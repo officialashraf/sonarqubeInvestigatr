@@ -1,0 +1,22 @@
+.col1 {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 5px; /* Reduced size */
+    width: 100wh;
+  }
+  
+  .icon-style {
+    color: gray;
+   size: 25px;
+  }
+  
+  .icon-style:hover {
+    color: lightgrey;
+    background-color: black;
+   
+
+    
+  }
+
+   

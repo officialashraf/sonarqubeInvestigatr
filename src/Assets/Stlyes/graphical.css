@@ -1,0 +1,35 @@
+
+  .container {
+    background-color: black;
+    padding: 10px;
+  }
+  
+  .row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    height: 50px;
+  }
+  
+  .icon {
+    color: white;
+  }
+  
+  .card {
+    height: 100%;
+    background-color: white;
+    flex-grow: 1;
+    padding: 5px;
+  }
+  
+  .header {
+    font-size: 0.8em;
+    margin-bottom: 5px;
+  }
+  
+  .firstRowCard {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  

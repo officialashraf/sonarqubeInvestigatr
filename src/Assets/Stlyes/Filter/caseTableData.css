@@ -1,0 +1,63 @@
+.fixed-th {
+  position: sticky;
+  top: -2px;
+  background: #fff;
+  z-index: 10;
+  text-align: center;
+  font-weight: bold;
+  min-width: 120px; /* Minimum width based on header text */
+  max-width: 200px; /* Prevents excessive width */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fixed-td {
+  min-width: 40px; /* Fixed width */
+  max-width: 200px; /* Match header width */
+  height: 20px; /* Fix row height */
+  padding: 5px;
+  text-align: left;
+  overflow: hidden;
+}
+
+.cell-content {
+  overflow: hidden;
+  white-space: nowrap;
+  height: 20px; 
+  text-overflow: ellipsis;
+  display: block;
+  width: 100%;
+}
+
+.fixed-td:hover .cell-content {
+  white-space: normal;
+  word-wrap: break-word;
+  background: rgba(0, 0, 0, 0.1);
+  padding: 5px;
+
+  min-width: 80px;
+  max-width: 100%;
+  z-index: 100;
+}
+
+
+  
+  .table-container {
+    overflow-x: auto; /* Enable horizontal scroll if content exceeds table width */
+  }
+  .pagination{
+    --bs-pagination-active-bg: black !important;
+    --bs-pagination-bg:gray !important;
+    --bs-pagination-hover-color: white !important;
+    --bs-pagination-hover-bg: black !important;
+  }
+  
+  @media (min-width: 400px) and (max-width: 600px) {
+    .paginationstabs{
+    flex-direction: column;
+    display: flex;
+    width: 100%;
+  
+    }
+  }

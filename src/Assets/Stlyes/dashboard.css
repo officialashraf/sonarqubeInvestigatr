@@ -1,0 +1,98 @@
+/* ✅ Main Container */
+.ContainerDashboard {
+  width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ✅ Dashboard Grid Layout */
+.dashboard-container {
+  display: grid;
+  grid-template-columns: 8% auto 8%; /* Default for large screens */
+  grid-template-rows: 8% auto;
+  width: 100vw;
+  min-height: 100vh;
+}
+
+/* ✅ Sidebar & Main Content */
+.cont-a, .cont-c {
+  background-color: black;
+  color: white;
+}
+
+.cont-b {
+  background-color: #fff;
+  color: black;
+  overflow: hidden;
+
+  height: 100%;
+
+  /* padding: 20px; */
+}
+
+.cont-d {
+  grid-column: 1 / 4;
+  background-color: black;
+  color: white;
+  text-align: center;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+/* .row-1{
+overflow: auto;
+} */
+/* .row-2{
+  overflow: auto;
+} */
+
+/* ✅ Responsive Design */
+@media (min-width: 1367px) and (max-width: 1920px) {
+  .dashboard-container {
+    grid-template-columns: 6% 88% 6%;
+  }
+}
+
+/* 🔹 Laptops & Small Desktops (1025px - 1366px) */
+@media (min-width: 1025px) and (max-width: 1366px) {
+  .dashboard-container {
+    grid-template-columns: 4% 92% 4%;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .dashboard-container {
+    grid-template-columns: 6% 88% 6%;
+  }
+  .cont-b {
+    overflow: auto;
+  }
+}
+
+@media (min-width: 600px) and (max-width: 768px) {
+  .dashboard-container {
+    grid-template-columns: 8% 84% 8%;
+  }
+  .cont-b {
+    overflow: auto;
+  }
+}
+
+
+/* 🔹 Mobile Screens (400px - 599px) */
+@media (min-width: 599px) and (max-width: 400px) {
+  .dashboard-container {
+    grid-template-columns: 8% 84% 8%;
+  }
+}
+
+/* ✅ Extra Small Screens (Less than 400px) */
+@media (max-width: 399px) {
+  .dashboard-container {
+    grid-template-columns: 10% 80% 10%;
+  }
+  .cont-a, .cont-c {
+    /* display: none; */
+  }
+}
