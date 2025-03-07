@@ -63,7 +63,7 @@ const CaseHeader = ({ onIconClick }) => {
       </div>
       {/*end header*/}
       <div
-        className="row py-2 px-2  align-items-start"
+        className="row py-0 px-2  align-items-start"
         style={{ backgroundColor: "lightgrey" }}
         >
         <div className="col-md-2 col-sm-4 mb-2">
@@ -77,7 +77,7 @@ const CaseHeader = ({ onIconClick }) => {
   <ListAltOutlined/>
   </div> */}
 
-        <div className="col-md-auto col-sm-12 mb-1">
+        <div className="col-md-auto col-sm-12 mb-1 ">
           <select
             className="form-select form-select-sm"
             style={{ fontSize: "12px" }}

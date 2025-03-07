@@ -22,7 +22,7 @@
   }
   
   .responsiveGrid {
-    min-width: 1025px;
+    /* min-width: 1025px; */
   }
   
   @media (min-width: 400px) and (max-width: 1025px) {

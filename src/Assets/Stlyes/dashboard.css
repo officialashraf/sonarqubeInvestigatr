@@ -28,7 +28,7 @@
 
   height: 100%;
 
-  /* padding: 20px; */
+  /* padding: 10px; */
 }
 
 .cont-d {
@@ -40,9 +40,10 @@
   top: 0;
   z-index: 1000;
 }
-/* .row-1{
+.row-1{
 overflow: auto;
-} */
+padding-top: 5px;
+}
 /* .row-2{
   overflow: auto;
 } */

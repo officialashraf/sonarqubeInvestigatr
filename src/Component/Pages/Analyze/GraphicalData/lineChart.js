@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { Box, Slider } from '@mui/material';
-import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, CartesianGrid, ReferenceLine } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, CartesianGrid,ResponsiveContainer, ReferenceLine } from 'recharts';
 import '../../../../Assets/Stlyes/lineChart.css'
 
 const LineChart1 = () => {
@@ -47,11 +47,13 @@ const LineChart1 = () => {
   return (
     <Box className="mt-1 h-[200px]">
       {data.length > 0 ? (
+          <ResponsiveContainer width="100%" height={150}>
         <LineChart 
-          width={1200} 
-          height={150} 
+          // width={1200} 
+          // height={150} 
           data={data}
           margin={{  right: 50}}
+          
         >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis 
@@ -101,6 +103,7 @@ const LineChart1 = () => {
             dot={{ r: 3 }} // Small dots on points
           />
         </LineChart>
+        </ResponsiveContainer>
       ) : (
         <div className="h-[150px] flex items-center justify-center">
           <p className="text-gray-500 text-xl">No Data Available</p>

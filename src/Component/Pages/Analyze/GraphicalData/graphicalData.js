@@ -55,7 +55,7 @@ const ComponentThree = () => (
 
 const GraphicalData = () => {
   return (
-    <div className="responsiveContainer">
+    <div className="responsiveContainer" >
 
     <Grid container spacing={1} p={1} className="responsiveGrid" style={{background:"lightgray", marginLeft:"0 px !important"}}>
       <Grid item xs={12}  sx={{ paddingLeft: '0px !important',  paddingTop:"0px !important"}}>
