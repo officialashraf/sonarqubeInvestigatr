@@ -67,7 +67,7 @@ padding-top: 5px;
     grid-template-columns: 6% 88% 6%;
   }
   .cont-b {
-    overflow: auto;
+    /* overflow: auto; */
   }
 }
 
@@ -76,7 +76,7 @@ padding-top: 5px;
     grid-template-columns: 8% 84% 8%;
   }
   .cont-b {
-    overflow: auto;
+    /* overflow: auto; */
   }
 }
 
