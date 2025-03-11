@@ -273,7 +273,7 @@ const EditCase = ({ togglePopup, item }) => {
               openMenuOnClick={true}
             />
 
-            <label htmlFor="watchers">Watchers:</label>
+            {/* <label htmlFor="watchers">Watchers:</label>
             <Select
               options={options}
               isMulti
@@ -283,7 +283,28 @@ const EditCase = ({ togglePopup, item }) => {
               placeholder="Select Watchers"
               value={watcherValues}
               onChange={handleWatchersChange}
-            />
+            /> */}
+          
+<label htmlFor="watchers">Watchers:</label>
+<Select
+  options={options}
+  isMulti
+  styles={customStyles}
+  className="com"
+  name="watchers"
+  placeholder="Select Watchers"
+  value={formData.watchers.map(watcher => {
+    const existingWatcher = options.find(opt => opt.label === watcher);
+    return existingWatcher || { value: watcher, label: watcher };
+  })}
+  onChange={(selectedOptions) => {
+    setFormData(prev => ({
+      ...prev,
+      watchers: selectedOptions ? selectedOptions.map(option => option.label) : []
+    }));
+  }}
+/>
+
 
             <label htmlFor="status">Status:</label>
             <Select

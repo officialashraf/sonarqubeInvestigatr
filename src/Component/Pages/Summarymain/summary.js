@@ -275,7 +275,7 @@ const Summary = ({ filters }) => {
           <ProgressRow label="Overall Progress" />
           <h5 style={{ textAlign: "center" }}> FilterCount: {filters}</h5>
 
-          <div className='graphchats' style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1rem' }}>
+          <div className='graphchats' style={{ display: 'flex', gap:"40px", alignItems:"center",justifyContent:"center", marginTop: '1rem' }}>
             {/* Pie Chart */}
             {/* <Box width={400} height={300} className="box">
               <ResponsiveContainer width={400} height={300}>

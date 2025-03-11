@@ -18,7 +18,7 @@
 /* ✅ Navbar Brand (Remove Negative Margin & Align) */
 .navbar-brand {
     margin: 0 !important;
-    font-size: 1.5rem;
+    font-size: 1.3rem;
 }
 
 /* ✅ Navigation Items */
@@ -34,7 +34,7 @@
 }
 
 /* 🔹 Large Screens & Desktops (1367px - 1920px) */
-@media (min-width: 1367px) and (max-width: 1920px) {
+/* @media (min-width: 1367px) and (max-width: 1920px) {
     .containerss {
         padding-left: 30px;
         padding-right: 0px;
@@ -47,10 +47,10 @@
     .custom-nav {
         gap: 15px;
     }
-}
+} */
 
 /* 🔹 Laptops & Small Desktops (1025px - 1366px) */
-@media (min-width: 1025px) and (max-width: 1366px) {
+/* @media (min-width: 1025px) and (max-width: 1366px) {
     .containerss {
         padding-left: 20px;
         padding-right: 0px;
@@ -67,10 +67,10 @@
     .custom-nav {
         gap: 12px;
     }
-}
+} */
 
 /* 🔹 Tablet (Landscape) - 769px to 1024px */
-@media (min-width: 769px) and (max-width: 1024px) {
+/* @media (min-width: 769px) and (max-width: 1024px) {
     .containerss {
         padding-left: 15px;
         padding-right: 0px;
@@ -87,10 +87,10 @@
     .custom-nav {
         gap: 10px;
     }
-}
+} */
 
 /* 🔹 Tablet (Portrait) - 600px to 768px */
-@media (min-width: 600px) and (max-width: 768px) {
+/* @media (min-width: 600px) and (max-width: 768px) {
     .containerss {
         padding-left: 10px;
         padding-right: 0px;
@@ -107,32 +107,31 @@
     .custom-nav {
         gap: 8px;
     }
-}
+} */
 
 /* 🔹 Mobile (Below 600px) */
-@media (min-width: 599px)  and (max-width: 400px){
+/* @media (min-width: 599px)  and (max-width: 400px){
     .containerss {
         padding-left: 5px;
         padding-right: 0px;
     }
 
     .navbar {
-        /* flex-direction: column; */
+        
         align-items: center;
-        /* padding: 10px; */
+        
     }
 
     .navbar-brand {
-        /* font-size: 1.1rem; */
+        
         text-align: center;
     }
 
     .custom-nav {
-        /* flex-direction: column; */
-        /* gap: 5px; */
+        
         text-align: center;
     }
-}
+} */
 
 
 

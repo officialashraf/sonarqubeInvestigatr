@@ -55,50 +55,56 @@
 /* 🔹 Large Screens (1920px) */
 @media (min-width: 1367px) and (max-width: 1920px) {
     .card-container {
-        width: 220px;
+        width: 200px;
+    }
+      .card-list-container {
+        /* flex-wrap: wrap; */
+        display: flex;
+        justify-content: center;
+        gap: 20px;
     }
 }
 
 /* 🔹 Laptops & Small Desktops (1025px - 1366px) */
 @media (min-width: 1025px) and (max-width: 1366px) {
     .card-container {
-        width: 180px; /* Default */
-        margin-top: 10px;
+        width: 180px; 
+        /* margin-top: 10px; */
     }
 }
 
 /* 🔹 Tablets (Landscape) - 769px to 1024px */
 @media (min-width: 769px) and (max-width: 1024px) {
-    .card-list-container {
+    /* .card-list-container {
         flex-wrap: wrap;
         justify-content: center;
-    }
-    .card-container {
+    } */
+    /* .card-container {
         width: 160px;
-    }
+    } */
 }
 
 /* 🔹 Tablets (Portrait) - 600px to 768px */
 @media (min-width: 600px) and (max-width: 768px) {
-    .card-list-container {
+    /* .card-list-container {
         flex-wrap: wrap;
         justify-content: center;
-    }
-    .card-container {
+    } */
+    /* .card-container {
         margin-top: 10px;
         width: 140px;
-    }
+    } */
 }
 
 /* 🔹 Mobile Screens - 480px to 599px */
 @media (min-width: 480px) and (max-width: 599px) {
-    .card-list-container {
+    /* .card-list-container {
         flex-wrap: wrap;
         justify-content: center;
     }
     .card-container {
         width: 120px;
-    }
+    } */
 }
 
 /* ✅ Extra Small Screens (Less than 480px) */

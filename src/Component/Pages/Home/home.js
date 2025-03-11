@@ -12,7 +12,7 @@ const Home = () => {
 
 
   return (
-    <div>
+    <div style={{height: "100%", width:"100%",flexDirection:"column", overflow:"hidden", margin:"2.5px"}}>
 
       <div className="row-1">
         <CardList /> 
@@ -21,7 +21,6 @@ const Home = () => {
         <DataTable />
 
       </div>
-
 
     </div>
   )
