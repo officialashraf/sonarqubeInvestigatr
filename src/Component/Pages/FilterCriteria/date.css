@@ -1,0 +1,254 @@
+/* Parent component styles */
+.parent-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .open-popup-btn {
+    padding: 10px 15px;
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    
+  }
+  
+  .selected-date-display {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+  }
+  
+  /* Popup styles */
+  /* .popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  } */
+  
+  /* .popup-container {
+    position: relative;
+    width: 90%;
+    max-width: 650px;
+    max-height: 90vh;
+    overflow-y: auto;
+    border-radius: 8px;
+    background-color: #f5f5f5;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  } */
+  
+  .close-icon {
+    position: absolute;
+    top: -3px;
+    right: 15px;
+    background: none;
+    border: none;
+    
+    cursor: pointer;
+    color: #333;
+    z-index: 10;
+  }
+  
+  .popup-content {
+    padding: 10px;
+  } 
+  
+  /* DatePicker styles */
+  .date-picker-container {
+    font-family: Arial, sans-serif;
+    width: 100%;
+    color: #333;
+  }
+  
+  .date-picker-layout {
+    display: flex;
+  }
+  
+  .presets-container {
+    width: 150px;
+    /* padding: 20px 10px; */
+    border-right: 1px solid #ddd;
+    background-color: #e6e6e6;
+  }
+  
+  .preset-option {
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-bottom: 5px;
+    border-radius: 4px;
+    color: #333;
+  }
+  
+  .preset-option:hover {
+    background-color: #d4d4d4;
+  }
+  
+  .calendar-container {
+    flex: 1;
+    padding:  5px;
+    background-color: #f5f5f5;
+  }
+  
+  .date-inputs {
+    display: flex;
+    justify-content: space-between;
+   
+  }
+  
+  .date-input-group {
+    width: 48%;
+  }
+  
+  .date-input-group label {
+    display: block;
+    color: #333;
+  }
+  
+  .date-input-group input {
+    width: 100%;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    color: #333;
+  }
+  
+  .time-selectors {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0px;
+  }
+  
+  .time-selector {
+    display: flex;
+    align-items: center;
+    background-color: white;
+   margin: 4px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+  }
+  
+  .time-arrows {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .time-arrow {
+    background: none;
+    border: none;
+    color: black;
+    cursor: pointer;
+    
+  }
+  
+  .time-separator {
+    margin: 0 5px;
+    
+    color: #333;
+  }
+  
+  .calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+   
+  }
+  
+  .calendar-nav {
+    background: none;
+    border: none;
+    color: black;
+    
+    cursor: pointer;
+  }
+  
+  .current-month {
+    
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    background-color: white;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+  }
+  
+  .day-name {
+    text-align: center;
+    
+    padding: 5px 0;
+    color: #777;
+  }
+  
+  .calendar-day {
+    text-align: center;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+    color: #333;
+  }
+  
+  .calendar-day:hover {
+    background-color: #e6e6e6;
+  }
+  
+  .outside-month {
+    color: #aaa;
+  }
+  
+  .start-date, .end-date {
+    background-color:gray;
+    color: white;
+  }
+  
+  .in-range {
+    background-color: rgba(74, 144, 226, 0.2);
+  }
+  
+  .date-picker-actions {
+    margin-top: 20px;
+  }
+  
+  .save-search {
+    margin-bottom: 15px;
+    color: #333;
+  }
+  
+  .button-group {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 4px;
+  }
+  
+  .btn-clear, .btn-done {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    margin-left: 5px;
+    cursor: pointer;
+    background-color: #ccc;
+    color: #000;
+  }
+  
+  .btn-clear:hover,.btn-done:hover {
+    background-color: black;
+    color: white;
+  }
+  
+ 
+  
