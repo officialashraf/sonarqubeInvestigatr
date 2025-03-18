@@ -63,6 +63,7 @@ const EditCase = ({ togglePopup, item }) => {
       }));
     }
   }, [item, users.data]);
+  
 
   const handleEditCase = async (formData) => {
     const token = Cookies.get("accessToken");
@@ -134,6 +135,13 @@ const EditCase = ({ togglePopup, item }) => {
       [name]: value
     }));
   };
+
+  // onChange={(selectedOptions) => {
+  //   setFormData(prev => ({
+  //     ...prev,
+  //     watchers: selectedOptions ? selectedOptions.map(option => option.label) : []
+  //   }));
+  // }}
 
   const handleWatchersChange = (selectedOptions) => {
     setFormData(prev => ({
@@ -297,12 +305,13 @@ const EditCase = ({ togglePopup, item }) => {
     const existingWatcher = options.find(opt => opt.label === watcher);
     return existingWatcher || { value: watcher, label: watcher };
   })}
-  onChange={(selectedOptions) => {
-    setFormData(prev => ({
-      ...prev,
-      watchers: selectedOptions ? selectedOptions.map(option => option.label) : []
-    }));
-  }}
+  onChange={handleWatchersChange}
+  // onChange={(selectedOptions) => {
+  //   setFormData(prev => ({
+  //     ...prev,
+  //     watchers: selectedOptions ? selectedOptions.map(option => option.label) : []
+  //   }));
+  // }}
 />
 
 

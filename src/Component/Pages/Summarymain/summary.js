@@ -275,7 +275,7 @@ const Summary = ({ filters }) => {
           <ProgressRow label="Overall Progress" />
           <h5 style={{ textAlign: "center" }}> FilterCount: {filters}</h5>
 
-          <div className='graphchats' style={{ display: 'flex', gap:"40px", alignItems:"center",justifyContent:"center", marginTop: '1rem' }}>
+          <div className='graphchats'>
             {/* Pie Chart */}
             {/* <Box width={400} height={300} className="box">
               <ResponsiveContainer width={400} height={300}>
@@ -299,8 +299,8 @@ const Summary = ({ filters }) => {
                 </PieChart>
               </ResponsiveContainer>
             </Box> */}
-            <Box width={350} height={300} className="box">
-      <ResponsiveContainer width="100%" height="100%">
+            <Box className="box">
+      <ResponsiveContainer width="100%" height={300}>
         <PieChart>
           <Legend align="center" verticalAlign="top"    
             formatter={(value, entry) => `${value} ${entry.payload.value}`}/>
@@ -324,8 +324,8 @@ const Summary = ({ filters }) => {
     </Box>
 
             {/* Bar Chart */}
-            <Box width={350} height={300} className="box">
-              <ResponsiveContainer width={340} height={300}>
+            <Box  className="box">
+              <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={barData} >
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="name" />
@@ -353,8 +353,8 @@ const Summary = ({ filters }) => {
             </Box>
 
             {/* Table */}
-            <Box width={350} height={300} className="box">
-            <TableContainer component={Paper} width={340} height={300}>
+            <Box className="box">
+            <TableContainer component={Paper} width="100%" height={300}>
         <Table width={340} height={300}>
           <TableHead >
             <TableRow>
