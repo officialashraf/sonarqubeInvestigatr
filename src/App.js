@@ -17,6 +17,7 @@ import GraphicalData from './Component/Pages/Analyze/GraphicalData/graphicalData
 import './App.css'
 import ProtectedRoute from './utils/protectRoute.js';
 import Loader from './Component/Pages/Layout/loader.js';
+import SearchResults from './Component/Pages/FilterCriteria/List/fullscreen.js';
 
 
 const AppContent = () => {
@@ -48,6 +49,7 @@ const AppContent = () => {
             <Route path="/key" element={< KeywordChart/>} />
             <Route path="/line" element={<LineChart1 />} />
             <Route path="/grapg" element={< GraphicalData />} />
+            <Route path="/cases/save" element={< SearchResults />} />
             <Route path="*" element={<div className='notfound'> <h4>Work in progress........</h4></div>} />
           </Route>
           <Route path='loader' element={<Loader/>}/>

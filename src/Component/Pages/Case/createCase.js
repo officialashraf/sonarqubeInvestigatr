@@ -5,7 +5,48 @@ import Cookies from "js-cookie"; // Make sure you're using this for cookies
 import {  toast } from 'react-toastify';
 import Select from 'react-select';
 
-
+export   const customStyles = {
+  control: (base,state) => ({
+    ...base,
+    backgroundColor: 'white', // Black background
+    color: 'black', // White text
+    // border: '1px solid #fff',
+    boxShadow: 'none',
+    outline: 'none'
+  }),
+  menu: (base) => ({
+    ...base,
+    backgroundColor: 'white', // Black background
+    color: 'black', // White text
+  }),
+  option: (base, state) => ({
+    ...base,
+    backgroundColor: state.isSelected ? 'black' : 'white', // Darker black for selected option
+    color: 'black', // White text
+    '&:hover': {
+      backgroundColor: 'black', // Lighter black on hover
+      color:'white'
+    }
+  }),
+  multiValue: (base) => ({
+    ...base,
+    backgroundColor: 'white', // Dark background for selected values
+    color: 'black', // White text
+  }),
+  multiValueLabel: (base) => ({
+    ...base,
+    backgroundColor:'black',
+    color: 'white', // White text
+  }),
+  multiValueRemove: (base) => ({
+    ...base,
+    color: 'black', // White text
+    '&:hover': {
+      backgroundColor: 'black', // Lighter black on hover
+      color: 'white' // White text
+    }
+  })
+};
 const CreateCase = ({ togglePopup }) => {
   const [formData, setFormData] = useState({
     title: "",
@@ -98,48 +139,7 @@ const handleCreateCase = async (formData) => {
     }));
   };
 
-  const customStyles = {
-    control: (base,state) => ({
-      ...base,
-      backgroundColor: 'white', // Black background
-      color: 'black', // White text
-      // border: '1px solid #fff',
-      boxShadow: 'none',
-      outline: 'none'
-    }),
-    menu: (base) => ({
-      ...base,
-      backgroundColor: 'white', // Black background
-      color: 'black', // White text
-    }),
-    option: (base, state) => ({
-      ...base,
-      backgroundColor: state.isSelected ? 'black' : 'white', // Darker black for selected option
-      color: 'black', // White text
-      '&:hover': {
-        backgroundColor: 'black', // Lighter black on hover
-        color:'white'
-      }
-    }),
-    multiValue: (base) => ({
-      ...base,
-      backgroundColor: 'white', // Dark background for selected values
-      color: 'black', // White text
-    }),
-    multiValueLabel: (base) => ({
-      ...base,
-      backgroundColor:'black',
-      color: 'white', // White text
-    }),
-    multiValueRemove: (base) => ({
-      ...base,
-      color: 'black', // White text
-      '&:hover': {
-        backgroundColor: 'black', // Lighter black on hover
-        color: 'white' // White text
-      }
-    })
-  };
+
    
     return (
         <div className="popup-overlay">
