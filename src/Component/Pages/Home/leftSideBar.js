@@ -8,7 +8,7 @@ const  Sidebar = ()=> {
 
   const menuItems = [
     // { label: 'Home', icon: <House size={15} />, path: '/home' },
-      { label: 'Search Data', icon: <Search size={15} />, path: '/search' },
+      // { label: 'Search Data', icon: <Search size={15} />, path: '/search' },
     { label: 'PII', icon: <ListTask size={15} />, path: '/pii' },
      { label: 'Cases', icon: <Folder size={15} />, path: '/cases' },
   

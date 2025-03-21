@@ -6,14 +6,21 @@ import CloseIcon from '@mui/icons-material/Close';
 import InputAdornment from '@mui/material/InputAdornment';
 import { TextField } from '@mui/material';
 import  TuneIcon  from '@mui/icons-material/Tune';
-import { sharedSxStyles } from "./createCriteria";
+import CreateCriteria, { sharedSxStyles } from "./createCriteria";
 import SendIcon from '@mui/icons-material/Send';
 import { useNavigate } from 'react-router-dom';
-
+import RecentCriteria from './recentCriteria';
+import { useSelector, useDispatch } from "react-redux";
+import { setPage } from '../../../Redux/Action/criteriaAction';
  
 
-const SavedCriteria = ({onClose, setShowPopup}) => {
+const SavedCriteria = ({togglePopup, setShowPopup}) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { searchResults, totalPages, currentPage } = useSelector((state) => state.search);
+  console.log("searResult",searchResults, totalPages,currentPage)
+  const [showCreate, setshowCreate] = useState(false);
+  const [showRecent, setshowRecent] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [searchChips, setSearchChips] = useState(['bomb']);
   const [activeTab, setActiveTab] = useState('Cases');
@@ -47,17 +54,34 @@ const SavedCriteria = ({onClose, setShowPopup}) => {
     setSearchChips([]);
     setInputValue('');
   };
+
+  const handleShow= () =>{
+    setshowCreate(true)
+  }
+  const handleShowRecent= () =>{
+    setshowRecent(true)
+  }
   const ViewScreen = () => {
-    navigate('/cases/save' );
-     onClose();
-    setShowPopup(false);}
+    navigate('/search' );
+     togglePopup();
+     setShowPopup()
+    }
+
   return (
     <div className="popup-overlay">
     <div className="popup-container">
-        {/* <button className="close-icon" onClick={onClose}>
+        <button className="close-icon"  onClick={() => {
+          // Directly set showPopup to false in parent component
+          setShowPopup();
+          // Also close this component's popup if needed
+          if (typeof togglePopup === 'function') {
+            togglePopup();
+          }
+        }} >
             &times;
-        </button> */}
+        </button>
         <div className="popup-content">
+          <h5>Search Result</h5>
     <div className="search-container">
       <div className="search-header">
         {/* <div className="search-input-container"> */}
@@ -89,8 +113,8 @@ const SavedCriteria = ({onClose, setShowPopup}) => {
                                         endAdornment: (
                                             <InputAdornment position="end">
                
-                     <SendIcon/>
-                  <TuneIcon  style={{cursor:'pointer'}} onClick={onClose}/> {/* New Card List Filter Icon */}
+                     <SendIcon style={{cursor:'pointer'}} onClick={handleShowRecent} />
+                  <TuneIcon  style={{cursor:'pointer'}} onClick={handleShow}/> {/* New Card List Filter Icon */}
                
                                             </InputAdornment>
                                         ), style: {
@@ -143,14 +167,14 @@ const SavedCriteria = ({onClose, setShowPopup}) => {
       
       <div className="search-results">
         {activeTab === 'Cases' ? (
-          cases.map(item => (
+          searchResults && searchResults.map((item) => (
             <div key={item.id} className="result-card">
               <div className="card-header">
-                <div className="card-id">{item.id}</div>
-                <div className="status-badge">{item.status}</div>
+                <div className="card-id">{item.unified_case_id}</div>
+                <div className="status-badge">{item.status || 'NEW'}</div>
               </div>
-              <div className="card-text">{item.text}</div>
-              <div className="card-subtext">{item.subtext}</div>
+              <div className="card-text">{item.site_keywordsmatched}</div>
+              <div className="card-subtext">{item.unified_type}</div>
             </div>
           ))
         ) : (
@@ -172,12 +196,27 @@ const SavedCriteria = ({onClose, setShowPopup}) => {
         </button>
       </div>
       
-      {/* <div className="view-all">
-        
-      </div> */}
+     {/* Pagination */}
+     <div>
+        <button
+          onClick={() => dispatch(setPage(currentPage - 1))}
+          disabled={currentPage === 1}
+        >
+          Previous
+        </button>
+        <span> Page {currentPage} of {totalPages} </span>
+        <button
+          onClick={() => dispatch(setPage(currentPage + 1))}
+          disabled={currentPage === totalPages}
+        >
+          Next
+        </button>
+      </div>
     </div>
     </div>
     </div>
+    {showCreate && <CreateCriteria setShowPopup={setShowPopup} togglePopup={togglePopup}/>}
+    {showRecent && <RecentCriteria togglePopup={togglePopup} togglePopupa={setShowPopup} />}
     </div>
   );
 };

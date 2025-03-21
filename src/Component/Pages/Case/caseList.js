@@ -220,11 +220,11 @@ const DataTable = () => {
             {/* <span className="custom-confirm-button" title='Add New Case'  onClick={togglePopup}><Plus size={30}/>Add New Case</span>  */}
             <button className='add-btn' title='Add New Case' onClick={togglePopup}><Plus size={20} />Add New Case</button>
 
-            <DropdownButton className="custom-dropdown1" align="end" title={<ThreeDotsVertical size={24} />} id="dropdown-menu-align-end">
+            {/* <DropdownButton className="custom-dropdown1" align="end" title={<ThreeDotsVertical size={24} />} id="dropdown-menu-align-end">
               <Dropdown.Item href="#">Option 1</Dropdown.Item>
               <Dropdown.Item href="#">Option 2</Dropdown.Item>
               <Dropdown.Item href="#">Option 3</Dropdown.Item>
-            </DropdownButton>
+            </DropdownButton> */}
           </div>
         </div>
         <div className="data-table">

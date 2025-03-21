@@ -39,7 +39,7 @@ const AppContent = () => {
           <Routes>
           <Route path="/" element={<LoginPage />} />
           <Route element={<ProtectedRoute />}>
-            <Route path="/search" element={<SearchBar />} />
+            <Route path="/pii" element={<SearchBar />} />
             <Route path="/cases" element={<Home />} />
             <Route path="/cases/:caseId" element={<MainFilter />} />
             <Route path="/add-filter" element={<AddFilter2 />} />
@@ -49,7 +49,7 @@ const AppContent = () => {
             <Route path="/key" element={< KeywordChart/>} />
             <Route path="/line" element={<LineChart1 />} />
             <Route path="/grapg" element={< GraphicalData />} />
-            <Route path="/cases/save" element={< SearchResults />} />
+            <Route path="/search" element={< SearchResults />} />
             <Route path="*" element={<div className='notfound'> <h4>Work in progress........</h4></div>} />
           </Route>
           <Route path='loader' element={<Loader/>}/>

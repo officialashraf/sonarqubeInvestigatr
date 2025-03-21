@@ -49,9 +49,10 @@
   
   .close-icon {
     position: absolute;
-    top: -3px;
+    /* top: -3px; */
     right: 15px;
     background: none;
+    padding: 8px;
     border: none;
     
     cursor: pointer;

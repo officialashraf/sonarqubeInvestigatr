@@ -9,7 +9,9 @@ import RecentCriteria from './recentCriteria';
 import SavedCriteria from './savedCriteria';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import {  toast } from 'react-toastify';
+import { toast } from 'react-toastify';
+import { useDispatch } from "react-redux";
+import { setSearchResults } from '../../../Redux/Action/criteriaAction';
 
 export const sharedSxStyles = {
   '& .MuiOutlinedInput-root': {
@@ -29,6 +31,7 @@ export const sharedSxStyles = {
 };
 
 const CreateCriteria = ({ togglePopup, setShowPopup, handleCreateCase }) => {
+  const dispatch = useDispatch();
   const Token = Cookies.get('accessToken');
   const [formData, setFormData] = useState({
     searchQuery: '',
@@ -67,13 +70,13 @@ const CreateCriteria = ({ togglePopup, setShowPopup, handleCreateCase }) => {
           'Authorization': `Bearer ${Token}`
         },
       });
-      
+
       // Format the response data for react-select
       const caseOptionsFormatted = response.data.data.map(caseItem => ({
         value: caseItem.id,
         label: `${caseItem.id} - ${caseItem.title || 'Untitled'}`
       }));
-      
+
       setCaseOptions(caseOptionsFormatted);
     } catch (error) {
       console.error('Error fetching case data:', error);
@@ -94,7 +97,7 @@ const CreateCriteria = ({ togglePopup, setShowPopup, handleCreateCase }) => {
         value: platform,  // Use the platform value directly if it's a string
         label: platform   // Use the platform value directly if it's a string
       }));
-      
+
       setFileTypeOptions(fileTypeOptionsFormatted);
     } catch (error) {
       console.error('Error fetching file types:', error);
@@ -106,22 +109,22 @@ const CreateCriteria = ({ togglePopup, setShowPopup, handleCreateCase }) => {
     try {
       const criteriaPaylod = {
         keyword: formData.searchQuery,
-        case_id: formData.caseIds && formData.caseIds.length > 0 ? formData.caseIds[0].value.toString(): "",
+        case_id: formData.caseIds && formData.caseIds.length > 0 ? formData.caseIds[0].value.toString() : "",
         file_type: formData.filetype && formData.filetype.length > 0 ? formData.filetype[0].value : "",
         latitude: formData.latitude || "",
         longitude: formData.longitude || "",
-        start_time: selectedDates.startDate ? `${selectedDates.startDate.toISOString().split('T')[0]}T${String(selectedDates.startTime.hours).padStart(2, '0')}:${String(selectedDates.startTime.minutes).padStart(2, '0')}:00` : "",
-        end_time: selectedDates.endDate ? `${selectedDates.endDate.toISOString().split('T')[0]}T${String(selectedDates.endTime.hours).padStart(2, '0')}:${String(selectedDates.endTime.minutes).padStart(2, '0')}:00` : ""
+        start_time: selectedDates.startDate ? `${selectedDates.startDate.toISOString().split('T')[0]}T${String(selectedDates.startTime.hours).padStart(2, '0')}:${String(selectedDates.startTime.minutes).padStart(2, '0')}:00` : "" || null,
+        end_time: selectedDates.endDate ? `${selectedDates.endDate.toISOString().split('T')[0]}T${String(selectedDates.endTime.hours).padStart(2, '0')}:${String(selectedDates.endTime.minutes).padStart(2, '0')}:00` : "" || null
       };
-       console.log("criteria Payloaad", criteriaPaylod)
+      console.log("criteria Payloaad", criteriaPaylod)
       const response = await axios.post('http://5.180.148.40:9006/api/das/criteria', criteriaPaylod, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${Token}`
         },
       });
-      
-              toast.success("Criteria saved successfully");
+
+      toast.success("Criteria saved successfully");
       console.log('Criteria saved successfully:', response.data);
       setSavedCriteria(response.data);
       // You might want to show a success message or handle the response in some way
@@ -133,7 +136,7 @@ const CreateCriteria = ({ togglePopup, setShowPopup, handleCreateCase }) => {
   // Handle checkbox change for saving criteria
   const handleSaveCriteriaChange = (e) => {
     setFormData(prev => ({ ...prev, includeArchived: e.target.checked }));
-    
+
     // If checkbox is checked, save the criteria
     // if (e.target.checked) {
     //   saveCriteria();
@@ -143,7 +146,7 @@ const CreateCriteria = ({ togglePopup, setShowPopup, handleCreateCase }) => {
   // Handle search submission
   const handleSearch = async (e) => {
     e.preventDefault();
-   
+
     console.log(e);
     try {
       if (formData.includeArchived) {
@@ -154,21 +157,21 @@ const CreateCriteria = ({ togglePopup, setShowPopup, handleCreateCase }) => {
         unified_case_id: formData.caseIds && formData.caseIds.length > 0 ? formData.caseIds[0].value : "",
         unified_type: type.value,
         site_keywordsmatched: formData.searchQuery,
-        start_time: selectedDates.startDate ? `${selectedDates.startDate.toISOString().split('T')[0]}T${String(selectedDates.startTime.hours).padStart(2, '0')}:${String(selectedDates.startTime.minutes).padStart(2, '0')}:00` : "",
-        end_time: selectedDates.endDate ? `${selectedDates.endDate.toISOString().split('T')[0]}T${String(selectedDates.endTime.hours).padStart(2, '0')}:${String(selectedDates.endTime.minutes).padStart(2, '0')}:00` : ""
+        start_time: selectedDates.startDate ? `${selectedDates.startDate.toISOString().split('T')[0]}T${String(selectedDates.startTime.hours).padStart(2, '0')}:${String(selectedDates.startTime.minutes).padStart(2, '0')}:00` : "" || null,
+        end_time: selectedDates.endDate ? `${selectedDates.endDate.toISOString().split('T')[0]}T${String(selectedDates.endTime.hours).padStart(2, '0')}:${String(selectedDates.endTime.minutes).padStart(2, '0')}:00` : "" || null
       }));
-      console.log("search[ayload",queryArray)
-      
+      console.log("search[ayload", queryArray)
+
       const response = await axios.post('http://5.180.148.40:9006/api/das/search', {
-        query: queryArray
-      }, {
+         query: queryArray, page: 1, per_page: 50 
+        }, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${Token}`
         },
       });
-    
-      
+
+      dispatch(setSearchResults(response.data.results));
       console.log('Search results:', response.data);
       setFormData({
         searchQuery: '',
@@ -184,18 +187,13 @@ const CreateCriteria = ({ togglePopup, setShowPopup, handleCreateCase }) => {
       if (handleCreateCase) {
         handleCreateCase(response.data);
       }
-     
-    //   if (typeof togglePopup === 'function') {
-    //     togglePopup(); // Close the first popup
-    // }
-    
-    // Ensure second popup only opens if first one is closed
-    setTimeout(() => {
-        if (!showPopupR) {
-            setShowPopupR(true);
+
+      setTimeout(() => {
+        if (!showPopupS) {
+          setShowPopupS(true);
         }
-    }, 300);
-    
+      }, 300);
+
     } catch (error) {
       console.error('Error performing search:', error);
     }
@@ -209,11 +207,11 @@ const CreateCriteria = ({ togglePopup, setShowPopup, handleCreateCase }) => {
   const togglePopupA = () => {
     setShowPopupD(!showPopupD);
   };
-  
+
   const togglePopupR = () => {
     setShowPopupR(!showPopupR);
   };
-  
+
   const togglePopupS = () => {
     setShowPopupS(true);
   };
@@ -235,7 +233,15 @@ const CreateCriteria = ({ togglePopup, setShowPopup, handleCreateCase }) => {
   return (
     <div className="popup-overlay">
       <div className="popup-container">
-        <button className="close-icon" onClick={togglePopup}>
+        <button className="close-icon"
+          onClick={() => {
+            // Directly set showPopup to false in parent component
+            // setShowPopup();
+            // Also close this component's popup if needed
+            if (typeof togglePopup === 'function') {
+              togglePopup();
+            }
+          }}>
           &times;
         </button>
         <div className="popup-content">
@@ -380,8 +386,8 @@ const CreateCriteria = ({ togglePopup, setShowPopup, handleCreateCase }) => {
                 <Checkbox
                   checked={formData.includeArchived}
                   onChange={handleSaveCriteriaChange}
-                  
-                 
+
+
                 />
               }
               label="Save this search"
@@ -394,7 +400,7 @@ const CreateCriteria = ({ togglePopup, setShowPopup, handleCreateCase }) => {
                 type="submit"
                 style={{ width: '100%', height: '30px' }}
                 className="add-btn"
-               
+
               >
                 Search
               </button>
@@ -402,7 +408,7 @@ const CreateCriteria = ({ togglePopup, setShowPopup, handleCreateCase }) => {
           </form>
         </div>
       </div>
-      
+
       {/* Popup components */}
       {showPopupD && (
         <DatePickera
@@ -411,16 +417,17 @@ const CreateCriteria = ({ togglePopup, setShowPopup, handleCreateCase }) => {
           onClose={togglePopupA}
         />
       )}
-      
+
       {showPopupR && (
         <RecentCriteria
-          onClose={togglePopupR}
+          togglePopup={togglePopupR}
+          setShowPopup={setShowPopup}
         />
       )}
-      
+
       {showPopupS && (
         <SavedCriteria
-          onClose={togglePopupS}
+          togglePopup={togglePopupS}
           setShowPopup={setShowPopup}
         />
       )}

@@ -4,6 +4,7 @@ import { Cpu, FileEarmarkText, Bell, PinAngle, ChatLeftText ,Search} from 'react
 import { useNavigate } from 'react-router-dom';
 import "../../../Assets/Stlyes/rightSideBar.css"
 import CreateCriteria from '../FilterCriteria/createCriteria'
+import SavedCriteria from '../FilterCriteria/savedCriteria';
 
 const  RightSidebar = ()=> {
   const navigate = useNavigate();
@@ -30,7 +31,6 @@ const  RightSidebar = ()=> {
   ];
 
   return (
-   
      <>
          <div style={{marginTop:'1rem'}}>
          {menuItems.map((item, index) => (
@@ -44,10 +44,10 @@ const  RightSidebar = ()=> {
             </Nav.Link>
           ))}
          </div>
-         {showPopup && <CreateCriteria togglePopup={togglePopup} setShowPopup={setShowPopup}/>}
-         {/* {showPopup && <SavedCriteria togglePopup={togglePopup} setShowPopup={setShowPopup}/>} */}
+         {/* {showPopup && <CreateCriteria togglePopup={togglePopup} setShowPopup={setShowPopup}/>} */}
+          
+          {showPopup && <SavedCriteria togglePopup={togglePopup} setShowPopup={setShowPopup}/>} 
           </>
-
   );
 }
 

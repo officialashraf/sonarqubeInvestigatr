@@ -10,23 +10,25 @@ import SaveIcon from "@mui/icons-material/Save";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import CloseIcon from "@mui/icons-material/Close";
 // import "bootstrap/dist/css/bootstrap.min.css";
-import { sharedSxStyles } from "./createCriteria";
+import CreateCriteria, { sharedSxStyles } from "./createCriteria";
 import Cookies from 'js-cookie'
 import { toast } from "react-toastify";
 import EditCriteria from './editCriteria';
 
-const RecentCriteria = ({onClose}) => {
+const RecentCriteria = ({togglePopup, setShowPopup}) => {
   const [search, setSearch] = useState("");
-  const [recomendation, setrecomendation] = useState(["Currently there are no recomendation for you"])
   const [recentSearch, setRecentSearch] = useState(["person", "every"]);
   const [savedSearch, setSavedSearch] = useState([]);
   const [showEditPopup, setShowEditPopup] = useState(false);
+  const [showPopup, setshowPopup] = useState(false)
  const [criteriaId, setCriteriaId] = useState()
- console.log("criteriaIdmain", criteriaId)
+//  console.log("criteriaIdmain", criteriaId)
   const toggleEditPopup = () => {
     setShowEditPopup(!showEditPopup);
   };
-
+  const toggle = () => {
+  setshowPopup(true);
+  };
   const handleRemoveItem = (index) => {
     const updatedSearch = recentSearch.filter((_, i) => i !== index);
     setRecentSearch(updatedSearch);
@@ -102,7 +104,7 @@ const RecentCriteria = ({onClose}) => {
                                     <InputAdornment position="end">
        
        
-          <TuneIcon  style={{cursor:'pointer'}} onClick={onClose}/> {/* New Card List Filter Icon */}
+          <TuneIcon  style={{cursor:'pointer'}} onClick={toggle}/> {/* New Card List Filter Icon */}
        
                                     </InputAdornment>
                                 ), style: {
@@ -136,19 +138,6 @@ const RecentCriteria = ({onClose}) => {
               }} >
               <CloseIcon style={{fontSize:'15px'}} />
             </IconButton>
-            </ListItem>
-          ))}
-        </List>
-      </div>
-      <hr />
-      <div>
-      <div style={{ display: "flex", alignItems: "center" }}>
-      <LocationOnIcon color="action"/> <label style={{marginLeft:'5px'}}>Recomendation</label>
-      </div>
-        <List className="bg-gray rounded border-1">
-          {recomendation.map((item, index) => (
-            <ListItem key={index} className="text-white">
-              <ListItemText primary={item} />
             </ListItem>
           ))}
         </List>
@@ -191,6 +180,10 @@ const RecentCriteria = ({onClose}) => {
           criteriaId={criteriaId} 
         />
       )}
+      {showPopup && (
+        <CreateCriteria setShowPopup={setShowPopup} togglePopup={togglePopup}/>
+      )}
+    
     </div>
   );
 };

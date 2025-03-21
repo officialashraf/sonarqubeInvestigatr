@@ -73,7 +73,7 @@ const SearchBar = () => {
           <Search onClick={handleSearch} color="gray" size="24" />
         </div>
         <div className="search-results-container">
-          <div className="search-results">
+          <div className="searchresult">
             {filteredResults.length > 0 ? (
               <>
                 <table className="results-table">

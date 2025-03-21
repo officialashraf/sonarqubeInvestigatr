@@ -13,7 +13,6 @@ import { toast } from 'react-toastify';
 const EditCriteria = ({ togglePopup, criteriaId }) => {
   const [formData, setFormData] = useState({
     searchQuery: '',
-    datatype: [],
     filetype: [],
     caseIds: [],
     latitude: '',
@@ -95,7 +94,6 @@ console.log("criteriaId", criteriaId)
         searchQuery: criteriaData.keyword || '',
         caseIds: caseOption ? [caseOption] : [],
         filetype: fileTypeOption ? [fileTypeOption] : [],
-        datatype: fileTypeOption ? [fileTypeOption] : [], // Assuming datatype is the same as filetype
         latitude: criteriaData.latitude || '',
         longitude: criteriaData.longitude || ''
       });
@@ -261,20 +259,8 @@ console.log("criteriaId", criteriaId)
               sx={sharedSxStyles}
             />
 
-            {/* Datatype Dropdown (Multi Select) */}
-            <div className="mb-3">
-              <label>Datatype</label>
-              <Select
-                isMulti
-                options={fileTypeOptions}
-                styles={customStyles}
-                className="com"
-                value={formData.datatype}
-                onChange={(selected) => setFormData(prev => ({ ...prev, datatype: selected }))}
-                placeholder="Select Datatype"
-              />
-            </div>
-
+            
+          
             {/* Filetype Dropdown (Multi Select) */}
             <div className="mb-3">
               <label>Filetype</label>

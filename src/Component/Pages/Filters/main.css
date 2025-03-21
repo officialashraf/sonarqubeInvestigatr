@@ -99,7 +99,11 @@ background-color: white;
   color: #000000;
 }
 /*add new filter*/
-
+.p-1{
+  overflow-y: auto;
+  height: 450px;
+  overflow-x: hidden;
+}
 .filter-name-input{
   background-color: #ffffff;
   border:1px solid #000000;
