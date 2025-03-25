@@ -11,20 +11,24 @@ import SendIcon from '@mui/icons-material/Send';
 import { useNavigate } from 'react-router-dom';
 import RecentCriteria from './recentCriteria';
 import { useSelector, useDispatch } from "react-redux";
-import { setPage } from '../../../Redux/Action/criteriaAction';
+import { closePopup, openPopup, setPage } from '../../../Redux/Action/criteriaAction';
  
 
-const SavedCriteria = ({togglePopup, setShowPopup}) => {
+const SavedCriteria = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const activePopup = useSelector((state) => state.popup.activePopup);
+
   const { searchResults, totalPages, currentPage } = useSelector((state) => state.search);
   console.log("searResult",searchResults, totalPages,currentPage)
-  const [showCreate, setshowCreate] = useState(false);
-  const [showRecent, setshowRecent] = useState(false);
+  const savedResults = JSON.parse(localStorage.getItem('searchResults'));
+console.log(savedResults);
+  
   const [inputValue, setInputValue] = useState('');
   const [searchChips, setSearchChips] = useState(['bomb']);
   const [activeTab, setActiveTab] = useState('Cases');
   
+  if (activePopup !== "saved") return null;
   // Sample data
   const cases = [
     { id: 'C28301', status: 'New', text: 'pcjpmrnplgku', subtext: 'aslshh.rsg' },
@@ -55,29 +59,16 @@ const SavedCriteria = ({togglePopup, setShowPopup}) => {
     setInputValue('');
   };
 
-  const handleShow= () =>{
-    setshowCreate(true)
-  }
-  const handleShowRecent= () =>{
-    setshowRecent(true)
-  }
+  
   const ViewScreen = () => {
     navigate('/search' );
-     togglePopup();
-     setShowPopup()
+    dispatch(closePopup())
     }
 
   return (
     <div className="popup-overlay">
     <div className="popup-container">
-        <button className="close-icon"  onClick={() => {
-          // Directly set showPopup to false in parent component
-          setShowPopup();
-          // Also close this component's popup if needed
-          if (typeof togglePopup === 'function') {
-            togglePopup();
-          }
-        }} >
+        <button className="close-icon" onClick={() => dispatch(closePopup())}>
             &times;
         </button>
         <div className="popup-content">
@@ -113,8 +104,8 @@ const SavedCriteria = ({togglePopup, setShowPopup}) => {
                                         endAdornment: (
                                             <InputAdornment position="end">
                
-                     <SendIcon style={{cursor:'pointer'}} onClick={handleShowRecent} />
-                  <TuneIcon  style={{cursor:'pointer'}} onClick={handleShow}/> {/* New Card List Filter Icon */}
+                     <SendIcon style={{cursor:'pointer'}} onClick={() => dispatch(openPopup("recent"))}/>
+                  <TuneIcon  style={{cursor:'pointer'}} onClick={() => dispatch(openPopup("create"))}/> {/* New Card List Filter Icon */}
                
                                             </InputAdornment>
                                         ), style: {
@@ -167,14 +158,16 @@ const SavedCriteria = ({togglePopup, setShowPopup}) => {
       
       <div className="search-results">
         {activeTab === 'Cases' ? (
-          searchResults && searchResults.map((item) => (
+         savedResults &&savedResults.map((item) => (
             <div key={item.id} className="result-card">
               <div className="card-header">
-                <div className="card-id">{item.unified_case_id}</div>
+                <div className="card-id">{item.unified_case_id.join(", ")}</div>
                 <div className="status-badge">{item.status || 'NEW'}</div>
               </div>
               <div className="card-text">{item.site_keywordsmatched}</div>
+              <div className="card-subtext">{item.unified_activity_title}</div>
               <div className="card-subtext">{item.unified_type}</div>
+         
             </div>
           ))
         ) : (
@@ -215,8 +208,8 @@ const SavedCriteria = ({togglePopup, setShowPopup}) => {
     </div>
     </div>
     </div>
-    {showCreate && <CreateCriteria setShowPopup={setShowPopup} togglePopup={togglePopup}/>}
-    {showRecent && <RecentCriteria togglePopup={togglePopup} togglePopupa={setShowPopup} />}
+    {/* {showCreate && <CreateCriteria setShowPopup={setShowPopup} togglePopup={togglePopup}/>}
+    {showRecent && <RecentCriteria togglePopup={togglePopup} togglePopupa={setShowPopup} />} */}
     </div>
   );
 };

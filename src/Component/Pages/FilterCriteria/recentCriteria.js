@@ -14,28 +14,44 @@ import CreateCriteria, { sharedSxStyles } from "./createCriteria";
 import Cookies from 'js-cookie'
 import { toast } from "react-toastify";
 import EditCriteria from './editCriteria';
+import { useDispatch, useSelector } from "react-redux";
+import { closePopup, openPopup } from "../../../Redux/Action/criteriaAction";
 
-const RecentCriteria = ({togglePopup, setShowPopup}) => {
-  const [search, setSearch] = useState("");
+const RecentCriteria = () => {
+  
   const [recentSearch, setRecentSearch] = useState(["person", "every"]);
   const [savedSearch, setSavedSearch] = useState([]);
-  const [showEditPopup, setShowEditPopup] = useState(false);
-  const [showPopup, setshowPopup] = useState(false)
  const [criteriaId, setCriteriaId] = useState()
-//  console.log("criteriaIdmain", criteriaId)
-  const toggleEditPopup = () => {
-    setShowEditPopup(!showEditPopup);
-  };
-  const toggle = () => {
-  setshowPopup(true);
-  };
+
+  useEffect(() => {
+      fetchData();
+    }, []);
+  const dispatch = useDispatch();
+  const activePopup = useSelector((state) =>state.popup?.activePopup || null);
+  console.log("Current Active Popup:", activePopup);
+
+const handelCreate = ()=>{
+  console.log("🚀 Create button clicked! Dispatching openPopup('create')");
+  dispatch(openPopup("create"))
+}
+   // Debugging
+
+  // if (activePopup !== "recent") {
+  //   console.log("Not 'recent', activePopup is:", activePopup);
+  //   return null;
+  // }
+  
+  // if (activePopup === "create") {
+  //   console.log("Rendering CreateCriteria");
+  //   return <CreateCriteria />;
+  // }
+
+
   const handleRemoveItem = (index) => {
     const updatedSearch = recentSearch.filter((_, i) => i !== index);
     setRecentSearch(updatedSearch);
   };
-    useEffect(() => {
-      fetchData();
-    }, []);
+   
 
   const Token = Cookies.get('accessToken');
   const fetchData = async () => {
@@ -81,14 +97,15 @@ const RecentCriteria = ({togglePopup, setShowPopup}) => {
       console.error("Error deleting item:", error);
     }
   };
-
+ 
   return (
     <div className="popup-overlay">
     <div className="popup-container">
-    {/* <button className="close-icon" onClick={onClose}>
+    <button className="close-icon" onClick={() => dispatch(closePopup())}>
         &times;
-      </button> */}
+      </button>
       <div className="popup-content">
+        <h5>Saved Criteria</h5>
     <div className="container p-4  text-white  shadow-lg" style={{  background:'grey' }}>
       <div className="d-flex align-items-center mb-3">
       <TextField
@@ -104,8 +121,7 @@ const RecentCriteria = ({togglePopup, setShowPopup}) => {
                                     <InputAdornment position="end">
        
        
-          <TuneIcon  style={{cursor:'pointer'}} onClick={toggle}/> {/* New Card List Filter Icon */}
-       
+          <TuneIcon  style={{cursor:'pointer'}} onClick={handelCreate}/> {/* New Card List Filter Icon */}
                                     </InputAdornment>
                                 ), style: {
                                     height: '38px', // Use consistent height
@@ -157,7 +173,6 @@ const RecentCriteria = ({togglePopup, setShowPopup}) => {
                 <IconButton edge="end" color="dark">
                 <Edit 
          onClick={() => {
-          toggleEditPopup();
           setCriteriaId(item.id); // Set the selected item's ID
         }}
           style={{ cursor: 'pointer' }} 
@@ -174,14 +189,13 @@ const RecentCriteria = ({togglePopup, setShowPopup}) => {
     </div>
     </div>
     </div>
-    {showEditPopup && (
+    {/* {showEditPopup && (
         <EditCriteria 
-          togglePopup={toggleEditPopup} 
-          criteriaId={criteriaId} 
+         
         />
-      )}
-      {showPopup && (
-        <CreateCriteria setShowPopup={setShowPopup} togglePopup={togglePopup}/>
+      )} */}
+      {activePopup ==="create" && (
+        <CreateCriteria />
       )}
     
     </div>

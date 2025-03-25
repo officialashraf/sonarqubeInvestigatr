@@ -1,4 +1,4 @@
-import { SET_SEARCH_RESULTS, SET_PAGE } from "../Constants/criteriaConstant";
+import { SET_SEARCH_RESULTS, SET_PAGE, CLOSE_POPUP,OPEN_POPUP } from "../Constants/criteriaConstant";
 
 const initialState = {
   searchResults: [],
@@ -6,12 +6,12 @@ const initialState = {
   currentPage: 1,
 };
 
-const searchReducer = (state = initialState, action) => {
+export const searchReducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_SEARCH_RESULTS:
       return {
         ...state,
-        searchResults: action.payload.records,
+        searchResults: action.payload.results,
         totalPages: action.payload.total_pages || 1,
       };
 
@@ -26,4 +26,27 @@ const searchReducer = (state = initialState, action) => {
   }
 };
 
-export default searchReducer;
+
+
+
+ export const popupReducer = (state = { activePopup: null}, action) => {
+  console.log("Reducer Called:", action);
+  switch (action.type) {
+    case OPEN_POPUP:
+      return {
+        ...state,
+       activePopup: action.payload, // Set active popup
+      };
+
+    case CLOSE_POPUP:
+      return {
+        ...state,
+        activePopup: null, // Close the popup
+      };
+
+    default:
+      return state; // Return current state for unhandled actions
+  }
+};
+
+

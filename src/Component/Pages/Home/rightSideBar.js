@@ -1,25 +1,30 @@
-import React,{useState} from 'react';
-import { Container, Nav } from 'react-bootstrap';
+import React from 'react';
+import {  Nav } from 'react-bootstrap';
 import { Cpu, FileEarmarkText, Bell, PinAngle, ChatLeftText ,Search} from 'react-bootstrap-icons';
 import { useNavigate } from 'react-router-dom';
 import "../../../Assets/Stlyes/rightSideBar.css"
-import CreateCriteria from '../FilterCriteria/createCriteria'
+import { useDispatch ,useSelector} from 'react-redux';
+import { openPopup } from '../../../Redux/Action/criteriaAction';
+import RecentCriteria from '../FilterCriteria/recentCriteria';
+import CreateCriteria from '../FilterCriteria/createCriteria';
 import SavedCriteria from '../FilterCriteria/savedCriteria';
 
 const  RightSidebar = ()=> {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [showPopup, setShowPopup] = useState(false);
+  const activePopup = useSelector((state) => state.popup?.activePopup || null);
+ 
+ console.log("actvepopup", activePopup)
 
-  const handleItemClick = (item, setShowPopup, navigate) => {
+  const handleItemClick = (item) => {
     if (item.isPopup) {
-        setShowPopup(true); // Search click hone par popup open hoga
+      console.log("Dispatching action: openPopup");
+       dispatch(openPopup("recent"))// Search click hone par popup open hoga
     } else {
         navigate(item.path); // Baaki sab pages navigate karenge
     }}
    
-    const togglePopup = () => {
-      setShowPopup((prev) => !prev);
-    };
+   
 
   const menuItems = [
     { label: 'Gemini', icon: <Cpu size={15} />, path: '/gemini' },
@@ -36,7 +41,7 @@ const  RightSidebar = ()=> {
          {menuItems.map((item, index) => (
             <Nav.Link
               key={index}
-              onClick={() => handleItemClick(item, setShowPopup, navigate)}
+              onClick={() => handleItemClick(item)}
               style={{ color: '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', fontSize: '12px',  marginBottom: '2rem' }}
             >
               {item.icon}
@@ -44,9 +49,9 @@ const  RightSidebar = ()=> {
             </Nav.Link>
           ))}
          </div>
-         {/* {showPopup && <CreateCriteria togglePopup={togglePopup} setShowPopup={setShowPopup}/>} */}
-          
-          {showPopup && <SavedCriteria togglePopup={togglePopup} setShowPopup={setShowPopup}/>} 
+         {activePopup === "recent" && <RecentCriteria />}
+         {activePopup === "create" && <CreateCriteria />}
+         {activePopup === "saved" && <SavedCriteria/>}
           </>
   );
 }

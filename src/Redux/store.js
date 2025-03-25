@@ -6,7 +6,7 @@ import { filterReducer, summaryDataReducer, taskFilterReducer } from './Reducers
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage"; // Local Storage ke liye
 import { combineReducers } from "redux";
-import searchReducer from './Reducers/criteriaReducer';
+import {searchReducer , popupReducer} from './Reducers/criteriaReducer';
 
 // ✅ Persist Config
 const persistConfig = {
@@ -23,12 +23,18 @@ const rootReducer = combineReducers({
     summaryData: summaryReducer,
     filterCount: filterReducer,
     search: searchReducer,
+    popup: popupReducer,
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 //  Configure Store
 const store = configureStore({
   reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      immutableCheck: process.env.NODE_ENV !== "production" ? false : true,
+      serializableCheck: process.env.NODE_ENV !== "production" ? false : true,
+    }),
 });
 console.log(store.getState());
 // Persistor Export 

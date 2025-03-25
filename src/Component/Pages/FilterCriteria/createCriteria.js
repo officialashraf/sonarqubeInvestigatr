@@ -10,8 +10,9 @@ import SavedCriteria from './savedCriteria';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
-import { useDispatch } from "react-redux";
-import { setSearchResults } from '../../../Redux/Action/criteriaAction';
+import { useDispatch, useSelector} from "react-redux";
+import { closePopup, openPopup, setSearchResults } from '../../../Redux/Action/criteriaAction';
+
 
 export const sharedSxStyles = {
   '& .MuiOutlinedInput-root': {
@@ -55,12 +56,16 @@ const CreateCriteria = ({ togglePopup, setShowPopup, handleCreateCase }) => {
   const [fileTypeOptions, setFileTypeOptions] = useState([]);
   const [savedCriteria, setSavedCriteria] = useState(null);
 
+  const activePopup = useSelector((state) => state.popup?.activePopup || null);
+console.log("create popup", activePopup)
+  
+
   // Fetch case IDs on component mount
   useEffect(() => {
     fetchCaseData();
     fetchFileTypes();
   }, []);
-
+  // if (activePopup !== "create") return null;
   // Fetch case data from API
   const fetchCaseData = async () => {
     try {
@@ -152,14 +157,24 @@ const CreateCriteria = ({ togglePopup, setShowPopup, handleCreateCase }) => {
       if (formData.includeArchived) {
         await saveCriteria(); // Ensure saveCriteria executes if checked
       }
-      // Prepare the query array with one object per file type
-      const queryArray = formData.filetype.map(type => ({
-        unified_case_id: formData.caseIds && formData.caseIds.length > 0 ? formData.caseIds[0].value : "",
-        unified_type: type.value,
-        site_keywordsmatched: formData.searchQuery,
-        start_time: selectedDates.startDate ? `${selectedDates.startDate.toISOString().split('T')[0]}T${String(selectedDates.startTime.hours).padStart(2, '0')}:${String(selectedDates.startTime.minutes).padStart(2, '0')}:00` : "" || null,
-        end_time: selectedDates.endDate ? `${selectedDates.endDate.toISOString().split('T')[0]}T${String(selectedDates.endTime.hours).padStart(2, '0')}:${String(selectedDates.endTime.minutes).padStart(2, '0')}:00` : "" || null
-      }));
+    
+      const queryArray = formData.filetype.map(type => {
+        let queryObj = {
+          unified_case_id: formData.caseIds?.length > 0 ? formData.caseIds[0].value : "",
+          unified_type: type.value,
+          site_keywordsmatched: formData.searchQuery
+        };
+      
+        if (selectedDates.startDate && selectedDates.startTime) {
+          queryObj.start_time = `${selectedDates.startDate.toISOString().split('T')[0]}T${String(selectedDates.startTime.hours).padStart(2, '0')}:${String(selectedDates.startTime.minutes).padStart(2, '0')}:00`;
+        }
+      
+        if (selectedDates.endDate && selectedDates.endTime) {
+          queryObj.end_time = `${selectedDates.endDate.toISOString().split('T')[0]}T${String(selectedDates.endTime.hours).padStart(2, '0')}:${String(selectedDates.endTime.minutes).padStart(2, '0')}:00`;
+        }
+      
+        return queryObj;
+      });
       console.log("search[ayload", queryArray)
 
       const response = await axios.post('http://5.180.148.40:9006/api/das/search', {
@@ -168,10 +183,11 @@ const CreateCriteria = ({ togglePopup, setShowPopup, handleCreateCase }) => {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${Token}`
-        },
+        }
       });
-
       dispatch(setSearchResults(response.data.results));
+      console.log("Dispatched setSearchResults with:", response.data.results);
+       localStorage.setItem('searchResults', JSON.stringify(response.data.results));
       console.log('Search results:', response.data);
       setFormData({
         searchQuery: '',
@@ -187,12 +203,8 @@ const CreateCriteria = ({ togglePopup, setShowPopup, handleCreateCase }) => {
       if (handleCreateCase) {
         handleCreateCase(response.data);
       }
-
-      setTimeout(() => {
-        if (!showPopupS) {
-          setShowPopupS(true);
-        }
-      }, 300);
+     dispatch(openPopup("recent"))
+     ;
 
     } catch (error) {
       console.error('Error performing search:', error);
@@ -208,13 +220,7 @@ const CreateCriteria = ({ togglePopup, setShowPopup, handleCreateCase }) => {
     setShowPopupD(!showPopupD);
   };
 
-  const togglePopupR = () => {
-    setShowPopupR(!showPopupR);
-  };
-
-  const togglePopupS = () => {
-    setShowPopupS(true);
-  };
+ 
 
   // Handle data from DatePicker
   const handleDateSelection = (dateData) => {
@@ -233,15 +239,7 @@ const CreateCriteria = ({ togglePopup, setShowPopup, handleCreateCase }) => {
   return (
     <div className="popup-overlay">
       <div className="popup-container">
-        <button className="close-icon"
-          onClick={() => {
-            // Directly set showPopup to false in parent component
-            // setShowPopup();
-            // Also close this component's popup if needed
-            if (typeof togglePopup === 'function') {
-              togglePopup();
-            }
-          }}>
+        <button className="close-icon" onClick={() => dispatch(closePopup())}>
           &times;
         </button>
         <div className="popup-content">
@@ -261,8 +259,8 @@ const CreateCriteria = ({ togglePopup, setShowPopup, handleCreateCase }) => {
                 ),
                 endAdornment: (
                   <InputAdornment position="end">
-                    <Send onClick={togglePopupR} style={{ cursor: 'pointer' }} />
-                    <Tune onClick={togglePopupS} style={{ cursor: 'pointer' }} />
+                    <Send onClick={() => dispatch(openPopup("recent"))} style={{ cursor: 'pointer' }} />
+                    <Tune onClick={() => dispatch(openPopup("saved"))} style={{ cursor: 'pointer' }} />
                   </InputAdornment>
                 ),
                 style: {
@@ -275,20 +273,6 @@ const CreateCriteria = ({ togglePopup, setShowPopup, handleCreateCase }) => {
               onChange={handleInputChange}
               sx={sharedSxStyles}
             />
-
-            {/* Datatype Dropdown (Multi Select) */}
-            <div className="mb-3">
-              <label>Datatype</label>
-              <Select
-                isMulti
-                options={fileTypeOptions}
-                styles={customStyles}
-                className="com"
-                value={formData.datatype}
-                onChange={(selected) => setFormData(prev => ({ ...prev, datatype: selected }))}
-                placeholder="Select Datatype"
-              />
-            </div>
 
             {/* Filetype Dropdown (Multi Select) */}
             <div className="mb-3">
@@ -418,7 +402,7 @@ const CreateCriteria = ({ togglePopup, setShowPopup, handleCreateCase }) => {
         />
       )}
 
-      {showPopupR && (
+      {/* {showPopupR && (
         <RecentCriteria
           togglePopup={togglePopupR}
           setShowPopup={setShowPopup}
@@ -430,7 +414,7 @@ const CreateCriteria = ({ togglePopup, setShowPopup, handleCreateCase }) => {
           togglePopup={togglePopupS}
           setShowPopup={setShowPopup}
         />
-      )}
+      )} */}
     </div>
   );
 };
