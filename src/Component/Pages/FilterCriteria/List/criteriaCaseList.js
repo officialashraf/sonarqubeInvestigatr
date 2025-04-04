@@ -1,16 +1,17 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Table, InputGroup, FormControl, Dropdown, DropdownButton, Badge } from 'react-bootstrap';
+import { Table, InputGroup, FormControl, Dropdown, DropdownButton, Badge, Pagination } from 'react-bootstrap';
 
 import axios from 'axios';
-import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material';
+import { ArrowDropDown, ArrowDropUp, Padding } from '@mui/icons-material';
 import '../../../../Assets/Stlyes/table.css';
 import Cookies from "js-cookie";
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import CaseDetails from '../../Case/caseDetails';
 import EditCase from '../../Case/editCase';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setCaseData } from '../../../../Redux/Action/caseAction';
+import { setPage } from '../../../../Redux/Action/criteriaAction';
 
 const CriteriaCaseTable = () => {
   const dispatch = useDispatch();
@@ -24,8 +25,12 @@ const CriteriaCaseTable = () => {
   const [showPopupB, setShowPopupB] = useState(false);
   const [selectedData, setSelectedData] = useState(null);
 
-
-
+  const searchResults = useSelector(state => state.search.searchResults);
+  const currentPage = useSelector(state => state.search.currentPage);
+  const {totalPages, totalResults} = useSelector(state => state.search);
+  const itemsPerPage = 50;
+  const savedResults = JSON.parse(localStorage.getItem('searchResults'))?.expiry > new Date().getTime() ? JSON.parse(localStorage.getItem('searchResults')).results : null;
+  console.log("savedReasult", searchResults)
   const onFieldClick = (item) => {
     dispatch(setCaseData(item));
     const caseId = item.id // Set the case data in Redux store
@@ -181,12 +186,19 @@ const CriteriaCaseTable = () => {
     });
     setFilteredData(sortedData);
 };
+
+ // Pagination logic remains the same
+ const indexOfLastItem = currentPage * itemsPerPage;
+ const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+ const currentItems = searchResults.slice(indexOfFirstItem, indexOfLastItem);
+   // Handle page change
+   const handlePageChange = (pageNumber) => {
+    dispatch(setPage(pageNumber));
+  };
   return (
     <>
-      
-       
-        <div className="data-table" style={{height:'420px', marginTop:'5px'}}>
-          <Table striped bordered hover variant="light"  >
+        <div className="data-table" style={{height:'320px', marginTop:'5px'}}>
+          {/* <Table striped bordered hover variant="light"  >
             <thead>
               <tr>
                 <th>
@@ -282,42 +294,136 @@ const CriteriaCaseTable = () => {
               </tr>
             </thead>
             <tbody className='tb-1'>
-              {filteredData && filteredData.map((item, index) => (
-                <tr key={item.id} >
+            // {savedResults.length > 0 ? ( 
+                //  savedResults.map((item, index) => ( 
+                 {currentItems.length > 0 ? ( 
+              currentItems.map((item, index) => (
+                <tr key={item.id}>
 
-                  <td onClick={() => onFieldClick(item)} style={{ cursor: 'pointer' }} >{`CASE${String(item.id).padStart(4, '0')}`}</td>
-                  <td>{item.title}</td>
-                  <td>{item.created_on.slice(0, 10)}</td>
-                  <td>{item.created_by.slice(0, 8)}</td>
+                  <td onClick={() => onFieldClick(item)} style={{ cursor: 'pointer' }} >{item.unified_case_id}</td>
+                  <td>{item.site_keywordsmatched || item.unified_activity_title}</td>
+                  <td>{item.unified_capture_time.slice(0, 10)}</td>
+                  <td>{item.socialmedia_from_screenname}</td>
                   <td>{item.assignee}</td>
-                  <td>{item.watchers}</td>
-                  <td>{item.modified_on}</td>
+                  <td>{item.watchers}</td>  
+                  <td>{item.unified_date_only}</td>
                   <td disabled={true} >
                     <Badge pill bg="dark" className="badge-custom">
-                      <span>{item.status}</span>
+                      <span>{item.sentiment}</span>
                     </Badge>
                   </td>
                   <td className="d-flex justify-content-between align-items-center">
-                    <span>{item.description}</span>
-                    <span> <Dropdown>
-                      <Dropdown.Toggle className="custom-dropdown-toggle custom-btn"> ⋮ </Dropdown.Toggle>
-                      <Dropdown.Menu className="custom-dropdown-menu">
-                        <Dropdown.Item onClick={() => { togglePopupA(item) }} style={{ cursor: "pointer" }}>Details</Dropdown.Item>
-                        <Dropdown.Item onClick={() => { togglePopupB(item) }} >Edit</Dropdown.Item>
-                        <Dropdown.Item
-                          onClick={() => confirmDelete(item.id,item.title)}
-                        >Delete</Dropdown.Item>
-                      </Dropdown.Menu>
-                    </Dropdown>
-                    </span>
+                    <span>{item.unified_activity_content
+                    }</span>
+                    
 
                   </td>
                 </tr>
-              ))}
-            </tbody>
-          </Table>
+           
+          ))) : (
+            <div className="card-subtext"> No  Data Available</div>
+          )}
+           </tbody>
+          </Table> */}
+  <Table striped bordered hover>
+  <thead>
+    <tr>
+      {/* Dynamically generate headers from all unique keys */}
+      {currentItems.length > 0 && [...new Set(currentItems.flatMap(item => Object.keys(item)))]
+        .map((key, index) => (
+          <th key={index} className="fixed-th">
+            {key.replace(/_/g, ' ').toUpperCase()} {/* Format headers */}
+          </th>
+        ))}
+    </tr>
+  </thead>
+  <tbody>
+    {currentItems.length > 0 ? (
+      currentItems.map((item, rowIndex) => (
+        <tr key={rowIndex}>
+          {/* Dynamically generate table cells */}
+          {[...new Set(currentItems.flatMap(item => Object.keys(item)))].map((key, colIndex) => (
+            <td key={colIndex} className="fixed-th">
+              <div
+                className="cell-content"
+                style={{
+                  cursor: 'pointer',
+                  padding: "8px",
+                  height: '37px',
+                  fontFamily: 'sans-serif',
+                  fontWeight: 'normal',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                }}
+                title={typeof item[key] === 'object' ? JSON.stringify(item[key]) : item[key]}
+              >
+                {typeof item[key] === 'object' && item[key] !== null
+                  ? JSON.stringify(item[key]) // Handle objects/arrays by converting to string
+                  : item[key] || '-'} {/* Show '-' for missing keys */}
+              </div>
+            </td>
+          ))}
+        </tr>
+      ))
+    ) : (
+      <tr>
+        <td colSpan={[...new Set(currentItems.flatMap(item => Object.keys(item)))].length} className="text-center">
+          No Data Available
+        </td>
+      </tr>
+    )}
+  </tbody>
+</Table>
+
+
         </div>
-     
+      <div className='d-flex justify-content-between mt-1'>
+        <div style={{width:'300px', overflow:'auto'}}> 
+        <Pagination> 
+          {/* First Page */} 
+          <Pagination.First  
+            onClick={() => handlePageChange(1)}  
+            disabled={currentPage === 1}  
+          /> 
+           
+          {/* Previous Page */} 
+          <Pagination.Prev  
+            onClick={() => handlePageChange(currentPage - 1)}  
+            disabled={currentPage === 1}  
+          /> 
+           
+          {/* Page Numbers */} 
+          {[...Array(totalPages)]
+  .slice(0, 6) // Sirf 6 pages tak limit karna
+  .map((_, index) => (
+    <Pagination.Item
+      key={index + 1}
+      active={index + 1 === currentPage}
+      onClick={() => handlePageChange(index + 1)}
+    >
+      {index + 1}
+    </Pagination.Item>
+  ))}
+
+          {/* Next Page */} 
+          <Pagination.Next  
+            onClick={() => handlePageChange(currentPage + 1)}  
+            disabled={currentPage === totalPages}  
+          /> 
+           
+          {/* Last Page */} 
+          <Pagination.Last  
+            onClick={() => handlePageChange(totalPages)}  
+            disabled={currentPage === totalPages}  
+          /> 
+        </Pagination> 
+        
+      </div>
+      <div style={{ fontSize: "12px"}}>
+          Page {currentPage} - {itemsPerPage} / {totalResults}
+        </div>
+        </div>
       {showPopupB && <EditCase  item={selectedData} togglePopup={togglePopupB} />}
       {showPopupA && <CaseDetails item={selectedData} users={users} togglePopupA={togglePopupA} />}
 
@@ -326,9 +432,3 @@ const CriteriaCaseTable = () => {
 };
 
 export default CriteriaCaseTable;
-//"69256ec1d45c5b23973b8d44884d5914
-// "6b0a297b235c5b719d5b33d605dc3948",
-// "2850b434e3aa55ac9bad26a61381deed",
-// "0e984e466fd35713a1d876c27ce2d84d",
-// "6aa97938a23d526a93a19616a5904d62",
-// "3d1ddc358d6f573d80285db381c27d04"

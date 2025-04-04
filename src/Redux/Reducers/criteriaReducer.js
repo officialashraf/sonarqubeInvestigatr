@@ -3,6 +3,7 @@ import { SET_SEARCH_RESULTS, SET_PAGE, CLOSE_POPUP,OPEN_POPUP } from "../Constan
 const initialState = {
   searchResults: [],
   totalPages: 1,
+totalResults:0,
   currentPage: 1,
 };
 
@@ -11,8 +12,9 @@ export const searchReducer = (state = initialState, action) => {
     case SET_SEARCH_RESULTS:
       return {
         ...state,
-        searchResults: action.payload.results,
+        searchResults: action.payload.results || [],
         totalPages: action.payload.total_pages || 1,
+totalResults : action.payload.total_results || 0,
       };
 
     case SET_PAGE:
@@ -23,7 +25,7 @@ export const searchReducer = (state = initialState, action) => {
 
     default:
       return state;
-  }
+}
 };
 
 

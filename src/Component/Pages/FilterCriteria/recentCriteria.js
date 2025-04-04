@@ -3,7 +3,7 @@ import "./recentCriteria.css"
 import TuneIcon from '@mui/icons-material/Tune';
 import SearchIcon from '@mui/icons-material/Search';
 import { TextField, IconButton, List, ListItem, ListItemText, ListItemSecondaryAction } from "@mui/material";
-import { Edit, Delete } from "@mui/icons-material";
+import { Edit, Delete, Send } from "@mui/icons-material";
 import InputAdornment from '@mui/material/InputAdornment';
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import SaveIcon from "@mui/icons-material/Save";
@@ -15,13 +15,27 @@ import Cookies from 'js-cookie'
 import { toast } from "react-toastify";
 import EditCriteria from './editCriteria';
 import { useDispatch, useSelector } from "react-redux";
-import { closePopup, openPopup } from "../../../Redux/Action/criteriaAction";
+import { closePopup, openPopup, setPage, setSearchResults } from "../../../Redux/Action/criteriaAction";
+import axios from "axios";
 
 const RecentCriteria = () => {
   
   const [recentSearch, setRecentSearch] = useState(["person", "every"]);
   const [savedSearch, setSavedSearch] = useState([]);
  const [criteriaId, setCriteriaId] = useState()
+ const [showEditPopup, setShowEditPopup] = useState(false);
+ const [searchQuery, setSearchQuery] = useState("");
+ const [keywords, setKeywords] = useState([]);
+
+const [formData, setFormData] = useState({
+    searchQuery: '',
+    datatype: [],
+    filetype: [],
+    caseIds: [],
+    includeArchived: false,
+    latitude: '',
+    longitude: ''
+  });
 
   useEffect(() => {
       fetchData();
@@ -36,20 +50,23 @@ const handelCreate = ()=>{
 }
    // Debugging
 
-  // if (activePopup !== "recent") {
-  //   console.log("Not 'recent', activePopup is:", activePopup);
-  //   return null;
-  // }
   
-  // if (activePopup === "create") {
-  //   console.log("Rendering CreateCriteria");
-  //   return <CreateCriteria />;
-  // }
+  const toggleEditPopup = () => {
+    setShowEditPopup(!showEditPopup);
+  };
 
+  // Handle Enter key press
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && searchQuery.trim() !== "") {
+      e.preventDefault(); // Prevent form submission
+      setKeywords([...keywords, searchQuery.trim()]); // Add new keyword to the list
+      setSearchQuery(""); // Clear input field
+    }
+  };
 
-  const handleRemoveItem = (index) => {
-    const updatedSearch = recentSearch.filter((_, i) => i !== index);
-    setRecentSearch(updatedSearch);
+  // Remove chip when clicked
+  const handleRemoveItem = (chipToDelete) => {
+    setKeywords(keywords.filter((chip) => chip !== chipToDelete));
   };
    
 
@@ -63,10 +80,10 @@ const handelCreate = ()=>{
         },
       });
       const data = await response.json();
-      console.log("resposegetCriteria",data)
+      console.log("resposegetCriteria",data.data)
       if (data && data.data) {
-        setSavedSearch(data.data.map(item => ({ keyword: item.keyword, id: item.id }))); // Extract keywords
-       
+        setSavedSearch(data.data.map(item => ({ keyword: item.keyword.slice(0, 3).join(", "), id: item.id }))); // Extract keywords
+       console.log("setSavedSearch", setSavedSearch)
       }
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -97,7 +114,66 @@ const handelCreate = ()=>{
       console.error("Error deleting item:", error);
     }
   };
+
+  console.log("keyword", keywords, searchQuery)
+  const handleSearch = async () => {
+    // if (keywords || keywords.length === 0) {
+    //   console.error("No keywords selected!", searchQuery);
+    //   return;
+    // }
+  
+    try {
+      const queryObj = {
+        keyword:keywords, // Pass the array of keywords directly
+      };
+  
+      console.log("Sending search query:", keywords);
  
+      const response = await axios.post('http://5.180.148.40:9006/api/das/search', {
+        queryObj
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${Token}`
+        }
+      });
+  
+      console.log("Search results:", response.data);
+  
+      // Dispatch the search results to the store
+      dispatch(setSearchResults({
+        results: response.data.results,
+        total_pages: response.data.total_pages || 1,
+        total_results:response.data.total_results || 0,
+      }));
+   dispatch(setPage(1));
+      // Store the results locally
+      localStorage.setItem('searchResults', JSON.stringify({
+        results: response.data.results,
+        expiry: new Date().getTime() + 24 * 60 * 60 * 1000 // Store for 24 hours
+      }));
+  
+      // Clear selected chips
+      setFormData(prev => ({
+        ...prev,
+        searchQuery: [] // Clear the chips array after successful search
+      })
+    
+    );
+ dispatch(openPopup("saved"));
+    } catch (error) {
+      console.error("Error performing search:", error);
+    }
+  };
+  
+  // const filteredList = savedSearch.filter((item) =>
+  //   item.keyword?.toLowerCase().includes(searchQuery.toLowerCase())
+  // );
+  const filteredList = savedSearch.filter((item) =>
+    typeof item.keyword === "string" &&
+    item.keyword.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+  
   return (
     <div className="popup-overlay">
     <div className="popup-container">
@@ -120,7 +196,7 @@ const handelCreate = ()=>{
                                 endAdornment: (
                                     <InputAdornment position="end">
        
-       
+       <Send style={{cursor:'pointer'}} onClick={handleSearch}/>
           <TuneIcon  style={{cursor:'pointer'}} onClick={handelCreate}/> {/* New Card List Filter Icon */}
                                     </InputAdornment>
                                 ), style: {
@@ -130,8 +206,9 @@ const handelCreate = ()=>{
                                   },
                             }}
                             placeholder="Search..."
-                            // value={formData.searchQuery}
-                            // onChange={(e) => setFormData(prev => ({ ...prev, searchQuery: e.target.value }))}
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            onKeyDown={handleKeyDown}
                             sx={sharedSxStyles}
                         />
         
@@ -145,10 +222,10 @@ const handelCreate = ()=>{
   <label style={{ marginLeft: 'auto' }}>Clear Recent</label>
 </div>
         <List className="bg-gray rounded border-1">
-          {recentSearch.map((item, index) => (
+          {keywords.map((item, index) => (
             <ListItem key={index} className="text-white">
               <ListItemText primary={item} />
-              <IconButton onClick={() => handleRemoveItem(index)} style={{
+              <IconButton  onClick={() => handleRemoveItem(item)} style={{
                 padding: "0",
                 margin: "0",
               }} >
@@ -166,13 +243,15 @@ const handelCreate = ()=>{
       <label style={{marginLeft:'5px'}}>Saved Search</label>
     </div>
         <List className="bg-gray">
-          {savedSearch.map((item, index) => (
+        {filteredList.length > 0 ? (
+          filteredList.map((item, index) => (
             <ListItem key={index} className="text-white">
               <ListItemText primary={item.keyword} />
               <ListItemSecondaryAction>
                 <IconButton edge="end" color="dark">
                 <Edit 
          onClick={() => {
+          toggleEditPopup();
           setCriteriaId(item.id); // Set the selected item's ID
         }}
           style={{ cursor: 'pointer' }} 
@@ -183,21 +262,20 @@ const handelCreate = ()=>{
                 </IconButton>
               </ListItemSecondaryAction>
             </ListItem>
-          ))}
+          ))): (
+            <p className="text-gray-400">No matched keyword</p>
+          )}
         </List>
       </div>
     </div>
     </div>
     </div>
-    {/* {showEditPopup && (
+     {showEditPopup && (
         <EditCriteria 
-         
+          togglePopup={toggleEditPopup} 
+          criteriaId={criteriaId} 
         />
-      )} */}
-      {activePopup ==="create" && (
-        <CreateCriteria />
       )}
-    
     </div>
   );
 };

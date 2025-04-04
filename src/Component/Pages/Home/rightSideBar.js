@@ -52,6 +52,7 @@ const  RightSidebar = ()=> {
          {activePopup === "recent" && <RecentCriteria />}
          {activePopup === "create" && <CreateCriteria />}
          {activePopup === "saved" && <SavedCriteria/>}
+         
           </>
   );
 }

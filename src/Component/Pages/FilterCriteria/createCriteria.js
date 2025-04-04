@@ -11,7 +11,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector} from "react-redux";
-import { closePopup, openPopup, setSearchResults } from '../../../Redux/Action/criteriaAction';
+import { closePopup, openPopup, setPage, setSearchResults } from '../../../Redux/Action/criteriaAction';
 
 
 export const sharedSxStyles = {
@@ -34,6 +34,7 @@ export const sharedSxStyles = {
 const CreateCriteria = ({ togglePopup, setShowPopup, handleCreateCase }) => {
   const dispatch = useDispatch();
   const Token = Cookies.get('accessToken');
+  
   const [formData, setFormData] = useState({
     searchQuery: '',
     datatype: [],
@@ -113,9 +114,20 @@ console.log("create popup", activePopup)
   const saveCriteria = async () => {
     try {
       const criteriaPaylod = {
-        keyword: formData.searchQuery,
-        case_id: formData.caseIds && formData.caseIds.length > 0 ? formData.caseIds[0].value.toString() : "",
-        file_type: formData.filetype && formData.filetype.length > 0 ? formData.filetype[0].value : "",
+        // keyword: formData.searchQuery,
+        // case_id: formData.caseIds && formData.caseIds.length > 0 ? formData.caseIds[0].value.toString() : "",
+        // file_type: formData.filetype && formData.filetype.length > 0 ? formData.filetype[0].value : "",
+        keyword: Array.isArray(formData.searchQuery) 
+    ? formData.searchQuery 
+    : [formData.searchQuery], // Agar single keyword ho, to array me wrap kar le
+// `searchQuery` multiple values ho sakti hain
+case_id: formData.caseIds?.length > 0 
+    ? formData.caseIds.map(caseId => caseId.value.toString()) 
+    : [], // `caseIds` multiple values handle karega aur array return karega
+file_type: formData.filetype?.length > 0 
+    ? formData.filetype.map(file => file.value) 
+    : [], // `filetype` multiple values ka array return karega
+
         latitude: formData.latitude || "",
         longitude: formData.longitude || "",
         start_time: selectedDates.startDate ? `${selectedDates.startDate.toISOString().split('T')[0]}T${String(selectedDates.startTime.hours).padStart(2, '0')}:${String(selectedDates.startTime.minutes).padStart(2, '0')}:00` : "" || null,
@@ -158,36 +170,48 @@ console.log("create popup", activePopup)
         await saveCriteria(); // Ensure saveCriteria executes if checked
       }
     
-      const queryArray = formData.filetype.map(type => {
-        let queryObj = {
-          unified_case_id: formData.caseIds?.length > 0 ? formData.caseIds[0].value : "",
-          unified_type: type.value,
-          site_keywordsmatched: formData.searchQuery
-        };
+      const queryArray = {
+        unified_case_id: formData.caseIds?.length > 0 
+          ? formData.caseIds.map(caseId => caseId.value) 
+          : [],
+        unified_type: formData.filetype?.length > 0 
+          ? formData.filetype.map(type => type.value) 
+          : [],
+        site_keywordsmatched: Array.isArray(formData.searchQuery) 
+          ? formData.searchQuery 
+          : [formData.searchQuery], // Ensure `searchQuery` is always an array
+      };
       
-        if (selectedDates.startDate && selectedDates.startTime) {
-          queryObj.start_time = `${selectedDates.startDate.toISOString().split('T')[0]}T${String(selectedDates.startTime.hours).padStart(2, '0')}:${String(selectedDates.startTime.minutes).padStart(2, '0')}:00`;
-        }
+      if (selectedDates.startDate && selectedDates.startTime) {
+        queryArray.start_time = `${selectedDates.startDate.toISOString().split('T')[0]}T${String(selectedDates.startTime.hours).padStart(2, '0')}:${String(selectedDates.startTime.minutes).padStart(2, '0')}:00`;
+      }
       
-        if (selectedDates.endDate && selectedDates.endTime) {
-          queryObj.end_time = `${selectedDates.endDate.toISOString().split('T')[0]}T${String(selectedDates.endTime.hours).padStart(2, '0')}:${String(selectedDates.endTime.minutes).padStart(2, '0')}:00`;
-        }
-      
-        return queryObj;
-      });
+      if (selectedDates.endDate && selectedDates.endTime) {
+        queryArray.end_time = `${selectedDates.endDate.toISOString().split('T')[0]}T${String(selectedDates.endTime.hours).padStart(2, '0')}:${String(selectedDates.endTime.minutes).padStart(2, '0')}:00`;
+      }
       console.log("search[ayload", queryArray)
 
       const response = await axios.post('http://5.180.148.40:9006/api/das/search', {
-         query: queryArray, page: 1, per_page: 50 
+          queryArray
         }, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${Token}`
         }
       });
-      dispatch(setSearchResults(response.data.results));
+      // dispatch(setSearchResults(response.data.results));
+      dispatch(setSearchResults({
+        results: response.data.results,
+        total_pages: response.data.total_pages || 1,
+        total_results:response.data.total_results || 0,
+      }));
+
+      // Dispatch initial page number
+      dispatch(setPage(1));
       console.log("Dispatched setSearchResults with:", response.data.results);
-       localStorage.setItem('searchResults', JSON.stringify(response.data.results));
+      //  localStorage.setItem('searchResults', JSON.stringify(response.data.results));
+      localStorage.setItem('searchResults', JSON.stringify({ results: response.data.results, expiry: new Date().getTime() + 24 * 60 * 60 * 1000 }));
+
       console.log('Search results:', response.data);
       setFormData({
         searchQuery: '',
@@ -203,17 +227,34 @@ console.log("create popup", activePopup)
       if (handleCreateCase) {
         handleCreateCase(response.data);
       }
-     dispatch(openPopup("recent"))
-     ;
+     dispatch(openPopup("saved"));
 
     } catch (error) {
       console.error('Error performing search:', error);
     }
   };
 
+  // const handleInputChange = (e) => {
+  //   setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  // };
   const handleInputChange = (e) => {
-    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
-  };
+    const { name, value } = e.target;
+
+    // If updating `searchQuery`, split input into an array of keywords
+    if (name === "searchQuery") {
+        setFormData(prev => ({
+            ...prev,
+            [name]: value.split(",").map(keyword => keyword.trim()) // Split by commas and trim extra spaces
+        }));
+    } else {
+        // For other inputs, handle normally
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    }
+};
+
 
   // Toggle popup visibility
   const togglePopupA = () => {

@@ -7,7 +7,7 @@ import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage"; // Local Storage ke liye
 import { combineReducers } from "redux";
 import {searchReducer , popupReducer} from './Reducers/criteriaReducer';
-
+import {thunk }from "redux-thunk";
 // ✅ Persist Config
 const persistConfig = {
   key: "root",
@@ -34,7 +34,7 @@ const store = configureStore({
     getDefaultMiddleware({
       immutableCheck: process.env.NODE_ENV !== "production" ? false : true,
       serializableCheck: process.env.NODE_ENV !== "production" ? false : true,
-    }),
+    }).concat(thunk),
 });
 console.log(store.getState());
 // Persistor Export 

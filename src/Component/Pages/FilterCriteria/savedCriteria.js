@@ -11,7 +11,10 @@ import SendIcon from '@mui/icons-material/Send';
 import { useNavigate } from 'react-router-dom';
 import RecentCriteria from './recentCriteria';
 import { useSelector, useDispatch } from "react-redux";
-import { closePopup, openPopup, setPage } from '../../../Redux/Action/criteriaAction';
+import { closePopup, openPopup, setPage, setSearchResults } from '../../../Redux/Action/criteriaAction';
+import axios from 'axios'; // Import axios
+import Cookies from 'js-cookie'; // Import js-cookie
+import { toast } from 'react-toastify';
  
 
 const SavedCriteria = () => {
@@ -19,47 +22,190 @@ const SavedCriteria = () => {
   const dispatch = useDispatch();
   const activePopup = useSelector((state) => state.popup.activePopup);
 
-  const { searchResults, totalPages, currentPage } = useSelector((state) => state.search);
-  console.log("searResult",searchResults, totalPages,currentPage)
-  const savedResults = JSON.parse(localStorage.getItem('searchResults'));
+  const { searchResults, totalPages, currentPage, totalResults } = useSelector((state) => state.search);
+  console.log("searResult",searchResults, totalPages,currentPage, totalResults)
+  // const savedResults = JSON.parse(localStorage.getItem('searchResults'));
+  const savedResults = JSON.parse(localStorage.getItem('searchResults'))?.expiry > new Date().getTime() ? JSON.parse(localStorage.getItem('searchResults')).results : null;
+
 console.log(savedResults);
   
   const [inputValue, setInputValue] = useState('');
-  const [searchChips, setSearchChips] = useState(['bomb']);
+  const [searchChips, setSearchChips] = useState([]);
   const [activeTab, setActiveTab] = useState('Cases');
-  
+  const [filteredResults, setFilteredResults] = useState(savedResults || []);
+const [savedCriteria, setSavedCriteria] = useState([]);
+const [formData, setFormData] = useState({
+  searchQuery: '',
+  // Add other form fields as needed
+});
+  console.log("searchChips", searchChips);
   if (activePopup !== "saved") return null;
-  // Sample data
-  const cases = [
-    { id: 'C28301', status: 'New', text: 'pcjpmrnplgku', subtext: 'aslshh.rsg' },
-    { id: 'C76064', status: 'New', text: 'connectionpcjncn12434', subtext: 'aslshh.rsg' }
-  ];
   
-  const transactions = [
-    { id: 'T12345', status: 'Pending', text: 'transfer38292', subtext: 'cxnpay.io' },
-    { id: 'T67890', status: 'Complete', text: 'exchngbtc212', subtext: 'btcwall.net' }
-  ];
+
+  // const handleKeyPress = (e) => {
+  //   if (e.key === 'Enter' && inputValue.trim() !== '') {
+  //     // Add chip and clear input
+  //     if (!searchChips.includes(inputValue.trim())) {
+  //       setSearchChips([...searchChips, inputValue.trim()]);
+  //     }
+  //     setInputValue('');
+  //   }
+  // };
   
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter' && inputValue.trim() !== '') {
-      // Add chip and clear input
-      if (!searchChips.includes(inputValue.trim())) {
-        setSearchChips([...searchChips, inputValue.trim()]);
-      }
-      setInputValue('');
-    }
-  };
-  
-  const removeChip = (chip) => {
-    setSearchChips(searchChips.filter(item => item !== chip));
-  };
+  // const removeChip = (chip) => {
+  //   setSearchChips(searchChips.filter(item => item !== chip));
+  // };
   
   const resetSearch = () => {
     setSearchChips([]);
     setInputValue('');
   };
 
+  const Token = Cookies.get('accessToken');
+  // const handleSaveCriteria = async () => {
+  //   try {
+  //     // Use the first chip as the keyword if available, otherwise use searchQuery
+  //     const keyword = searchChips.length > 0 ? searchChips[0] : formData.searchQuery;
   
+  //     const criteriaPaylod = {
+  //       keyword: keyword,
+  //     };
+  
+  //     console.log("Criteria Payload", criteriaPaylod);
+  
+  //     const Token = Cookies.get('accessToken'); // Ensure token is available
+  
+  //     const response = await axios.post('http://5.180.148.40:9006/api/das/criteria', criteriaPaylod, {
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         'Authorization': `Bearer ${Token}`
+  //       },
+  //     });
+  
+  //     // Update local state with the new saved criteria
+  //     setSavedCriteria(prevCriteria => [...prevCriteria, response.data]);
+  
+  //     // Clear search chips after saving
+  //     setSearchChips([]);
+  
+  //     // Show success toast
+  //     toast.success("Criteria saved successfully");
+      
+  //     console.log('Criteria saved successfully:', response.data);
+  
+  //     // Optional: Close the create popup or perform any additional actions
+  //     dispatch(closePopup());
+  //     dispatch(openPopup("recent"))
+  
+  //   } catch (error) {
+  //     console.error('Error saving criteria:', error);
+      
+  //     // Show error toast
+  //     toast.error("Failed to save criteria");
+  //   }
+  // };
+  // Handle Enter key press (convert input to chip)
+  const filterResults = (chips, query) => {
+    if (!chips.length && !query) {
+      setFilteredResults(savedResults); // Show full list if no filters
+      return;
+    }
+
+    const lowerQuery = query.toLowerCase();
+
+    const filtered = savedResults.filter((item) =>
+      chips.some((chip) => matchesSearch(item, chip)) || matchesSearch(item, lowerQuery)
+    );
+
+    setFilteredResults(filtered.length > 0 ? filtered : []); // No match condition
+  };
+
+  // ✅ Checks if ANY field matches the search query
+  const matchesSearch = (item, query) => {
+    return (
+      item?.unified_case_id?.join(", ").toLowerCase().includes(query) ||  // Match ID
+      item?.status?.toLowerCase().includes(query) ||  // Match Status
+      item?.site_keywordsmatched?.toLowerCase().includes(query) ||  // Match Keywords
+      item?.unified_activity_title?.toLowerCase().includes(query) ||  // Match Title
+      item?.unified_type?.toLowerCase().includes(query)  // Match Type
+    );
+  };
+
+  // ✅ Handle Enter key press (convert input to chip)
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter" && inputValue.trim() !== "") {
+      e.preventDefault();
+      if (!searchChips.includes(inputValue.trim())) {
+        const updatedChips = [...searchChips, inputValue.trim()];
+        setSearchChips(updatedChips);
+        filterResults(updatedChips, inputValue);
+      }
+      setInputValue("");
+    }
+  };
+
+  // ✅ Handle input change & filter results
+  const handleInputChange = (e) => {
+    const query = e.target.value;
+    setInputValue(query);
+    filterResults(searchChips, query);
+  };
+
+  // ✅ Remove a chip and update filtering
+  const removeChip = (chip) => {
+    const updatedChips = searchChips.filter((item) => item !== chip);
+    setSearchChips(updatedChips);
+    filterResults(updatedChips, inputValue);
+  };
+  const handleSearch = async () => {
+    // if (keywords || keywords.length === 0) {
+    //   console.error("No keywords selected!", searchQuery);
+    //   return;
+    // }
+  
+    try {
+      const queryObj = {
+        keyword:searchChips, // Pass the array of keywords directly
+      };
+  
+      console.log("Sending search query:", searchChips);
+ 
+      const response = await axios.post('http://5.180.148.40:9006/api/das/search', {
+        queryObj
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${Token}`
+        }
+      });
+  
+      console.log("Search results:", response.data);
+  
+      // Dispatch the search results to the store
+      dispatch(setSearchResults({
+        results: response.data.results,
+        total_pages: response.data.total_pages || 1,
+        total_results:response.data.total_results || 0,
+      }));
+   dispatch(setPage(1));
+      // Store the results locally
+      localStorage.setItem('searchResults', JSON.stringify({
+        results: response.data.results,
+        expiry: new Date().getTime() + 24 * 60 * 60 * 1000 // Store for 24 hours
+      }));
+  
+      // Clear selected chips
+      setFormData(prev => ({
+        ...prev,
+        searchQuery: [] // Clear the chips array after successful search
+      })
+    
+    );
+//  dispatch(openPopup("saved"));
+    } catch (error) {
+      console.error("Error performing search:", error);
+    }
+  };
   const ViewScreen = () => {
     navigate('/search' );
     dispatch(closePopup())
@@ -104,7 +250,7 @@ console.log(savedResults);
                                         endAdornment: (
                                             <InputAdornment position="end">
                
-                     <SendIcon style={{cursor:'pointer'}} onClick={() => dispatch(openPopup("recent"))}/>
+                     <SendIcon style={{cursor:'pointer'}} onClick={handleSearch}/>
                   <TuneIcon  style={{cursor:'pointer'}} onClick={() => dispatch(openPopup("create"))}/> {/* New Card List Filter Icon */}
                
                                             </InputAdornment>
@@ -116,15 +262,16 @@ console.log(savedResults);
                                     }}
                                     type="text" 
                                     value={inputValue}
-                                    onChange={(e) => setInputValue(e.target.value)}
+                                    onChange={handleInputChange}
                                     onKeyPress={handleKeyPress}
                                     placeholder="Search..."
                                     sx={sharedSxStyles}
                                 />
        {/* </div> */}
       </div>
-      
-      <div className="search-term-indicator">
+     <div>
+       
+     <div className="search-term-indicator">
         <div className="chips-container">
           {searchChips.map((chip, index) => (
             <div key={index} className="search-chip">
@@ -137,59 +284,42 @@ console.log(savedResults);
         </div>
         <div className="action-buttons">
           <button className="action-button" onClick={resetSearch}>RESET</button>
-          <button className="action-button">SAVE SEARCH</button>
         </div>
       </div>
       
       <div className="tabs">
-        <div 
-          className={`tab ${activeTab === 'Cases' ? 'active' : ''}`}
-          onClick={() => setActiveTab('Cases')}
-        >
-          Cases (87)
-        </div>
-        <div 
-          className={`tab ${activeTab === 'Transactions' ? 'active' : ''}`}
-          onClick={() => setActiveTab('Transactions')}
-        >
-          Transactions (4127)
-        </div>
+  <div 
+    className={`tab active`} // "Cases" will always be active
+    onClick={() => setActiveTab('Cases')}
+  >
+    Cases ({totalResults || "no results"})
+  </div>
+</div>
+
+<div className="search-results">
+{filteredResults.length > 0 ? (
+          filteredResults.slice(-5).map((item) => ( //Only show the latest 5 results
+    <div key={item.id} className="result-card">
+      <div className="card-header">
+        <div className="card-id">{item.unified_case_id.join(", ")}</div>
+        <div className="status-badge">{item.status || 'NEW'}</div>
       </div>
-      
-      <div className="search-results">
-        {activeTab === 'Cases' ? (
-         savedResults &&savedResults.map((item) => (
-            <div key={item.id} className="result-card">
-              <div className="card-header">
-                <div className="card-id">{item.unified_case_id.join(", ")}</div>
-                <div className="status-badge">{item.status || 'NEW'}</div>
-              </div>
-              <div className="card-text">{item.site_keywordsmatched}</div>
-              <div className="card-subtext">{item.unified_activity_title}</div>
-              <div className="card-subtext">{item.unified_type}</div>
-         
-            </div>
-          ))
-        ) : (
-          transactions.map(item => (
-            <div key={item.id} className="result-card">
-              <div className="card-header">
-                <div className="card-id">{item.id}</div>
-                <div className={`status-badge ${item.status === 'Complete' ? 'complete' : 'pending'}`}>
-                  {item.status}
-                </div>
-              </div>
-              <div className="card-text">{item.text}</div>
-              <div className="card-subtext">{item.subtext}</div>
-            </div>
-          ))
-        )}
+      <div className="card-text">{item.site_keywordsmatched}</div>
+      <div className="card-subtext">{item.unified_activity_title}</div>
+      <div className="card-subtext">{item.unified_type}</div>
+
+    </div>
+    
+  )) ) : (
+    <div className="card-subtext">❌ No Matched Data</div>
+  )}
         <button className="add-btn" style={{marginLeft:'0px'}} onClick={ViewScreen}>
           VIEW ALL RESULTS IN FULL SCREEN
         </button>
       </div>
-      
-     {/* Pagination */}
+     </div>
+{/*       
+     Pagination
      <div>
         <button
           onClick={() => dispatch(setPage(currentPage - 1))}
@@ -204,7 +334,7 @@ console.log(savedResults);
         >
           Next
         </button>
-      </div>
+      </div> */}
     </div>
     </div>
     </div>

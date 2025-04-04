@@ -91,13 +91,13 @@ console.log("criteriaId", criteriaId)
       
       // Update form data
       setFormData({
-        searchQuery: criteriaData.keyword || '',
+        searchQuery: criteriaData.keyword || [],
         caseIds: caseOption ? [caseOption] : [],
         filetype: fileTypeOption ? [fileTypeOption] : [],
         latitude: criteriaData.latitude || '',
         longitude: criteriaData.longitude || ''
       });
-      
+      console.log("setFormData", formData)
       setIsLoading(false);
     } catch (error) {
       console.error('Error fetching criteria details:', error);
@@ -105,7 +105,7 @@ console.log("criteriaId", criteriaId)
       setIsLoading(false);
     }
   };
-
+console.log("formdata", formData.caseIds)
   // Fetch case data from API
   const fetchCaseData = async () => {
     try {
@@ -159,13 +159,19 @@ console.log("criteriaId", criteriaId)
     try {
       const Token = Cookies.get('accessToken');
       const updatePayload = {
-        keyword: formData.searchQuery,
-        case_id: formData.caseIds && formData.caseIds.length > 0 ? formData.caseIds[0].value.toString() : "",
-        file_type: formData.filetype && formData.filetype.length > 0 ? formData.filetype[0].value : "",
+        keyword: Array.isArray(formData.searchQuery) 
+        ? formData.searchQuery 
+        : [formData.searchQuery], // Ensure `searchQuery` is always an array
+      case_id: formData.caseIds?.length > 0 
+        ? formData.caseIds.map(caseId => caseId.value.toString()) 
+        : [], // Handle multiple case IDs as an array of strings
+      file_type: formData.filetype?.length > 0 
+        ? formData.filetype.map(file => file.value) 
+        : [],
         latitude: formData.latitude || "",
         longitude: formData.longitude || "",
-        start_time: selectedDates.startDate ? `${selectedDates.startDate.toISOString().split('T')[0]}T${String(selectedDates.startTime.hours).padStart(2, '0')}:${String(selectedDates.startTime.minutes).padStart(2, '0')}:00` : "",
-        end_time: selectedDates.endDate ? `${selectedDates.endDate.toISOString().split('T')[0]}T${String(selectedDates.endTime.hours).padStart(2, '0')}:${String(selectedDates.endTime.minutes).padStart(2, '0')}:00` : ""
+        start_time: selectedDates.startDate ? `${selectedDates.startDate.toISOString().split('T')[0]}T${String(selectedDates.startTime.hours).padStart(2, '0')}:${String(selectedDates.startTime.minutes).padStart(2, '0')}:00` : null,
+        end_time: selectedDates.endDate ? `${selectedDates.endDate.toISOString().split('T')[0]}T${String(selectedDates.endTime.hours).padStart(2, '0')}:${String(selectedDates.endTime.minutes).padStart(2, '0')}:00` : null
       };
       
       const response = await axios.put(`http://5.180.148.40:9006/api/das/criteria/${criteriaId}`, updatePayload, {
