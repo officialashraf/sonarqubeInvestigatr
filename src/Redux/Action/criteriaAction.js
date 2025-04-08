@@ -1,4 +1,4 @@
-import { SET_SEARCH_RESULTS, SET_PAGE, OPEN_POPUP, CLOSE_POPUP } from "../Constants/criteriaConstant";
+import { SET_SEARCH_RESULTS, SET_PAGE, OPEN_POPUP, CLOSE_POPUP, SET_KEYWORDS } from "../Constants/criteriaConstant";
 
 export const setSearchResults = (payload) => ({
   type: SET_SEARCH_RESULTS,
@@ -17,4 +17,8 @@ export const openPopup = (popupName) => ({
 
 export const closePopup = () => ({
   type: CLOSE_POPUP, // Close the popup
+});
+export const setKeywords = (keywords) => ({
+  type: SET_KEYWORDS,
+  payload: keywords,
 });

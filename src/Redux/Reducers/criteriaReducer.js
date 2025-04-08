@@ -1,4 +1,4 @@
-import { SET_SEARCH_RESULTS, SET_PAGE, CLOSE_POPUP,OPEN_POPUP } from "../Constants/criteriaConstant";
+import { SET_SEARCH_RESULTS, SET_PAGE, CLOSE_POPUP,OPEN_POPUP, SET_KEYWORDS } from "../Constants/criteriaConstant";
 
 const initialState = {
   searchResults: [],
@@ -52,3 +52,14 @@ totalResults : action.payload.total_results || 0,
 };
 
 
+export const criteriaReducer = (state = {keywords: []}, action) => {
+  switch (action.type) {
+    case SET_KEYWORDS:
+      return {
+        ...state,
+        keywords: action.payload,
+      };
+    default:
+      return state;
+  }
+};

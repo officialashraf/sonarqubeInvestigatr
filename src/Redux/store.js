@@ -1,17 +1,16 @@
 import {configureStore}  from '@reduxjs/toolkit'
-import { caseReducer, summaryReducer, tabReducer,
-
-  } from './Reducers/caseReducer'
+import { caseReducer, summaryReducer, tabReducer } from './Reducers/caseReducer'
 import { filterReducer, summaryDataReducer, taskFilterReducer } from './Reducers/filterReducer';
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage"; // Local Storage ke liye
 import { combineReducers } from "redux";
-import {searchReducer , popupReducer} from './Reducers/criteriaReducer';
+import {searchReducer , popupReducer, criteriaReducer} from './Reducers/criteriaReducer';
 import {thunk }from "redux-thunk";
 // ✅ Persist Config
 const persistConfig = {
   key: "root",
   storage, // Local Storage
+  // blacklist: ['search'],
 };
 
 
@@ -24,6 +23,7 @@ const rootReducer = combineReducers({
     filterCount: filterReducer,
     search: searchReducer,
     popup: popupReducer,
+    criteriaKeywords: criteriaReducer,
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
@@ -39,5 +39,6 @@ const store = configureStore({
 console.log(store.getState());
 // Persistor Export 
 export const persistor = persistStore(store);
+// persistor.purge();
 export default store;
 
