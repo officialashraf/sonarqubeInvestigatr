@@ -35,12 +35,8 @@ const SavedCriteria = () => {
     searchQuery: '',
   });
 
-  // Use the data from Redux store first, fallback to localStorage only if Redux store is empty
-  const displayResults = searchResults && searchResults.length > 0 
-    ? searchResults 
-    : JSON.parse(localStorage.getItem('searchResults'))?.expiry > new Date().getTime() 
-      ? JSON.parse(localStorage.getItem('searchResults')).results 
-      : [];
+  const displayResults = searchResults 
+  
 
   console.log("searchChips", searchChips);
   

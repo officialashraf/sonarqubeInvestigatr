@@ -1,9 +1,10 @@
 import { SET_SEARCH_RESULTS, SET_PAGE, CLOSE_POPUP,OPEN_POPUP, SET_KEYWORDS } from "../Constants/criteriaConstant";
 
+// Redux Reducer
 const initialState = {
   searchResults: [],
   totalPages: 1,
-totalResults:0,
+  totalResults: 0,
   currentPage: 1,
 };
 
@@ -14,20 +15,17 @@ export const searchReducer = (state = initialState, action) => {
         ...state,
         searchResults: action.payload.results || [],
         totalPages: action.payload.total_pages || 1,
-totalResults : action.payload.total_results || 0,
+        totalResults: action.payload.total_results || 0,
       };
-
     case SET_PAGE:
       return {
         ...state,
         currentPage: action.payload,
       };
-
     default:
       return state;
-}
+  }
 };
-
 
 
 

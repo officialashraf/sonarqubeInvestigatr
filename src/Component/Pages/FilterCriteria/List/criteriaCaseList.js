@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Pagination, Spinner } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import CaseDetails from '../../Case/caseDetails';
-import EditCase from '../../Case/editCase';
-import { setPage } from '../../../../Redux/Action/criteriaAction';
+import { setPage, setSearchResults } from '../../../../Redux/Action/criteriaAction';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
@@ -19,7 +17,9 @@ const CriteriaCaseTable = () => {
   const { totalPages, totalResults, searchResults, currentPage } = useSelector(state => state.search);
   console.log("search......",searchResults)
   const itemsPerPage = 50;
+  const keywords = useSelector((state) => state.criteriaKeywords.keywords);
   
+  console.log("Keywords from Redux:", keywords);
   // Get the token for API requests
   const Token = localStorage.getItem('token') || Cookies.get('token');
   
@@ -30,39 +30,35 @@ const CriteriaCaseTable = () => {
       
       try {
         // Get the current query parameters from localStorage
-        const currentQuery = JSON.parse(localStorage.getItem('currentSearchQuery'));
+        const keyword = keywords
         
-        if (!currentQuery) {
+        if (!keyword) {
           setIsLoading(false);
           return;
         }
         
         // Add pagination parameters to the query
         const paginatedQuery = {
-          ...currentQuery,
+          keyword:keyword,
           page: currentPage,
-          limit: itemsPerPage
         };
         console.log("pagination", paginatedQuery)
-        const response = await axios.post('http://5.180.148.40:9006/api/das/search', {
-          queryArray: paginatedQuery
-        }, {
+        const response = await axios.post('http://5.180.148.40:9006/api/das/search', 
+          paginatedQuery
+        , {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${Token}`
           }
         });
         
-        
+        console.log("rsponsePaginated", response)
         // Update Redux store with the new page of results
-        dispatch({
-          type: 'SET_SEARCH_RESULTS',
-          payload: {
+        dispatch(setSearchResults({
             results: response.data.results,
             total_pages: response.data.total_pages || 1,
             total_results: response.data.total_results || 0,
-          }
-        });
+        }));
         
       } catch (error) {
         console.error('Error fetching page data:', error);
@@ -202,9 +198,6 @@ const CriteriaCaseTable = () => {
           {isLoading ? 'Loading...' : `Page ${currentPage} - ${totalPages} / ${totalResults}`}
         </div>
       </div>
-      
-      {showPopupB && <EditCase item={selectedData} togglePopup={togglePopupB} />}
-      {showPopupA && <CaseDetails item={selectedData} users={users} togglePopupA={togglePopupA} />}
     </>
   );
 };
