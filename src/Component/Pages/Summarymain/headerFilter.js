@@ -3,7 +3,7 @@ import { Navbar, Nav,Container, Row, Col,Badge } from 'react-bootstrap';
 import { FaFileAlt,FaArrowLeft } from 'react-icons/fa';
  import {  useSelector } from 'react-redux';
 //import { setSelectedTab } from '../../../../Redux/Action/caseAction';
-import '../../../Assets/Stlyes/headerfilter.css';
+import './headerfilter.css';
 import { useNavigate, useParams } from 'react-router-dom';
 // import CaseData from '../Analyze/TabularData/tabulerData';
 

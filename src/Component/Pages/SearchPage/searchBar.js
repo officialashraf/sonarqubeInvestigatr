@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "../../../Assets/Stlyes/searchBar.css";
+import "./searchBar.css";
 import { Search } from "react-bootstrap-icons";
 import { useNavigate } from "react-router-dom";
 

@@ -1,5 +1,6 @@
 // import React from 'react'
 // import { useState } from 'react';
+// import './pagination.css'
 
 // const Pagination = ({
 //     totalItems,

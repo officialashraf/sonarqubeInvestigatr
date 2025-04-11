@@ -1,5 +1,5 @@
 import React, {  useState,useEffect } from "react";
-import "../../../Assets/Stlyes/createCase.css";
+import "./createCase.css";
 import axios from "axios";
 import Cookies from "js-cookie"; // Make sure you're using this for cookies
 import {  toast } from 'react-toastify';
@@ -47,7 +47,7 @@ export   const customStyles = {
     }
   })
 };
-const CreateCase = ({ togglePopup }) => {
+  const CreateCase = ({ togglePopup }) => {
   const [formData, setFormData] = useState({
     title: "",
     description: "",

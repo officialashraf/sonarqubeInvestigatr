@@ -120,8 +120,7 @@ navigate('/cases')
     // if (keywords || keywords.length === 0) {
     //   console.error("No keywords selected!", searchChips);
     //   return;
-    // }
-  
+    // }  
     try {
       const queryObj = {
         keyword:searchChips, // Pass the array of keywords directly

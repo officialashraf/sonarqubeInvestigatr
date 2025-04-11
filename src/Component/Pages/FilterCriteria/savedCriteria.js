@@ -14,8 +14,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { closePopup, openPopup, setPage, setSearchResults } from '../../../Redux/Action/criteriaAction';
 import axios from 'axios'; // Import axios
 import Cookies from 'js-cookie'; // Import js-cookie
-import { toast } from 'react-toastify';
- 
+
 
 const SavedCriteria = () => {
   const navigate = useNavigate();

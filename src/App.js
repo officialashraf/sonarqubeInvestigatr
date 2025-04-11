@@ -9,7 +9,7 @@ import CaseTableDataFilter from './Component/Pages/Analyze/caseTableDataFilter.j
 import CaseAddFilter from './Component/Pages/Summarymain/unusable/caseAddFilter.js';
 import RightSidebar from './Component/Pages/Home/rightSideBar.js';
 import Sidebar from './Component/Pages/Home/leftSideBar.js';
-import './Assets/Stlyes/dashboard.css';
+import './Component/Pages/Home/dashboard.css';
 import Summary from './Component/Pages/Summarymain/summary.js';
 import LineChart1 from './Component/Pages/Analyze/GraphicalData/lineChart.js';
 import KeywordChart from './Component/Pages/Analyze/GraphicalData/keywordChart.js';
@@ -18,7 +18,7 @@ import './App.css'
 import ProtectedRoute from './utils/protectRoute.js';
 import Loader from './Component/Pages/Layout/loader.js';
 import SearchResults from './Component/Pages/FilterCriteria/List/fullscreen.js';
-
+import UsersHome from './Component/Pages/User/UsersHome.js';
 
 const AppContent = () => {
   const location = useLocation();
@@ -50,7 +50,8 @@ const AppContent = () => {
             <Route path="/line" element={<LineChart1 />} />
             <Route path="/grapg" element={< GraphicalData />} />
             <Route path="/search" element={< SearchResults />} />
-            <Route path="*" element={<div className='notfound'> <h4>Work in progress........</h4></div>} />
+            <Route path="/user" element={< UsersHome/>} />
+            <Route path="*" element={<div className='notfound'> <h1>Work in progress........</h1></div>} />
           </Route>
           <Route path='loader' element={<Loader/>}/>
           </Routes>

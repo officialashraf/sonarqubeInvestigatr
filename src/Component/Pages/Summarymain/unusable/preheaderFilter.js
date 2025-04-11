@@ -2,7 +2,7 @@ import React from 'react';
 import { Nav } from 'react-bootstrap';
 import { useDispatch,useSelector } from 'react-redux';
 import { setSelectedTab } from '../../../../Redux/Action/caseAction';
-import  '../../../../Assets/Stlyes/preHeaderFilter.css';
+import  './preHeaderFilter.css';
 
 const PreheaderFilter = () => {
   const dispatch = useDispatch();

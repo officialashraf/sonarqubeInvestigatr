@@ -3,7 +3,7 @@ import { Container, Row, Col, Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import '../../../Assets/Stlyes/login.css';
+import './login.css';
 import InputField from './inputField'; // reusable input field
 import {  toast } from 'react-toastify';
 

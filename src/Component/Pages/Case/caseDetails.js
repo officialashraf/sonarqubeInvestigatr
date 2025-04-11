@@ -1,6 +1,6 @@
 import React from 'react'
 import { Table , CloseButton} from 'react-bootstrap'
-import '../../../Assets/Stlyes/caseDetails.css'
+import './caseDetails.css'
 
 const CaseDetails = ({ item, togglePopupA }) => {
     return (

@@ -3,9 +3,9 @@ import { useState, useEffect } from "react";
 import { Table, Pagination } from "react-bootstrap";
 import Cookies from "js-cookie";
 import axios from "axios";
-import "../../../../Assets/Stlyes/Filter/caseTableData.css";
+import "./caseTableData.css";
 import { useSelector, useDispatch } from "react-redux";
-import "../../../../Assets/Stlyes/pagination.css";
+import "./pagination.css";
 import {
   setSumaryHeadersAction,
   setSummaryDataAction,

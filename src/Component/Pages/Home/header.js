@@ -1,7 +1,7 @@
 import React from 'react';
 import { Navbar, Nav, NavDropdown, Container } from 'react-bootstrap';
 import { Bell, PersonCircle } from 'react-bootstrap-icons'; // Bootstrap Icons
-import "../../../Assets/Stlyes/header.css";
+import "./header.css";
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';

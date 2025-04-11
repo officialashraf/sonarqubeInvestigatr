@@ -3,7 +3,7 @@ import { Table, InputGroup, FormControl, Dropdown, DropdownButton, Badge, Pagina
 
 import axios from 'axios';
 import { ArrowDropDown, ArrowDropUp, Padding } from '@mui/icons-material';
-import '../../../../Assets/Stlyes/table.css';
+import './table.css';
 import Cookies from "js-cookie";
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';

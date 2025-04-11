@@ -1,6 +1,6 @@
 import React from "react";
 import { Card, CardContent, Typography, Grid, IconButton } from "@mui/material";
-import "../../../../Assets/Stlyes/graphicalData.css"
+import "./graphicalData.css"
 import {ListAltOutlined ,ArrowBack, ArrowForward, MoreVert} from '@mui/icons-material';
 import LineChart1 from "./lineChart";
 import KeywordChart from "./keywordChart";
