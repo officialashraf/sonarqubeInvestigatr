@@ -30,7 +30,9 @@ const SavedCriteria = () => {
   const [activeTab, setActiveTab] = useState('Cases');
   const [isLoading, setIsLoading] = useState(false);
   
-  const keywords = useSelector((state) => state.criteriaKeywords);
+  const keywords = useSelector((state) => state.criteriaKeywords.keywords);
+  console.log("savedkeyword", keywords)
+
   const [formData, setFormData] = useState({
     searchQuery: '',
   });
@@ -41,13 +43,17 @@ const SavedCriteria = () => {
   console.log("searchChips", searchChips);
   
   useEffect(() => {
-    let combinedChips = '';
-    if (keywords?.keywords && Array.isArray(keywords.keywords)) {
-      combinedChips = keywords.keywords;
-      console.log("combinedChips", combinedChips);
+    console.log("Keywords object:", keywords);
+    if (keywords && Array.isArray(keywords)) {
+        let combinedChips = keywords;
+        console.log("Combined Chips:", combinedChips);
+        setSearchChips(combinedChips);
+    } else {
+        console.log("Keywords.keyword is not an array or doesn't exist.");
+        setSearchChips([]); // Fallback for empty or invalid data
     }
-    setSearchChips(combinedChips);
-  }, [keywords]);
+}, [keywords]);
+
 
   // Filter results based on user input
   const filterResults = (chips, query) => {
@@ -160,7 +166,12 @@ const SavedCriteria = () => {
         total_pages: response.data.total_pages || 1,
         total_results: response.data.total_results || 0,
       }));
-      dispatch(setKeywords(response.data.input.keyword));
+    
+      //const keywordFromAPI = response.data.input.keyword;
+      dispatch(setKeywords({
+        keyword: response.data.input.keyword,
+        queryPayload: {} // or other fields if needed
+      }));
       dispatch(setPage(1));
       
       // Clear input field after search
@@ -232,7 +243,7 @@ const SavedCriteria = () => {
             <div>
               <div className="search-term-indicator">
                 <div className="chips-container">
-                  {searchChips.map((chip, index) => (
+                  {searchChips && searchChips.map((chip, index) => (
                     <div key={index} className="search-chip">
                       <span>{chip}</span>
                       <button className="chip-delete-btn" onClick={() => removeChip(chip)}>

@@ -20,7 +20,7 @@ export const openPopup = (popupName) => ({
 export const closePopup = () => ({
   type: CLOSE_POPUP, // Close the popup
 });
-export const setKeywords = (keywords) => ({
+export const setKeywords = (payload) => ({
   type: SET_KEYWORDS,
-  payload: keywords,
+  payload,
 });

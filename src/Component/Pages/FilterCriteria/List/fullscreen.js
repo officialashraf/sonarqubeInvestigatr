@@ -32,7 +32,7 @@ const { searchResults, totalPages, currentPage, totalResults } = useSelector((st
   console.log("searchResult", searchResults, totalPages, currentPage, totalResults);
 
 
-const keywords = useSelector((state) => state.criteriaKeywords);
+ const keywords = useSelector((state) => state.criteriaKeywords.keywords);
 
 console.log("Keywords from Redux:", keywords);
 const [formData, setFormData] = useState({
@@ -45,8 +45,8 @@ const [formData, setFormData] = useState({
 
 // Combined chips: Redux + user added
 useEffect(() => {
-  if (keywords?.keywords && Array.isArray(keywords.keywords)) {
-    const combinedChips = keywords.keywords.map((k) => ({ keyword: k }));
+  if (keywords && Array.isArray(keywords)) {
+    const combinedChips = keywords.map((k) => ({ keyword: k }));
     setSearchChips(combinedChips);
     console.log("combinedChips", combinedChips);
   }
@@ -180,7 +180,10 @@ console.log("filterdeChpis", filteredChips)
         total_pages: response.data.total_pages || 1,
         total_results: response.data.total_results || 0,
       }));
-      dispatch(setKeywords(response.data.input.keyword));
+      dispatch(setKeywords({
+             keyword: response.data.input.keyword,
+             queryPayload: {} // or other fields if needed
+           }));
       dispatch(setPage(1));
      
     } catch (error) {

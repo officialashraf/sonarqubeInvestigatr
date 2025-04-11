@@ -16,7 +16,7 @@ const  Sidebar = ()=> {
     { label: 'Reports', icon: <BarChart size={15} />, path: '/reports' },
     // { label: 'Dashboard', icon: <Grid size={15} />, path: '/dashboard' },
     // { label: 'Targets', icon: <Bullseye size={15} />, path: '/targets' },
-    { label: 'Admin', icon: <People size={15} />, path: '/admin' },
+    { label: 'Users', icon: <People size={15} />, path: '/user' },
   ];
 
   return (

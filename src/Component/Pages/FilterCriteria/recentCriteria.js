@@ -27,7 +27,7 @@ const RecentCriteria = () => {
  const [searchQuery, setSearchQuery] = useState("");
  const [keywords, setKeyword] = useState([]);
  const recentKeyword = useSelector((state) => state.criteriaKeywords.keywords);
- console.log("recnetkeyword", recentKeyword.keywords)
+//  console.log("recnetkeyword", recentKeyword.keywords)
 //  setKeyword(recentKeyword)
 const [formData, setFormData] = useState({
     searchQuery: '',
@@ -156,7 +156,10 @@ const handelCreate = ()=>{
         total_results: response.data.total_results || 0,
       }));
   
-      dispatch(setKeywords(response.data.input.keyword));
+      dispatch(setKeywords({
+                   keyword: response.data.input.keyword,
+                   queryPayload: {} // or other fields if needed
+                 }));
       //  dispatch(setPage(1));
   
         dispatch(openPopup("saved")); // Remove closePopup call

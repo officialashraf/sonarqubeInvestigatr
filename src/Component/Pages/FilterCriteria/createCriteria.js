@@ -218,7 +218,11 @@ const handleSearch = async (e) => {
       total_pages: response.data.total_pages || 1,
       total_results: response.data.total_results || 0,
     }));
-    dispatch(setKeywords(response.data.input.keyword));
+
+    dispatch(setKeywords({
+      keyword: response.data.input.keyword,
+      queryPayload: response.data.input  // or other fields if needed
+    }));
     console.log("setkeywordDispacth",response.data.input.keyword)
     // Dispatch initial page number
     dispatch(setPage(1));

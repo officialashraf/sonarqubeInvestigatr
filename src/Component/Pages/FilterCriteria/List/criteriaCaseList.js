@@ -17,59 +17,112 @@ const CriteriaCaseTable = () => {
   const { totalPages, totalResults, searchResults, currentPage } = useSelector(state => state.search);
   console.log("search......",searchResults)
   const itemsPerPage = 50;
+  // const keywords = useSelector((state) => state.criteriaKeywords.keywords);
+  const payload = useSelector((state) => state.criteriaKeywords.queryPayload);
   const keywords = useSelector((state) => state.criteriaKeywords.keywords);
-  
   console.log("Keywords from Redux:", keywords);
+  console.log("Payload from Redux:",payload);
   // Get the token for API requests
   const Token = localStorage.getItem('token') || Cookies.get('token');
   
   // Fetch data when page changes
+  // useEffect(() => {
+  //   const fetchPageData = async () => {
+  //     setIsLoading(true);
+      
+  //     try {
+  //       // Get the current query parameters from localStorage
+  //        const keyword = keywords
+        
+  //       if (!keyword) {
+  //         setIsLoading(false);
+  //         return;
+  //       }
+        
+  //       // Add pagination parameters to the query
+  //       const paginatedQuery = {
+  //         keyword:keyword,
+  //         page: currentPage,
+  //       };
+  //       console.log("pagination", paginatedQuery)
+  //       const response = await axios.post('http://5.180.148.40:9006/api/das/search', 
+  //     paginatedQuery
+  //       , {
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //           'Authorization': `Bearer ${Token}`
+  //         }
+  //       });
+        
+  //       console.log("rsponsePaginated", response)
+  //       // Update Redux store with the new page of results
+  //       dispatch(setSearchResults({
+  //           results: response.data.results,
+  //           total_pages: response.data.total_pages || 1,
+  //           total_results: response.data.total_results || 0,
+  //       }));
+        
+  //     } catch (error) {
+  //       console.error('Error fetching page data:', error);
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
+    
+  //   fetchPageData();
+  // }, [currentPage, dispatch, Token]);
+
   useEffect(() => {
     const fetchPageData = async () => {
       setIsLoading(true);
-      
+  
       try {
-        // Get the current query parameters from localStorage
-        const keyword = keywords
-        
+        const token = Token;
+        const keyword = keywords;
+  
         if (!keyword) {
           setIsLoading(false);
           return;
         }
-        
-        // Add pagination parameters to the query
-        const paginatedQuery = {
-          keyword:keyword,
-          page: currentPage,
-        };
-        console.log("pagination", paginatedQuery)
-        const response = await axios.post('http://5.180.148.40:9006/api/das/search', 
-          paginatedQuery
-        , {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${Token}`
+  
+        // Determine query based on keyword match
+        const usePayload =
+          payload && payload.keyword && payload.keyword === keyword;
+  
+        const paginatedQuery = usePayload
+          ? { ...payload, page: currentPage }
+          : { keyword, page: currentPage };
+  
+        console.log("Final query =>", paginatedQuery);
+  
+        const response = await axios.post(
+          'http://5.180.148.40:9006/api/das/search',
+          paginatedQuery,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
           }
-        });
-        
-        console.log("rsponsePaginated", response)
-        // Update Redux store with the new page of results
-        dispatch(setSearchResults({
+        );
+  
+        dispatch(
+          setSearchResults({
             results: response.data.results,
             total_pages: response.data.total_pages || 1,
             total_results: response.data.total_results || 0,
-        }));
-        
+          })
+        );
       } catch (error) {
         console.error('Error fetching page data:', error);
       } finally {
         setIsLoading(false);
       }
     };
-    
+  
     fetchPageData();
-  }, [currentPage, dispatch, Token]);
-
+  }, [currentPage, dispatch, Token, keywords, payload]);
+  
   const togglePopupB = (item) => {
     setShowPopupB((prev) => !prev);
     setSelectedData(item);

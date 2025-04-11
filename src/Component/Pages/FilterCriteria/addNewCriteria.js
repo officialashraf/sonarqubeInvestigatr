@@ -630,7 +630,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import DatePickera from './datepicker';
 import '../FilterCriteria/createCriteria.css';
 import { customStyles } from '../Case/createCase';
-import { openPopup, setPage, setSearchResults } from '../../../Redux/Action/criteriaAction';
+import { openPopup, setKeywords, setPage, setSearchResults } from '../../../Redux/Action/criteriaAction';
 import { toast } from 'react-toastify';
 
 const AddNewCriteria = ({ 
@@ -792,15 +792,19 @@ console.log("platform", response.data)
             total_results: response.data.total_results || 0,
           }));
           
+          dispatch(setKeywords({
+                keyword: response.data.input.keyword,
+                queryPayload: response.data.input  // or other fields if needed
+              }));
           // Dispatch the initial page number
           dispatch(setPage(1));
           console.log("Dispatched setSearchResults with:", response.data.results);
           
           // Persist results in local storage with an expiry timestamp
-          localStorage.setItem('searchResults', JSON.stringify({
-            results: response.data.results,
-            expiry: new Date().getTime() + 24 * 60 * 60 * 1000, // 24-hour expiry
-          }));
+        //   localStorage.setItem('searchResults', JSON.stringify({
+        //     results: response.data.results,
+        //     expiry: new Date().getTime() + 24 * 60 * 60 * 1000, // 24-hour expiry
+        //   }));
           
           console.log('Search results:', response.data);
           setIsPopupVisible(false);

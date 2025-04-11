@@ -1,3 +1,4 @@
+import { setKeywords } from "../Action/criteriaAction";
 import { SET_SEARCH_RESULTS, SET_PAGE, CLOSE_POPUP,OPEN_POPUP, SET_KEYWORDS } from "../Constants/criteriaConstant";
 
 // Redux Reducer
@@ -50,12 +51,44 @@ export const searchReducer = (state = initialState, action) => {
 };
 
 
-export const criteriaReducer = (state = {keywords: []}, action) => {
+// export const criteriaReducer = (state = {keywords: []}, action) => {
+//   switch (action.type) {
+//     case SET_KEYWORDS:
+//       return {
+//         ...state,
+//         keywords: action.payload,
+//       };
+//     default:
+//       return state;
+//   }
+// };
+
+const queryState = {
+  queryPayload: {
+    case_id: [],
+    file_type: [],
+    keyword: [],
+    start_time: null,
+    end_time: null,
+    latitude: null,
+    longitude: null,
+    page: 1,
+  }
+};
+
+export const criteriaReducer = (state = queryState, action) => {
   switch (action.type) {
     case SET_KEYWORDS:
+      
       return {
         ...state,
-        keywords: action.payload,
+        keywords: action.payload.keyword,
+        queryPayload: action.payload.skipQueryPayload
+        ? state.queryPayload
+        : {
+            ...state.queryPayload,
+            ...action.payload.queryPayload,
+          },
       };
     default:
       return state;
