@@ -25,6 +25,7 @@ const RecentCriteria = () => {
  const [criteriaId, setCriteriaId] = useState()
  const [showEditPopup, setShowEditPopup] = useState(false);
  const [searchQuery, setSearchQuery] = useState("");
+
  const [keywords, setKeyword] = useState([]);
  const recentKeyword = useSelector((state) => state.criteriaKeywords.keywords);
 //  console.log("recnetkeyword", recentKeyword.keywords)
@@ -211,7 +212,10 @@ const handelCreate = ()=>{
                             }}
                             placeholder="Search..."
                             value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
+                            onChange={(e) =>{
+                            console.log("Typed: ", e.target.value); 
+                            setSearchQuery(e.target.value);
+                          }}
                             onKeyDown={handleKeyDown}
                             sx={sharedSxStyles}
                         />

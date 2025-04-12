@@ -149,6 +149,10 @@ console.log("filterdeChpis", filteredChips)
   };
 
   const handleSearch = async () => {
+    // if (keywords || keywords.length === 0) {
+    //   console.error("No keywords selected!", searchChips);
+    //   return;
+    // }  
     try {
       const payload = {
         keyword: searchChips?.length > 0 

@@ -9,7 +9,7 @@ import CaseTableDataFilter from './Component/Pages/Analyze/caseTableDataFilter.j
 import CaseAddFilter from './Component/Pages/Summarymain/unusable/caseAddFilter.js';
 import RightSidebar from './Component/Pages/Home/rightSideBar.js';
 import Sidebar from './Component/Pages/Home/leftSideBar.js';
-import './Assets/Stlyes/dashboard.css';
+import './Component/Pages/Home/dashboard.css';
 import Summary from './Component/Pages/Summarymain/summary.js';
 import LineChart1 from './Component/Pages/Analyze/GraphicalData/lineChart.js';
 import KeywordChart from './Component/Pages/Analyze/GraphicalData/keywordChart.js';
@@ -23,6 +23,8 @@ import UsersDashboard from './Component/Pages/User/UsersDashboard.js';
 
 const AppContent = () => {
   const location = useLocation();
+
+  
 
   return (
     <div className="ContainerDashboard">
@@ -51,8 +53,12 @@ const AppContent = () => {
             <Route path="/line" element={<LineChart1 />} />
             <Route path="/grapg" element={< GraphicalData />} />
             <Route path="/search" element={< SearchResults />} />
+
             <Route path="/users" element={< UsersDashboard />} />
             <Route path="*" element={<div className='notfound'> <h4>Work in progress........</h4></div>} />
+
+
+
           </Route>
           <Route path='loader' element={<Loader/>}/>
           </Routes>

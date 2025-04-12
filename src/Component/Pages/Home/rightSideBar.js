@@ -2,7 +2,7 @@ import React from 'react';
 import {  Nav } from 'react-bootstrap';
 import { Cpu, FileEarmarkText, Bell, PinAngle, ChatLeftText ,Search} from 'react-bootstrap-icons';
 import { useNavigate } from 'react-router-dom';
-import "../../../Assets/Stlyes/rightSideBar.css"
+import "./rightSideBar.css"
 import { useDispatch ,useSelector} from 'react-redux';
 import { openPopup } from '../../../Redux/Action/criteriaAction';
 import RecentCriteria from '../FilterCriteria/recentCriteria';

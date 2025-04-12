@@ -3,7 +3,7 @@ import { Table, InputGroup, FormControl, Dropdown, DropdownButton, Badge } from 
 import { Search, List, CardList, Plus, ThreeDotsVertical } from 'react-bootstrap-icons';
 import axios from 'axios';
 import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material';
-import '../../../Assets/Stlyes/table.css';
+import './table.css';
 import CreateCase from '../Case/createCase';
 import Cookies from "js-cookie";
 import { useNavigate } from 'react-router-dom';

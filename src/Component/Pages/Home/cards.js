@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { Card, Container } from 'react-bootstrap';
 import { Folder, FileEarmarkPlus, PieChart, Check2Circle, PauseCircle, Archive, Trash } from 'react-bootstrap-icons';
-import '../../../Assets/Stlyes/card.css';
+import './card.css';
 import { useEffect, useState,useCallback } from 'react';
 import Cookies from "js-cookie";
 
@@ -95,3 +95,9 @@ const CardList = ()=> {
 }
 
 export default CardList;
+
+
+
+
+
+

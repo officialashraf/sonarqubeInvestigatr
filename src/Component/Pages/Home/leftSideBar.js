@@ -2,8 +2,11 @@ import React from 'react';
 import { Nav } from 'react-bootstrap';
 import { House, ListTask, Folder, BarChart, People,Search} from 'react-bootstrap-icons';
 import { useNavigate } from 'react-router-dom';
-import "../../../Assets/Stlyes/sideBar.css"
 
+
+
+
+import "./sideBar.css"
 
 const  Sidebar = ()=> {
   const navigate = useNavigate();
