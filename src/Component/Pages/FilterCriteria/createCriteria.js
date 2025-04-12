@@ -11,7 +11,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector} from "react-redux";
-import { closePopup, openPopup, setPage, setSearchResults } from '../../../Redux/Action/criteriaAction';
+import { closePopup, openPopup, setKeywords, setPage, setSearchResults } from '../../../Redux/Action/criteriaAction';
 
 
 export const sharedSxStyles = {
@@ -144,6 +144,7 @@ file_type: formData.filetype?.length > 0
       toast.success("Criteria saved successfully");
       console.log('Criteria saved successfully:', response.data);
       setSavedCriteria(response.data);
+      dispatch(setKeywords(response.data.keyword));
       // You might want to show a success message or handle the response in some way
     } catch (error) {
       console.error('Error saving criteria:', error);
@@ -153,90 +154,9 @@ file_type: formData.filetype?.length > 0
   // Handle checkbox change for saving criteria
   const handleSaveCriteriaChange = (e) => {
     setFormData(prev => ({ ...prev, includeArchived: e.target.checked }));
-
-    // If checkbox is checked, save the criteria
-    // if (e.target.checked) {
-    //   saveCriteria();
-    // }
   };
 
-  // Handle search submission
-  const handleSearch = async (e) => {
-    e.preventDefault();
-
-    console.log(e);
-    try {
-      if (formData.includeArchived) {
-        await saveCriteria(); // Ensure saveCriteria executes if checked
-      }
-    
-      const queryArray = {
-        unified_case_id: formData.caseIds?.length > 0 
-          ? formData.caseIds.map(caseId => caseId.value) 
-          : [],
-        unified_type: formData.filetype?.length > 0 
-          ? formData.filetype.map(type => type.value) 
-          : [],
-        site_keywordsmatched: Array.isArray(formData.searchQuery) 
-          ? formData.searchQuery 
-          : [formData.searchQuery], // Ensure `searchQuery` is always an array
-      };
-      
-      if (selectedDates.startDate && selectedDates.startTime) {
-        queryArray.start_time = `${selectedDates.startDate.toISOString().split('T')[0]}T${String(selectedDates.startTime.hours).padStart(2, '0')}:${String(selectedDates.startTime.minutes).padStart(2, '0')}:00`;
-      }
-      
-      if (selectedDates.endDate && selectedDates.endTime) {
-        queryArray.end_time = `${selectedDates.endDate.toISOString().split('T')[0]}T${String(selectedDates.endTime.hours).padStart(2, '0')}:${String(selectedDates.endTime.minutes).padStart(2, '0')}:00`;
-      }
-      console.log("search[ayload", queryArray)
-
-      const response = await axios.post('http://5.180.148.40:9006/api/das/search', {
-          queryArray
-        }, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${Token}`
-        }
-      });
-      // dispatch(setSearchResults(response.data.results));
-      dispatch(setSearchResults({
-        results: response.data.results,
-        total_pages: response.data.total_pages || 1,
-        total_results:response.data.total_results || 0,
-      }));
-
-      // Dispatch initial page number
-      dispatch(setPage(1));
-      console.log("Dispatched setSearchResults with:", response.data.results);
-      //  localStorage.setItem('searchResults', JSON.stringify(response.data.results));
-      localStorage.setItem('searchResults', JSON.stringify({ results: response.data.results, expiry: new Date().getTime() + 24 * 60 * 60 * 1000 }));
-
-      console.log('Search results:', response.data);
-      setFormData({
-        searchQuery: '',
-        datatype: [],
-        filetype: [],
-        caseIds: [],
-        includeArchived: false,
-        latitude: '',
-        longitude: ''
-      });
-
-      // Handle the search results (e.g., pass them to a parent component)
-      if (handleCreateCase) {
-        handleCreateCase(response.data);
-      }
-     dispatch(openPopup("saved"));
-
-    } catch (error) {
-      console.error('Error performing search:', error);
-    }
-  };
-
-  // const handleInputChange = (e) => {
-  //   setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
-  // };
+ 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
@@ -255,6 +175,78 @@ file_type: formData.filetype?.length > 0
     }
 };
 
+
+const handleSearch = async (e) => {
+  e.preventDefault();
+  try {
+    if (formData.includeArchived) {
+      await saveCriteria(); // Ensure saveCriteria executes if checked
+    }
+    
+    const payload = {
+      keyword: Array.isArray(formData.searchQuery) ? formData.searchQuery : [formData.searchQuery],
+      case_id: formData.caseIds?.length > 0 ? formData.caseIds.map(caseId => caseId.value) : [],
+      file_type: formData.filetype?.length > 0 ? formData.filetype.map(type => type.value) : [],
+      page: 1, // Start at page 1
+    };
+    
+    if (selectedDates.startDate && selectedDates.startTime) {
+      payload.start_time = `${selectedDates.startDate.toISOString().split('T')[0]}T${String(selectedDates.startTime.hours).padStart(2, '0')}:${String(selectedDates.startTime.minutes).padStart(2, '0')}:00`;
+    }
+    
+    if (selectedDates.endDate && selectedDates.endTime) {
+      payload.end_time = `${selectedDates.endDate.toISOString().split('T')[0]}T${String(selectedDates.endTime.hours).padStart(2, '0')}:${String(selectedDates.endTime.minutes).padStart(2, '0')}:00`;
+    }
+    
+    console.log("search payload", payload);
+    
+    const response = await axios.post(
+      'http://5.180.148.40:9006/api/das/search', 
+      payload, 
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${Token}`
+        }
+      }
+    );
+    
+    console.log("dispatchresponse", response);
+    
+    dispatch(setSearchResults({
+      results: response.data.results,
+      total_pages: response.data.total_pages || 1,
+      total_results: response.data.total_results || 0,
+    }));
+
+    dispatch(setKeywords({
+      keyword: response.data.input.keyword,
+      queryPayload: response.data.input  // or other fields if needed
+    }));
+    console.log("setkeywordDispacth",response.data.input.keyword)
+    // Dispatch initial page number
+    dispatch(setPage(1));
+    
+    setFormData({
+      searchQuery: '',
+      datatype: [],
+      filetype: [],
+      caseIds: [],
+      includeArchived: false,
+      latitude: '',
+      longitude: ''
+    });
+    
+    // Handle the search results (e.g., pass them to a parent component)
+    if (handleCreateCase) {
+      handleCreateCase(response.data);
+    }
+    
+    dispatch(openPopup("saved"));
+  } catch (error) {
+    console.error('Error performing search:', error);
+  }
+};
 
   // Toggle popup visibility
   const togglePopupA = () => {

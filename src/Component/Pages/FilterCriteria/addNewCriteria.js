@@ -630,7 +630,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import DatePickera from './datepicker';
 import '../FilterCriteria/createCriteria.css';
 import { customStyles } from '../Case/createCase';
-import { openPopup, setSearchResults } from '../../../Redux/Action/criteriaAction';
+import { openPopup, setKeywords, setPage, setSearchResults } from '../../../Redux/Action/criteriaAction';
 import { toast } from 'react-toastify';
 
 const AddNewCriteria = ({ 
@@ -660,7 +660,6 @@ const AddNewCriteria = ({
         includeArchived: false,
         latitude: '',
         longitude: '',
-        radius: ''
     });
 
     // Fetch case data from API
@@ -743,113 +742,154 @@ console.log("platform", response.data)
 
     // Perform search API call
     
-    const performSearch = async () => {         
-        try {             
-            // Defensive check for searchChips
-            if (!searchChips || searchChips.length === 0) {
-                console.warn('No search chips available');
-                return null;
+    const performSearch = async (e) => {
+        e.preventDefault();
+        
+        console.log(e);
+        try {
+          // Build the query payload with the correct structure
+          const payload = {
+            keyword: searchChips?.length > 0
+              ? searchChips.map(chip => chip.keyword || "")
+              : [],
+            case_id: formData.caseIds?.length > 0
+              ? formData.caseIds.map(caseId => caseId.value)
+              : [],
+            file_type: formData.platform?.length > 0
+              ? formData.platform.map(type => type.value)
+              : [],
+            page: 1
+          };
+          
+          // Add start time to the query if available
+          if (selectedDates.startDate && selectedDates.startTime) {
+            payload.start_time = `${selectedDates.startDate.toISOString().split('T')[0]}T${String(selectedDates.startTime.hours).padStart(2, '0')}:${String(selectedDates.startTime.minutes).padStart(2, '0')}:00`;
+          }
+          
+          // Add end time to the query if available
+          if (selectedDates.endDate && selectedDates.endTime) {
+            payload.end_time = `${selectedDates.endDate.toISOString().split('T')[0]}T${String(selectedDates.endTime.hours).padStart(2, '0')}:${String(selectedDates.endTime.minutes).padStart(2, '0')}:00`;
+          }
+          
+          console.log("Query Payload:", payload);
+          
+          // Make the API request with the correct payload structure
+          const response = await axios.post(
+            'http://5.180.148.40:9006/api/das/search',
+            payload,
+            {
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${Token}`,
+              }
             }
-    
-            // Build the query array with improved null handling
-            const queryArray = searchChips.map(chip => ({
-                unified_case_id: chip.case_id || "", 
-                unified_type: chip.file_type || "", 
-                site_keywordsmatched: chip.keyword || "", 
-                latitude: chip.latitude || "", 
-                longitude: chip.longitude || "", 
-                start_time: chip.start_time || null, 
-                end_time: chip.end_time || null 
-            }));                  
-    
-            console.log("Query Payload:", queryArray);                  
-    
-            // Validate Token before using
-            if (!Token) {
-                throw new Error('Authentication token is missing');
-            }
-    
-            // API POST request
-            const response = await axios.post('http://5.180.148.40:9006/api/das/search', {
-                query: queryArray,
-                page: 1,
-                per_page: 50
-            }, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${Token}`
-                }
-            });               
-    
-            console.log("responseSearch", response);
-            console.log("responseData", response.data);
-            // Check for valid response data
-            if (!response.data || !response.data.results) {
-                throw new Error('Invalid response from search API');
-            }
-    
-            // Dispatch search results
-            dispatch(setSearchResults(response.data.results));
-                 console.log("Dispatched setSearchResults with:", response.data.results);
-            // Persist results in localStorage
-            localStorage.setItem('searchResults', JSON.stringify(response.data.results)); 
-    
-            // Optional case creation handler
-            if (handleCreateCase) {
-                handleCreateCase(response.data);
-            }                
-            toast.success("Criteria Apply successfully");
-            // Show saved popup
-            dispatch(openPopup("saved"));                  
-            setIsPopupVisible(false)
-            return response.data;
+          );
+          
+          // Dispatch search results
+          dispatch(setSearchResults({
+            results: response.data.results,
+            total_pages: response.data.total_pages || 1,
+            total_results: response.data.total_results || 0,
+          }));
+          
+          dispatch(setKeywords({
+                keyword: response.data.input.keyword,
+                queryPayload: response.data.input  // or other fields if needed
+              }));
+          // Dispatch the initial page number
+          dispatch(setPage(1));
+          console.log("Dispatched setSearchResults with:", response.data.results);
+          
+          // Persist results in local storage with an expiry timestamp
+        //   localStorage.setItem('searchResults', JSON.stringify({
+        //     results: response.data.results,
+        //     expiry: new Date().getTime() + 24 * 60 * 60 * 1000, // 24-hour expiry
+        //   }));
+          
+          console.log('Search results:', response.data);
+          setIsPopupVisible(false);
+          // Reset form data to initial values
+          setFormData({
+            searchQuery: '',
+            datatype: [],
+            filetype: [],
+            caseIds: [],
+            includeArchived: false,
+            latitude: '',
+            longitude: '',
+          });
+          
+          // Handle the search results, if applicable
+          if (handleCreateCase) {
+            handleCreateCase(response.data);
+          }
+          
+          // Show the "saved" popup
+          // dispatch(openPopup("saved"));
         } catch (error) {
-            console.error('Error performing search:', error);
-            
-            // Optional: dispatch error handling action
-            // dispatch(setSearchError(error.message));
-            
-            throw error;
+          console.error('Error performing search:', error);
         }
-    };
-
+      };
+    
     // Handle Apply button click (Create Criteria)
     const handleCreateCriteria = async (e) => {
-        e.preventDefault();
-
+        e.preventDefault(); // Prevent default form submission
+    
         try {
-            const keywordsString = searchChips.map(chip => chip.keyword).join(", ");
-            const criteriaData = {
-                 // Convert keywords to a comma-separated string
-                case_id: formData.caseIds.map(c => c.value).join(", "), // Combine all case IDs into a string
-                file_type: formData.platform.map(ft => ft.value).join(", "), // Combine all file types
-                // latitude: formData.latitude || " ", // Default empty space if not provided
-                // longitude: formData.longitude || " ", // Default empty space if not provided
-                start_time: selectedDates.startDate?.toISOString() || null, // Null if not selected
-                end_time: selectedDates.endDate?.toISOString() || null,
-                keyword: searchChips.slice(-1)[0]?.keyword || ""
+            // Build the criteria payload
+            const criteriaPayload = {
+                keyword: searchChips?.length > 0
+                ? searchChips.map(chip => chip.keyword || "")
+                : [],  // Wrap `keywordsString` in an array if it's a single value
+                case_id: formData.caseIds?.length > 0
+                    ? formData.caseIds.map(caseId => caseId.value.toString())
+                    : [], // Handle multiple `caseIds` as an array
+                file_type: formData.platform?.length > 0
+                    ? formData.platform.map(file => file.value)
+                    : [], // Handle multiple `file_type` values as an array
+                latitude: formData.latitude || "",
+                longitude: formData.longitude || "",
+                start_time: selectedDates.startDate && selectedDates.startTime
+                    ? `${selectedDates.startDate.toISOString().split('T')[0]}T${String(selectedDates.startTime.hours).padStart(2, '0')}:${String(selectedDates.startTime.minutes).padStart(2, '0')}:00`
+                    : null, // Include start_time if both date and time are provided
+                end_time: selectedDates.endDate && selectedDates.endTime
+                    ? `${selectedDates.endDate.toISOString().split('T')[0]}T${String(selectedDates.endTime.hours).padStart(2, '0')}:${String(selectedDates.endTime.minutes).padStart(2, '0')}:00`
+                    : null, // Include end_time if both date and time are provided
             };
-            console.log("creayteData", criteriaData)
-            // Replace with your create criteria API endpoint
-           const response = await axios.post('http://5.180.148.40:9006/api/das/criteria', criteriaData, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${Token}`
+    
+            console.log("Criteria Payload:", criteriaPayload);
+    
+            // Make the API request
+            const response = await axios.post(
+                'http://5.180.148.40:9006/api/das/criteria',
+                criteriaPayload,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${Token}`,
+                    }
                 }
-            });
-console.log("response", response)
-            dispatch(openPopup("created"));
+            );
+    
+            console.log("Response:", response);
+    
+            // Dispatch popup to indicate criteria creation success
+            //dispatch(openPopup("created"));
+            dispatch(openPopup("recent"));
             setIsPopupVisible(false);
         } catch (error) {
             console.error('Error creating criteria:', error);
+    
+            // Optionally handle error further (e.g., show an error popup or toast)
         }
     };
+    
 
     return (
         <>
             {isPopupVisible && (
                 <div className="popup-overlay" style={{ justifyContent: 'center' }}>
-                    <div className="popup-container" style={{ width: '20%' }}>
+                    <div className="popup-container" style={{ width: '40%' }}>
                         <div className="popup-content" style={{ marginTop: '4rem' }}>
                             <h5>Filter Criteria</h5>
                             <span style={{ cursor: "pointer", marginLeft: '14rem' }} onClick={() => setIsPopupVisible(false)}>
@@ -857,7 +897,7 @@ console.log("response", response)
                             </span>
                             <form>
                                 <h5>Filter</h5>
-                             <div style={{height:'150px', overflowX:'auto'}}>
+                             {/* <div style={{height:'150px', overflowX:'auto'}}>
                              <p>
                                     {searchChips?.map((chip, index) => (
                                         <span key={index} style={{marginRight: '5px'}}>
@@ -866,7 +906,7 @@ console.log("response", response)
                                         </span>
                                     ))}
                                 </p>
-                             </div>
+                             </div> */}
 
                                 {/* Case Selection */}
                                 <div className="mb-3">

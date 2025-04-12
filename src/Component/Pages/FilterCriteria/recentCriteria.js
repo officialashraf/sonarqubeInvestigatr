@@ -15,7 +15,7 @@ import Cookies from 'js-cookie'
 import { toast } from "react-toastify";
 import EditCriteria from './editCriteria';
 import { useDispatch, useSelector } from "react-redux";
-import { closePopup, openPopup, setPage, setSearchResults } from "../../../Redux/Action/criteriaAction";
+import { closePopup, openPopup, setPage, setSearchResults,setKeywords } from "../../../Redux/Action/criteriaAction";
 import axios from "axios";
 
 const RecentCriteria = () => {
@@ -25,8 +25,11 @@ const RecentCriteria = () => {
  const [criteriaId, setCriteriaId] = useState()
  const [showEditPopup, setShowEditPopup] = useState(false);
  const [searchQuery, setSearchQuery] = useState("");
- const [keywords, setKeywords] = useState([]); 
 
+ const [keywords, setKeyword] = useState([]);
+ const recentKeyword = useSelector((state) => state.criteriaKeywords.keywords);
+//  console.log("recnetkeyword", recentKeyword.keywords)
+//  setKeyword(recentKeyword)
 const [formData, setFormData] = useState({
     searchQuery: '',
     datatype: [],
@@ -36,6 +39,14 @@ const [formData, setFormData] = useState({
     latitude: '',
     longitude: ''
   });
+
+
+  useEffect(() => {
+    if (recentKeyword) {
+      setKeyword(recentKeyword); // Update the state with recentKeyword
+      console.log("Updated keywords:", recentKeyword);
+    }
+  }, [recentKeyword]);
 
   useEffect(() => {
       fetchData();
@@ -59,14 +70,14 @@ const handelCreate = ()=>{
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && searchQuery.trim() !== "") {
       e.preventDefault(); // Prevent form submission
-      setKeywords([...keywords, searchQuery.trim()]); // Add new keyword to the list
+      setKeyword([...keywords, searchQuery.trim()]); // Add new keyword to the list
       setSearchQuery(""); // Clear input field
     }
   };
 
   // Remove chip when clicked
   const handleRemoveItem = (chipToDelete) => {
-    setKeywords(keywords.filter((chip) => chip !== chipToDelete));
+    setKeyword(keywords.filter((chip) => chip !== chipToDelete));
   };
    
 
@@ -117,54 +128,48 @@ const handelCreate = ()=>{
 
   console.log("keyword", keywords, searchQuery)
   const handleSearch = async () => {
-    // if (keywords || keywords.length === 0) {
-    //   console.error("No keywords selected!", searchQuery);
-    //   return;
-    // }
-  
     try {
-      const queryObj = {
-        keyword:keywords, // Pass the array of keywords directly
+      const payload = {
+        keyword: keywords,
+        case_id: [],
+        file_type: [],
+        page: 1,
       };
   
-      console.log("Sending search query:", keywords);
- 
-      const response = await axios.post('http://5.180.148.40:9006/api/das/search', {
-        queryObj
-      }, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${Token}`
+      console.log("Sending search query:", payload);
+  
+      const response = await axios.post(
+        'http://5.180.148.40:9006/api/das/search',
+        payload,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${Token}`,
+          },
         }
-      });
+      );
   
       console.log("Search results:", response.data);
   
-      // Dispatch the search results to the store
       dispatch(setSearchResults({
         results: response.data.results,
         total_pages: response.data.total_pages || 1,
-        total_results:response.data.total_results || 0,
-      }));
-   dispatch(setPage(1));
-      // Store the results locally
-      localStorage.setItem('searchResults', JSON.stringify({
-        results: response.data.results,
-        expiry: new Date().getTime() + 24 * 60 * 60 * 1000 // Store for 24 hours
+        total_results: response.data.total_results || 0,
       }));
   
-      // Clear selected chips
-      setFormData(prev => ({
-        ...prev,
-        searchQuery: [] // Clear the chips array after successful search
-      })
-    
-    );
- dispatch(openPopup("saved"));
+      dispatch(setKeywords({
+                   keyword: response.data.input.keyword,
+                   queryPayload: {} // or other fields if needed
+                 }));
+      //  dispatch(setPage(1));
+  
+        dispatch(openPopup("saved")); // Remove closePopup call
+  
     } catch (error) {
       console.error("Error performing search:", error);
     }
   };
+  
   
   // const filteredList = savedSearch.filter((item) =>
   //   item.keyword?.toLowerCase().includes(searchQuery.toLowerCase())
@@ -224,7 +229,19 @@ const handelCreate = ()=>{
   </div>
   <label style={{ marginLeft: 'auto' }}>Clear Recent</label>
 </div>
-        <List className="bg-gray rounded border-1">
+
+                <div className="chips-container">
+                  {keywords.map((chip, index) => (
+                    <div key={index} className="search-chip">
+                      <span>{chip}</span>
+                      <button className="chip-delete-btn" onClick={() => handleRemoveItem(chip)}>
+                        <CloseIcon fontSize='15px' />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+                
+        {/* <List className="bg-gray rounded border-1">
           {keywords.map((item, index) => (
             <ListItem key={index} className="text-white">
               <ListItemText primary={item} />
@@ -236,7 +253,7 @@ const handelCreate = ()=>{
             </IconButton>
             </ListItem>
           ))}
-        </List>
+        </List> */}
       </div>
       <hr  />
       <div style={{height:'300px', overflow:'auto'}}>

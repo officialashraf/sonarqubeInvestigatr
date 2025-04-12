@@ -312,7 +312,7 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
           <div ref={containerRef} className='sourceDiv'>
             {sources.map((source, sourceIndex) => (
 
-              <div key={sourceIndex} className="mb-3 border rounded">
+              <div key={sourceIndex} className="mb-3 border rounded" >
                 <div className="row g-3">
                   <div className="col-md-6">
                     <Form.Label>Source</Form.Label>

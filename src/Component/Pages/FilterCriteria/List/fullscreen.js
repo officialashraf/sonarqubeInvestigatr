@@ -16,7 +16,7 @@ import AddNewCriteria from '../addNewCriteria';
 import {  useNavigate, useLocation } from 'react-router-dom';
 import Cookies from 'js-cookie'
 import { toast } from 'react-toastify';
-import { closePopup, setPage, setSearchResults } from '../../../../Redux/Action/criteriaAction';
+import { closePopup, setKeywords, setPage, setSearchResults } from '../../../../Redux/Action/criteriaAction';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -28,10 +28,13 @@ const SearchResults = ({onClose}) => {
   const [searchChips, setSearchChips] = useState([]);
   const [activeTab, setActiveTab] = useState('Cases');
   const [isPopupVisible, setIsPopupVisible] = useState(false);
-   const { searchResults, totalPages, currentPage, totalResults } = useSelector((state) => state.search);   
-// console.log("searchRresults", searchResults)
+const { searchResults, totalPages, currentPage, totalResults } = useSelector((state) => state.search);
+  console.log("searchResult", searchResults, totalPages, currentPage, totalResults);
 
 
+ const keywords = useSelector((state) => state.criteriaKeywords.keywords);
+
+console.log("Keywords from Redux:", keywords);
 const [formData, setFormData] = useState({
   searchChips: '',
   // Add other form fields as needed
@@ -40,15 +43,42 @@ const [formData, setFormData] = useState({
   //        fetchData();
   //      }, []);
 
+// Combined chips: Redux + user added
+useEffect(() => {
+  if (keywords && Array.isArray(keywords)) {
+    const combinedChips = keywords.map((k) => ({ keyword: k }));
+    setSearchChips(combinedChips);
+    console.log("combinedChips", combinedChips);
+  }
+}, [keywords]);
 
-  
+useEffect(() => {
+  console.log("Updated Search Results:", searchResults);
+  console.log("Total Pages:", totalPages);
+  console.log("Current Page:", currentPage);
+  console.log("Total Results:", totalResults);
+}, [searchResults, totalPages, currentPage, totalResults]); 
+  // useEffect(() => {
+  //   if (keywords && Array.isArray(keywords)) {
+  //     const newChips = keywords
+  //       .filter(
+  //         (keyword) =>
+  //           typeof keyword === "string" &&
+  //           !searchChips.find((chip) => chip.keyword === keyword)
+  //       )
+  //       .map((keyword) => ({ keyword }));
+  //    console.log("newCjips", newChips)
+  //     setSearchChips((prev) => [...prev, ...newChips]);
+  //   }
+  // }, [keywords, searchChips]);
+
   const openPopup = () => {
     setIsPopupVisible(true); // Pop-up ko open karne ke liye state ko true kare
   };
   const exitClick =()=>{
 navigate('/cases')
   }
-
+  console.log("Keywords saerch:", searchChips);
    const Token = Cookies.get('accessToken');
     // const fetchData = async () => {
     //   try {
@@ -88,7 +118,7 @@ navigate('/cases')
     chip.keyword.toLowerCase().includes(inputValue.toLowerCase()) // Search based on stored data
   );
 
-
+console.log("filterdeChpis", filteredChips)
   // Add new chip when "Enter" is pressed
   const handleKeyPress = (e) => {
     if (e.key === "Enter" && inputValue.trim() !== "") {
@@ -98,6 +128,8 @@ navigate('/cases')
       if (!searchChips.find((chip) => chip.keyword === newChip.keyword)) {
         setSearchChips((prev) => [...prev, newChip]); // Add new chip
       }
+
+     
 
       setInputValue(""); // Clear input field
     }
@@ -122,43 +154,42 @@ navigate('/cases')
     //   return;
     // }  
     try {
-      const queryObj = {
-        keyword:searchChips, // Pass the array of keywords directly
+      const payload = {
+        keyword: searchChips?.length > 0 
+        ? searchChips.map(chip => chip.keyword) // Extract the `keyword` value from each object
+        : [], // Pass the array of keywords directly
+        case_id: [], // Adding empty case_id array to match expected format
+        file_type: [], // Adding empty file_type array to match expected format
+        page: 1 // Adding page parameter
       };
-  
-      console.log("Sending search query:", queryObj);
- 
-      const response = await axios.post('http://5.180.148.40:9006/api/das/search', {
-        queryObj
-      }, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${Token}`
+      
+      console.log("Sending search query:", payload);
+      
+      const response = await axios.post(
+        'http://5.180.148.40:9006/api/das/search', 
+        payload, // Send the payload directly, not wrapped in an object
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${Token}`
+          }
         }
-      });
-  
+      );
+      
       console.log("Search results:", response.data);
-  
+      
       // Dispatch the search results to the store
       dispatch(setSearchResults({
         results: response.data.results,
-        total_pages: response.data.total_pages || 1
+        total_pages: response.data.total_pages || 1,
+        total_results: response.data.total_results || 0,
       }));
-   dispatch(setPage(1));
-      // Store the results locally
-      localStorage.setItem('searchResults', JSON.stringify({
-        results: response.data.results,
-        expiry: new Date().getTime() + 24 * 60 * 60 * 1000 // Store for 24 hours
-      }));
-  resetSearch()
-      // Clear selected chips
-      setFormData(prev => ({
-        ...prev,
-        searchChips: [] 
-      })
-    
-    );
-//  dispatch(openPopup("saved"));
+      dispatch(setKeywords({
+             keyword: response.data.input.keyword,
+             queryPayload: {} // or other fields if needed
+           }));
+      dispatch(setPage(1));
+     
     } catch (error) {
       console.error("Error performing search:", error);
     }
@@ -223,9 +254,14 @@ navigate('/cases')
                                 />
                                 {/* <button onClick={handleExit}>Exit Full Screen</button> */}
        {/* </div> */}
+      
+         
       </div>
+      <button className="action-button" style={{padding:'0px 5px', height:'30px', marginTop:"5px"}} onClick={resetSearch}>RESET</button>
+        
       <button className="action-button" style={{padding:'0px 5px', height:'30px', marginTop:"5px"}} onClick={exitClick}>Exit FullScreen</button>
       </div>
+     
       <div className="search-term-indicator">
         <div className="chips-container">
           {filteredChips && filteredChips.map((chip, index) => (
@@ -237,10 +273,7 @@ navigate('/cases')
             </div>
           ))}
         </div>
-        <div className="action-buttons">
-          <button className="action-button" onClick={resetSearch}>RESET</button>
-      
-        </div>
+
       </div>
       
       <div className="tabs">
