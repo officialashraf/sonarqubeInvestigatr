@@ -6,8 +6,8 @@ import UserManagement from './UserManagement'
 const UsersHome = () => {
   return (
     <>
-    <PHeader/>
-    <Navigation/>
+    {/* <PHeader/>
+    <Navigation/> */}
     <UserManagement/>
     </>
   )
