@@ -18,6 +18,7 @@ import './App.css'
 import ProtectedRoute from './utils/protectRoute.js';
 import Loader from './Component/Pages/Layout/loader.js';
 import SearchResults from './Component/Pages/FilterCriteria/List/fullscreen.js';
+import UsersDashboard from './Component/Pages/User/UsersDashboard.js';
 
 
 const AppContent = () => {
@@ -50,6 +51,7 @@ const AppContent = () => {
             <Route path="/line" element={<LineChart1 />} />
             <Route path="/grapg" element={< GraphicalData />} />
             <Route path="/search" element={< SearchResults />} />
+            <Route path="/users" element={< UsersDashboard />} />
             <Route path="*" element={<div className='notfound'> <h4>Work in progress........</h4></div>} />
           </Route>
           <Route path='loader' element={<Loader/>}/>

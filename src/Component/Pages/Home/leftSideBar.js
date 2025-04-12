@@ -3,6 +3,8 @@ import { Nav } from 'react-bootstrap';
 import { House, ListTask, Folder, BarChart, People,Search} from 'react-bootstrap-icons';
 import { useNavigate } from 'react-router-dom';
 import "../../../Assets/Stlyes/sideBar.css"
+
+
 const  Sidebar = ()=> {
   const navigate = useNavigate();
 
@@ -16,7 +18,7 @@ const  Sidebar = ()=> {
     { label: 'Reports', icon: <BarChart size={15} />, path: '/reports' },
     // { label: 'Dashboard', icon: <Grid size={15} />, path: '/dashboard' },
     // { label: 'Targets', icon: <Bullseye size={15} />, path: '/targets' },
-    { label: 'Users', icon: <People size={15} />, path: '/user' },
+    { label: 'Users', icon: <People size={15} />, path: '/users' },
   ];
 
   return (
