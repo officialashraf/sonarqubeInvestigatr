@@ -1,7 +1,7 @@
 import React from 'react';
 import { Navbar, Nav, NavDropdown, Container } from 'react-bootstrap';
 import { Bell, PersonCircle } from 'react-bootstrap-icons'; // Bootstrap Icons
-import "../../../Assets/Stlyes/header.css";
+import "./header.css";
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
@@ -18,7 +18,7 @@ const  Header = () => {
     <Navbar bg="black" variant="dark">
       <Container className="containerss d-flex justify-content-between align-items-center">
         <Navbar.Brand  className="custom-navbar-brand">
-          Cases
+                 Casebook
         </Navbar.Brand>
         {/* style={{verticalAlign: "middle", marginRight: "7px", marginTop:"10px"}} */}
         <Nav className="custom-nav">

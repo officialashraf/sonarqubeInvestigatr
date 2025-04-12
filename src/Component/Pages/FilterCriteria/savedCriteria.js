@@ -12,6 +12,7 @@ import SendIcon from '@mui/icons-material/Send';
 import { useNavigate } from 'react-router-dom';
 import RecentCriteria from './recentCriteria';
 import { useSelector, useDispatch } from "react-redux";
+
 import { closePopup, openPopup, setKeywords, setPage, setSearchResults } from '../../../Redux/Action/criteriaAction';
 import axios from 'axios';
 import Cookies from 'js-cookie';

@@ -1,9 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { Table, Pagination, Spinner } from 'react-bootstrap';
+import { useState, useEffect, useCallback } from 'react';
+import { Table, InputGroup, FormControl, Dropdown, DropdownButton, Badge, Pagination } from 'react-bootstrap';
+
+import axios from 'axios';
+import { ArrowDropDown, ArrowDropUp, Padding } from '@mui/icons-material';
+import './table.css';
+import Cookies from "js-cookie";
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import CaseDetails from '../../Case/caseDetails';
+import EditCase from '../../Case/editCase';
+import { Spinner } from 'react-bootstrap';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { setPage, setSearchResults } from '../../../../Redux/Action/criteriaAction';
-import axios from 'axios';
-import Cookies from 'js-cookie';
 
 const CriteriaCaseTable = () => {
   const dispatch = useDispatch();

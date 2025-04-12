@@ -177,7 +177,7 @@ import ProgressRow from "./progressBar.js";
 import { Container, Box, Table, TableContainer, TableFooter, TableBody, TableCell, TableHead, TableRow, Paper } from '@mui/material';
 import { PieChart, Pie, Tooltip, Legend, ResponsiveContainer,BarChart, Bar, XAxis, YAxis, CartesianGrid, Cell } from 'recharts';
 import AddFilter2 from '../Filters/addFilter.js';
-import '../../../Assets/Stlyes/summary.css';
+import './summary.css';
 
 
 const Summary = ({ filters }) => {

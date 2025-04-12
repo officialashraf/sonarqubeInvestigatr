@@ -84,7 +84,6 @@ cursor: pointer;
   padding: 0px 0px 0px 10px;
   white-space: nowrap; 
   font-size: 12px;
-  color: white;
  
  }
 
@@ -136,6 +135,17 @@ cursor: pointer;
   padding: 0;
   font-size: 1.5rem;
   /* Adjust size as needed */
+}
+
+
+.menu-button{
+  background: none;
+  border: none;
+  color: black;
+  /* Only black color for the dots */
+  font-size: 1rem;
+  justify-content: flex-end;
+  
 }
 
 .custom-dropdown-toggle::after {
@@ -251,3 +261,14 @@ cursor: pointer;
       padding-left:20px;
       padding-right: 20px;
     }
+
+    .status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.5rem;
+    font-weight: 500;
+    justify-content: center;
+    display: inline-block;
+    white-space: nowrap;
+    align-items: center;
+  }

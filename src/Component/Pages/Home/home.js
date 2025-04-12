@@ -1,7 +1,7 @@
 import React from 'react'
 
 import CardList from './cards.js'
-import '../../../Assets/Stlyes/dashboard.css'
+import './dashboard.css'
 
 import DataTable from '../Case/caseList.js'
 

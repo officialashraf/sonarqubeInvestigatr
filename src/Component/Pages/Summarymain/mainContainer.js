@@ -174,7 +174,7 @@ import { useSelector } from 'react-redux';
 import Summary from './summary.js';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import '../../../Assets/Stlyes/mainContainer.css';
+import './mainContainer.css';
 import AddFilter2 from '../Filters/addFilter.js';
 import Loader from '../Layout/loader.js';
 
