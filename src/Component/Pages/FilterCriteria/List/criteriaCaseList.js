@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import CaseDetails from '../../Case/caseDetails';
 import EditCase from '../../Case/editCase';
+import { Spinner } from 'react-bootstrap';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { setPage, setSearchResults } from '../../../../Redux/Action/criteriaAction';
