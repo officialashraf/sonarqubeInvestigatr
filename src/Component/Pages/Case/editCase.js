@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
@@ -11,9 +10,10 @@ const EditCase = ({ togglePopup, item }) => {
     title: item.title || "",
     description: item.description || "",
     status: item.status || "",
-    // If watchers is a string, split it; if it's already an array, use it; otherwise empty array
-    watchers: typeof item.watchers === 'string' ? item.watchers.split(", ").filter(w => w) : 
-              Array.isArray(item.watchers) ? item.watchers : [],
+ // If watchers is a string, split it; if it's already an array, use it; otherwise empty array
+    watchers: typeof item.watchers === 'string' 
+  ? item.watchers.split(",").map((w) => w.trim()).filter((w) => w)
+              :Array.isArray(item.watchers) ? item.watchers : [],
     assignee: item.assignee || "",
     comment: item.comment || "",
   });
@@ -58,8 +58,10 @@ const EditCase = ({ togglePopup, item }) => {
         assignee: item.assignee,
         status: item.status,
         watchers: typeof item.watchers === 'string' ? 
-                 item.watchers.split(", ").filter(w => w) : 
-                 Array.isArray(item.watchers) ? item.watchers : []
+                      item.watchers.split(",").map((w) => w.trim()).filter((w) => w)
+                       : Array.isArray(item.watchers)
+      ? item.watchers
+      : [],
       }));
     }
   }, [item, users.data]);
@@ -146,7 +148,7 @@ const EditCase = ({ togglePopup, item }) => {
   const handleWatchersChange = (selectedOptions) => {
     setFormData(prev => ({
       ...prev,
-      watchers: selectedOptions ? selectedOptions.map(option => option.label) : []
+      watchers: selectedOptions ? selectedOptions.map((option) => option.label) : [],
     }));
   };
 
@@ -301,8 +303,8 @@ const EditCase = ({ togglePopup, item }) => {
   className="com"
   name="watchers"
   placeholder="Select Watchers"
-  value={formData.watchers.map(watcher => {
-    const existingWatcher = options.find(opt => opt.label === watcher);
+  value={formData.watchers.map((watcher) => {
+    const existingWatcher = options.find((opt) => opt.label === watcher);
     return existingWatcher || { value: watcher, label: watcher };
   })}
   onChange={handleWatchersChange}

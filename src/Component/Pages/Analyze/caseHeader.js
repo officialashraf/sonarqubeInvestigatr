@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { ListAltOutlined, PieChart, MoreVert } from "@mui/icons-material";
+import { Col} from 'react-bootstrap';
+import { FaArrowLeft } from 'react-icons/fa';
 import "./tabulerHeader.css";
 import { useNavigate } from "react-router-dom";
 
@@ -27,6 +29,9 @@ const CaseHeader = ({ onIconClick }) => {
         className="row header-row p-2 text-dark align-items-center"
         style={{ background: "lightgray" }}
       >
+         <Col xs={1} className="d-flex align-items-center justify-content-center">
+                  <FaArrowLeft style={{ cursor: 'pointer',margin:'0px' }}  onClick={() => navigate('/cases')} />
+                </Col>
         {/* <div className='row header-row p-2' style={{background: 'lightgray', color:'black',display: 'flex', marginLeft: '0rem', marginRight: '0rem', height:"40px"}} > */}
         <div className="col">
           <h5 className="mb-1">

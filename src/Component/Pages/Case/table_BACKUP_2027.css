@@ -7,7 +7,12 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+<<<<<<< HEAD
+  margin-bottom: 5px; 
+ 
+=======
    margin-bottom: 5px; 
+>>>>>>> e8b881ea9c5aa8661c6adf044d0c27ec93b03986
   background-color: white;
 }
 th{
@@ -261,6 +266,12 @@ cursor: pointer;
       padding-right: 20px;
       background-color: #000;
     }
+<<<<<<< HEAD
+    /* .status-badge{
+      border-radius: 5px !important;
+      font-family: sans-serif !important;
+    } */
+=======
 
     .status-badge {
     padding: 0.25rem 0.75rem;
@@ -272,4 +283,4 @@ cursor: pointer;
     white-space: nowrap;
     align-items: center;
   }
-
+>>>>>>> e8b881ea9c5aa8661c6adf044d0c27ec93b03986

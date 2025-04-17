@@ -44,6 +44,7 @@ const DataTable = () => {
             'Authorization': `Bearer ${Token}`
           },
         });
+        console.log("API Response:", response.data);
     
       setData(response.data.data);
       setFilteredData(response.data.data);
@@ -126,7 +127,7 @@ const DataTable = () => {
         });
        const user = response.data;
         setUsers(user); // Update the state with usered data
-        console.log("userss", user)
+        console.log("users", user)
          } catch (error) { 
           console.error('There was an error usering the data!', error); 
         } };
