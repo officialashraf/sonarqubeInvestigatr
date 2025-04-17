@@ -8,9 +8,7 @@
   justify-content: space-between;
   align-items: center;
    margin-bottom: 5px; 
- 
   background-color: white;
- 
 }
 th{
   background-color: gray !important;
@@ -36,12 +34,12 @@ td{
    font-size: 12px;
 }
 
-.search-icon {
+/* .search-icon {
   background-color: #fff;
   border-radius: 0px;
   box-shadow: 0 0 0 0;
   border: white;
-}
+} */
 
 .header-icons {
   display: flex;
@@ -247,6 +245,7 @@ cursor: pointer;
       margin-top: 0px;
       background-color: #ccc;
       color: #000;
+      height: "22px";
     }
     
 

@@ -6,7 +6,7 @@ import { FiMoreVertical } from "react-icons/fi";
 import { FaRegEye } from "react-icons/fa";
 import { TbPassword } from "react-icons/tb";
 import { FaRegCopy } from "react-icons/fa6";
-import "../../../Assets/Stlyes/table.css";
+import "../Case/table.css";
 import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
 import Dropdown from "react-bootstrap/Dropdown";
 import UserDetails from "./userDetails";
@@ -74,12 +74,12 @@ const UserTable = () => {
 return(
 <>
  <div className="data-table-container">
-      <div className="top-header">
+      <div className="top-header" style={{marginTop:'10px'}}>
         <div className="search-bar1">
           <div className="input-group">
-            <span className="input-group-text search-icon">
+            {/* <span className="input-group-text search-icon">
               <Search size={16} />
-            </span>
+            </span> */}
             <input type="text" className="form-control" placeholder="Search" />
           </div>
         </div>
@@ -194,12 +194,12 @@ return(
                 <td
                   style={{
                     display: "flex",
-                    justifyContent: "space-between",
+                    justifyContent: "end",
                     alignItems: "center",
                     textAlign: "center"
                   }}
                 >
-                  <div
+                  {/* <div
                     style={{
                       display: "flex",
                       alignItems: "center",
@@ -217,7 +217,7 @@ return(
                     </div>
                     <FaRegEye />
                     <FaRegCopy />
-                  </div>
+                  </div> */}
                   <Dropdown>
                     <Dropdown.Toggle
                       className="menu-button"

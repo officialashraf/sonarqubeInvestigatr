@@ -31,8 +31,43 @@ const SavedCriteria = () => {
   const [activeTab, setActiveTab] = useState('Cases');
   const [isLoading, setIsLoading] = useState(false);
   
-  const keywords = useSelector((state) => state.criteriaKeywords.keywords);
+  const caseId = useSelector((state) => state.criteriaKeywords.queryPayload.case_id);
+  console.log("casId", caseId)
+  const keywords = useSelector((state) => state.criteriaKeywords.keyword);
+  const fileType = useSelector((state) => state.criteriaKeywords.queryPayload.file_type);
+  console.log("filetype",fileType)
+  const keyword = useSelector((state) => state.criteriaKeywords.queryPayload.keyword);
+  console.log("keyword", keyword)
   console.log("savedkeyword", keywords)
+   
+  useEffect(() => {
+    console.log("Keywords object:", keywords);
+    console.log("Case ID:", caseId);
+    console.log("File Type:", fileType);
+  
+    const isValid = (val) =>
+      val !== null && val !== undefined && val.toString().trim() !== "";
+  
+    if (keyword && Array.isArray(keyword)) {
+      let combinedChips = [...keyword];
+  
+      if (Array.isArray(caseId) && caseId.every(id => typeof id === "number")) {
+        combinedChips = [...combinedChips, ...caseId.map((id) => `${id}`)];
+    }
+    
+    // Check if fileType is an array and merge its values
+    if (Array.isArray(fileType) && fileType.length > 0) {
+        combinedChips = [...combinedChips, ...fileType];
+    } else if (isValid(fileType)) {
+        combinedChips.push(fileType); // Add fileType if it's a valid single value
+    }
+      console.log("Combined Chips:", combinedChips);
+      setSearchChips(combinedChips);
+    } else {
+      console.log("Keywords is not an array or doesn't exist.");
+      setSearchChips([]); // Fallback for empty or invalid data
+    }
+  }, [keyword, caseId, fileType]);
 
   const [formData, setFormData] = useState({
     searchQuery: '',
@@ -43,17 +78,6 @@ const SavedCriteria = () => {
 
   console.log("searchChips", searchChips);
   
-  useEffect(() => {
-    console.log("Keywords object:", keywords);
-    if (keywords && Array.isArray(keywords)) {
-        let combinedChips = keywords;
-        console.log("Combined Chips:", combinedChips);
-        setSearchChips(combinedChips);
-    } else {
-        console.log("Keywords.keyword is not an array or doesn't exist.");
-        setSearchChips([]); // Fallback for empty or invalid data
-    }
-}, [keywords]);
 
 
   // Filter results based on user input
@@ -168,11 +192,12 @@ const SavedCriteria = () => {
         total_results: response.data.total_results || 0,
       }));
     
-      //const keywordFromAPI = response.data.input.keyword;
+      const keywordFromAPI = response.data.input.keyword;
       dispatch(setKeywords({
-        keyword: response.data.input.keyword,
-        queryPayload: {} // or other fields if needed
+        // keyword: response.data.input.keyword,
+        queryPayload: response.data.input // or other fields if needed
       }));
+
       dispatch(setPage(1));
       
       // Clear input field after search

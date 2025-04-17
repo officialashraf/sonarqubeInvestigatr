@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Table, CloseButton } from "react-bootstrap";
-import "../../../Assets/Stlyes/caseDetails.css";
+import "../Case/caseDetails.css";
 
 const UserDetails = ({ onClose }) => {
   return (

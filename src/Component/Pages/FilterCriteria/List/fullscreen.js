@@ -28,49 +28,65 @@ const SearchResults = ({onClose}) => {
   const [searchChips, setSearchChips] = useState([]);
   const [activeTab, setActiveTab] = useState('Cases');
   const [isPopupVisible, setIsPopupVisible] = useState(false);
-const { searchResults, totalPages, currentPage, totalResults } = useSelector((state) => state.search);
+
+  const { searchResults, totalPages, currentPage, totalResults } = useSelector((state) => state.search);
   console.log("searchResult", searchResults, totalPages, currentPage, totalResults);
+  
+  const keywords = useSelector((state) => state.criteriaKeywords.queryPayload.keyword);
+  console.log("Keywords from Redux:", keywords);
 
+    const caseId = useSelector((state) => state.criteriaKeywords.queryPayload.case_id);
+    console.log("casId", caseId)
+   
+    const fileType = useSelector((state) => state.criteriaKeywords.queryPayload.file_type);
+    console.log("filetype",fileType)
+    const payload= useSelector((state) => state.criteriaKeywords.queryPayload);
+  
 
- const keywords = useSelector((state) => state.criteriaKeywords.keywords);
-
-console.log("Keywords from Redux:", keywords);
-const [formData, setFormData] = useState({
+   const [formData, setFormData] = useState({
   searchChips: '',
   // Add other form fields as needed
 });
-  //  useEffect(() => {
-  //        fetchData();
-  //      }, []);
+ 
 
-// Combined chips: Redux + user added
 useEffect(() => {
+  console.log("Keywords object:", keywords);
+  console.log("Case ID:", caseId);
+  console.log("File Type:", fileType);
+
+  const isValid = (val) =>
+    val !== null && val !== undefined && val.toString().trim() !== "";
+
   if (keywords && Array.isArray(keywords)) {
-    const combinedChips = keywords.map((k) => ({ keyword: k }));
-    setSearchChips(combinedChips);
-    console.log("combinedChips", combinedChips);
-  }
-}, [keywords]);
+    let combinedChips = [...keywords];
 
-useEffect(() => {
-  console.log("Updated Search Results:", searchResults);
-  console.log("Total Pages:", totalPages);
-  console.log("Current Page:", currentPage);
-  console.log("Total Results:", totalResults);
-}, [searchResults, totalPages, currentPage, totalResults]); 
-  // useEffect(() => {
-  //   if (keywords && Array.isArray(keywords)) {
-  //     const newChips = keywords
-  //       .filter(
-  //         (keyword) =>
-  //           typeof keyword === "string" &&
-  //           !searchChips.find((chip) => chip.keyword === keyword)
-  //       )
-  //       .map((keyword) => ({ keyword }));
-  //    console.log("newCjips", newChips)
-  //     setSearchChips((prev) => [...prev, ...newChips]);
-  //   }
-  // }, [keywords, searchChips]);
+    if (Array.isArray(caseId) && caseId.length > 0) {
+      combinedChips = [...combinedChips, ...caseId.map((id) => `${id}`)]; // Ensure each caseId value remains a string
+  }
+  
+
+  // Check if fileType is an array and merge its values
+  if (Array.isArray(fileType) && fileType.length > 0) {
+      combinedChips = [...combinedChips, ...fileType];
+  } else if (isValid(fileType)) {
+      combinedChips.push(fileType); // Add fileType if it's a valid single value
+  }
+
+    console.log("Combined Chips:", combinedChips);
+    setSearchChips(combinedChips);
+  } else {
+    console.log("Keywords is not an array or doesn't exist.");
+    setSearchChips([]); // Fallback for empty or invalid data
+  }
+}, [keywords, caseId, fileType]);
+
+// useEffect(() => {
+//   console.log("Updated Search Results:", searchResults);
+//   console.log("Total Pages:", totalPages);
+//   console.log("Current Page:", currentPage);
+//   console.log("Total Results:", totalResults);
+// }, [searchResults, totalPages, currentPage, totalResults]); 
+  
 
   const openPopup = () => {
     setIsPopupVisible(true); // Pop-up ko open karne ke liye state ko true kare
@@ -78,58 +94,25 @@ useEffect(() => {
   const exitClick =()=>{
 navigate('/cases')
   }
-  console.log("Keywords saerch:", searchChips);
+
    const Token = Cookies.get('accessToken');
-    // const fetchData = async () => {
-    //   try {
-    //     const response = await fetch("http://5.180.148.40:9006/api/das/criteria", {
-    //       headers: {
-    //         'Content-Type': 'application/json',
-    //         'Authorization': `Bearer ${Token}`
-    //       },
-    //     });
-    //     const data = await response.json();
-    //     console.log("resposegetCriteria",data)
-    //     setSearchChips(data.data)
-    //     // if (data && data.data) {
-    //     //   setSearchChips(data.data.map(item => ({ keyword: item.keyword }))); // Extract keywords
-         
-    //     // }
-    //     console.log("chips",searchChips)
-    //   } catch (error) {
-    //     console.error("Error fetching data:", error);
-    //   }
-    
-    // };
-  
- 
-  // const handleKeyPress = (e) => {
-  //   if (e.key === 'Enter' && inputValue.trim() !== '') {
-  //     // Add chip and clear input
-  //     if (!searchChips.includes(inputValue.trim())) {
-  //       setSearchChips([...searchChips, inputValue.trim()]);
-  //     }
-  //     setInputValue('');
-  //   }
-  // };
-  // Filter data dynamically as input changes
+   
+  console.log("Keywords saerch:", searchChips);
   const filteredChips = searchChips.filter((chip) =>
-    typeof chip.keyword === "string" &&
-    chip.keyword.toLowerCase().includes(inputValue.toLowerCase()) // Search based on stored data
-  );
+    (typeof chip === "string" && chip.toLowerCase().includes(inputValue.toLowerCase())) ||
+    (typeof chip === "number" && chip.toString().includes(inputValue)) // Search for numbers
+);
 
 console.log("filterdeChpis", filteredChips)
   // Add new chip when "Enter" is pressed
   const handleKeyPress = (e) => {
     if (e.key === "Enter" && inputValue.trim() !== "") {
-      const newChip = { keyword: inputValue.trim() }; // Add new chip structure
+      const newChip =  inputValue.trim() ; // Add new chip structure
 
       // Check if chip already exists
-      if (!searchChips.find((chip) => chip.keyword === newChip.keyword)) {
+      if (!searchChips.find((chip) => chip === newChip)) {
         setSearchChips((prev) => [...prev, newChip]); // Add new chip
       }
-
-     
 
       setInputValue(""); // Clear input field
     }
@@ -149,20 +132,35 @@ console.log("filterdeChpis", filteredChips)
   };
 
   const handleSearch = async () => {
-    // if (keywords || keywords.length === 0) {
-    //   console.error("No keywords selected!", searchChips);
-    //   return;
-    // }  
+    console.log("keyword....",payload)
+   console.log("searchzchips1", searchChips)
     try {
       const payload = {
-        keyword: searchChips?.length > 0 
-        ? searchChips.map(chip => chip.keyword) // Extract the `keyword` value from each object
-        : [], // Pass the array of keywords directly
-        case_id: [], // Adding empty case_id array to match expected format
-        file_type: [], // Adding empty file_type array to match expected format
-        page: 1 // Adding page parameter
+        keyword: [...searchChips],
+        case_id: [],
+        file_type: [],
+        page: 1
       };
-      
+      // const fileTypeKeywords = ['instagram', 'twitter', 'facebook', 'vk', 'youtube', 'linkedin', 'tiktok'];
+      // // Process searchChips
+      // if (searchChips && Array.isArray(searchChips) && searchChips.length > 0) {
+      //   searchChips.forEach((chip) => {
+      //     const val = chip?.toString().toLowerCase().trim();
+    
+      //     if (!val) return; // Ignore empty or invalid values
+    
+      //     if (!isNaN(val)) {
+      //       // If it's a number, add it to case_id as a number
+      //       payload.case_id.push(Number(val));
+      //     } else if (fileTypeKeywords.includes(val)) {
+      //       // If it matches a file type keyword, add it to file_type
+      //       payload.file_type.push(val);
+      //     } else {
+      //       // Otherwise, treat it as a keyword
+      //       payload.keyword.push(val);
+      //     }
+        // });
+      // }
       console.log("Sending search query:", payload);
       
       const response = await axios.post(
@@ -176,7 +174,7 @@ console.log("filterdeChpis", filteredChips)
         }
       );
       
-      console.log("Search results:", response.data);
+      console.log("Search results------:", response);
       
       // Dispatch the search results to the store
       dispatch(setSearchResults({
@@ -185,8 +183,8 @@ console.log("filterdeChpis", filteredChips)
         total_results: response.data.total_results || 0,
       }));
       dispatch(setKeywords({
-             keyword: response.data.input.keyword,
-             queryPayload: {} // or other fields if needed
+            //  keyword: response.data.input.keyword,
+             queryPayload: response.data.input// or other fields if needed
            }));
       dispatch(setPage(1));
      
@@ -207,22 +205,7 @@ console.log("filterdeChpis", filteredChips)
  
 
       <div className="search-header" style={{width:'50%'}}>
-        {/* <div className="search-input-container"> */}
-          {/* <span className="search-icon">
-           <SearchIcon/>
-          </span>
-          <input 
-            type="text" 
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            onKeyPress={handleKeyPress}
-            className="search-input"
-            placeholder="Search..."
-          />
-       
-        <button className="icon-button">
-         <FilterListIcon/>
-        </button> */}
+      
         <TextField
                                     fullWidth
                                     className="com mb-3"
@@ -266,7 +249,7 @@ console.log("filterdeChpis", filteredChips)
         <div className="chips-container">
           {filteredChips && filteredChips.map((chip, index) => (
             <div key={index} className="search-chip">
-              <span>{chip.keyword}</span>
+              <span>{chip}</span>
               <button className="chip-delete-btn" onClick={() => removeChip(chip)}>
                 <CloseIcon fontSize='15px'/>
               </button>
@@ -287,7 +270,7 @@ console.log("filterdeChpis", filteredChips)
       
       <div className="search-results"style={{height:'auto'}}>
         
-        <CriteriaCaseTable/>
+      <CriteriaCaseTable searchChips={searchChips} />
        
     
       

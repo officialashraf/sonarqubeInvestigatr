@@ -12,6 +12,7 @@ import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector} from "react-redux";
 import { closePopup, openPopup, setKeywords, setPage, setSearchResults } from '../../../Redux/Action/criteriaAction';
+import Confirm from './confirmCriteria';
 
 
 export const sharedSxStyles = {
@@ -44,8 +45,7 @@ const CreateCriteria = ({ togglePopup, setShowPopup, handleCreateCase }) => {
     latitude: '',
     longitude: ''
   });
-  const [showPopupR, setShowPopupR] = useState(false);
-  const [showPopupS, setShowPopupS] = useState(false);
+    const [showSavePopup, setShowSavePopup] = useState(false);
   const [showPopupD, setShowPopupD] = useState(false);
   const [selectedDates, setSelectedDates] = useState({
     startDate: null,
@@ -55,7 +55,7 @@ const CreateCriteria = ({ togglePopup, setShowPopup, handleCreateCase }) => {
   });
   const [caseOptions, setCaseOptions] = useState([]);
   const [fileTypeOptions, setFileTypeOptions] = useState([]);
-  const [savedCriteria, setSavedCriteria] = useState(null);
+  
 
   const activePopup = useSelector((state) => state.popup?.activePopup || null);
 console.log("create popup", activePopup)
@@ -68,6 +68,9 @@ console.log("create popup", activePopup)
   }, []);
   // if (activePopup !== "create") return null;
   // Fetch case data from API
+
+ 
+
   const fetchCaseData = async () => {
     try {
       const response = await axios.get('http://5.180.148.40:9001/api/case-man/v1/case', {
@@ -110,50 +113,22 @@ console.log("create popup", activePopup)
     }
   };
 
-  // Save criteria to API
-  const saveCriteria = async () => {
-    try {
-      const criteriaPaylod = {
-        // keyword: formData.searchQuery,
-        // case_id: formData.caseIds && formData.caseIds.length > 0 ? formData.caseIds[0].value.toString() : "",
-        // file_type: formData.filetype && formData.filetype.length > 0 ? formData.filetype[0].value : "",
-        keyword: Array.isArray(formData.searchQuery) 
-    ? formData.searchQuery 
-    : [formData.searchQuery], // Agar single keyword ho, to array me wrap kar le
-// `searchQuery` multiple values ho sakti hain
-case_id: formData.caseIds?.length > 0 
-    ? formData.caseIds.map(caseId => caseId.value.toString()) 
-    : [], // `caseIds` multiple values handle karega aur array return karega
-file_type: formData.filetype?.length > 0 
-    ? formData.filetype.map(file => file.value) 
-    : [], // `filetype` multiple values ka array return karega
 
-        latitude: formData.latitude || "",
-        longitude: formData.longitude || "",
-        start_time: selectedDates.startDate ? `${selectedDates.startDate.toISOString().split('T')[0]}T${String(selectedDates.startTime.hours).padStart(2, '0')}:${String(selectedDates.startTime.minutes).padStart(2, '0')}:00` : "" || null,
-        end_time: selectedDates.endDate ? `${selectedDates.endDate.toISOString().split('T')[0]}T${String(selectedDates.endTime.hours).padStart(2, '0')}:${String(selectedDates.endTime.minutes).padStart(2, '0')}:00` : "" || null
-      };
-      console.log("criteria Payloaad", criteriaPaylod)
-      const response = await axios.post('http://5.180.148.40:9006/api/das/criteria', criteriaPaylod, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${Token}`
-        },
-      });
-
-      toast.success("Criteria saved successfully");
-      console.log('Criteria saved successfully:', response.data);
-      setSavedCriteria(response.data);
-      dispatch(setKeywords(response.data.keyword));
-      // You might want to show a success message or handle the response in some way
-    } catch (error) {
-      console.error('Error saving criteria:', error);
-    }
-  };
-
+ 
   // Handle checkbox change for saving criteria
   const handleSaveCriteriaChange = (e) => {
-    setFormData(prev => ({ ...prev, includeArchived: e.target.checked }));
+
+    const isChecked = e.target.checked;
+
+    if (isChecked) {
+        setFormData((prev) => ({ ...prev, includeArchived: true }));
+        setShowSavePopup(true); // Open the popup
+    } else {
+        // Close the popup and reset form state when unchecked
+        setFormData((prev) => ({ ...prev, includeArchived: false }));
+        setShowSavePopup(false);
+    }
+   
   };
 
  
@@ -179,9 +154,7 @@ file_type: formData.filetype?.length > 0
 const handleSearch = async (e) => {
   e.preventDefault();
   try {
-    if (formData.includeArchived) {
-      await saveCriteria(); // Ensure saveCriteria executes if checked
-    }
+   
     
     const payload = {
       keyword: Array.isArray(formData.searchQuery) ? formData.searchQuery : [formData.searchQuery],
@@ -220,7 +193,7 @@ const handleSearch = async (e) => {
     }));
 
     dispatch(setKeywords({
-      keyword: response.data.input.keyword,
+      // keyword: response.data.input.keyword,
       queryPayload: response.data.input  // or other fields if needed
     }));
     console.log("setkeywordDispacth",response.data.input.keyword)
@@ -434,7 +407,11 @@ const handleSearch = async (e) => {
           onClose={togglePopupA}
         />
       )}
-
+{
+ showSavePopup && (
+  <Confirm  formData={formData} selectedDates={selectedDates}/>
+ )
+}
       {/* {showPopupR && (
         <RecentCriteria
           togglePopup={togglePopupR}

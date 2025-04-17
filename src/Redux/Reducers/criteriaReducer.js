@@ -81,15 +81,14 @@ export const criteriaReducer = (state = queryState, action) => {
     case SET_KEYWORDS:
       
       return {
-        ...state,
-        keywords: action.payload.keyword,
-        queryPayload: action.payload.skipQueryPayload
-        ? state.queryPayload
-        : {
+          ...state,
+          keywords: action.payload.keyword,
+          queryPayload: {
             ...state.queryPayload,
             ...action.payload.queryPayload,
           },
-      };
+        };
+     
     default:
       return state;
   }

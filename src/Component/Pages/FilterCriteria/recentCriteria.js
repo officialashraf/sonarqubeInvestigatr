@@ -27,7 +27,14 @@ const RecentCriteria = () => {
  const [searchQuery, setSearchQuery] = useState("");
 
  const [keywords, setKeyword] = useState([]);
- const recentKeyword = useSelector((state) => state.criteriaKeywords.keywords);
+ const recentKeyword = useSelector((state) => state.criteriaKeywords.queryPayload.keyword);
+  const caseId = useSelector((state) => state.criteriaKeywords.queryPayload.case_id);
+   console.log("casId", caseId)
+   const fileType = useSelector((state) => state.criteriaKeywords.queryPayload.file_type);
+   console.log("filetype",fileType)
+   const keyword = useSelector((state) => state.criteriaKeywords.queryPayload.keyword);
+   console.log("keyword", keyword)
+  
 //  console.log("recnetkeyword", recentKeyword.keywords)
 //  setKeyword(recentKeyword)
 const [formData, setFormData] = useState({
@@ -40,13 +47,42 @@ const [formData, setFormData] = useState({
     longitude: ''
   });
 
-
   useEffect(() => {
-    if (recentKeyword) {
-      setKeyword(recentKeyword); // Update the state with recentKeyword
-      console.log("Updated keywords:", recentKeyword);
+    const isValid = (val) =>
+        val !== null && val !== undefined && val.toString().trim() !== "";
+
+    let updatedKeywords = [];
+
+    // Handle recentKeyword
+    if (Array.isArray(recentKeyword) && recentKeyword.length > 0) {
+        updatedKeywords = [...updatedKeywords, ...recentKeyword];
+    } else if (isValid(recentKeyword)) {
+        updatedKeywords.push(recentKeyword);
     }
-  }, [recentKeyword]);
+
+    // Handle caseId
+    // Handle caseId — always as array of strings
+    if (Array.isArray(caseId) && caseId.length > 0) {
+      updatedKeywords = [...updatedKeywords, ...caseId.map(id => `${id}`)];
+  } else if (isValid(caseId)) {
+      updatedKeywords.push(`${caseId}`);
+  }
+
+  // Handle fileType — always as array of strings
+  if (Array.isArray(fileType) && fileType.length > 0) {
+      updatedKeywords = [...updatedKeywords, ...fileType.map(ft => `${ft}`)];
+  } else if (isValid(fileType)) {
+      updatedKeywords.push(`${fileType}`);
+  }
+
+    console.log("Updated keyword state (processed):", updatedKeywords);
+    setKeyword(updatedKeywords);
+}, [recentKeyword, caseId, fileType]);
+
+  
+
+
+
 
   useEffect(() => {
       fetchData();
@@ -79,7 +115,10 @@ const handelCreate = ()=>{
   const handleRemoveItem = (chipToDelete) => {
     setKeyword(keywords.filter((chip) => chip !== chipToDelete));
   };
-   
+
+     const handleReset = ()=>{
+      setKeyword([])
+     };
 
   const Token = Cookies.get('accessToken');
   const fetchData = async () => {
@@ -93,13 +132,13 @@ const handelCreate = ()=>{
       const data = await response.json();
       console.log("resposegetCriteria",data.data)
       if (data && data.data) {
-        setSavedSearch(data.data.map(item => ({ keyword: item.keyword.slice(0, 3).join(", "), id: item.id }))); // Extract keywords
-       console.log("setSavedSearch", setSavedSearch)
+        setSavedSearch(data.data); // Extract keywords
+       console.log("setSavedSearch", savedSearch)
       }
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-    console.log("setkewords",savedSearch,setSavedSearch)
+    
   };
 
   const handleDelete = async (index, id) => {
@@ -158,8 +197,8 @@ const handelCreate = ()=>{
       }));
   
       dispatch(setKeywords({
-                   keyword: response.data.input.keyword,
-                   queryPayload: {} // or other fields if needed
+                  //  keyword: response.data.input.keyword,
+                   queryPayload: response.data.input // or other fields if needed
                  }));
       //  dispatch(setPage(1));
   
@@ -170,15 +209,53 @@ const handelCreate = ()=>{
     }
   };
   
-  
-  // const filteredList = savedSearch.filter((item) =>
-  //   item.keyword?.toLowerCase().includes(searchQuery.toLowerCase())
-  // );
+  const ReuseCriteria = (item) => {
+    console.log("detailscriterai", item);
+
+    // Initialize updatedKeywords using current state
+    const isValid = (val) =>
+        val !== null && val !== undefined && val.toString().trim() !== "";
+
+    let updatedKeywords = []; // Maintain existing keywords
+
+    // Extract item details and update the keyword list
+    if (item) {
+        if (isValid(item.keyword)) {
+          updatedKeywords = [
+            ...updatedKeywords,
+            ...item.keyword.map((kw) => `${kw}`) // Save each keyword as a string
+        ];// Save item's keyword as string
+        }
+       
+        if (item.case_id?.length > 0) {
+            updatedKeywords = [
+                ...updatedKeywords,
+                ...item.case_id.map((id) => `${id}`)
+            ]; // Save item's caseIds
+        }
+        if (item.file_type?.length > 0) {
+            updatedKeywords = [
+                ...updatedKeywords,
+                ...item.file_type.map((ft) => `${ft}`)
+            ]; // Save item's fileTypes
+        }
+    }
+
+    // Dispatch action to update Redux state
+    dispatch(setKeywords({
+      keyword: updatedKeywords, // New keywords array
+      // queryPayload: {
+      //     keyword: updatedKeywords, // You can adjust this based on what you want in the payload
+      // },
+  }));
+    console.log("Updated keyword state after reuse:", updatedKeywords);
+    setKeyword(updatedKeywords); // Update the state
+};
+
   const filteredList = savedSearch.filter((item) =>
-    typeof item.keyword === "string" &&
-    item.keyword.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-  
+    (typeof item.keyword === "string" && item.keyword.toLowerCase().includes(searchQuery.toLowerCase())) ||
+    (typeof item.title === "string" && item.title.toLowerCase().includes(searchQuery.toLowerCase()))
+  )
   return (
     <div className="popup-overlay">
     <div className="popup-container">
@@ -227,11 +304,11 @@ const handelCreate = ()=>{
     <AccessTimeIcon color="action" />
     <label style={{ marginLeft: '5px' }}>Recent</label>
   </div>
-  <label style={{ marginLeft: 'auto' }}>Clear Recent</label>
+  <label style={{ marginLeft: 'auto' , cursor:'pointer'}}onClick={handleReset}>Clear Recent</label>
 </div>
 
                 <div className="chips-container">
-                  {keywords.map((chip, index) => (
+                  {keywords &&  keywords.map((chip, index) => (
                     <div key={index} className="search-chip">
                       <span>{chip}</span>
                       <button className="chip-delete-btn" onClick={() => handleRemoveItem(chip)}>
@@ -266,7 +343,7 @@ const handelCreate = ()=>{
         {filteredList.length > 0 ? (
           filteredList.map((item, index) => (
             <ListItem key={index} className="text-white">
-              <ListItemText primary={item.keyword} />
+              <ListItemText style={{cursor:'pointer'}} primary={item.title} onClick={() => ReuseCriteria(item)}/>
               <ListItemSecondaryAction>
                 <IconButton edge="end" color="dark">
                 <Edit 

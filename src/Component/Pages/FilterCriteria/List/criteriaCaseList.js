@@ -1,137 +1,121 @@
-import { useState, useEffect, useCallback } from 'react';
-import { Table, InputGroup, FormControl, Dropdown, DropdownButton, Badge, Pagination } from 'react-bootstrap';
-
+import React, { useState, useEffect, useMemo } from 'react';
+import { Table, Pagination, Spinner } from 'react-bootstrap';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
+import { setKeywords, setPage, setSearchResults } from '../../../../Redux/Action/criteriaAction';
 import axios from 'axios';
-import { ArrowDropDown, ArrowDropUp, Padding } from '@mui/icons-material';
-import './table.css';
-import Cookies from "js-cookie";
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import CaseDetails from '../../Case/caseDetails';
-import EditCase from '../../Case/editCase';
-import { Spinner } from 'react-bootstrap';
+import Cookies from 'js-cookie';
 
-import { useDispatch, useSelector } from 'react-redux';
-import { setPage, setSearchResults } from '../../../../Redux/Action/criteriaAction';
-
-const CriteriaCaseTable = () => {
+const CriteriaCaseTable = ({ searchChips }) => {
   const dispatch = useDispatch();
-  const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showPopupA, setShowPopupA] = useState(false);
   const [showPopupB, setShowPopupB] = useState(false);
   const [selectedData, setSelectedData] = useState(null);
-
+console.log("SearchChips", searchChips)
   // Get the Redux state
   const { totalPages, totalResults, searchResults, currentPage } = useSelector(state => state.search);
-  console.log("search......",searchResults)
   const itemsPerPage = 50;
-  // const keywords = useSelector((state) => state.criteriaKeywords.keywords);
-  const payload = useSelector((state) => state.criteriaKeywords.queryPayload);
   const keywords = useSelector((state) => state.criteriaKeywords.keywords);
-  console.log("Keywords from Redux:", keywords);
-  console.log("Payload from Redux:",payload);
+  const payload = useSelector((state) => state.criteriaKeywords.queryPayload,shallowEqual);
+  
   // Get the token for API requests
-  const Token = localStorage.getItem('token') || Cookies.get('token');
+  const Token = localStorage.getItem('acessToken') || Cookies.get('acessToken');
   
-  // Fetch data when page changes
-  // useEffect(() => {
-  //   const fetchPageData = async () => {
-  //     setIsLoading(true);
-      
-  //     try {
-  //       // Get the current query parameters from localStorage
-  //        const keyword = keywords
-        
-  //       if (!keyword) {
-  //         setIsLoading(false);
-  //         return;
-  //       }
-        
-  //       // Add pagination parameters to the query
-  //       const paginatedQuery = {
-  //         keyword:keyword,
-  //         page: currentPage,
-  //       };
-  //       console.log("pagination", paginatedQuery)
-  //       const response = await axios.post('http://5.180.148.40:9006/api/das/search', 
-  //     paginatedQuery
-  //       , {
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //           'Authorization': `Bearer ${Token}`
-  //         }
-  //       });
-        
-  //       console.log("rsponsePaginated", response)
-  //       // Update Redux store with the new page of results
-  //       dispatch(setSearchResults({
-  //           results: response.data.results,
-  //           total_pages: response.data.total_pages || 1,
-  //           total_results: response.data.total_results || 0,
-  //       }));
-        
-  //     } catch (error) {
-  //       console.error('Error fetching page data:', error);
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   };
-    
-  //   fetchPageData();
-  // }, [currentPage, dispatch, Token]);
+  
 
-  useEffect(() => {
-    const fetchPageData = async () => {
-      setIsLoading(true);
   
-      try {
-        const token = Token;
-        const keyword = keywords;
   
-        if (!keyword) {
-          setIsLoading(false);
-          return;
+    const normalizedPayload = useMemo(() => ({
+      keyword: payload?.keyword?.map((v) => v?.toString().toLowerCase().trim()) || [],
+      case_id: payload?.case_id?.map((v) => Number(v)) || [],
+      file_type: payload?.file_type?.map((v) => v?.toString().toLowerCase().trim()) || [],
+    }), [payload]);
+  
+    const normalizedChips = useMemo(() => {
+      const fileTypeKeywords = ['instagram', 'twitter', 'facebook', 'vk', 'youtube', 'linkedin', 'tiktok'];
+      const tempCaseId = [];
+      const tempFileType = [];
+      const tempKeywords = [];
+  
+      searchChips?.forEach((item) => {
+        const val = item?.toString().toLowerCase().trim();
+        if (!val) return;
+        if (!isNaN(val)) {
+          tempCaseId.push(Number(val));
+        } else if (fileTypeKeywords.includes(val)) {
+          tempFileType.push(val);
+        } else {
+          tempKeywords.push(val);
         }
+      });
   
-        // Determine query based on keyword match
-        const usePayload =
-          payload && payload.keyword && payload.keyword === keyword;
+      return {
+        keyword: tempKeywords,
+        case_id: tempCaseId,
+        file_type: tempFileType,
+      };
+    }, [searchChips]);
   
-        const paginatedQuery = usePayload
-          ? { ...payload, page: currentPage }
-          : { keyword, page: currentPage };
+    const isMatchingQuery = useMemo(() => {
+      const isEqual = (a, b) => JSON.stringify([...a].sort()) === JSON.stringify([...b].sort());
   
-        console.log("Final query =>", paginatedQuery);
+      return (
+        isEqual(normalizedPayload.keyword, normalizedChips.keyword) &&
+        isEqual(normalizedPayload.case_id, normalizedChips.case_id) &&
+        isEqual(normalizedPayload.file_type, normalizedChips.file_type)
+      );
+    }, [normalizedPayload, normalizedChips]);
   
-        const response = await axios.post(
-          'http://5.180.148.40:9006/api/das/search',
-          paginatedQuery,
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`,
-            },
+    useEffect(() => {
+      const fetchPageData = async () => {
+        setIsLoading(true);
+        try {
+          const token = Token;
+  
+          let paginatedQuery;
+          if (isMatchingQuery) {
+            paginatedQuery = { ...payload, page: currentPage };
+          } else {
+            paginatedQuery = {
+              keyword: searchChips.map((chip) => chip?.toString().toLowerCase().trim()),
+              case_id: [],
+              file_type: [],
+              page: currentPage,
+            };
           }
-        );
+  console.log("paginatedQuery", paginatedQuery)
+          const response = await axios.post(
+            'http://5.180.148.40:9006/api/das/search',
+            paginatedQuery,
+            {
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${Token}`,
+              },
+            }
+          );
+  console.log("searchQ",response)
+          dispatch(
+            setSearchResults({
+              results: response.data.results,
+              total_pages: response.data.total_pages || 1,
+              total_results: response.data.total_results || 0,
+            })
+          );
   
-        dispatch(
-          setSearchResults({
-            results: response.data.results,
-            total_pages: response.data.total_pages || 1,
-            total_results: response.data.total_results || 0,
-          })
-        );
-      } catch (error) {
-        console.error('Error fetching page data:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+          dispatch(setKeywords({ queryPayload: response.data.input }));
+        } catch (err) {
+          console.error('Fetch error:', err);
+        } finally {
+          setIsLoading(false);
+        }
+      };
   
-    fetchPageData();
-  }, [currentPage, dispatch, Token, keywords, payload]);
+      fetchPageData();
+    }, [currentPage]); // Only track what’s necessary!
   
+  
+
   const togglePopupB = (item) => {
     setShowPopupB((prev) => !prev);
     setSelectedData(item);
@@ -147,6 +131,16 @@ const CriteriaCaseTable = () => {
     dispatch(setPage(pageNumber));
   };
   
+  // Get unique headers from search results
+  const getUniqueHeaders = () => {
+    if (!searchResults || searchResults.length === 0) {
+      return [];
+    }
+    return [...new Set(searchResults.flatMap(item => Object.keys(item)))];
+  };
+  
+  const uniqueHeaders = getUniqueHeaders();
+  
   return (
     <>
       <div className="data-table" style={{ height: '420px', marginTop: '0px' }}>
@@ -161,21 +155,18 @@ const CriteriaCaseTable = () => {
           <Table striped bordered hover>
             <thead>
               <tr>
-                {/* Dynamically generate headers from all unique keys */}
-                {searchResults.length > 0 && [...new Set(searchResults.flatMap(item => Object.keys(item)))]
-                  .map((key, index) => (
-                    <th key={index} className="fixed-th">
-                      {key.replace(/_/g, ' ').toUpperCase()} {/* Format headers */}
-                    </th>
-                  ))}
+                {uniqueHeaders.map((key, index) => (
+                  <th key={index} className="fixed-th">
+                    {key.replace(/_/g, ' ').toUpperCase()}
+                  </th>
+                ))}
               </tr>
             </thead>
             <tbody>
-              {searchResults.length > 0 ? (
+              {searchResults && searchResults.length > 0 ? (
                 searchResults.map((item, rowIndex) => (
                   <tr key={rowIndex}>
-                    {/* Dynamically generate table cells */}
-                    {[...new Set(searchResults.flatMap(item => Object.keys(item)))].map((key, colIndex) => (
+                    {uniqueHeaders.map((key, colIndex) => (
                       <td key={colIndex} className="fixed-th">
                         <div
                           className="cell-content"
@@ -193,8 +184,8 @@ const CriteriaCaseTable = () => {
                           onClick={() => togglePopupA(item)}
                         >
                           {typeof item[key] === 'object' && item[key] !== null
-                            ? JSON.stringify(item[key]) // Handle objects/arrays by converting to string
-                            : item[key] || '-'} {/* Show '-' for missing keys */}
+                            ? JSON.stringify(item[key])
+                            : item[key] || '-'}
                         </div>
                       </td>
                     ))}
@@ -202,7 +193,7 @@ const CriteriaCaseTable = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={[...new Set(searchResults.flatMap(item => Object.keys(item)))].length || 1} className="text-center">
+                  <td colSpan={uniqueHeaders.length || 1} className="text-center">
                     No Data Available
                   </td>
                 </tr>
@@ -214,50 +205,43 @@ const CriteriaCaseTable = () => {
       
       <div className='d-flex justify-content-between mt-1'>
         <div style={{ width: '300px', overflow: 'auto' }}>
-          
+          <Pagination>
+            <Pagination.Prev
+              onClick={() => handlePageChange(Math.max(currentPage - 1, 1))}
+              disabled={currentPage === 1 || isLoading}
+            />
 
-<Pagination>
-  {/* Previous Page */}
-  <Pagination.Prev
-    onClick={() => handlePageChange(Math.max(currentPage - 1, 1))} // Ensure it doesn't go below 1
-    disabled={currentPage === 1 || isLoading}
-  />
+            {Array.from({ length: totalPages }, (_, i) => i + 1)
+              .filter(
+                (page) =>
+                  page === 1 ||
+                  page === totalPages ||
+                  (page >= currentPage - 2 && page <= currentPage + 2)
+              )
+              .map((page) => (
+                <Pagination.Item
+                  key={page}
+                  active={page === currentPage}
+                  onClick={() => handlePageChange(page)}
+                  disabled={isLoading}
+                >
+                  {page}
+                </Pagination.Item>
+              ))}
 
-  {/* Dynamic Page Numbers */}
-  {Array.from({ length: totalPages }, (_, i) => i + 1)
-    .filter(
-      (page) =>
-        page === 1 || // Always show the first page
-        page === totalPages || // Always show the last page
-        (page >= currentPage - 2 && page <= currentPage + 2) // Show 2 pages before and after the current page
-    )
-    .map((page) => (
-      <Pagination.Item
-        key={page}
-        active={page === currentPage}
-        onClick={() => handlePageChange(page)}
-        disabled={isLoading}
-      >
-        {page}
-      </Pagination.Item>
-    ))}
+            <Pagination.Next
+              onClick={() => handlePageChange(Math.min(currentPage + 1, totalPages))}
+              disabled={currentPage === totalPages || isLoading}
+            />
 
-  {/* Next Page */}
-  <Pagination.Next
-    onClick={() => handlePageChange(Math.min(currentPage + 1, totalPages))} // Ensure it doesn't exceed totalPages
-    disabled={currentPage === totalPages || isLoading}
-  />
-
-  {/* Last Page */}
-  <Pagination.Last
-    onClick={() => handlePageChange(totalPages)}
-    disabled={currentPage === totalPages || isLoading}
-  />
-</Pagination>
-
+            <Pagination.Last
+              onClick={() => handlePageChange(totalPages)}
+              disabled={currentPage === totalPages || isLoading}
+            />
+          </Pagination>
         </div>
         <div style={{ fontSize: "12px" }}>
-          {isLoading ? 'Loading...' : `Page ${currentPage} - ${totalPages} / ${totalResults}`}
+          {isLoading ? 'Loading...' : `Page ${currentPage} of ${totalPages} / Total: ${totalResults} results`}
         </div>
       </div>
     </>
@@ -265,3 +249,5 @@ const CriteriaCaseTable = () => {
 };
 
 export default CriteriaCaseTable;
+
+

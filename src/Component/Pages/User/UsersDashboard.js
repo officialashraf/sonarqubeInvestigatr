@@ -1,7 +1,6 @@
 
 import React from 'react'
-import PHeader from './pHeader.js'
-import PreHeader from './preHeder.js'
+
 import UserTable from './UserTable.js'
 
 
