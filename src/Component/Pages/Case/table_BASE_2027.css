@@ -7,8 +7,11 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-top: 5px;
    margin-bottom: 5px; 
+ 
   background-color: white;
+ 
 }
 th{
   background-color: gray !important;
@@ -34,12 +37,12 @@ td{
    font-size: 12px;
 }
 
-/* .search-icon {
+.search-icon {
   background-color: #fff;
   border-radius: 0px;
   box-shadow: 0 0 0 0;
   border: white;
-} */
+}
 
 .header-icons {
   display: flex;
@@ -82,6 +85,7 @@ cursor: pointer;
   padding: 0px 0px 0px 10px;
   white-space: nowrap; 
   font-size: 12px;
+  color: white;
  
  }
 
@@ -121,7 +125,7 @@ cursor: pointer;
   color: gray;
 }
 .custom-dropdown1 .dropdown-toggle::after { display: none; }
-/* .table>:not(caption)>> {
+/* .table>:not(caption)>*>* {
     padding: .5rem .5rem .5rem .5rem !important;
    }
    */
@@ -133,17 +137,6 @@ cursor: pointer;
   padding: 0;
   font-size: 1.5rem;
   /* Adjust size as needed */
-}
-
-
-.menu-button{
-  background: none;
-  border: none;
-  color: black;
-  /* Only black color for the dots */
-  font-size: 1rem;
-  justify-content: flex-end;
-  
 }
 
 .custom-dropdown-toggle::after {
@@ -245,7 +238,6 @@ cursor: pointer;
       margin-top: 0px;
       background-color: #ccc;
       color: #000;
-      height: "22px";
     }
     
 
@@ -259,17 +251,8 @@ cursor: pointer;
       font-size: 12px;
       padding-left:20px;
       padding-right: 20px;
-      background-color: #000;
     }
-
-    .status-badge {
-    padding: 0.25rem 0.75rem;
-    border-radius: 1rem;
-    font-size: 0.5rem;
-    font-weight: 500;
-    justify-content: center;
-    display: inline-block;
-    white-space: nowrap;
-    align-items: center;
-  }
-
+    .status-badge{
+      border-radius: 5px !important;
+      font-family: sans-serif !important;
+    }

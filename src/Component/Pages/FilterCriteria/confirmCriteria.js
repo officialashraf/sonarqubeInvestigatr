@@ -1,0 +1,105 @@
+import React, { useState } from 'react';
+import axios from 'axios';
+import Cookies from 'js-cookie';
+import { toast } from 'react-toastify';
+import '../User/AddUserForm.css'
+
+const Confirm = ({ formData, selectedDates }) => {
+    const Token = Cookies.get('accessToken');
+    const [isVisible, setIsVisible] = useState(true);
+    const [searchTitle, setSearchTitle] = useState('');
+    console.log("formData", formData);
+    console.log("selectedDates", selectedDates);
+
+    const saveCriteria = async () => {
+        try {
+            const criteriaPaylod = {
+              title: searchTitle || "", 
+                keyword: Array.isArray(formData.searchQuery)
+                    ? formData.searchQuery
+                    : [formData.searchQuery], // Wrap single keyword in an array
+                case_id: formData.caseIds?.length > 0
+                    ? formData.caseIds.map((caseId) => caseId.value.toString())
+                    : [], // Handle multiple `caseIds` and return array
+                file_type: formData.filetype?.length > 0
+                    ? formData.filetype.map((file) => file.value)
+                    : [], // Handle multiple `filetype` and return array
+
+                latitude: formData.latitude || "",
+                longitude: formData.longitude || "",
+                start_time: selectedDates.startDate
+                    ? `${selectedDates.startDate.toISOString().split('T')[0]}T${String(selectedDates.startTime.hours).padStart(2, '0')}:${String(selectedDates.startTime.minutes).padStart(2, '0')}:00`
+                    : "" || null,
+                end_time: selectedDates.endDate
+                    ? `${selectedDates.endDate.toISOString().split('T')[0]}T${String(selectedDates.endTime.hours).padStart(2, '0')}:${String(selectedDates.endTime.minutes).padStart(2, '0')}:00`
+                    : "" || null,
+            };
+
+            console.log("Criteria Payload:", criteriaPaylod); // Debug: Payload for API
+
+            const response = await axios.post('http://5.180.148.40:9006/api/das/criteria', criteriaPaylod, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${Token}`
+                },
+            });
+
+            toast.success("Criteria saved successfully");
+          
+            console.log('Criteria saved successfully:', response.data); // Debug: API response
+            setIsVisible(false)
+          } catch (error) {
+            console.error('Error saving criteria:', error); // Debug: Error log
+        }
+    };
+
+    return isVisible && (
+        <div className="popup-overlay" style={{
+            top: 0, left: 0, width: "100%", height: "100%", display: "flex",
+            justifyContent: "center", alignItems: "center", zIndex: 1050
+        }}>
+            <div className="popup-container" style={{display:'flex', alignItems:'center'}}>
+                {/* <button
+                    className="close-icon"
+                    onClick={() => setIsVisible(false)}
+                >
+                    &times;
+                </button> */}
+              
+                <div className="popup-content" style={{width:'70%'}}>
+                    <h5>Save Search as</h5>
+                    <form onSubmit={(e) => e.preventDefault()}> {/* Prevent form submission default */}
+                        <label>Search Title</label>
+                        <input
+                            type="text"
+                            placeholder="Enter title"
+                            className="com"
+                            value={searchTitle} // Bind input value to state
+                            onChange={(e) => setSearchTitle(e.target.value)} // Update state on input
+                        />
+                        <div className="button-container">
+                            <button
+                                type="button"
+                                className="cancel-btn"
+                                onClick={() => setIsVisible(false)}
+                            >
+                                CANCEL
+                            </button>
+                            <button
+                                type="submit"
+                                className="create-btn"
+                                onClick={saveCriteria}
+                            >
+                                SAVE
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default Confirm;
+
+

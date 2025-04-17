@@ -259,7 +259,6 @@ cursor: pointer;
       font-size: 12px;
       padding-left:20px;
       padding-right: 20px;
-      background-color: #000;
     }
 
     .status-badge {
@@ -272,4 +271,3 @@ cursor: pointer;
     white-space: nowrap;
     align-items: center;
   }
-

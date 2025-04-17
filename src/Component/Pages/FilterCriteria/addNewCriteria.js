@@ -750,7 +750,7 @@ console.log("platform", response.data)
           // Build the query payload with the correct structure
           const payload = {
             keyword: searchChips?.length > 0
-              ? searchChips.map(chip => chip.keyword || "")
+              ? searchChips.map(chip => chip || "")
               : [],
             case_id: formData.caseIds?.length > 0
               ? formData.caseIds.map(caseId => caseId.value)
@@ -793,7 +793,7 @@ console.log("platform", response.data)
           }));
           
           dispatch(setKeywords({
-                keyword: response.data.input.keyword,
+                // keyword: response.data.input.keyword,
                 queryPayload: response.data.input  // or other fields if needed
               }));
           // Dispatch the initial page number
@@ -839,7 +839,7 @@ console.log("platform", response.data)
             // Build the criteria payload
             const criteriaPayload = {
                 keyword: searchChips?.length > 0
-                ? searchChips.map(chip => chip.keyword || "")
+                ? searchChips.map(chip => chip || "")
                 : [],  // Wrap `keywordsString` in an array if it's a single value
                 case_id: formData.caseIds?.length > 0
                     ? formData.caseIds.map(caseId => caseId.value.toString())
