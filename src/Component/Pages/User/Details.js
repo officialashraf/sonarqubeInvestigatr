@@ -3,7 +3,7 @@ import { Table, CloseButton } from "react-bootstrap";
 import "../Case/caseDetails.css";
 
 const Details = ({ item, users, toggleDetails }) => {
-console.log(item, "item")
+console.log(item.last_logout, "items")
   console.log(users, "users ohhhhhkk");
 
   return <div className="popup-overlay">
@@ -39,7 +39,7 @@ console.log(item, "item")
                 <tr>
                   <th>Last Active</th>
                   <td>
-                    {item.lastActive}
+                    {item.last_logout}
                   </td>
                 </tr>
                 <tr>

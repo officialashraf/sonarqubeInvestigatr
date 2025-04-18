@@ -40,7 +40,7 @@ const AppContent = () => {
     if (path === "/line") return "Line Chart";
     if (path === "/grapg") return "Graphical Data";
     if (path === "/search") return "Search";
-    if (path === "/user") return "Users";
+    if (path === "/users") return "Users";
     if (path === "/reports") return "Reports";
     if (path === "/ comments") return "Comm";
     if (path === "/pin") return "Pin";

@@ -11,13 +11,15 @@ const CriteriaCaseTable = ({ searchChips }) => {
   const [showPopupA, setShowPopupA] = useState(false);
   const [showPopupB, setShowPopupB] = useState(false);
   const [selectedData, setSelectedData] = useState(null);
-console.log("SearchChips", searchChips)
+
   // Get the Redux state
   const { totalPages, totalResults, searchResults, currentPage } = useSelector(state => state.search);
   const itemsPerPage = 50;
-  const keywords = useSelector((state) => state.criteriaKeywords.keywords);
-  const payload = useSelector((state) => state.criteriaKeywords.queryPayload,shallowEqual);
-  
+  const keywords = useSelector((state) => state.criteriaKeywords.keyword);
+
+  const payload = useSelector((state) => state.criteriaKeywords.queryPayload);
+  console.log("payload", payload)
+  console.log("SearchChips", searchChips)
   // Get the token for API requests
   const Token = localStorage.getItem('acessToken') || Cookies.get('acessToken');
   

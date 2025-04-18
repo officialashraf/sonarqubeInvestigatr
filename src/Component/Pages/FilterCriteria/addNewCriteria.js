@@ -692,7 +692,7 @@ const AddNewCriteria = ({
                     'Authorization': `Bearer ${Token}`
                 },
             });
-console.log("platform", response.data)
+console.log("platforms", response.data)
             const fileTypeOptionsFormatted = response.data.data.map(platform => ({
                 value: platform,
                 label: platform

@@ -1,18 +1,16 @@
-
 import React from 'react'
+import PHeader from './PHeader'
+import Navigation from './Navigation'
+import UserManagement from './UserManagement'
 
-import UserTable from './UserTable.js'
-
-
-
-export const UsersDashboard = () => {
+const UsersDashboard = () => {
   return (
-    <div>
-    {/* <PHeader/> */}
-    {/* <PreHeader/> */}
-    <UserTable/>
-    </div>
+    <>
+    {/* <PHeader/>
+    <Navigation/> */}
+    <UserManagement/>
+    </>
   )
 }
 
-export default UsersDashboard;
+export default UsersDashboard
