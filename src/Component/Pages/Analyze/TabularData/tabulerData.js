@@ -178,7 +178,7 @@ const TabulerData = () => {
           justifyContent: "space-between",
         }}
       >
-        <Pagination>
+        <Pagination style={{width:'50px'}}>
           <Pagination.Prev
             onClick={() => setCurrentPage(currentPage - 1)}
             disabled={currentPage === 1}

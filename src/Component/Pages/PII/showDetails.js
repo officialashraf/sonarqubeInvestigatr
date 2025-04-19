@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "../PII/searchBar.css";
+import "./searchBar.css";
 import { Search } from "react-bootstrap-icons";
 import { useNavigate } from "react-router-dom";
+import UserCards from "./cardDetails";
+import ProfileDetails from "./profileDetails";
 
-const SearchBar = () => {
+const ShowDetails = () => {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
   const [filteredResults, setFilteredResults] = useState([]);
@@ -71,10 +73,10 @@ const SearchBar = () => {
             className="search-input"
           />
           <Search onClick={handleSearch} color="gray" size="24" />
-        </div><div>heeyeyeyey</div>
+        </div>
         <div className="search-results-container">
-          <div className="searchresult">
-            {filteredResults.length > 0 ? (
+          <div className="searchresult"   style={{display:'flex'}}>
+            {/* {filteredResults.length > 0 ? (
               <>
                 <table className="results-table">
                   <thead>
@@ -139,7 +141,10 @@ const SearchBar = () => {
               </>
             ) : (
               <p>No results found</p>
-            )}
+            )} */}
+            {/* <ProfileDetails/> */}
+<UserCards/>
+
           </div>
         </div>
         <div className="button-container">
@@ -152,4 +157,4 @@ const SearchBar = () => {
   );
 };
 
-export default SearchBar;
+export default ShowDetails;

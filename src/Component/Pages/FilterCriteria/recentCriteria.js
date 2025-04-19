@@ -80,10 +80,6 @@ const [formData, setFormData] = useState({
 }, [recentKeyword, caseId, fileType]);
 
   
-
-
-
-
   useEffect(() => {
       fetchData();
     }, []);
