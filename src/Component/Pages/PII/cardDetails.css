@@ -1,9 +1,11 @@
 /* Common layout styles */
 .cards-container {
-    margin-top: 2rem;
-   
-  }
-  
+  flex: 70%;
+  margin-top: 2rem;
+  /* height: 100vh;
+  overflow: auto; */
+}
+
   .loader-container {
     display: flex;
     justify-content: center;
@@ -24,7 +26,7 @@
     height: 100%;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
     transition: transform 0.2s, box-shadow 0.2s;
-    background-color: black;
+    background-color: black   !important;
   }
   
   .user-card:hover {
@@ -37,6 +39,7 @@
     display: flex;
     align-items: center;
     margin-bottom: 16px;
+    color: white;
   }
   
   .user-avatar {

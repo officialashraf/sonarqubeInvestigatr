@@ -76,6 +76,11 @@
   overflow-x: auto;
  
 }
+.wrapper {
+  display: flex;
+  /* height: 100vh;
+  overflow-y: auto; Single scrollbar */
+}
 
 .results-table {
   width: 100%;

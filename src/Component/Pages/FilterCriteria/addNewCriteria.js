@@ -181,7 +181,7 @@ console.log("selectedDates", selectedDates)
           }));
           
           dispatch(setKeywords({
-                // keyword: response.data.input.keyword,
+                 keyword:searchChips,
                 queryPayload: response.data.input  // or other fields if needed
               }));
           // Dispatch the initial page number
@@ -364,7 +364,7 @@ console.log("selectedDates", selectedDates)
                                         className="add-btn" 
                                         onClick={handleSaveCriteriaChange}
                                     >
-                                        Apply
+                                      Create
                                     </button>
                                     <button 
                                         type="button" 

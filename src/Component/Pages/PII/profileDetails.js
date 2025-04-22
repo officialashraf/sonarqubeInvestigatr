@@ -43,7 +43,7 @@ const ProfileDetails = () => {
   }
 
   return (
-    <Container fluid className="profile-container">
+    <Container  className="profile-container">
       <Card className="profile-card">
         <Card.Body className="p-0">
          
