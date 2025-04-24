@@ -39,7 +39,7 @@ const TabulerData = () => {
         page: page,
         // limit: itemsPerPage
       };
-
+console.log("queryArray",queryData)
       const response = await axios.post(
         "http://5.180.148.40:9006/api/das/search",
         queryData,
@@ -53,7 +53,7 @@ const TabulerData = () => {
 
       const responseData = response.data;
       const dataArray = responseData.results;
-      console.log("dataaryy", dataArray);
+      console.log("dataaryy", response);
       const totalItems = responseData.total_results; // Assuming backend returns total items count
       console.log("totalresluts", totalItems);
       if (Array.isArray(dataArray) && dataArray.length > 0) {
@@ -65,7 +65,13 @@ const TabulerData = () => {
         });
 
         setHeaders(Array.from(allKeys));
-        setData(dataArray);
+        // setData(dataArray);
+        setData(dataArray.map(item => {
+          return Object.keys(item).reduce((acc, key) => {
+            acc[key] = typeof item[key] === "object" ? JSON.stringify(item[key]) : item[key];
+            return acc;
+          }, {});
+        }));
         setTotalPages(Math.ceil(totalItems / itemsPerPage));
         setItems(totalItems);
       }
@@ -172,38 +178,48 @@ const TabulerData = () => {
                 </Pagination> 
             )} */}
       <div className="paginationstabs"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        <Pagination style={{width:'50px'}}>
-          <Pagination.Prev
-            onClick={() => setCurrentPage(currentPage - 1)}
-            disabled={currentPage === 1}
-          />
+    style={{
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between",
+    }}
+>
+  <Pagination style={{ width: "200px" }}>
+    <Pagination.First onClick={() => handlePageChange(1)} disabled={currentPage === 1} />
+    <Pagination.Prev onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1} />
 
-          {pages.map((number, index) => (
-            <Pagination.Item
-              key={index}
-              active={number === currentPage}
-              onClick={() => number !== "..." && handlePageChange(number)}
-              disabled={number === "..."}
-            >
-              {number}
-            </Pagination.Item>
-          ))}
+    {pages.map((number, index) => {
+      if (
+        number === 1 ||
+        number === totalPages ||
+        number === currentPage ||
+        number === currentPage - 1 ||
+        number === currentPage + 1
+      ) {
+        return (
+          <Pagination.Item
+            key={index}
+            active={number === currentPage}
+            onClick={() => number !== "..." && handlePageChange(number)}
+          >
+            {number}
+          </Pagination.Item>
+        );
+      } else if (number === "...") {
+        return <Pagination.Item key={index} disabled>{number}</Pagination.Item>;
+      }
+      return null;
+    })}
 
-          <Pagination.Next
-            onClick={() => setCurrentPage(currentPage + 1)}
-            disabled={currentPage === totalPages}
-          />
-        </Pagination>
-        <div style={{ fontSize: "12px", marginRight: "10px" }}>
-          Page {currentPage} - {itemsPerPage} / {items}
-        </div>
-      </div>
+    <Pagination.Next onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === totalPages} />
+    <Pagination.Last onClick={() => handlePageChange(totalPages)} disabled={currentPage === totalPages} />
+  </Pagination>
+
+  <div style={{ fontSize: "12px", marginRight: "10px" }}>
+    Page {currentPage} - {itemsPerPage} / {items}
+  </div>
+</div>
+
     </>
   );
 };

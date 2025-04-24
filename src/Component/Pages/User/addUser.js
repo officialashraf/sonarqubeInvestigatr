@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import "./AddUserForm.css";
+import "./addUser.css";
 import { IoMdSearch } from "react-icons/io";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { toast } from 'react-toastify';
 
-const AddUserForm = ({ onClose }) => {
+const AddUser = ({ onClose }) => {
   const [formData, setFormData] = useState({
     username: "",
     first_name: "",
@@ -99,4 +99,4 @@ const AddUserForm = ({ onClose }) => {
   );
 };
 
-export default AddUserForm;
+export default AddUser;

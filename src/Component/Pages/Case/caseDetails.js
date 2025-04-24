@@ -27,7 +27,7 @@ const CaseDetails = ({ item, togglePopupA }) => {
                          <tr> <th>Last Data Proceed On</th> <td>{item.lastDataProceedOn}</td> </tr>
                           <tr> <th>Last Data Proceed By</th> <td>{item.lastDataProceedBy}</td> </tr> 
                           <tr> <th>Assignee</th> <td>{item.assignee}</td> </tr>
-                           <tr> <th>Watcher(s)</th> <td>{item.watchers.join(', ')}</td> </tr>
+                           <tr> <th>Watcher(s)</th> <td>{item.watchers}</td> </tr>
                             <tr> <th>Archived By</th> <td>{item.archivedBy}</td> </tr> 
                             <tr> <th>Archived On</th> <td>{item.archivedOn}</td> </tr> 
                             <tr> <th>Archival Reason</th> <td>{item.archivalReason}</td> </tr> 

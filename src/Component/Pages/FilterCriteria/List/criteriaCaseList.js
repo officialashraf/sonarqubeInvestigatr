@@ -136,9 +136,9 @@ const CriteriaCaseTable = () => {
     );
     
     // Add ellipsis if needed
-    if (currentPage > 3) {
-      pageItems.push(<Pagination.Ellipsis key="ellipsis1" disabled />);
-    }
+    // if (currentPage > 3) {
+    //   pageItems.push(<Pagination.Ellipsis key="ellipsis1" disabled />);
+    // }
     
     // Add pages around current page
     const startPage = Math.max(2, currentPage - 1);
@@ -160,9 +160,9 @@ const CriteriaCaseTable = () => {
     }
     
     // Add ellipsis if needed
-    if (currentPage < totalPages - 2) {
-      pageItems.push(<Pagination.Ellipsis key="ellipsis2" disabled />);
-    }
+    // if (currentPage < totalPages - 2) {
+    //   pageItems.push(<Pagination.Ellipsis key="ellipsis2" disabled />);
+    // }
     
     // Always add last page if different from first
     if (totalPages > 1) {

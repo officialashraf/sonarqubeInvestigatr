@@ -13,10 +13,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 10px;
+  padding:1px;
   gap: 10px;
   border: 1px solid #dfe1e5;
-  border-radius: 24px;
+  border-radius: 5px;
   box-shadow: 0 1px 6px rgba(32, 33, 36, 0.28);
   width: 100%;
   max-width: 600px;
@@ -32,6 +32,11 @@
   padding: 0 10px;
   font-size: 14px;
   flex: 1;
+}
+
+.search-dropdown:focus {
+  outline: none;
+  box-shadow: none;
 }
 
 .search-input {
@@ -71,7 +76,7 @@
 
 .searchresult {
   width: 100%;
- height: 400px;
+ height: 430px; 
   box-sizing: border-box;
   overflow-x: auto;
  
@@ -103,26 +108,24 @@
 }
 
 .create-case-button {
-  height: 36px;
-  width: 200px;
+  height: 28px;
   border: none;
-  background-color: #808080;
+  background-color: black;
   color: white;
   cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: .375rem;
-  margin: 10px 0;
+ padding: 5px 15px;
+  border-radius:5px;
+  margin: 10px 4.5% 0px 0px;
 }
 
 .create-case-button:hover {
-  background-color: black;
+  background-color: #808080;
 }
 
 .button-container {
   display: flex;
   justify-content: flex-end;
+  width: 100%;
  
 }
 /* 

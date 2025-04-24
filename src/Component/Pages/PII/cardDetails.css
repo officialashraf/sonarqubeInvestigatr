@@ -1,7 +1,7 @@
 /* Common layout styles */
 .cards-container {
   flex: 70%;
-  margin-top: 2rem;
+  /* margin-top: 2rem; */
   /* height: 100vh;
   overflow: auto; */
 }

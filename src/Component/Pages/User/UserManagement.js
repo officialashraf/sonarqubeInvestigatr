@@ -4,10 +4,9 @@ import { FiMoreVertical } from "react-icons/fi";
 import { FaRegEye } from "react-icons/fa";
 import { TbPassword } from "react-icons/tb";
 import { FaRegCopy } from "react-icons/fa6";
-import AddUserForm from "./AddUserForm";
+import AddUser from "./addUser";
 import "../Case/table.css";
-import Details from "./Details";
-import EditUserForm from "./EditUserForm";
+import EditUser from "./editUser";
 import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
 import Dropdown from "react-bootstrap/Dropdown";
 import Badge from "react-bootstrap/Badge";
@@ -15,6 +14,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
+import UserDetails from "./userDetails";
 
 
 const UserManagement = () => {
@@ -522,10 +522,10 @@ return (
     </div>
 
 
-    {showAddForm && <AddUserForm onClose={togglePopup} />}
-    {showDetail && <Details item={selectedUser} users={users} toggleDetails={toggleDetails}/>}
+    {showAddForm && <AddUser onClose={togglePopup} />}
+    {showDetail && <UserDetails item={selectedUser} users={users} toggleDetails={toggleDetails}/>}
     {showEditForm &&
-      <EditUserForm
+      <EditUser
         togglePopup={toggleEditForm}
         item={selectedUser} // Pass selected user data
         // onUserUpdated={() => fetchUsers()} // Refresh the user list after updating
