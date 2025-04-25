@@ -53,9 +53,11 @@ console.log("queryArray",queryData)
 
       const responseData = response.data;
       const dataArray = responseData.results;
+
       console.log("dataaryy", response);
+
       const totalItems = responseData.total_results; // Assuming backend returns total items count
-      console.log("totalresluts", totalItems);
+      // console.log("totalresluts", totalItems);
       if (Array.isArray(dataArray) && dataArray.length > 0) {
         const allKeys = new Set();
         dataArray.forEach((item) => {
@@ -70,10 +72,16 @@ console.log("queryArray",queryData)
           return Object.keys(item).reduce((acc, key) => {
             acc[key] = typeof item[key] === "object" ? JSON.stringify(item[key]) : item[key];
             return acc;
+
+
           }, {});
         }));
+
         setTotalPages(Math.ceil(totalItems / itemsPerPage));
         setItems(totalItems);
+
+        // dispatch(setSummaryDataAction(data));
+        // dispatch(setSumaryHeadersAction(headers));
       }
 
       setLoading(false);

@@ -5,6 +5,7 @@ import { Col} from 'react-bootstrap';
 import { FaArrowLeft } from 'react-icons/fa';
 import "./tabulerHeader.css";
 import { useNavigate } from "react-router-dom";
+import { FaPhotoVideo } from "react-icons/fa";
 
 const CaseHeader = ({ onIconClick }) => {
   const caseData1 = useSelector((state) => state.caseData.caseData);
@@ -14,9 +15,6 @@ const CaseHeader = ({ onIconClick }) => {
   };
   const backToCase = () => {
     navigate(`/cases`);
-  };
-  const backToResource = () => {
-    navigate(`/esource`);
   };
   // const togglePopup = () => {
   //   setShowPopup((prev) => !prev);
@@ -42,17 +40,17 @@ const CaseHeader = ({ onIconClick }) => {
           {/* <h5 className="header-caseid-h7" >Case id: {`CASE${String(caseData1.id).padStart(4, '0')}`}</h5> */}
           {/* <p className='header-casename-h5' >{caseData1.title}</p> */}
         </div>
-        <div className="col d-flex flex-wrap justify-content-center align-items-center">
-          <button className="add-new-filter-button" onClick={backToResource}>
+        <div className="col d-flex flex-wrap justify-content-end align-items-center">
+          {/* <button className="add-new-filter-button" onClick={() => onIconClick("resources")}>
             Resources
-          </button>
-          <button
+          </button> */}
+          {/* <button
             className="add-new-filter-button"
             style={{ marginLeft: "12px" }}
             onClick={backToCase}
           >
             Case board
-          </button>
+          </button> */}
           <button
             className="add-new-filter-button"
             style={{ marginLeft: "12px" }}
@@ -93,7 +91,11 @@ const CaseHeader = ({ onIconClick }) => {
           </select>
         </div>
         {/* <div className="col-auto ms-auto ml-3 d-flex justify-content-center align-items-center"  style={{ marginRight:"5px", height:"28px"}}> */}
-        <div className="col-auto ms-auto d-flex align-items-center">
+        <div className="col-auto ms-auto d-flex align-items-center gap-3">
+           <FaPhotoVideo
+            className="icon-styles"
+            onClick={() => onIconClick("resources")}
+          />
           <PieChart
             className="icon-style"
             onClick={() => onIconClick("graphicalData")}

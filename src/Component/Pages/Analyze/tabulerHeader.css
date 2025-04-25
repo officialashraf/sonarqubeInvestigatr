@@ -5,6 +5,11 @@
     padding: 5px; /* Reduced size */
     width: 100wh;
   }
+
+  .icon-styles{
+   color: gray;
+   font-size: large;
+  }
   
   .icon-style {
     color: gray;
@@ -18,5 +23,9 @@
 
     
   }
+  .icon-styles:hover {
+    color: lightgrey;
+    background-color: black;
+    }
 
    
