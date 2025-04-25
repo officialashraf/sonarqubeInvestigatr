@@ -19,7 +19,7 @@ const rootReducer = combineReducers({
     taskFilterId : taskFilterReducer,
     caseData : caseReducer ,
     filterData: summaryDataReducer,
-    summaryData: summaryReducer,
+    summaryData: summaryDataReducer,
     filterCount: filterReducer,
     search: searchReducer,
     popup: popupReducer,

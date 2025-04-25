@@ -4,10 +4,9 @@ import { FiMoreVertical } from "react-icons/fi";
 import { FaRegEye } from "react-icons/fa";
 import { TbPassword } from "react-icons/tb";
 import { FaRegCopy } from "react-icons/fa6";
-import AddUserForm from "./AddUserForm";
+import AddUserForm from "./addUser";
 import "../Case/table.css";
-import Details from "./Details";
-import EditUserForm from "./EditUserForm";
+import EditUserForm from "./editUser";
 import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
 import Dropdown from "react-bootstrap/Dropdown";
 import Badge from "react-bootstrap/Badge";
@@ -15,7 +14,9 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
-
+import UserDetails from "./userDetails";
+import EditUser from "./editUser";
+import AddUser from "./addUser";
 
 const UserManagement = () => {
   const [data, setData] = useState([]);
@@ -99,8 +100,7 @@ const UserManagement = () => {
         },)
     };
 
-    const deleteUser = async (id) => {
-        //const caseId = parseInt(id.replace("CASE", ""), 10);
+    const deleteUser = async (id, username) => {
         const token = Cookies.get("accessToken");
         if (!token) {
           console.error("No token found in cookies.");
@@ -116,7 +116,7 @@ const UserManagement = () => {
               }
             });
             window.dispatchEvent(new Event("databaseUpdated"));
-          toast(`User ${id}} Deleted Successfully`)
+          toast(`User ${username} Deleted Successfully`)
           console.log("User Deleted:", response.data);
     
           // After successful deletion, fetch the updated data
@@ -522,10 +522,10 @@ return (
     </div>
 
 
-    {showAddForm && <AddUserForm onClose={togglePopup} />}
-    {showDetail && <Details item={selectedUser} users={users} toggleDetails={toggleDetails}/>}
+    {showAddForm && <AddUser onClose={togglePopup} />}
+    {showDetail && <UserDetails item={selectedUser} users={users} toggleDetails={toggleDetails}/>}
     {showEditForm &&
-      <EditUserForm
+      <EditUser
         togglePopup={toggleEditForm}
         item={selectedUser} // Pass selected user data
         // onUserUpdated={() => fetchUsers()} // Refresh the user list after updating

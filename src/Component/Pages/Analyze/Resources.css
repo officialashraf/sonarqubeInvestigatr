@@ -1,0 +1,459 @@
+.container-r {
+    /* font-family: Arial, sans-serif; */
+    width: 100%;
+    height: auto;
+    background-color: #f9f9f9;
+  }
+  
+  .top-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ccc;
+    padding : 2px;
+  }
+  
+  .title h5 {
+    margin: 0;
+    font-size: 12px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .jobs {
+    display: flex;
+    align-items: center;
+  }
+  
+  .job-content {
+    display: flex;
+    align-items: center;
+    gap: 1px;
+  }
+  
+  .job-content h6 {
+    margin: 0;
+    font-size: 10px;
+    font-weight: bold;
+    color: black;
+    cursor: pointer;
+    
+  }
+  
+  .dropdown-icon {
+    font-size: 12px;
+    color: #333;
+    cursor: pointer;
+  }
+  
+  .icons {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    margin-left: 10px;
+  }
+  
+  .icons svg {
+    font-size: 12px;
+    color: #555;
+    cursor: pointer;
+  }
+  
+  /* Content Section */
+.contents {
+    display: flex;
+    height: calc(100vh - 100px); /* Adjust height based on header */
+    background-color: #f9f9f9;
+  }
+  
+  /* Left Sidebar */
+  .left-sidebar {
+    width: 20%;
+    background-color: lightgray;
+    color: white;
+    padding: 16px;
+    overflow-y: auto;
+  }
+
+  .sidebar-header {
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #a5a5a5; /* Border below the title */
+  }
+  .sidebar-header h5 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: bold;
+    color: #000000;
+  }
+  .sidebar-header .search-icon {
+    font-size: 18px;
+    color: #ffffff;
+    margin-right: 10px; /* Space between the icon and the title */
+  }
+  
+  .resourceItem {
+    display: flex;
+    align-items: center;
+    /* padding-top: 10px; */
+    background-color: #ffffff;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-bottom: 5px;
+    color: black;
+  }
+  
+  .resourceItem:hover {
+    background-color: #000000;
+    color: white;
+  }
+  
+  .resourceItem.active {
+    background-color: #000000;
+    color: white;
+  }
+
+  
+  .resourceImage {
+    width: 50px;
+    height: 50px;
+    /* border-radius: 5px; */
+    margin-right: 10px;
+  }
+  
+  .resourceDetails {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .resourceType {
+    font-weight: bold;
+    margin: 0;
+  }
+  
+  .resourceContent {
+    font-size: 12px;
+    color: #bdc3c7;
+    margin: 0;
+  }
+
+  
+@media (max-width: 768px) {
+  .left-sidebar {
+    width: 30%; /* Sidebar takes full width on small screens */
+    padding: 8px;
+  }
+
+  .right-content {
+    width: 100%;
+    padding: 8px;
+  }
+
+  .top-header {
+    flex-direction: column; /* Stack elements vertically */
+    align-items: flex-start;
+    padding: 8px;
+  }
+  .title h5 {
+    font-size: 12px; /* Adjust font size for small screens */
+  }
+
+  .subscribeButton {
+    font-size: 12px; /* Adjust button font size */
+  }
+}
+@media (max-width: 480px) {
+  .container-r {
+    padding: 8px; /* Reduce padding for very small screens */
+  }
+
+  .channel-action {
+    flex-direction: column;
+    gap: 8px; /* Reduce spacing on smaller screens */
+  }
+
+  .actionButton {
+    font-size: 14px; /* Smaller font size for small screens */
+  }
+}
+  
+  /* Right Content Area */
+
+  .resourceDetailsContainer{
+    display: flex;
+  }
+  .right-content {
+    
+    flex: 1;
+    padding-left: 10px;
+    padding-top: 10px;
+    width: 50%;
+    overflow-y: auto;
+    background-color: #f4f4f4;
+    border-left: 1px solid #ddd;
+    align-items: center;
+    justify-content: center;
+    height: 450px;
+
+  }
+  .resourceDetailsView {
+    padding: 10px;
+    background-color: white;
+    width: 100%;
+    max-width: 800px;
+    height: auto;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    margin: auto;
+    overflow: hidden;
+  }
+  .vkIframe {
+    width: 100%;
+    height: auto;
+    max-width: 800px;  /* or whatever max width works for you */
+    display: block;
+    object-fit: contain; /* Keeps aspect ratio without overflow */
+    /* margin: 0 auto; Center align */
+    border-radius: 10px;
+  }
+  .marginSides20 {
+    margin-left: 20%;
+    margin-right: 20%;
+  }
+  
+  .sentiment {
+    font-size: 14px;
+    font-weight: bold;
+    justify-content: flex-start;
+  }
+
+  
+.profile-section {
+  display: flex;
+  align-items: center;
+  /* margin-top: 10px; */
+  margin-bottom: 10px;
+}
+
+.profileImage {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+  
+.displayName {
+  font-size: 10px;
+  font-weight: bold;
+  color: #333;
+  margin: 0px;
+  align-items: center;
+}
+.name-date {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.postDate {
+  font-size: 12px;
+  color: #777;
+  margin: 2px 0 0 0;
+}
+.postImage {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  border-radius: 10px;
+  display: block;
+  /* margin-top: 10px; */
+}
+body {
+  overflow-x: hidden;
+}
+
+
+.activityContent {
+  font-size: 11px;
+  color: #555;
+  line-height: 1.5;
+  margin: 0px;
+}
+.placeholder {
+    text-align: center;
+    color: #7f8c8d;
+    font-size: 18px;
+  }
+
+  .like-commment-share {
+    display: flex;
+    justify-content: space-evenly;
+    gap: 15px; /* You can increase or decrease this value */
+    font-size: 20px; /* Optional: control icon size */
+    color: #333;     /* Optional: adjust icon color */
+    align-items: center;
+  }
+  .like{
+    font-size: 20px; /* Optional: control icon size */
+    color: #333; 
+    gap: 1px;
+  }
+  .comment{
+    font-size: 20px; /* Optional: control icon size */
+    color: #333; 
+    gap: 1px;
+  }
+  .repost{
+    font-size: 20px; /* Optional: control icon size */
+    color: #333; 
+    gap: 1px;
+  }
+  .vk{
+    justify-content: flex-start;
+     }
+     .unified-date {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+ 
+
+.tiktok-container {
+  position: relative;
+  width: 300px;
+  height: 600px;
+  overflow: hidden;
+  border-radius: 20px;
+  background-color: black;
+  margin-left: 20%;
+  margin-right: 20%;
+}
+
+video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.right-panel {
+  position: absolute;
+  right: 10px;
+  bottom: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+  gap: 15px;
+}
+
+.icon {
+  text-align: center;
+  font-size: 18px;
+}
+
+.icon span {
+  display: block;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.profile-pic {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid white;
+}
+
+.bottom-content {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  right: 60px;
+  color: white;
+  font-family: sans-serif;
+}
+
+.username {
+  font-weight: bold;
+}
+
+.caption {
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+  .channel-action{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px; /* Adds spacing between sections */
+  padding: 10px;
+  border-bottom: 1px solid #646464;
+ }
+ .channelInfo {
+  display: flex;
+  /* margin-left: 16px; */
+  align-items: center;
+  gap: 8px;
+}
+
+.channelLogo {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.channelName {
+  font-size: 1rem;
+  font-weight: bold;
+} 
+
+.subscribers {
+  font-size: 0.875rem;
+  color: #606060;
+}
+
+.subscribeButton {
+  margin-left: auto;
+  background-color: #808080;
+  color: rgb(255, 255, 255);
+  padding: 2px 8px;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  flex-shrink: 0;
+  font-size: 1rem;
+}
+
+.subscribeButton:hover {
+  background-color: #000000;
+  color: white;
+}
+
+.actions {
+  display: flex;
+  gap: 16px;
+  /* width: 100%; */
+  gap: 12px;
+
+  max-width: 800px;
+}
+
+.actionButton {
+  background-color: #f1f1f1;
+  color: #000;
+  border: none;
+  /* padding: 8px 16px; */
+   border-radius: 12px;
+  font-size: 1rem;
+  cursor: pointer;
+  gap: 4px;
+}
+
+.actionButton:hover {
+  background-color: #e0e0e0;
+}   

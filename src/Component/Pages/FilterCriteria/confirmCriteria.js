@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
-import '../User/AddUserForm.css'
+import '../User/addUser.css'
 
 const Confirm = ({ formData, selectedDates }) => {
     const Token = Cookies.get('accessToken');

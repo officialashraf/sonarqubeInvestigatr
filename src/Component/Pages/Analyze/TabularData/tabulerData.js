@@ -53,9 +53,9 @@ const TabulerData = () => {
 
       const responseData = response.data;
       const dataArray = responseData.results;
-      console.log("dataaryy", dataArray);
+      // console.log("dataaryy", dataArray);
       const totalItems = responseData.total_results; // Assuming backend returns total items count
-      console.log("totalresluts", totalItems);
+      // console.log("totalresluts", totalItems);
       if (Array.isArray(dataArray) && dataArray.length > 0) {
         const allKeys = new Set();
         dataArray.forEach((item) => {
@@ -65,9 +65,17 @@ const TabulerData = () => {
         });
 
         setHeaders(Array.from(allKeys));
-        setData(dataArray);
+        // setData(dataArray);
+        setData(dataArray.map(item => {
+          return Object.keys(item).reduce((acc, key) => {
+            acc[key] = typeof item[key] === "object" ? JSON.stringify(item[key]) : item[key];
+            return acc;
+          }, {});}))
         setTotalPages(Math.ceil(totalItems / itemsPerPage));
         setItems(totalItems);
+
+        // dispatch(setSummaryDataAction(data));
+        // dispatch(setSumaryHeadersAction(headers));
       }
 
       setLoading(false);
