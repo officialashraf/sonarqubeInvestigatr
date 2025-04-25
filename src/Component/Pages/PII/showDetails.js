@@ -11,68 +11,11 @@ import { searchFailure, searchRequest, searchSuccess } from "../../../Redux/Acti
 const ShowDetails = () => {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
-  // const [filteredResults, setFilteredResults] = useState([]);
-  // const [searchType, setSearchType] = useState("name");
-  // const [query, setQuery] = useState("");
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         `https://jsonplaceholder.typicode.com/users`
-  //       );
-  //       setData(response.data);
-  //       setFilteredResults(response.data);
-  //     } catch (error) {
-  //       console.error("Error fetching data", error);
-  //     }
-  //   };
-  //   fetchData();
-  // }, []);
-
-  // const handleSearchTypeChange = (e) => setSearchType(e.target.value);
-  // const handleQueryChange = (e) => setQuery(e.target.value);
-
-  // const handleSearch = () => {
-  //   if (query.trim() === "") {
-  //     setFilteredResults(data);
-  //   } else {
-  //     const filteredData = data.filter((user) =>
-  //       user[searchType]?.toLowerCase().includes(query.toLowerCase())
-  //     );
-  //     setFilteredResults(filteredData);
-  //   }
-  // };
+ 
   const [query, setQuery] = useState("");
   const [searchType, setSearchType] = useState('');
   const dispatch = useDispatch();
-  // const { data } = useSelector((state) => state.pii)
-
-  // const handleSearch = async () => {
-  //   if (!query.trim()) return;
-
-  //   // dispatch(searchRequest());
-
-  //   let url = "";
-  //   console.log("searchTyep",searchType)
-  //   console.log("searchQuery",query)
-  //   if (searchType === "email") {
-  //     url = `http://5.180.148.40:9002/api/osint-man/v1/email/${query}`;
-  //   } else {
-  //     url = `http://5.180.148.40:9002/api/osint-man/v1/phone-no/${query}`;
-  //   }
-
-  //   try {
-  //     const response = await axios.get(url);
-  //     setData(response);
-      
-  //     console.log("data",response);
-  //     // dispatch(searchSuccess(response));
-  //   } catch (err) {
-  //     console.log("eroorer",err);
-  //     // dispatch(searchFailure(err.message));
-  //   }
-  // };
+  
   const handleSearch = async () => {
     if (!query.trim()) return;
   
@@ -90,8 +33,9 @@ const ShowDetails = () => {
     try {
       console.log("Final URL:", url);
       const response = await axios.get(url);
-      console.log("data",response);
+      console.log("data--------",response);
       setData(response.data); // important fix
+      dispatch(searchSuccess(response.data))
       console.log("data", response.data);
     } catch (err) {
       console.log("error", err.message);
@@ -111,6 +55,7 @@ const ShowDetails = () => {
       <div className="search-bar-container">
         <div className="search-bar">
         <select className="search-dropdown" value={searchType} onChange={(e) => setSearchType(e.target.value)}>
+        <option value="" disabled selected>Select</option>
         <option value="email">Email</option>
         <option value="phone">Phone</option>
       </select>
@@ -122,6 +67,12 @@ const ShowDetails = () => {
         type="text"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            handleSearch(); // Calls the search function when Enter is pressed
+          }
+        }}
+      
         placeholder={`Enter ${searchType} to search`}
       />
           <Search onClick={handleSearch} color="gray" size="15" style={{marginRight:'5px'}} />
