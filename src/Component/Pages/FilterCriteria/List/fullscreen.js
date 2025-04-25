@@ -183,7 +183,7 @@ console.log("filterdeChpis", filteredChips)
         total_results: response.data.total_results || 0,
       }));
       dispatch(setKeywords({
-            //  keyword: response.data.input.keyword,
+              keyword: response.data.input.keyword,
              queryPayload: response.data.input// or other fields if needed
            }));
       dispatch(setPage(1));

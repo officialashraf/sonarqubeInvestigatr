@@ -22,6 +22,7 @@ import SearchResults from './Component/Pages/FilterCriteria/List/fullscreen.js';
 import UsersDashboard from './Component/Pages/User/UsersDashboard.js';
 import Confirm from './Component/Pages/FilterCriteria/confirmCriteria.js';
 import LogoutUser from './Component/Pages/User/logout.js';
+import ShowDetails from './Component/Pages/PII/showDetails.js';
 
 
 
@@ -66,7 +67,7 @@ const AppContent = () => {
           <Routes>
           <Route path="/" element={<LoginPage />} />
           <Route element={<ProtectedRoute />}>
-            <Route path="/pii" element={<SearchBar />} />
+            <Route path="/pii" element={<ShowDetails/>} />
             <Route path="/cases" element={<Home />} />
             <Route path="/cases/:caseId" element={<MainFilter />} />
             <Route path="/add-filter" element={<AddFilter2 />} />
@@ -80,6 +81,7 @@ const AppContent = () => {
             <Route path="/confirm" element={< Confirm />} />
             <Route path="logout" element={< LogoutUser />} />
             <Route path="/users" element={< UsersDashboard />} />
+            
             <Route path="*" element={<div className='notfound'> <h4>Work in progress........</h4></div>} />
 
 

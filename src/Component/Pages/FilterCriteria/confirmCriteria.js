@@ -4,26 +4,44 @@ import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
 import '../User/addUser.css'
 
-const Confirm = ({ formData, selectedDates }) => {
+const Confirm = ({ formData, selectedDates,  searchChips  }) => {
     const Token = Cookies.get('accessToken');
     const [isVisible, setIsVisible] = useState(true);
     const [searchTitle, setSearchTitle] = useState('');
-    console.log("formData", formData);
+    console.log("formData",   searchChips
+        
+    );
     console.log("selectedDates", selectedDates);
 
     const saveCriteria = async () => {
+        let keywordSource = formData.searchQuery || searchChips;
+        console.log("keys", keywordSource)
         try {
+          
             const criteriaPaylod = {
               title: searchTitle || "", 
-                keyword: Array.isArray(formData.searchQuery)
-                    ? formData.searchQuery
-                    : [formData.searchQuery], // Wrap single keyword in an array
+
+             
+
+     keyword : Array.isArray(keywordSource)
+           ? keywordSource
+       : keywordSource
+        ? [keywordSource]
+        : [],
+
+                // keyword: Array.isArray(formData.searchQuery)
+                //     ? formData.searchQuery
+                //     : [formData.searchQuery], // Wrap single keyword in an array
                 case_id: formData.caseIds?.length > 0
                     ? formData.caseIds.map((caseId) => caseId.value.toString())
                     : [], // Handle multiple `caseIds` and return array
-                file_type: formData.filetype?.length > 0
-                    ? formData.filetype.map((file) => file.value)
-                    : [], // Handle multiple `filetype` and return array
+                // file_type: formData.filetype?.length > 0
+                //     ? formData.filetype.map((file) => file.value)
+                //     : [], // Handle multiple `filetype` and return array
+                file_type: [
+                    ...(formData.filetype?.length > 0 ? formData.filetype.map((file) => file.value) : []),
+                    ...(formData.platform?.length > 0 ? formData.platform.map((platform) => platform.value) : [])
+                  ],
 
                 latitude: formData.latitude || "",
                 longitude: formData.longitude || "",

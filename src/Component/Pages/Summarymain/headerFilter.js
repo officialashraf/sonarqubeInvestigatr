@@ -10,8 +10,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 const HeaderFilter = () => {
   //const dispatch = useDispatch();
   const caseData1 = useSelector((state) => state.caseData.caseData);
-  const {id} = useParams()
-  console.log("parms id", id)
+  const {caseId} = useParams()
+  console.log("parms id", caseId)
    console.log("headeData", caseData1)
   const navigate = useNavigate()
   const  handleClick =()=>{
@@ -29,7 +29,7 @@ const HeaderFilter = () => {
         <Col xs={11}>
           <Nav className="flex-column">
             <Nav.Item className="d-flex align-items-center">
-              <span>ID:{`CASE${String(caseData1.id).padStart(4, '0')}`}</span>
+              <span>ID:{`CASE${String(caseId).padStart(4, '0')}`}</span>
               </Nav.Item> 
               <Nav.Item>
              <span className='caseName'>{caseData1.title} </span> <FaFileAlt className="ml-3" />  <Badge pill bg="dark">

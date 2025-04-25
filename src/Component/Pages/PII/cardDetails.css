@@ -1,0 +1,93 @@
+/* Common layout styles */
+.cards-container {
+  flex: 70%;
+  /* margin-top: 2rem; */
+  /* height: 100vh;
+  overflow: auto; */
+}
+
+  .loader-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 3rem;
+  }
+  
+  .error-container {
+    text-align: center;
+    margin-top: 3rem;
+  }
+  
+  .error-message {
+    color: #f44336;
+  }
+  
+  /* Card styles */
+  .user-card {
+    height: 100%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+    transition: transform 0.2s, box-shadow 0.2s;
+    background-color: black   !important;
+  }
+  
+  .user-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  }
+  
+  /* User info styles */
+  /* .user-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+    color: white;
+  }*/
+  
+  .user-avatar {
+    margin-right: 8px !important;
+  } 
+  .user-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  /* .avatar-section {
+    display: flex;
+    align-items: center;
+    gap: 10px; 
+  } */
+  
+  /* .avatar-style {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    background-color: #f0f0f0; 
+  } */
+  
+  .user-details {
+    flex: 1;
+    text-align: center;
+  }
+  .user-name {
+    margin: 0 !important;
+  }
+  .css-1lt5qva-MuiCardContent-root:last-child {
+    padding-bottom: 0px !important;
+}
+  .user-info {
+    display: flex !important;
+    align-items: center !important;
+    margin-bottom: 8px !important;
+    color: white !important;
+  }
+  
+  .info-icon {
+    margin-right: 5px !important;
+    width: 15px !important;
+    height: 15px  !important;
+    /* font-size: 1.2rem !important; */
+  }
+

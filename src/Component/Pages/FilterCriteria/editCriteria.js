@@ -607,7 +607,8 @@ const EditCriteria = ({ togglePopup, criteriaId }) => {
     try {
       const Token = Cookies.get('accessToken');
       const updatePayload = {
-        keyword: formData.searchQuery,
+        keyword: Array.isArray(formData.searchQuery) ? formData.searchQuery : [formData.searchQuery],
+
         case_id: formData.caseIds.map(caseId => caseId.value.toString()),
         file_type: formData.filetype.map(file => file.value.toString()),
         latitude: formData.latitude || "",
@@ -615,7 +616,7 @@ const EditCriteria = ({ togglePopup, criteriaId }) => {
         start_time: selectedDates.startDate ? `${selectedDates.startDate.toISOString().split('T')[0]}T${String(selectedDates.startTime.hours).padStart(2, '0')}:${String(selectedDates.startTime.minutes).padStart(2, '0')}:00` : null,
         end_time: selectedDates.endDate ? `${selectedDates.endDate.toISOString().split('T')[0]}T${String(selectedDates.endTime.hours).padStart(2, '0')}:${String(selectedDates.endTime.minutes).padStart(2, '0')}:00` : null
       };
-      
+      console.log("updatetd",updatePayload)
       const response = await axios.put(`http://5.180.148.40:9006/api/das/criteria/${criteriaId}`, updatePayload, {
         headers: {
           'Content-Type': 'application/json',

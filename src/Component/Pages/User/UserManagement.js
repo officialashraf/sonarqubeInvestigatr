@@ -1,12 +1,16 @@
 import { Search, Plus } from "react-bootstrap-icons";
 import { Table } from "react-bootstrap";
 import { FiMoreVertical } from "react-icons/fi";
-import { FaRegEye } from "react-icons/fa";
-import { TbPassword } from "react-icons/tb";
-import { FaRegCopy } from "react-icons/fa6";
-import AddUserForm from "./addUser";
+
+
+
+
 import "../Case/table.css";
-import EditUserForm from "./editUser";
+
+import AddUser from "./addUser";
+import "../Case/table.css";
+import EditUser from "./editUser";
+
 import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
 import Dropdown from "react-bootstrap/Dropdown";
 import Badge from "react-bootstrap/Badge";
@@ -15,8 +19,8 @@ import axios from "axios";
 import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
 import UserDetails from "./userDetails";
-import EditUser from "./editUser";
-import AddUser from "./addUser";
+
+
 
 const UserManagement = () => {
   const [data, setData] = useState([]);

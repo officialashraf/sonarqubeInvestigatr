@@ -27,13 +27,25 @@ const RecentCriteria = () => {
  const [searchQuery, setSearchQuery] = useState("");
 
  const [keywords, setKeyword] = useState([]);
- const recentKeyword = useSelector((state) => state.criteriaKeywords.queryPayload.keyword);
-  const caseId = useSelector((state) => state.criteriaKeywords.queryPayload.case_id);
-   console.log("casId", caseId)
-   const fileType = useSelector((state) => state.criteriaKeywords.queryPayload.file_type);
-   console.log("filetype",fileType)
-   const keyword = useSelector((state) => state.criteriaKeywords.queryPayload.keyword);
-   console.log("keyword", keyword)
+ const recentKeyword = useSelector(
+  (state) => state.criteriaKeywords?.queryPayload?.keyword
+);
+
+const caseId = useSelector(
+  (state) => state.criteriaKeywords?.queryPayload?.case_id || ''
+);
+console.log("caseId", caseId);
+
+const fileType = useSelector(
+  (state) => state.criteriaKeywords?.queryPayload?.file_type || ''
+);
+console.log("fileType", fileType);
+
+const keyword = useSelector(
+  (state) => state.criteriaKeywords?.queryPayload?.keyword || ''
+);
+console.log("keyword", keyword);
+
   
 //  console.log("recnetkeyword", recentKeyword.keywords)
 //  setKeyword(recentKeyword)
@@ -80,10 +92,6 @@ const [formData, setFormData] = useState({
 }, [recentKeyword, caseId, fileType]);
 
   
-
-
-
-
   useEffect(() => {
       fetchData();
     }, []);
@@ -166,6 +174,8 @@ const handelCreate = ()=>{
   };
 
   console.log("keyword", keywords, searchQuery)
+
+
   const handleSearch = async () => {
     try {
       const payload = {
@@ -197,7 +207,7 @@ const handelCreate = ()=>{
       }));
   
       dispatch(setKeywords({
-                  //  keyword: response.data.input.keyword,
+                  keyword: keywords,
                    queryPayload: response.data.input // or other fields if needed
                  }));
       //  dispatch(setPage(1));
@@ -209,49 +219,133 @@ const handelCreate = ()=>{
     }
   };
   
-  const ReuseCriteria = (item) => {
-    console.log("detailscriterai", item);
+//   const ReuseCriteria = (item) => {
+//     console.log("detailscriterai", item);
 
-    // Initialize updatedKeywords using current state
-    const isValid = (val) =>
-        val !== null && val !== undefined && val.toString().trim() !== "";
+//     // Initialize updatedKeywords using current state
+//     const isValid = (val) =>
+//         val !== null && val !== undefined && val.toString().trim() !== "";
 
-    let updatedKeywords = []; // Maintain existing keywords
+//     let updatedKeywords = []; // Maintain existing keywords
 
-    // Extract item details and update the keyword list
-    if (item) {
-        if (isValid(item.keyword)) {
-          updatedKeywords = [
-            ...updatedKeywords,
-            ...item.keyword.map((kw) => `${kw}`) // Save each keyword as a string
-        ];// Save item's keyword as string
-        }
+//     // Extract item details and update the keyword list
+//     if (item) {
+//         if (isValid(item.keyword)) {
+//           updatedKeywords = [
+//             ...updatedKeywords,
+//             ...item.keyword.map((kw) => `${kw}`) // Save each keyword as a string
+//         ];// Save item's keyword as string
+//         }
        
-        if (item.case_id?.length > 0) {
-            updatedKeywords = [
-                ...updatedKeywords,
-                ...item.case_id.map((id) => `${id}`)
-            ]; // Save item's caseIds
-        }
-        if (item.file_type?.length > 0) {
-            updatedKeywords = [
-                ...updatedKeywords,
-                ...item.file_type.map((ft) => `${ft}`)
-            ]; // Save item's fileTypes
-        }
+//         if (item.case_id?.length > 0) {
+//             updatedKeywords = [
+//                 ...updatedKeywords,
+//                 ...item.case_id.map((id) => `${id}`)
+//             ]; // Save item's caseIds
+//         }
+//         if (item.file_type?.length > 0) {
+//             updatedKeywords = [
+//                 ...updatedKeywords,
+//                 ...item.file_type.map((ft) => `${ft}`)
+//             ]; // Save item's fileTypes
+//         }
+//     }
+
+//     // Dispatch action to update Redux state
+//     dispatch(setKeywords({
+//       keyword: updatedKeywords, // New keywords array
+//       // queryPayload: {
+//       //     keyword: updatedKeywords, // You can adjust this based on what you want in the payload
+//       // },
+//   }));
+//     console.log("Updated keyword state after reuse:", updatedKeywords);
+//     setKeyword(updatedKeywords); // Update the state
+// };
+
+
+const ReuseCriteria = async (item) => {
+  console.log("detailscriterai", item);
+
+  const isValid = (val) =>
+    val !== null && val !== undefined && val.toString().trim() !== "";
+
+  let updatedKeywords = [];
+
+  const queryPayload = {};
+
+  if (item) {
+    if (Array.isArray(item.keyword) && item.keyword.length > 0) {
+      updatedKeywords.push(...item.keyword.map((kw) => `${kw}`));
+      queryPayload.keyword = item.keyword;
     }
 
-    // Dispatch action to update Redux state
-    dispatch(setKeywords({
-      keyword: updatedKeywords, // New keywords array
-      // queryPayload: {
-      //     keyword: updatedKeywords, // You can adjust this based on what you want in the payload
-      // },
-  }));
+    if (Array.isArray(item.case_id) && item.case_id.length > 0) {
+      updatedKeywords.push(...item.case_id.map((id) => `${id}`));
+      queryPayload.case_id = item.case_id;
+    }
+
+    if (Array.isArray(item.file_type) && item.file_type.length > 0) {
+      updatedKeywords.push(...item.file_type.map((ft) => `${ft}`));
+      queryPayload.file_type = item.file_type;
+    }
+
+    if (isValid(item.start_date)) {
+      queryPayload.start_date = item.start_date;
+    }
+
+    if (isValid(item.end_date)) {
+      queryPayload.end_date = item.end_date;
+    }
+
+    if (isValid(item.lat)) {
+      queryPayload.lat = item.lat;
+    }
+
+    if (isValid(item.long)) {
+      queryPayload.long = item.long;
+    }
+     setKeyword(updatedKeywords)
+  }
+
+  try {
+    const response = await axios.post(
+      'http://5.180.148.40:9006/api/das/search',
+      queryPayload,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${Token}`,
+        },
+      }
+    );
+console.log("Reusee Qeury Payload", queryPayload)
+console.log("QueryResponse",response)
+console.log("updatedetRecent", updatedKeywords)
+    // ✅ Dispatch updated keywords
+   dispatch(setKeywords({
+                  keyword: updatedKeywords,
+                   queryPayload: response.data.input // or other fields if needed
+                 }));
+
+    // ✅ Update local state if needed
+    setKeyword(updatedKeywords);
+
+    // ✅ Store API result in Redux
+    dispatch(setSearchResults({
+      results: response.data.results,
+      total_pages: response.data.total_pages || 1,
+      total_results: response.data.total_results || 0,
+    }));
+   
     console.log("Updated keyword state after reuse:", updatedKeywords);
-    setKeyword(updatedKeywords); // Update the state
+    console.log("Query Payload dispatched:", queryPayload);
+    dispatch(openPopup("saved"));
+  } catch (error) {
+    console.error("API call failed in ReuseCriteria:", error);
+  }
 };
 
+ 
   const filteredList = savedSearch.filter((item) =>
     (typeof item.keyword === "string" && item.keyword.toLowerCase().includes(searchQuery.toLowerCase())) ||
     (typeof item.title === "string" && item.title.toLowerCase().includes(searchQuery.toLowerCase()))

@@ -51,7 +51,7 @@ const SavedCriteria = () => {
     if (keyword && Array.isArray(keyword)) {
       let combinedChips = [...keyword];
   
-      if (Array.isArray(caseId) && caseId.every(id => typeof id === "number")) {
+      if (Array.isArray(caseId) && caseId.every(id => (typeof id === "number"|| typeof id === "string"))) {
         combinedChips = [...combinedChips, ...caseId.map((id) => `${id}`)];
     }
     
@@ -194,7 +194,7 @@ const SavedCriteria = () => {
     
       const keywordFromAPI = response.data.input.keyword;
       dispatch(setKeywords({
-        // keyword: response.data.input.keyword,
+        keyword: response.data.input.keyword,
         queryPayload: response.data.input // or other fields if needed
       }));
 

@@ -64,6 +64,8 @@ export const searchReducer = (state = initialState, action) => {
 // };
 
 const queryState = {
+
+  keywords:[],
   queryPayload: {
     case_id: [],
     file_type: [],
@@ -79,7 +81,6 @@ const queryState = {
 export const criteriaReducer = (state = queryState, action) => {
   switch (action.type) {
     case SET_KEYWORDS:
-      
       return {
           ...state,
           keywords: action.payload.keyword,

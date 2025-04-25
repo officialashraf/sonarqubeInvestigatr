@@ -30,6 +30,7 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
 
   const [sources, setSources] = useState([
     {
+      id:'',
       source: '',
       platform: [],
       keywords: [], // Initialize as an array with a single empty string
@@ -148,6 +149,7 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
 
         return {
           source: criteria.source,
+        id:criteria.id,
           platform: criteria.platform || [],
           keywords: criteria.keywords || [],
           urls: criteria.urls || [],
@@ -183,6 +185,7 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
 
   const handleAddSource = () => {
     setSources([...sources, {
+      id:'',
       source: '',
       platform: [],
       keywords: [],
@@ -239,10 +242,13 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
       toast.error("You don't have permission to edit this filter");
       return;
     }
+    console.log("saources",sources)
+    console.log("saourcesID",sources.id)
     const postData = {
       name: filterName,
       description: description, 
       filter_criteria: sources.map((source) => ({
+        id:source.id,
         source: source.source,
         platform: source.platform,
         keywords: source.keywords,

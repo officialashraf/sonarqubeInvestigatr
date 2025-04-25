@@ -1,0 +1,109 @@
+/* ProfileCard.css */
+.profile-container {
+  flex:20%;
+  padding: 0;
+  /* position: fixed; */
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background-color: black;
+  color: white;
+/* margin-top: 8px; */
+margin-left:20px;
+
+}
+
+  
+  .profile-card {
+    height: 100vh;
+    border: none;
+    border-radius: 0;
+    background-color:black;
+    color: white;
+  }
+  
+  .profile-header {
+    display: flex;
+    flex-direction: column;
+    /* padding: 15px; */
+    border-bottom: 1px solid #2c3b4a;
+  }
+  
+  .profile-avatar-section {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .profile-avatar {
+    width: 100px;
+    height: 100px;
+    background-color: #6f7172;
+    border-radius: 5%;
+    margin-right: 15px;
+  }
+  
+  .profile-id {
+    font-size: 14px;
+    margin-right: 10px;
+  }
+  
+  .active-badge {
+    background-color: #28a745;
+    color: white;
+    font-size: 12px;
+    padding: 4px 8px;
+  }
+  
+  .threat-score-section {
+    margin-top: 10px;
+  }
+  
+  .threat-label {
+    font-size: 12px;
+    color: #aaa;
+    margin-bottom: 4px;
+  }
+  
+  .threat-score {
+    background-color: #ffc107;
+    color: #333;
+    font-size: 14px;
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+  
+  .profile-details {
+    padding: 15px;
+    height: 100%;
+  }
+  
+  .detail-item {
+    margin-bottom: 15px;
+  }
+  
+  .detail-label {
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    color: #aaa;
+    margin-bottom: 4px;
+  }
+  
+  .detail-label svg {
+    margin-right: 5px;
+  }
+  
+  .detail-value {
+    font-size: 14px;
+  }
+  
+  .loading-container {
+    width: 30%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #1c2b3a;
+    color: white;
+  }

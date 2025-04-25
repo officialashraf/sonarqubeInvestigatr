@@ -6,6 +6,7 @@ import storage from "redux-persist/lib/storage"; // Local Storage ke liye
 import { combineReducers } from "redux";
 import {searchReducer , popupReducer, criteriaReducer} from './Reducers/criteriaReducer';
 import {thunk }from "redux-thunk";
+import searchReducer1 from './Reducers/piiReducer';
 // ✅ Persist Config
 const persistConfig = {
   key: "root",
@@ -23,6 +24,7 @@ const rootReducer = combineReducers({
     filterCount: filterReducer,
     search: searchReducer,
     popup: popupReducer,
+    pii:searchReducer1,
     criteriaKeywords: criteriaReducer,
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
