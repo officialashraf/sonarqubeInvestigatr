@@ -30,15 +30,18 @@ const SavedCriteria = () => {
   const [searchChips, setSearchChips] = useState([]);
   const [activeTab, setActiveTab] = useState('Cases');
   const [isLoading, setIsLoading] = useState(false);
+  const [enterInput,setEnterInput] = useState([]);
   
-  const caseId = useSelector((state) => state.criteriaKeywords.queryPayload.case_id);
+  const caseId = useSelector((state) => state.criteriaKeywords?.queryPayload?.case_id|| '');
   console.log("casId", caseId)
-  const keywords = useSelector((state) => state.criteriaKeywords.keyword);
-  const fileType = useSelector((state) => state.criteriaKeywords.queryPayload.file_type);
+  const keywords = useSelector((state) => state.criteriaKeywords?.keyword|| '');
+  const fileType = useSelector((state) => state.criteriaKeywords?.queryPayload?.file_type|| '');
   console.log("filetype",fileType)
-  const keyword = useSelector((state) => state.criteriaKeywords.queryPayload.keyword);
+  const keyword = useSelector((state) => state.criteriaKeywords?.queryPayload?.keyword|| '');
   console.log("keyword", keyword)
   console.log("savedkeyword", keywords)
+  const reduxPayload = useSelector((state) => state.criteriaKeywords?.queryPayload|| '');
+    console.log("Redux Payload:", reduxPayload);
    
   useEffect(() => {
     console.log("Keywords object:", keywords);
@@ -122,6 +125,7 @@ const SavedCriteria = () => {
       if (!searchChips.includes(inputValue.trim())) {
         const updatedChips = [...searchChips, inputValue.trim()];
         setSearchChips(updatedChips);
+        setEnterInput(prev => [...prev, inputValue.trim()]);
       }
       setInputValue("");
     }
@@ -137,6 +141,7 @@ const SavedCriteria = () => {
   const removeChip = (chip) => {
     const updatedChips = searchChips.filter((item) => item !== chip);
     setSearchChips(updatedChips);
+    setEnterInput((prev) => prev.filter((chip) => chip !== chip));
   };
 
   const resetSearch = () => {
@@ -148,33 +153,55 @@ const SavedCriteria = () => {
   
   // Main search function to call API
   const handleSearch = async () => {
-    if (searchChips.length === 0 && !inputValue.trim()) {
-      toast.warning("Please enter a search term");
-      return;
-    }
-    
+    console.log("reduxPayload:", reduxPayload);
+    console.log("enterInput:", enterInput);
+    console.log("searchChips:", keywords);
+  
     try {
-      setIsLoading(true);
-      
-      // If there's input in the search field that hasn't been added as a chip yet,
-      // include it in the search query
-      const searchTerms = [...searchChips];
-      if (inputValue.trim()) {
-        searchTerms.push(inputValue.trim());
-      }
-      
+      // 1. Redux ke sirf keyword le rahe hain
+      const reduxKeywords = Array.isArray(reduxPayload.keyword)
+        ? reduxPayload.keyword
+        : JSON.parse(reduxPayload.keyword || "[]");
+  console.log("reduxKeyword", reduxKeywords)
+    
+        const userKeywords = Array.isArray(enterInput) 
+        ? enterInput 
+        : JSON.parse(enterInput || "[]");
+
+  console.log("userKeyword", userKeywords)
+      // 🔥 Keywords only: searchChips se wo elements jo redux keywords ya user keywords me hain
+      const allPossibleKeywords = [...reduxKeywords, ...userKeywords];
+      console.log("alllProgresskeyword", allPossibleKeywords)
+      const finalKeywords = searchChips.filter((chip) => allPossibleKeywords.includes(chip));
+  console.log("finalkeywords",finalKeywords)
+      // 2. case_id aur file_type separately treat honge
+      const reduxCaseIds = Array.isArray(reduxPayload.case_id)
+        ? reduxPayload.case_id
+        : JSON.parse(reduxPayload.case_id || "[]");
+  
+      const reduxFileTypes = Array.isArray(reduxPayload.file_type)
+        ? reduxPayload.file_type
+        : JSON.parse(reduxPayload.file_type || "[]");
+  console.log("fileType or Caseids",reduxCaseIds,reduxFileTypes)
+      const finalCaseIds = searchChips.filter((chip) => reduxCaseIds.includes(chip));
+      const finalFileTypes = searchChips.filter((chip) => reduxFileTypes.includes(chip));
+  console.log("finalcaseid or finalfiletype", finalCaseIds,finalFileTypes)
       const payload = {
-        keyword: searchTerms,
-        case_id: [],
-        file_type: [],
-        page: 1
+        keyword: finalKeywords,   // Only keywords
+        case_id: finalCaseIds,    // Only case_ids
+        file_type: finalFileTypes,// Only file_types
+        page: reduxPayload.page || 1,
+        start_time: reduxPayload.start_time || null,
+        end_time: reduxPayload.end_time || null,
+        latitude: reduxPayload.latitude || null,
+        longitude: reduxPayload.longitude || null
       };
-      
+  
       console.log("Sending search query:", payload);
-      
+  
       const response = await axios.post(
-        'http://5.180.148.40:9006/api/das/search', 
-        payload, // Send the payload directly, not wrapped in an object
+        'http://5.180.148.40:9006/api/das/search',
+        payload,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -182,34 +209,25 @@ const SavedCriteria = () => {
           }
         }
       );
-      
-      console.log("Search results:", response.data);
-      
-      // Dispatch the search results to the Redux store
+  
+      console.log("Search results------:", response);
+  
+      // Redux store update
       dispatch(setSearchResults({
         results: response.data.results,
         total_pages: response.data.total_pages || 1,
         total_results: response.data.total_results || 0,
       }));
-    
-      const keywordFromAPI = response.data.input.keyword;
+  
       dispatch(setKeywords({
         keyword: response.data.input.keyword,
-        queryPayload: response.data.input // or other fields if needed
+        queryPayload: response.data.input
       }));
-
+  
       dispatch(setPage(1));
-      
-      // Clear input field after search
-      setInputValue('');
-      
-      // Show success toast
-      toast.success("Search completed successfully");
+      // dispatch(openPopup("saved"));
     } catch (error) {
-      console.error("Error performing search:", error);
-      toast.error("Search failed. Please try again.");
-    } finally {
-      setIsLoading(false);
+      console.error("Error performing search:", error.message);
     }
   };
   

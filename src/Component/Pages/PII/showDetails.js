@@ -1,53 +1,56 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import "./searchBar.css";
 import { Search } from "react-bootstrap-icons";
-import { useNavigate } from "react-router-dom";
 import UserCards from "./cardDetails";
 import ProfileDetails from "./profileDetails";
-import { useDispatch, useSelector } from 'react-redux';
-import { searchFailure, searchRequest, searchSuccess } from "../../../Redux/Action/piiAction";
+import { useDispatch} from 'react-redux';
+import {  searchSuccess } from "../../../Redux/Action/piiAction";
+import { toast } from 'react-toastify';
+import validator from "validator";
 
 const ShowDetails = () => {
-  const navigate = useNavigate();
   const [data, setData] = useState([]);
  
   const [query, setQuery] = useState("");
-  const [searchType, setSearchType] = useState('');
+  const [searchType, setSearchType] = useState("phone-no");
   const dispatch = useDispatch();
   
   const handleSearch = async () => {
     if (!query.trim()) return;
-  
-    let url = "";
-    console.log("searchTyep",searchType)
-   console.log("searchQuery",query)
+  console.log("Seartype", searchType)
+    
     if (searchType === "email") {
-      url = `http://5.180.148.40:9002/api/osint-man/v1/email/${query}`;
-    } else {
-      url = `http://5.180.148.40:9002/api/osint-man/v1/phone-no/${query}`;
+      if (!validator.isEmail(query) || !query.endsWith("@gmail.com")) {
+        toast.error("Please enter a valid Gmail address");
+        return;
+      }
+    } else if (searchType === "phone-no") {
+      // Remove all non-digit characters
+      const cleanedQuery = query.replace(/\D/g, '');  // \D = non-digit
+
+      if (!cleanedQuery) {
+        toast.error("Please enter a valid phone number with digits only");
+        return;
+      }
     }
   
-    url = encodeURI(url); // in case of special chars like @
+    let url = searchType === "email"
+      ? `http://5.180.148.40:9002/api/osint-man/v1/email/${query}`
+      : `http://5.180.148.40:9002/api/osint-man/v1/phone-no/${query}`;
+  
+    url = encodeURI(url); // Encode URL to handle special characters
   
     try {
       console.log("Final URL:", url);
       const response = await axios.get(url);
-      console.log("data--------",response);
-      setData(response.data); // important fix
-      dispatch(searchSuccess(response.data))
+      setData(response.data);
+      dispatch(searchSuccess(response.data));
       console.log("data", response.data);
     } catch (err) {
       console.log("error", err.message);
       console.log("full error", err);
     }
-  };
-  
-  const handleCreateCase = () => {
-    navigate(
-      "/cases"
-      //, { state: { showPopup: true } }
-    );
   };
 
   return (
@@ -55,27 +58,29 @@ const ShowDetails = () => {
       <div className="search-bar-container">
         <div className="search-bar">
         <select className="search-dropdown" value={searchType} onChange={(e) => setSearchType(e.target.value)}>
-        <option value="" disabled selected>Select</option>
-        <option value="email">Email</option>
-        <option value="phone">Phone</option>
-      </select>
-          
-          
-          
-           <input
-            className="search-input"
-        type="text"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            handleSearch(); // Calls the search function when Enter is pressed
-          }
-        }}
-      
-        placeholder={`Enter ${searchType} to search`}
-      />
-          <Search onClick={handleSearch} color="gray" size="15" style={{marginRight:'5px'}} />
+  <option value="phone">Phone</option> {/* Default selected */}
+  <option value="email">Email</option>
+</select>
+
+<input
+  className="search-input"
+  type="text"
+  value={query}
+  onChange={(e) => setQuery(e.target.value)}
+  onKeyDown={(e) => {
+    if (e.key === "Enter") {
+      handleSearch(); // Validate and execute search only when Enter is pressed
+    }
+  }}
+  placeholder={`Enter ${searchType} to search`}
+  disabled={!searchType}
+/>
+
+<Search
+  onClick={handleSearch} // Triggers validation & search only when clicked
+/>
+
+
         </div>
         <div className="search-results-container">
           <div className="searchresult"  >
@@ -87,11 +92,7 @@ const ShowDetails = () => {
 
           </div>
         </div>
-        <div className="button-container">
-          <button className="create-case-button" onClick={handleCreateCase}>
-            Create Case
-          </button>
-        </div>
+        
       </div>
       {/* <div className="search-bar">
       <select value={searchType} onChange={(e) => setSearchType(e.target.value)}>

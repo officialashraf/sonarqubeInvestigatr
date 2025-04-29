@@ -13,9 +13,9 @@ const CriteriaCaseTable = () => {
   const [selectedData, setSelectedData] = useState(null);
 
   // Get the Redux state
-  const { totalPages, totalResults, searchResults, currentPage } = useSelector(state => state.search);
-  const payload = useSelector((state) => state.criteriaKeywords.queryPayload);
-  const keywords = useSelector((state) => state.criteriaKeywords.keywords);
+  const { totalPages, totalResults, searchResults, currentPage } = useSelector(state => state?.search || '');
+  const payload = useSelector((state) => state.criteriaKeywords?.queryPayload|| '');
+  const keywords = useSelector((state) => state.criteriaKeywords?.keywords|| '');
   
   // Get the token for API requests
   const Token = localStorage.getItem('token') || Cookies.get('token');
@@ -37,34 +37,13 @@ const CriteriaCaseTable = () => {
         // Determine if the current keywords match those in the payload
         let paginatedQuery;
         
-        if (payload && payload.keyword) {
-          // Check if current keywords match any part of the payload
-          const keywordMatches = Array.isArray(keywords) && 
-            keywords.every(kw => 
-              (Array.isArray(payload.case_id) && payload.case_id.includes(kw)) ||
-              (Array.isArray(payload.keyword) && payload.keyword.includes(kw)) ||
-              (Array.isArray(payload.file_type) && payload.file_type.includes(kw))
-            );
-            
-          if (keywordMatches) {
-            // Use the full payload with the updated page number
+        if (payload) {
+     
             paginatedQuery = { ...payload, page: currentPage };
-          } else {
-            // Just use the keywords for search
-            paginatedQuery = {
-              keyword: keywords,
-              page: currentPage
-            };
-          }
-        } else {
-          // If no payload exists, use simple keyword search
-          paginatedQuery = {
-            keyword: keywords,
-            page: currentPage
-          };
+      
         }
   
-        console.log("Sending query:", paginatedQuery);
+        console.log("Sending queryQWQ:", paginatedQuery);
   
         const response = await axios.post(
           'http://5.180.148.40:9006/api/das/search',
@@ -135,11 +114,7 @@ const CriteriaCaseTable = () => {
       </Pagination.Item>
     );
     
-    // Add ellipsis if needed
-    // if (currentPage > 3) {
-    //   pageItems.push(<Pagination.Ellipsis key="ellipsis1" disabled />);
-    // }
-    
+   
     // Add pages around current page
     const startPage = Math.max(2, currentPage - 1);
     const endPage = Math.min(totalPages - 1, currentPage + 1);
@@ -159,10 +134,7 @@ const CriteriaCaseTable = () => {
       }
     }
     
-    // Add ellipsis if needed
-    // if (currentPage < totalPages - 2) {
-    //   pageItems.push(<Pagination.Ellipsis key="ellipsis2" disabled />);
-    // }
+   
     
     // Always add last page if different from first
     if (totalPages > 1) {

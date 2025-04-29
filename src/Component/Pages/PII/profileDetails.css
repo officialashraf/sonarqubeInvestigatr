@@ -107,3 +107,29 @@ margin-left:20px;
     background-color: #1c2b3a;
     color: white;
   }
+  /* .carousel-indicators li {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: gray; 
+  } */
+  .carousel-control-prev-icon,
+  .carousel-control-next-icon {
+    display: none !important;
+  }
+
+  /* Indicators ko circle banana */
+.carousel-indicators [data-bs-target] {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color:black;
+  border: none;
+  /* margin: 0 4px; */
+
+}
+
+/* Active indicator thoda dark kar do */
+.carousel-indicators .active {
+  background-color:white;
+}

@@ -1,20 +1,15 @@
-
-
 import React, { useState, useEffect } from 'react';
 import Select from 'react-select';
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Cookies from 'js-cookie'
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
-import Checkbox from '@mui/material/Checkbox';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import DatePickera from './datepicker';
 import '../FilterCriteria/createCriteria.css';
 import { customStyles } from '../Case/createCase';
 import { openPopup, setKeywords, setPage, setSearchResults } from '../../../Redux/Action/criteriaAction';
-import { toast } from 'react-toastify';
 import Confirm from './confirmCriteria';
 
 const AddNewCriteria = ({ 
@@ -28,7 +23,7 @@ const AddNewCriteria = ({
     console.log("searaddnew", searchChips)
     // State for dynamic options
 
-     const [showSavePopup, setShowSavePopup] = useState(false);
+    const [showSavePopup, setShowSavePopup] = useState(false);
     const [caseOptions, setCaseOptions] = useState([]);
     const [fileTypeOptions, setFileTypeOptions] = useState([]);
     // const [searchResults, setSearchResults] = useState();
@@ -47,9 +42,8 @@ const AddNewCriteria = ({
         latitude: '',
         longitude: '',
     });
-console.log(
-    "formdatgertt...", formData
-)
+console.log("formdatgertt...", formData)
+ const payload = useSelector((state) => state.criteriaKeywords?.queryPayload|| '');
     // Fetch case data from API
     const fetchCaseData = async () => {
         try {
@@ -130,41 +124,43 @@ console.log("selectedDates", selectedDates)
 
     // Perform search API call
     
+    console.log("payload---", payload)
     const performSearch = async (e) => {
         e.preventDefault();
         
         console.log(e);
         try {
           // Build the query payload with the correct structure
-          const payload = {
-            keyword: searchChips?.length > 0
-              ? searchChips.map(chip => chip || "")
-              : [],
-            case_id: formData.caseIds?.length > 0
-              ? formData.caseIds.map(caseId => caseId.value)
-              : [],
-            file_type: formData.platform?.length > 0
-              ? formData.platform.map(type => type.value)
-              : [],
-            page: 1
-          };
+          const payloadS = {
+            keyword: Array.isArray(payload.keyword) ? payload.keyword : JSON.parse(payload.keyword || "[]"),
+            case_id: [
+                ...(Array.isArray(payload.case_id) ? payload.case_id : JSON.parse(payload.case_id || "[]")),
+                ...(Array.isArray(formData.caseIds) ? formData.caseIds.map(caseId => String(caseId.value)) : [])
+              ],
+              
+            file_type: [
+                ...(Array.isArray(payload.file_type) ? payload.file_type : JSON.parse(payload.file_type || "[]")),
+                ...(Array.isArray(formData.platform) ? formData.platform.map(type => type.value) : [])
+            ],
+            page: payload.page || 1
+        };
+        
+        // Combine start time from both sources
+        if (payload.start_time || (selectedDates.startDate && selectedDates.startTime)) {
+            payload.start_time = payload.start_time || `${selectedDates.startDate.toISOString().split('T')[0]}T${String(selectedDates.startTime.hours).padStart(2, '0')}:${String(selectedDates.startTime.minutes).padStart(2, '0')}:00`;
+        }
+        
+        // Combine end time from both sources
+        if (payload.end_time || (selectedDates.endDate && selectedDates.endTime)) {
+            payload.end_time = payload.end_time || `${selectedDates.endDate.toISOString().split('T')[0]}T${String(selectedDates.endTime.hours).padStart(2, '0')}:${String(selectedDates.endTime.minutes).padStart(2, '0')}:00`;
+        }
           
-          // Add start time to the query if available
-          if (selectedDates.startDate && selectedDates.startTime) {
-            payload.start_time = `${selectedDates.startDate.toISOString().split('T')[0]}T${String(selectedDates.startTime.hours).padStart(2, '0')}:${String(selectedDates.startTime.minutes).padStart(2, '0')}:00`;
-          }
-          
-          // Add end time to the query if available
-          if (selectedDates.endDate && selectedDates.endTime) {
-            payload.end_time = `${selectedDates.endDate.toISOString().split('T')[0]}T${String(selectedDates.endTime.hours).padStart(2, '0')}:${String(selectedDates.endTime.minutes).padStart(2, '0')}:00`;
-          }
-          
-          console.log("Query Payload:", payload);
+          console.log("Query Payload:", payloadS);
           
           // Make the API request with the correct payload structure
           const response = await axios.post(
             'http://5.180.148.40:9006/api/das/search',
-            payload,
+            payloadS,
             {
               headers: {
                 'Content-Type': 'application/json',
@@ -172,7 +168,7 @@ console.log("selectedDates", selectedDates)
               }
             }
           );
-          
+          console.log("response of addnew", response)
           // Dispatch search results
           dispatch(setSearchResults({
             results: response.data.results,
