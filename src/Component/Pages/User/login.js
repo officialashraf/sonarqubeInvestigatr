@@ -99,7 +99,7 @@ const LoginPage = () => {
                             controlId="Username"
                             autocomplete="off"
                             name="username"
-                           
+                          
                         />
                         <InputField
                             label="Password"
@@ -110,7 +110,7 @@ const LoginPage = () => {
                             controlId="Username"
                             autocomplete="off"
                             name="password"
-                             
+                       
                         />
                         <div className="d-flex justify-content-between mt-2">
                             <a href="/forgotPassword" className="forgot-password-link">

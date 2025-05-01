@@ -9,7 +9,7 @@
     width: 5vmax;
     height: 5vmax;
     border-radius: 50%;
-    border-bottom: 5px solid rgb(0, 0, 0, 0.719);
+    border-bottom: 5px solid rgba(29, 27, 27, 0.719);
     animation: loadingRotate 800ms linear infinite;
 }
 

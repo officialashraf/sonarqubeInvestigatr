@@ -23,7 +23,8 @@ import UsersDashboard from './Component/Pages/User/UsersDashboard.js';
 import Confirm from './Component/Pages/FilterCriteria/confirmCriteria.js';
 import LogoutUser from './Component/Pages/User/logout.js';
 import ShowDetails from './Component/Pages/PII/showDetails.js';
-
+import LicensePage from './Component/Pages/User/license.js';
+import LicenseValidator from './utils/licenseValidator.js';
 
 
 const AppContent = () => {
@@ -50,22 +51,25 @@ const AppContent = () => {
 
     return "Cases";
   };
-
+  const excludedPaths = ["/login", "/", "/license"];
   return (
     <div className="ContainerDashboard">
       {/* Render Header for all pages except the LoginPage */}
 
       <div className="dashboard-container">
         <div className="cont-d">
-          {location.pathname !== "/" && <Header title={getHeaderTitle()} />}
+        {!excludedPaths.includes(location.pathname) && <Header title={getHeaderTitle()} />}
+    
         </div>
         <div className="cont-a">
-          {location.pathname !== "/" && <Sidebar />}
+          {!excludedPaths.includes(location.pathname) && <Sidebar />}
         </div>
 
         <div className="cont-b">
           <Routes>
-          <Route path="/" element={<LoginPage />} />
+            <Route path='/' element={<LicenseValidator/>}/>
+          <Route path="/license" element={<LicensePage />} />
+          <Route path="/login" element={<LoginPage />} />
           <Route element={<ProtectedRoute />}>
             <Route path="/pii" element={<ShowDetails/>} />
             <Route path="/cases" element={<Home />} />
@@ -93,7 +97,7 @@ const AppContent = () => {
         </div>
 
         <div className="cont-c">
-          {location.pathname !== "/" && <RightSidebar />}
+        {!excludedPaths.includes(location.pathname) && <RightSidebar/>}
         </div>
       </div>
     </div>

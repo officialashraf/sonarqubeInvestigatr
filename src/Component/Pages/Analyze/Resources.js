@@ -19,10 +19,12 @@ import { GoEye } from "react-icons/go";
 import { AiOutlineLike } from "react-icons/ai";
 import { AiOutlineDislike } from "react-icons/ai";
 import { LiaDownloadSolid } from "react-icons/lia";
-import { BsThreeDots } from "react-icons/bs";
-
+import { BsThreeDots } from "react-icons/bs"
+import {  PinAngle, ChatLeftText} from 'react-bootstrap-icons';
+import AddComment from '../Comment/AddComment';
 
 const Resources = () => {
+  const [showPopup, setShowPopup] = useState(false);
 
   const summaryData = useSelector(state => state.summaryData.data);
   const summaryHeaders = useSelector(state => state.summaryData.headers);
@@ -594,17 +596,28 @@ const Resources = () => {
                   <div> 
                     <strong>{selectedResource.socialmedia_activity_view_count}</strong>{" "}View
                   </div>
+                
                 </div>
+                
               )}
 
 
 
             </div>
+          
           ) : (
             <div className="placeholder">
               <p>Select a resource to view its details</p>
             </div>
+
           )}
+           {selectedResource && (
+    <div className="commentBar">
+        <PinAngle size={15} className="me-2" onClick={() => setShowPopup(true)} />
+        <ChatLeftText size={15} onClick={() => setShowPopup(true)} />
+    </div>
+)}
+<AddComment show={showPopup} onClose={() => setShowPopup(false)}  selectedResource={selectedResource} />
         </div>
       </div>
     </div>

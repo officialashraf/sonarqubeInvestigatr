@@ -30,8 +30,8 @@ const  RightSidebar = ()=> {
     { label: 'Gemini', icon: <Cpu size={15} />, path: '/gemini' },
      { label: 'Search', icon: <Search size={15} />, isPopup: true },
     { label: 'Docs', icon: <FileEarmarkText size={15} />, path: '/documents' },
-    { label: 'Pin', icon: <PinAngle size={15} />, path: '/pin' },
-    { label: 'Comm', icon: <ChatLeftText size={15} />, path: '/ comments' },
+    // { label: 'Pin', icon: <PinAngle size={15} />, path: '/pin' },
+    // { label: 'Comm', icon: <ChatLeftText size={15} />, path: '/ comments' },
     // { label: 'Notif', icon: <Bell size={15} />, path: '/notification' },
   ];
 

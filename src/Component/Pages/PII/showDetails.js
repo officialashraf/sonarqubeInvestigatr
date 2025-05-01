@@ -27,12 +27,14 @@ const ShowDetails = () => {
       }
     } else if (searchType === "phone-no") {
       // Remove all non-digit characters
-      const cleanedQuery = query.replace(/\D/g, '');  // \D = non-digit
-
-      if (!cleanedQuery) {
-        toast.error("Please enter a valid phone number with digits only");
-        return;
-      }
+    
+        // Check if the query contains any alphabet character
+        const hasAlphabets = /[a-zA-Z]/.test(query);
+        const hasInvalidSpecialChars = /[^0-9\/\-\+]/.test(query); 
+        if (hasAlphabets || hasInvalidSpecialChars) {
+          toast.error("Phone number must contain only digits");
+          return;
+        }
     }
   
     let url = searchType === "email"
@@ -58,7 +60,7 @@ const ShowDetails = () => {
       <div className="search-bar-container">
         <div className="search-bar">
         <select className="search-dropdown" value={searchType} onChange={(e) => setSearchType(e.target.value)}>
-  <option value="phone">Phone</option> {/* Default selected */}
+  <option value="phone-no">Phone</option> {/* Default selected */}
   <option value="email">Email</option>
 </select>
 
