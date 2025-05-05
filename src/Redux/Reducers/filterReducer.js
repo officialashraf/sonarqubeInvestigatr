@@ -1,3 +1,4 @@
+
   import { SET_TASK_FILTER_ID , SET_HEADERS, SET_DATA, LOG_FILTER_COUNT, SET_PAGINATION,SET_LOADING,SET_ERROR} from "../Constants/filterConstant";
 
 const initialState = {
@@ -17,7 +18,7 @@ export const taskFilterReducer = (state = initialState, action) => {
         return state;
     }
   };
-
+  
 //  export const summaryDataReducer = (state = {  data: [],headers: []}, action) => {
 //     switch (action.type) {
 //       case SET_DATA:
@@ -26,7 +27,6 @@ export const taskFilterReducer = (state = initialState, action) => {
 //         return { ...state, headers: action.payload };
 //         case SET_PAGINATION:
 //         return { ...state, headers: action.payload };
-        
 //       default:
 //         return state;
 //     }}

@@ -1,3 +1,4 @@
+
 import axios from 'axios';
 import {SET_TASK_FILTER_ID, SET_DATA, SET_HEADERS, LOG_FILTER_COUNT, SET_ERROR, SET_PAGINATION, SET_LOADING} from '../Constants/filterConstant'
 import Cookies from "js-cookie";
@@ -6,6 +7,8 @@ export const setTaskFilter = (taskId, filterId) => ({
     type: SET_TASK_FILTER_ID,
     payload: { taskId, filterId },
   });
+
+
 
 // export const setSummaryDataAction = (data) => ({
 //   type: SET_DATA,
@@ -23,6 +26,7 @@ export const logFilterCount = (user) => {
     payload: user,
   };
 };
+
 
 //newcommonapi
 export const fetchSummaryData =
@@ -83,3 +87,4 @@ export const fetchSummaryData =
       dispatch({ type: SET_ERROR, payload: error.message });
     }
   };
+

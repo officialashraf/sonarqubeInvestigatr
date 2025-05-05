@@ -1,10 +1,9 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef,useState } from "react";
 import "./Resources.css";
 import { LuPin } from "react-icons/lu";
 import { RiInformation2Line } from "react-icons/ri";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { IoChevronDown } from "react-icons/io5";
-import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { FaRegHeart } from "react-icons/fa";
 import { FaRegComment } from "react-icons/fa6";
@@ -19,6 +18,9 @@ import { GoEye } from "react-icons/go";
 import { AiOutlineLike } from "react-icons/ai";
 import { AiOutlineDislike } from "react-icons/ai";
 import { LiaDownloadSolid } from "react-icons/lia";
+import { BsThreeDots } from "react-icons/bs";
+import throttle from 'lodash.throttle';
+import { useDispatch } from "react-redux";
 import { BsThreeDots } from "react-icons/bs"
 import {  PinAngle, ChatLeftText} from 'react-bootstrap-icons';
 import AddComment from '../Comment/AddComment';
@@ -26,7 +28,7 @@ import { fetchSummaryData } from "../../../Redux/Action/filterAction";
 import throttle from 'lodash.throttle';
 import { toast } from "react-toastify";
 const Resources = () => {
-
+ 
   const dispatch = useDispatch();
   const [showPopup, setShowPopup] = useState(false);
   const data1 = useSelector((state) => state.caseData.caseData);
@@ -302,20 +304,9 @@ if (scrollTop <= 0 && currentPage > 1 && !loading) {
                       </div>
                     );
                   })()}
-                 
                   <p className="activityContent">
                     {selectedResource.unified_activity_content}
                   </p>
-                  {/* <img
-                  src={selectedResource.socialmedia_from_imageurl}
-                  alt="Post"
-                  // onError={(e) => {
-                  //   e.target.onerror = null;
-                  //   e.target.src =
-                  //     "https://www.kurin.com/wp-content/uploads/placeholder-square.jpg";
-                  // }}
-                  className="postImage"
-                /> */}
                   <div className="insta-icon " style={{ justifyContent: "initial" }}>
                     <div className="like-commment-share">
                       <div className="like">
@@ -733,17 +724,17 @@ if (scrollTop <= 0 && currentPage > 1 && !loading) {
 
                   {/* Channel Details */}
                   <div className="channel-action">
-                      <div className="channelInfo">
-                        <img
-                          src={selectedResource.socialmedia_from_imageurl ?? selectedResource.socialmedia_media_url}
-                          alt="Channel Logo"
-                          className="channelLogo"
-                        />
-                        <h6 className="channelName">{selectedResource.socialmedia_from_displayname}</h6>
-                        <button className="subscribeButton">Subscribe</button>
-                      </div>
-                      
-                    
+                    <div className="channelInfo">
+                      <img
+                        src={selectedResource.socialmedia_from_imageurl ?? selectedResource.socialmedia_media_url}
+                        alt="Channel Logo"
+                        className="channelLogo"
+                      />
+                      <h6 className="channelName">{selectedResource.socialmedia_from_displayname}</h6>
+                      <button className="subscribeButton">Subscribe</button>
+                    </div>
+
+
                     {/* Actions */}
                     <div className="actions">
                       <button className="actionButton">
@@ -774,7 +765,7 @@ if (scrollTop <= 0 && currentPage > 1 && !loading) {
                       </button>
                     </div>
                   </div>
-                  <div> 
+                  <div>
                     <strong>{selectedResource.socialmedia_activity_view_count}</strong>{" "}View
                   </div>
                 
@@ -788,7 +779,7 @@ if (scrollTop <= 0 && currentPage > 1 && !loading) {
           
           ) : (
             <div className="placeholder">
-              <p>Select a resource to view its details</p>
+              {/* <p>Select a resource to view its details</p> */}
             </div>
 
           )}
