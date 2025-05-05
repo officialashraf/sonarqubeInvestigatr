@@ -4,6 +4,7 @@ import "./graphicalData.css"
 import {ListAltOutlined ,ArrowBack, ArrowForward, MoreVert} from '@mui/icons-material';
 import LineChart1 from "./lineChart";
 import KeywordChart from "./keywordChart";
+import SentimentPieChart from "./sentimentPiechart";
 
 
 const Header = ({ title }) => (
@@ -36,7 +37,7 @@ const ComponentOne = () => (
 );
 
 const ComponentTwo = () => (
-  <Card  sx={{ height: "235px" ,backgroundColor: "lightgray" }}>
+  <Card  sx={{ height: "350px" ,backgroundColor: "lightgray" }}>
     <Header title="Keywords" />
     <CardContent>
     <KeywordChart/>
@@ -45,10 +46,18 @@ const ComponentTwo = () => (
 );
 
 const ComponentThree = () => (
-  <Card  sx={{ height: "235px", backgroundColor: "lightgray" }}>
+  <Card  sx={{ height: "350px", backgroundColor: "lightgray" }}>
     <Header title="Location" />
     <CardContent>
       <Typography variant="h6" color="textSecondary" align="center" height={250}> No Data </Typography>
+    </CardContent>
+  </Card>
+);
+const ComponentFour=() => (
+  <Card  sx={{ height: "350px", backgroundColor: "lightgray" , marginBottom:'5rem' }}>
+    <Header title="Sentiment" />
+    <CardContent>
+    <SentimentPieChart height={250}/>
     </CardContent>
   </Card>
 );
@@ -57,7 +66,8 @@ const GraphicalData = () => {
   return (
     <div className="responsiveContainer" >
 
-    <Grid container spacing={1} p={1} className="responsiveGrid" style={{background:"lightgray", marginLeft:"0 px !important"}}>
+    <Grid container spacing={1} p={1} className="responsiveGrid" style={{background:"lightgray", marginLeft:"0 px !important", height: '100vh',
+        overflowY: 'auto'}}>
       <Grid item xs={12}  sx={{ paddingLeft: '0px !important',  paddingTop:"0px !important"}}>
       <ComponentOne/>
       </Grid>
@@ -67,6 +77,12 @@ const GraphicalData = () => {
       <Grid item xs={6} p={1} pb={0} >
         <ComponentThree />
       </Grid>
+      <Grid item xs={6} p={1} pb={0} mb={10} >
+         <ComponentFour/>
+        </Grid>
+        <Grid item xs={6} p={1} pb={0} mb={10} >
+        <ComponentThree />
+        </Grid>
     </Grid>
     </div>
   );

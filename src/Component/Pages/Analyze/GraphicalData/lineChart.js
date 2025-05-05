@@ -5,8 +5,10 @@ import axios from 'axios';
 import { Box, Slider } from '@mui/material';
 import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, CartesianGrid,ResponsiveContainer, ReferenceLine } from 'recharts';
 import './lineChart.css'
+import Cookies from "js-cookie";
 
 const LineChart1 = () => {
+   const token = Cookies.get("accessToken");
   const [data, setData] = useState([]);
   const [recordTypes, setRecordTypes] = useState([]);
   const caseId = useSelector((state) => state.caseData.caseData.id);
@@ -17,7 +19,14 @@ const LineChart1 = () => {
         const response = await axios.post('http://5.180.148.40:9006/api/das/aggregate', {
           query: { unified_case_id: caseId },
           aggs_fields: ["unified_date_only", "unified_record_type"]
-        });
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
         console.log("line", response);
 

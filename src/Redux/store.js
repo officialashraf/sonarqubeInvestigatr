@@ -11,7 +11,7 @@ import searchReducer1 from './Reducers/piiReducer';
 const persistConfig = {
   key: "root",
   storage, // Local Storage
-  // blacklist: ['search'],
+  blacklist: ['filterData'],
 };
 
 
