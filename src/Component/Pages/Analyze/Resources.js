@@ -4,7 +4,6 @@ import { LuPin } from "react-icons/lu";
 import { RiInformation2Line } from "react-icons/ri";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { IoChevronDown } from "react-icons/io5";
-import { useState } from "react";
 import { useSelector } from "react-redux";
 import { FaRegHeart } from "react-icons/fa";
 import { FaRegComment } from "react-icons/fa6";
@@ -20,28 +19,120 @@ import { AiOutlineLike } from "react-icons/ai";
 import { AiOutlineDislike } from "react-icons/ai";
 import { LiaDownloadSolid } from "react-icons/lia";
 import { BsThreeDots } from "react-icons/bs";
+import { useRef, useEffect } from 'react';
+import { useState } from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import axios from 'axios';
+import Cookies from 'js-cookie';
+import throttle from 'lodash.throttle';
+import FetchCaseData from "../Services/CommonApi.js"
+import { useDispatch } from "react-redux";
+import { fetchSummaryData, setSumaryHeadersAction, setSummaryDataAction } from "../../../Redux/Action/filterAction.js"
 
 
 const Resources = () => {
+  const dispatch = useDispatch();
 
+  // const currentPage = useSelector((state) => state.search.currentPage);
   const summaryData = useSelector(state => state.summaryData.data);
   const summaryHeaders = useSelector(state => state.summaryData.headers);
+  const data1 = useSelector((state) => state.caseData.caseData);
+  const page = useSelector((state) => state.summaryData.page)
   console.log("Summary Data from Redux:", summaryData);
   console.log("Summary Headers from Redux:", summaryHeaders);
+  const [currentPage, setCurrentPage] = useState(page);
+  const [resources, setResources] = useState([]);
+  const [selectedResource, setSelectedResource] = useState(null);
+  const [hasMore, setHasMore] = useState(true);
+  const [loading, setLoading] = useState(false); // Loader state
+  const sidebarRef = useRef(null);
+  const scrollDirectionRef = useRef(null); // 👈 Add this at the top
 
 
-  const [selectedResource, setSelectedResource] = useState(null); // State to track the selected resource
+  const itemsPerPage = 50;
 
+
+// **Step 1: Component Mount hone par Redux se Data Fetch karein**
+  useEffect(() => {
+    if (!summaryData || summaryData.length === 0) {
+      FetchCaseData({ unified_case_id: data1.id, page: currentPage, dispatch });
+    }
+  }, [summaryData, data1.id, currentPage, dispatch]);; // Sirf ek baar initial load par Redux se data check hoga
+
+  // **Step 2: Scroll Detection par API Call karein**
+  useEffect(() => {
+
+    const sidebar = document.querySelector(".left-sidebar");
+
+    if (!sidebar) return; // ❗ Prevent null reference error
+
+    const handleScroll = throttle(() => {
+      const { scrollTop, scrollHeight, clientHeight } = sidebar;
+
+      // Load NEXT page when user scrolls to bottom
+      if (scrollTop + clientHeight >= scrollHeight - 5 && hasMore && !loading) {
+
+        scrollDirectionRef.current = 'down';
+        setCurrentPage(prev => prev + 1);
+        // skipScrollRef.current = true;
+      }
+
+      // Load PREVIOUS page when user scrolls to top
+      if (scrollTop <= 0 && currentPage > 1 && !loading) {
+        scrollDirectionRef.current = 'up';
+        setCurrentPage(prev => prev - 1);
+        // skipScrollRef.current = true;
+      }
+    }, 500);
+
+    sidebar.addEventListener("scroll", handleScroll);
+    return () => sidebar.removeEventListener("scroll", handleScroll);
+  }, [currentPage]);
+
+  // **Step 3: Jab page change ho tab API call karein**
+  useEffect(() => {
+
+
+    const scrollContainer = sidebarRef.current;
+    if (currentPage > 1) {
+      setLoading(true);
+     dispatch(fetchSummaryData({
+      queryPayload: { unified_case_id: data1.id },
+      page: currentPage,
+      itemsPerPage: 50
+    })).then(() => {
+      setLoading(false);
+    });
+      // Delay scroll position to avoid top scroll re-trigger
+      setTimeout(() => {
+        if (scrollDirectionRef.current === 'up') {
+          scrollContainer.scrollTo({
+            top: 100,
+            // top: scrollContainer.scrollHeight - 150, // 👈 **Fix: Scroll should move smoothly**
+            behavior: 'smooth',
+          });
+        } else {
+          scrollContainer.scrollTo({
+            top: 40,
+            behavior: 'smooth',
+          });
+        }
+      }, 300);
+    }
+  }, [currentPage]);
 
   const handleResourceClick = resource => {
     console.log("Selected Resource:", resource);
     setSelectedResource(resource); // Set the selected resource to display in the right content area
   };
-  const getSentimentColor = (sentiment) => {
-    if (sentiment === "Negative") return "red";
-    if (sentiment === "Positive") return "green";
-    return "gray"; // Default color for neutral or undefined sentiment
-  };
+
+  function getYouTubeVideoId(url) {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
+  }
+
+
 
 
   return (
@@ -66,45 +157,61 @@ const Resources = () => {
 
       {/* Content Section */}
       <div className="contents">
-        <div className="left-sidebar">
-
-          <div className="sidebar-header">
-            <span className="search-icon">
-              <i className="fa fa-search"></i> {/* Font Awesome Search Icon */}
-            </span>
-            <h5>Resources Insights</h5>
-          </div>
-
-          {summaryData && Array.isArray(summaryData) ? (
-            summaryData.map((resource) => (
-              <div
-                key={resource.row_id}
-                className={`resourceItem ${selectedResource?.row_id === resource.row_id ? "active" : ""
-                  }`}
-                onClick={() => handleResourceClick(resource)}
-              >
-                <img
-                  src={resource.socialmedia_from_imageurl ?? resource.socialmedia_media_url}
-                  // src={resource.socialmedia_from_imageurl} // Fallback to dummy image
-                  // alt={resource.unified_type}
-                  onError={(e) => {
-                    e.target.onerror = null; // prevents infinite loop
-                    e.target.src = 'https://www.kurin.com/wp-content/uploads/placeholder-square.jpg';
-                  }}
-                  className="resourceImage"
-                />
-                <div className="resourceDetails">
-                  <p className="resourceType">{resource.unified_type}</p>
-                  <p className="resourceContent">{resource.socialmedia_activity}</p>
-                </div>
+        <div
+          className="left-sidebar" ref={sidebarRef}
+          id="scrollableDiv"
+        >
+          <div className="inner-content" >
+            <div className="sidebar-header">
+              <h5>Resources Insights</h5>
+            </div>
+            <div style={{ marginBottom: '10px', color: '#000' }}>
+              <strong>Current Page:</strong> {currentPage}
+            </div>
+            {loading && (
+              <div style={{ textAlign: 'center', padding: '10px', color: 'black' }}>
+                Loading...
               </div>
-            ))
-          ) : (
-            <p style={{ textAlign: "center", marginTop: "2rem", color: "gray" }}>
-              No Data Load for this case,<br />
-              "Try again after some time."
-            </p>
-          )}
+            )}
+            {summaryData && Array.isArray(summaryData) ? (
+              summaryData.map((resource) => (
+                <div
+                  key={resource.row_id}
+                  className={`resourceItem ${selectedResource?.row_id === resource.row_id ? "active" : ""
+                    }`}
+                  onClick={() => handleResourceClick(resource)}
+                >
+                  <img
+                    src={resource.socialmedia_from_imageurl ?? resource.socialmedia_media_url}
+                    // src={resource.socialmedia_from_imageurl} // Fallback to dummy image
+                    // alt={resource.unified_type}
+                    onError={(e) => {
+                      e.target.onerror = null; // prevents infinite loop
+                      e.target.src = 'https://www.kurin.com/wp-content/uploads/placeholder-square.jpg';
+                    }}
+                    className="resourceImage"
+                  />
+                  <div className="resourceDetails">
+                    <p className="resourceType">{resource.unified_type}</p>
+                    <p className="resourceContent">{resource.socialmedia_activity}</p>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p style={{ textAlign: "center", marginTop: "2rem", color: "gray" }}>
+                No Data Load for this case,<br />
+                "Try again after some time."
+              </p>
+            )}
+            {loading && (
+              <div style={{ textAlign: 'center', padding: '10px', color: 'black' }}>
+                Loading...
+              </div>
+            )}
+            <div style={{ marginBottom: '10px', color: '#000' }}>
+              <strong>Current Page:</strong> {currentPage}
+            </div>
+          </div>
         </div>
 
 
@@ -116,9 +223,7 @@ const Resources = () => {
                   className="sentiment"
                   style={{
                     color: "white",
-                    backgroundColor: getSentimentColor(
-                      selectedResource.sentiment
-                    ),
+                    backgroundColor: "black",
                     padding: "5px 10px",
                     borderRadius: "5px",
                     display: "inline-block",
@@ -153,53 +258,49 @@ const Resources = () => {
                     </div>
 
                   </div>
-                  {/* Media Render (based on URL extension) */}
-                  {/* {(() => {
-      const url = selectedResource.socialmedia_from_imageurl;
-      const extension = url?.split('.').pop()?.toLowerCase();
+                  {selectedResource.socialmedia_media_url && (() => {
+                    let urls = selectedResource.socialmedia_media_url;
 
-      if (['mp4', 'mov', 'webm'].includes(extension)) {
-        return (
-          <video controls className="postVideo">
-            <source src={url} type={`video/${extension}`} />
-            Your browser does not support the video tag.
-          </video>
-        );
-      } else if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(extension)) {
-        return (
-          <img
-            src={url}
-            alt="Post"
-            className="postImage"
-          />
-        );
-      } else {
-        return null; // unsupported format
-      }
-    })()} */}
-                  <img
-                    src={selectedResource.socialmedia_from_imageurl}
-                    alt="Post"
-                    // onError={(e) => {
-                    //   e.target.onerror = null;
-                    //   e.target.src =
-                    //     "https://www.kurin.com/wp-content/uploads/placeholder-square.jpg";
-                    // }}
-                    className="postImage"
-                  />
+                    // Step 1: Clean karo array ko
+                    if (typeof urls === 'string') {
+                      urls = urls.replace(/[\[\]"]+/g, '').split(',');
+                    }
+
+                    // Step 2: Single URL nahi multiple URL array hai ab
+                    return (
+                      <div className="imageGridWrapper">
+                        {urls.map((url, index) => {
+                          url = url.trim(); // Remove spaces
+
+                          if (url.includes('video')) {
+                            return (
+                              <video key={index} controls className="postImage">
+                                <source src={url} type="video/mp4" />
+                                Your browser does not support the video tag.
+                              </video>
+                            );
+                          } else if (url.includes('pbs') || url.includes('twimg')) {
+                            return (
+                              <img
+                                key={index}
+                                src={url}
+                                alt={`Post ${index}`}
+                                className="postMedia"
+                              />
+                            );
+                          } else {
+                            return (
+                              <p key={index}>Media not available</p>
+                            );
+                          }
+                        })}
+                      </div>
+                    );
+                  })()}
+                
                   <p className="activityContent">
                     {selectedResource.unified_activity_content}
                   </p>
-                  {/* <img
-                  src={selectedResource.socialmedia_from_imageurl}
-                  alt="Post"
-                  // onError={(e) => {
-                  //   e.target.onerror = null;
-                  //   e.target.src =
-                  //     "https://www.kurin.com/wp-content/uploads/placeholder-square.jpg";
-                  // }}
-                  className="postImage"
-                /> */}
                   <div className="insta-icon " style={{ justifyContent: "initial" }}>
                     <div className="like-commment-share">
                       <div className="like">
@@ -239,17 +340,45 @@ const Resources = () => {
                   <p className="activityContent">
                     {selectedResource.unified_activity_content}
                   </p>
-                 
-                  <img
-                    src={selectedResource.socialmedia_from_imageurl}
-                    alt="Post"
-                    // onError={(e) => {
-                    //   e.target.onerror = null;
-                    //   e.target.src =
-                    //     "https://www.kurin.com/wp-content/uploads/placeholder-square.jpg";
-                    // }}
-                    className="postImage"
-                  />
+                  {selectedResource.socialmedia_media_url && (() => {
+                    let urls = selectedResource.socialmedia_media_url;
+
+                    // Step 1: Clean karo array ko
+                    if (typeof urls === 'string') {
+                      urls = urls.replace(/[\[\]"]+/g, '').split(',');
+                    }
+
+                    // Step 2: Single URL nahi multiple URL array hai ab
+                    return (
+                      <div className="imageGridWrapper">
+                        {urls.map((url, index) => {
+                          url = url.trim(); // Remove spaces
+
+                          if (url.includes('video')) {
+                            return (
+                              <video key={index} controls className="postImage">
+                                <source src={url} type="video/mp4" />
+                                Your browser does not support the video tag.
+                              </video>
+                            );
+                          } else if (url.includes('pbs') || url.includes('twimg')) {
+                            return (
+                              <img
+                                key={index}
+                                src={url}
+                                alt={`Post ${index}`}
+                                className="postMedia"
+                              />
+                            );
+                          } else {
+                            return (
+                              <p key={index}>Media not available</p>
+                            );
+                          }
+                        })}
+                      </div>
+                    );
+                  })()}
                   <div className="insta-icon">
                     <div className="like-commment-share">
                       <div className="like">
@@ -290,16 +419,45 @@ const Resources = () => {
                   <p className="activityContent">
                     {selectedResource.unified_activity_content}
                   </p>
-                  <img
-                    src={selectedResource.socialmedia_from_imageurl}
-                    alt="Post"
-                    // onError={(e) => {
-                    //   e.target.onerror = null;
-                    //   e.target.src =
-                    //     "https://www.kurin.com/wp-content/uploads/placeholder-square.jpg";
-                    // }}
-                    className="postImage"
-                  />
+                  {selectedResource.socialmedia_media_url && (() => {
+                    let urls = selectedResource.socialmedia_media_url;
+
+                    // Step 1: Clean karo array ko
+                    if (typeof urls === 'string') {
+                      urls = urls.replace(/[\[\]"]+/g, '').split(',');
+                    }
+
+                    // Step 2: Single URL nahi multiple URL array hai ab
+                    return (
+                      <div className="imageGridWrapper">
+                        {urls.map((url, index) => {
+                          url = url.trim(); // Remove spaces
+
+                          if (url.includes('video')) {
+                            return (
+                              <video key={index} controls className="postImage">
+                                <source src={url} type="video/mp4" />
+                                Your browser does not support the video tag.
+                              </video>
+                            );
+                          } else if (url.includes('pbs') || url.includes('twimg')) {
+                            return (
+                              <img
+                                key={index}
+                                src={url}
+                                alt={`Post ${index}`}
+                                className="postMedia"
+                              />
+                            );
+                          } else {
+                            return (
+                              <p key={index}>Media not available</p>
+                            );
+                          }
+                        })}
+                      </div>
+                    );
+                  })()}
 
                   <div className="view" style={{ display: "flex", gap: "4px" }}>
                     <div className="time">
@@ -389,7 +547,7 @@ const Resources = () => {
                   </p>
 
                   <img
-                    src={selectedResource.socialmedia_from_imageurl}
+                    src={selectedResource.socialmedia_media_url}
                     alt="Post"
                     // onError={(e) => {
                     //   e.target.onerror = null;
@@ -479,24 +637,26 @@ const Resources = () => {
                     </div>
 
                   </div>
-                  <img
-                    src={selectedResource.socialmedia_media_url}
-                    // className="vkIframe"
-                    //                  allow="autoplay; encrypted-media"
-                    // allowFullScreen
-                    //                 width="100%"
-                    // height="400"
-                    // frameBorder="0"
-                    // title="VK video"
-                    // controls
-                    // autoPlay={false}
-                    // onError={(e) => {
-                    //   e.target.onerror = null;
-                    //   e.target.src =
-                    //     "https://www.kurin.com/wp-content/uploads/placeholder-square.jpg";
-                    // }}
-                    className="postImage"
-                  />
+                  {selectedResource.socialmedia_media_url?.match(/\.(mp4|mov|webm|ogg)$/i) ? (
+
+                    <video
+                      src={selectedResource.socialmedia_media_url}
+                      controls
+                      className="postImage"
+                      width="100%"
+                      height="400"
+                    />
+                  ) : (
+                    <img
+                      src={selectedResource.socialmedia_media_url}
+                      className="postImage"
+                      alt="Social Media"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = "https://www.kurin.com/wp-content/uploads/placeholder-square.jpg";
+                      }}
+                    />
+                  )}
                   <p className="activityContent">
                     {selectedResource.unified_activity_content}
                   </p>
@@ -537,12 +697,19 @@ const Resources = () => {
               {selectedResource.unified_type === "YouTube" && (
                 <div className="resourceDetailsView yt">
                   <div className="videoWrapper">
-                    <img
-                      className="postImage"
-                      src={selectedResource.socialmedia_media_url}
-                      title="Video Player"
-                      allowFullScreen
-                    />
+                    {selectedResource.socialmedia_media_url && (
+                      <div className="youtube-video">
+                        <iframe
+                          width="100%"
+                          height="400"
+                          src={`https://www.youtube.com/embed/${getYouTubeVideoId(selectedResource.socialmedia_activity_url)}`}
+                          title="YouTube video player"
+                          frameBorder="0"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                          allowFullScreen
+                        ></iframe>
+                      </div>
+                    )}
                   </div>
                   <h4 className="videoTitle">
                     {selectedResource.socialmedia_activity_title}
@@ -550,17 +717,17 @@ const Resources = () => {
 
                   {/* Channel Details */}
                   <div className="channel-action">
-                      <div className="channelInfo">
-                        <img
-                          src={selectedResource.socialmedia_from_imageurl ?? selectedResource.socialmedia_media_url}
-                          alt="Channel Logo"
-                          className="channelLogo"
-                        />
-                        <h6 className="channelName">{selectedResource.socialmedia_from_displayname}</h6>
-                        <button className="subscribeButton">Subscribe</button>
-                      </div>
-                      
-                    
+                    <div className="channelInfo">
+                      <img
+                        src={selectedResource.socialmedia_from_imageurl ?? selectedResource.socialmedia_media_url}
+                        alt="Channel Logo"
+                        className="channelLogo"
+                      />
+                      <h6 className="channelName">{selectedResource.socialmedia_from_displayname}</h6>
+                      <button className="subscribeButton">Subscribe</button>
+                    </div>
+
+
                     {/* Actions */}
                     <div className="actions">
                       <button className="actionButton">
@@ -591,7 +758,7 @@ const Resources = () => {
                       </button>
                     </div>
                   </div>
-                  <div> 
+                  <div>
                     <strong>{selectedResource.socialmedia_activity_view_count}</strong>{" "}View
                   </div>
                 </div>
@@ -602,7 +769,7 @@ const Resources = () => {
             </div>
           ) : (
             <div className="placeholder">
-              <p>Select a resource to view its details</p>
+              {/* <p>Select a resource to view its details</p> */}
             </div>
           )}
         </div>

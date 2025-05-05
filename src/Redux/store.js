@@ -11,20 +11,20 @@ import searchReducer1 from './Reducers/piiReducer';
 const persistConfig = {
   key: "root",
   storage, // Local Storage
-  // blacklist: ['search'],
+   blacklist: ['filterData'],
 };
 
 
 const rootReducer = combineReducers({
-    selectedTab: tabReducer,
+  selectedTab: tabReducer,
     taskFilterId : taskFilterReducer,
     caseData : caseReducer ,
-    filterData: summaryDataReducer,
-    summaryData: summaryDataReducer,
-    filterCount: filterReducer,
-    search: searchReducer,
-    popup: popupReducer,
-    pii:searchReducer1,
+  filterData: summaryDataReducer,
+  summaryData: summaryDataReducer,
+  filterCount: filterReducer,
+  search: searchReducer,
+  popup: popupReducer,
+  pii:searchReducer1,
     criteriaKeywords: criteriaReducer,
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);

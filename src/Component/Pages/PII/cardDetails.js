@@ -28,7 +28,7 @@ const UserCards = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const profiles = useSelector((state) => state.pii.data.cyniqBasicResult)
+  const profiles = useSelector((state) => state.pii?.data?.cyniqBasicResult || []);
   console.log("profile", profiles)
   useEffect(() => {
     // Function to fetch data from API

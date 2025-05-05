@@ -71,7 +71,7 @@ const AddUser = ({ onClose }) => {
             <input className="com" name="first_name" value={formData.first_name} onChange={handleChange} placeholder="Enter First Name" required />
 
             <label>Last Name:</label>
-            <input className="com" name="last_name" value={formData.last_name} onChange={handleChange} placeholder="Enter Last Name" required />
+            <input className="com" name="last_name" value={formData.last_name} onChange={handleChange} placeholder="Enter Last Name"/>
 
             <label>Role:</label>
             <div style={{ position: "relative", width: "100%" }}>

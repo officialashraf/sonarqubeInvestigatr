@@ -243,6 +243,27 @@ return (
       <Table striped bordered hover variant="light">
         <thead>
           <tr>
+             <th>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center"
+                }}
+              >
+                ID
+                 <span
+                    onClick={() => handleSort("id")}
+                    style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
+                  >
+                    {sortConfig.key === "id" ? (
+                      sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
+                    ) : (
+                      <ArrowDropDown />
+                    )}
+                  </span>
+              </div>
+            </th>
             <th>
               <div
                 style={{
@@ -435,6 +456,9 @@ return (
                 key={item.id || Math.random()}
                 style={{ position: "relative" }}
               >
+                 <td>
+                  {item.id}
+                </td>
                 <td>
                   {item.username}
                 </td>
