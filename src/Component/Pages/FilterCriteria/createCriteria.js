@@ -158,7 +158,15 @@ const handleSearch = async (e) => {
     
     const payload = {
       keyword: Array.isArray(formData.searchQuery) ? formData.searchQuery : [formData.searchQuery],
-      case_id: formData.caseIds?.length > 0 ? formData.caseIds.map(caseId => caseId.value) : [],
+      // case_id: formData.caseIds?.length > 0 
+      // ? formData.caseIds.map(caseId => caseId.value).join(",") 
+      // : "",
+      case_id: formData.caseIds?.length > 0 
+      ? (formData.caseIds.map(caseId => caseId.value.toString()))
+      : "[]",
+    
+    
+
       file_type: formData.filetype?.length > 0 ? formData.filetype.map(type => type.value) : [],
       page: 1, // Start at page 1
     };
@@ -193,7 +201,7 @@ const handleSearch = async (e) => {
     }));
 
     dispatch(setKeywords({
-      // keyword: response.data.input.keyword,
+       keyword: response.data.input.keyword,
       queryPayload: response.data.input  // or other fields if needed
     }));
     console.log("setkeywordDispacth",response.data.input.keyword)

@@ -13,6 +13,7 @@ const InputField = ({ label, type, value, onChange, placeholder, controlId, name
                 placeholder={placeholder}
                 autoComplete={autocomplete} 
                 required
+              
             />
         </Form.Group>
     );

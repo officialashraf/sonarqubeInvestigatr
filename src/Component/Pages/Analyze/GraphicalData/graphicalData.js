@@ -45,24 +45,27 @@ const Header = ({ title }) =>
     </Grid>
   </Grid>;
 
-const ComponentOne = () =>
+const ComponentOne = () =>(
   <Card sx={{ height: "235px", backgroundColor: "lightgray" }}>
     <Header title="Timeline" />
     <CardContent>
       <LineChart1 />
     </CardContent>
-  </Card>;
+  </Card>);
 
-const ComponentTwo = () =>
-  <Card sx={{ height: "350px", backgroundColor: "lightgray" }}>
+
+const ComponentTwo = () => (
+  <Card  sx={{ height: "350px" ,backgroundColor: "lightgray" }}>
+
     <Header title="Keywords" />
     <CardContent>
       <KeywordChart />
     </CardContent>
-  </Card>;
+  </Card>);
 
-const ComponentThree = () =>
-  <Card sx={{ height: "350px", backgroundColor: "lightgray" }}>
+
+const ComponentThree = () => (
+  <Card  sx={{ height: "350px", backgroundColor: "lightgray" }}>
     <Header title="Location" />
     <CardContent>
       <Typography
@@ -74,8 +77,8 @@ const ComponentThree = () =>
         {" "}No Data{" "}
       </Typography>
     </CardContent>
-  </Card>;
-const ComponentFour = () =>
+  </Card>);
+const ComponentFour = () =>(
   <Card
     sx={{ height: "350px", backgroundColor: "lightgray", marginBottom: "5rem" }}
   >
@@ -83,43 +86,34 @@ const ComponentFour = () =>
     <CardContent>
       <SentimentPieChart height={250} />
     </CardContent>
-  </Card>;
+  </Card>
+  );
+
+
 
 const GraphicalData = () => {
   return (
-    <div className="responsiveContainer">
-      <Grid
-        container
-        spacing={1}
-        p={1}
-        className="responsiveGrid"
-        style={{
-          background: "lightgray",
-          marginLeft: "0 px !important",
-          height: "100vh",
-          overflowY: "auto"
-        }}
-      >
-        <Grid
-          item
-          xs={12}
-          sx={{ paddingLeft: "0px !important", paddingTop: "0px !important" }}
-        >
-          <ComponentOne />
-        </Grid>
-        <Grid item xs={6} p={1} pb={0} sx={{ paddingLeft: "0 !important" }}>
-          <ComponentTwo />
-        </Grid>
-        <Grid item xs={6} p={1} pb={0}>
-          <ComponentThree />
-        </Grid>
-        <Grid item xs={6} p={1} pb={0} mb={10}>
-          <ComponentFour />
-        </Grid>
-        <Grid item xs={6} p={1} pb={0} mb={10}>
-          <ComponentThree />
-        </Grid>
+    <div className="responsiveContainer" >
+
+    <Grid container spacing={1} p={1} className="responsiveGrid" style={{background:"lightgray", marginLeft:"0 px !important", height: '100vh',
+        overflowY: 'auto'}}>
+      <Grid item xs={12}  sx={{ paddingLeft: '0px !important',  paddingTop:"0px !important"}}>
+      <ComponentOne/>
       </Grid>
+      <Grid item xs={6} p={1} pb={0}  sx={{ paddingLeft: '0 !important' }}>
+     <ComponentTwo/>
+      </Grid>
+      <Grid item xs={6} p={1} pb={0} >
+        <ComponentThree />
+      </Grid>
+      <Grid item xs={6} p={1} pb={0} mb={10} >
+         <ComponentFour/>
+        </Grid>
+        <Grid item xs={6} p={1} pb={0} mb={10} >
+        <ComponentThree />
+        </Grid>
+    </Grid>
+
     </div>
   );
 };

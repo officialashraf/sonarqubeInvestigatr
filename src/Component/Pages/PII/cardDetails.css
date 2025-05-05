@@ -48,7 +48,7 @@
   .user-header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    /* justify-content: space-between; */
   }
   
   /* .avatar-section {
@@ -78,8 +78,8 @@
     padding-bottom: 0px !important;
 }
   .user-info {
-    display: flex !important;
-    align-items: center !important;
+    /* display: flex !important;
+    align-items: center !important; */
     margin-bottom: 8px !important;
     color: white !important;
   }

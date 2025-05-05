@@ -1,171 +1,184 @@
+
 import React, { useState, useEffect } from 'react';
 import '../savedCriteria.css';
 import SearchIcon from '@mui/icons-material/Search';
-import FilterListIcon from '@mui/icons-material/FilterList';
 import CloseIcon from '@mui/icons-material/Close';
 import InputAdornment from '@mui/material/InputAdornment';
-import { TextField, Typography } from '@mui/material';
+import { TextField } from '@mui/material';
 import TuneIcon from '@mui/icons-material/Tune';
 import { sharedSxStyles } from "../createCriteria";
 import SendIcon from '@mui/icons-material/Send';
-import DataTable from '../../Case/caseList';
 import CriteriaCaseTable from './criteriaCaseList';
-import CriteriaTransactionTable from './criteriaTransactionlist';
-import SavedCriteria from '../savedCriteria';
 import AddNewCriteria from '../addNewCriteria';
-import {  useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie'
-import { toast } from 'react-toastify';
-import { closePopup, setKeywords, setPage, setSearchResults } from '../../../../Redux/Action/criteriaAction';
+import { setKeywords, setPage, setSearchResults } from '../../../../Redux/Action/criteriaAction';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 
-const SearchResults = ({onClose}) => {
- 
+const SearchResults = ({ onClose }) => {
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [inputValue, setInputValue] = useState('');
   const [searchChips, setSearchChips] = useState([]);
   const [activeTab, setActiveTab] = useState('Cases');
+  const [enterInput,setEnterInput] = useState([])
   const [isPopupVisible, setIsPopupVisible] = useState(false);
 
   const { searchResults, totalPages, currentPage, totalResults } = useSelector((state) => state.search);
   console.log("searchResult", searchResults, totalPages, currentPage, totalResults);
-  
-  const keywords = useSelector((state) => state.criteriaKeywords.queryPayload.keyword);
+
+  const keywords = useSelector((state) => state.criteriaKeywords?.queryPayload?.keyword || '');
   console.log("Keywords from Redux:", keywords);
 
-    const caseId = useSelector((state) => state.criteriaKeywords.queryPayload.case_id);
-    console.log("casId", caseId)
-   
-    const fileType = useSelector((state) => state.criteriaKeywords.queryPayload.file_type);
-    console.log("filetype",fileType)
-    const payload= useSelector((state) => state.criteriaKeywords.queryPayload);
-  
+  const caseId = useSelector((state) => state.criteriaKeywords?.queryPayload?.case_id || '');
+  console.log("casId", caseId)
 
-   const [formData, setFormData] = useState({
-  searchChips: '',
-  // Add other form fields as needed
-});
- 
+  const fileType = useSelector((state) => state.criteriaKeywords?.queryPayload?.file_type || '');
+  console.log("filetype", fileType)
+  const reduxPayload = useSelector((state) => state.criteriaKeywords?.queryPayload || '');
+  console.log("Full Redux Payload:", reduxPayload);
 
-useEffect(() => {
-  console.log("Keywords object:", keywords);
-  console.log("Case ID:", caseId);
-  console.log("File Type:", fileType);
 
-  const isValid = (val) =>
-    val !== null && val !== undefined && val.toString().trim() !== "";
+  const [formData, setFormData] = useState({
+    searchChips: '',
+    // Add other form fields as needed
+  });
 
-  if (keywords && Array.isArray(keywords)) {
-    let combinedChips = [...keywords];
 
-    if (Array.isArray(caseId) && caseId.length > 0) {
-      combinedChips = [...combinedChips, ...caseId.map((id) => `${id}`)]; // Ensure each caseId value remains a string
-  }
-  
+  useEffect(() => {
+    console.log("Keywords object:", keywords);
+    console.log("Case ID:", caseId);
+    console.log("File Type:", fileType);
 
-  // Check if fileType is an array and merge its values
-  if (Array.isArray(fileType) && fileType.length > 0) {
-      combinedChips = [...combinedChips, ...fileType];
-  } else if (isValid(fileType)) {
-      combinedChips.push(fileType); // Add fileType if it's a valid single value
-  }
+    const isValid = (val) =>
+      val !== null && val !== undefined && val.toString().trim() !== "";
 
-    console.log("Combined Chips:", combinedChips);
-    setSearchChips(combinedChips);
-  } else {
-    console.log("Keywords is not an array or doesn't exist.");
-    setSearchChips([]); // Fallback for empty or invalid data
-  }
-}, [keywords, caseId, fileType]);
+    if (keywords && Array.isArray(keywords)) {
+      let combinedChips = [...keywords];
 
-// useEffect(() => {
-//   console.log("Updated Search Results:", searchResults);
-//   console.log("Total Pages:", totalPages);
-//   console.log("Current Page:", currentPage);
-//   console.log("Total Results:", totalResults);
-// }, [searchResults, totalPages, currentPage, totalResults]); 
-  
+      if (Array.isArray(caseId) && caseId.length > 0) {
+        combinedChips = [...combinedChips, ...caseId.map((id) => `${id}`)]; // Ensure each caseId value remains a string
+      }
+
+
+      // Check if fileType is an array and merge its values
+      if (Array.isArray(fileType) && fileType.length > 0) {
+        combinedChips = [...combinedChips, ...fileType];
+      } else if (isValid(fileType)) {
+        combinedChips.push(fileType); // Add fileType if it's a valid single value
+      }
+
+      console.log("Combined Chips:", combinedChips);
+      setSearchChips(combinedChips);
+    } else {
+      console.log("Keywords is not an array or doesn't exist.");
+      setSearchChips([]); // Fallback for empty or invalid data
+      setActiveTab([]);
+    }
+  }, [keywords, caseId, fileType]);
+
+  // useEffect(() => {
+  //   console.log("Updated Search Results:", searchResults);
+  //   console.log("Total Pages:", totalPages);
+  //   console.log("Current Page:", currentPage);
+  //   console.log("Total Results:", totalResults);
+  // }, [searchResults, totalPages, currentPage, totalResults]); 
+
 
   const openPopup = () => {
     setIsPopupVisible(true); // Pop-up ko open karne ke liye state ko true kare
   };
-  const exitClick =()=>{
-navigate('/cases')
+  const exitClick = () => {
+    navigate('/cases')
   }
 
-   const Token = Cookies.get('accessToken');
-   
+  const Token = Cookies.get('accessToken');
+
   console.log("Keywords saerch:", searchChips);
   const filteredChips = searchChips.filter((chip) =>
     (typeof chip === "string" && chip.toLowerCase().includes(inputValue.toLowerCase())) ||
     (typeof chip === "number" && chip.toString().includes(inputValue)) // Search for numbers
-);
+  );
 
-console.log("filterdeChpis", filteredChips)
+  console.log("filterdeChpis", filteredChips)
   // Add new chip when "Enter" is pressed
   const handleKeyPress = (e) => {
     if (e.key === "Enter" && inputValue.trim() !== "") {
-      const newChip =  inputValue.trim() ; // Add new chip structure
-
-      // Check if chip already exists
+      const newChip = inputValue.trim(); 
       if (!searchChips.find((chip) => chip === newChip)) {
-        setSearchChips((prev) => [...prev, newChip]); // Add new chip
+        setSearchChips((prev) => [...prev, newChip]); 
+        setEnterInput((prev) => [...prev, newChip]); // user input me add karna hai
       }
-
-      setInputValue(""); // Clear input field
+      setInputValue(""); 
     }
   };
   
-  // const removeChip = (chip) => {
-  //   setSearchChips(searchChips.filter(item => item !== chip));
-  // };
-  const removeChip = (chipToRemove) => {
+   const removeChip = (chipToRemove) => {
     const updatedChips = searchChips.filter((chip) => chip !== chipToRemove);
-    setSearchChips(updatedChips); // Update state
-    // onUpdatedChips(updatedChips); // Pass updated chips as props
+    setSearchChips(updatedChips);
+  
+    // ❗ Only remove from enterInput if it was user's entered chip
+    setEnterInput((prev) => prev.filter((chip) => chip !== chipToRemove));
   };
+  
   const resetSearch = () => {
     setSearchChips([]);
     setInputValue('');
+    setEnterInput([])
   };
 
-  const handleSearch = async () => {
-    console.log("keyword....",payload)
-   console.log("searchzchips1", searchChips)
+    const handleSearch = async () => {
+    console.log("reduxPayload:", reduxPayload);
+    console.log("enterInput:", enterInput);
+    console.log("searchChips:", searchChips);
+  
     try {
+      // 1. Redux ke sirf keyword le rahe hain
+      const reduxKeywords = Array.isArray(reduxPayload.keyword)
+        ? reduxPayload.keyword
+        : JSON.parse(reduxPayload.keyword || "[]");
+  console.log("reduxKeyword", reduxKeywords)
+    
+        const userKeywords = Array.isArray(enterInput) 
+        ? enterInput 
+        : JSON.parse(enterInput || "[]");
+
+  console.log("userKeyword", userKeywords)
+      // 🔥 Keywords only: searchChips se wo elements jo redux keywords ya user keywords me hain
+      const allPossibleKeywords = [...reduxKeywords, ...userKeywords];
+      console.log("alllProgresskeyword", allPossibleKeywords)
+      const finalKeywords = searchChips.filter((chip) => allPossibleKeywords.includes(chip));
+  console.log("finalkeywords",finalKeywords)
+      // 2. case_id aur file_type separately treat honge
+      const reduxCaseIds = Array.isArray(reduxPayload.case_id)
+        ? reduxPayload.case_id
+        : JSON.parse(reduxPayload.case_id || "[]");
+  
+      const reduxFileTypes = Array.isArray(reduxPayload.file_type)
+        ? reduxPayload.file_type
+        : JSON.parse(reduxPayload.file_type || "[]");
+  console.log("fileType or Caseids",reduxCaseIds,reduxFileTypes)
+      const finalCaseIds = searchChips.filter((chip) => reduxCaseIds.includes(chip));
+      const finalFileTypes = searchChips.filter((chip) => reduxFileTypes.includes(chip));
+  console.log("finalcaseid or finalfiletype", finalCaseIds,finalFileTypes)
       const payload = {
-        keyword: [...searchChips],
-        case_id: [],
-        file_type: [],
-        page: 1
+        keyword: finalKeywords,   // Only keywords
+        case_id: finalCaseIds,    // Only case_ids
+        file_type: finalFileTypes,// Only file_types
+        page: reduxPayload.page || 1,
+        start_time: reduxPayload.start_time || null,
+        end_time: reduxPayload.end_time || null,
+        latitude: reduxPayload.latitude || null,
+        longitude: reduxPayload.longitude || null
       };
-      // const fileTypeKeywords = ['instagram', 'twitter', 'facebook', 'vk', 'youtube', 'linkedin', 'tiktok'];
-      // // Process searchChips
-      // if (searchChips && Array.isArray(searchChips) && searchChips.length > 0) {
-      //   searchChips.forEach((chip) => {
-      //     const val = chip?.toString().toLowerCase().trim();
-    
-      //     if (!val) return; // Ignore empty or invalid values
-    
-      //     if (!isNaN(val)) {
-      //       // If it's a number, add it to case_id as a number
-      //       payload.case_id.push(Number(val));
-      //     } else if (fileTypeKeywords.includes(val)) {
-      //       // If it matches a file type keyword, add it to file_type
-      //       payload.file_type.push(val);
-      //     } else {
-      //       // Otherwise, treat it as a keyword
-      //       payload.keyword.push(val);
-      //     }
-        // });
-      // }
+  
       console.log("Sending search query:", payload);
-      
+  
       const response = await axios.post(
-        'http://5.180.148.40:9006/api/das/search', 
-        payload, // Send the payload directly, not wrapped in an object
+        'http://5.180.148.40:9006/api/das/search',
+        payload,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -173,118 +186,118 @@ console.log("filterdeChpis", filteredChips)
           }
         }
       );
-      
+  
       console.log("Search results------:", response);
-      
-      // Dispatch the search results to the store
+  
+      // Redux store update
       dispatch(setSearchResults({
         results: response.data.results,
         total_pages: response.data.total_pages || 1,
         total_results: response.data.total_results || 0,
       }));
+  
       dispatch(setKeywords({
-              keyword: response.data.input.keyword,
-             queryPayload: response.data.input// or other fields if needed
-           }));
+        keyword: response.data.input.keyword,
+        queryPayload: response.data.input
+      }));
+  
       dispatch(setPage(1));
-     
+  
     } catch (error) {
       console.error("Error performing search:", error);
     }
   };
-   
   
+  
+
   return (
 
-    <div className="search-container" style={{backgroundColor:'darkgray',height:'100%', zIndex:'1050'}}>
-   <div style={{display: 'flex', justifyContent: 'space-between', aligntems: 'center', marginTop:'5px'}}>
-{/* 
+    <div className="search-container" style={{ backgroundColor: 'darkgray', height: '100%', zIndex: '1050' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', aligntems: 'center', marginTop: '5px' }}>
+        {/* 
   <h6 >Search Results</h6 > */}
-  
-  
- 
 
-      <div className="search-header" style={{width:'50%'}}>
-      
-        <TextField
-                                    fullWidth
-                                    className="com mb-3"
-                                    InputProps={{
-                                        startAdornment: (
-                                            <InputAdornment position="start">
-                                                <SearchIcon />
-                                            </InputAdornment>
-                                        ),
-                                        endAdornment: (
-                                            <InputAdornment position="end">
-               
-                      <SendIcon style={{cursor:'pointer'}} onClick={handleSearch}/>
-                  <TuneIcon onClick={openPopup} style={{cursor:'pointer'}} /> {/* New Card List Filter Icon */}
-               
-                                            </InputAdornment>
-                                        ), style: {
-                                            height: '38px', // Use consistent height
-                                            padding: '0 8px', // Ensure uniform padding
-            
-                                          },
-                                    }}
-                                    type="text" 
-                                    value={inputValue}
-                                    onChange={(e) => setInputValue(e.target.value)}
-                                    onKeyPress={handleKeyPress}
-                                    placeholder="Search..."
-                                    sx={sharedSxStyles}
-                                />
-                                {/* <button onClick={handleExit}>Exit Full Screen</button> */}
-       {/* </div> */}
-      
-         
+
+
+
+        <div className="search-header" style={{ width: '50%' }}>
+
+          <TextField
+            fullWidth
+            className="com mb-3"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+              endAdornment: (
+                <InputAdornment position="end">
+
+                  <SendIcon style={{ cursor: 'pointer' }} onClick={handleSearch} />
+                  <TuneIcon onClick={openPopup} style={{ cursor: 'pointer' }} /> {/* New Card List Filter Icon */}
+
+                </InputAdornment>
+              ), style: {
+                height: '38px', // Use consistent height
+                padding: '0 8px', // Ensure uniform padding
+
+              },
+            }}
+            type="text"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            onKeyPress={handleKeyPress}
+            placeholder="Search..."
+            sx={sharedSxStyles}
+          />
+          {/* <button onClick={handleExit}>Exit Full Screen</button> */}
+          {/* </div> */}
+
+
+        </div>
+        <button className="action-button" style={{ padding: '0px 5px', height: '30px', marginTop: "5px" }} onClick={resetSearch}>RESET</button>
+
+        <button className="action-button" style={{ padding: '0px 5px', height: '30px', marginTop: "5px" }} onClick={exitClick}>Exit FullScreen</button>
       </div>
-      <button className="action-button" style={{padding:'0px 5px', height:'30px', marginTop:"5px"}} onClick={resetSearch}>RESET</button>
-        
-      <button className="action-button" style={{padding:'0px 5px', height:'30px', marginTop:"5px"}} onClick={exitClick}>Exit FullScreen</button>
-      </div>
-     
+
       <div className="search-term-indicator">
         <div className="chips-container">
           {filteredChips && filteredChips.map((chip, index) => (
             <div key={index} className="search-chip">
               <span>{chip}</span>
               <button className="chip-delete-btn" onClick={() => removeChip(chip)}>
-                <CloseIcon fontSize='15px'/>
+                <CloseIcon fontSize='15px' />
               </button>
             </div>
           ))}
         </div>
 
       </div>
-      
+
       <div className="tabs">
-        <div 
-         className={`tab active`} // "Cases" will always be active
+        <div
+          className={`tab active`} // "Cases" will always be active
           onClick={() => setActiveTab('Cases')}
         >
           Cases ({totalResults || "no results"})
         </div>
       </div>
-      
-      <div className="search-results"style={{height:'auto'}}>
-        
-      <CriteriaCaseTable searchChips={searchChips} />
-       
-    
-      
+
+      <div className="search-results" style={{ height: 'auto' }}>
+
+        <CriteriaCaseTable searchChips={searchChips} />
+
+
+
       </div>
-      
-      {/* <div className="view-all">
-        
-      </div> */}
- {isPopupVisible && <AddNewCriteria searchChips={searchChips} isPopupVisible={isPopupVisible} setIsPopupVisible={setIsPopupVisible} />}
+
+      {isPopupVisible && <AddNewCriteria searchChips={searchChips} isPopupVisible={isPopupVisible} setIsPopupVisible={setIsPopupVisible} />}
 
     </div>
-   
-    
-   
+
+
+
   );
 };
 

@@ -145,7 +145,16 @@
     color: #bdc3c7;
     margin: 0;
   }
-
+ .commentBar{
+  background-color: black;
+  color: white;
+  height: 25px;
+  display: flex;
+  align-items: center; /* Centers content vertically */
+  justify-content: flex-end; /* Centers content horizontally */
+  padding: 10px;
+  margin-right: 10px;
+ }
   
 @media (max-width: 768px) {
   .left-sidebar {

@@ -1,14 +1,11 @@
+
 import { useState, useEffect } from "react";
 import { Table, Pagination } from "react-bootstrap";
-import Cookies from "js-cookie";
-import axios from "axios";
 import "./caseTableData.css";
 import { useSelector, useDispatch } from "react-redux";
 import "./pagination.css";
 import {
   fetchSummaryData,
-  setSumaryHeadersAction,
-  setSummaryDataAction,
 } from "../../../../Redux/Action/filterAction";
 import Loader from "../../Layout/loader";
 

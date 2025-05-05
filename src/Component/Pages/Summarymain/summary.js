@@ -181,9 +181,9 @@ import './summary.css';
 import Cookies from "js-cookie";
 
 
-
 const Summary = ({ filters }) => {
-
+  const token = Cookies.get("accessToken");
+      
   const [pieData, setPieData] = useState([]);
   const [barData, setBarData] = useState([]);
   const [tableData, setTableData] = useState([]);
@@ -210,17 +210,14 @@ const Summary = ({ filters }) => {
         const response = await axios.post('http://5.180.148.40:9006/api/das/aggregate', {
           query: { unified_case_id: caseId },
           aggs_fields: ["unified_record_type", "unified_date_only", "unified_type"]
-        }, {
+        },
+        {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
           },
-          
-        });
-        console.log({
-  Authorization: `Bearer ${token}`
-});
-
+        }
+      );
         console.log("summary data:", response.data);
 
         const { unified_record_type, unified_date_only, unified_type } = response.data;

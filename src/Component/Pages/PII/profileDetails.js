@@ -1,15 +1,18 @@
 
 import React, { useState, useEffect } from 'react';
-import { Card, Container, Badge } from 'react-bootstrap';
+import { Card, Container } from 'react-bootstrap';
 import { Phone, Email, Person, Cake, Wc } from '@mui/icons-material';
-
+import Carousel from 'react-bootstrap/Carousel';
 import './profileDetails.css';
 import { useSelector } from 'react-redux';
 import userImg from '../../Assets/blank-profile.webp'
+
+
 const ProfileDetails = () => {
   const [profileData, setProfileData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const profiles = useSelector((state) => state.pii?.data?.cyniqBasicResult || []);
+
+  const profiles = useSelector((state) => state.pii?.data?.cyniqBasicResult|| '')
   // console.log("profile",profiles[0])
   // setProfileData(profiles);
   useEffect(() => {
@@ -49,17 +52,31 @@ const ProfileDetails = () => {
           <div className="profile-header">
              <div className="profile-avatar-section">
               <div className="profile-avatar">
-              {profileData && Array.isArray(profileData.images) && profileData.images.length > 0 ? (
+              {/* {profileData && Array.isArray(profileData.images) && profileData.images.length > 0 ? (
   <img src={profileData.images[0]} alt="Profile Image" width={100} />
 ) : (
   <img src={userImg} alt="Profile Image" width={100} />
+)} */}
+
+
+
+{profileData && Array.isArray(profileData.images) && profileData.images.length > 0 ? (
+  <Carousel >
+    {profileData.images.map((image, index) => (
+      <Carousel.Item key={index}>
+        <img src={image} alt={`Profile Image ${index}`} width={100} height={100}/>
+      </Carousel.Item>
+    ))}
+  </Carousel>
+) : (
+  <img src={userImg} alt={`Profile Image`} width={100} height={100}  />
 )}
               </div>
               <div className="profile-id"><ul className="email-list">
   {profileData && Array.isArray(profileData.names) && profileData.names.length > 0 ? (
     profileData.names.slice(0, 3).map((name, index) => <li key={index}>{name}</li>)
   ) : (
-    <li>--</li>
+    <li></li>
   )}
 </ul></div>
               {/* {profileData.active && (

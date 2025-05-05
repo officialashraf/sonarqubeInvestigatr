@@ -11,6 +11,11 @@ const KeywordChart = () => {
   const caseId = useSelector((state) => state.caseData.caseData.id);
 
 
+
+
+ const token = Cookies.get("accessToken");
+    
+
   useEffect(() => {
     const fetchData = async () => {
       const token = Cookies.get("accessToken");
@@ -18,12 +23,17 @@ const KeywordChart = () => {
         const response = await axios.post('http://5.180.148.40:9006/api/das/aggregate', {
           query: { unified_case_id: caseId },
           aggs_fields: ["unified_record_type", "unified_date_only", "unified_type", "socialmedia_hashtags"]
+
         }, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-        })
+
+        },
+        
+      );
+
 
         console.log("summary::::", response);
 

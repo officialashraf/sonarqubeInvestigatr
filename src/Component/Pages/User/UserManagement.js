@@ -243,7 +243,7 @@ return (
       <Table striped bordered hover variant="light">
         <thead>
           <tr>
-             <th>
+          <th>
               <div
                 style={{
                   display: "flex",
@@ -251,7 +251,7 @@ return (
                   alignItems: "center"
                 }}
               >
-                ID
+                UserID
                  <span
                     onClick={() => handleSort("id")}
                     style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
@@ -456,8 +456,8 @@ return (
                 key={item.id || Math.random()}
                 style={{ position: "relative" }}
               >
-                 <td>
-                  {item.id}
+                  <td>
+                 {`USER${String(item.id).padStart(4, '0')}`}
                 </td>
                 <td>
                   {item.username}

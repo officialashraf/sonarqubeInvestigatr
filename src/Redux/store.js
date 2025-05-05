@@ -12,6 +12,7 @@ const persistConfig = {
   key: "root",
   storage, // Local Storage
    blacklist: ['filterData'],
+  
 };
 
 

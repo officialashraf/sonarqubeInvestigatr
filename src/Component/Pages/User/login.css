@@ -80,7 +80,25 @@ input:-webkit-autofill {
     box-shadow: 0 0 0px 1000px white !important;
     transition: background-color red 5000s ease-in-out 0s;
   }
+ 
+  .customfiled{
+    background-color: grey;
+    color: white;
+    border: none;
+    /* margin-bottom: 15px; */
+    font-size: 12px;
+    height: 5rem;
+    outline: none; 
+    box-shadow: none; 
+    border-color: none; 
+    border-radius: 5px;
+    width: 100%;
   
+  }
+  .customfiled::placeholder {
+    color: rgb(49, 47, 47);
+    opacity: 1; /* Ensure it's fully visible */
+  }
 @media (max-width: 768px) {
     .login-row {
         width: 100%;

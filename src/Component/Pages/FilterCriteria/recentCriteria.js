@@ -25,6 +25,7 @@ const RecentCriteria = () => {
  const [criteriaId, setCriteriaId] = useState()
  const [showEditPopup, setShowEditPopup] = useState(false);
  const [searchQuery, setSearchQuery] = useState("");
+  const [enterInput,setEnterInput] = useState([]);
 
  const [keywords, setKeyword] = useState([]);
  const recentKeyword = useSelector(
@@ -45,7 +46,8 @@ const keyword = useSelector(
   (state) => state.criteriaKeywords?.queryPayload?.keyword || ''
 );
 console.log("keyword", keyword);
-
+ const reduxPayload = useSelector((state) => state.criteriaKeywords?.queryPayload || '');
+  console.log("Redux Payload:", reduxPayload);
   
 //  console.log("recnetkeyword", recentKeyword.keywords)
 //  setKeyword(recentKeyword)
@@ -115,6 +117,7 @@ const handelCreate = ()=>{
     if (e.key === "Enter" && searchQuery.trim() !== "") {
       e.preventDefault(); // Prevent form submission
       setKeyword([...keywords, searchQuery.trim()]); // Add new keyword to the list
+      setEnterInput(prev => [...prev, searchQuery.trim()]);
       setSearchQuery(""); // Clear input field
     }
   };
@@ -122,10 +125,12 @@ const handelCreate = ()=>{
   // Remove chip when clicked
   const handleRemoveItem = (chipToDelete) => {
     setKeyword(keywords.filter((chip) => chip !== chipToDelete));
+    setEnterInput((prev) => prev.filter((chip) => chip !== chipToDelete));
   };
 
      const handleReset = ()=>{
-      setKeyword([])
+      setKeyword([]);
+      setEnterInput([]);
      };
 
   const Token = Cookies.get('accessToken');
@@ -176,91 +181,86 @@ const handelCreate = ()=>{
   console.log("keyword", keywords, searchQuery)
 
 
-  const handleSearch = async () => {
-    try {
-      const payload = {
-        keyword: keywords,
-        case_id: [],
-        file_type: [],
-        page: 1,
-      };
   
-      console.log("Sending search query:", payload);
-  
-      const response = await axios.post(
-        'http://5.180.148.40:9006/api/das/search',
-        payload,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${Token}`,
-          },
-        }
-      );
-  
-      console.log("Search results:", response.data);
-  
-      dispatch(setSearchResults({
-        results: response.data.results,
-        total_pages: response.data.total_pages || 1,
-        total_results: response.data.total_results || 0,
-      }));
-  
-      dispatch(setKeywords({
-                  keyword: keywords,
-                   queryPayload: response.data.input // or other fields if needed
-                 }));
-      //  dispatch(setPage(1));
-  
-        dispatch(openPopup("saved")); // Remove closePopup call
-  
-    } catch (error) {
-      console.error("Error performing search:", error);
-    }
-  };
-  
-//   const ReuseCriteria = (item) => {
-//     console.log("detailscriterai", item);
 
-//     // Initialize updatedKeywords using current state
-//     const isValid = (val) =>
-//         val !== null && val !== undefined && val.toString().trim() !== "";
-
-//     let updatedKeywords = []; // Maintain existing keywords
-
-//     // Extract item details and update the keyword list
-//     if (item) {
-//         if (isValid(item.keyword)) {
-//           updatedKeywords = [
-//             ...updatedKeywords,
-//             ...item.keyword.map((kw) => `${kw}`) // Save each keyword as a string
-//         ];// Save item's keyword as string
-//         }
-       
-//         if (item.case_id?.length > 0) {
-//             updatedKeywords = [
-//                 ...updatedKeywords,
-//                 ...item.case_id.map((id) => `${id}`)
-//             ]; // Save item's caseIds
-//         }
-//         if (item.file_type?.length > 0) {
-//             updatedKeywords = [
-//                 ...updatedKeywords,
-//                 ...item.file_type.map((ft) => `${ft}`)
-//             ]; // Save item's fileTypes
-//         }
-//     }
-
-//     // Dispatch action to update Redux state
-//     dispatch(setKeywords({
-//       keyword: updatedKeywords, // New keywords array
-//       // queryPayload: {
-//       //     keyword: updatedKeywords, // You can adjust this based on what you want in the payload
-//       // },
-//   }));
-//     console.log("Updated keyword state after reuse:", updatedKeywords);
-//     setKeyword(updatedKeywords); // Update the state
-// };
+   const handleSearch = async () => {
+      console.log("reduxPayload:", reduxPayload);
+      console.log("enterInput:", enterInput);
+      console.log("searchChips:", keywords);
+    
+      try {
+        // 1. Redux ke sirf keyword le rahe hain
+        const reduxKeywords = Array.isArray(reduxPayload.keyword)
+          ? reduxPayload.keyword
+          : JSON.parse(reduxPayload.keyword || "[]");
+    console.log("reduxKeyword", reduxKeywords)
+      
+          const userKeywords = Array.isArray(enterInput) 
+          ? enterInput 
+          : JSON.parse(enterInput || "[]");
+  
+    console.log("userKeyword", userKeywords)
+        // 🔥 Keywords only: searchChips se wo elements jo redux keywords ya user keywords me hain
+        const allPossibleKeywords = [...reduxKeywords, ...userKeywords];
+        console.log("alllProgresskeyword", allPossibleKeywords)
+        const finalKeywords = keywords.filter((chip) => allPossibleKeywords.includes(chip));
+    console.log("finalkeywords",finalKeywords)
+        // 2. case_id aur file_type separately treat honge
+        const reduxCaseIds = Array.isArray(reduxPayload.case_id)
+          ? reduxPayload.case_id
+          : JSON.parse(reduxPayload.case_id || "[]");
+    
+        const reduxFileTypes = Array.isArray(reduxPayload.file_type)
+          ? reduxPayload.file_type
+          : JSON.parse(reduxPayload.file_type || "[]");
+    console.log("fileType or Caseids",reduxCaseIds,reduxFileTypes)
+        const finalCaseIds = keywords.filter((chip) => reduxCaseIds.includes(chip));
+        const finalFileTypes = keywords.filter((chip) => reduxFileTypes.includes(chip));
+    console.log("finalcaseid or finalfiletype", finalCaseIds,finalFileTypes)
+        const payload = {
+          keyword: finalKeywords,   // Only keywords
+          case_id: finalCaseIds,    // Only case_ids
+          file_type: finalFileTypes,// Only file_types
+          page: reduxPayload.page || 1,
+          start_time: reduxPayload.start_time || null,
+          end_time: reduxPayload.end_time || null,
+          latitude: reduxPayload.latitude || null,
+          longitude: reduxPayload.longitude || null
+        };
+    
+        console.log("Sending search query:", payload);
+    
+        const response = await axios.post(
+          'http://5.180.148.40:9006/api/das/search',
+          payload,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${Token}`
+            }
+          }
+        );
+    
+        console.log("Search results------:", response);
+    
+        // Redux store update
+        dispatch(setSearchResults({
+          results: response.data.results,
+          total_pages: response.data.total_pages || 1,
+          total_results: response.data.total_results || 0,
+        }));
+    
+        dispatch(setKeywords({
+          keyword: response.data.input.keyword,
+          queryPayload: response.data.input
+        }));
+    
+        dispatch(setPage(1));
+        dispatch(openPopup("saved"));
+      } catch (error) {
+        console.error("Error performing search:", error);
+      }
+    };
 
 
 const ReuseCriteria = async (item) => {
@@ -365,7 +365,7 @@ console.log("updatedetRecent", updatedKeywords)
                             className="com mb-3"
                             InputProps={{
                                 startAdornment: (
-                                    <InputAdornment position="start">
+                                   <InputAdornment position="start">
                                         <SearchIcon />
                                     </InputAdornment>
                                 ),
@@ -412,19 +412,7 @@ console.log("updatedetRecent", updatedKeywords)
                   ))}
                 </div>
                 
-        {/* <List className="bg-gray rounded border-1">
-          {keywords.map((item, index) => (
-            <ListItem key={index} className="text-white">
-              <ListItemText primary={item} />
-              <IconButton  onClick={() => handleRemoveItem(item)} style={{
-                padding: "0",
-                margin: "0",
-              }} >
-              <CloseIcon style={{fontSize:'15px'}} />
-            </IconButton>
-            </ListItem>
-          ))}
-        </List> */}
+        
       </div>
       <hr  />
       <div style={{height:'300px', overflow:'auto'}}>

@@ -1,12 +1,12 @@
-import {SET_TASK_FILTER_ID, SET_DATA, SET_HEADERS, LOG_FILTER_COUNT, SET_LOADING, SET_PAGINATION, SET_ERROR} from '../Constants/filterConstant'
-import Cookies from "js-cookie"
+
 import axios from 'axios';
+import {SET_TASK_FILTER_ID, SET_DATA, SET_HEADERS, LOG_FILTER_COUNT, SET_ERROR, SET_PAGINATION, SET_LOADING} from '../Constants/filterConstant'
+import Cookies from "js-cookie";
 
 export const setTaskFilter = (taskId, filterId) => ({
     type: SET_TASK_FILTER_ID,
     payload: { taskId, filterId },
   });
-
 
 
 
@@ -26,8 +26,10 @@ export const logFilterCount = (user) => {
     payload: user,
   };
 };
- 
- export const fetchSummaryData =
+
+
+//newcommonapi
+export const fetchSummaryData =
   ({ queryPayload, page = 1, itemsPerPage = 50 }) =>
   async (dispatch) => {
     try {
@@ -82,6 +84,7 @@ export const logFilterCount = (user) => {
         },
       });
     } catch (error) {
-      dispatch({ type: SET_ERROR, payload: error.message });
-    }
-  };
+      dispatch({ type: SET_ERROR, payload: error.message });
+    }
+  };
+
