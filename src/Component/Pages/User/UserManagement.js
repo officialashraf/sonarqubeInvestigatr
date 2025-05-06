@@ -56,7 +56,7 @@ const UserManagement = () => {
       const response = await axios.get("http://5.180.148.40:9000/api/user-man/v1/user", {
         headers: {
           Authorization: `Bearer ${token}`,
-
+           "Content-Type":'application/json'
         },
        
       });
@@ -126,10 +126,22 @@ const UserManagement = () => {
           // After successful deletion, fetch the updated data
           //fetchData(); // Optionally refresh data after deletion
     
-        } catch (error) {
-          toast("Error deleting case:", error)
-          console.error("Error deleting User:", error);
-        }
+        } catch (err) {
+                    // Error handling based on the type of error
+                    console.error('Error during login:', err);
+            
+                    if (err.response) {
+                        
+                            toast(err.response?.data?.detail || 'Something went wrong. Please try again.');
+                        
+                    } else if (err.request) {
+                        // No response from the server
+                       toast('No response from the server. Please check your connection.');
+                    } else {
+                        // Unknown error occurred
+                       toast('An unknown error occurred. Please try again.');
+                    }
+                }
       };
 
    const userData = async () => {

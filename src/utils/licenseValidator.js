@@ -9,7 +9,7 @@ const LicenseValidator =()=>{
   useEffect(() => {
     const checkLicense = async () => {
       try {
-        const res = await axios.get("http://5.180.148.40:9005/api/license")
+        const res = await axios.get("http://5.180.148.40:9008/api/license")
         const { license_registered } = res.data;
         console.log("responseLicense", res)
         console.log("responseLicense", res.data)

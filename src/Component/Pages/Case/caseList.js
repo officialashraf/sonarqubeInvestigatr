@@ -6,17 +6,18 @@ import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material';
 import './table.css';
 import CreateCase from '../Case/createCase';
 import Cookies from "js-cookie";
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import CaseDetails from './caseDetails';
 import EditCase from './editCase';
 import { useDispatch } from 'react-redux';
 import { setCaseData } from '../../../Redux/Action/caseAction';
-
+import { fetchSummaryData } from '../../../Redux/Action/filterAction';
+import { SET_PAGINATION } from '../../../Redux/Constants/filterConstant';
 const DataTable = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const location = useLocation();
   const [data, setData] = useState([]);
   const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -33,6 +34,20 @@ const DataTable = () => {
     const caseId = item.id // Set the case data in Redux store
     navigate(`/cases/${caseId}`); // Navigate to the new page
   };
+  useEffect(() => {
+    if (location.pathname === "/cases") {
+        // dispatch(fetchSummaryData({
+        //     queryPayload: {}, // Ensure an empty payload or relevant query
+        //     page: 1,
+        //     itemsPerPage: 50
+        // }));
+
+        dispatch({
+            type: SET_PAGINATION,
+            payload: { page: 1 } // Explicitly set page to 1
+        });
+    }
+}, [location.pathname, dispatch]);
 
   const fetchData = async () => {
     try {

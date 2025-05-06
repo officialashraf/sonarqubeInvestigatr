@@ -143,9 +143,10 @@
   height: 25px;
   display: flex;
   align-items: center; /* Centers content vertically */
-  justify-content: flex-end; /* Centers content horizontally */
+  justify-content: center; /* Centers content horizontally */
   padding: 10px;
-  margin-right: 10px;
+  margin-top: 50%;
+  /* margin: 0 auto; */
  }
   
 @media (max-width: 768px) {

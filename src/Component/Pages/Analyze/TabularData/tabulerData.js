@@ -243,8 +243,8 @@ import { useSelector, useDispatch } from "react-redux";
 import "./pagination.css";
 import {
   fetchSummaryData,
-  setSumaryHeadersAction,
-  setSummaryDataAction,
+  // setSumaryHeadersAction,
+  // setSummaryDataAction,
 } from "../../../../Redux/Action/filterAction";
 import Loader from "../../Layout/loader";
 

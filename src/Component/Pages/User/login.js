@@ -58,18 +58,7 @@ const LoginPage = () => {
             console.error('Error during login:', err);
     
             if (err.response) {
-                // Backend returned an error response
-                // if (err.response.status === 401) {
-                //     toast('Incorrect username or password. Please try again.');
-                // } else
-            //  if (err.response.status === 500) {
-            //         toast('Server error. Please try again later.');
-            //  }
                 
-                //  }else if (err.response.status === 404) {
-                //     toast('Incorrect username or password. Please try again.');}
-                  
-                   // setError(err.response?.data?.detail || 'Something went wrong. Please try again.');
                     toast(err.response?.data?.detail || 'Something went wrong. Please try again.');
                 
             } else if (err.request) {

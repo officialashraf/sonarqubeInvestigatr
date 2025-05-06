@@ -1,7 +1,6 @@
 
 import Header from './Component/Pages/Home/header.js';
 import Home from './Component/Pages/Home/home';
-import SearchBar from './Component/Pages/SearchPage/searchBar';
 import LoginPage from './Component/Pages/User/login';
 import { BrowserRouter , Routes, Route, useLocation  } from 'react-router-dom';
 import MainFilter from './Component/Pages/Summarymain/mainFilterPage.js';
@@ -25,6 +24,7 @@ import LogoutUser from './Component/Pages/User/logout.js';
 import ShowDetails from './Component/Pages/PII/showDetails.js';
 import LicensePage from './Component/Pages/User/license.js';
 import LicenseValidator from './utils/licenseValidator.js';
+import DashboardMain from './Component/Pages/User/dashboardMain.js';
 
 
 const AppContent = () => {
@@ -48,6 +48,7 @@ const AppContent = () => {
     if (path === "/pin") return "Pin";
     if (path === "/documents") return "Docs";
     if (path === "/gemini") return "Gemini";
+    if (path === "/dashboard") return "Admin";
 
     return "Cases";
   };
@@ -85,6 +86,8 @@ const AppContent = () => {
             <Route path="/confirm" element={< Confirm />} />
             <Route path="logout" element={< LogoutUser />} />
             <Route path="/users" element={< UsersDashboard />} />
+            <Route path="/dashboard" element={< DashboardMain />} />
+         
             
             <Route path="*" element={<div className='notfound'> <h4>Work in progress........</h4></div>} />
 

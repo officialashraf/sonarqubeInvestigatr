@@ -13,7 +13,7 @@ const KeywordChart = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.post('http://5.180.148.40:9006/api/das/aggregate', {
+        const response = await axios.post('http://5.180.148.40:9007/api/das/aggregate', {
           query: { unified_case_id: caseId },
           aggs_fields: ["unified_record_type", "unified_date_only", "unified_type", "socialmedia_hashtags"]
         },

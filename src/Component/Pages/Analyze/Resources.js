@@ -223,22 +223,8 @@ if (scrollTop <= 0 && currentPage > 1 && !loading) {
         <div className="right-content">
           {selectedResource ? (
             <div className="resourceDetailsContainer">
-              <div className="sentimentSection">
-                <span
-                  className="sentiment"
-                  style={{
-                    color: "white",
-                    backgroundColor: 'black',
-                    padding: "5px 10px",
-                    borderRadius: "5px",
-                    display: "inline-block",
-                    marginBottom: "10px",
-                  }}
-                >
-                  {selectedResource.sentiment}
-                </span>
-              </div>
-
+            
+            
               {/*  Instagram Layout */}
               {selectedResource.unified_type === "Instagram" && (
                 <div className="resourceDetailsView marginSides20">
@@ -781,7 +767,28 @@ if (scrollTop <= 0 && currentPage > 1 && !loading) {
                 </div>
                 
               )}
-
+  <div className="sentimentSection">
+                <span
+                  className="sentiment"
+                  style={{
+                    color: "white",
+                    backgroundColor: 'black',
+                    padding: "5px 10px",
+                    borderRadius: "5px",
+                    display: "inline-block",
+                    marginBottom: "10px",
+                    marginRight:'10px'
+                  }}
+                >
+                  {selectedResource.sentiment}
+                </span>
+                {selectedResource && (
+    <div className="commentBar" style={{width:'60px'}}>
+        <PinAngle size={15} className="me-2" onClick={() => setShowPopup(true)} />
+        <ChatLeftText size={15} onClick={() => setShowPopup(true)} />
+    </div>
+)}
+              </div>
 
 
             </div>
@@ -792,14 +799,11 @@ if (scrollTop <= 0 && currentPage > 1 && !loading) {
             </div>
 
           )}
-           {selectedResource && (
-    <div className="commentBar">
-        <PinAngle size={15} className="me-2" onClick={() => setShowPopup(true)} />
-        <ChatLeftText size={15} onClick={() => setShowPopup(true)} />
-    </div>
-)}
+          
+
 <AddComment show={showPopup} onClose={() => setShowPopup(false)}  selectedResource={selectedResource} />
         </div>
+       
       </div>
     </div>
   );
