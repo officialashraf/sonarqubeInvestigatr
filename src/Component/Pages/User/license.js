@@ -56,7 +56,7 @@ const LicensePage = () => {
     console.log("key",licenseKey)
     try {
         console.log("key",typeof licenseKey)
-      const response = await axios.post("http://5.180.148.40:9005/api/license/register", 
+      const response = await axios.post("http://5.180.148.40:9008/api/license/register", 
         { key: licenseKey }, // Ensure key is passed correctly
   {
     headers: {

@@ -432,7 +432,7 @@ const EditCriteria = ({ togglePopup, criteriaId }) => {
     try {
       setIsLoading(true);
       const Token = Cookies.get('accessToken');
-      const response = await axios.get(`http://5.180.148.40:9006/api/das/criteria/${criteriaId}`, {
+      const response = await axios.get(`http://5.180.148.40:9007/api/das/criteria/${criteriaId}`, {
         headers: {
           'Authorization': `Bearer ${Token}`
         },
@@ -617,7 +617,7 @@ const EditCriteria = ({ togglePopup, criteriaId }) => {
         end_time: selectedDates.endDate ? `${selectedDates.endDate.toISOString().split('T')[0]}T${String(selectedDates.endTime.hours).padStart(2, '0')}:${String(selectedDates.endTime.minutes).padStart(2, '0')}:00` : null
       };
       console.log("updatetd",updatePayload)
-      const response = await axios.put(`http://5.180.148.40:9006/api/das/criteria/${criteriaId}`, updatePayload, {
+      const response = await axios.put(`http://5.180.148.40:9007/api/das/criteria/${criteriaId}`, updatePayload, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${Token}`

@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import "./pagination.css";
 import {
   fetchSummaryData,
+
 } from "../../../../Redux/Action/filterAction";
 import Loader from "../../Layout/loader";
 

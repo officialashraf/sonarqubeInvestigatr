@@ -182,7 +182,7 @@ const handleSearch = async (e) => {
     console.log("search payload", payload);
     
     const response = await axios.post(
-      'http://5.180.148.40:9006/api/das/search', 
+      'http://5.180.148.40:9007/api/das/search', 
       payload, 
       {
         headers: {

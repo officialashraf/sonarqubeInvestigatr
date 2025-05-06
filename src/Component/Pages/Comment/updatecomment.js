@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 
 
-const UpdateComment =({onClose,comment,resourceId})=>{
+const UpdateComment =({onClose,comment,resourceId, GetCommentList})=>{
     const [newComment, setNewComment] = useState(comment.comment || "");
     const token = Cookies.get("accessToken");
     const handleUpdate = async (e) => {
@@ -23,9 +23,10 @@ const UpdateComment =({onClose,comment,resourceId})=>{
                   },
                 }
               );
-          
+             
               console.log("Updated", comment);
               toast.success("Comment updated successfully!");
+              GetCommentList()
               console.log("Updated Comment:", response.data);
               onClose()
           
