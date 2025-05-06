@@ -129,6 +129,13 @@ const EditCase = ({ togglePopup, item }) => {
       toast.error(err.response?.data?.detail || "Failed to update case");
     }
   };
+// if (JSON.stringify(formData) === JSON.stringify(originalData)) {
+//   alert("You didn't change anything.");
+//   return;
+// }
+
+// handleEditCase(formData);
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -256,11 +263,11 @@ const EditCase = ({ togglePopup, item }) => {
               value={formData.title}
               onChange={handleInputChange}
               placeholder="Enter title"
-              required
+              // required
             />
 
             <label htmlFor="description">Description:</label>
-            <textarea
+            <input
               className="com"
               id="description"
               name="description"
@@ -332,7 +339,7 @@ const EditCase = ({ togglePopup, item }) => {
             />
 
             <label htmlFor="comment">Comment:</label>
-            <textarea
+            <input
               className="com"
               id="comment"
               name="comment"

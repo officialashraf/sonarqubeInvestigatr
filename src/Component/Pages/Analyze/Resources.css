@@ -72,7 +72,15 @@
     background-color: lightgray;
     color: white;
     padding: 16px;
-    overflow-y: auto;
+    overflow: auto;
+    margin-bottom: 45px;
+    height: 78vh;
+  }
+  #scrollableDiv {
+    border: 2px solid red;
+  }
+  .inner-content {
+    padding-bottom: 60px; /* ya jitna space chahiye */
   }
 
   .sidebar-header {
@@ -281,6 +289,21 @@
   display: block;
   /* margin-top: 10px; */
 }
+.imageFlexWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px; /* Space between images */
+  margin-top: 10px;
+  justify-content: flex-start;
+}
+
+.postMedia {
+  width: calc(50% - 4px); /* 2 images in one row */
+  height: 200px; /* Fixed height */
+  object-fit: cover; /* Crop nicely */
+  border-radius: 0px; /* Soft rounded corners */
+}
+
 body {
   overflow-x: hidden;
 }
@@ -292,11 +315,15 @@ body {
   line-height: 1.5;
   margin: 0px;
 }
-.placeholder {
+/* .placeholder {
     text-align: center;
     color: #7f8c8d;
     font-size: 18px;
   }
+  .placeholder p{
+    text-align: center;
+    color: #000;
+  } */
 
   .like-commment-share {
     display: flex;

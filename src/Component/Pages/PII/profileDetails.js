@@ -11,6 +11,7 @@ import userImg from '../../Assets/blank-profile.webp'
 const ProfileDetails = () => {
   const [profileData, setProfileData] = useState(null);
   const [loading, setLoading] = useState(true);
+
   const profiles = useSelector((state) => state.pii?.data?.cyniqBasicResult|| '')
   // console.log("profile",profiles[0])
   // setProfileData(profiles);
