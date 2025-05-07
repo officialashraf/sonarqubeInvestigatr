@@ -14,9 +14,9 @@ const CaseHeader = ({ onIconClick }) => {
   const backToSnap = () => {
     navigate(`/cases/${caseData1.id}`);
   };
-  const backToCase = () => {
-    navigate(`/cases`);
-  };
+  // const backToCase = () => {
+  //   navigate(`/cases/${caseData1.id}`);
+  // };
   // const togglePopup = () => {
   //   setShowPopup((prev) => !prev);
   // };
@@ -29,7 +29,7 @@ const CaseHeader = ({ onIconClick }) => {
         style={{ background: "lightgray" }}
       >
          <Col xs={1} className="d-flex align-items-center justify-content-center">
-                  <FaArrowLeft style={{ cursor: 'pointer',margin:'0px' }}  onClick={() => navigate(-1)} />
+                  <FaArrowLeft style={{ cursor: 'pointer',margin:'0px' }}  onClick={backToSnap} />
                 </Col>
         {/* <div className='row header-row p-2' style={{background: 'lightgray', color:'black',display: 'flex', marginLeft: '0rem', marginRight: '0rem', height:"40px"}} > */}
         <div className="col">

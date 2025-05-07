@@ -33,8 +33,9 @@ const UserCards = () => {
   const [error, setError] = useState(null);
   const [searchValue, setSearchValue] = useState('');
 
+
   const profiles = useSelector((state) => state.pii?.data?.cyniqBasicResult|| '');
-  
+
   useEffect(() => {
     // Function to fetch data from API
     const fetchUsers = async () => {

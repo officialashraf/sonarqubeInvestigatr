@@ -36,18 +36,18 @@
 //         let pieSource = [];
 //         if (social_media) pieSource.push({ name: 'Social Media', value: social_media.length });
 //         if (rss) pieSource.push({ name: 'RSS', value: rss.length });
-        
+
 //         if ( response.data.social_media.length === 0) {
 //           pieSource.push({ name: 'No Data', value: 0 });
 //         }
-        
-      
+
+
 //         const isWithinLastWeek = (date) => {
 //           const now = new Date();
 //           const oneWeekAgo = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7);
 //           return new Date(date) >= oneWeekAgo && new Date(date) <= now;
 //         };
-        
+
 //         // Filter dates for the last week and map to barData
 //         const barData = dates.length > 0 ? dates
 //           .filter(item => isWithinLastWeek(item.key))
@@ -94,7 +94,7 @@
 //         <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1rem' }}>
 //           <Box width={400} height={300} className="box">
 //             <ResponsiveContainer width={400} height={300}>
-            
+
 //               <PieChart>
 //               <Legend align="center" verticalAlign="top" />
 //                 <Pie
@@ -109,15 +109,15 @@
 //                 >
 //                 {pieData.map((entry, index) => (
 //           <Cell key={`cell-${index}`} fill="#333">
-           
-          
+
+
 //           </Cell>))}
 //                 </Pie>
-            
+
 //                 <Tooltip
 //               formatter={() => ` Total: ${totalCount}`}
 //                 />
-              
+
 //               </PieChart>
 //             </ResponsiveContainer>
 //           </Box>
@@ -175,10 +175,11 @@ import { useSelector } from 'react-redux';
 import axios from 'axios';
 import ProgressRow from "./progressBar.js";
 import { Container, Box, Table, TableContainer, TableFooter, TableBody, TableCell, TableHead, TableRow, Paper } from '@mui/material';
-import { PieChart, Pie, Tooltip, Legend, ResponsiveContainer,BarChart, Bar, XAxis, YAxis, CartesianGrid, Cell } from 'recharts';
+import { PieChart, Pie, Tooltip, Legend, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Cell } from 'recharts';
 import AddFilter2 from '../Filters/addFilter.js';
 import './summary.css';
 import Cookies from "js-cookie";
+
 
 const Summary = ({ filters }) => {
   const token = Cookies.get("accessToken");
@@ -189,14 +190,28 @@ const Summary = ({ filters }) => {
   const [totalCount, setTotalCount] = useState(0);
   const [showPopup, setShowPopup] = useState(false);
 
+
+
   const caseId = useSelector((state) => state.caseData.caseData.id);
   // const filterCount = useSelector((state) => state.filterCount.filterCount.count);
   console.log("casiId",caseId)
   useEffect(() => {
     const fetchData = async () => {
+      
+          const token = Cookies.get("accessToken");
+          console.log("token-----",token);
+            console.log({
+      Authorization: `Bearer ${token}`
+    });
+
       try {
+
         const response = await axios.post('http://5.180.148.40:9007/api/das/aggregate', {
+<<<<<<< HEAD
           query: { unified_case_id: String(caseId) },
+=======
+                   query: { unified_case_id: caseId },
+>>>>>>> 0ba14e9676917f8360c435326c66e0b72f911988
           aggs_fields: ["unified_record_type", "unified_date_only", "unified_type"]
         },
         {
@@ -207,17 +222,18 @@ const Summary = ({ filters }) => {
         }
        
       );
-      // console.log("query", query)
+
+
         console.log("summary data:", response.data);
-  
+
         const { unified_record_type, unified_date_only, unified_type } = response.data;
-  
+
         //  Fix Pie Chart Data (unified_record_type)
         // const pieSource = (unified_record_type || []).map(item => ({
         //   name: item.key,
         //   value: item.doc_count
         // }));
-  
+
         // if (pieSource.length === 0) {
         //   pieSource.push({ name: 'No Data', value: 0 });
         // }
@@ -225,37 +241,37 @@ const Summary = ({ filters }) => {
           name: item.key,
           value: item.doc_count
         }));
-        
+
         if (pieData.length === 0) {
           pieData.push({ name: 'No Data', value: 0 });
         }
-        
+
         // const totalCount = pieData.reduce((sum, item) => sum + item.value, 0);
-        
+
         // const colors = ['#8884d8', '#8dd1e1', '#a4de6c', '#d0ed57', '#ffc658'];
         //   Bar Chart Data (unified_date_only)
         const barData = (unified_date_only || []).map(item => ({
           name: item.key.split('-').slice(0, 3).join(''),
           value: item.doc_count
         }));
-  
+
         if (barData.length === 0) {
           barData.push({ name: 'No Data', value: 0 });
         }
-  
+
         //Table Data (unified_type)
         const tableData = (unified_type || []).map(item => ({
           name: item.key,
           value: item.doc_count
         }));
-        
-  console.log("tabledtaa", tableData)
+
+        console.log("tabledtaa", tableData)
         //  Set States
         setPieData(pieData);
         setBarData(barData);
         setTableData(tableData);
         setTotalCount(tableData.reduce((sum, item) => sum + item.value, 0));
-  
+
       } catch (error) {
         console.error('Error fetching data:', error);
         setPieData([{ name: 'No Data', value: 0 }]);
@@ -264,7 +280,7 @@ const Summary = ({ filters }) => {
         setTotalCount(0);
       }
     };
-  
+
     fetchData();
   }, [caseId]);
 
@@ -310,84 +326,84 @@ const Summary = ({ filters }) => {
               </ResponsiveContainer>
             </Box> */}
             <Box className="box">
-      <ResponsiveContainer width="100%" height={300}>
-        <PieChart>
-          <Legend align="center" verticalAlign="top"    
-            formatter={(value, entry) => `${value} ${entry.payload.value}`}/>
-          <Pie
-            data={pieData}
-            cx="50%"
-            cy="50%"
-            innerRadius={60}
-            outerRadius={80}
-            fill="#333"
-            dataKey="value"
-            label={({ name }) => name}
-          >
-            {pieData.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill="#333"/>
-            ))}
-          </Pie>
-          <Tooltip formatter={(value) => `Total: ${value}`} />
-        </PieChart>
-      </ResponsiveContainer>
-    </Box>
+              <ResponsiveContainer width="100%" height={300}>
+                <PieChart>
+                  <Legend align="center" verticalAlign="top"
+                    formatter={(value, entry) => `${value} ${entry.payload.value}`} />
+                  <Pie
+                    data={pieData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={60}
+                    outerRadius={80}
+                    fill="#333"
+                    dataKey="value"
+                    label={({ name }) => name}
+                  >
+                    {pieData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill="#333" />
+                    ))}
+                  </Pie>
+                  <Tooltip formatter={(value) => `Total: ${value}`} />
+                </PieChart>
+              </ResponsiveContainer>
+            </Box>
 
             {/* Bar Chart */}
-            <Box  className="box">
+            <Box className="box">
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={barData} >
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="name" />
                   <YAxis />
-                  <Tooltip 
-          wrapperStyle={{ backgroundColor: "#fff", border: "1px solid #ccc", padding: "5px" }}
-        />
-     
+                  <Tooltip
+                    wrapperStyle={{ backgroundColor: "#fff", border: "1px solid #ccc", padding: "5px" }}
+                  />
+
                   <Bar dataKey="value" fill="#333" barSize={15}
-                  isAnimationActive={false} 
+                    isAnimationActive={false}
                   >
 
-{barData.map((entry, index) => (
-            <Cell
-              key={`cell-${index}`}
-              fill={index === activeIndex ? "#333" : "#333"} // Hover pe color change
-              onMouseEnter={() => setActiveIndex(index)}
-              onMouseLeave={() => setActiveIndex(null)}
-            />
-          ))}
+                    {barData.map((entry, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={index === activeIndex ? "#333" : "#333"} // Hover pe color change
+                        onMouseEnter={() => setActiveIndex(index)}
+                        onMouseLeave={() => setActiveIndex(null)}
+                      />
+                    ))}
                   </Bar>
-     
+
                 </BarChart>
               </ResponsiveContainer>
             </Box>
 
             {/* Table */}
             <Box className="box">
-            <TableContainer component={Paper} width="100%" height={300}>
-        <Table width={340} height={300}>
-          <TableHead >
-            <TableRow>
-              <TableCell >Type</TableCell>
-              <TableCell align="right" >No. of Records</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {tableData.map(item => (
-              <TableRow key={item.key}>
-                <TableCell style={{ height: '20px',padding: '0px 5px' }}>{item.name}</TableCell>
-                <TableCell align="right" style={{ height: '20px',padding: '0px 5px' }}>{item.value}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-          <TableFooter>
-            <TableRow>
-              <TableCell style={{ height: '20px',padding: '0px 5px' }}>Total</TableCell>
-              <TableCell align="right" style={{ height: '20px',padding: '0px 5px' }}>{totalCount}</TableCell>
-            </TableRow>
-          </TableFooter>
-        </Table>
-      </TableContainer>
+              <TableContainer component={Paper} width="100%" height={300}>
+                <Table width={340} height={300}>
+                  <TableHead >
+                    <TableRow>
+                      <TableCell >Type</TableCell>
+                      <TableCell align="right" >No. of Records</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {tableData.map(item => (
+                      <TableRow key={item.key}>
+                        <TableCell style={{ height: '20px', padding: '0px 5px' }}>{item.name}</TableCell>
+                        <TableCell align="right" style={{ height: '20px', padding: '0px 5px' }}>{item.value}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                  <TableFooter>
+                    <TableRow>
+                      <TableCell style={{ height: '20px', padding: '0px 5px' }}>Total</TableCell>
+                      <TableCell align="right" style={{ height: '20px', padding: '0px 5px' }}>{totalCount}</TableCell>
+                    </TableRow>
+                  </TableFooter>
+                </Table>
+              </TableContainer>
             </Box>
           </div>
         </Box>
