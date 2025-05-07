@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { ListAltOutlined, PieChart, MoreVert } from "@mui/icons-material";
+import { ListAltOutlined, PieChart } from "@mui/icons-material";
+import { FaPhotoVideo } from "react-icons/fa";
 import { Col} from 'react-bootstrap';
 import { FaArrowLeft } from 'react-icons/fa';
 import "./tabulerHeader.css";
 import { useNavigate } from "react-router-dom";
-import { FaPhotoVideo } from "react-icons/fa";
+
 
 const CaseHeader = ({ onIconClick }) => {
   const caseData1 = useSelector((state) => state.caseData.caseData);
