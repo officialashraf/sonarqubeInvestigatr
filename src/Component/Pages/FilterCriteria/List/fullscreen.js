@@ -16,7 +16,8 @@ import { setKeywords, setPage, setSearchResults } from '../../../../Redux/Action
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { ListAltOutlined, PieChart, MoreVert } from "@mui/icons-material";
-import { FaPhotoVideo } from "react-icons/fa";
+import GrapghicalCriteria from './CriteriaGraphicaView/grapghicalCriteria';
+
 
 const SearchResults = ({ onClose }) => {
 
@@ -27,6 +28,7 @@ const SearchResults = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState('Cases');
   const [enterInput,setEnterInput] = useState([])
   const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const [activeComponent, setActiveComponent] = useState('list');
 
   const { searchResults, totalPages, currentPage, totalResults } = useSelector((state) => state.search);
   console.log("searchResult", searchResults, totalPages, currentPage, totalResults);
@@ -47,7 +49,9 @@ const SearchResults = ({ onClose }) => {
     searchChips: '',
     // Add other form fields as needed
   });
-
+  const handleComponentToggle = (componentName) => {
+    setActiveComponent(componentName);
+  };
 
   useEffect(() => {
     console.log("Keywords object:", keywords);
@@ -219,9 +223,6 @@ const SearchResults = ({ onClose }) => {
         {/* 
   <h6 >Search Results</h6 > */}
 
-
-
-
         <div className="search-header" style={{ width: '50%' }}>
 
           <TextField
@@ -277,7 +278,7 @@ const SearchResults = ({ onClose }) => {
 
       </div>
 
-      <div className="tabs">
+      {/* <div className="tabs">
         <div
           className={`tab active`} // "Cases" will always be active
           onClick={() => setActiveTab('Cases')}
@@ -286,26 +287,26 @@ const SearchResults = ({ onClose }) => {
         </div>
 
         
-      </div>
- <div className="col-auto ms-auto d-flex align-items-center gap-3">
-           <FaPhotoVideo
-            className="icon-styles"
-            // onClick={() => onIconClick("resources")}
-          />
-          <PieChart
-            className="icon-style"
-            // onClick={() => onIconClick("graphicalData")}
-          />
-          <ListAltOutlined
-            className="icon-style"
-            // onClick={() => onIconClick("caseData")}
-          />
-      
-        </div>
-      
+      </div> */}
+
+      <div className="col-auto  d-flex align-items-center gap-1 justify-content-end  me-2">
+      <PieChart 
+    className="icon-style"
+    onClick={() => handleComponentToggle("graph")} 
+  />
+  <ListAltOutlined 
+    className="icon-style"
+    onClick={() => handleComponentToggle("list")} 
+  />
+            </div>
       <div className="search-results" style={{ height: 'auto' }}>
 
-        <CriteriaCaseTable searchChips={searchChips} />
+      {activeComponent === "graph" && (
+    <GrapghicalCriteria searchChips={searchChips} />
+  )}
+  {activeComponent === "list" && (
+    <CriteriaCaseTable searchChips={searchChips} />
+  )}
 
       </div>
 

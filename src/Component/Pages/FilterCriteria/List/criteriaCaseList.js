@@ -178,6 +178,16 @@ const CriteriaCaseTable = () => {
   return (
     <>
       <div className="data-table" style={{ height: '420px', marginTop: '0px' }}>
+      <div className="tabs">
+        <div
+          className={`tab active`} // "Cases" will always be active
+          // onClick={() => setActiveTab('Cases')}
+        >
+          Cases ({totalResults || "no results"})
+        </div>
+
+        
+      </div>
         {isLoading ? (
           <div className="d-flex justify-content-center align-items-center" style={{ height: '100%' }}>
             <Spinner animation="border" role="status" variant="primary">

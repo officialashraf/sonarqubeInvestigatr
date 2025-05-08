@@ -12,8 +12,8 @@ import CaseDetails from './caseDetails';
 import EditCase from './editCase';
 import { useDispatch } from 'react-redux';
 import { setCaseData } from '../../../Redux/Action/caseAction';
-import { fetchSummaryData } from '../../../Redux/Action/filterAction';
 import { SET_PAGINATION } from '../../../Redux/Constants/filterConstant';
+
 const DataTable = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -385,9 +385,4 @@ const DataTable = () => {
 };
 
 export default DataTable;
-//"69256ec1d45c5b23973b8d44884d5914
-// "6b0a297b235c5b719d5b33d605dc3948",
-// "2850b434e3aa55ac9bad26a61381deed",
-// "0e984e466fd35713a1d876c27ce2d84d",
-// "6aa97938a23d526a93a19616a5904d62",
-// "3d1ddc358d6f573d80285db381c27d04"
+

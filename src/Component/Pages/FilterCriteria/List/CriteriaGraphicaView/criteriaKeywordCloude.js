@@ -6,32 +6,50 @@ import { useSelector } from 'react-redux';
 import Cookies from "js-cookie";
 
 
-const KeywordChart = () => {
+const CriteriaKeywordChart = () => {
   const token = Cookies.get("accessToken");
   const [data, setData] = useState([]);
-  const caseId = useSelector((state) => state.caseData.caseData.id);
+  // const caseId = useSelector((state) => state.caseData.caseData.id);
+
+  const queryPayload = useSelector((state) => state.criteriaKeywords.queryPayload);
+
+
+    
+
   useEffect(() => {
     const fetchData = async () => {
-      
-      try {
-        const payload = {
-          query: { unified_case_id: String(caseId) },
-          aggs_fields: ["unified_record_type", "unified_date_only", "unified_type", "socialmedia_hashtags"]
 
-        }
-        const response = await axios.post('http://5.180.148.40:9007/api/das/aggregate',payload
-          , {
+      try {
+        console.log("querfunction", queryPayload)
+        const payload = {
+            query: {
+                unified_case_id: Array.isArray(queryPayload?.case_id) ? queryPayload.case_id : [],
+                file_type: Array.isArray(queryPayload?.file_type) ? queryPayload.file_type : [],
+                keyword: Array.isArray(queryPayload?.keyword) ? queryPayload.keyword : [],
+            },
+            aggs_fields: ["unified_type", "unified_record_type", "sentiment", "unified_date_only", "socialmedia_hashtags"],
+            start_time: queryPayload?.start_time || "",
+            end_time: queryPayload?.end_time || ""
+        };
+
+        const response = await axios.post('http://5.180.148.40:9007/api/das/aggregate',payload,
+           {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
+
         },
         
       );
-   console.log("querypaylodkeyword",payload)
+
+
         console.log("KeywordCloud---", response);
-        
-     const { socialmedia_hashtags } = response.data;
+
+
+
+
+        const { socialmedia_hashtags } = response.data;
         if (socialmedia_hashtags) {
           setData(socialmedia_hashtags);
         } else {
@@ -44,7 +62,7 @@ const KeywordChart = () => {
     };
 
     fetchData();
-  }, [caseId]);
+  }, [queryPayload]);
 
   const dataa = data && data.map((item) => ({
     text: item.key, // ✅ WordCloud me "key" dikhega
@@ -75,4 +93,4 @@ const KeywordChart = () => {
   );
 }
 
-export default KeywordChart;
+export default CriteriaKeywordChart;
