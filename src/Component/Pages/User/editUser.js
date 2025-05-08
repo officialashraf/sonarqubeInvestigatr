@@ -48,9 +48,9 @@ const EditUser = ({ togglePopup, item}) => {
     try{
       const hasChanged = {};
       // Only include fields that have actually changed
-      if (formData.firstName !== item.first_name) {hasChanged.first_name = formData.firstName;}
-      if (formData.lastName !== item.last_name) {hasChanged.last_name = formData.lastName;}
-      if (formData.username !== item.username) {hasChanged.username = formData.username;}
+      if (formData.firstName !== item.first_name || formData.firstName === "") {hasChanged.first_name = formData.firstName;}
+      if (formData.lastName !== item.last_name || formData.lastName === "") {hasChanged.last_name = formData.lastName;}
+      if (formData.username !== item.username || formData.username === "") {hasChanged.username = formData.username;}
       if (formData.email !== item.email) {hasChanged.email = formData.email;}
       if (formData.contactNumber !== item.contact_no) {hasChanged.contact_no = formData.contactNumber;}
       if (formData.role !== item.role) { hasChanged.role = formData.role;}
@@ -111,7 +111,6 @@ const EditUser = ({ togglePopup, item}) => {
               name="firstName"
               value={formData.firstName}
               onChange={handleChange}
-              required
             />
 
             <label htmlFor="lastName">Last Name:</label>

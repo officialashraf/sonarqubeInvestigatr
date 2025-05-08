@@ -19,6 +19,7 @@ const ProfileDetails = () => {
     // Simulating API call - replace with your actual API fetch
     const fetchData = async () => {
       try {
+         setLoading(true);
    
         if (profiles && Array.isArray(profiles) && profiles.length > 0) {
           setProfileData(profiles[0]);
@@ -28,9 +29,10 @@ const ProfileDetails = () => {
         // if (profiles && profiles.length > 0) {
         //   setProfileData(profiles[0]);
         // }
-        setLoading(false);
+       
       } catch (error) {
         console.error("Error fetching profile data:", error);
+      } finally{
         setLoading(false);
       }
     };

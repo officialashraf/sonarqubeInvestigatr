@@ -19,6 +19,7 @@ import axios from "axios";
 import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
 import UserDetails from "./userDetails";
+import Loader from "../Layout/loader";
 
 
 
@@ -32,6 +33,7 @@ const UserManagement = () => {
   const [showDetail, setShowDetail] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   console.log(selectedUser);
 
@@ -52,6 +54,7 @@ const UserManagement = () => {
 
   const fetchUsers = async () => {
     try {
+      setLoading(true);
       const token = Cookies.get("accessToken");
       const response = await axios.get("http://5.180.148.40:9000/api/user-man/v1/user", {
         headers: {
@@ -66,6 +69,8 @@ const UserManagement = () => {
   } catch (error) {
     toast.error("Failed to fetch users");
     console.error(error);
+  } finally{
+    setLoading(false);
   }
 };
 // console.log("users",users)
@@ -214,7 +219,9 @@ const UserManagement = () => {
            setFilteredData(sortedData);
           }         ;
 
-
+ if(loading){
+  return <Loader/>
+ }
 
   
 return (

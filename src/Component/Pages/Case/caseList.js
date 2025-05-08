@@ -12,6 +12,7 @@ import CaseDetails from './caseDetails';
 import EditCase from './editCase';
 import { useDispatch } from 'react-redux';
 import { setCaseData } from '../../../Redux/Action/caseAction';
+import Loader from '../Layout/loader';
 
 const DataTable = () => {
   const dispatch = useDispatch();
@@ -25,7 +26,7 @@ const DataTable = () => {
   const [showPopupA, setShowPopupA] = useState(false);
   const [showPopupB, setShowPopupB] = useState(false);
   const [selectedData, setSelectedData] = useState(null);
-
+  const [loading, setLoading] = useState(true);
 
 
   const onFieldClick = (item) => {
@@ -36,6 +37,7 @@ const DataTable = () => {
 
   const fetchData = async () => {
     try {
+      setLoading(true);
       const Token = Cookies.get('accessToken');
       const response = await axios.get('http://5.180.148.40:9001/api/case-man/v1/case',
         {
@@ -51,6 +53,8 @@ const DataTable = () => {
       console.log("data", response.data)
     } catch (error) {
       console.error('Error fetching data:', error);
+    } finally{
+      setLoading(false);
     }
   };
   
@@ -200,6 +204,9 @@ const DataTable = () => {
     });
     setFilteredData(sortedData);
 };
+  if(loading){
+    return <Loader/>
+  }
   return (
     <>
       <div className="data-table-container">

@@ -231,7 +231,7 @@ const handelCreate = ()=>{
         console.log("Sending search query:", payload);
     
         const response = await axios.post(
-          'http://5.180.148.40:9006/api/das/search',
+          'http://5.180.148.40:9007/api/das/search',
           payload,
           {
             headers: {
@@ -309,7 +309,7 @@ const ReuseCriteria = async (item) => {
 
   try {
     const response = await axios.post(
-      'http://5.180.148.40:9006/api/das/search',
+      'http://5.180.148.40:9007/api/das/search',
       queryPayload,
       {
         headers: {

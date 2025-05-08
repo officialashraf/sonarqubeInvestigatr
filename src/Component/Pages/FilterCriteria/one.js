@@ -219,7 +219,7 @@ const UnifiedSearchCriteria = ({ onClose, setShowPopup, handleCreateCase }) => {
         end_time: selectedDates.endDate ? `${selectedDates.endDate.toISOString().split('T')[0]}T${String(selectedDates.endTime.hours).padStart(2, '0')}:${String(selectedDates.endTime.minutes).padStart(2, '0')}:00` : ""
       }));
       
-      const response = await axios.post('http://5.180.148.40:9006/api/das/search', {
+      const response = await axios.post('http://5.180.148.40:9007/api/das/search', {
         query: queryArray
       }, {
         headers: {
