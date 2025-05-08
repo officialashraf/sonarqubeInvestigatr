@@ -10,19 +10,9 @@ import originalWarn from './utils/warn';
 import {Provider} from "react-redux"
 import store, { persistor } from "./Redux/store"; // Store aur Persistor import karo
 import { PersistGate } from "redux-persist/integration/react";
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      refetchOnWindowFocus: false,
-      retry: 1,
-      staleTime: 5 * 60 * 1000, // 5 minutes
-      
-    },
-  },
-});
+
+
 
 const root = createRoot(document.getElementById('root'));
 root.render(
@@ -30,7 +20,7 @@ root.render(
      
      <Provider store={store} >
      <PersistGate loading={null} persistor={persistor}>
-     <QueryClientProvider client={queryClient}>
+    
     <App />
     <ToastContainer 
      position="top-center" // Position of the toasts
@@ -42,8 +32,8 @@ root.render(
     hideProgressBar={true}
 
     />
-      <ReactQueryDevtools initialIsOpen={false} /> {/* Optional: Development tool */}
-      </QueryClientProvider>
+    
+      
     </PersistGate>
     </Provider>
   

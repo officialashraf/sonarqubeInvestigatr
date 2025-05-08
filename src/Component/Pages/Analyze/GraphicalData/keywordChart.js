@@ -40,7 +40,6 @@ const KeywordChart = () => {
           );
 
           console.log("summary::::", response);
-
           const { socialmedia_hashtags } = response.data;
           if (socialmedia_hashtags) {
             setData(socialmedia_hashtags);
@@ -52,6 +51,7 @@ const KeywordChart = () => {
           setData([]); // Set data to an empty array on error
         } finally {
           setLoading(false); // Set loading to false after fetching data
+
         }
       };
 

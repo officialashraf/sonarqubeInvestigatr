@@ -15,6 +15,8 @@ import Cookies from 'js-cookie'
 import { setKeywords, setPage, setSearchResults } from '../../../../Redux/Action/criteriaAction';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
+import { ListAltOutlined, PieChart, MoreVert } from "@mui/icons-material";
+import { FaPhotoVideo } from "react-icons/fa";
 
 const SearchResults = ({ onClose }) => {
 
@@ -282,13 +284,28 @@ const SearchResults = ({ onClose }) => {
         >
           Cases ({totalResults || "no results"})
         </div>
-      </div>
 
+        
+      </div>
+ <div className="col-auto ms-auto d-flex align-items-center gap-3">
+           <FaPhotoVideo
+            className="icon-styles"
+            // onClick={() => onIconClick("resources")}
+          />
+          <PieChart
+            className="icon-style"
+            // onClick={() => onIconClick("graphicalData")}
+          />
+          <ListAltOutlined
+            className="icon-style"
+            // onClick={() => onIconClick("caseData")}
+          />
+      
+        </div>
+      
       <div className="search-results" style={{ height: 'auto' }}>
 
         <CriteriaCaseTable searchChips={searchChips} />
-
-
 
       </div>
 

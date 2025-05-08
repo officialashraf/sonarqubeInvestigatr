@@ -32,7 +32,7 @@ const CriteriaTransactionTable = () => {
   const fetchData = async () => {
     try {
       const Token = Cookies.get('accessToken');
-      const response = await axios.get('http://5.180.148.40:9001/api/case-man/v1/case',
+      const response = await axios.get('http://5.180.148.40:9000/api/case-man/v1/case',
         {
           headers: {
             'Content-Type': 'application/json',

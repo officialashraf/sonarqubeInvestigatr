@@ -245,7 +245,7 @@ console.log("selectedDates", selectedDates)
     
             // Make the API request
             const response = await axios.post(
-                'http://5.180.148.40:9006/api/das/criteria',
+                'http://5.180.148.40:9007/api/das/criteria',
                 criteriaPayload,
                 {
                     headers: {

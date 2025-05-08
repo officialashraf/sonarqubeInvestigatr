@@ -136,16 +136,16 @@ const handelCreate = ()=>{
   const Token = Cookies.get('accessToken');
   const fetchData = async () => {
     try {
-      const response = await fetch("http://5.180.148.40:9006/api/das/criteria", {
+      const response = await axios.get("http://5.180.148.40:9007/api/das/criteria", {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${Token}`
         },
       });
-      const data = await response.json();
+      const data = response
       console.log("resposegetCriteria",data.data)
       if (data && data.data) {
-        setSavedSearch(data.data); // Extract keywords
+        setSavedSearch(data.data.data); // Extract keywords
        console.log("setSavedSearch", savedSearch)
       }
     } catch (error) {
@@ -157,7 +157,7 @@ const handelCreate = ()=>{
   const handleDelete = async (index, id) => {
     try {
       // Making the DELETE API call
-      const response = await fetch(`http://5.180.148.40:9006/api/das/criteria/${id}`, {
+      const response = await fetch(`http://5.180.148.40:9007/api/das/criteria/${id}`, {
         method: "DELETE",
         headers: {
           'Content-Type': 'application/json',
@@ -346,10 +346,16 @@ console.log("updatedetRecent", updatedKeywords)
 };
 
  
-  const filteredList = savedSearch.filter((item) =>
+  // const filteredList =  savedSearch && savedSearch.filter((item) =>
+  //   (typeof item.keyword === "string" && item.keyword.toLowerCase().includes(searchQuery.toLowerCase())) ||
+  //   (typeof item.title === "string" && item.title.toLowerCase().includes(searchQuery.toLowerCase()))
+  // )
+
+  const filteredList = Array.isArray(savedSearch) ? savedSearch.filter((item) =>
     (typeof item.keyword === "string" && item.keyword.toLowerCase().includes(searchQuery.toLowerCase())) ||
     (typeof item.title === "string" && item.title.toLowerCase().includes(searchQuery.toLowerCase()))
-  )
+) : [];
+
   return (
     <div className="popup-overlay">
     <div className="popup-container">

@@ -20,6 +20,7 @@ const LineChart1 = () => {
         setLoading(true);
         const response = await axios.post('http://5.180.148.40:9007/api/das/aggregate', {
           query: { unified_case_id: String(caseId) },
+
           aggs_fields: ["unified_date_only", "unified_record_type"]
         },
         {
