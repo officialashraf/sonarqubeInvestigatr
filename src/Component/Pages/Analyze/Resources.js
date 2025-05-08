@@ -19,17 +19,14 @@ import { AiOutlineLike } from "react-icons/ai";
 import { AiOutlineDislike } from "react-icons/ai";
 import { LiaDownloadSolid } from "react-icons/lia";
 import { BsThreeDots } from "react-icons/bs";
-import throttle from 'lodash.throttle';
-import { useDispatch } from "react-redux";
-import { BsThreeDots } from "react-icons/bs"
 import {  PinAngle, ChatLeftText} from 'react-bootstrap-icons';
 import AddComment from '../Comment/AddComment';
 import { fetchSummaryData } from "../../../Redux/Action/filterAction";
 import throttle from 'lodash.throttle';
 import { toast } from "react-toastify";
+
 const Resources = () => {
- 
-  const dispatch = useDispatch();
+   const dispatch = useDispatch();
   const [showPopup, setShowPopup] = useState(false);
   const data1 = useSelector((state) => state.caseData.caseData);
   

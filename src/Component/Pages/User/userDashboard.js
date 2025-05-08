@@ -5,7 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import UserManagement from './UserManagement';
 import { useNavigate } from 'react-router-dom';
 
-const DashboardMain = () => {
+const  UserDashboard = () => {
 
   const navigate = useNavigate();
   const cardData = [
@@ -22,7 +22,7 @@ const DashboardMain = () => {
       if (title === "User Management") {
           navigate("/users");
       } else if (title === "Roles and Permission") {
-          navigate("/users");
+          navigate("/roles");
       }
   };
   return (
@@ -55,4 +55,4 @@ const DashboardMain = () => {
   );
 };
 
-export default DashboardMain;
+export default  UserDashboard;
