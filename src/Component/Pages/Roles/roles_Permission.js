@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import AddRole from "./addRole";
 import Details_Permisson from "./details_Permisson";
 import AssignRole from "./asignRole";
+import EditRole from "./editRole";
 
 const RolesPermission = () => {
     const navigate = useNavigate();
@@ -36,7 +37,8 @@ const [popupDetails, setPopupDetails] = useState(null);
     setShowPopupB(prev => !prev);
   };
   
-  const togglePopupC= () => {
+  const togglePopupC= (details) => {
+    setPopupDetails(details);
     setShowPopupC(prev => !prev);
   };
   const togglePopupD = (details) => {
@@ -298,10 +300,14 @@ const [popupDetails, setPopupDetails] = useState(null);
                                         </Dropdown.Toggle>
                                         <Dropdown.Menu className="custom-dropdown-menu">
                                             <Dropdown.Item  onClick={() => togglePopupB(item)}>Details</Dropdown.Item>
-                                            <Dropdown.Item onClick={togglePopupC }>Edit</Dropdown.Item>
+
                                             <Dropdown.Item
                                             onClick={() => confirmDelete(item.role)}
                                              >Delete</Dropdown.Item>
+
+                                            <Dropdown.Item  onClick={() => togglePopupC(item.role)}>Edit</Dropdown.Item>
+                                         
+
                                             <Dropdown.Item  onClick={() => togglePopupD(item)}>Assign Role&Permissions</Dropdown.Item>
                                         </Dropdown.Menu>
                                     </Dropdown>
@@ -313,7 +319,9 @@ const [popupDetails, setPopupDetails] = useState(null);
             </div>
               {showPopup && <AddRole togglePopup={togglePopup}/>}
               {showPopupB && <Details_Permisson togglePopup={togglePopupB} details={popupDetails}/>}
-              {showPopupC && <AddRole togglePopup={togglePopupC}/>}
+
+
+              {showPopupC && <EditRole togglePopup={togglePopupC} details={popupDetails}/>}
               {showPopupD && <AssignRole togglePopup={togglePopupD}  details={popupDetails}/>}
         </div>
     );
