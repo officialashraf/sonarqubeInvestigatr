@@ -1,16 +1,10 @@
 import { Search, Plus } from "react-bootstrap-icons";
-import { Table } from "react-bootstrap";
+import { Col, Table } from "react-bootstrap";
 import { FiMoreVertical } from "react-icons/fi";
-
-
-
-
 import "../Case/table.css";
-
 import AddUser from "./addUser";
 import "../Case/table.css";
 import EditUser from "./editUser";
-
 import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
 import Dropdown from "react-bootstrap/Dropdown";
 import Badge from "react-bootstrap/Badge";
@@ -20,10 +14,13 @@ import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
 import UserDetails from "./userDetails";
 import Loader from "../Layout/loader";
+import { FaArrowLeft } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 
 
 const UserManagement = () => {
+  const  navigate =  useNavigate()
   const [data, setData] = useState([]);
   const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -214,7 +211,7 @@ const UserManagement = () => {
                const bDate = new Date(bValue);
                return direction === "asc" ? aDate - bDate : bDate - aDate;
              }
-         
+        
              if (typeof aValue === "string" && typeof bValue === "string") {
                return direction === "asc"
                  ? aValue.localeCompare(bValue)
@@ -239,7 +236,9 @@ const UserManagement = () => {
 return (
   <div className="data-table-container">
     <div className="top-header" style={{ marginTop: "10px" }}>
-      <div className="search-bar1">
+    <Col xs={1} className="d-flex align-items-center justify-content-flex-start"  style={{width:"20%"}}>
+    <FaArrowLeft style={{ cursor: 'pointer',marginRight:'10px' }}  onClick={() => navigate('/dashboard')} />
+       <div className="search-bar1" style={{width:'100%'}}>
         <div className="input-group">
           <input
             type="text"
@@ -250,6 +249,7 @@ return (
           />
         </div>
       </div>
+      </Col>
       <div className="header-icons">
         <button className="add-btn" onClick={togglePopup}>
           <Plus size={14} style={{ marginRight: "5px" }} />

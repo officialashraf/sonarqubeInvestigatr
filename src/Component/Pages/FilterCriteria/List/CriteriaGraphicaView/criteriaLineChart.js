@@ -3,26 +3,29 @@ import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { Box, Slider } from '@mui/material';
 import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, CartesianGrid,ResponsiveContainer, ReferenceLine } from 'recharts';
-import './lineChart.css'
+import  "../../../Analyze/GraphicalData/lineChart.css";
 import Cookies from "js-cookie";
-import Loader from '../../Layout/loader';
 
-const LineChart1 = () => {
+const CriteriaLineChart = () => {
   const token = Cookies.get("accessToken");
   const [data, setData] = useState([]);
   const [recordTypes, setRecordTypes] = useState([]);
-  const caseId = useSelector((state) => state.caseData.caseData.id);
-  const [loading, setLoading] = useState(true); // Add loading state
-
+  // const caseId = useSelector((state) => state.caseData.caseData.id);
+  const queryPayload = useSelector((state) => state.criteriaKeywords.queryPayload);
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setLoading(true);
-        const response = await axios.post('http://5.180.148.40:9007/api/das/aggregate', {
-          query: { unified_case_id: String(caseId) },
-
-          aggs_fields: ["unified_date_only", "unified_record_type"]
-        },
+        const payload = {
+          query: {
+              unified_case_id: Array.isArray(queryPayload?.case_id) ? queryPayload.case_id : [],
+              file_type: Array.isArray(queryPayload?.file_type) ? queryPayload.file_type : [],
+              keyword: Array.isArray(queryPayload?.keyword) ? queryPayload.keyword : [],
+          },
+          aggs_fields: ["unified_type", "unified_record_type", "sentiment", "unified_date_only", "socialmedia_hashtags"],
+          start_time: queryPayload?.start_time || "",
+          end_time: queryPayload?.end_time || ""
+      };
+        const response = await axios.post('http://5.180.148.40:9007/api/das/aggregate', payload,
         {
           headers: {
             "Content-Type": "application/json",
@@ -50,18 +53,11 @@ const LineChart1 = () => {
         console.error('Error fetching data:', error);
         setData([]);
         setRecordTypes([]);
-      } finally{
-        setLoading(false);
       }
     };
 
     fetchData();
-  }, [caseId]);
-
-  if(loading){
-     console.log("Loading state is TRUE");
-    return <  Loader style={{marginTop:'-120px'}} />
-  }
+  }, [queryPayload]);
 
   return (
     <Box className="mt-1 h-[200px]">
@@ -146,4 +142,4 @@ const LineChart1 = () => {
   );
 };
 
-export default LineChart1;
+export default CriteriaLineChart;

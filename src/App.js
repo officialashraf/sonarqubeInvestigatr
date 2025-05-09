@@ -18,13 +18,14 @@ import './App.css'
 import ProtectedRoute from './utils/protectRoute.js';
 import Loader from './Component/Pages/Layout/loader.js';
 import SearchResults from './Component/Pages/FilterCriteria/List/fullscreen.js';
-import UsersDashboard from './Component/Pages/User/UsersDashboard.js';
 import Confirm from './Component/Pages/FilterCriteria/confirmCriteria.js';
 import LogoutUser from './Component/Pages/User/logout.js';
 import ShowDetails from './Component/Pages/PII/showDetails.js';
 import LicensePage from './Component/Pages/User/license.js';
 import LicenseValidator from './utils/licenseValidator.js';
-import DashboardMain from './Component/Pages/User/dashboardMain.js';
+import UserDashboard from './Component/Pages/User/userDashboard.js';
+import UserManagement from './Component/Pages/User/UserManagement.js';
+import RolesPermission from './Component/Pages/Roles/roles_Permission.js';
 
 
 const AppContent = () => {
@@ -85,8 +86,9 @@ const AppContent = () => {
             <Route path="/search" element={< SearchResults />} />
             <Route path="/confirm" element={< Confirm />} />
             <Route path="logout" element={< LogoutUser />} />
-            <Route path="/users" element={< UsersDashboard />} />
-            <Route path="/dashboard" element={< DashboardMain />} />
+            <Route path="/users" element={< UserManagement />} />
+            <Route path="/dashboard" element={< UserDashboard />} />
+            <Route path="/roles" element={< RolesPermission />} />   
          
             
             <Route path="*" element={<div className='notfound'> <h4>Work in progress........</h4></div>} />

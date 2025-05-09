@@ -8,60 +8,51 @@ import Loader from '../../Layout/loader';
 
 
 const KeywordChart = () => {
-  const [data, setData] = useState([]);
-  const caseId = useSelector(state => state.caseData.caseData.id);
-  const [loading, setLoading] = useState(true); // Add loading state
-
   const token = Cookies.get("accessToken");
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const caseId = useSelector((state) => state.caseData.caseData.id);
+  useEffect(() => {
+    const fetchData = async () => {
 
-  useEffect(
-    () => {
-      const fetchData = async () => {
-        const token = Cookies.get("accessToken");
-        try {
-          setLoading(true);
-          const response = await axios.post(
-            "http://5.180.148.40:9007/api/das/aggregate",
-            {
-              query: { unified_case_id: String(caseId) },
-              aggs_fields: [
-                "unified_record_type",
-                "unified_date_only",
-                "unified_type",
-                "socialmedia_hashtags"
-              ]
-            },
-            {
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`
-              }
-            }
-          );
-
-          console.log("summary::::", response);
-          const { socialmedia_hashtags } = response.data;
-          if (socialmedia_hashtags) {
-            setData(socialmedia_hashtags);
-          } else {
-            setData([]); // Set data to an empty array if socialmedia_hashtags is undefined
-          }
-        } catch (error) {
-          console.error("Error fetching data:", error);
-          setData([]); // Set data to an empty array on error
-        } finally {
-          setLoading(false); // Set loading to false after fetching data
+      try {
+        setLoading(true);
+        const payload = {
+          query: { unified_case_id: String(caseId) },
+          aggs_fields: ["unified_record_type", "unified_date_only", "unified_type", "socialmedia_hashtags"]
 
         }
-      };
+        const response = await axios.post('http://5.180.148.40:9007/api/das/aggregate', payload
+          , {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          },
 
+        );
+        console.log("querypaylodkeyword", payload)
+        console.log("KeywordCloud---", response);
+
+        const { socialmedia_hashtags } = response.data;
+        if (socialmedia_hashtags) {
+          setData(socialmedia_hashtags);
+        } else {
+          setData([]); // Set data to an empty array if socialmedia_hashtags is undefined
+        }
+      } catch (error){
+        setData([]);
+        console.log("error", error);
+      } finally {
+        setLoading(false);
+      }
+    }
       fetchData();
     },
-    [caseId]
-  );
-if (loading) {
-  return <Loader />;
-}
+      [caseId]);
+  if (loading) {
+    return <Loader />;
+  }
 
   const dataa =
     data &&
@@ -77,21 +68,21 @@ if (loading) {
     <Box width={600} height={230} style={{ marginTop: 0, padding: 0 }}>
       {data.length > 0
         ? <WordCloud
-            data={dataa}
-            fontSizeMapper={fontSizeMapper}
-            rotate={rotate}
-            margin={0}
-            width={600}
-            height={250}
-          />
+          data={dataa}
+          fontSizeMapper={fontSizeMapper}
+          rotate={rotate}
+          margin={0}
+          width={600}
+          height={250}
+        />
         : <Typography
-            variant="h6"
-            color="textSecondary"
-            align="center"
-            height={250}
-          >
-            No Data Available
-          </Typography>}
+          variant="h6"
+          color="textSecondary"
+          align="center"
+          height={250}
+        >
+          No Data Available
+        </Typography>}
     </Box>
   );
 };
