@@ -1,51 +1,42 @@
-import React, { useEffect, useRef,useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./Resources.css";
-import { LuPin } from "react-icons/lu";
+import { LuPin, LuRepeat2 } from "react-icons/lu";
 import { RiInformation2Line } from "react-icons/ri";
-import { BsThreeDotsVertical } from "react-icons/bs";
+import { BsThreeDotsVertical, BsThreeDots } from "react-icons/bs";
 import { IoChevronDown } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
-import { FaRegHeart } from "react-icons/fa";
+import { FaRegHeart, FaRegCommentDots, FaRegBookmark } from "react-icons/fa";
 import { FaRegComment } from "react-icons/fa6";
 import { PiShareFatBold } from "react-icons/pi";
-import { LiaThumbsUpSolid } from "react-icons/lia";
-import { FaRegCommentDots } from "react-icons/fa";
-import { MdRepeat } from "react-icons/md";
-import { LuRepeat2 } from "react-icons/lu";
-import { FaRegBookmark } from "react-icons/fa";
-import { MdOutlineFileUpload } from "react-icons/md";
+import { LiaThumbsUpSolid, LiaDownloadSolid } from "react-icons/lia";
+import { MdRepeat, MdOutlineFileUpload } from "react-icons/md";
 import { GoEye } from "react-icons/go";
-import { AiOutlineLike } from "react-icons/ai";
-import { AiOutlineDislike } from "react-icons/ai";
-import { LiaDownloadSolid } from "react-icons/lia";
-import { BsThreeDots } from "react-icons/bs";
-import {  PinAngle, ChatLeftText} from 'react-bootstrap-icons';
+import { AiOutlineLike, AiOutlineDislike } from "react-icons/ai";
+import throttle from 'lodash.throttle';
+import { PinAngle, ChatLeftText } from 'react-bootstrap-icons';
 import AddComment from '../Comment/AddComment';
 import { fetchSummaryData } from "../../../Redux/Action/filterAction";
-import throttle from 'lodash.throttle';
-import { toast } from "react-toastify";
+
+
 
 const Resources = () => {
-   const dispatch = useDispatch();
+
+  const dispatch = useDispatch();
   const [showPopup, setShowPopup] = useState(false);
   const data1 = useSelector((state) => state.caseData.caseData);
-  
-
-
-
   const {
     data,
     headers,
     page,
     totalPages,
     totalResults,
-  
+
     error,
-    } = useSelector((state) => state.filterData);
-    const summaryData = data
-  const summaryHeaders =headers
-  console.log("totalresultes",totalResults)
-    console.log("totalapges",totalPages)
+  } = useSelector((state) => state.filterData);
+  const summaryData = data
+  const summaryHeaders = headers
+  console.log("totalresultes", totalResults)
+  console.log("totalapges", totalPages)
   console.log("Summary Data from Redux:", summaryData);
   console.log("Summary Headers from Redux:", summaryHeaders);
   const [currentPage, setCurrentPage] = useState(page);
@@ -54,89 +45,98 @@ const Resources = () => {
   const sidebarRef = useRef(null);
   const scrollDirectionRef = useRef(null);
   const [selectedResource, setSelectedResource] = useState(null); // State to track the selected resource
+  const [allResources, setAllResources] = useState([]);
 
+
+  useEffect(() => {
+    if (data1?.id) {
+      setLoading(true);
+      dispatch(fetchSummaryData({
+        queryPayload: { unified_case_id: data1.id },
+        page: currentPage,
+        itemsPerPage: 50,
+      })).then(() => {
+        setLoading(false);
+      });
+    }
+  }, [currentPage, data1?.id]);
+
+  // Ensure only 100 items remain in the list
+  useEffect(() => {
+    if (summaryData && Array.isArray(summaryData)) {
+      setAllResources(prev => {
+        let updatedResources;
+        if (currentPage === 1) {
+          // On first page load, replace the resources
+          updatedResources = [...summaryData];
+        } else {
+          // On subsequent pages, append the new data
+          updatedResources = [...prev, ...summaryData];
+        }
+        if (updatedResources.length > 100) {
+          updatedResources = updatedResources.slice(-100); // Keep only the latest 100 items
+        }
+        return updatedResources;
+      });
+    }
+  }, [summaryData, currentPage]);
+  // Infinite scroll listener
+  useEffect(() => {
+    const sidebarElement = sidebarRef.current;
+    if (!sidebarElement) return;
+
+    const handleInfiniteScroll = throttle(() => {
+      if (
+        sidebarElement.scrollTop + sidebarElement.clientHeight >=
+        sidebarElement.scrollHeight - 10
+      ) {
+        if (!loading && hasMore) {
+          scrollDirectionRef.current = 'down';
+          setCurrentPage(prev => prev + 1);
+        }
+      } else if (
+        sidebarElement.scrollTop <= 0
+      ) {
+        if (!loading && currentPage > 1) {
+          scrollDirectionRef.current = 'up';
+          setCurrentPage(prev => Math.max(prev - 1, 1));
+        }
+      }
+    }, 500);
+
+    sidebarElement.addEventListener("scroll", handleInfiniteScroll);
+    return () => sidebarElement.removeEventListener("scroll", handleInfiniteScroll);
+  }, [loading, hasMore, currentPage]);
+
+  // Adjust scroll position after loading previous page to avoid jumpiness
+  useEffect(() => {
+    const scrollContainer = sidebarRef.current;
+    if (!scrollContainer) return;
+
+    if (scrollDirectionRef.current === 'up') {
+
+      const newScrollTop = currentPage === 1
+        ? scrollContainer.scrollHeight * 0 // Move slightly down when at page 1
+        : scrollContainer.scrollHeight / 2 - scrollContainer.clientHeight / 2; // Default centering
+      //  const newScrollTop = scrollContainer.scrollHeight / 2 - scrollContainer.clientHeight / 2;
+      scrollContainer.scrollTo({
+        top: newScrollTop,
+        behavior: 'smooth',
+      });
+    }
+  }, [currentPage]);
 
   const handleResourceClick = resource => {
     console.log("Selected Resource:", resource);
     setSelectedResource(resource); // Set the selected resource to display in the right content area
   };
- 
-  useEffect(() => {
-
-    const sidebar = document.querySelector(".left-sidebar");
-
-    const handleScroll = throttle(() => {
-      const { scrollTop, scrollHeight, clientHeight } = sidebar;
-
-      // Load NEXT page when user scrolls to bottom
-      // if (scrollTop + clientHeight >= scrollHeight - 5 && hasMore && !loading) {
-        
-      //   scrollDirectionRef.current = 'down';
-      //   setCurrentPage(prev => prev + 1);
-      //   // skipScrollRef.current = true;
-      // }
-      if (scrollTop + clientHeight >= scrollHeight - 5 && hasMore && !loading) {
-        if (currentPage < totalPages) {
-            scrollDirectionRef.current = 'down';
-            setCurrentPage(prev => prev + 1);
-            // skipScrollRef.current = true;
-        } else {
-          toast("No more pages available")
-            console.log("No more pages available"); // Replace with UI message
-        }
-    }
-    
-      // Load PREVIOUS page when user scrolls to top
-      // Load PREVIOUS page when user scrolls to top
-if (scrollTop <= 0 && currentPage > 1 && !loading) { 
-  scrollDirectionRef.current = 'up';
-  setCurrentPage(prev => Math.max(prev - 1, 1)); // Ensure it doesn't go below 1
-}
-
-    }, 500);
-
-    sidebar.addEventListener("scroll", handleScroll);
-    return () => sidebar.removeEventListener("scroll", handleScroll);
-  }, [currentPage]);
-  useEffect(() => {
-
-
-    const scrollContainer = sidebarRef.current;
-   if (currentPage > 1) {
-     setLoading(true);
-     dispatch(fetchSummaryData({
-      queryPayload: { unified_case_id: data1.id },
-      page: currentPage,
-      itemsPerPage: 50
-    })).then(() => {
-      setLoading(false);
-    });
-    
-       // Delay scroll position to avoid top scroll re-trigger
- setTimeout(() => {
-   if (scrollDirectionRef.current === 'up') {
-     scrollContainer.scrollTo({
-       top: 80,
-       // top: scrollContainer.scrollHeight - 150, // 👈 *Fix: Scroll should move smoothly*
-       behavior: 'smooth',
-     });
-   } else {
-     scrollContainer.scrollTo({
-       top: 40,
-       behavior: 'smooth',
-     });
-   }
- }, 300);
-   }
- }, [currentPage,page]);
- 
- const getYouTubeVideoId = (url) => {
-  console.log("url", url);
-  const regExp = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/|v\/|shorts\/)|youtu\.be\/)([^#&?]{11})/;
-  const match = url.match(regExp);
-  console.log("match", match);
-  return match ? match[1] : null;
-}
+  const getYouTubeVideoId = (url) => {
+    console.log("url", url);
+    const regExp = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/|v\/|shorts\/)|youtu\.be\/)([^#&?]{11})/;
+    const match = url.match(regExp);
+    console.log("match", match);
+    return match ? match[1] : null;
+  }
 
 
   return (
@@ -161,69 +161,69 @@ if (scrollTop <= 0 && currentPage > 1 && !loading) {
 
       {/* Content Section */}
       <div className="contents">
-        <div className="left-sidebar" ref={sidebarRef}style={{marginBottom: "4rem"}}>
-<div className="inner-content" style={{paddingBottom:'60px',paddingTop:'60px'}}>
-          <div className="sidebar-header">
-            <span className="search-icon">
-              <i className="fa fa-search"></i> {/* Font Awesome Search Icon */}
-            </span>
-            <h5>Resources Insights</h5>
-            <div style={{ marginBottom: '10px', color: '#000' }}>
-          <strong>Current Page:</strong> {currentPage}
-          </div>
-              {loading && (
-              <div style={{ textAlign: 'center', padding: '10px', color: 'black' }}>
-              Loading...
+        <div className="left-sidebar" ref={sidebarRef} style={{ marginBottom: "4rem" }}>
+          <div className="inner-content" style={{ paddingBottom: '60px', paddingTop: '60px' }}>
+            <div className="sidebar-header">
+              <span className="search-icon">
+                <i className="fa fa-search"></i> {/* Font Awesome Search Icon */}
+              </span>
+              <h5>Resources Insights</h5>
+              <div style={{ marginBottom: '10px', color: '#000' }}>
+                {/* <strong>Current Page:</strong> {currentPage} */}
               </div>
-              )}
-          </div>
-
-          {summaryData && Array.isArray(summaryData) ? (
-            summaryData.map((resource) => (
-              <div
-                key={resource.row_id}
-                className={`resourceItem ${selectedResource?.row_id === resource.row_id ? "active" : ""
-                  }`}
-                onClick={() => handleResourceClick(resource)}
-              >
-                <img
-                  src={resource.socialmedia_from_imageurl ?? resource.socialmedia_media_url}
-                  // src={resource.socialmedia_from_imageurl} // Fallback to dummy image
-                  // alt={resource.unified_type}
-                  onError={(e) => {
-                    e.target.onerror = null; // prevents infinite loop
-                    e.target.src = 'https://www.kurin.com/wp-content/uploads/placeholder-square.jpg';
-                  }}
-                  className="resourceImage"
-                />
-                <div className="resourceDetails">
-                  <p className="resourceType">{resource.unified_type}</p>
-                  <p className="resourceContent">{resource.socialmedia_activity}</p>
+              {loading && (
+                <div style={{ textAlign: 'center', padding: '10px', color: 'black' }}>
+                  Loading...
                 </div>
-              </div>
-            ))
-          ) : (
-            <p style={{ textAlign: "center", marginTop: "2rem", color: "gray" }}>
-              No Data Load for this case,<br />
-              "Try again after some time."
-            </p>
-          )}
-          <div style={{ marginBottom: '10px', color: '#000' }}>
-          <strong>Current Page:</strong> {currentPage}
-          </div>
-              {loading && (
-              <div style={{ textAlign: 'center', padding: '10px', color: 'black' }}>
-              Loading...
-              </div>
               )}
-        </div>
+            </div>
+
+            {allResources.length > 0 ? (
+              allResources.map((resource) => (
+                <div
+                  key={resource.row_id}
+                  className={`resourceItem ${selectedResource?.row_id === resource.row_id ? "active" : ""
+                    }`}
+                  onClick={() => handleResourceClick(resource)}
+                >
+                  <img
+                    src={resource.socialmedia_from_imageurl ?? resource.socialmedia_media_url}
+                    // src={resource.socialmedia_from_imageurl} // Fallback to dummy image
+                    // alt={resource.unified_type}
+                    onError={(e) => {
+                      e.target.onerror = null; // prevents infinite loop
+                      e.target.src = 'https://www.kurin.com/wp-content/uploads/placeholder-square.jpg';
+                    }}
+                    className="resourceImage"
+                  />
+                  <div className="resourceDetails">
+                    <p className="resourceType">{resource.unified_type}</p>
+                    <p className="resourceContent">{resource.socialmedia_activity}</p>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p style={{ textAlign: "center", marginTop: "2rem", color: "gray" }}>
+                No Data Load for this case,<br />
+                "Try again after some time."
+              </p>
+            )}
+            <div style={{ marginBottom: '10px', color: '#000' }}>
+              {/* <strong>Current Page:</strong> {currentPage} */}
+            </div>
+            {loading && (
+              <div style={{ textAlign: 'center', padding: '10px', color: 'black' }}>
+                Loading...
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="right-content">
           {selectedResource ? (
             <div className="resourceDetailsContainer">
-            
-            
+
+
               {/*  Instagram Layout */}
               {selectedResource.unified_type === "Instagram" && (
                 <div className="resourceDetailsView marginSides20">
@@ -329,8 +329,8 @@ if (scrollTop <= 0 && currentPage > 1 && !loading) {
                   <p className="activityContent">
                     {selectedResource.unified_activity_content}
                   </p>
-                 
-                 {selectedResource.socialmedia_media_url && (() => {
+
+                  {selectedResource.socialmedia_media_url && (() => {
                     let urls = selectedResource.socialmedia_media_url;
 
                     // Step 1: Clean karo array ko
@@ -628,8 +628,8 @@ if (scrollTop <= 0 && currentPage > 1 && !loading) {
 
                   </div>
                   {selectedResource.socialmedia_media_url?.match(/\.(mp4|mov|webm|ogg)$/i) ? (
-                     
-                     <video
+
+                    <video
                       src={selectedResource.socialmedia_media_url}
                       controls
                       className="postImage"
@@ -687,7 +687,7 @@ if (scrollTop <= 0 && currentPage > 1 && !loading) {
               {selectedResource.unified_type === "YouTube" && (
                 <div className="resourceDetailsView yt">
                   <div className="videoWrapper">
-                  {selectedResource.socialmedia_media_url && (
+                    {selectedResource.socialmedia_media_url && (
                       <div className="youtube-video">
                         <iframe
                           width="100%"
@@ -751,11 +751,11 @@ if (scrollTop <= 0 && currentPage > 1 && !loading) {
                   <div>
                     <strong>{selectedResource.socialmedia_activity_view_count}</strong>{" "}View
                   </div>
-                
+
                 </div>
-                
               )}
-  <div className="sentimentSection">
+
+              <div className="sentimentSection">
                 <span
                   className="sentiment"
                   style={{
@@ -765,33 +765,30 @@ if (scrollTop <= 0 && currentPage > 1 && !loading) {
                     borderRadius: "5px",
                     display: "inline-block",
                     marginBottom: "10px",
-                    marginRight:'10px'
+                    marginRight: '10px'
                   }}
                 >
                   {selectedResource.sentiment}
                 </span>
                 {selectedResource && (
-    <div className="commentBar" style={{width:'60px'}}>
-        <PinAngle size={15} className="me-2" onClick={() => setShowPopup(true)} />
-        <ChatLeftText size={15} onClick={() => setShowPopup(true)} />
-    </div>
-)}
+                  <div className="commentBar" style={{ width: '60px' }}>
+                    <PinAngle size={15} className="me-2" onClick={() => setShowPopup(true)} />
+                    <ChatLeftText size={15} onClick={() => setShowPopup(true)} />
+                  </div>
+                )}
               </div>
 
-
             </div>
-          
+
           ) : (
             <div className="placeholder">
               {/* <p>Select a resource to view its details</p> */}
             </div>
 
           )}
-          
-
-<AddComment show={showPopup} onClose={() => setShowPopup(false)}  selectedResource={selectedResource} />
+          <AddComment show={showPopup} onClose={() => setShowPopup(false)} selectedResource={selectedResource} />
         </div>
-       
+
       </div>
     </div>
   );

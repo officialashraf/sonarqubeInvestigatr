@@ -207,7 +207,6 @@ const Summary = ({ filters }) => {
       try {
 
         const response = await axios.post('http://5.180.148.40:9007/api/das/aggregate', {
-
           query: { unified_case_id: String(caseId) },
 
           aggs_fields: ["unified_record_type", "unified_date_only", "unified_type"]

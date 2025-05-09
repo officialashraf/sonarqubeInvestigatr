@@ -11,7 +11,7 @@ import validator from "validator";
 
 const ShowDetails = () => {
   const [data, setData] = useState([]);
- 
+  
   const [query, setQuery] = useState("");
   const [searchType, setSearchType] = useState("phone-no");
   const dispatch = useDispatch();

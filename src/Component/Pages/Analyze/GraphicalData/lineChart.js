@@ -5,18 +5,22 @@ import { Box, Slider } from '@mui/material';
 import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, CartesianGrid,ResponsiveContainer, ReferenceLine } from 'recharts';
 import './lineChart.css'
 import Cookies from "js-cookie";
+import Loader from '../../Layout/loader';
 
 const LineChart1 = () => {
   const token = Cookies.get("accessToken");
   const [data, setData] = useState([]);
   const [recordTypes, setRecordTypes] = useState([]);
   const caseId = useSelector((state) => state.caseData.caseData.id);
+  const [loading, setLoading] = useState(true); // Add loading state
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true);
         const response = await axios.post('http://5.180.148.40:9007/api/das/aggregate', {
-          query: { unified_case_id:String(caseId)},
+          query: { unified_case_id: String(caseId) },
+
           aggs_fields: ["unified_date_only", "unified_record_type"]
         },
         {
@@ -46,11 +50,18 @@ const LineChart1 = () => {
         console.error('Error fetching data:', error);
         setData([]);
         setRecordTypes([]);
+      } finally{
+        setLoading(false);
       }
     };
 
     fetchData();
   }, [caseId]);
+
+  if(loading){
+     console.log("Loading state is TRUE");
+    return <  Loader style={{marginTop:'-120px'}} />
+  }
 
   return (
     <Box className="mt-1 h-[200px]">

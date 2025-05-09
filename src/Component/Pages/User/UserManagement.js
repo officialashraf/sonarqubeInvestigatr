@@ -1,16 +1,10 @@
 import { Search, Plus } from "react-bootstrap-icons";
 import { Col, Table } from "react-bootstrap";
 import { FiMoreVertical } from "react-icons/fi";
-
-
-
-
 import "../Case/table.css";
-
 import AddUser from "./addUser";
 import "../Case/table.css";
 import EditUser from "./editUser";
-
 import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
 import Dropdown from "react-bootstrap/Dropdown";
 import Badge from "react-bootstrap/Badge";
@@ -19,6 +13,7 @@ import axios from "axios";
 import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
 import UserDetails from "./userDetails";
+import Loader from "../Layout/loader";
 import { FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
@@ -35,6 +30,7 @@ const UserManagement = () => {
   const [showDetail, setShowDetail] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   console.log(selectedUser);
 
@@ -55,6 +51,7 @@ const UserManagement = () => {
 
   const fetchUsers = async () => {
     try {
+      setLoading(true);
       const token = Cookies.get("accessToken");
       const response = await axios.get("http://5.180.148.40:9000/api/user-man/v1/user", {
         headers: {
@@ -69,6 +66,8 @@ const UserManagement = () => {
   } catch (error) {
     toast.error("Failed to fetch users");
     console.error(error);
+  } finally{
+    setLoading(false);
   }
 };
 // console.log("users",users)
@@ -212,7 +211,7 @@ const UserManagement = () => {
                const bDate = new Date(bValue);
                return direction === "asc" ? aDate - bDate : bDate - aDate;
              }
-         
+        
              if (typeof aValue === "string" && typeof bValue === "string") {
                return direction === "asc"
                  ? aValue.localeCompare(bValue)
@@ -229,7 +228,9 @@ const UserManagement = () => {
            setFilteredData(sortedData);
           }         ;
 
-
+ if(loading){
+  return <Loader/>
+ }
 
   
 return (
