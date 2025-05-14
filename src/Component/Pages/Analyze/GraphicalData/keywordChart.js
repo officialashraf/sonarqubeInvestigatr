@@ -16,10 +16,10 @@ const KeywordChart = () => {
   const initialRender = useRef(true);
 
   useEffect(() => {
-    if (initialRender.current) {
-      initialRender.current = false; // Mark first render as completed
-      return; // Avoid making the request initially
-    }
+    // if (initialRender.current) {
+    //   initialRender.current = false; // Mark first render as completed
+    //   return; // Avoid making the request initially
+    // }
     const fetchData = async () => {
 
       try {
