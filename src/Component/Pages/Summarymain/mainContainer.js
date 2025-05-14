@@ -49,10 +49,10 @@ const MainContainer = () => {
   };
 
   useEffect(() => {
-    if (initialRender.current) {
-      initialRender.current = false; // Mark first render as completed
-      return; // Avoid making the request initially
-    }
+    // if (initialRender.current) {
+    //   initialRender.current = false; // Mark first render as completed
+    //   return; // Avoid making the request initially
+    // }
     filterData();
     const handleDatabaseUpdate = () => filterData();
     window.addEventListener("databaseUpdated", handleDatabaseUpdate);
