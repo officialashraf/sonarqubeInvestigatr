@@ -25,13 +25,13 @@ const UpdateComment =({onClose,comment,resourceId, GetCommentList})=>{
               );
              
               console.log("Updated", comment);
-              toast.success("Comment updated successfully!");
+              toast.success("Update comment  successfully");
               GetCommentList()
               console.log("Updated Comment:", response.data);
               onClose()
           
             } catch (error) {
-              toast.error("Error updating comment!");
+              toast.error("Error while updating comment");
               console.error("Error:", error.response ? error.response.data : error.message);
             }
           };

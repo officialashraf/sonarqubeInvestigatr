@@ -22,7 +22,7 @@ const ShowDetails = () => {
     
     if (searchType === "email") {
       if (!validator.isEmail(query) || !query.endsWith("@gmail.com")) {
-        toast.error("Please enter a valid Gmail address");
+        toast.error("Please enter a valid email address");
         return;
       }
     } else if (searchType === "phone-no") {

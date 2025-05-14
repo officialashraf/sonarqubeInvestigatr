@@ -120,7 +120,7 @@ const EditCase = ({ togglePopup, item }) => {
       );
 
       if (response.status === 200) {
-        toast.success("Case Updated Successfully");
+        toast.success("Case updated successfully");
         window.dispatchEvent(new Event("databaseUpdated"));
         togglePopup();
       }

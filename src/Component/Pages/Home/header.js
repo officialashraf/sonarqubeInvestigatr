@@ -45,7 +45,7 @@ const  Header = ({title}) => {
                   console.log("Logout successful");
                   Cookies.remove('accessToken');
                   Cookies.remove('refreshToken'); // Remove the token after successful logout
-                  toast(" Logout Successfull")
+                  toast(" Logout successfull")
                   navigate("/");
               } else {
                   console.error("Logout failed:", response.statusText);

@@ -46,12 +46,12 @@ const LoginPage = () => {
 
     
                 // Navigate to the next page after successful login
-                toast("You have logged in successfully!");
+                toast("You have successfully logged in");
                 navigate('/cases');
                
             } else {
                 // Handle errors when the response is not 200
-                toast('Unexpected error occurred. Please try again.');
+                toast('An unexpected error has occurred. Please try again');
             }
         } catch (err) {
             // Error handling based on the type of error
@@ -59,7 +59,7 @@ const LoginPage = () => {
     
             if (err.response) {
                 
-                    toast(err.response?.data?.detail || 'Something went wrong. Please try again.');
+                    toast(err.response?.data?.detail || 'Something went wrong. Please try again');
                 
             } else if (err.request) {
                 // No response from the server

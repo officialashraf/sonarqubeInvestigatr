@@ -4,7 +4,7 @@ import { FiMoreVertical } from "react-icons/fi";
 import "../Case/table.css";
 import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
 import Dropdown from "react-bootstrap/Dropdown";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
@@ -26,6 +26,7 @@ const RolesPermission = () => {
     const [showPopupB, setShowPopupB] = useState(false);
     const [showPopupC, setShowPopupC] = useState(false);
     const [showPopupD, setShowPopupD] = useState(false);
+    const initialRender = useRef(true);
 
 const [popupDetails, setPopupDetails] = useState(null);
 
@@ -60,7 +61,11 @@ const [popupDetails, setPopupDetails] = useState(null);
             console.log("data from roles", response)
             setFilteredData(response.data);
         } catch (error) {
-            toast.error("Failed to fetch roles");
+            if (error.response && error.response.data && error.response.data.detail) {
+                 toast.error(error.response.data.detail);
+              } else {
+                console.error("An error occurred:", error.message);
+              }
             console.error(error);
         }
     };
@@ -87,6 +92,10 @@ const [popupDetails, setPopupDetails] = useState(null);
       
 
     useEffect(() => {
+        if (initialRender.current) {
+            initialRender.current = false; // Mark first render as completed
+            return; // Avoid making the request initially
+          }
         fetchRoles();
 
         const handleDatabaseUpdated = () => {
@@ -205,7 +214,7 @@ const [popupDetails, setPopupDetails] = useState(null);
                   }
                 });
                 window.dispatchEvent(new Event("databaseUpdated"));
-              toast(`Role ${role} Deleted Successfully`)
+              toast(`Role ${role} deleted successfully`)
               console.log("Role Deleted:", response.data);
         
               // After successful deletion, fetch the updated data
@@ -217,14 +226,14 @@ const [popupDetails, setPopupDetails] = useState(null);
                 
                         if (err.response) {
                             
-                                toast(err.response?.data?.detail || 'Something went wrong. Please try again.');
+                                toast(err.response?.data?.detail || 'Something went wrong. Please try again');
                             
                         } else if (err.request) {
                             // No response from the server
-                           toast('No response from the server. Please check your connection.');
+                           toast('No response from the server. Please check your connection');
                         } else {
                             // Unknown error occurred
-                           toast('An unknown error occurred. Please try again.');
+                           toast('An unknown error occurred. Please try again');
                         }
                     }
           };

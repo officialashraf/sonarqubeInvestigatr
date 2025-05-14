@@ -35,7 +35,7 @@ const EditRole = ({togglePopup,details}) => {
             );
             
 
-            toast.success("Role Updated successfully");
+            toast.success("Role updated successfully");
             window.dispatchEvent(new Event("databaseUpdated"));
             // window.addEventListener("databaseUpdated", handleDatabaseUpdated)
             console.log('Role Updated successfully:', response.data); // Debug: API response

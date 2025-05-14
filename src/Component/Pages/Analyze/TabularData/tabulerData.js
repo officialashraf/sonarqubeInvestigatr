@@ -9,6 +9,7 @@ import {
 
 } from "../../../../Redux/Action/filterAction";
 import Loader from "../../Layout/loader";
+import { useRef } from "react";
 
 const TabulerData = () => {
   const dispatch = useDispatch();
@@ -32,9 +33,13 @@ const TabulerData = () => {
   const [currentPage, setCurrentPage] = useState(page);
   
   const itemsPerPage = 50;
-
+  const initialRender = useRef(true);
 
   useEffect(() => {
+    if (initialRender.current) {
+      initialRender.current = false; // Mark first render as completed
+      return; // Avoid making the request initially
+    }
     if (data1?.id) {
       dispatch(fetchSummaryData({
         queryPayload: { unified_case_id: data1.id },
@@ -61,7 +66,7 @@ const TabulerData = () => {
   }
 
   if (error) {
-    return <div>Error: {error.message}</div>;
+    return <div>{error.message}</div>;
   }
   
   const pages = [];

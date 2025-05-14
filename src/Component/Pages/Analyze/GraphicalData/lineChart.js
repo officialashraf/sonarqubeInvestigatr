@@ -6,6 +6,8 @@ import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, CartesianGrid,Responsiv
 import './lineChart.css'
 import Cookies from "js-cookie";
 import Loader from '../../Layout/loader';
+import { toast } from 'react-toastify';
+import { useRef } from 'react';
 
 const LineChart1 = () => {
   const token = Cookies.get("accessToken");
@@ -13,8 +15,14 @@ const LineChart1 = () => {
   const [recordTypes, setRecordTypes] = useState([]);
   const caseId = useSelector((state) => state.caseData.caseData.id);
   const [loading, setLoading] = useState(true); // Add loading state
+  const initialRender = useRef(true);
+  
 
   useEffect(() => {
+    if (initialRender.current) {
+      initialRender.current = false; // Mark first render as completed
+      return; // Avoid making the request initially
+    }
     const fetchData = async () => {
       try {
         setLoading(true);
@@ -47,6 +55,12 @@ const LineChart1 = () => {
 
         }
       } catch (error) {
+         if (error.response && error.response.data && error.response.data.detail) {
+                toast.error( error.response.data.detail)
+                console.error("Backend error:", error.response.data.detail);
+              } else {
+                console.error("An error occurred:", error.message);
+              }
         console.error('Error fetching data:', error);
         setData([]);
         setRecordTypes([]);
