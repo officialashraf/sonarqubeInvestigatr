@@ -26,6 +26,7 @@ import LicenseValidator from './utils/licenseValidator.js';
 import UserDashboard from './Component/Pages/User/userDashboard.js';
 import UserManagement from './Component/Pages/User/UserManagement.js';
 import RolesPermission from './Component/Pages/Roles/roles_Permission.js';
+import ReportPage from './Component/Pages/Reports/reportPage.js';
 
 
 const AppContent = () => {
@@ -89,7 +90,7 @@ const AppContent = () => {
             <Route path="/users" element={< UserManagement />} />
             <Route path="/dashboard" element={< UserDashboard />} />
             <Route path="/roles" element={< RolesPermission />} />   
-         
+             <Route path="/reports" element={< ReportPage/>} /> 
             
             <Route path="*" element={<div className='notfound'> <h4>Work in progress........</h4></div>} />
 
