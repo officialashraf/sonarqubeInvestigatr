@@ -1,307 +1,3 @@
-// import { Search, Plus } from "react-bootstrap-icons";
-// import { Col, Table } from "react-bootstrap";
-// import { FiMoreVertical } from "react-icons/fi";
-// import "../Case/table.css";
-// import "../Case/table.css";
-// import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
-// import Dropdown from "react-bootstrap/Dropdown";
-// import { useEffect, useState } from "react";
-// import axios from "axios";
-// import Cookies from 'js-cookie';
-// import { toast } from 'react-toastify';
-// import { FaArrowLeft } from "react-icons/fa";
-// import { useNavigate } from "react-router-dom";
-
-
-
-// const RolesPermission = () => {
-//     const navigate = useNavigate();
-
-//     const [data, setData] = useState([]);
-//     const [searchTerm, setSearchTerm] = useState("");
-//     const [filteredData, setFilteredData] = useState([]);
-//     const [showAddForm, setShowAddForm] = useState(false);
-//     const [sortKey, setSortKey] = useState(null); // 'role', 'endpoint', 'route'
-//     const [sortOrder, setSortOrder] = useState('asc'); // ya 'desc'
-
-//     const togglePopup = () => setShowAddForm(!showAddForm);
-
-//     const fetchRoles = async () => {
-//         try {
-//             const token = Cookies.get("accessToken");
-//             const response = await axios.get("http://5.180.148.40:9000/api/user-man/v1/role", {
-//                 headers: {
-//                     Authorization: `Bearer ${token}`,
-//                     "Content-Type": 'application/json'
-//                 },
-
-//             });
-//             console.log("API Response Roles:", response);
-//             setData(response.data);
-//             console.log("setData", data)
-//             setFilteredData(response.data);
-//         } catch (error) {
-//             toast.error("Failed to fetch users");
-//             console.error(error);
-//         }
-//     };
-
-//     useEffect(() => {
-
-//         fetchRoles();
-//         const handleDatabaseUpdated = () => {
-
-//             fetchRoles();
-//         };
-
-//         window.addEventListener("databaseUpdated", handleDatabaseUpdated);
-
-//         return () => {
-//             window.removeEventListener("databaseUpdated", handleDatabaseUpdated);
-//         };
-//     }, []);
-
-
-//     const handleSearch = (event) => {
-//         const searchValue = event.target.value.trim().toLowerCase();
-//         setSearchTerm(searchValue);
-
-//         const filtered = data.filter(item => {
-//             return Object.values(item).some((value) => {
-//                 if (value !== null && value !== undefined) {
-//                     // Convert the value to a string and check if it includes the search value
-//                     return value
-//                         .toString()
-//                         .toLowerCase()
-//                         .includes(searchValue);
-//                 }
-//                 return false;
-//             });
-//         });
-//         setFilteredData(filtered);
-//     };
-
-//     const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
-
-//     const sortedData = [...data].map(roleItem => ({
-//         ...roleItem,
-//         permissions: [...roleItem.permissions].sort((a, b) => {
-//             if (!sortKey) return 0;
-
-//             let valA = a[sortKey].toLowerCase();
-//             let valB = b[sortKey].toLowerCase();
-
-//             if (valA < valB) return sortOrder === 'asc' ? -1 : 1;
-//             if (valA > valB) return sortOrder === 'asc' ? 1 : -1;
-//             return 0;
-//         })
-//     }));
-
-//     const handleSort = (key) => {
-//         if (sortKey === key) {
-//             // same column pe dobara click -> order toggle
-//             setSortOrder(prev => (prev === 'asc' ? 'desc' : 'asc'));
-//         } else {
-//             setSortKey(key);
-//             setSortOrder('asc');
-//         }
-//     };
-
-
-
-
-//     return (
-//         <div className="data-table-container">
-//             <div className="top-header" style={{ marginTop: "10px" }}>
-//                 <Col xs={1} className="d-flex align-items-center justify-content-flex-start" style={{ width: "20%" }}>
-//                     <FaArrowLeft style={{ cursor: 'pointer', marginRight: '10px' }} onClick={() => navigate('/dashboard')} />
-//                     <div className="search-bar1" style={{ width: '100%' }}>
-//                         <div className="input-group">
-//                             <input
-//                                 type="text"
-//                                 className="form-control"
-//                                 value={searchTerm}
-//                                 onChange={handleSearch}
-//                                 placeholder="Search"
-//                             />
-//                         </div>
-//                     </div>
-//                 </Col>
-
-
-//                 <div className="header-icons">
-//                     <button className="add-btn" onClick={togglePopup}>
-//                         <Plus size={14} style={{ marginRight: "5px" }} />
-//                         Add New Role
-//                     </button>
-//                 </div>
-//             </div>
-
-//             <div className="data-table" style={{ height: "550px" }}>
-//                 <Table striped bordered hover variant="light">
-//                     <thead>
-//                         <tr>
-//                             <th>
-//                                 <div
-//                                     style={{
-//                                         display: "flex",
-//                                         justifyContent: "space-between",
-//                                         alignItems: "center"
-//                                     }}
-//                                 >
-//                                     Roles
-//                                     <span
-//                                         onClick={() => handleSort("role")}
-//                                         style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
-//                                     >
-//                                         {sortConfig.key === "role" ? (
-//                                             sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
-//                                         ) : (
-//                                             <ArrowDropDown />
-//                                         )}
-//                                     </span>
-//                                 </div>
-//                             </th>
-//                             <th>
-//                                 <div
-//                                     style={{
-//                                         display: "flex",
-//                                         justifyContent: "space-between",
-//                                         alignItems: "center"
-//                                     }}
-//                                 >
-//                                     Endpoints                 <span
-//                                         onClick={() => handleSort("perm.endpoint")}
-//                                         style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
-//                                     >
-//                                         {sortConfig.key === "perm.endpoint" ? (
-//                                             sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
-//                                         ) : (
-//                                             <ArrowDropDown />
-//                                         )}
-//                                     </span>
-//                                 </div>
-//                             </th>
-//                             <th>
-//                                 <div
-//                                     style={{
-//                                         display: "flex",
-//                                         justifyContent: "space-between",
-//                                         alignItems: "center"
-//                                     }}
-//                                 >
-//                                     Routes
-//                                     <span
-//                                         onClick={() => handleSort("perm.route")}
-//                                         style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
-//                                     >
-//                                         {sortConfig.key === "perm.route" ? (
-//                                             sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
-//                                         ) : (
-//                                             <ArrowDropDown />
-//                                         )}
-//                                     </span>
-//                                 </div>
-
-
-//                             </th>
-//                             <th>
-//                                 <div
-//                                     style={{
-//                                         display: "flex",
-//                                         justifyContent: "space-between",
-//                                         alignItems: "center"
-//                                     }}
-//                                 >
-//                                     Action
-//                                     <span
-//                                         style={{
-//                                             cursor: "pointer",
-//                                             display: "inline-flex",
-//                                             alignItems: "center"
-//                                         }}
-//                                     >
-//                                         <ArrowDropDown />
-//                                     </span>
-//                                 </div>
-//                             </th>
-//                         </tr>
-//                     </thead>
-//                     <tbody>
-//                         {filteredData && filteredData.map((roleItem, roleIndex) =>
-//                             roleItem.permissions.map((perm, permIndex) => (
-//                                 <tr key={`${roleIndex}-${permIndex}`}>
-//                                     <td>{roleItem.role}</td>
-//                                     <td>{perm.endpoint}</td>
-//                                     <td>{perm.route}</td>
-
-//                                     <td
-//                                         style={{
-//                                             display: "flex",
-//                                             justifyContent: "end",
-//                                             alignItems: "center",
-//                                             textAlign: "center"
-//                                         }}
-//                                     >
-//                                         <div
-//                                             style={{
-//                                                 display: "flex",
-//                                                 alignItems: "center",
-//                                                 gap: "10px"
-//                                             }}
-//                                         />
-//                                         <Dropdown>
-//                                             <Dropdown.Toggle
-//                                                 className="menu-button"
-//                                                 style={{
-//                                                     background: "none",
-//                                                     border: "none",
-//                                                     cursor: "pointer"
-//                                                 }}
-//                                             >
-//                                                 <FiMoreVertical size={16} />
-//                                             </Dropdown.Toggle>
-//                                             <Dropdown.Menu
-//                                                 className="custom-dropdown-menu"
-//                                                 style={{
-//                                                     minWidth: "150px",
-//                                                     textAlign: "left"
-//                                                 }}
-//                                             >
-//                                                 <Dropdown.Item
-//                                                     // onClick={() => toggleDetails(item)}
-//                                                     style={{ cursor: "pointer" }}
-//                                                 >
-//                                                     Details
-//                                                 </Dropdown.Item>
-//                                                 <Dropdown.Item
-//                                                 //   onClick={() => toggleEditForm(item)}
-//                                                 >
-//                                                     Edit
-//                                                 </Dropdown.Item>
-//                                                 <Dropdown.Item
-//                                                 // onClick={() => confirmDelete(item.id, item.username)}
-//                                                 >
-//                                                     Delete
-//                                                 </Dropdown.Item>
-//                                                 <Dropdown.Item>Re Assign  Role</Dropdown.Item>
-
-//                                             </Dropdown.Menu>
-//                                         </Dropdown>
-//                                     </td>
-//                                 </tr>
-//                             ))
-//                         )}
-//                     </tbody>
-//                 </Table>
-//             </div>
-
-//         </div>
-//     );
-// };
-
-// export default RolesPermission;
-
 import { Search, Plus } from "react-bootstrap-icons";
 import { Col, Table } from "react-bootstrap";
 import { FiMoreVertical } from "react-icons/fi";
@@ -477,6 +173,62 @@ const [popupDetails, setPopupDetails] = useState(null);
         return <ArrowDropDown />;
     };
 
+    const confirmDelete = (role) => {
+          toast((t) => (
+            <div>
+              <p>Are you sure you want to delete {role} role?</p>
+              <button className='custom-confirm-button' onClick={() => { deleteRole(role); toast.dismiss(t.role); }} style={{ padding: "4px 1px", fontSize: "12px", width: "20%" }}>Yes</button>
+              <button className='custom-confirm-button' onClick={() => toast.dismiss(t.role)} style={{ padding: "4px 1px", fontSize: "12px", width: "20%" }} >No</button> </div>),
+            { autoClose: false, closeOnClick: false, draggable: false, style: {
+              position: 'fixed',
+              top: '300px',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: '100%',
+              zIndex: 9999, 
+            }
+            },)
+        };
+    const deleteRole = async (role) => {
+            const token = Cookies.get("accessToken");
+            if (!token) {
+              console.error("No token found in cookies.");
+              return;
+            }
+            try {
+              
+              const response = await axios.delete(`http://5.180.148.40:9000/api/user-man/v1/role/${role}`,
+                {
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                  }
+                });
+                window.dispatchEvent(new Event("databaseUpdated"));
+              toast(`Role ${role} Deleted Successfully`)
+              console.log("Role Deleted:", response.data);
+        
+              // After successful deletion, fetch the updated data
+              //fetchData(); // Optionally refresh data after deletion
+        
+            } catch (err) {
+                        // Error handling based on the type of error
+                        console.error('Error during login:', err);
+                
+                        if (err.response) {
+                            
+                                toast(err.response?.data?.detail || 'Something went wrong. Please try again.');
+                            
+                        } else if (err.request) {
+                            // No response from the server
+                           toast('No response from the server. Please check your connection.');
+                        } else {
+                            // Unknown error occurred
+                           toast('An unknown error occurred. Please try again.');
+                        }
+                    }
+          };
+
     return (
         <div className="data-table-container">
             <div className="top-header" style={{ marginTop: "10px" }}>
@@ -548,8 +300,14 @@ const [popupDetails, setPopupDetails] = useState(null);
                                         </Dropdown.Toggle>
                                         <Dropdown.Menu className="custom-dropdown-menu">
                                             <Dropdown.Item  onClick={() => togglePopupB(item)}>Details</Dropdown.Item>
+
+                                            <Dropdown.Item
+                                            onClick={() => confirmDelete(item.role)}
+                                             >Delete</Dropdown.Item>
+
                                             <Dropdown.Item  onClick={() => togglePopupC(item.role)}>Edit</Dropdown.Item>
-                                            <Dropdown.Item>Delete</Dropdown.Item>
+                                         
+
                                             <Dropdown.Item  onClick={() => togglePopupD(item)}>Assign Role&Permissions</Dropdown.Item>
                                         </Dropdown.Menu>
                                     </Dropdown>
@@ -561,6 +319,8 @@ const [popupDetails, setPopupDetails] = useState(null);
             </div>
               {showPopup && <AddRole togglePopup={togglePopup}/>}
               {showPopupB && <Details_Permisson togglePopup={togglePopupB} details={popupDetails}/>}
+
+
               {showPopupC && <EditRole togglePopup={togglePopupC} details={popupDetails}/>}
               {showPopupD && <AssignRole togglePopup={togglePopupD}  details={popupDetails}/>}
         </div>

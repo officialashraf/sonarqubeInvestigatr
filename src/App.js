@@ -51,6 +51,7 @@ const AppContent = () => {
     if (path === "/documents") return "Docs";
     if (path === "/gemini") return "Gemini";
     if (path === "/dashboard") return "Admin";
+    if (path === "/roles") return "Roles";
 
     return "Cases";
   };
