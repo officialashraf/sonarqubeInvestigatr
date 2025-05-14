@@ -61,22 +61,45 @@ const GridView = () => {
       );
 
       // Save the file using file picker
+      // const fileHandle = await window.showSaveFilePicker({
+      //   suggestedName: "social_media_report.docx",
+      //   types: [
+      //     {
+      //       description: "Word Document",
+      //       accept: {
+      //         "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [".docx"],
+      //       },
+      //     },
+      //   ],
+      // });
+
+      // const writable = await fileHandle.createWritable();
+      // await writable.write(response2.data);
+      // await writable.close();
+if ('showSaveFilePicker' in window && window.isSecureContext) {
+      // Use the new API
       const fileHandle = await window.showSaveFilePicker({
-        suggestedName: "social_media_report.docx",
-        types: [
-          {
-            description: "Word Document",
-            accept: {
-              "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [".docx"],
-            },
-          },
-        ],
+        suggestedName: 'social_media_report.docx',
+        types: [{
+          description: 'Word Document',
+          accept: {
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx']
+          }
+        }]
       });
 
       const writable = await fileHandle.createWritable();
-      await writable.write(response2.data);
+      await writable.write(blob);
       await writable.close();
-
+    } else {
+      // Fallback for HTTP or unsupported browsers
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "document.docx";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
       console.log("Report saved successfully!");
     } catch (error) {
       console.error("Error downloading or saving .docx file:", error);
