@@ -64,7 +64,11 @@ const UserManagement = () => {
     setData(response.data.data);
     setFilteredData(response.data.data);
   } catch (error) {
-    toast.error("Failed to fetch users");
+     if (error.response && error.response.data && error.response.data.detail) {
+                    toast.error(error.response.data.detail);
+                 } else {
+                   console.error("An error occurred:", error.message);
+                 }
     console.error(error);
   } finally{
     setLoading(false);
@@ -122,7 +126,7 @@ const UserManagement = () => {
               }
             });
             window.dispatchEvent(new Event("databaseUpdated"));
-          toast(`User ${username} Deleted Successfully`)
+          toast(`User ${username} deleted successfully`)
           console.log("User Deleted:", response.data);
     
           // After successful deletion, fetch the updated data
@@ -134,14 +138,14 @@ const UserManagement = () => {
             
                     if (err.response) {
                         
-                            toast(err.response?.data?.detail || 'Something went wrong. Please try again.');
+                            toast(err.response?.data?.detail || 'Something went wrong. Please try again');
                         
                     } else if (err.request) {
                         // No response from the server
-                       toast('No response from the server. Please check your connection.');
+                       toast('No response from the server. Please check your connection');
                     } else {
                         // Unknown error occurred
-                       toast('An unknown error occurred. Please try again.');
+                       toast('An unknown error occurred. Please try again');
                     }
                 }
       };

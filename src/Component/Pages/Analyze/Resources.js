@@ -46,9 +46,15 @@ const Resources = () => {
   const scrollDirectionRef = useRef(null);
   const [selectedResource, setSelectedResource] = useState(null); // State to track the selected resource
   const [allResources, setAllResources] = useState([]);
+  const initialRender = useRef(true);
+  const [loadedPages, setLoadedPages] = useState([]);
 
 
   useEffect(() => {
+    if (initialRender.current) {
+      initialRender.current = false; // Mark first render as completed
+      return; // Avoid making the request initially
+    }
     if (data1?.id) {
       setLoading(true);
       dispatch(fetchSummaryData({
@@ -61,25 +67,61 @@ const Resources = () => {
     }
   }, [currentPage, data1?.id]);
 
-  // Ensure only 100 items remain in the list
+  // Manage loaded pages and allResources to avoid duplicates and keep max 2 pages and max 100 items
   useEffect(() => {
     if (summaryData && Array.isArray(summaryData)) {
       setAllResources(prev => {
-        let updatedResources;
-        if (currentPage === 1) {
-          // On first page load, replace the resources
-          updatedResources = [...summaryData];
+        let updatedResources = [...prev];
+        let updatedLoadedPages = [...loadedPages];
+
+        if (!updatedLoadedPages.includes(currentPage)) {
+          if (scrollDirectionRef.current === 'down') {
+            // Append new page data
+            updatedResources = [...updatedResources, ...summaryData];
+            updatedLoadedPages.push(currentPage);
+            // Keep only last 2 pages
+            if (updatedLoadedPages.length > 2) {
+              const removedPage = updatedLoadedPages.shift();
+              // Remove data of removedPage (assumed 50 items per page) from start
+              updatedResources = updatedResources.slice(50);
+            }
+          } else if (scrollDirectionRef.current === 'up') {
+            // Prepend new page data
+            updatedResources = [...summaryData, ...updatedResources];
+            updatedLoadedPages.unshift(currentPage);
+            // Keep only last 2 pages
+            if (updatedLoadedPages.length > 2) {
+              const removedPage = updatedLoadedPages.pop();
+              // Remove data of removedPage (assumed 50 items per page) from end
+              updatedResources = updatedResources.slice(0, updatedResources.length - 50);
+            }
+          } else {
+            // Initial load or unknown scroll direction
+            updatedResources = [...summaryData];
+            updatedLoadedPages = [currentPage];
+          }
         } else {
-          // On subsequent pages, append the new data
-          updatedResources = [...prev, ...summaryData];
+          // Page already loaded, do not add duplicate data
+          updatedResources = [...prev];
         }
+
+        // Ensure max 100 items
         if (updatedResources.length > 100) {
-          updatedResources = updatedResources.slice(-100); // Keep only the latest 100 items
+          updatedResources = updatedResources.slice(-100);
         }
+
+        setLoadedPages(updatedLoadedPages);
         return updatedResources;
       });
+
+      // Update hasMore flag
+      setHasMore(() => {
+        if (loadedPages.length === 0) return true;
+        const maxLoadedPage = Math.max(...loadedPages);
+        return maxLoadedPage < totalPages;
+      });
     }
-  }, [summaryData, currentPage]);
+  }, [summaryData, currentPage, totalPages]);
   // Infinite scroll listener
   useEffect(() => {
     const sidebarElement = sidebarRef.current;
@@ -208,6 +250,12 @@ const Resources = () => {
                 "Try again after some time."
               </p>
             )}
+             {/* No More Data Message */}
+          {!hasMore && allResources.length > 0 && (
+            <p style={{ textAlign: "center", marginTop: "2rem", color: "gray" }}>
+              No more data available.
+            </p>
+          )}
             <div style={{ marginBottom: '10px', color: '#000' }}>
               {/* <strong>Current Page:</strong> {currentPage} */}
             </div>

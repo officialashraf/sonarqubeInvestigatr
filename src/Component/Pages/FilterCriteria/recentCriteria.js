@@ -168,7 +168,7 @@ const handelCreate = ()=>{
       if (response.ok) {
         // Filter the list to remove the item locally
         fetchData()
-        toast("Criteria successfully deleted!")
+        toast("Criteria successfully deleted")
         console.log("Criteria successfully deleted!");
       } else {
         console.error("Failed to delete item:", response.status);

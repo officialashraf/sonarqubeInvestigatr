@@ -65,13 +65,13 @@ const LicensePage = () => {
   }
     );
       console.log("key",licenseKey)
-      toast.success("License registered successfully!");
+      toast.success("License registered successfully");
       console.log("License Response:", response);
 
       // Redirect to login page upon success
       navigate("/login");
     } catch (error) {
-      toast.error("License registration failed!"|| error)
+      toast.error("License registration failed"|| error)
     //   setError(error.response ? error.response.data.message : "Registration error");
       console.error("Error:", error);
     }

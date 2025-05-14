@@ -2,6 +2,7 @@
 import axios from 'axios';
 import {SET_TASK_FILTER_ID, SET_DATA, SET_HEADERS, LOG_FILTER_COUNT, SET_ERROR, SET_PAGINATION, SET_LOADING} from '../Constants/filterConstant'
 import Cookies from "js-cookie";
+import { toast } from 'react-toastify';
 
 export const setTaskFilter = (taskId, filterId) => ({
     type: SET_TASK_FILTER_ID,
@@ -32,6 +33,7 @@ export const logFilterCount = (user) => {
 export const fetchSummaryData =
   ({ queryPayload, page = 1, itemsPerPage = 50 }) =>
   async (dispatch) => {
+    console.log("fetchSummaryData called"); 
     try {
       dispatch({ type: SET_LOADING });
 
@@ -85,6 +87,12 @@ export const fetchSummaryData =
       });
     } catch (error) {
       dispatch({ type: SET_ERROR, payload: error.message });
+      if (error.response && error.response.data && error.response.data.detail) {
+        toast.error( error.response.data.detail)
+        console.error("Backend error:", error.response.data.detail);
+      } else {
+        console.error("An error occurred:", error.message);
+      }
     }
   };
 

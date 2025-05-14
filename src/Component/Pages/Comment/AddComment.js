@@ -63,7 +63,7 @@ const AddComment = ({ show, onClose, selectedResource }) => {
            },
          }
        );
-       toast.success("Add new comment Successfully");
+       toast.success("New comment added successfully");
        setComments((prev) => [...prev, res.data]);
        setNewComment('');
        GetCommentList()
@@ -85,7 +85,7 @@ const AddComment = ({ show, onClose, selectedResource }) => {
        });
        GetCommentList()
        if (response.status === 200) {
-         toast.success("Comment successfully deleted!");
+         toast.success("Comment deleted successfully");
        } else {
          console.error("Failed to delete item:", response.status);
        }

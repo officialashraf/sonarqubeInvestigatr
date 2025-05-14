@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import Cookies from "js-cookie";
 import Loader from '../../Layout/loader';
+import { useRef } from 'react';
 
 
 const KeywordChart = () => {
@@ -12,7 +13,13 @@ const KeywordChart = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const caseId = useSelector((state) => state.caseData.caseData.id);
+  const initialRender = useRef(true);
+
   useEffect(() => {
+    if (initialRender.current) {
+      initialRender.current = false; // Mark first render as completed
+      return; // Avoid making the request initially
+    }
     const fetchData = async () => {
 
       try {

@@ -31,7 +31,7 @@ const EditUser = ({ togglePopup, item}) => {
     setUsers(response.data);
    } catch (error) {
     console.error('Error fetching user data:', error);
-    toast.error('Failed to fetch user data. Please try again later.');
+    toast.error('Failed to fetch user data. Please try again later');
    }
   };
   useEffect(() => {
@@ -41,7 +41,7 @@ const EditUser = ({ togglePopup, item}) => {
   const handleEditUser = async (formData) => {
     const token = Cookies.get("accessToken");
     if (!token) {
-      toast.error("Token not found. Please log in again.");
+      toast.error("Token not found. Please log in again");
       return;
     }
 
@@ -81,7 +81,7 @@ const EditUser = ({ togglePopup, item}) => {
       }
     } catch (err) {
       console.error("Update error:", err);
-      toast.error(err.response?.data?.detail || "Something went wrong while updating. Please try again.");
+      toast.error(err.response?.data?.detail || "Something went wrong while updating. Please try again");
     }
   };
 

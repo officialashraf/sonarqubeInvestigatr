@@ -196,7 +196,7 @@ const UnifiedSearchCriteria = ({ onClose, setShowPopup, handleCreateCase }) => {
       }
     } catch (error) {
       console.error("Error deleting item:", error);
-      toast.error("Error deleting criteria");
+      toast.error("Error while deleting criteria");
     }
   };
   
@@ -254,7 +254,7 @@ const UnifiedSearchCriteria = ({ onClose, setShowPopup, handleCreateCase }) => {
       
     } catch (error) {
       console.error('Error performing search:', error);
-      toast.error("Search failed");
+      toast.error("Search failed. Please try again");
     }
   };
   

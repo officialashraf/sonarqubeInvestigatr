@@ -34,7 +34,7 @@ const AddRole = ({togglePopup}) => {
             );
             
 
-            toast.success("Role Created successfully");
+            toast.success("Role created successfully");
             window.dispatchEvent(new Event("databaseUpdated"));
             // window.addEventListener("databaseUpdated", handleDatabaseUpdated)
             console.log('Role Created successfully:', response.data); // Debug: API response

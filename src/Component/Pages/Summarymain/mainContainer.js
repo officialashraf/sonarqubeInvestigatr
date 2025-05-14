@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button } from 'react-bootstrap';
 import { FaPlus } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
@@ -9,6 +9,7 @@ import Cookies from 'js-cookie';
 import './mainContainer.css';
 import AddFilter2 from '../Filters/addFilter.js';
 import Loader from '../Layout/loader.js';
+import { toast } from 'react-toastify';
 
 const MainContainer = () => {
 
@@ -18,6 +19,7 @@ const MainContainer = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [isLoading, setIsLoading] = useState(true); // Track loading state
   const token = Cookies.get('accessToken');
+  const initialRender = useRef(true);
 
   const togglePopup = () => {
     setShowPopup((prev) => !prev);
@@ -35,12 +37,22 @@ const MainContainer = () => {
       setfilterdata(response.data.data);
     } catch (error) {
       console.error('Error fetching filters:', error);
+       if (error.response && error.response.data && error.response.data.detail) {
+              toast.error( error.response.data.detail)
+              console.error("Backend error:", error.response.data.detail);
+            } else {
+              console.error("An error occurred:", error.message);
+            }
     } finally {
       setIsLoading(false); // End loading regardless of success/error
     }
   };
 
   useEffect(() => {
+    if (initialRender.current) {
+      initialRender.current = false; // Mark first render as completed
+      return; // Avoid making the request initially
+    }
     filterData();
     const handleDatabaseUpdate = () => filterData();
     window.addEventListener("databaseUpdated", handleDatabaseUpdate);

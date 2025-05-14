@@ -103,15 +103,15 @@ const handleCreateCase = async (formData) => {
       }
     );    window.dispatchEvent(new Event("databaseUpdated"));
       if (response.status === 200) {
-        toast.success("Case Created Successfully");
+        toast.success("Case created successfully");
         togglePopup(); // पॉपअप बंद करें
       } else {
-        toast.error("Unexpected response from server.");
+        toast.error("Unexpected response received from the server");
       }
   
     } catch (err) {
       console.error("Error during case creation:", err.response || err);
-      toast.error( (err.response?.data?.detail || err.message || "Error during case creation: " ));
+      toast.error( (err.response?.data?.detail || err.message || "Error encountered during case creation: " ));
     }
   };
 
