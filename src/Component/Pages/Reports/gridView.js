@@ -95,13 +95,11 @@ if ('showSaveFilePicker' in window && window.isSecureContext) {
       await writable.close();
     } else {
       // Fallback for HTTP or unsupported browsers
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = "document.docx";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);}
+     const a = document.createElement('a');
+  a.href = url;
+  a.download = 'social_media_report.docx';
+  a.click();
+  a.remove();}
       console.log("Report saved successfully!");
     } catch (error) {
       console.error("Error downloading or saving .docx file:", error);
