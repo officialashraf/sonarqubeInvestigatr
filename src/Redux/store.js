@@ -7,11 +7,12 @@ import { combineReducers } from "redux";
 import {searchReducer , popupReducer, criteriaReducer} from './Reducers/criteriaReducer';
 import {thunk }from "redux-thunk";
 import searchReducer1 from './Reducers/piiReducer';
+import reportReducer from './Reducers/reportReducer';
 // ✅ Persist Config
 const persistConfig = {
   key: "root",
   storage, // Local Storage
-   blacklist: ['filterData'],
+   blacklist: ['filterData','report'],
   
 };
 
@@ -27,6 +28,7 @@ const rootReducer = combineReducers({
   popup: popupReducer,
   pii:searchReducer1,
     criteriaKeywords: criteriaReducer,
+    report: reportReducer,
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
