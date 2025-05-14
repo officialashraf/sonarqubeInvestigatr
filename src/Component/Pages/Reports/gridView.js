@@ -99,7 +99,7 @@ if ('showSaveFilePicker' in window && window.isSecureContext) {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
+      window.URL.revokeObjectURL(url);}
       console.log("Report saved successfully!");
     } catch (error) {
       console.error("Error downloading or saving .docx file:", error);
