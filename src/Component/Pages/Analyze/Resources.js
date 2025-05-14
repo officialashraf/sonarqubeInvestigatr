@@ -51,10 +51,10 @@ const Resources = () => {
 
 
   useEffect(() => {
-    if (initialRender.current) {
-      initialRender.current = false; // Mark first render as completed
-      return; // Avoid making the request initially
-    }
+    // if (initialRender.current) {
+    //   initialRender.current = false; // Mark first render as completed
+    //   return; // Avoid making the request initially
+    // }
     if (data1?.id) {
       setLoading(true);
       dispatch(fetchSummaryData({
