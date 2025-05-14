@@ -1,6 +1,6 @@
 import React from 'react';
 import { Nav } from 'react-bootstrap';
-import { House, ListTask, Folder, BarChart, People,Search} from 'react-bootstrap-icons';
+import { House, ListTask, Folder, BarChart, People,Bullseye,Search} from 'react-bootstrap-icons';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -20,7 +20,7 @@ const  Sidebar = ()=> {
     // { label: 'Legals', icon: <FileEarmarkText size={15} />, path: '/legals' },
     { label: 'Reports', icon: <BarChart size={15} />, path: '/reports' },
     // { label: 'Dashboard', icon: <Grid size={15} />, path: '/dashboard' },
-    // { label: 'Targets', icon: <Bullseye size={15} />, path: '/targets' },
+    { label: 'Targets', icon: <Bullseye size={15} />, path: '/targets' },
     { label: 'Admin', icon: <People size={15} />, path: '/dashboard' },
   ];
 
