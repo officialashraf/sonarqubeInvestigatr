@@ -46,15 +46,15 @@ const Resources = () => {
   const scrollDirectionRef = useRef(null);
   const [selectedResource, setSelectedResource] = useState(null); // State to track the selected resource
   const [allResources, setAllResources] = useState([]);
-  const initialRender = useRef(true);
+  // const initialRender = useRef(true);
   const [loadedPages, setLoadedPages] = useState([]);
 
 
   useEffect(() => {
-    if (initialRender.current) {
-      initialRender.current = false; // Mark first render as completed
-      return; // Avoid making the request initially
-    }
+    // if (initialRender.current) {
+    //   initialRender.current = false; // Mark first render as completed
+    //   return; // Avoid making the request initially
+    // }
     if (data1?.id) {
       setLoading(true);
       dispatch(fetchSummaryData({

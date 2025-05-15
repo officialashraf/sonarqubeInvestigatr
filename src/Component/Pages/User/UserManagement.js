@@ -274,7 +274,7 @@ return (
                   alignItems: "center"
                 }}
               >
-                UserID
+                UserId
                  <span
                     onClick={() => handleSort("id")}
                     style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
@@ -498,11 +498,11 @@ return (
                   {item.email}
                 </td>
                 <td>
-                  {(item.last_logout || "-")}
+                  {(item.last_logout?item.last_logout.slice(0,10) : "-")}
                 </td>
                 <td>
                   {
-                    (item.updatedOn || "-")
+                    (item.updatedOn?item.updatedOn.slice(0,10) : "-")
                   }
                 </td>
                 <td>
