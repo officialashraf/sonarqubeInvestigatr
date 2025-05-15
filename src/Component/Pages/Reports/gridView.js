@@ -61,22 +61,46 @@ const GridView = () => {
       );
 
       // Save the file using file picker
+      // const fileHandle = await window.showSaveFilePicker({
+      //   suggestedName: "social_media_report.docx",
+      //   types: [
+      //     {
+      //       description: "Word Document",
+      //       accept: {
+      //         "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [".docx"],
+      //       },
+      //     },
+      //   ],
+      // });
+
+      // const writable = await fileHandle.createWritable();
+      // await writable.write(response2.data);
+      // await writable.close();
+         const blob = await response2.data
+
+    const url = window.URL.createObjectURL(blob);
+if ('showSaveFilePicker' in window && window.isSecureContext) {
+      // Use the new API
       const fileHandle = await window.showSaveFilePicker({
-        suggestedName: "social_media_report.docx",
-        types: [
-          {
-            description: "Word Document",
-            accept: {
-              "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [".docx"],
-            },
-          },
-        ],
+        suggestedName: 'social_media_report.docx',
+        types: [{
+          description: 'Word Document',
+          accept: {
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx']
+          }
+        }]
       });
 
       const writable = await fileHandle.createWritable();
-      await writable.write(response2.data);
+      await writable.write(blob);
       await writable.close();
-
+    } else {
+      // Fallback for HTTP or unsupported browsers
+     const a = document.createElement('a');
+  a.href = url;
+  a.download = 'social_media_report.docx';
+  a.click();
+  a.remove();}
       console.log("Report saved successfully!");
     } catch (error) {
       console.error("Error downloading or saving .docx file:", error);
