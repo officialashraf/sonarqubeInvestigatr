@@ -371,10 +371,10 @@ const handleDownload  = async () => {
                   </InputAdornment>
                 ),
                 endAdornment: (
-                  <InputAdornment position="end">
-                    <Send onClick={() => dispatch(openPopup("recent"))} style={{ cursor: 'pointer' }} />
+                  <button position="end" style={{ border: 'none' , backgroundColor: 'white'}}>
+                    <Send onClick={handleSearch} />
                   
-                  </InputAdornment>
+                  </button>
                 ),
                 style: {
                   height: '38px',

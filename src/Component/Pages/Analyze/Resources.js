@@ -46,15 +46,10 @@ const Resources = () => {
   const scrollDirectionRef = useRef(null);
   const [selectedResource, setSelectedResource] = useState(null); // State to track the selected resource
   const [allResources, setAllResources] = useState([]);
-  const initialRender = useRef(true);
   const [loadedPages, setLoadedPages] = useState([]);
 
 
   useEffect(() => {
-    if (initialRender.current) {
-      initialRender.current = false; // Mark first render as completed
-      return; // Avoid making the request initially
-    }
     if (data1?.id) {
       setLoading(true);
       dispatch(fetchSummaryData({
@@ -83,7 +78,9 @@ const Resources = () => {
             if (updatedLoadedPages.length > 2) {
               const removedPage = updatedLoadedPages.shift();
               // Remove data of removedPage (assumed 50 items per page) from start
-              updatedResources = updatedResources.slice(50);
+              // updatedResources = updatedResources.slice(50);
+              const removedPageSize = prev.filter(item => item.page === removedPage).length;
+              updatedResources = updatedResources.slice(removedPageSize);
             }
           } else if (scrollDirectionRef.current === 'up') {
             // Prepend new page data
@@ -93,7 +90,9 @@ const Resources = () => {
             if (updatedLoadedPages.length > 2) {
               const removedPage = updatedLoadedPages.pop();
               // Remove data of removedPage (assumed 50 items per page) from end
-              updatedResources = updatedResources.slice(0, updatedResources.length - 50);
+              // updatedResources = updatedResources.slice(0, updatedResources.length - 50);
+              const removedPageSize = prev.filter(item => item.page === removedPage).length;
+              updatedResources = updatedResources.slice(0, updatedResources.length - removedPageSize);
             }
           } else {
             // Initial load or unknown scroll direction

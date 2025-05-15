@@ -19,7 +19,6 @@ const MainContainer = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [isLoading, setIsLoading] = useState(true); // Track loading state
   const token = Cookies.get('accessToken');
-  const initialRender = useRef(true);
 
   const togglePopup = () => {
     setShowPopup((prev) => !prev);
@@ -49,10 +48,6 @@ const MainContainer = () => {
   };
 
   useEffect(() => {
-    if (initialRender.current) {
-      initialRender.current = false; // Mark first render as completed
-      return; // Avoid making the request initially
-    }
     filterData();
     const handleDatabaseUpdate = () => filterData();
     window.addEventListener("databaseUpdated", handleDatabaseUpdate);
