@@ -117,6 +117,7 @@ const UserManagement = () => {
           return;
         }
         try {
+
           const response = await axios.delete(`http://5.180.148.40:9000/api/user-man/v1/user/${id}`,
             {
               headers: {
