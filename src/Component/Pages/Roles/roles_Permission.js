@@ -28,6 +28,7 @@ const RolesPermission = () => {
     const [showPopupD, setShowPopupD] = useState(false);
     // const initialRender = useRef(true);
 
+
 const [popupDetails, setPopupDetails] = useState(null);
 
      const togglePopup = () => {
@@ -92,6 +93,7 @@ const [popupDetails, setPopupDetails] = useState(null);
       
 
     useEffect(() => {
+
         // if (initialRender.current) {
         //     initialRender.current = false; // Mark first render as completed
         //     return; // Avoid making the request initially

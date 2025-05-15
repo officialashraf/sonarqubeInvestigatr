@@ -19,7 +19,6 @@ const MainContainer = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [isLoading, setIsLoading] = useState(true); // Track loading state
   const token = Cookies.get('accessToken');
-  const initialRender = useRef(true);
 
   const togglePopup = () => {
     setShowPopup((prev) => !prev);

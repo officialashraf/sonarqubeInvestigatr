@@ -15,6 +15,7 @@ const LineChart1 = () => {
   const [recordTypes, setRecordTypes] = useState([]);
   const caseId = useSelector((state) => state.caseData.caseData.id);
   const [loading, setLoading] = useState(true); // Add loading state
+
   // const initialRender = useRef(true);
   
 
@@ -23,6 +24,7 @@ const LineChart1 = () => {
     //   initialRender.current = false; // Mark first render as completed
     //   return; // Avoid making the request initially
     // }
+
     const fetchData = async () => {
       try {
         setLoading(true);

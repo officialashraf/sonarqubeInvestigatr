@@ -1,6 +1,6 @@
 
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
@@ -44,6 +44,14 @@ const EditRole = ({togglePopup,details}) => {
             console.error('Error saving criteria:', error); // Debug: Error log
         }
     };
+    useEffect(
+      () => {
+        if (details) {
+          setSearchTitle(details); // Assuming details is the current role name
+        }
+      },
+      [details]
+    );
 
     return  (
         <div className="popup-overlay" style={{

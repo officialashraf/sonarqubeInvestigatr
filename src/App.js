@@ -94,6 +94,7 @@ const AppContent = () => {
             <Route path="/roles" element={< RolesPermission />} />   
              <Route path="/reports" element={< ReportPage/>} /> 
             <Route path="/targets" element={< TargetDashboard/>} /> 
+
             <Route path="*" element={<div className='notfound'> <h4>Work in progress........</h4></div>} />
 
 

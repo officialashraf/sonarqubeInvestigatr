@@ -40,6 +40,7 @@ const TabulerData = () => {
     //   initialRender.current = false; // Mark first render as completed
     //   return; // Avoid making the request initially
     // }
+
     if (data1?.id) {
       dispatch(fetchSummaryData({
         queryPayload: { unified_case_id: data1.id },

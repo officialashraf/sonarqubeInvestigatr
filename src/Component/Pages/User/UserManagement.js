@@ -118,7 +118,7 @@ const UserManagement = () => {
         }
         try {
           const authToken = Cookies.get('accessToken'); // Read the token from cookies 
-          const response = await axios.delete(`http://5.180.148.40:9000/api/user-man/v1/user/${id}`,
+          const response = await axios.delete(http://5.180.148.40:9000/api/user-man/v1/user/${id},
             {
               headers: {
                 'Content-Type': 'application/json',
@@ -480,7 +480,7 @@ return (
                 style={{ position: "relative" }}
               >
                   <td>
-                 {`USER${String(item.id).padStart(4, '0')}`}
+                 {USER${String(item.id).padStart(4, '0')}}
                 </td>
                 <td>
                   {item.username}
@@ -585,4 +585,4 @@ return (
 );
 };
 
-export default UserManagement;
+export default UserManagement;

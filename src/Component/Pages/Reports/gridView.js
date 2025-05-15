@@ -144,6 +144,9 @@ if ('showSaveFilePicker' in window && window.isSecureContext) {
     setSearchTerm(e.target.value);
     // You can implement search functionality here
   };
+  const filteredData = data.filter((item) =>
+    Object.values(item).some((value) => typeof value === "string" && value.toLowerCase().includes(searchTerm.toLowerCase()))
+  );
 
   // Calculate pagination
   const pages = [];
@@ -224,8 +227,8 @@ if ('showSaveFilePicker' in window && window.isSecureContext) {
               </tr>
             </thead>
             <tbody>
-              {data.length > 0 ? (
-                data.map((item, rowIndex) => (
+              {filteredData.length > 0 ? (
+                filteredData.map((item, rowIndex) => (
                   <tr key={rowIndex}>
                     {[...new Set(data.flatMap(item => Object.keys(item)))].map((key, colIndex) => (
                       <td key={colIndex} className="fixed-td">
