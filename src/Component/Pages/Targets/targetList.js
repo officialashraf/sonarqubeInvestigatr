@@ -145,6 +145,62 @@ const TargetList = () => {
     setDetails(details);
     setShowPopupD(prev => !prev);
   };
+  const confirmDelete = (id, name) => {
+    toast((t) => (
+      <div>
+        <p>Are you sure you want to delete {name} target?</p>
+        <button className='custom-confirm-button' onClick={() => { deleteTarget(id, name); toast.dismiss(t.id); }} style={{ padding: "4px 1px", fontSize: "12px", width: "20%" }}>Yes</button>
+        <button className='custom-confirm-button' onClick={() => toast.dismiss(t.id)} style={{ padding: "4px 1px", fontSize: "12px", width: "20%" }} >No</button> </div>),
+      {
+        autoClose: false, closeOnClick: false, draggable: false, style: {
+          position: 'fixed',
+          top: '300px',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: '100%',
+          zIndex: 9999,
+        }
+      },)
+  };
+  const deleteTarget = async (id, name) => {
+    const token = Cookies.get("accessToken");
+    if (!token) {
+      console.error("No token found in cookies.");
+      return;
+    }
+    try {
+
+      const response = await axios.delete(`http://5.180.148.40:9001/api/case-man/v1/target/${id}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        });
+      // window.dispatchEvent(new Event("databaseUpdated"));
+      toast(`Target ${name} deleted successfully`)
+      console.log("Target deleted:", response.data);
+
+      // After successful deletion, fetch the updated data
+      fetchUsers(); // Optionally refresh data after deletion
+
+    } catch (err) {
+      // Error handling based on the type of error
+      console.error('Error during login:', err);
+
+      if (err.response) {
+
+        toast(err.response?.data?.detail || 'Something went wrong. Please try again');
+
+      } else if (err.request) {
+        // No response from the server
+        toast('No response from the server. Please check your connection');
+      } else {
+        // Unknown error occurred
+        toast('An unknown error occurred. Please try again');
+      }
+    }
+  };
   return (
     <div className="data-table-container">
       <div className="top-header" style={{ marginTop: "10px" }}>
@@ -477,7 +533,7 @@ const TargetList = () => {
                           Edit
                         </Dropdown.Item>
                         <Dropdown.Item
-                        // onClick={() => confirmDelete(item.id, item.username)}
+                        onClick={() => confirmDelete(item.id, item.name)}
                         >
                           Delete
                         </Dropdown.Item>
