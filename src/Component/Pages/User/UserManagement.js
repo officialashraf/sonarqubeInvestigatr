@@ -480,7 +480,7 @@ return (
                 style={{ position: "relative" }}
               >
                   <td>
-                 {USER${String(item.id).padStart(4, '0')}}
+                 {`USER${String(item.id).padStart(4, '0')}`}
                 </td>
                 <td>
                   {item.username}
