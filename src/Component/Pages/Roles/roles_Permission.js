@@ -26,7 +26,7 @@ const RolesPermission = () => {
     const [showPopupB, setShowPopupB] = useState(false);
     const [showPopupC, setShowPopupC] = useState(false);
     const [showPopupD, setShowPopupD] = useState(false);
-    const initialRender = useRef(true);
+    // const initialRender = useRef(true);
 
 const [popupDetails, setPopupDetails] = useState(null);
 

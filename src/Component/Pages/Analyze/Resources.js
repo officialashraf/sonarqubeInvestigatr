@@ -46,7 +46,7 @@ const Resources = () => {
   const scrollDirectionRef = useRef(null);
   const [selectedResource, setSelectedResource] = useState(null); // State to track the selected resource
   const [allResources, setAllResources] = useState([]);
-  const initialRender = useRef(true);
+  // const initialRender = useRef(true);
   const [loadedPages, setLoadedPages] = useState([]);
 
 

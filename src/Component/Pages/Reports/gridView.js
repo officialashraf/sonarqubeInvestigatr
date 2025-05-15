@@ -77,6 +77,7 @@ const GridView = () => {
       // await writable.write(response2.data);
       // await writable.close();
          const blob = await response2.data
+
     const url = window.URL.createObjectURL(blob);
 if ('showSaveFilePicker' in window && window.isSecureContext) {
       // Use the new API

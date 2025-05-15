@@ -15,7 +15,7 @@ const LineChart1 = () => {
   const [recordTypes, setRecordTypes] = useState([]);
   const caseId = useSelector((state) => state.caseData.caseData.id);
   const [loading, setLoading] = useState(true); // Add loading state
-  const initialRender = useRef(true);
+  // const initialRender = useRef(true);
   
 
   useEffect(() => {

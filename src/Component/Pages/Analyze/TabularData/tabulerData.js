@@ -33,7 +33,7 @@ const TabulerData = () => {
   const [currentPage, setCurrentPage] = useState(page);
   
   const itemsPerPage = 50;
-  const initialRender = useRef(true);
+  // const initialRender = useRef(true);
 
   useEffect(() => {
     // if (initialRender.current) {

@@ -13,7 +13,7 @@ const KeywordChart = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const caseId = useSelector((state) => state.caseData.caseData.id);
-  const initialRender = useRef(true);
+  // const initialRender = useRef(true);
 
   useEffect(() => {
     // if (initialRender.current) {
