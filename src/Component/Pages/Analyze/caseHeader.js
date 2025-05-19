@@ -54,16 +54,6 @@ const CaseHeader = ({ onIconClick }) => {
               placeholder="Search..."
             />
           </div>
-
-          <div className="col-md-auto col-sm-12 mb-1 ">
-            <select
-              className="form-select form-select-sm"
-              style={{ fontSize: "12px" }}
-            >
-              <option value="source1">Smart Insights</option>
-              <option value="source2">Options</option>
-            </select>
-          </div>
           <div className="col-auto ms-auto d-flex align-items-center gap-3">
             <FaPhotoVideo
               className="icon-styles"

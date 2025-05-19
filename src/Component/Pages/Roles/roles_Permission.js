@@ -14,6 +14,7 @@ import AddRole from "./addRole";
 import DetailsPermission from "./details_Permission";
 import AssignRole from "./asignRole";
 import EditRole from "./editRole";
+import Loader from "../Layout/loader";
 
 const RolesPermission = () => {
     const navigate = useNavigate();
@@ -26,6 +27,7 @@ const RolesPermission = () => {
     const [showPopupB, setShowPopupB] = useState(false);
     const [showPopupC, setShowPopupC] = useState(false);
     const [showPopupD, setShowPopupD] = useState(false);
+    const [loading, setLoading] = useState(false);
 
 
     const [popupDetails, setPopupDetails] = useState(null);
@@ -49,6 +51,7 @@ const RolesPermission = () => {
 
     const fetchRoles = async () => {
         try {
+            setLoading(true);
             const token = Cookies.get("accessToken");
             const response = await axios.get("http://5.180.148.40:9000/api/user-man/v1/role", {
                 headers: {
@@ -67,9 +70,11 @@ const RolesPermission = () => {
                 console.error("An error occurred:", error.message);
             }
             console.error(error);
+        } finally{
+            setLoading(false);
         }
     };
-
+   
     useEffect(() => {
         fetchRoles();
 
@@ -191,6 +196,10 @@ const RolesPermission = () => {
             }
         }
     };
+
+    if(loading){
+        return <Loader/>
+    }
 
     return (
         <div className="data-table-container">
