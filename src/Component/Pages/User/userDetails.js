@@ -1,6 +1,5 @@
-import React from "react";
 import { Table, CloseButton } from "react-bootstrap";
-import "../Case/caseDetails.css";
+import "../Case/caseDetails.css"
 
 const UserDetails = ({ item, users, toggleDetails }) => {
 console.log(item.last_logout, "items")

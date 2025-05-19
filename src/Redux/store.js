@@ -1,5 +1,5 @@
 import {configureStore}  from '@reduxjs/toolkit'
-import { caseReducer, summaryReducer, tabReducer } from './Reducers/caseReducer'
+import { caseReducer, tabReducer } from './Reducers/caseReducer'
 import { filterReducer, summaryDataReducer, taskFilterReducer } from './Reducers/filterReducer';
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage"; // Local Storage ke liye

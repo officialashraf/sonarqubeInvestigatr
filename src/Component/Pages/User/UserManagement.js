@@ -1,4 +1,4 @@
-import { Search, Plus } from "react-bootstrap-icons";
+import {  Plus } from "react-bootstrap-icons";
 import { Col, Table } from "react-bootstrap";
 import { FiMoreVertical } from "react-icons/fi";
 import "../Case/table.css";
@@ -25,7 +25,6 @@ const UserManagement = () => {
   const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredData, setFilteredData] = useState([]);
-  // const [filteredUsers, setFilteredUsers] = useState([]);
   const [showAddForm, setShowAddForm] = useState(false);
   const [showDetail, setShowDetail] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
@@ -74,10 +73,7 @@ const UserManagement = () => {
     setLoading(false);
   }
 };
-// console.log("users",users)
-//   useEffect(() => {
-//     fetchUsers();
-//   }, []);
+
 
   useEffect(() => {
              fetchUsers();
@@ -117,7 +113,6 @@ const UserManagement = () => {
           return;
         }
         try {
-         
           const response = await axios.delete(`http://5.180.148.40:9000/api/user-man/v1/user/${id}`,
             {
               headers: {
@@ -125,12 +120,12 @@ const UserManagement = () => {
                 'Authorization': `Bearer ${token}`
               }
             });
-            window.dispatchEvent(new Event("databaseUpdated"));
+            // window.dispatchEvent(new Event("databaseUpdated"));
           toast(`User ${username} deleted successfully`)
           console.log("User Deleted:", response.data);
     
           // After successful deletion, fetch the updated data
-          //fetchData(); // Optionally refresh data after deletion
+          fetchUsers(); // Optionally refresh data after deletion
     
         } catch (err) {
                     // Error handling based on the type of error

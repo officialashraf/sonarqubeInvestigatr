@@ -10,9 +10,8 @@ import { toast } from 'react-toastify';
 import validator from "validator";
 
 const ShowDetails = () => {
-  const [data, setData] = useState([]);
-  
-  const [query, setQuery] = useState("");
+ 
+   const [query, setQuery] = useState("");
   const [searchType, setSearchType] = useState("phone-no");
   const dispatch = useDispatch();
   
@@ -30,7 +29,7 @@ const ShowDetails = () => {
     
         // Check if the query contains any alphabet character
         const hasAlphabets = /[a-zA-Z]/.test(query);
-        const hasInvalidSpecialChars = /[^0-9\/\-\+]/.test(query); 
+           const hasInvalidSpecialChars = /[^0-9/\-+.]/.test(query);
         if (hasAlphabets || hasInvalidSpecialChars) {
           toast.error("Phone number must contain only digits");
           return;
@@ -46,7 +45,7 @@ const ShowDetails = () => {
     try {
       console.log("Final URL:", url);
       const response = await axios.get(url);
-      setData(response.data);
+      // setData(response.data);
       dispatch(searchSuccess(response.data));
       console.log("data", response.data);
     } catch (err) {
@@ -96,26 +95,7 @@ const ShowDetails = () => {
         </div>
         
       </div>
-      {/* <div className="search-bar">
-      <select value={searchType} onChange={(e) => setSearchType(e.target.value)}>
-        <option value="email">Email</option>
-        <option value="phone">Phone</option>
-      </select>
-
-      <input
-        type="text"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        placeholder={`Enter ${searchType}`}
-      />
-
-      <button onClick={handleSearch}>Search</button>
-
-      Optional: Show response
-      {loading && <p>Loading...</p>}
-      {error && <p style={{ color: "red" }}>Error: {error}</p>}
-      {data && <pre>{JSON.stringify(data, null, 2)}</pre>}
-    </div> */}
+  
     </>
   );
 };

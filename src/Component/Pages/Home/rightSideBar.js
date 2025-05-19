@@ -1,6 +1,5 @@
-import React from 'react';
 import {  Nav } from 'react-bootstrap';
-import { Cpu, FileEarmarkText, Bell, PinAngle, ChatLeftText ,Search} from 'react-bootstrap-icons';
+import { Cpu, FileEarmarkText ,Search} from 'react-bootstrap-icons';
 import { useNavigate } from 'react-router-dom';
 import "./rightSideBar.css"
 import { useDispatch ,useSelector} from 'react-redux';

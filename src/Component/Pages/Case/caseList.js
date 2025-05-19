@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { Table, InputGroup, FormControl, Dropdown, DropdownButton, Badge } from 'react-bootstrap';
-import { Search, List, CardList, Plus, ThreeDotsVertical } from 'react-bootstrap-icons';
+import { useState, useEffect  } from 'react';
+import { Table, InputGroup, FormControl, Dropdown, Badge } from 'react-bootstrap';
+import { Search, Plus} from 'react-bootstrap-icons';
 import axios from 'axios';
 import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material';
 import './table.css';
@@ -37,11 +37,7 @@ const DataTable = () => {
   };
   useEffect(() => {
     if (location.pathname === "/cases") {
-        // dispatch(fetchSummaryData({
-        //     queryPayload: {}, // Ensure an empty payload or relevant query
-        //     page: 1,
-        //     itemsPerPage: 50
-        // }));
+      
 
         dispatch({
             type: SET_PAGINATION,
@@ -171,10 +167,7 @@ const DataTable = () => {
     setFilteredData(filtered);
   };
 
-  // const handleStatusChange = (id, status) => {
-  //   setFilteredData(filteredData.map(item => (item.id === id ? { ...item, status } : item)));
-  // };
-
+ 
   const togglePopup = () => {
 
     setShowPopup((prev) => !prev);
@@ -243,11 +236,7 @@ const DataTable = () => {
             {/* <span className="custom-confirm-button" title='Add New Case'  onClick={togglePopup}><Plus size={30}/>Add New Case</span>  */}
             <button className='add-btn' title='Add New Case' onClick={togglePopup}><Plus size={20} />Add New Case</button>
 
-            {/* <DropdownButton className="custom-dropdown1" align="end" title={<ThreeDotsVertical size={24} />} id="dropdown-menu-align-end">
-              <Dropdown.Item href="#">Option 1</Dropdown.Item>
-              <Dropdown.Item href="#">Option 2</Dropdown.Item>
-              <Dropdown.Item href="#">Option 3</Dropdown.Item>
-            </DropdownButton> */}
+           
           </div>
         </div>
         <div className="data-table">

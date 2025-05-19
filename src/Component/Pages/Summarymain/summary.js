@@ -1,10 +1,8 @@
-
-
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import ProgressRow from "./progressBar.js";
-import { Container, Box, Table, TableContainer, TableFooter, TableBody, TableCell, TableHead, TableRow, Paper } from '@mui/material';
+import {  Box, Table, TableContainer, TableFooter, TableBody, TableCell, TableHead, TableRow, Paper } from '@mui/material';
 import { PieChart, Pie, Tooltip, Legend, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Cell } from 'recharts';
 import AddFilter2 from '../Filters/addFilter.js';
 import './summary.css';
@@ -12,7 +10,7 @@ import Cookies from "js-cookie";
 
 
 const Summary = ({ filters }) => {
-  const token = Cookies.get("accessToken");
+ const token = Cookies.get("accessToken");
       
   const [pieData, setPieData] = useState([]);
   const [barData, setBarData] = useState([]);
@@ -27,13 +25,7 @@ const Summary = ({ filters }) => {
   console.log("casiId",caseId)
   useEffect(() => {
     const fetchData = async () => {
-      
-          const token = Cookies.get("accessToken");
-          console.log("token-----",token);
-            console.log({
-      Authorization: `Bearer ${token}`
-    });
-
+                   
       try {
 
         const response = await axios.post('http://5.180.148.40:9007/api/das/aggregate', {
@@ -55,15 +47,6 @@ const Summary = ({ filters }) => {
 
         const { unified_record_type, unified_date_only, unified_type } = response.data;
 
-        //  Fix Pie Chart Data (unified_record_type)
-        // const pieSource = (unified_record_type || []).map(item => ({
-        //   name: item.key,
-        //   value: item.doc_count
-        // }));
-
-        // if (pieSource.length === 0) {
-        //   pieSource.push({ name: 'No Data', value: 0 });
-        // }
         const pieData = (unified_record_type || []).map(item => ({
           name: item.key,
           value: item.doc_count
@@ -73,10 +56,7 @@ const Summary = ({ filters }) => {
           pieData.push({ name: 'No Data', value: 0 });
         }
 
-        // const totalCount = pieData.reduce((sum, item) => sum + item.value, 0);
-
-        // const colors = ['#8884d8', '#8dd1e1', '#a4de6c', '#d0ed57', '#ffc658'];
-        //   Bar Chart Data (unified_date_only)
+      
         const barData = (unified_date_only || []).map(item => ({
           name: item.key.split('-').slice(0, 3).join(''),
           value: item.doc_count
@@ -109,7 +89,7 @@ const Summary = ({ filters }) => {
     };
 
     fetchData();
-  }, [caseId]);
+  }, [caseId,token]);
 
   const togglePopup = () => {
     setShowPopup((prev) => !prev);
@@ -129,29 +109,7 @@ const Summary = ({ filters }) => {
           <h5 style={{ textAlign: "center" }}> FilterCount: {filters}</h5>
 
           <div className='graphchats'>
-            {/* Pie Chart */}
-            {/* <Box width={400} height={300} className="box">
-              <ResponsiveContainer width={400} height={300}>
-                <PieChart>
-                  <Legend align="center" verticalAlign="top" />
-                  <Pie
-                    data={pieData}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={60}
-                    outerRadius={80}
-                    fill="#333"
-                    dataKey="value"
-                    label={({ name }) => name}
-                  >
-                    {pieData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill="#333" />
-                    ))}
-                  </Pie>
-                  <Tooltip formatter={() => ` Total: ${totalCount}`} />
-                </PieChart>
-              </ResponsiveContainer>
-            </Box> */}
+           
             <Box className="box">
               <ResponsiveContainer width="100%" height={300}>
                 <PieChart>

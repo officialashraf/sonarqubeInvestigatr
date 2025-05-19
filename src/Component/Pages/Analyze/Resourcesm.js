@@ -20,9 +20,7 @@ import { fetchSummaryData } from "../../../Redux/Action/filterAction";
 
 
 const Resources = () => {
-
   const dispatch = useDispatch();
- 
   const [showPopup, setShowPopup] = useState(false);
   const data1 = useSelector((state) => state.caseData.caseData);
   const {
@@ -31,7 +29,7 @@ const Resources = () => {
     page,
     totalPages,
     totalResults,
-  } = useSelector((state) => state.filterData);
+   } = useSelector((state) => state.filterData);
   const summaryData = data
   const summaryHeaders = headers
   console.log("totalresultes", totalResults)
@@ -45,6 +43,8 @@ const Resources = () => {
   const scrollDirectionRef = useRef(null);
   const [selectedResource, setSelectedResource] = useState(null); // State to track the selected resource
   const [allResources, setAllResources] = useState([]);
+
+
   const [loadedPages, setLoadedPages] = useState([]);
 
 
@@ -65,32 +65,33 @@ const Resources = () => {
   // Manage loaded pages and allResources to avoid duplicates and keep max 2 pages and max 100 items
   useEffect(() => {
     if (summaryData && Array.isArray(summaryData)) {
-      setAllResources(prevResources => {
-        const currentLoadedPages = [...loadedPagesRef.current]; // Capture current loadedPages
-        let updatedResources = [...prevResources];
-        let updatedLoadedPages = [...currentLoadedPages];
+      setAllResources(prev => {
+        let updatedResources = [...prev];
+        let updatedLoadedPages = [...loadedPages];
 
-        if (!currentLoadedPages.includes(currentPage)) {
+        if (!updatedLoadedPages.includes(currentPage)) {
           if (scrollDirectionRef.current === 'down') {
             // Append new page data
             updatedResources = [...updatedResources, ...summaryData];
             updatedLoadedPages.push(currentPage);
-            
             // Keep only last 2 pages
             if (updatedLoadedPages.length > 2) {
               const removedPage = updatedLoadedPages.shift();
-              const removedPageSize = prevResources.filter(item => item.page === removedPage).length;
+              // Remove data of removedPage (assumed 50 items per page) from start
+              // updatedResources = updatedResources.slice(50);
+              const removedPageSize = prev.filter(item => item.page === removedPage).length;
               updatedResources = updatedResources.slice(removedPageSize);
             }
           } else if (scrollDirectionRef.current === 'up') {
             // Prepend new page data
             updatedResources = [...summaryData, ...updatedResources];
             updatedLoadedPages.unshift(currentPage);
-            
             // Keep only last 2 pages
             if (updatedLoadedPages.length > 2) {
               const removedPage = updatedLoadedPages.pop();
-              const removedPageSize = prevResources.filter(item => item.page === removedPage).length;
+              // Remove data of removedPage (assumed 50 items per page) from end
+              // updatedResources = updatedResources.slice(0, updatedResources.length - 50);
+              const removedPageSize = prev.filter(item => item.page === removedPage).length;
               updatedResources = updatedResources.slice(0, updatedResources.length - removedPageSize);
             }
           } else {
@@ -98,6 +99,9 @@ const Resources = () => {
             updatedResources = [...summaryData];
             updatedLoadedPages = [currentPage];
           }
+        } else {
+          // Page already loaded, do not add duplicate data
+          updatedResources = [...prev];
         }
 
         // Ensure max 100 items
@@ -105,22 +109,18 @@ const Resources = () => {
           updatedResources = updatedResources.slice(-100);
         }
 
-        // Update loadedPages state
         setLoadedPages(updatedLoadedPages);
-        
-        // Update hasMore based on the new state
-        setHasMore(updatedLoadedPages.length === 0 || Math.max(...updatedLoadedPages) < totalPages);
-
         return updatedResources;
       });
+
+      // Update hasMore flag
+      setHasMore(() => {
+        if (loadedPages.length === 0) return true;
+        const maxLoadedPage = Math.max(...loadedPages);
+        return maxLoadedPage < totalPages;
+      });
     }
-  }, [summaryData, currentPage, totalPages]); // Added loadedPages to dependencies
- 
-  const loadedPagesRef = useRef(loadedPages);
-useEffect(() => {
-  loadedPagesRef.current = loadedPages;
-}, [loadedPages]);
-  // ... rest of your component ...
+  }, [summaryData, currentPage, totalPages,loadedPages]);
 
   // Infinite scroll listener
   useEffect(() => {
@@ -160,6 +160,7 @@ useEffect(() => {
       const newScrollTop = currentPage === 1
         ? scrollContainer.scrollHeight * 0 // Move slightly down when at page 1
         : scrollContainer.scrollHeight / 2 - scrollContainer.clientHeight / 2; // Default centering
+      //  const newScrollTop = scrollContainer.scrollHeight / 2 - scrollContainer.clientHeight / 2;
       scrollContainer.scrollTo({
         top: newScrollTop,
         behavior: 'smooth',
@@ -210,6 +211,7 @@ useEffect(() => {
               </span>
               <h5>Resources Insights</h5>
               <div style={{ marginBottom: '10px', color: '#000' }}>
+                {/* <strong>Current Page:</strong> {currentPage} */}
               </div>
               {loading && (
                 <div style={{ textAlign: 'center', padding: '10px', color: 'black' }}>
@@ -227,12 +229,14 @@ useEffect(() => {
                   onClick={() => handleResourceClick(resource)}
                 >
                   <img
+                   alt="Pic"
                     src={resource.socialmedia_from_imageurl ?? resource.socialmedia_media_url}
+                    // src={resource.socialmedia_from_imageurl} // Fallback to dummy image
+                    // alt={resource.unified_type}
                     onError={(e) => {
                       e.target.onerror = null; // prevents infinite loop
                       e.target.src = 'https://www.kurin.com/wp-content/uploads/placeholder-square.jpg';
                     }}
-                    alt="pic_not_found"
                     className="resourceImage"
                   />
                   <div className="resourceDetails">
@@ -247,12 +251,12 @@ useEffect(() => {
                 "Try again after some time."
               </p>
             )}
-            {/* No More Data Message */}
-            {!hasMore && allResources.length > 0 && (
-              <p style={{ textAlign: "center", marginTop: "2rem", color: "gray" }}>
-                No more data available.
-              </p>
-            )}
+             {/* No More Data Message */}
+          {!hasMore && allResources.length > 0 && (
+            <p style={{ textAlign: "center", marginTop: "2rem", color: "gray" }}>
+              No more data available.
+            </p>
+          )}
             <div style={{ marginBottom: '10px', color: '#000' }}>
               {/* <strong>Current Page:</strong> {currentPage} */}
             </div>
@@ -276,12 +280,12 @@ useEffect(() => {
 
                     <img
                       src={selectedResource.socialmedia_from_imageurl}
+                       alt="Pic"
                       onError={(e) => {
                         e.target.onerror = null;
                         e.target.src =
                           "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
                       }}
-                      alt="pic_not_found"
                       className="profileImage"
                     />
 
@@ -299,7 +303,9 @@ useEffect(() => {
 
                     // Step 1: Clean karo array ko
                     if (typeof urls === 'string') {
-                      urls = urls.replace(/[\]"]+/g, '').split(',');
+         
+urls = urls.replace(/[\]"]/g, '').split(',');
+
                     }
 
                     // Step 2: Single URL nahi multiple URL array hai ab
@@ -357,12 +363,12 @@ useEffect(() => {
                   <div className="profile-section">
                     <img
                       src={selectedResource.socialmedia_from_imageurl}
+                       alt="Pic"
                       onError={(e) => {
                         e.target.onerror = null;
                         e.target.src =
                           "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
                       }}
-                      alt="pic_not_found"
                       className="profileImage"
                     />
                     <div className="name-date">
@@ -443,8 +449,8 @@ useEffect(() => {
                         e.target.src =
                           "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
                       }}
-                      alt="pic_not_found"
                       className="profileImage"
+                       alt="Pic"
                     />
                     <div className="name-date">
                       <p className="displayName">
@@ -463,6 +469,7 @@ useEffect(() => {
                     // Step 1: Clean karo array ko
                     if (typeof urls === 'string') {
                       urls = urls.replace(/[\]"]+/g, '').split(',');
+
                     }
 
                     // Step 2: Single URL nahi multiple URL array hai ab
@@ -535,15 +542,15 @@ useEffect(() => {
                 </div>
               )}
 
-              {/* {/tiktok/} */}
+              {/*tiktok*/}
               {selectedResource.unified_type === "Tiktok" && (
                 <div class="tiktok-container">
                   <video src={selectedResource.socialmedia_from_imageurl} autoplay muted loop></video>
 
                   <div class="right-panel">
-                    <img src="your-profile.jpg"alt="pic_not_found" class="profile-pic" />
+                    <img src="your-profile.jpg" alt="Pic" class="profile-pic" />
                     <div class="icon"><GoEye /><span>{selectedResource.socialmedia_activity_view_count}</span></div>
-                    <div class="icon">❤<span>{selectedResource.socialmedia_activity_like_count}</span></div>
+                    <div class="icon">❤️<span>{selectedResource.socialmedia_activity_like_count}</span></div>
                     <div class="icon"><FaRegCommentDots /><span></span></div>
                     <div class="icon"><FaRegBookmark /><span></span></div>
                     <div class="icon"><PiShareFatBold /><span></span></div>
@@ -559,18 +566,18 @@ useEffect(() => {
                 </div>
               )}
 
-              {/* {/FaceBook/} */}
+              {/*FaceBook*/}
               {selectedResource.unified_type === "Facebook" && (
                 <div className="resourceDetailsView marginSides20">
                   <div className="profile-section">
                     <img
                       src={selectedResource.socialmedia_from_imageurl}
+                       alt="Pic"
                       onError={(e) => {
                         e.target.onerror = null;
                         e.target.src =
                           "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
                       }}
-                      alt="pic_not_found"
                       className="profileImage"
                     />
                     <div className="name-date">
@@ -641,6 +648,16 @@ useEffect(() => {
                   <p className="activityContent">
                     {selectedResource.unified_activity_content}
                   </p>
+                  {/* <img
+                  src={selectedResource.socialmedia_from_imageurl}
+                  alt="Post"
+                  // onError={(e) => {
+                  //   e.target.onerror = null;
+                  //   e.target.src =
+                  //     "https://www.kurin.com/wp-content/uploads/placeholder-square.jpg";
+                  // }}
+                  className="postImage"
+                /> */}
                 </div>
               )}
 
@@ -651,18 +668,19 @@ useEffect(() => {
 
                     <img
                       src={selectedResource.socialmedia_media_url}
+                      alt="Pic"
                       onError={(e) => {
                         e.target.onerror = null;
                         e.target.src =
                           "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
                       }}
-                      alt="pic_not_found"
                       className="profileImage"
                     />
                     <div className="name-date">
                       <p className="displayName">
                         {selectedResource.socialmedia_from_displayname}
                       </p>
+                      {/* <p className="postDate">{selectedResource.unified_date_only}</p> */}
                     </div>
 
                   </div>
@@ -689,6 +707,16 @@ useEffect(() => {
                   <p className="activityContent">
                     {selectedResource.unified_activity_content}
                   </p>
+                  {/* <img
+                  src={selectedResource.socialmedia_from_imageurl}
+                  alt="Post"
+                  // onError={(e) => {
+                  //   e.target.onerror = null;
+                  //   e.target.src =
+                  //     "https://www.kurin.com/wp-content/uploads/placeholder-square.jpg";
+                  // }}
+                  className="postImage"
+                /> */}
                   <div className="insta-icon" style={{ justifyContent: "initial" }}>
                     <div className="unified-date">
                       <div className="like-commment-share vk">
@@ -707,7 +735,7 @@ useEffect(() => {
                     </div>
                   </div>
                   <div className="bottom-row">
-                    <span className="red-heart">❤</span>
+                    <span className="red-heart">❤️</span>
                     <span className="like-count">{selectedResource.socialmedia_activity_like_count}</span>
                   </div>
                 </div>
@@ -811,6 +839,7 @@ useEffect(() => {
 
           ) : (
             <div className="placeholder">
+              {/* <p>Select a resource to view its details</p> */}
             </div>
 
           )}
@@ -822,4 +851,4 @@ useEffect(() => {
   );
 };
 
-export default Resources;
+export default Resources;

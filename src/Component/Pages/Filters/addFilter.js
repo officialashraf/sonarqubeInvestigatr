@@ -1,17 +1,15 @@
-import React, { useState, useEffect } from 'react'
-//import AddNewFilter from "./components/addNewFilter";
+import { useState, useEffect } from 'react'
 import ExistingFilters from "./existingFilter";
 import axios from 'axios';
 import AddNewFilter from './addNewFilter';
 import "./main.css"
 import { Plus, X } from 'react-bootstrap-icons'
-import { useSelector, useDispatch } from 'react-redux';
-
+import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import Cookies from 'js-cookie';
 
 const AddFilter2 = ({ togglePopup }) => {
-  const dispatch = useDispatch();
+
   const [selectedFilters, setSelectedFilters] = useState([]);
   const [initialSelectedFilters, setInitialSelectedFilters] = useState([]);
   const caseData1 = useSelector((state) => state.caseData.caseData);
@@ -64,14 +62,11 @@ const AddFilter2 = ({ togglePopup }) => {
 
   // Proceed handler
   const handleProceed = async () => {
-    // const filtersToStart = selectedFilters.filter(id =>!selectedFilters .includes(id));
-    // console.log("filterToStop", filtersToStart)
-    // const filtersToStop = initialSelectedFilters.filter(id => !initialSelectedFilters.includes(id));
-    // console.log("filterToStop", filtersToStop)
-    const filtersToStart = selectedFilters.filter(id => 
+
+    const filtersToStart = selectedFilters.filter(id =>
       !initialSelectedFilters.includes(id)
     );
-    const filtersToStop = initialSelectedFilters.filter(id => 
+    const filtersToStop = initialSelectedFilters.filter(id =>
       !selectedFilters.includes(id)
     );
     try {
@@ -81,12 +76,14 @@ const AddFilter2 = ({ togglePopup }) => {
         const payload = {
           filter_id: filtersToStart,
           case_id: String(caseData1.id)
-      };
-      console.log('Payload being sent start:', payload);
-        await axios.post('http://5.180.148.40:9002/api/osint-man/v1/start',payload, {   headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        }});
+        };
+        console.log('Payload being sent start:', payload);
+        await axios.post('http://5.180.148.40:9002/api/osint-man/v1/start', payload, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          }
+        });
         window.dispatchEvent(new Event('databaseUpdated'));
       }
 
@@ -95,27 +92,27 @@ const AddFilter2 = ({ togglePopup }) => {
         const payload = {
           filter_id_list: filtersToStop,
           case_id: String(caseData1.id)
-      };
-      console.log('Payload being sent stop:', payload);
+        };
+        console.log('Payload being sent stop:', payload);
         await axios.post('http://5.180.148.40:9002/api/osint-man/v1/stop/batch', payload, {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`,
           },
-        });window.dispatchEvent(new Event('databaseUpdated'));
+        }); window.dispatchEvent(new Event('databaseUpdated'));
       }
 
-     // Update case status
-     await axios.put(`http://5.180.148.40:9001/api/case-man/v1/case/${caseData1.id}`,
-      { status: "in progress" },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+      // Update case status
+      await axios.put(`http://5.180.148.40:9001/api/case-man/v1/case/${caseData1.id}`,
+        { status: "in progress" },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
         }
-      }
-    );
-    window.dispatchEvent(new Event('databaseUpdated'));
+      );
+      window.dispatchEvent(new Event('databaseUpdated'));
 
 
       // Refresh data and close popup
@@ -137,7 +134,7 @@ const AddFilter2 = ({ togglePopup }) => {
   return (
     <>
       <div className="popup-overlay">
-        <div className="popup-container" style={{width:"50%"}}>
+        <div className="popup-container" style={{ width: "50%" }}>
           <button className="close-icon" onClick={togglePopup}>&times;</button>
           <div className="popup-content">
             <div className="container-fluid p-4 main-body-div">
@@ -157,7 +154,7 @@ const AddFilter2 = ({ togglePopup }) => {
                   <div className="col-md-8" style={{ marginTop: "-15px" }}>
                     <button onClick={() => setShowAddFilter(false)} className="btn close-add-filter-button">
                       <X />
-                    </button> 
+                    </button>
                     <AddNewFilter filterIde={filterIdedit} onNewFilterCreated={handleNewFilterCreated} />
                   </div>
                 )}

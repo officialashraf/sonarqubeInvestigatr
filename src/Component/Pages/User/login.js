@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Container, Row, Col, Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import './login.css';
 import InputField from './inputField'; // reusable input field
-import {  toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 const LoginPage = () => {
     const navigate = useNavigate();
@@ -26,7 +26,7 @@ const LoginPage = () => {
     // Handle form submission
     const handleLogin = async (e) => {
         e.preventDefault(); // Prevents form default submission
-    
+
         try {
             // Sending REST API request with username and password
             const response = await axios.post('http://5.180.148.40:9000/api/user-man/v1/user/validate', {
@@ -37,18 +37,18 @@ const LoginPage = () => {
             // Checking if the response is successful
             if (response.status === 200) {
                 const { access_token, refresh_token } = response.data; // Extract tokens from REST response
-                  
+
 
                 // Set cookies for 1 day
                 Cookies.set('accessToken', access_token, { expires: 10 });
                 Cookies.set('refreshToken', refresh_token, { expires: 10 });
 
 
-    
+
                 // Navigate to the next page after successful login
                 toast("You have successfully logged in");
                 navigate('/cases');
-               
+
             } else {
                 // Handle errors when the response is not 200
                 toast('An unexpected error has occurred. Please try again');
@@ -56,11 +56,11 @@ const LoginPage = () => {
         } catch (err) {
             // Error handling based on the type of error
             console.error('Error during login:', err);
-    
+
             if (err.response) {
-                
-                    toast(err.response?.data?.detail || 'Something went wrong. Please try again');
-                
+
+                toast(err.response?.data?.detail || 'Something went wrong. Please try again');
+
             } else if (err.request) {
                 // No response from the server
                 setError('No response from the server. Please check your connection.');
@@ -70,7 +70,7 @@ const LoginPage = () => {
             }
         }
     };
-    
+
     return (
         <Container fluid className="login-container">
             <Row className="login-row">
@@ -88,7 +88,7 @@ const LoginPage = () => {
                             controlId="Username"
                             autocomplete="off"
                             name="username"
-                          
+
                         />
                         <InputField
                             label="Password"
@@ -99,7 +99,7 @@ const LoginPage = () => {
                             controlId="Username"
                             autocomplete="off"
                             name="password"
-                       
+
                         />
                         <div className="d-flex justify-content-between mt-2">
                             <a href="/forgotPassword" className="forgot-password-link">

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { Box, Slider } from '@mui/material';
@@ -57,7 +57,7 @@ const CriteriaLineChart = () => {
     };
 
     fetchData();
-  }, [queryPayload]);
+  }, [queryPayload,token]);
 
   return (
     <Box className="mt-1 h-[200px]">

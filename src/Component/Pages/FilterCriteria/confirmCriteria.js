@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
@@ -21,23 +21,16 @@ const Confirm = ({ formData, selectedDates,  searchChips  }) => {
             const criteriaPaylod = {
               title: searchTitle || "", 
 
-             
-
      keyword : Array.isArray(keywordSource)
            ? keywordSource
        : keywordSource
         ? [keywordSource]
         : [],
 
-                // keyword: Array.isArray(formData.searchQuery)
-                //     ? formData.searchQuery
-                //     : [formData.searchQuery], // Wrap single keyword in an array
                 case_id: formData.caseIds?.length > 0
                     ? formData.caseIds.map((caseId) => caseId.value.toString())
                     : [], // Handle multiple `caseIds` and return array
-                // file_type: formData.filetype?.length > 0
-                //     ? formData.filetype.map((file) => file.value)
-                //     : [], // Handle multiple `filetype` and return array
+                
                 file_type: [
                     ...(formData.filetype?.length > 0 ? formData.filetype.map((file) => file.value) : []),
                     ...(formData.platform?.length > 0 ? formData.platform.map((platform) => platform.value) : [])
@@ -67,6 +60,7 @@ const Confirm = ({ formData, selectedDates,  searchChips  }) => {
             console.log('Criteria saved successfully:', response.data); // Debug: API response
             setIsVisible(false)
           } catch (error) {
+             toast.error(error.response.data.detail||"Error saving criteria");
             console.error('Error saving criteria:', error); // Debug: Error log
         }
     };
@@ -77,12 +71,7 @@ const Confirm = ({ formData, selectedDates,  searchChips  }) => {
             justifyContent: "center", alignItems: "center", zIndex: 1050
         }}>
             <div className="popup-container" style={{display:'flex', alignItems:'center'}}>
-                {/* <button
-                    className="close-icon"
-                    onClick={() => setIsVisible(false)}
-                >
-                    &times;
-                </button> */}
+              
               
                 <div className="popup-content" style={{width:'70%'}}>
                     <h5>Save Search as</h5>

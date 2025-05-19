@@ -1,16 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Select from 'react-select';
 import DatePickera from './datepicker';
 import { Search, Send, Tune, CalendarToday } from '@mui/icons-material';
 import { Checkbox, FormControlLabel, InputAdornment, TextField } from '@mui/material';
 import '../FilterCriteria/createCriteria.css';
 import { customStyles } from '../Case/createCase';
-import RecentCriteria from './recentCriteria';
-import SavedCriteria from './savedCriteria';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { toast } from 'react-toastify';
-import { useDispatch, useSelector} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { closePopup, openPopup, setKeywords, setPage, setSearchResults } from '../../../Redux/Action/criteriaAction';
 import Confirm from './confirmCriteria';
 
@@ -35,7 +32,7 @@ export const sharedSxStyles = {
 const CreateCriteria = ({ togglePopup, setShowPopup, handleCreateCase }) => {
   const dispatch = useDispatch();
   const Token = Cookies.get('accessToken');
-  
+
   const [formData, setFormData] = useState({
     searchQuery: '',
     datatype: [],
@@ -45,7 +42,7 @@ const CreateCriteria = ({ togglePopup, setShowPopup, handleCreateCase }) => {
     latitude: '',
     longitude: ''
   });
-    const [showSavePopup, setShowSavePopup] = useState(false);
+  const [showSavePopup, setShowSavePopup] = useState(false);
   const [showPopupD, setShowPopupD] = useState(false);
   const [selectedDates, setSelectedDates] = useState({
     startDate: null,
@@ -55,23 +52,23 @@ const CreateCriteria = ({ togglePopup, setShowPopup, handleCreateCase }) => {
   });
   const [caseOptions, setCaseOptions] = useState([]);
   const [fileTypeOptions, setFileTypeOptions] = useState([]);
-  
+
 
   const activePopup = useSelector((state) => state.popup?.activePopup || null);
-console.log("create popup", activePopup)
-  
+  console.log("create popup", activePopup)
+
 
   // Fetch case IDs on component mount
-  useEffect(() => {
-    fetchCaseData();
-    fetchFileTypes();
-  }, []);
+
   // if (activePopup !== "create") return null;
   // Fetch case data from API
 
+
+
  
 
-  const fetchCaseData = async () => {
+  useEffect(() => {
+     const fetchCaseData = async () => {
     try {
       const response = await axios.get('http://5.180.148.40:9001/api/case-man/v1/case', {
         headers: {
@@ -110,131 +107,133 @@ console.log("create popup", activePopup)
       setFileTypeOptions(fileTypeOptionsFormatted);
     } catch (error) {
       console.error('Error fetching file types:', error);
+     
     }
   };
+    fetchCaseData();
+    fetchFileTypes();
+  }, [Token]);
 
-
- 
   // Handle checkbox change for saving criteria
   const handleSaveCriteriaChange = (e) => {
 
     const isChecked = e.target.checked;
 
     if (isChecked) {
-        setFormData((prev) => ({ ...prev, includeArchived: true }));
-        setShowSavePopup(true); // Open the popup
+      setFormData((prev) => ({ ...prev, includeArchived: true }));
+      setShowSavePopup(true); // Open the popup
     } else {
-        // Close the popup and reset form state when unchecked
-        setFormData((prev) => ({ ...prev, includeArchived: false }));
-        setShowSavePopup(false);
+      // Close the popup and reset form state when unchecked
+      setFormData((prev) => ({ ...prev, includeArchived: false }));
+      setShowSavePopup(false);
     }
-   
+
   };
 
- 
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
     // If updating `searchQuery`, split input into an array of keywords
     if (name === "searchQuery") {
-        setFormData(prev => ({
-            ...prev,
-            [name]: value.split(",").map(keyword => keyword.trim()) // Split by commas and trim extra spaces
-        }));
+      setFormData(prev => ({
+        ...prev,
+        [name]: value.split(",").map(keyword => keyword.trim()) // Split by commas and trim extra spaces
+      }));
     } else {
-        // For other inputs, handle normally
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
+      // For other inputs, handle normally
+      setFormData(prev => ({
+        ...prev,
+        [name]: value
+      }));
     }
-};
+  };
 
 
-const handleSearch = async (e) => {
-  e.preventDefault();
-  try {
-   
-    
-    const payload = {
-      keyword: Array.isArray(formData.searchQuery) ? formData.searchQuery : [formData.searchQuery],
-      // case_id: formData.caseIds?.length > 0 
-      // ? formData.caseIds.map(caseId => caseId.value).join(",") 
-      // : "",
-      case_id: formData.caseIds?.length > 0 
-      ? (formData.caseIds.map(caseId => caseId.value.toString()))
-      : "[]",
-    
-    
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    try {
 
-      file_type: formData.filetype?.length > 0 ? formData.filetype.map(type => type.value) : [],
-      page: 1, // Start at page 1
-    };
-    
-    if (selectedDates.startDate && selectedDates.startTime) {
-      payload.start_time = `${selectedDates.startDate.toISOString().split('T')[0]}T${String(selectedDates.startTime.hours).padStart(2, '0')}:${String(selectedDates.startTime.minutes).padStart(2, '0')}:00`;
-    }
-    
-    if (selectedDates.endDate && selectedDates.endTime) {
-      payload.end_time = `${selectedDates.endDate.toISOString().split('T')[0]}T${String(selectedDates.endTime.hours).padStart(2, '0')}:${String(selectedDates.endTime.minutes).padStart(2, '0')}:00`;
-    }
-    
-    console.log("search payload", payload);
-    
-    const response = await axios.post(
-      'http://5.180.148.40:9007/api/das/search', 
-      payload, 
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${Token}`
-        }
+
+      const payload = {
+        keyword: Array.isArray(formData.searchQuery) ? formData.searchQuery : [formData.searchQuery],
+        // case_id: formData.caseIds?.length > 0 
+        // ? formData.caseIds.map(caseId => caseId.value).join(",") 
+        // : "",
+        case_id: formData.caseIds?.length > 0
+          ? (formData.caseIds.map(caseId => caseId.value.toString()))
+          : "[]",
+
+
+
+        file_type: formData.filetype?.length > 0 ? formData.filetype.map(type => type.value) : [],
+        page: 1, // Start at page 1
+      };
+
+      if (selectedDates.startDate && selectedDates.startTime) {
+        payload.start_time = `${selectedDates.startDate.toISOString().split('T')[0]}T${String(selectedDates.startTime.hours).padStart(2, '0')}:${String(selectedDates.startTime.minutes).padStart(2, '0')}:00`;
       }
-    );
-    
-    console.log("dispatchresponse", response);
-    
-    dispatch(setSearchResults({
-      results: response.data.results,
-      total_pages: response.data.total_pages || 1,
-      total_results: response.data.total_results || 0,
-    }));
 
-    dispatch(setKeywords({
-       keyword: response.data.input.keyword,
-      queryPayload: response.data.input  // or other fields if needed
-    }));
-    console.log("setkeywordDispacth",response.data.input.keyword)
-    // Dispatch initial page number
-    dispatch(setPage(1));
-    
-    setFormData({
-      searchQuery: '',
-      datatype: [],
-      filetype: [],
-      caseIds: [],
-      includeArchived: false,
-      latitude: '',
-      longitude: ''
-    });
-    
-    // Handle the search results (e.g., pass them to a parent component)
-    if (handleCreateCase) {
-      handleCreateCase(response.data);
+      if (selectedDates.endDate && selectedDates.endTime) {
+        payload.end_time = `${selectedDates.endDate.toISOString().split('T')[0]}T${String(selectedDates.endTime.hours).padStart(2, '0')}:${String(selectedDates.endTime.minutes).padStart(2, '0')}:00`;
+      }
+
+      console.log("search payload", payload);
+
+      const response = await axios.post(
+        'http://5.180.148.40:9007/api/das/search',
+        payload,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${Token}`
+          }
+        }
+      );
+
+      console.log("dispatchresponse", response);
+
+      dispatch(setSearchResults({
+        results: response.data.results,
+        total_pages: response.data.total_pages || 1,
+        total_results: response.data.total_results || 0,
+      }));
+
+      dispatch(setKeywords({
+        keyword: response.data.input.keyword,
+        queryPayload: response.data.input  // or other fields if needed
+      }));
+      console.log("setkeywordDispacth", response.data.input.keyword)
+      // Dispatch initial page number
+      dispatch(setPage(1));
+
+      setFormData({
+        searchQuery: '',
+        datatype: [],
+        filetype: [],
+        caseIds: [],
+        includeArchived: false,
+        latitude: '',
+        longitude: ''
+      });
+
+      // Handle the search results (e.g., pass them to a parent component)
+      if (handleCreateCase) {
+        handleCreateCase(response.data);
+      }
+
+      dispatch(openPopup("saved"));
+    } catch (error) {
+      console.error('Error performing search:', error);
     }
-    
-    dispatch(openPopup("saved"));
-  } catch (error) {
-    console.error('Error performing search:', error);
-  }
-};
+  };
 
   // Toggle popup visibility
   const togglePopupA = () => {
     setShowPopupD(!showPopupD);
   };
 
- 
+
 
   // Handle data from DatePicker
   const handleDateSelection = (dateData) => {
@@ -415,24 +414,11 @@ const handleSearch = async (e) => {
           onClose={togglePopupA}
         />
       )}
-{
- showSavePopup && (
-  <Confirm  formData={formData} selectedDates={selectedDates}/>
- )
-}
-      {/* {showPopupR && (
-        <RecentCriteria
-          togglePopup={togglePopupR}
-          setShowPopup={setShowPopup}
-        />
-      )}
-
-      {showPopupS && (
-        <SavedCriteria
-          togglePopup={togglePopupS}
-          setShowPopup={setShowPopup}
-        />
-      )} */}
+      {
+        showSavePopup && (
+          <Confirm formData={formData} selectedDates={selectedDates} />
+        )
+      }
     </div>
   );
 };

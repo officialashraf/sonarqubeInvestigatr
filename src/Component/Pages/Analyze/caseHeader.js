@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { ListAltOutlined, PieChart } from "@mui/icons-material";
 import { FaPhotoVideo } from "react-icons/fa";
@@ -14,12 +13,7 @@ const CaseHeader = ({ onIconClick }) => {
   const backToSnap = () => {
     navigate(`/cases/${caseData1.id}`);
   };
-  // const backToCase = () => {
-  //   navigate(`/cases/${caseData1.id}`);
-  // };
-  // const togglePopup = () => {
-  //   setShowPopup((prev) => !prev);
-  // };
+ 
   return (
     <>
     <div className="container-fluid">
@@ -31,27 +25,16 @@ const CaseHeader = ({ onIconClick }) => {
          <Col xs={1} className="d-flex align-items-center justify-content-center">
                   <FaArrowLeft style={{ cursor: 'pointer',margin:'0px' }}  onClick={backToSnap} />
                 </Col>
-        {/* <div className='row header-row p-2' style={{background: 'lightgray', color:'black',display: 'flex', marginLeft: '0rem', marginRight: '0rem', height:"40px"}} > */}
-        <div className="col">
+      <div className="col">
           <h5 className="mb-1">
             Case ID: {`CASE${String(caseData1.id).padStart(4, "0")}`}
           </h5>
           <p className="mb-0">{caseData1.title}</p>
 
-          {/* <h5 className="header-caseid-h7" >Case id: {`CASE${String(caseData1.id).padStart(4, '0')}`}</h5> */}
-          {/* <p className='header-casename-h5' >{caseData1.title}</p> */}
+        
         </div>
         <div className="col d-flex flex-wrap justify-content-end align-items-center">
-          {/* <button className="add-new-filter-button" onClick={() => onIconClick("resources")}>
-            Resources
-          </button> */}
-          {/* <button
-            className="add-new-filter-button"
-            style={{ marginLeft: "12px" }}
-            onClick={backToCase}
-          >
-            Case board
-          </button> */}
+          
           <button
             className="add-new-filter-button"
             style={{ marginLeft: "12px" }}
@@ -61,11 +44,9 @@ const CaseHeader = ({ onIconClick }) => {
             Back to Case Snapshot
           </button>
         </div>
-        {/* <div className='col d-flex justify-content-end align-items-center' >
-            <button className="add-new-filter-button ">  Back to Case Snapshot</button>
-        </div> */}
+    
       </div>
-      {/*end header*/}
+   
       <div
         className="row py-0 px-2  align-items-start"
         style={{ backgroundColor: "lightgrey" }}
@@ -77,9 +58,7 @@ const CaseHeader = ({ onIconClick }) => {
             placeholder="Search..."
             />
         </div>
-        {/* <div className="col-md-auto">
-  <ListAltOutlined/>
-  </div> */}
+     
 
         <div className="col-md-auto col-sm-12 mb-1 ">
           <select
@@ -105,10 +84,10 @@ const CaseHeader = ({ onIconClick }) => {
             className="icon-style"
             onClick={() => onIconClick("caseData")}
           />
-          {/* <MoreVert className="icon-style" /> */}
+        
         </div>
       </div>
-      {/* {showPopup && <AddFilter2 togglePopup={togglePopup} />} */}
+   
             </div>
     </>
   );

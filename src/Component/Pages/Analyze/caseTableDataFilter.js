@@ -1,16 +1,11 @@
-import React from 'react'
-
-//import Pagination from './pagination'
 import CaseHeader from './caseHeader'
-import CaseData from './TabularData/tabulerData'
 import { useState } from 'react'
 import TabulerData from './TabularData/tabulerData'
 import GraphicalData from './GraphicalData/graphicalData'
 import Resources from './Resources'
 
 const CaseTableDataFilter = () => {
-  // const [filter, setFilter] = useState([]);
-  const [view, setView] = useState('caseData'); // Default view is 'caseData'
+    const [view, setView] = useState('caseData'); // Default view is 'caseData'
 
   const handleButtonClick = (viewType) => {
     setView(viewType); // Update the view when a button is clicked
@@ -23,8 +18,6 @@ const CaseTableDataFilter = () => {
 
     <CaseHeader onIconClick={handleButtonClick}/>
     <div style={{height:"auto", backgroundColor:"#D3D3D3", overflow:"auto"}}>
-      {/* <CaseData data={data}  onIc/> */}
-      {/* {view === 'caseData' ? <TabulerData /> : <GraphicalData />} */}
        {view === "caseData" && <TabulerData />}
         {view === "graphicalData" && <GraphicalData />}
         {view === "resources" && <Resources />}

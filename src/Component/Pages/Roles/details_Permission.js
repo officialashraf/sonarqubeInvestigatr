@@ -1,6 +1,7 @@
-import React from 'react'
 import { Table , CloseButton} from 'react-bootstrap'
-const Details_Permisson =({ togglePopup, details }) => {
+import "../Case/caseDetails.css"
+
+const DetailsPermission =({ togglePopup, details }) => {
     console.log("details", details)
   return (
   
@@ -35,6 +36,6 @@ const Details_Permisson =({ togglePopup, details }) => {
   )
 }
 
-export default Details_Permisson
+export default DetailsPermission
 
 

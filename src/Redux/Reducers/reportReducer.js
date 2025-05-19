@@ -1,4 +1,4 @@
-// reportReducer.js
+
 import { SET_REPORT_RESULTS } from '../Constants/reportConstant';
 
 const initialState = {

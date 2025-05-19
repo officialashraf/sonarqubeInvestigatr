@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import  { useState, useEffect } from 'react';
 import { Box, Typography } from '@mui/material';
 import WordCloud from 'react-d3-cloud';
 import axios from 'axios';
@@ -62,7 +62,7 @@ const CriteriaKeywordChart = () => {
     };
 
     fetchData();
-  }, [queryPayload]);
+  }, [queryPayload,token]);
 
   const dataa = data && data.map((item) => ({
     text: item.key, // ✅ WordCloud me "key" dikhega

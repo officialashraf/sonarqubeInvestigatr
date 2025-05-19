@@ -19,17 +19,7 @@ export const taskFilterReducer = (state = initialState, action) => {
     }
   };
   
-//  export const summaryDataReducer = (state = {  data: [],headers: []}, action) => {
-//     switch (action.type) {
-//       case SET_DATA:
-//         return { ...state, data: action.payload };
-//       case SET_HEADERS:
-//         return { ...state, headers: action.payload };
-//         case SET_PAGINATION:
-//         return { ...state, headers: action.payload };
-//       default:
-//         return state;
-//     }}
+
    export const filterReducer = (state = {filterCount:{}}, action) => {
       switch (action.type) {
         case LOG_FILTER_COUNT:

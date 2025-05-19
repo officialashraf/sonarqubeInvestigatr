@@ -1,14 +1,12 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { Table, InputGroup, FormControl, Dropdown, DropdownButton, Badge } from 'react-bootstrap';
+import { useState, useEffect} from 'react';
+import { Table  } from 'react-bootstrap';
 
 import axios from 'axios';
 import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material';
 import './table.css';
 import Cookies from "js-cookie";
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import CaseDetails from '../../Case/caseDetails';
-import EditCase from '../../Case/editCase';
+
 import { useDispatch } from 'react-redux';
 import { setCaseData } from '../../../../Redux/Action/caseAction';
 
@@ -87,10 +85,7 @@ const CriteriaTransactionTable = () => {
       }, []);
 
 
-  // const handleStatusChange = (id, status) => {
-  //   setFilteredData(filteredData.map(item => (item.id === id ? { ...item, status } : item)));
-  // };
-
+  
 
 
 

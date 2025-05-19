@@ -93,10 +93,7 @@ cursor: pointer;
   white-space: nowrap; 
   font-size: 12px;
   font-family: Helvetica;
-  
-
-}
-
+  }
 
 .data-table thead{
   background-color: #d3d3d3;
@@ -114,9 +111,7 @@ cursor: pointer;
   padding: 0px;
 }
 
-/* .dropdown-toggle {
-   white-space: nowrap !important;
-  } */
+
 .dropdown-item:hover {
   background-color: black;
   border-color: white;
