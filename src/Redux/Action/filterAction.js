@@ -11,15 +11,7 @@ export const setTaskFilter = (taskId, filterId) => ({
 
 
 
-// export const setSummaryDataAction = (data) => ({
-//   type: SET_DATA,
-//   payload: data,
-// });
 
-// export const setSumaryHeadersAction = (headers) => ({
-//   type: SET_HEADERS,
-//   payload: headers,
-// });
 export const logFilterCount = (user) => {
   console.log("filterCount", user);
   return {

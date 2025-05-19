@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
+import{ useEffect, useState } from "react";
 import "../Case/table.css";
 import { useNavigate } from "react-router-dom";
-import { Search, Plus } from "react-bootstrap-icons";
+import { Plus } from "react-bootstrap-icons";
 import { Col, Table } from "react-bootstrap";
 import { FaArrowLeft } from "react-icons/fa";
 import { ArrowDropDown, ArrowDropUp, Category } from "@mui/icons-material";
 import Dropdown from "react-bootstrap/Dropdown";
-import Badge from "react-bootstrap/Badge";
 import { FiMoreVertical } from "react-icons/fi";
 import { toast } from 'react-toastify';
 import axios from "axios";
@@ -27,8 +26,8 @@ const TargetList = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [showPopup, setShowPopup] = useState(false);
   const [showPopupE, setShowPopupE] = useState(false);
-    const [showPopupD, setShowPopupD] = useState(false);
-    const [details, setDetails] = useState([])
+  const [showPopupD, setShowPopupD] = useState(false);
+  const [details, setDetails] = useState([])
 
 
   const fetchUsers = async () => {
@@ -37,7 +36,7 @@ const TargetList = () => {
       const token = Cookies.get("accessToken");
       const response = await axios.get("http://5.180.148.40:9001/api/case-man/v1/target", {
         headers: {
-          Authorization:`Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
           "Content-Type": 'application/json'
         },
 
@@ -45,7 +44,7 @@ const TargetList = () => {
       console.log("API Response:", response);
       setData(response.data);
       setFilteredData(response.data);
-      
+
     } catch (error) {
       if (error.response && error.response.data && error.response.data.detail) {
         toast.error(error.response.data.detail);
@@ -57,19 +56,20 @@ const TargetList = () => {
       setLoading(false);
     }
   };
-  console.log("serrr",filteredData)
+  console.log("serrr", filteredData)
   useEffect(() => {
     const tri = fetchUsers();
     console.log("okk", tri)
     const handleDatabaseUpdated = () => {
-            fetchUsers();
-        };
+      fetchUsers();
+    };
 
-        window.addEventListener("databaseUpdated", handleDatabaseUpdated);
-        return () => {
-            window.removeEventListener("databaseUpdated", handleDatabaseUpdated);
-        };
+    window.addEventListener("databaseUpdated", handleDatabaseUpdated);
+    return () => {
+      window.removeEventListener("databaseUpdated", handleDatabaseUpdated);
+    };
   }, [])
+
 
   const handleSearch = (event) => {
     const searchValue = event.target.value.trim().toLowerCase();
@@ -89,7 +89,7 @@ const TargetList = () => {
     });
     setFilteredData(filtered);
   };
-  
+
 
 
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
@@ -133,18 +133,76 @@ const TargetList = () => {
 
     setFilteredData(sortedData);
   };
-    const togglePopup = () => {
+
+  const togglePopup = () => {
 
     setShowPopup((prev) => !prev);
   };
-    const togglePopupE= (details) => {
+  const togglePopupE = (details) => {
     setDetails(details);
     setShowPopupE(prev => !prev);
   };
-   const togglePopupD= (details) => {
+  const togglePopupD = (details) => {
     setDetails(details);
     setShowPopupD(prev => !prev);
   };
+  const confirmDelete = (id, name) => {
+    toast((t) => (
+      <div>
+        <p>Are you sure you want to delete {name} target?</p>
+        <button className='custom-confirm-button' onClick={() => { deleteTarget(id, name); toast.dismiss(t.id); }} style={{ padding: "4px 1px", fontSize: "12px", width: "20%" }}>Yes</button>
+        <button className='custom-confirm-button' onClick={() => toast.dismiss(t.id)} style={{ padding: "4px 1px", fontSize: "12px", width: "20%" }} >No</button> </div>),
+      {
+        autoClose: false, closeOnClick: false, draggable: false, style: {
+          position: 'fixed',
+          top: '300px',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: '100%',
+          zIndex: 9999,
+        }
+      },)
+  };
+  const deleteTarget = async (id, name) => {
+    const token = Cookies.get("accessToken");
+    if (!token) {
+      console.error("No token found in cookies.");
+      return;
+    }
+    try {
+
+      const response = await axios.delete(`http://5.180.148.40:9001/api/case-man/v1/target/${id}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        });
+      // window.dispatchEvent(new Event("databaseUpdated"));
+      toast(`Target ${name} deleted successfully`)
+      console.log("Target deleted:", response.data);
+
+      // After successful deletion, fetch the updated data
+      fetchUsers(); // Optionally refresh data after deletion
+
+    } catch (err) {
+      // Error handling based on the type of error
+      console.error('Error during login:', err);
+
+      if (err.response) {
+
+        toast(err.response?.data?.detail || 'Something went wrong. Please try again');
+
+      } else if (err.request) {
+        // No response from the server
+        toast('No response from the server. Please check your connection');
+      } else {
+        // Unknown error occurred
+        toast('An unknown error occurred. Please try again');
+      }
+    }
+  };
+
   return (
     <div className="data-table-container">
       <div className="top-header" style={{ marginTop: "10px" }}>
@@ -162,8 +220,8 @@ const TargetList = () => {
               <input
                 type="text"
                 className="form-control"
-                 value={searchTerm}
-                 onChange={handleSearch}
+                value={searchTerm}
+                onChange={handleSearch}
                 placeholder="Search"
               />
             </div>
@@ -171,9 +229,9 @@ const TargetList = () => {
         </Col>
         <div className="header-icons">
           <button className="add-btn"
-             onClick={togglePopup}
+            onClick={togglePopup}
           >
-         
+
             <Plus size={14} style={{ marginRight: "5px" }} />
             Add New keywords
           </button>
@@ -258,15 +316,15 @@ const TargetList = () => {
                 >
                   Synonyms
                   <span
-                            onClick={() => handleSort("synonyms")}
-                            style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
-                          >
-                  {sortConfig.key === "synonyms" ? (
-                              sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
-                            ) : (
-                              <ArrowDropDown />
-                            )}
-                          </span>
+                    onClick={() => handleSort("synonyms")}
+                    style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
+                  >
+                    {sortConfig.key === "synonyms" ? (
+                      sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
+                    ) : (
+                      <ArrowDropDown />
+                    )}
+                  </span>
                 </div>
               </th>
               <th>
@@ -278,16 +336,16 @@ const TargetList = () => {
                   }}
                 >
                   Threat Score(1-10)
-                   <span
-                            onClick={() => handleSort("threat_weightage")}
-                            style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
-                          >
-                            {sortConfig.key === "threat_weightage" ? (
-                              sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
-                            ) : (
-                              <ArrowDropDown />
-                            )}
-                          </span> 
+                  <span
+                    onClick={() => handleSort("threat_weightage")}
+                    style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
+                  >
+                    {sortConfig.key === "threat_weightage" ? (
+                      sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
+                    ) : (
+                      <ArrowDropDown />
+                    )}
+                  </span>
                 </div>
               </th>
               <th>
@@ -299,16 +357,16 @@ const TargetList = () => {
                   }}
                 >
                   Modified on
-                   <span
-                            onClick={() => handleSort("modified_on")}
-                            style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
-                          >
-                            {sortConfig.key === "modified_on" ? (
-                              sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
-                            ) : (
-                              <ArrowDropDown />
-                            )}
-                          </span> 
+                  <span
+                    onClick={() => handleSort("modified_on")}
+                    style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
+                  >
+                    {sortConfig.key === "modified_on" ? (
+                      sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
+                    ) : (
+                      <ArrowDropDown />
+                    )}
+                  </span>
                 </div>
               </th>
               <th>
@@ -320,16 +378,16 @@ const TargetList = () => {
                   }}
                 >
                   Modified by
-                   <span
-                            onClick={() => handleSort("modified_by")}
-                            style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
-                          >
-                            {sortConfig.key === "modified_by" ? (
-                              sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
-                            ) : (
-                              <ArrowDropDown />
-                            )}
-                          </span> 
+                  <span
+                    onClick={() => handleSort("modified_by")}
+                    style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
+                  >
+                    {sortConfig.key === "modified_by" ? (
+                      sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
+                    ) : (
+                      <ArrowDropDown />
+                    )}
+                  </span>
                 </div>
               </th>
               <th>
@@ -341,16 +399,16 @@ const TargetList = () => {
                   }}
                 >
                   Created_on
-                   <span
-                            onClick={() => handleSort("created_on")}
-                            style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
-                          >
-                            {sortConfig.key === "created_on" ? (
-                              sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
-                            ) : (
-                              <ArrowDropDown />
-                            )}
-                          </span> 
+                  <span
+                    onClick={() => handleSort("created_on")}
+                    style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
+                  >
+                    {sortConfig.key === "created_on" ? (
+                      sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
+                    ) : (
+                      <ArrowDropDown />
+                    )}
+                  </span>
                 </div>
               </th>
               <th>
@@ -361,17 +419,17 @@ const TargetList = () => {
                     alignItems: "center"
                   }}
                 >
-                 Created_by
-                   <span
-                            onClick={() => handleSort("created_by")}
-                            style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
-                          >
-                            {sortConfig.key === "created_by" ? (
-                              sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
-                            ) : (
-                              <ArrowDropDown />
-                            )}
-                          </span> 
+                  Created_by
+                  <span
+                    onClick={() => handleSort("created_by")}
+                    style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
+                  >
+                    {sortConfig.key === "created_by" ? (
+                      sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
+                    ) : (
+                      <ArrowDropDown />
+                    )}
+                  </span>
                 </div>
               </th>
               <th>
@@ -420,7 +478,7 @@ const TargetList = () => {
                     {item.threat_weightage}
                   </td>
                   <td>
-                    {(item.modified_on?item.modified_on.slice(0,10)
+                    {(item.modified_on ? item.modified_on.slice(0, 10)
                       : "-")}
                   </td>
                   <td>
@@ -428,7 +486,7 @@ const TargetList = () => {
                       || "-")}
                   </td>
                   <td>
-                    {(item.created_on.slice(0,10)
+                    {(item.created_on.slice(0, 10)
                       || "-")}
                   </td>
                   <td>
@@ -443,7 +501,7 @@ const TargetList = () => {
                       textAlign: "center"
                     }}
                   >
-                   <span>{item.description}</span>
+                    <span>{item.description}</span>
                     <Dropdown>
                       <Dropdown.Toggle
                         className="menu-button"
@@ -454,9 +512,9 @@ const TargetList = () => {
                           cursor: "pointer"
                         }}
                       >
-                                     
-                 <FiMoreVertical size={16} />
-                        
+
+                        <FiMoreVertical size={16} />
+
                       </Dropdown.Toggle>
                       <Dropdown.Menu
                         className="custom-dropdown-menu"
@@ -472,12 +530,12 @@ const TargetList = () => {
                           Details
                         </Dropdown.Item>
                         <Dropdown.Item
-                        onClick={() => togglePopupE(item)}
+                          onClick={() => togglePopupE(item)}
                         >
                           Edit
                         </Dropdown.Item>
                         <Dropdown.Item
-                        // onClick={() => confirmDelete(item.id, item.username)}
+                          onClick={() => confirmDelete(item.id, item.name)}
                         >
                           Delete
                         </Dropdown.Item>
@@ -490,8 +548,8 @@ const TargetList = () => {
         </Table>
       </div>
       {showPopup && <TargetCreate togglePopup={togglePopup} />}
-            {showPopupE && <TargetUpdate togglePopup={togglePopupE}details={details} />}
-              {showPopupD && <TargetDetails togglePopup={togglePopupD}details={details} />}
+      {showPopupE && <TargetUpdate togglePopup={togglePopupE} details={details} />}
+      {showPopupD && <TargetDetails togglePopup={togglePopupD} details={details} />}
     </div>
   );
 };

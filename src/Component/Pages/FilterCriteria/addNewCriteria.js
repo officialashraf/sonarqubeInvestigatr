@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Select from 'react-select';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,11 +9,10 @@ import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import DatePickera from './datepicker';
 import '../FilterCriteria/createCriteria.css';
 import { customStyles } from '../Case/createCase';
-import { openPopup, setKeywords, setPage, setSearchResults } from '../../../Redux/Action/criteriaAction';
+import { setKeywords, setPage, setSearchResults } from '../../../Redux/Action/criteriaAction';
 import Confirm from './confirmCriteria';
 
 const AddNewCriteria = ({ 
-    togglePopup, 
     handleCreateCase, 
     searchChips, 
     isPopupVisible, 
@@ -45,7 +44,9 @@ const AddNewCriteria = ({
 console.log("formdatgertt...", formData)
  const payload = useSelector((state) => state.criteriaKeywords?.queryPayload|| '');
     // Fetch case data from API
-    const fetchCaseData = async () => {
+  
+    useEffect(() => {
+          const fetchCaseData = async () => {
         try {
             const response = await axios.get('http://5.180.148.40:9001/api/case-man/v1/case', {
                 headers: {
@@ -86,10 +87,9 @@ console.log("platforms", response.data)
         }
     };
 
-    useEffect(() => {
         fetchCaseData();
         fetchFileTypes();
-    }, []);
+    }, [Token]);
 
     // Date picker state and handlers
     const [selectedDates, setSelectedDates] = useState({
@@ -215,58 +215,7 @@ console.log("selectedDates", selectedDates)
         }
       };
     
-    // Handle Apply button click (Create Criteria)
-    const handleCreateCriteria = async (e) => {
-        e.preventDefault(); // Prevent default form submission
-    
-        try {
-            // Build the criteria payload
-            const criteriaPayload = {
-                keyword: searchChips?.length > 0
-                ? searchChips.map(chip => chip || "")
-                : [],  // Wrap `keywordsString` in an array if it's a single value
-                case_id: formData.caseIds?.length > 0
-                    ? formData.caseIds.map(caseId => caseId.value.toString())
-                    : [], // Handle multiple `caseIds` as an array
-                file_type: formData.platform?.length > 0
-                    ? formData.platform.map(file => file.value)
-                    : [], // Handle multiple `file_type` values as an array
-                latitude: formData.latitude || "",
-                longitude: formData.longitude || "",
-                start_time: selectedDates.startDate && selectedDates.startTime
-                    ? `${selectedDates.startDate.toISOString().split('T')[0]}T${String(selectedDates.startTime.hours).padStart(2, '0')}:${String(selectedDates.startTime.minutes).padStart(2, '0')}:00`
-                    : null, // Include start_time if both date and time are provided
-                end_time: selectedDates.endDate && selectedDates.endTime
-                    ? `${selectedDates.endDate.toISOString().split('T')[0]}T${String(selectedDates.endTime.hours).padStart(2, '0')}:${String(selectedDates.endTime.minutes).padStart(2, '0')}:00`
-                    : null, // Include end_time if both date and time are provided
-            };
-    
-            console.log("Criteria Payload:", criteriaPayload);
-    
-            // Make the API request
-            const response = await axios.post(
-                'http://5.180.148.40:9007/api/das/criteria',
-                criteriaPayload,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${Token}`,
-                    }
-                }
-            );
-    
-            console.log("Response:", response);
-    
-            // Dispatch popup to indicate criteria creation success
-            //dispatch(openPopup("created"));
-            dispatch(openPopup("recent"));
-            setIsPopupVisible(false);
-        } catch (error) {
-            console.error('Error creating criteria:', error);
-    
-            // Optionally handle error further (e.g., show an error popup or toast)
-        }
-    };
+   
     const handleSaveCriteriaChange = () => {
             setShowSavePopup(true); // Open the popup  
       };
@@ -283,16 +232,7 @@ console.log("selectedDates", selectedDates)
                             </span>
                             <form>
                                 <h5>Filter</h5>
-                             {/* <div style={{height:'150px', overflowX:'auto'}}>
-                             <p>
-                                    {searchChips?.map((chip, index) => (
-                                        <span key={index} style={{marginRight: '5px'}}>
-                                            {chip.keyword}
-                                            {index < searchChips.length - 1 ? ', ' : ''}
-                                        </span>
-                                    ))}
-                                </p>
-                             </div> */}
+                           
 
                                 {/* Case Selection */}
                                 <div className="mb-3">

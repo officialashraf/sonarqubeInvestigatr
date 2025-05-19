@@ -1,11 +1,6 @@
-import React from 'react';
 import { Nav } from 'react-bootstrap';
-import { House, ListTask, Folder, BarChart, People,Bullseye,Search} from 'react-bootstrap-icons';
+import {  ListTask, Folder, BarChart, People,Bullseye} from 'react-bootstrap-icons';
 import { useNavigate } from 'react-router-dom';
-
-
-
-
 import "./sideBar.css"
 
 const  Sidebar = ()=> {

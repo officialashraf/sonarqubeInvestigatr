@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import Cookies from "js-cookie";
@@ -9,56 +9,12 @@ const CriteriaSentimentChart = () => {
   let [data, setData] = useState([]);
   const queryPayload = useSelector((state) => state.criteriaKeywords.queryPayload);
   console.log("querUseselctor", queryPayload)
-  // const caseId = useSelector((state) => state.caseData.caseData.id);
  
-  // const caseId = useSelector(
-  //   (state) => state.criteriaKeywords.queryPayload
-  // );
-  //  data = [
-  //   { name: 'Positive', value: 120 },
-  //   { name: 'Negative', value: 80 },
-  // ];
 
   const COLORS = [ '#000000','#000000'];
 
   useEffect(() => {
-  //     const fetchData = async () => {
-  //       try {
-  //         const response = await axios.post('http://5.180.148.40:9007/api/das/aggregate', {
-  //           query: { unified_case_id: String(caseId) },
-  //           aggs_fields: ["sentiment"]
-  //         },
-  //         {
-  //           headers: {
-  //             "Content-Type": "application/json",
-  //             Authorization: `Bearer ${token}`,
-  //           },
-  //         }
-  //       );
   
-  //         console.log("sentiment", response.data.sentiment);
-  
-  //         const { sentiment } = response.data;
-  //         const chartData = Array.isArray(sentiment)
-  // ? sentiment.map(item => ({
-  //     name: item.key, // Sentiment type (Positive/Negative)
-  //     value: item.doc_count, // Count value
-  //   }))
-  // : [];
-  // console.log("pieData",chartData)
-  //         if (sentiment) {
-  //           setData(chartData);
-  //         } else {
-  //           setData([]);
-  //         }
-  
-        
-  //       } catch (error) {
-  //         console.error('Error fetching data:', error);
-  //         setData([]);
-        
-  //       }
-  //     };
   const fetchData = async () => {
     try {
         const token = Cookies.get("accessToken"); // Retrieve token from cookies
@@ -109,7 +65,7 @@ console.log("queryPayload", payload)
     }
 };
       fetchData();
-    }, [queryPayload]);
+    }, [queryPayload,token]);
   return (
     <div style={{ width: '100%', height: 250 }}>
       <ResponsiveContainer>

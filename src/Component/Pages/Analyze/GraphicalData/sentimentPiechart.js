@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import Cookies from "js-cookie";
@@ -11,10 +11,7 @@ const SentimentPieChart = () => {
         let [data, setData] = useState([]);
 
         const caseId = useSelector(state => state.caseData.caseData.id);
-        //  data = [
-        //   { name: 'Positive', value: 120 },
-        //   { name: 'Negative', value: 80 },
-        // ];
+     
 
         const COLORS = ["#000000", "#000000"];
 
@@ -62,7 +59,7 @@ const SentimentPieChart = () => {
 
             fetchData();
           },
-          [caseId]
+          [caseId,token]
          
         );
         if(loading){

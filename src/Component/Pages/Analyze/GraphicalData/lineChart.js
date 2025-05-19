@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { Box, Slider } from '@mui/material';
@@ -7,7 +7,7 @@ import './lineChart.css'
 import Cookies from "js-cookie";
 import Loader from '../../Layout/loader';
 import { toast } from 'react-toastify';
-import { useRef } from 'react';
+
 
 const LineChart1 = () => {
   const token = Cookies.get("accessToken");
@@ -16,14 +16,11 @@ const LineChart1 = () => {
   const caseId = useSelector((state) => state.caseData.caseData.id);
   const [loading, setLoading] = useState(true); // Add loading state
 
-  // const initialRender = useRef(true);
+
   
 
   useEffect(() => {
-    // if (initialRender.current) {
-    //   initialRender.current = false; // Mark first render as completed
-    //   return; // Avoid making the request initially
-    // }
+   
 
     const fetchData = async () => {
       try {
@@ -72,7 +69,7 @@ const LineChart1 = () => {
     };
 
     fetchData();
-  }, [caseId]);
+  }, [caseId,token]);
 
   if(loading){
      console.log("Loading state is TRUE");

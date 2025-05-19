@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import{ useState, useEffect } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { toast } from 'react-toastify';
@@ -10,10 +10,10 @@ const EditCase = ({ togglePopup, item }) => {
     title: item.title || "",
     description: item.description || "",
     status: item.status || "",
- // If watchers is a string, split it; if it's already an array, use it; otherwise empty array
-    watchers: typeof item.watchers === 'string' 
-  ? item.watchers.split(",").map((w) => w.trim()).filter((w) => w)
-              :Array.isArray(item.watchers) ? item.watchers : [],
+    // If watchers is a string, split it; if it's already an array, use it; otherwise empty array
+    watchers: typeof item.watchers === 'string'
+      ? item.watchers.split(",").map((w) => w.trim()).filter((w) => w)
+      : Array.isArray(item.watchers) ? item.watchers : [],
     assignee: item.assignee || "",
     comment: item.comment || "",
   });
@@ -52,20 +52,20 @@ const EditCase = ({ togglePopup, item }) => {
   // Update formData when item or users change
   useEffect(() => {
     if (users.data?.length > 0) {
-      const assigneeUser = users.data.find(user => user.id === item.assignee);
+      // const assigneeUser = users.data.find(user => user.id === item.assignee);
       setFormData(prev => ({
         ...prev,
         assignee: item.assignee,
         status: item.status,
-        watchers: typeof item.watchers === 'string' ? 
-                      item.watchers.split(",").map((w) => w.trim()).filter((w) => w)
-                       : Array.isArray(item.watchers)
-      ? item.watchers
-      : [],
+        watchers: typeof item.watchers === 'string' ?
+          item.watchers.split(",").map((w) => w.trim()).filter((w) => w)
+          : Array.isArray(item.watchers)
+            ? item.watchers
+            : [],
       }));
     }
   }, [item, users.data]);
-  
+
 
   const handleEditCase = async (formData) => {
     const token = Cookies.get("accessToken");
@@ -75,37 +75,30 @@ const EditCase = ({ togglePopup, item }) => {
     }
 
     try {
-      // const updateData = {
-      //   title: formData.title,
-      //   description: formData.description,
-      //   status: formData.status || item.status,
-      //   assignee: formData.assignee || item.assignee,
-      //   watchers: Array.isArray(formData.watchers) ? formData.watchers.join(", ") : formData.watchers,
-      //   comment: formData.comment,
-      // };
-      const hasChanged = {};
-    
-    // Only include fields that have actually changed
-    if (formData.title !== item.title) hasChanged.title = formData.title;
-    if (formData.description !== item.description) hasChanged.description = formData.description;
-    if (formData.status !== item.status) hasChanged.status = formData.status;
-    if (formData.assignee !== item.assignee) hasChanged.assignee = formData.assignee;
-    if (formData.comment !== item.comment) hasChanged.comment = formData.comment;
-    
-    // Special handling for watchers array
-    const originalWatchers = typeof item.watchers === 'string' ? item.watchers : 
-                           Array.isArray(item.watchers) ? item.watchers.join(", ") : "";
-    const newWatchers = Array.isArray(formData.watchers) ? formData.watchers.join(", ") : formData.watchers;
-    
-    if (newWatchers !== originalWatchers) {
-      hasChanged.watchers = newWatchers;
-    }
 
-    // If nothing has changed, just close the popup
-    if (Object.keys(hasChanged).length === 0) {
-      togglePopup();
-      return;
-    }
+      const hasChanged = {};
+
+      // Only include fields that have actually changed
+      if (formData.title !== item.title) hasChanged.title = formData.title;
+      if (formData.description !== item.description) hasChanged.description = formData.description;
+      if (formData.status !== item.status) hasChanged.status = formData.status;
+      if (formData.assignee !== item.assignee) hasChanged.assignee = formData.assignee;
+      if (formData.comment !== item.comment) hasChanged.comment = formData.comment;
+
+      // Special handling for watchers array
+      const originalWatchers = typeof item.watchers === 'string' ? item.watchers :
+        Array.isArray(item.watchers) ? item.watchers.join(", ") : "";
+      const newWatchers = Array.isArray(formData.watchers) ? formData.watchers.join(", ") : formData.watchers;
+
+      if (newWatchers !== originalWatchers) {
+        hasChanged.watchers = newWatchers;
+      }
+
+      // If nothing has changed, just close the popup
+      if (Object.keys(hasChanged).length === 0) {
+        togglePopup();
+        return;
+      }
 
       const response = await axios.put(
         `http://5.180.148.40:9001/api/case-man/v1/case/${item.id}`,
@@ -129,12 +122,7 @@ const EditCase = ({ togglePopup, item }) => {
       toast.error(err.response?.data?.detail || "Failed to update case");
     }
   };
-// if (JSON.stringify(formData) === JSON.stringify(originalData)) {
-//   alert("You didn't change anything.");
-//   return;
-// }
 
-// handleEditCase(formData);
 
 
   const handleInputChange = (e) => {
@@ -145,12 +133,7 @@ const EditCase = ({ togglePopup, item }) => {
     }));
   };
 
-  // onChange={(selectedOptions) => {
-  //   setFormData(prev => ({
-  //     ...prev,
-  //     watchers: selectedOptions ? selectedOptions.map(option => option.label) : []
-  //   }));
-  // }}
+
 
   const handleWatchersChange = (selectedOptions) => {
     setFormData(prev => ({
@@ -215,10 +198,10 @@ const EditCase = ({ togglePopup, item }) => {
   };
 
   // Prepare values for Select components
-  const watcherValues = formData.watchers.map(watcher => ({
-    value: watcher,
-    label: watcher
-  }));
+  // const watcherValues = formData.watchers.map(watcher => ({
+  //   value: watcher,
+  //   label: watcher
+  // }));
 
   // Find the current assignee option from the users list
   const getCurrentAssignee = () => {
@@ -228,8 +211,8 @@ const EditCase = ({ togglePopup, item }) => {
     }
     return formData.assignee ? {
       value: formData.assignee,
-      label: typeof formData.assignee === 'string' ? 
-        formData.assignee  :
+      label: typeof formData.assignee === 'string' ?
+        formData.assignee :
         `User ${formData.assignee}`
     } : null;
   };
@@ -263,7 +246,7 @@ const EditCase = ({ togglePopup, item }) => {
               value={formData.title}
               onChange={handleInputChange}
               placeholder="Enter title"
-              // required
+            // required
             />
 
             <label htmlFor="description">Description:</label>
@@ -290,7 +273,9 @@ const EditCase = ({ togglePopup, item }) => {
               openMenuOnClick={true}
             />
 
-            {/* <label htmlFor="watchers">Watchers:</label>
+
+
+            <label htmlFor="watchers">Watchers:</label>
             <Select
               options={options}
               isMulti
@@ -298,30 +283,13 @@ const EditCase = ({ togglePopup, item }) => {
               className="com"
               name="watchers"
               placeholder="Select Watchers"
-              value={watcherValues}
+              value={formData.watchers.map((watcher) => {
+                const existingWatcher = options.find((opt) => opt.label === watcher);
+                return existingWatcher || { value: watcher, label: watcher };
+              })}
               onChange={handleWatchersChange}
-            /> */}
-          
-<label htmlFor="watchers">Watchers:</label>
-<Select
-  options={options}
-  isMulti
-  styles={customStyles}
-  className="com"
-  name="watchers"
-  placeholder="Select Watchers"
-  value={formData.watchers.map((watcher) => {
-    const existingWatcher = options.find((opt) => opt.label === watcher);
-    return existingWatcher || { value: watcher, label: watcher };
-  })}
-  onChange={handleWatchersChange}
-  // onChange={(selectedOptions) => {
-  //   setFormData(prev => ({
-  //     ...prev,
-  //     watchers: selectedOptions ? selectedOptions.map(option => option.label) : []
-  //   }));
-  // }}
-/>
+
+            />
 
 
             <label htmlFor="status">Status:</label>
@@ -335,7 +303,7 @@ const EditCase = ({ togglePopup, item }) => {
               value={getCurrentStatus()}
               onChange={handleStatusChange}
               defaultMenuIsOpen={false}  // Ensures menu starts closed
-              openMenuOnClick={true} 
+              openMenuOnClick={true}
             />
 
             <label htmlFor="comment">Comment:</label>

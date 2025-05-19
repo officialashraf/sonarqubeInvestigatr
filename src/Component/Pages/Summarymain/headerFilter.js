@@ -1,14 +1,10 @@
-import React from 'react';
 import { Navbar, Nav,Container, Row, Col,Badge } from 'react-bootstrap';
 import { FaFileAlt,FaArrowLeft } from 'react-icons/fa';
  import {  useSelector } from 'react-redux';
-//import { setSelectedTab } from '../../../../Redux/Action/caseAction';
 import './headerfilter.css';
 import { useNavigate, useParams } from 'react-router-dom';
-// import CaseData from '../Analyze/TabularData/tabulerData';
 
 const HeaderFilter = () => {
-  //const dispatch = useDispatch();
   const caseData1 = useSelector((state) => state.caseData.caseData);
   const {caseId} = useParams()
   console.log("parms id", caseId)

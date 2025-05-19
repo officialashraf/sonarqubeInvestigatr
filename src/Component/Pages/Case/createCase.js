@@ -187,8 +187,8 @@ const handleCreateCase = async (formData) => {
             styles={customStyles}
             className="com"
             placeholder="Select Assignee"
-            value={options && options.find((option) => option.value === formData.assignee) || null}
-            onChange={handleAssigneeChange}
+            value={(options && options.find((option) => option.value === formData.assignee)) || null}
+                      onChange={handleAssigneeChange}
           />
     </div>
         <label htmlFor="watcher">Watcher:</label>

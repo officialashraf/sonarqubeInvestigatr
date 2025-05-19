@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import "./addUser.css";
 import { IoMdSearch } from "react-icons/io";
 import axios from "axios";

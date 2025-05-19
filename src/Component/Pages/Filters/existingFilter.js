@@ -1,7 +1,5 @@
-
 import axios from 'axios';
-import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { SortDown, SortUp, Search } from 'react-bootstrap-icons';
 import { useSelector, useDispatch } from 'react-redux';
 import { logFilterCount } from '../../../Redux/Action/filterAction.js';
@@ -11,7 +9,6 @@ import Loader from '../Layout/loader.js';
 const ExistingFilter = ({ selectedFilters, onFilterToggle, onFilterSelect, setShowAddFilter }) => {
   const dispatch = useDispatch();
   const caseId = useSelector((state) => state.caseData.caseData.id);
-  
   const [loading, setLoading] = useState(true);
   const [filterdata, setfilterdata] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -19,8 +16,6 @@ const ExistingFilter = ({ selectedFilters, onFilterToggle, onFilterSelect, setSh
   const [sortDirection, setSortDirection] = useState('asc'); // new state for sort direction
   const token = Cookies.get('accessToken');
 
-
-  
   const toggleSearchBar = () => {
     setSearchBarVisibility(!searchBarVisibility);
   };
@@ -39,28 +34,26 @@ const ExistingFilter = ({ selectedFilters, onFilterToggle, onFilterSelect, setSh
         // If checked status is different, maintain checked items at top
         if (aChecked !== bChecked) return aChecked - bChecked;
         const dateA = new Date(a.modified_on || a.created_on);
-        const dateB = new Date(b.modified_on ||  b.created_on);
+        const dateB = new Date(b.modified_on || b.created_on);
 
         if (sortDirection === 'asc') {
-          return dateA - dateB ; // Latest firstass
+          return dateA - dateB; // Latest firstass
         } else {
           return dateB - dateA; // Oldest first
         }
       });
-        // For items with same checked status, sort by name based on direction
-      //   if (sortDirection === 'asc') {
-      //     return a.name.localeCompare(b.name);
-      //   } else {
-      //     return b.name.localeCompare(a.name);
-      //   }
-      // });
 
       setfilterdata({ ...filterdata, data: sortedFilters });
       // Toggle sort direction for next click
       setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
     }
   };
-  const sortFiltersHelper = (filters) => {
+  const isFilterInCurrentCase = useCallback((filter) => {
+    return Array.isArray(filter["case id"]) &&
+      filter["case id"].includes(String(caseId));
+  },[caseId]);
+
+  const sortFiltersHelper = useCallback((filters) => {
     return filters.sort((a, b) => {
       // First priority: Checked status
       const aInCurrentCase = isFilterInCurrentCase(a);
@@ -78,10 +71,13 @@ const ExistingFilter = ({ selectedFilters, onFilterToggle, onFilterSelect, setSh
       // Third priority: Name
       return a.name.localeCompare(b.name);
     });
-  };
-  const filterData = async () => {
+  },[isFilterInCurrentCase,sortDirection]);
+ 
+
+  useEffect(() => {
+     const filterData = async () => {
     setLoading(true);
-    try { 
+    try {
       const response = await axios.get(`http://5.180.148.40:9002/api/osint-man/v1/filters`, {
         headers: {
           'Content-Type': 'application/json',
@@ -90,18 +86,16 @@ const ExistingFilter = ({ selectedFilters, onFilterToggle, onFilterSelect, setSh
       });
       const user = response.data;
       const sortedFilters = sortFiltersHelper([...user.data]);
-      
+
       dispatch(logFilterCount(user));
       setfilterdata({ ...user, data: sortedFilters });;
-      
-    } catch (error) { 
-      console.error('There was an error fetching the data!', error); 
+
+    } catch (error) {
+      console.error('There was an error fetching the data!', error);
     } finally {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
     filterData();
     const handleDatabaseUpdate = () => {
       filterData();
@@ -112,12 +106,9 @@ const ExistingFilter = ({ selectedFilters, onFilterToggle, onFilterSelect, setSh
     return () => {
       window.removeEventListener("databaseUpdated", handleDatabaseUpdate);
     };
-  }, []);
+  }, [dispatch,token,sortFiltersHelper]);
 
-  const isFilterInCurrentCase = (filter) => {
-    return Array.isArray(filter["case id"]) && 
-           filter["case id"].includes(String(caseId));
-  };
+  
 
   return (
     <>
@@ -139,15 +130,15 @@ const ExistingFilter = ({ selectedFilters, onFilterToggle, onFilterSelect, setSh
         <button
           className="btn btn-sm me-2 sort-filters"
           onClick={sortFilters}
-          style={{ marginLeft: '0', marginRight: '0', width: '10px'}}
+          style={{ marginLeft: '0', marginRight: '0', width: '10px' }}
         >
           {sortDirection === 'asc' ? <SortDown /> : <SortUp />}
         </button>
       </div>
       <div className='exist-filter'>
         {loading ? (
-          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginTop:'8rem'}}> 
-            <Loader/>
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginTop: '8rem' }}>
+            <Loader />
           </div>
         ) : (
           <ul className="list-group existing-filters-ul">
@@ -156,18 +147,18 @@ const ExistingFilter = ({ selectedFilters, onFilterToggle, onFilterSelect, setSh
                 .filter(filter => filter.name.toLowerCase().includes(searchQuery))
                 .map((filter) => (
                   <li key={filter.id} className="list-group-item existing-filters-li">
-                    <input 
-                      type="checkbox" 
-                      className="form-check-input me-2" 
+                    <input
+                      type="checkbox"
+                      className="form-check-input me-2"
                       defaultChecked={isFilterInCurrentCase(filter)}
                       checked={selectedFilters.includes(filter.id)}
                       onChange={(e) => onFilterToggle(filter.id, e.target.checked)}
                     />
                     <span onClick={() => {
                       onFilterSelect(filter.id);
-                       setShowAddFilter(true);
-                      }}
-                        style={{cursor:'pointer'}}>
+                      setShowAddFilter(true);
+                    }}
+                      style={{ cursor: 'pointer' }}>
                       {filter.name}
                     </span>
                     <p className="existing-filters-li-p">created_by: {filter.created_by}</p>

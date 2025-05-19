@@ -1,10 +1,9 @@
 
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import { Form, InputGroup, Button, Badge } from 'react-bootstrap';
 import { toast } from 'react-toastify';
-import { useDispatch, useSelector } from 'react-redux';
-import { setTaskFilter } from '../../../Redux/Action/filterAction';
+import { useDispatch } from 'react-redux';
 import Cookies from 'js-cookie';
 import "./main.css"
 import { jwtDecode } from "jwt-decode";
@@ -30,7 +29,7 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
 
   const [sources, setSources] = useState([
     {
-      id:'',
+      id: '',
       source: '',
       platform: [],
       keywords: [], // Initialize as an array with a single empty string
@@ -48,7 +47,7 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
     // localStorage.setItem('taskId', taskId);
     localStorage.setItem('filterId', filterId);
     // dispatch(setTaskFilter(taskId, filterId));
-  }, [ filterId, dispatch]);
+  }, [filterId, dispatch]);
 
   useEffect(() => {
     if (token) {
@@ -149,7 +148,7 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
 
         return {
           source: criteria.source,
-        id:criteria.id,
+          id: criteria.id,
           platform: criteria.platform || [],
           keywords: criteria.keywords || [],
           urls: criteria.urls || [],
@@ -163,29 +162,19 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
       setSources(convertedSources);
 
       // Check edit permissions
-        const isEditable = (loggedInUserId == filterDetails.created_by);
-        console.log(isEditable)
-        setIsEditable(isEditable);
-        if (!toastShown.current) {
+      const isEditable = (String(loggedInUserId) === String(filterDetails.created_by));
+      console.log(isEditable)
+      setIsEditable(isEditable);
+      if (!toastShown.current) {
         toast.info(isEditable ? "You can edit this filter" : "You don't have permission to edit this filter");
         toastShown.current = true;
-        // if (loggedInUserId == filterDetails.created_by) {
-        //   setIsEditable(true);
-        //   toast.info("You can edit this filter yet");
-         
-  
-        //   console.log("hey", filterDetails.created_by, loggedInUserId)
-        // } else {
-        //   setIsEditable(false);
-        //   toast.info("You don't have permission to edit this filter yet");
-        // }
-    
-      }}
+      }
+    }
   }, [filterDetails, loggedInUserId]);
 
   const handleAddSource = () => {
     setSources([...sources, {
-      id:'',
+      id: '',
       source: '',
       platform: [],
       keywords: [],
@@ -197,7 +186,9 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
     }]);
   };
 
-  const fetchFilterDetails = async () => {
+  
+  useEffect(() => {
+    const fetchFilterDetails = async () => {
     try {
       const response = await axios.get(`http://5.180.148.40:9002/api/osint-man/v1/filter/${filterIde}`, {
         headers: {
@@ -211,13 +202,14 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
       toast.error('Error fetching platforms: ' + (error.response?.data?.detail || error.message));
     }
   };
+ 
+      fetchFilterDetails();
+   
+  }, [filterIde,token]);
+  
 
   useEffect(() => {
-    if (filterIde) {
-      fetchFilterDetails();
-    }
-  }, [filterIde]);
-  const fetchPlatforms = async () => {
+    const fetchPlatforms = async () => {
     try {
       const response = await axios.get('http://5.180.148.40:9002/api/osint-man/v1/platforms', {
         headers: {
@@ -230,10 +222,8 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
       toast.error('Error fetching platforms: ' + (error.response?.data?.detail || error.message));
     }
   };
-
-  useEffect(() => {
     fetchPlatforms();
-  }, []);
+  }, [token]);
 
 
 
@@ -242,13 +232,13 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
       toast.error("You don't have permission to edit this filter");
       return;
     }
-    console.log("saources",sources)
-    console.log("saourcesID",sources.id)
+    console.log("saources", sources)
+    console.log("saourcesID", sources.id)
     const postData = {
       name: filterName,
-      description: description, 
+      description: description,
       filter_criteria: sources.map((source) => ({
-        id:source.id,
+        id: source.id,
         source: source.source,
         platform: source.platform,
         keywords: source.keywords,
@@ -492,7 +482,7 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
               className="add-new-filter-button"
               style={{ marginLeft: '5px' }}
               onClick={handleSaveFilter}
-              // disabled={!isEditable}
+            // disabled={!isEditable}
             >
               {filterDetails?.id ? 'Update Filter' : 'Save Filter'}
             </button>

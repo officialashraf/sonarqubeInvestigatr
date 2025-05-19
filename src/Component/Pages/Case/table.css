@@ -237,10 +237,7 @@ cursor: pointer;
        /* width: 90px;  */
     }
 
-      /* .table-responsive {
-        overflow-x: hidden !important;
-         -webkit-overflow-scrolling:unset
-    } */
+   
     .add-btn {
       border: none;
       border-radius: 5px;
