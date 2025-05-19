@@ -1,10 +1,14 @@
+<<<<<<< HEAD
+import { useEffect, useState } from "react";
+=======
 import{ useEffect, useState } from "react";
+>>>>>>> 84636558bfb8a0696bc3ffd06de22e0f52b84c9b
 import "../Case/table.css";
 import { useNavigate } from "react-router-dom";
 import { Plus } from "react-bootstrap-icons";
 import { Col, Table } from "react-bootstrap";
 import { FaArrowLeft } from "react-icons/fa";
-import { ArrowDropDown, ArrowDropUp, Category } from "@mui/icons-material";
+import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
 import Dropdown from "react-bootstrap/Dropdown";
 import { FiMoreVertical } from "react-icons/fi";
 import { toast } from 'react-toastify';
@@ -13,16 +17,13 @@ import Cookies from 'js-cookie';
 import TargetCreate from "./targetCreate";
 import TargetUpdate from "./targetUpdate";
 import TargetDetails from "./targetDetails";
-
-
-
+import Loader from "../Layout/loader.js"
 
 const TargetList = () => {
   const navigate = useNavigate();
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
-  const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [showPopup, setShowPopup] = useState(false);
   const [showPopupE, setShowPopupE] = useState(false);
@@ -133,7 +134,6 @@ const TargetList = () => {
 
     setFilteredData(sortedData);
   };
-
   const togglePopup = () => {
 
     setShowPopup((prev) => !prev);
@@ -202,6 +202,9 @@ const TargetList = () => {
       }
     }
   };
+  if (loading) {
+    return <Loader />
+  }
   return (
     <div className="data-table-container">
       <div className="top-header" style={{ marginTop: "10px" }}>
@@ -211,7 +214,10 @@ const TargetList = () => {
           style={{ width: "20%" }}
         >
           <FaArrowLeft
-            style={{ cursor: "pointer", marginRight: "10px" }}
+            style={{
+              cursor: "pointer", margin: '0px 40px 0px 38px',
+              fontSize: '18px'
+            }}
             onClick={() => navigate("/Cases")}
           />
           <div className="search-bar1" style={{ width: "100%" }}>
@@ -232,7 +238,7 @@ const TargetList = () => {
           >
 
             <Plus size={14} style={{ marginRight: "5px" }} />
-            Add New keywords
+            Add New Target
           </button>
         </div>
       </div>
@@ -269,7 +275,7 @@ const TargetList = () => {
                     alignItems: "center"
                   }}
                 >
-                  Keywords
+                  Target
                   <span
                     onClick={() => handleSort("name")}
                     style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
@@ -457,8 +463,7 @@ const TargetList = () => {
             {filteredData &&
               filteredData.map(item =>
                 <tr
-                  key={item.
-                    id || Math.random()}
+                  key={item.id || Math.random()}
                   style={{ position: "relative" }}
                 >
                   <td>
@@ -534,7 +539,7 @@ const TargetList = () => {
                           Edit
                         </Dropdown.Item>
                         <Dropdown.Item
-                        onClick={() => confirmDelete(item.id, item.name)}
+                          onClick={() => confirmDelete(item.id, item.name)}
                         >
                           Delete
                         </Dropdown.Item>

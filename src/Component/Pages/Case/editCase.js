@@ -124,7 +124,6 @@ const EditCase = ({ togglePopup, item }) => {
   };
 
 
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -132,9 +131,6 @@ const EditCase = ({ togglePopup, item }) => {
       [name]: value
     }));
   };
-
-
-
   const handleWatchersChange = (selectedOptions) => {
     setFormData(prev => ({
       ...prev,
@@ -218,7 +214,6 @@ const EditCase = ({ togglePopup, item }) => {
   };
 
   // Find the current status option
-  // const currentStatus = statusOptions.find(option => option.value === formData.status) || { value: formData.status, label: formData.status };
   const getCurrentStatus = () => {
     const matchedStatus = statusOptions.find(option => option.value === formData.status);
     if (matchedStatus) {
@@ -299,7 +294,6 @@ const EditCase = ({ togglePopup, item }) => {
               styles={customStyles}
               className="com"
               placeholder="Select Status"
-              // defaultInputValue={formData.status}
               value={getCurrentStatus()}
               onChange={handleStatusChange}
               defaultMenuIsOpen={false}  // Ensures menu starts closed

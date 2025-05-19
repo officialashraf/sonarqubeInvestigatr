@@ -44,7 +44,7 @@ const Header = ({ title }) =>
     </Grid>
   </Grid>;
 
-const ComponentOne = () =>(
+const ComponentOne = () => (
   <Card sx={{ height: "235px", backgroundColor: "lightgray" }}>
     <Header title="Timeline" />
     <CardContent>
@@ -54,7 +54,7 @@ const ComponentOne = () =>(
 
 
 const ComponentTwo = () => (
-  <Card  sx={{ height: "350px" ,backgroundColor: "lightgray" }}>
+  <Card sx={{ height: "350px", backgroundColor: "lightgray" }}>
 
     <Header title="Keywords" />
     <CardContent>
@@ -64,7 +64,7 @@ const ComponentTwo = () => (
 
 
 const ComponentThree = () => (
-  <Card  sx={{ height: "350px", backgroundColor: "lightgray" }}>
+  <Card sx={{ height: "350px", backgroundColor: "lightgray" }}>
     <Header title="Location" />
     <CardContent>
       <Typography
@@ -77,7 +77,7 @@ const ComponentThree = () => (
       </Typography>
     </CardContent>
   </Card>);
-const ComponentFour = () =>(
+const ComponentFour = () => (
   <Card
     sx={{ height: "350px", backgroundColor: "lightgray", marginBottom: "5rem" }}
   >
@@ -86,7 +86,7 @@ const ComponentFour = () =>(
       <SentimentPieChart height={250} />
     </CardContent>
   </Card>
-  );
+);
 
 
 
@@ -94,24 +94,26 @@ const GraphicalData = () => {
   return (
     <div className="responsiveContainer" >
 
-    <Grid container spacing={1} p={1} className="responsiveGrid" style={{background:"lightgray", marginLeft:"0 px !important", height: '100vh',
-        overflowY: 'auto'}}>
-      <Grid item xs={12}  sx={{ paddingLeft: '0px !important',  paddingTop:"0px !important"}}>
-      <ComponentOne/>
-      </Grid>
-      <Grid item xs={6} p={1} pb={0}  sx={{ paddingLeft: '0 !important' }}>
-     <ComponentTwo/>
-      </Grid>
-      <Grid item xs={6} p={1} pb={0} >
-        <ComponentThree />
-      </Grid>
-      <Grid item xs={6} p={1} pb={0} mb={10} >
-         <ComponentFour/>
+      <Grid container spacing={1} p={1} className="responsiveGrid" style={{
+        background: "lightgray", marginLeft: "0 px !important", height: '100vh',
+        overflowY: 'auto'
+      }}>
+        <Grid item xs={12} sx={{ paddingLeft: '0px !important', paddingTop: "0px !important" }}>
+          <ComponentOne />
+        </Grid>
+        <Grid item xs={6} p={1} pb={0} sx={{ paddingLeft: '0 !important' }}>
+          <ComponentTwo />
+        </Grid>
+        <Grid item xs={6} p={1} pb={0} >
+          <ComponentThree />
         </Grid>
         <Grid item xs={6} p={1} pb={0} mb={10} >
-        <ComponentThree />
+          <ComponentFour />
         </Grid>
-    </Grid>
+        <Grid item xs={6} p={1} pb={0} mb={10} >
+          <ComponentThree />
+        </Grid>
+      </Grid>
 
     </div>
   );

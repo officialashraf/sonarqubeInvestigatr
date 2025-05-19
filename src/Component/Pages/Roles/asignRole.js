@@ -1,4 +1,5 @@
-import{ useState, useEffect, useCallback } from 'react';
+
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
@@ -24,10 +25,11 @@ const AssignRole = ({ togglePopup, details }) => {
             });
         }
     }, [details]);
-    
-  
 
-    const fetchEndpoints =useCallback (async () => {
+
+
+
+    const fetchEndpoints = useCallback(async () => {
         setEndpointsLoading(true);
         try {
             const response = await axios.get(
@@ -43,7 +45,7 @@ const AssignRole = ({ togglePopup, details }) => {
                 const formatted = response.data.map(item => ({
                     value: item.endpoint,
                     label: item.endpoint,
-                    isAssigned: item.roles?.includes(details.role) 
+                    isAssigned: item.roles?.includes(details.role)
                 }));
                 setEndpoints(formatted);
 
@@ -56,9 +58,9 @@ const AssignRole = ({ togglePopup, details }) => {
         } finally {
             setEndpointsLoading(false);
         }
-    },[token,details.role]);
+    }, [token, details.role]);
 
-    const fetchRoles =useCallback(async () => {
+    const fetchRoles = useCallback(async () => {
         setRolesLoading(true);
         try {
             const response = await axios.get(
@@ -82,30 +84,30 @@ const AssignRole = ({ togglePopup, details }) => {
         } finally {
             setRolesLoading(false);
         }
-    },[token]);
-  useEffect(() => {
+    }, [token]);
+    useEffect(() => {
         fetchEndpoints();
         fetchRoles();
-    }, [fetchEndpoints,fetchRoles]);
+    }, [fetchEndpoints, fetchRoles]);
 
     const assignRole = async () => {
         if (!selectedRole) return toast.warning('Please select a role');
         if (selectedEndpoints.length === 0) return toast.warning('Please select at least one permission');
         setLoading(true);
-        
+
         try {
             // Find newly added endpoints (endpoints that weren't initially assigned)
             const newlySelectedEndpoints = selectedEndpoints.filter(
                 endpoint => !initialEndpoints.includes(endpoint.value)
             );
-            
+
             // Only process newly selected endpoints
             if (newlySelectedEndpoints.length === 0) {
                 toast.info("No new permissions to assign");
                 setLoading(false);
                 return;
             }
-            
+
             const requests = newlySelectedEndpoints.map(endpoint =>
                 axios.post(
                     'http://5.180.148.40:9000/api/user-man/v1/assign-role',
@@ -121,7 +123,7 @@ const AssignRole = ({ togglePopup, details }) => {
                     }
                 )
             );
-            
+
             await Promise.all(requests);
             toast.success("New permissions assigned successfully");
             window.dispatchEvent(new Event("databaseUpdated"));
@@ -160,9 +162,9 @@ const AssignRole = ({ togglePopup, details }) => {
     const CheckboxOption = props => {
         const { data, isSelected, innerRef, innerProps } = props;
         return (
-            <div ref={innerRef} {...innerProps} style={{ 
-                display: 'flex', 
-                alignItems: 'center', 
+            <div ref={innerRef} {...innerProps} style={{
+                display: 'flex',
+                alignItems: 'center',
                 padding: 5,
                 backgroundColor: data.isAssigned ? '#f5f5f5' : 'white'
             }}>
@@ -173,8 +175,8 @@ const AssignRole = ({ togglePopup, details }) => {
                     style={{ marginRight: 10 }}
                 />
                 <label>
-                    {data.label} 
-                    {data.isAssigned && <span style={{color: '#666', marginLeft: 5}}>(already assigned)</span>}
+                    {data.label}
+                    {data.isAssigned && <span style={{ color: '#666', marginLeft: 5 }}>(already assigned)</span>}
                 </label>
             </div>
         );
@@ -243,6 +245,4 @@ const AssignRole = ({ togglePopup, details }) => {
         </div>
     );
 };
-
 export default AssignRole;
-

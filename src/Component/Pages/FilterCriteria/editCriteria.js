@@ -90,15 +90,15 @@ const EditCriteria = ({ togglePopup, criteriaId }) => {
           'Authorization': `Bearer ${Token}`
         },
       });
-      
+
       const criteriaData = response.data.data;
-      
+
       // Parse dates from the API response
       let startDate = null;
       let endDate = null;
       let startTime = { hours: 16, minutes: 30 };
       let endTime = { hours: 16, minutes: 30 };
-      
+
       if (criteriaData.start_time) {
         const startDateTime = new Date(criteriaData.start_time);
         startDate = startDateTime;
@@ -107,7 +107,7 @@ const EditCriteria = ({ togglePopup, criteriaId }) => {
           minutes: startDateTime.getMinutes()
         };
       }
-      
+
       if (criteriaData.end_time) {
         const endDateTime = new Date(criteriaData.end_time);
         endDate = endDateTime;
@@ -116,14 +116,14 @@ const EditCriteria = ({ togglePopup, criteriaId }) => {
           minutes: endDateTime.getMinutes()
         };
       }
-      
+
       setSelectedDates({
         startDate,
         endDate,
         startTime,
         endTime
       });
-      
+
       // Format case IDs as an array of objects for React-Select
       const selectedCaseIds = [];
       if (criteriaData.case_id) {
@@ -140,13 +140,13 @@ const EditCriteria = ({ togglePopup, criteriaId }) => {
           }
         });
       }
-      
+
       // Format file types as an array of objects for React-Select
       const selectedFileTypes = [];
       if (criteriaData.file_type) {
         // Check if file_type is an array or a single value
         const fileTypesArray = Array.isArray(criteriaData.file_type) ? criteriaData.file_type : [criteriaData.file_type];
-        
+
         fileTypesArray.forEach(fileType => {
           const matchingOption = fileTypeOpts.find(option => option.value === fileType);
           if (matchingOption) {
@@ -156,7 +156,7 @@ const EditCriteria = ({ togglePopup, criteriaId }) => {
           }
         });
       }
-      
+
       // Update form data
       setFormData({
         searchQuery: criteriaData.keyword || '',
@@ -165,6 +165,9 @@ const EditCriteria = ({ togglePopup, criteriaId }) => {
         latitude: criteriaData.latitude || '',
         longitude: criteriaData.longitude || ''
       });
+
+      setIsLoading(false);
+
     } catch (error) {
       console.error('Error fetching criteria details:', error);
       setError('Failed to load criteria details.');
@@ -175,6 +178,7 @@ const EditCriteria = ({ togglePopup, criteriaId }) => {
 
   // Initial data fetch
   useEffect(() => {
+
     if (!dataFetched && Token && criteriaId) {
       const fetchAllData = async () => {
         setIsLoading(true);
@@ -199,7 +203,7 @@ const EditCriteria = ({ togglePopup, criteriaId }) => {
   // Handle form update submission
   const handleUpdate = async (e) => {
     e.preventDefault();
-    
+
     try {
       const updatePayload = {
         keyword: formData.searchQuery,
@@ -216,12 +220,12 @@ const EditCriteria = ({ togglePopup, criteriaId }) => {
       };
 
       await axios.put(`${API_BASE_URL}:9007/api/das/criteria/${criteriaId}`, updatePayload, {
+
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${Token}`
         },
       });
-      
       toast.success('Criteria updated successfully');
       togglePopup();
     } catch (error) {
@@ -409,7 +413,7 @@ const EditCriteria = ({ togglePopup, criteriaId }) => {
           </form>
         </div>
       </div>
-      
+
       {/* Date Picker Popup */}
       {showPopupD && (
         <DatePickera

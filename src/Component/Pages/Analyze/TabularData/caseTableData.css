@@ -24,7 +24,7 @@
 .cell-content {
   overflow: hidden;
   white-space: nowrap;
-  height: 20px; 
+  height: 20px;
   text-overflow: ellipsis;
   display: block;
   width: 100%;
@@ -41,23 +41,20 @@
   z-index: 100;
 }
 
+.table-container {
+  overflow-x: auto; /* Enable horizontal scroll if content exceeds table width */
+}
+.pagination {
+  --bs-pagination-active-bg: black !important;
+  --bs-pagination-bg: gray !important;
+  --bs-pagination-hover-color: white !important;
+  --bs-pagination-hover-bg: black !important;
+}
 
-  
-  .table-container {
-    overflow-x: auto; /* Enable horizontal scroll if content exceeds table width */
-  }
-  .pagination{
-    --bs-pagination-active-bg: black !important;
-    --bs-pagination-bg:gray !important;
-    --bs-pagination-hover-color: white !important;
-    --bs-pagination-hover-bg: black !important;
-  }
-  
-  @media (min-width: 400px) and (max-width: 600px) {
-    .paginationstabs{
+@media (min-width: 400px) and (max-width: 600px) {
+  .paginationstabs {
     flex-direction: column;
     display: flex;
     width: 100%;
-  
-    }
   }
+}

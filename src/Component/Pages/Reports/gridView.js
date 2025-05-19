@@ -17,18 +17,18 @@ const GridView = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const Token = Cookies.get('accessToken');
-  
+
   const data1 = useSelector((state) => state.caseData.caseData);
   const {
     results,
-       page,
+    page,
     total_pages,
     total_results,
     error,
     loading: reportLoading,
   } = useSelector((state) => state.report);
-  
- 
+
+
   const totalPages = total_pages || 0;
   const totalResults = total_results || 0;
 
@@ -38,22 +38,23 @@ const GridView = () => {
   const [dataAvailable, setDataAvailable] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [isInitialLoad, setIsInitialLoad] = useState(true); // Track initial load
+
   const [data, setData] = useState([]);
 
-useEffect(() => {
-  setData(results || []);
-}, [results]);
+  useEffect(() => {
+    setData(results || []);
+  }, [results]);
 
   const itemsPerPage = 50;
 
 
-  
+
   // Fetch report data function
   const fetchReportData = async () => {
     try {
       // Show loading indicator
       setLoading(true);
-      
+
       const response2 = await axios.post(
         'http://5.180.148.40:9002/api/osint-man/v1/report',
         { rows: results },
@@ -65,32 +66,33 @@ useEffect(() => {
           },
         }
       );
+      const blob = await response2.data
 
-         const blob = await response2.data
+      const url = window.URL.createObjectURL(blob);
+      if ('showSaveFilePicker' in window && window.isSecureContext) {
+        // Use the new API
+        const fileHandle = await window.showSaveFilePicker({
+          suggestedName: 'social_media_report.docx',
+          types: [{
+            description: 'Word Document',
+            accept: {
+              'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx']
+            }
+          }]
+        });
 
-    const url = window.URL.createObjectURL(blob);
-if ('showSaveFilePicker' in window && window.isSecureContext) {
-      // Use the new API
-      const fileHandle = await window.showSaveFilePicker({
-        suggestedName: 'social_media_report.docx',
-        types: [{
-          description: 'Word Document',
-          accept: {
-            'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx']
-          }
-        }]
-      });
+        const writable = await fileHandle.createWritable();
+        await writable.write(blob);
+        await writable.close();
+      } else {
+        // Fallback for HTTP or unsupported browsers
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'social_media_report.docx';
+        a.click();
+        a.remove();
+      }
 
-      const writable = await fileHandle.createWritable();
-      await writable.write(blob);
-      await writable.close();
-    } else {
-      // Fallback for HTTP or unsupported browsers
-     const a = document.createElement('a');
-  a.href = url;
-  a.download = 'social_media_report.docx';
-  a.click();
-  a.remove();}
       console.log("Report saved successfully!");
     } catch (error) {
       console.error("Error downloading or saving .docx file:", error);
@@ -106,19 +108,19 @@ if ('showSaveFilePicker' in window && window.isSecureContext) {
     if (!isInitialLoad) {
       setLoading(reportLoading);
     }
-    
+
     // Check if data is available
     if (Array.isArray(data) && data.length > 0) {
       setDataAvailable(true);
     } else {
       setDataAvailable(false);
     }
-    
+
     // After first data processing, mark initial load as complete
     if (isInitialLoad) {
       setIsInitialLoad(false);
     }
-  }, [reportLoading, isInitialLoad,data]);
+  }, [reportLoading, isInitialLoad, data]);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -162,7 +164,7 @@ if ('showSaveFilePicker' in window && window.isSecureContext) {
       <div className="error-container" style={{ textAlign: 'center', padding: '50px', color: 'red' }}>
         <h3>Error Loading Data</h3>
         <p>{error.message || "An unexpected error occurred while fetching data."}</p>
-        <button 
+        <button
           onClick={() => {
             setLoading(true);
             fetchReportData();
@@ -180,7 +182,10 @@ if ('showSaveFilePicker' in window && window.isSecureContext) {
       <div className="top-header" style={{ marginTop: "10px" }}>
         <Col xs={1} className="d-flex align-items-center justify-content-flex-start" style={{ width: "20%" }}>
           <FaArrowLeft
-            style={{ cursor: 'pointer', marginRight: '10px' }}
+            style={{
+              cursor: 'pointer', margin: '0px 40px 0px 38px',
+              fontSize: '18px'
+            }}
             onClick={() => navigate('/dashboard')}
           />
           <div className="search-bar1" style={{ width: '100%' }}>
@@ -194,7 +199,7 @@ if ('showSaveFilePicker' in window && window.isSecureContext) {
           </div>
         </Col>
       </div>
-      
+
       <div
         className="case-t"
         style={{ overflowY: "auto", height: "450px", fontSize: "10px" }}
@@ -246,8 +251,8 @@ if ('showSaveFilePicker' in window && window.isSecureContext) {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={data.length > 0 ? 
-                    [...new Set(data.flatMap(item => Object.keys(item)))].length : 1} 
+                  <td colSpan={data.length > 0 ?
+                    [...new Set(data.flatMap(item => Object.keys(item)))].length : 1}
                     className="text-center">
                     No Data Available
                   </td>
@@ -306,13 +311,13 @@ if ('showSaveFilePicker' in window && window.isSecureContext) {
           <div style={{ fontSize: "12px", marginRight: "10px" }}>
             Page {currentPage} - {itemsPerPage} / {totalResults}
           </div>
-          
-          <button  
-            style={{backgroundColor:"black", color:'white', borderRadius:'5px'}}
+
+          <button
+            style={{ backgroundColor: "black", color: 'white', borderRadius: '5px' }}
             onClick={fetchReportData}
             disabled={loading}
           >
-            {loading ? "Processing..." : "Print Record"}
+            {loading ? "Processing..." : "Print Records"}
           </button>
         </div>
       )}

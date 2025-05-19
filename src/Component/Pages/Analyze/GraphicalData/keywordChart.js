@@ -7,7 +7,6 @@ import Cookies from "js-cookie";
 import Loader from '../../Layout/loader';
 
 
-
 const KeywordChart = () => {
   const token = Cookies.get("accessToken");
   const [data, setData] = useState([]);
@@ -49,13 +48,14 @@ const KeywordChart = () => {
         } else {
           setData([]); // Set data to an empty array if socialmedia_hashtags is undefined
         }
-      } catch (error){
+      } catch (error) {
         setData([]);
         console.log("error", error);
       } finally {
         setLoading(false);
       }
     }
+
       fetchData();
     },
       [caseId,token]);

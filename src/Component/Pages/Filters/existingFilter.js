@@ -15,7 +15,6 @@ const ExistingFilter = ({ selectedFilters, onFilterToggle, onFilterSelect, setSh
   const [searchBarVisibility, setSearchBarVisibility] = useState(false);
   const [sortDirection, setSortDirection] = useState('asc'); // new state for sort direction
   const token = Cookies.get('accessToken');
-
   const toggleSearchBar = () => {
     setSearchBarVisibility(!searchBarVisibility);
   };
@@ -51,7 +50,7 @@ const ExistingFilter = ({ selectedFilters, onFilterToggle, onFilterSelect, setSh
   const isFilterInCurrentCase = useCallback((filter) => {
     return Array.isArray(filter["case id"]) &&
       filter["case id"].includes(String(caseId));
-  },[caseId]);
+  }, [caseId]);
 
   const sortFiltersHelper = useCallback((filters) => {
     return filters.sort((a, b) => {
@@ -71,31 +70,31 @@ const ExistingFilter = ({ selectedFilters, onFilterToggle, onFilterSelect, setSh
       // Third priority: Name
       return a.name.localeCompare(b.name);
     });
-  },[isFilterInCurrentCase,sortDirection]);
- 
+  }, [isFilterInCurrentCase, sortDirection]);
+
 
   useEffect(() => {
-     const filterData = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.get(`http://5.180.148.40:9002/api/osint-man/v1/filters`, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-      const user = response.data;
-      const sortedFilters = sortFiltersHelper([...user.data]);
+    const filterData = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(`http://5.180.148.40:9002/api/osint-man/v1/filters`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+        const user = response.data;
+        const sortedFilters = sortFiltersHelper([...user.data]);
 
-      dispatch(logFilterCount(user));
-      setfilterdata({ ...user, data: sortedFilters });;
+        dispatch(logFilterCount(user));
+        setfilterdata({ ...user, data: sortedFilters });;
 
-    } catch (error) {
-      console.error('There was an error fetching the data!', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+      } catch (error) {
+        console.error('There was an error fetching the data!', error);
+      } finally {
+        setLoading(false);
+      }
+    };
     filterData();
     const handleDatabaseUpdate = () => {
       filterData();
@@ -106,9 +105,7 @@ const ExistingFilter = ({ selectedFilters, onFilterToggle, onFilterSelect, setSh
     return () => {
       window.removeEventListener("databaseUpdated", handleDatabaseUpdate);
     };
-  }, [dispatch,token,sortFiltersHelper]);
-
-  
+  }, [dispatch, token, sortFiltersHelper]);
 
   return (
     <>

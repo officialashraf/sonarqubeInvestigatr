@@ -39,7 +39,6 @@ const SearchView = () => {
     caseIds: [],
 
   });
-
   const [showPopupD, setShowPopupD] = useState(false);
   const [selectedDates, setSelectedDates] = useState({
     startDate: null,
@@ -48,39 +47,37 @@ const SearchView = () => {
     endTime: { hours: 16, minutes: 30 }
   });
   const [caseOptions, setCaseOptions] = useState([]);
- 
   const activePopup = useSelector((state) => state.popup?.activePopup || null);
   console.log("create popup", activePopup)
   const results = useSelector((state) => state.report?.results || null);
   console.log("result", results)
   // Fetch case IDs on component mount
   useEffect(() => {
-      const fetchCaseData = async () => {
-    try {
-      const response = await axios.get('http://5.180.148.40:9001/api/case-man/v1/case', {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${Token}`
-        },
-      });
+    const fetchCaseData = async () => {
+      try {
+        const response = await axios.get('http://5.180.148.40:9001/api/case-man/v1/case', {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${Token}`
+          },
+        });
 
-      // Format the response data for react-select
-      const caseOptionsFormatted = response.data.data.map(caseItem => ({
-        value: caseItem.id,
-        label: `${caseItem.id} - ${caseItem.title || 'Untitled'}`
-      }));
+        // Format the response data for react-select
+        const caseOptionsFormatted = response.data.data.map(caseItem => ({
+          value: caseItem.id,
+          label: `${caseItem.id} - ${caseItem.title || 'Untitled'}`
+        }));
 
-      setCaseOptions(caseOptionsFormatted);
-    } catch (error) {
-      console.error('Error fetching case data:', error);
-    }
-  };
+        setCaseOptions(caseOptionsFormatted);
+      } catch (error) {
+        console.error('Error fetching case data:', error);
+      }
+    };
     fetchCaseData();
-
   }, [Token]);
 
 
- const handleInputChange = (e) => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
 
     // If updating `searchQuery`, split input into an array of keywords
@@ -103,7 +100,7 @@ const SearchView = () => {
   const handleSearch = async (e) => {
     e.preventDefault();
     try {
-   
+
       const payload = {
 
         keyword: Array.isArray(formData.searchQuery) ? formData.searchQuery : [formData.searchQuery],
@@ -184,11 +181,8 @@ const SearchView = () => {
 
 
 
-
   return (
     <div>
-
-
       <div className="popup-content" style={{ height: '100vh' }}>
         <h5>Search Report</h5>
         <form onSubmit={handleSearch}>
@@ -294,7 +288,6 @@ const SearchView = () => {
           onClose={togglePopupA}
         />
       )}
-
     </div>
   );
 };

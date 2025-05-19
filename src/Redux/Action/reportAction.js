@@ -1,4 +1,3 @@
-// reportActions.js
 import { SET_REPORT_RESULTS } from '../Constants/reportConstant';
 
 export const setReportResults = (data) => ({

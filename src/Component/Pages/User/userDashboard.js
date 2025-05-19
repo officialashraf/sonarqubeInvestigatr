@@ -13,10 +13,6 @@ const UserDashboard = () => {
     { title: 'Roles and Permission' },
   ];
 
-
-
-
-
   const handleCheckboxChange = (title) => {
     if (title === "User Management") {
       navigate("/users");

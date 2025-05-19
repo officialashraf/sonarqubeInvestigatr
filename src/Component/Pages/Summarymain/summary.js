@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import ProgressRow from "./progressBar.js";
-import {  Box, Table, TableContainer, TableFooter, TableBody, TableCell, TableHead, TableRow, Paper } from '@mui/material';
+import { Box, Table, TableContainer, TableFooter, TableBody, TableCell, TableHead, TableRow, Paper } from '@mui/material';
 import { PieChart, Pie, Tooltip, Legend, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Cell } from 'recharts';
 import AddFilter2 from '../Filters/addFilter.js';
 import './summary.css';
@@ -10,8 +10,8 @@ import Cookies from "js-cookie";
 
 
 const Summary = ({ filters }) => {
- const token = Cookies.get("accessToken");
-      
+
+  const token = Cookies.get("accessToken");
   const [pieData, setPieData] = useState([]);
   const [barData, setBarData] = useState([]);
   const [tableData, setTableData] = useState([]);
@@ -21,11 +21,10 @@ const Summary = ({ filters }) => {
 
 
   const caseId = useSelector((state) => state.caseData.caseData.id);
-  // const filterCount = useSelector((state) => state.filterCount.filterCount.count);
-  console.log("casiId",caseId)
+  console.log("casiId", caseId)
   useEffect(() => {
     const fetchData = async () => {
-                   
+
       try {
 
         const response = await axios.post('http://5.180.148.40:9007/api/das/aggregate', {
@@ -33,20 +32,19 @@ const Summary = ({ filters }) => {
 
           aggs_fields: ["unified_record_type", "unified_date_only", "unified_type"]
         },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-       
-      );
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+
+        );
 
 
         console.log("summary data:", response.data);
 
         const { unified_record_type, unified_date_only, unified_type } = response.data;
-
         const pieData = (unified_record_type || []).map(item => ({
           name: item.key,
           value: item.doc_count
@@ -55,8 +53,6 @@ const Summary = ({ filters }) => {
         if (pieData.length === 0) {
           pieData.push({ name: 'No Data', value: 0 });
         }
-
-      
         const barData = (unified_date_only || []).map(item => ({
           name: item.key.split('-').slice(0, 3).join(''),
           value: item.doc_count
@@ -89,11 +85,19 @@ const Summary = ({ filters }) => {
     };
 
     fetchData();
-  }, [caseId,token]);
+  }, [caseId, token]);
 
-  const togglePopup = () => {
-    setShowPopup((prev) => !prev);
+  const togglePopup = (value) => {
+    if (typeof value === 'boolean') {
+      setShowPopup(value); // set true or false explicitly
+    } else {
+      setShowPopup((prev) => !prev); // fallback toggle
+    }
   };
+
+  // const togglePopup = () => {
+  //   setShowPopup((prev) => !prev);
+  // };
   const [activeIndex, setActiveIndex] = useState(null);
   return (
     <>
@@ -109,7 +113,6 @@ const Summary = ({ filters }) => {
           <h5 style={{ textAlign: "center" }}> FilterCount: {filters}</h5>
 
           <div className='graphchats'>
-           
             <Box className="box">
               <ResponsiveContainer width="100%" height={300}>
                 <PieChart>

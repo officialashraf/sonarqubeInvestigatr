@@ -1,4 +1,4 @@
-import {  Plus } from "react-bootstrap-icons";
+import { Plus } from "react-bootstrap-icons";
 import { Col, Table } from "react-bootstrap";
 import { FiMoreVertical } from "react-icons/fi";
 import "../Case/table.css";
@@ -20,7 +20,7 @@ import { useNavigate } from "react-router-dom";
 
 
 const UserManagement = () => {
-  const  navigate =  useNavigate()
+  const navigate = useNavigate()
   const [data, setData] = useState([]);
   const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -35,17 +35,15 @@ const UserManagement = () => {
 
 
   const togglePopup = () => setShowAddForm(!showAddForm);
-  // const toggleDetails = () => setShowDetail(!showDetail);
   const toggleDetails = (item) => {
-     console.log("Selected item for details:", item);
+    console.log("Selected item for details:", item);
     setSelectedUser(item);
     setShowDetail((prev) => !prev);
-    };
+  };
 
-  // const toggleEditForm = () => setShowEditForm(!showEditForm);
   const toggleEditForm = (item) => {
-    setSelectedUser(item); 
-    setShowEditForm((prev) => !prev); 
+    setSelectedUser(item);
+    setShowEditForm((prev) => !prev);
   };
 
   const fetchUsers = async () => {
@@ -55,31 +53,32 @@ const UserManagement = () => {
       const response = await axios.get("http://5.180.148.40:9000/api/user-man/v1/user", {
         headers: {
           Authorization: `Bearer ${token}`,
-           "Content-Type":'application/json'
+          "Content-Type": 'application/json'
         },
-       
+
       });
-       console.log("API Response:", response);
-    setData(response.data.data);
-    setFilteredData(response.data.data);
-  } catch (error) {
-     if (error.response && error.response.data && error.response.data.detail) {
-                    toast.error(error.response.data.detail);
-                 } else {
-                   console.error("An error occurred:", error.message);
-                 }
-    console.error(error);
-  } finally{
-    setLoading(false);
-  }
-};
+
+      console.log("API Response:", response);
+      setData(response.data.data);
+      setFilteredData(response.data.data);
+    } catch (error) {
+      if (error.response && error.response.data && error.response.data.detail) {
+        toast.error(error.response.data.detail);
+      } else {
+        console.error("An error occurred:", error.message);
+      }
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
 
   useEffect(() => {
-             fetchUsers();
-             const handleDatabaseUpdated = () => {
-             fetchUsers();
-            };
+    fetchUsers();
+    const handleDatabaseUpdated = () => {
+      fetchUsers();
+    };
 
     window.addEventListener("databaseUpdated", handleDatabaseUpdated);
 
@@ -90,187 +89,190 @@ const UserManagement = () => {
 
 
   const confirmDelete = (id, username) => {
-      toast((t) => (
-        <div>
-          <p>Are you sure you want to delete {username} user?</p>
-          <button className='custom-confirm-button' onClick={() => { deleteUser(id, username); toast.dismiss(t.id); }} style={{ padding: "4px 1px", fontSize: "12px", width: "20%" }}>Yes</button>
-          <button className='custom-confirm-button' onClick={() => toast.dismiss(t.id)} style={{ padding: "4px 1px", fontSize: "12px", width: "20%" }} >No</button> </div>),
-        { autoClose: false, closeOnClick: false, draggable: false, style: {
+    toast((t) => (
+      <div>
+        <p>Are you sure you want to delete {username} user?</p>
+        <button className='custom-confirm-button' onClick={() => { deleteUser(id, username); toast.dismiss(t.id); }} style={{ padding: "4px 1px", fontSize: "12px", width: "20%" }}>Yes</button>
+        <button className='custom-confirm-button' onClick={() => toast.dismiss(t.id)} style={{ padding: "4px 1px", fontSize: "12px", width: "20%" }} >No</button> </div>),
+      {
+        autoClose: false, closeOnClick: false, draggable: false, style: {
           position: 'fixed',
           top: '300px',
           left: '50%',
           transform: 'translate(-50%, -50%)',
           width: '100%',
-          zIndex: 9999, 
+          zIndex: 9999,
         }
-        },)
-    };
+      },)
+  };
 
-    const deleteUser = async (id, username) => {
-        const token = Cookies.get("accessToken");
-        if (!token) {
-          console.error("No token found in cookies.");
-          return;
+  const deleteUser = async (id, username) => {
+    const token = Cookies.get("accessToken");
+    if (!token) {
+      console.error("No token found in cookies.");
+      return;
+    }
+    try {
+
+      const response = await axios.delete(`http://5.180.148.40:9000/api/user-man/v1/user/${id}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        });
+      window.dispatchEvent(new Event("databaseUpdated"));
+      toast(`User ${username} deleted successfully`)
+      console.log("User Deleted:", response.data);
+
+    } catch (err) {
+      // Error handling based on the type of error
+      console.error('Error during login:', err);
+
+      if (err.response) {
+
+        toast(err.response?.data?.detail || 'Something went wrong. Please try again');
+
+      } else if (err.request) {
+        // No response from the server
+        toast('No response from the server. Please check your connection');
+      } else {
+        // Unknown error occurred
+        toast('An unknown error occurred. Please try again');
+      }
+    }
+  };
+
+  const userData = async () => {
+    const token = Cookies.get("accessToken");
+    try {
+      const response = await axios.get('http://5.180.148.40:9000/api/user-man/v1/user'
+        , {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        });
+      const user = response.data;
+      setUsers(user); // Update the state with usered data
+      console.log("users", user)
+    } catch (error) {
+      console.error('There was an error usering the data!', error);
+    }
+  };
+  useEffect(() => {
+    userData(); // Call the userData function
+  }, []);
+
+
+  const handleSearch = (event) => {
+    const searchValue = event.target.value.trim().toLowerCase();
+    setSearchTerm(searchValue);
+
+    const filtered = data.filter(item => {
+      return Object.values(item).some((value) => {
+        if (value !== null && value !== undefined) {
+          // Convert the value to a string and check if it includes the search value
+          return value
+            .toString()
+            .toLowerCase()
+            .includes(searchValue);
         }
-        try {
-          const response = await axios.delete(`http://5.180.148.40:9000/api/user-man/v1/user/${id}`,
-            {
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-              }
-            });
-            // window.dispatchEvent(new Event("databaseUpdated"));
-          toast(`User ${username} deleted successfully`)
-          console.log("User Deleted:", response.data);
-    
-          // After successful deletion, fetch the updated data
-          fetchUsers(); // Optionally refresh data after deletion
-    
-        } catch (err) {
-                    // Error handling based on the type of error
-                    console.error('Error during login:', err);
-            
-                    if (err.response) {
-                        
-                            toast(err.response?.data?.detail || 'Something went wrong. Please try again');
-                        
-                    } else if (err.request) {
-                        // No response from the server
-                       toast('No response from the server. Please check your connection');
-                    } else {
-                        // Unknown error occurred
-                       toast('An unknown error occurred. Please try again');
-                    }
-                }
-      };
+        return false;
+      });
+    });
+    setFilteredData(filtered);
+  };
 
-   const userData = async () => {
-      const token = Cookies.get("accessToken");
-       try { 
-        const response = await axios.get('http://5.180.148.40:9000/api/user-man/v1/user'
-          , {
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`
-            }
-          });
-         const user = response.data;
-          setUsers(user); // Update the state with usered data
-          console.log("users", user)
-           } catch (error) { 
-            console.error('There was an error usering the data!', error); 
-          } };
-        useEffect(() => {
-        userData(); // Call the userData function
-        }, []);
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
 
 
-        const handleSearch = (event) => {
-          const searchValue = event.target.value.trim().toLowerCase();
-          setSearchTerm(searchValue);
+  const handleSort = (key) => {
+    let direction = "asc";
 
-          const filtered = data.filter(item => {
-            return Object.values(item).some((value) => {
-              if (value !== null && value !== undefined) {
-                // Convert the value to a string and check if it includes the search value
-                return value
-                  .toString()
-                  .toLowerCase()
-                  .includes(searchValue);
-              }
-              return false;
-            });
-          });
-          setFilteredData(filtered);
-        };
+    if (sortConfig.key === key && sortConfig.direction === "asc") {
+      direction = "desc";
+    }
 
-          const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
+    setSortConfig({ key, direction });
 
-        
-      const handleSort = (key) => {
-           let direction = "asc";
-         
-           if (sortConfig.key === key && sortConfig.direction === "asc") {
-             direction = "desc";
-           }
-         
-           setSortConfig({ key, direction });
-         
-           const sortedData = [...filteredData].sort((a, b) => {
-             const aValue = a[key] ?? null;
-             const bValue = b[key] ?? null;
-         
-             if (aValue === null && bValue === null) return 0;
-             if (aValue === null) return 1;
-             if (bValue === null) return -1;
-         
-             if (key === "last_logout" || key === "created_on") {
-               const aDate = new Date(aValue);
-               const bDate = new Date(bValue);
-               return direction === "asc" ? aDate - bDate : bDate - aDate;
-             }
-        
-             if (typeof aValue === "string" && typeof bValue === "string") {
-               return direction === "asc"
-                 ? aValue.localeCompare(bValue)
-                 : bValue.localeCompare(aValue);
-             }
-         
-             if (typeof aValue === "number" && typeof bValue === "number") {
-               return direction === "asc" ? aValue - bValue : bValue - aValue;
-             }
-         
-             return 0;
-           });
-         
-           setFilteredData(sortedData);
-          }         ;
+    const sortedData = [...filteredData].sort((a, b) => {
+      const aValue = a[key] ?? null;
+      const bValue = b[key] ?? null;
 
- if(loading){
-  return <Loader/>
- }
+      if (aValue === null && bValue === null) return 0;
+      if (aValue === null) return 1;
+      if (bValue === null) return -1;
 
-  
-return (
-  <div className="data-table-container">
-    <div className="top-header" style={{ marginTop: "10px" }}>
-    <Col xs={1} className="d-flex align-items-center justify-content-flex-start"  style={{width:"20%"}}>
-    <FaArrowLeft style={{ cursor: 'pointer',marginRight:'10px' }}  onClick={() => navigate('/dashboard')} />
-       <div className="search-bar1" style={{width:'100%'}}>
-        <div className="input-group">
-          <input
-            type="text"
-            className="form-control"
-            value={searchTerm}
-            onChange={handleSearch}
-            placeholder="Search"
-          />
+      if (key === "last_logout" || key === "created_on") {
+        const aDate = new Date(aValue);
+        const bDate = new Date(bValue);
+        return direction === "asc" ? aDate - bDate : bDate - aDate;
+      }
+
+      if (typeof aValue === "string" && typeof bValue === "string") {
+        return direction === "asc"
+          ? aValue.localeCompare(bValue)
+          : bValue.localeCompare(aValue);
+      }
+
+      if (typeof aValue === "number" && typeof bValue === "number") {
+        return direction === "asc" ? aValue - bValue : bValue - aValue;
+      }
+
+      return 0;
+    });
+
+    setFilteredData(sortedData);
+  };
+
+  if (loading) {
+    return <Loader />
+  }
+
+
+  return (
+    <div className="data-table-container">
+      <div className="top-header" style={{ marginTop: "10px" }}>
+        <Col xs={1} className="d-flex align-items-center justify-content-flex-start" style={{ width: "20%" }}>
+          <FaArrowLeft style={{
+            cursor: 'pointer', margin: '0px 40px 0px 38px',
+            fontSize: '18px'
+          }} onClick={() => navigate('/dashboard')} />
+          <div className="search-bar1" style={{ width: '100%' }}>
+            <div className="input-group">
+              <input
+                type="text"
+                className="form-control"
+                value={searchTerm}
+                onChange={handleSearch}
+                placeholder="Search"
+              />
+            </div>
+          </div>
+        </Col>
+        <div className="header-icons">
+          <button className="add-btn" onClick={togglePopup}>
+            <Plus size={14} style={{ marginRight: "5px" }} />
+            Add New User
+          </button>
         </div>
       </div>
-      </Col>
-      <div className="header-icons">
-        <button className="add-btn" onClick={togglePopup}>
-          <Plus size={14} style={{ marginRight: "5px" }} />
-          Add New User
-        </button>
-      </div>
-    </div>
 
-    <div className="data-table" style={{ height: "550px"}}>
-      <Table striped bordered hover variant="light">
-        <thead>
-          <tr>
-          <th>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center"
-                }}
-              >
-                UserId
-                 <span
+      <div className="data-table" style={{ height: "550px" }}>
+        <Table striped bordered hover variant="light">
+          <thead>
+            <tr>
+              <th>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center"
+                  }}
+                >
+                  UserId
+                  <span
                     onClick={() => handleSort("id")}
                     style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
                   >
@@ -280,18 +282,18 @@ return (
                       <ArrowDropDown />
                     )}
                   </span>
-              </div>
-            </th>
-            <th>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center"
-                }}
-              >
-                UserName
-                 <span
+                </div>
+              </th>
+              <th>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center"
+                  }}
+                >
+                  UserName
+                  <span
                     onClick={() => handleSort("username")}
                     style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
                   >
@@ -301,18 +303,18 @@ return (
                       <ArrowDropDown />
                     )}
                   </span>
-              </div>
-            </th>
-            <th>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center"
-                }}
-              >
-                First Name
-                 <span
+                </div>
+              </th>
+              <th>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center"
+                  }}
+                >
+                  First Name
+                  <span
                     onClick={() => handleSort("first_name")}
                     style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
                   >
@@ -322,18 +324,18 @@ return (
                       <ArrowDropDown />
                     )}
                   </span>
-              </div>
-            </th>
-            <th>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center"
-                }}
-              >
-                Last Name
-               <span
+                </div>
+              </th>
+              <th>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center"
+                  }}
+                >
+                  Last Name
+                  <span
                     onClick={() => handleSort("last_name")}
                     style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
                   >
@@ -343,18 +345,18 @@ return (
                       <ArrowDropDown />
                     )}
                   </span>
-              </div>
-            </th>
-            <th>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center"
-                }}
-              >
-                Role
-                <span
+                </div>
+              </th>
+              <th>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center"
+                  }}
+                >
+                  Role
+                  <span
                     onClick={() => handleSort("role")}
                     style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
                   >
@@ -364,18 +366,18 @@ return (
                       <ArrowDropDown />
                     )}
                   </span>
-              </div>
-            </th>
-            <th>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center"
-                }}
-              >
-                Email
-                <span
+                </div>
+              </th>
+              <th>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center"
+                  }}
+                >
+                  Email
+                  <span
                     onClick={() => handleSort("email")}
                     style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
                   >
@@ -385,199 +387,198 @@ return (
                       <ArrowDropDown />
                     )}
                   </span>
-              </div>
-            </th>
-            <th>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center"
-                }}
-              >
-                Last Active
-                <span
-          onClick={() => handleSort("last_logout")}
-          style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
-        >
-          {sortConfig.key === "last_logout" ? (
-            sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
-          ) : (
-            <ArrowDropDown />
-          )}
-        </span>
-              </div>
-            </th>
-            <th>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center"
-                }}
-              >
-                Last Modified
-                <span
-          onClick={() => handleSort("created_on")}
-          style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
-        >
-          {sortConfig.key === "created_on" ? (
-            sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
-          ) : (
-            <ArrowDropDown />
-          )}
-        </span>
-              </div>
-            </th>
-            <th>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center"
-                }}
-              >
-                Status
-               <span onClick={() => handleSort('status')} style={{ cursor: 'pointer', display: 'inline-flex', alignItems: 'center' }}>
-                                     {sortConfig.key === 'status' ? (
-                                       sortConfig.direction === 'asc' ? <ArrowDropUp /> : <ArrowDropDown />
-                                     ) : <ArrowDropDown />}
-                </span>
-              </div>
-            </th>
-            <th>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center"
-                }}
-              >
-                Action
-                <span
+                </div>
+              </th>
+              <th>
+                <div
                   style={{
-                    cursor: "pointer",
-                    display: "inline-flex",
+                    display: "flex",
+                    justifyContent: "space-between",
                     alignItems: "center"
                   }}
                 >
-                  <ArrowDropDown />
-                </span>
-              </div>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredData &&
-           filteredData.map(item =>
-              <tr
-                key={item.id || Math.random()}
-                style={{ position: "relative" }}
-              >
-                  <td>
-                 {`USER${String(item.id).padStart(4, '0')}`}
-                </td>
-                <td>
-                  {item.username}
-                </td>
-                <td>
-                  {item.first_name || "-"}
-                </td>
-                <td>
-                  {item.last_name || "-"}
-                </td>
-                <td>
-                  {item.role}
-                </td>
-                <td>
-                  {item.email}
-                </td>
-                <td>
-                  {(item.last_logout?item.last_logout.slice(0,10) : "-")}
-                </td>
-                <td>
-                  {
-                    (item.updatedOn?item.updatedOn.slice(0,10) : "-")
-                  }
-                </td>
-                <td>
-                  <Badge pill bg="dark" className="badge-custom">
-                    <span>
-                      {item.status === "active" ? "Active" : "Deactivate"}
-                    </span>
-                  </Badge>
-                </td>
-                <td
+                  Last Active
+                  <span
+                    onClick={() => handleSort("last_logout")}
+                    style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
+                  >
+                    {sortConfig.key === "last_logout" ? (
+                      sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
+                    ) : (
+                      <ArrowDropDown />
+                    )}
+                  </span>
+                </div>
+              </th>
+              <th>
+                <div
                   style={{
                     display: "flex",
-                    justifyContent: "end",
-                    alignItems: "center",
-                    textAlign: "center"
+                    justifyContent: "space-between",
+                    alignItems: "center"
                   }}
                 >
-                  <div
+                  Last Modified
+                  <span
+                    onClick={() => handleSort("created_on")}
+                    style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
+                  >
+                    {sortConfig.key === "created_on" ? (
+                      sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
+                    ) : (
+                      <ArrowDropDown />
+                    )}
+                  </span>
+                </div>
+              </th>
+              <th>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center"
+                  }}
+                >
+                  Status
+                  <span onClick={() => handleSort('status')} style={{ cursor: 'pointer', display: 'inline-flex', alignItems: 'center' }}>
+                    {sortConfig.key === 'status' ? (
+                      sortConfig.direction === 'asc' ? <ArrowDropUp /> : <ArrowDropDown />
+                    ) : <ArrowDropDown />}
+                  </span>
+                </div>
+              </th>
+              <th>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center"
+                  }}
+                >
+                  Action
+                  <span
+                    style={{
+                      cursor: "pointer",
+                      display: "inline-flex",
+                      alignItems: "center"
+                    }}
+                  >
+                    <ArrowDropDown />
+                  </span>
+                </div>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredData &&
+              filteredData.map(item =>
+                <tr
+                  key={item.id || Math.random()}
+                  style={{ position: "relative" }}
+                >
+                  <td>
+                    {`USER${String(item.id).padStart(4, '0')}`}
+                  </td>
+                  <td>
+                    {item.username}
+                  </td>
+                  <td>
+                    {item.first_name || "-"}
+                  </td>
+                  <td>
+                    {item.last_name || "-"}
+                  </td>
+                  <td>
+                    {item.role}
+                  </td>
+                  <td>
+                    {item.email}
+                  </td>
+                  <td>
+                    {(item.last_logout ? item.last_logout.slice(0, 10) : "-")}
+                  </td>
+                  <td>
+                    {
+                      (item.updatedOn ? item.updatedOn.slice(0, 10) : "-")
+                    }
+                  </td>
+                  <td>
+                    <Badge pill bg="dark" className="badge-custom">
+                      <span>
+                        {item.status === "active" ? "Active" : "Deactivate"}
+                      </span>
+                    </Badge>
+                  </td>
+                  <td
                     style={{
                       display: "flex",
+                      justifyContent: "end",
                       alignItems: "center",
-                      gap: "10px"
+                      textAlign: "center"
                     }}
-                  />
-                  <Dropdown>
-                    <Dropdown.Toggle
-                      className="menu-button"
+                  >
+                    <div
                       style={{
-                        background: "none",
-                        border: "none",
-                        cursor: "pointer"
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "10px"
                       }}
-                    >
-                      <FiMoreVertical size={16} />
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu
-                      className="custom-dropdown-menu"
-                      style={{
-                        minWidth: "150px",
-                        textAlign: "left"
-                      }}
-                    >
-                      <Dropdown.Item
-                        onClick={() => toggleDetails(item)}
-                        style={{ cursor: "pointer" }}
+                    />
+                    <Dropdown>
+                      <Dropdown.Toggle
+                        className="menu-button"
+                        style={{
+                          background: "none",
+                          border: "none",
+                          cursor: "pointer"
+                        }}
                       >
-                        Details
-                      </Dropdown.Item>
-                      <Dropdown.Item onClick={() => toggleEditForm(item)}>
-                        Edit
-                      </Dropdown.Item>
-                      <Dropdown.Item
-                        onClick={() => confirmDelete(item.id, item.username)}
+                        <FiMoreVertical size={16} />
+                      </Dropdown.Toggle>
+                      <Dropdown.Menu
+                        className="custom-dropdown-menu"
+                        style={{
+                          minWidth: "150px",
+                          textAlign: "left"
+                        }}
                       >
-                        Delete
-                      </Dropdown.Item>
-                      <Dropdown.Item>Update Role</Dropdown.Item>
-                      <Dropdown.Item>Deactivate</Dropdown.Item>
-                      <Dropdown.Item>View Password</Dropdown.Item>
-                      <Dropdown.Item>Reset Password</Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </td>
-              </tr>
-            )}
-        </tbody>
-      </Table>
+                        <Dropdown.Item
+                          onClick={() => toggleDetails(item)}
+                          style={{ cursor: "pointer" }}
+                        >
+                          Details
+                        </Dropdown.Item>
+                        <Dropdown.Item onClick={() => toggleEditForm(item)}>
+                          Edit
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          onClick={() => confirmDelete(item.id, item.username)}
+                        >
+                          Delete
+                        </Dropdown.Item>
+                        <Dropdown.Item>Update Role</Dropdown.Item>
+                        <Dropdown.Item>Deactivate</Dropdown.Item>
+                        <Dropdown.Item>View Password</Dropdown.Item>
+                        <Dropdown.Item>Reset Password</Dropdown.Item>
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </td>
+                </tr>
+              )}
+          </tbody>
+        </Table>
+      </div>
+
+
+      {showAddForm && <AddUser onClose={togglePopup} />}
+      {showDetail && <UserDetails item={selectedUser} users={users} toggleDetails={toggleDetails} />}
+      {showEditForm &&
+        <EditUser
+          togglePopup={toggleEditForm}
+          item={selectedUser} // Pass selected user data
+        />}
     </div>
-
-
-    {showAddForm && <AddUser onClose={togglePopup} />}
-    {showDetail && <UserDetails item={selectedUser} users={users} toggleDetails={toggleDetails}/>}
-    {showEditForm &&
-      <EditUser
-        togglePopup={toggleEditForm}
-        item={selectedUser} // Pass selected user data
-        // onUserUpdated={() => fetchUsers()} // Refresh the user list after updating
-      />}
-  </div>
-);
+  );
 };
 
-export default UserManagement;
+export default UserManagement;

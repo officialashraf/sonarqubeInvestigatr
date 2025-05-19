@@ -17,6 +17,7 @@ import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { ListAltOutlined, PieChart } from "@mui/icons-material";
 import GrapghicalCriteria from './CriteriaGraphicaView/grapghicalCriteria';
+import Loader from '../../Layout/loader';
 
 
 const SearchResults = ({ onClose }) => {
@@ -25,10 +26,10 @@ const SearchResults = ({ onClose }) => {
   const dispatch = useDispatch();
   const [inputValue, setInputValue] = useState('');
   const [searchChips, setSearchChips] = useState([]);
-  // const [activeTab, setActiveTab] = useState('Cases');
   const [enterInput, setEnterInput] = useState([])
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [activeComponent, setActiveComponent] = useState('list');
+  const [loading, setLoading] = useState(false);
 
   const { searchResults, totalPages, currentPage, totalResults } = useSelector((state) => state.search);
   console.log("searchResult", searchResults, totalPages, currentPage, totalResults);
@@ -45,7 +46,7 @@ const SearchResults = ({ onClose }) => {
   console.log("Full Redux Payload:", reduxPayload);
 
 
- 
+
   const handleComponentToggle = (componentName) => {
     setActiveComponent(componentName);
   };
@@ -81,7 +82,6 @@ const SearchResults = ({ onClose }) => {
       // setActiveTab([]);
     }
   }, [keywords, caseId, fileType]);
-
   const openPopup = () => {
     setIsPopupVisible(true); // Pop-up ko open karne ke liye state ko true kare
   };
@@ -130,6 +130,7 @@ const SearchResults = ({ onClose }) => {
     console.log("searchChips:", searchChips);
 
     try {
+      setLoading(true);
       // 1. Redux ke sirf keyword le rahe hain
       const reduxKeywords = Array.isArray(reduxPayload.keyword)
         ? reduxPayload.keyword
@@ -200,9 +201,14 @@ const SearchResults = ({ onClose }) => {
 
     } catch (error) {
       console.error("Error performing search:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
+  if (loading) {
+    return <Loader />
+  }
 
 
   return (
@@ -243,8 +249,6 @@ const SearchResults = ({ onClose }) => {
             placeholder="Search..."
             sx={sharedSxStyles}
           />
-          {/* <button onClick={handleExit}>Exit Full Screen</button> */}
-          {/* </div> */}
 
 
         </div>
@@ -266,7 +270,6 @@ const SearchResults = ({ onClose }) => {
         </div>
 
       </div>
-
       <div className="col-auto  d-flex align-items-center gap-1 justify-content-end  me-2">
         <PieChart
           className="icon-style"

@@ -29,19 +29,18 @@ const SavedCriteria = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [enterInput, setEnterInput] = useState([]);
 
+
   const caseId = useSelector((state) => state.criteriaKeywords?.queryPayload?.case_id || '');
   console.log("casId", caseId)
- 
   const fileType = useSelector((state) => state.criteriaKeywords?.queryPayload?.file_type || '');
   console.log("filetype", fileType)
   const keyword = useSelector((state) => state.criteriaKeywords?.queryPayload?.keyword || '');
   console.log("keyword", keyword)
-
   const reduxPayload = useSelector((state) => state.criteriaKeywords?.queryPayload || '');
   console.log("Redux Payload:", reduxPayload);
 
   useEffect(() => {
- ;
+    ;
     console.log("Case ID:", caseId);
     console.log("File Type:", fileType);
 
@@ -150,7 +149,8 @@ const SavedCriteria = () => {
     console.log("reduxPayload:", reduxPayload);
     console.log("enterInput:", enterInput);
 
-  setIsLoading(true);
+
+    setIsLoading(true);
     try {
       // 1. Redux ke sirf keyword le rahe hain
       const reduxKeywords = Array.isArray(reduxPayload.keyword)
@@ -205,7 +205,8 @@ const SavedCriteria = () => {
       );
 
       console.log("Search results------:", response);
- setIsLoading(false);
+
+      setIsLoading(false);
       // Redux store update
       dispatch(setSearchResults({
         results: response.data.results,
@@ -298,7 +299,7 @@ const SavedCriteria = () => {
               <div className="tabs">
                 <div
                   className={`tab active`}
-                  // onClick={() => setActiveTab('Cases')}
+                // onClick={() => setActiveTab('Cases')}
                 >
                   Cases ({totalResults || 0})
                 </div>
@@ -306,7 +307,7 @@ const SavedCriteria = () => {
 
               <div className="search-results">
                 {isLoading ? (
-                 <Loader /> 
+                  <Loader />
                 ) : resultsToDisplay.length > 0 ? (
                   resultsToDisplay.slice(-5).map((item, index) => (
                     <div key={index} className="result-card">
