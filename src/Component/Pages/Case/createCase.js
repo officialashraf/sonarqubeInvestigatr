@@ -187,7 +187,7 @@ const CreateCase = ({ togglePopup }) => {
                 styles={customStyles}
                 className="com"
                 placeholder="Select Assignee"
-                value={options && options.find((option) => option.value === formData.assignee) || null}
+                value={(options && options.find((option) => option.value === formData.assignee)) || null}
                 onChange={handleAssigneeChange}
               />
             </div>

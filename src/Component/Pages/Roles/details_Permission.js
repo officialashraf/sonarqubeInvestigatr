@@ -26,6 +26,7 @@ const DetailsPermission = ({ togglePopup, details }) => {
                         <button type="button" className="cancel-btn" onClick={togglePopup}>
                             Cancel
                         </button>
+
                     </div>
                 </div>
             </div>

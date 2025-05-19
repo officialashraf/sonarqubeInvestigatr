@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Table } from 'react-bootstrap';
-
 import axios from 'axios';
 import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material';
 import './table.css';

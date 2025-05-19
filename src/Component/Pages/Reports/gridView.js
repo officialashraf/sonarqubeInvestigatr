@@ -28,7 +28,7 @@ const GridView = () => {
     loading: reportLoading,
   } = useSelector((state) => state.report);
 
-  const data = results || [];
+
   const totalPages = total_pages || 0;
   const totalResults = total_results || 0;
 
@@ -39,7 +39,15 @@ const GridView = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isInitialLoad, setIsInitialLoad] = useState(true); // Track initial load
 
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    setData(results || []);
+  }, [results]);
+
   const itemsPerPage = 50;
+
+
 
   // Fetch report data function
   const fetchReportData = async () => {
@@ -84,6 +92,7 @@ const GridView = () => {
         a.click();
         a.remove();
       }
+
       console.log("Report saved successfully!");
     } catch (error) {
       console.error("Error downloading or saving .docx file:", error);
@@ -111,7 +120,7 @@ const GridView = () => {
     if (isInitialLoad) {
       setIsInitialLoad(false);
     }
-  }, [data, reportLoading, isInitialLoad]);
+  }, [reportLoading, isInitialLoad, data]);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);

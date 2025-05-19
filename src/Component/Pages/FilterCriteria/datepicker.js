@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import './date.css';
 
 const DatePicker = ({ onSubmit, initialDates, onClose }) => {
@@ -7,8 +7,8 @@ const DatePicker = ({ onSubmit, initialDates, onClose }) => {
   const [endDate, setEndDate] = useState(initialDates?.endDate || null);
   const [startTime, setStartTime] = useState(initialDates?.startTime || { hours: 16, minutes: 30 });
   const [endTime, setEndTime] = useState(initialDates?.endTime || { hours: 16, minutes: 30 });
-  const [saveSearch, setSaveSearch] = useState(false);
 
+  // const [saveSearch, setSaveSearch] = useState(false);
   // Days of week abbreviations
   const dayNames = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
 
@@ -28,7 +28,7 @@ const DatePicker = ({ onSubmit, initialDates, onClose }) => {
     setEndDate(null);
     setStartTime({ hours: 16, minutes: 30 });
     setEndTime({ hours: 16, minutes: 30 });
-    setSaveSearch(false);
+    // setSaveSearch(false);
   };
 
   // Generate calendar days

@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import '../savedCriteria.css';
 import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
@@ -26,7 +26,6 @@ const SearchResults = ({ onClose }) => {
   const dispatch = useDispatch();
   const [inputValue, setInputValue] = useState('');
   const [searchChips, setSearchChips] = useState([]);
-  const [activeTab, setActiveTab] = useState('Cases');
   const [enterInput, setEnterInput] = useState([])
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [activeComponent, setActiveComponent] = useState('list');
@@ -47,10 +46,7 @@ const SearchResults = ({ onClose }) => {
   console.log("Full Redux Payload:", reduxPayload);
 
 
-  const [formData, setFormData] = useState({
-    searchChips: '',
-    // Add other form fields as needed
-  });
+
   const handleComponentToggle = (componentName) => {
     setActiveComponent(componentName);
   };
@@ -83,12 +79,9 @@ const SearchResults = ({ onClose }) => {
     } else {
       console.log("Keywords is not an array or doesn't exist.");
       setSearchChips([]); // Fallback for empty or invalid data
-      setActiveTab([]);
+      // setActiveTab([]);
     }
   }, [keywords, caseId, fileType]);
-
-
-
   const openPopup = () => {
     setIsPopupVisible(true); // Pop-up ko open karne ke liye state ko true kare
   };
@@ -208,14 +201,14 @@ const SearchResults = ({ onClose }) => {
 
     } catch (error) {
       console.error("Error performing search:", error);
-    }finally{
+    } finally {
       setLoading(false);
     }
   };
 
-   if(loading){
-      return <Loader/>
-    }
+  if (loading) {
+    return <Loader />
+  }
 
 
   return (
@@ -277,8 +270,6 @@ const SearchResults = ({ onClose }) => {
         </div>
 
       </div>
-
-
       <div className="col-auto  d-flex align-items-center gap-1 justify-content-end  me-2">
         <PieChart
           className="icon-style"

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import{ useState, useEffect } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { toast } from 'react-toastify';
@@ -52,7 +52,7 @@ const EditCase = ({ togglePopup, item }) => {
   // Update formData when item or users change
   useEffect(() => {
     if (users.data?.length > 0) {
-      const assigneeUser = users.data.find(user => user.id === item.assignee);
+      // const assigneeUser = users.data.find(user => user.id === item.assignee);
       setFormData(prev => ({
         ...prev,
         assignee: item.assignee,
@@ -131,7 +131,6 @@ const EditCase = ({ togglePopup, item }) => {
       [name]: value
     }));
   };
-
   const handleWatchersChange = (selectedOptions) => {
     setFormData(prev => ({
       ...prev,
@@ -195,10 +194,10 @@ const EditCase = ({ togglePopup, item }) => {
   };
 
   // Prepare values for Select components
-  const watcherValues = formData.watchers.map(watcher => ({
-    value: watcher,
-    label: watcher
-  }));
+  // const watcherValues = formData.watchers.map(watcher => ({
+  //   value: watcher,
+  //   label: watcher
+  // }));
 
   // Find the current assignee option from the users list
   const getCurrentAssignee = () => {

@@ -7,6 +7,7 @@ const initialState = {
 };
 
 export const taskFilterReducer = (state = initialState, action) => {
+
   switch (action.type) {
     case SET_TASK_FILTER_ID:
       return {
@@ -18,6 +19,8 @@ export const taskFilterReducer = (state = initialState, action) => {
       return state;
   }
 };
+
+
 export const filterReducer = (state = { filterCount: {} }, action) => {
   switch (action.type) {
     case LOG_FILTER_COUNT:

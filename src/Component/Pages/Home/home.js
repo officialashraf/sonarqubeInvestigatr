@@ -1,14 +1,9 @@
 
 import CardList from './cards.js'
 import './dashboard.css'
-
 import DataTable from '../Case/caseList.js'
 
-
-
 const Home = () => {
-
-
 
   return (
     <div style={{ height: "100%", width: "100%", flexDirection: "column", overflow: "hidden", margin: "2.5px" }}>

@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react';
 import './savedCriteria.css';
 import SearchIcon from '@mui/icons-material/Search';
@@ -6,14 +5,15 @@ import CloseIcon from '@mui/icons-material/Close';
 import InputAdornment from '@mui/material/InputAdornment';
 import { TextField } from '@mui/material';
 import TuneIcon from '@mui/icons-material/Tune';
-import  { sharedSxStyles } from "./createCriteria";
+import { sharedSxStyles } from "./createCriteria";
 import SendIcon from '@mui/icons-material/Send';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from "react-redux";
-
 import { closePopup, openPopup, setKeywords, setPage, setSearchResults } from '../../../Redux/Action/criteriaAction';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import Loader from '../Layout/loader';
+
 
 const SavedCriteria = () => {
   const navigate = useNavigate();
@@ -25,24 +25,22 @@ const SavedCriteria = () => {
 
   const [inputValue, setInputValue] = useState('');
   const [searchChips, setSearchChips] = useState([]);
-  const [activeTab, setActiveTab] = useState('Cases');
+  // const [activeTab, setActiveTab] = useState('Cases');
   const [isLoading, setIsLoading] = useState(false);
   const [enterInput, setEnterInput] = useState([]);
-  const [loading, setLoading] = useState(true);
+
 
   const caseId = useSelector((state) => state.criteriaKeywords?.queryPayload?.case_id || '');
   console.log("casId", caseId)
-  const keywords = useSelector((state) => state.criteriaKeywords?.keyword || '');
   const fileType = useSelector((state) => state.criteriaKeywords?.queryPayload?.file_type || '');
   console.log("filetype", fileType)
   const keyword = useSelector((state) => state.criteriaKeywords?.queryPayload?.keyword || '');
   console.log("keyword", keyword)
-  console.log("savedkeyword", keywords)
   const reduxPayload = useSelector((state) => state.criteriaKeywords?.queryPayload || '');
   console.log("Redux Payload:", reduxPayload);
 
   useEffect(() => {
-    console.log("Keywords object:", keywords);
+    ;
     console.log("Case ID:", caseId);
     console.log("File Type:", fileType);
 
@@ -70,9 +68,6 @@ const SavedCriteria = () => {
     }
   }, [keyword, caseId, fileType]);
 
-  const [formData, setFormData] = useState({
-    searchQuery: '',
-  });
 
   const displayResults = searchResults
 
@@ -139,7 +134,7 @@ const SavedCriteria = () => {
   const removeChip = (chip) => {
     const updatedChips = searchChips.filter((item) => item !== chip);
     setSearchChips(updatedChips);
-    setEnterInput((prev) => prev.filter((chip) => chip !== chip));
+    setEnterInput((prev) => prev.filter((exchip) => exchip !== chip));
   };
 
   const resetSearch = () => {
@@ -153,8 +148,9 @@ const SavedCriteria = () => {
   const handleSearch = async () => {
     console.log("reduxPayload:", reduxPayload);
     console.log("enterInput:", enterInput);
-    console.log("searchChips:", keywords);
 
+
+    setIsLoading(true);
     try {
       // 1. Redux ke sirf keyword le rahe hain
       const reduxKeywords = Array.isArray(reduxPayload.keyword)
@@ -210,6 +206,7 @@ const SavedCriteria = () => {
 
       console.log("Search results------:", response);
 
+      setIsLoading(false);
       // Redux store update
       dispatch(setSearchResults({
         results: response.data.results,
@@ -302,7 +299,7 @@ const SavedCriteria = () => {
               <div className="tabs">
                 <div
                   className={`tab active`}
-                  onClick={() => setActiveTab('Cases')}
+                // onClick={() => setActiveTab('Cases')}
                 >
                   Cases ({totalResults || 0})
                 </div>
@@ -310,7 +307,7 @@ const SavedCriteria = () => {
 
               <div className="search-results">
                 {isLoading ? (
-                  <div className="card-subtext">Loading results...</div>
+                  <Loader />
                 ) : resultsToDisplay.length > 0 ? (
                   resultsToDisplay.slice(-5).map((item, index) => (
                     <div key={index} className="result-card">

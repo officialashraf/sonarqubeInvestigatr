@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { Table, InputGroup, FormControl, Dropdown, DropdownButton, Badge } from 'react-bootstrap';
-import { Search, List, CardList, Plus, ThreeDotsVertical } from 'react-bootstrap-icons';
+import { useState, useEffect  } from 'react';
+import { Table, InputGroup, FormControl, Dropdown, Badge } from 'react-bootstrap';
+import { Search, Plus} from 'react-bootstrap-icons';
 import axios from 'axios';
 import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material';
 import './table.css';
@@ -164,7 +164,6 @@ const DataTable = () => {
     });
     setFilteredData(filtered);
   };
-
   const togglePopup = () => {
 
     setShowPopup((prev) => !prev);
@@ -231,7 +230,6 @@ const DataTable = () => {
 
 
             <button className='add-btn' title='Add New Case' onClick={togglePopup}><Plus size={20} />Add New Case</button>
-
           </div>
         </div>
         <div className="data-table">

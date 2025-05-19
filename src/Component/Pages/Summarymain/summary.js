@@ -1,6 +1,4 @@
-
-
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import ProgressRow from "./progressBar.js";
@@ -13,6 +11,7 @@ import Cookies from "js-cookie";
 
 const Summary = ({ filters }) => {
 
+  const token = Cookies.get("accessToken");
   const [pieData, setPieData] = useState([]);
   const [barData, setBarData] = useState([]);
   const [tableData, setTableData] = useState([]);
@@ -25,12 +24,6 @@ const Summary = ({ filters }) => {
   console.log("casiId", caseId)
   useEffect(() => {
     const fetchData = async () => {
-
-      const token = Cookies.get("accessToken");
-      console.log("token-----", token);
-      console.log({
-        Authorization: `Bearer ${token}`
-      });
 
       try {
 
@@ -92,7 +85,7 @@ const Summary = ({ filters }) => {
     };
 
     fetchData();
-  }, [caseId]);
+  }, [caseId, token]);
 
   const togglePopup = (value) => {
     if (typeof value === 'boolean') {
@@ -101,7 +94,7 @@ const Summary = ({ filters }) => {
       setShowPopup((prev) => !prev); // fallback toggle
     }
   };
-  
+
   // const togglePopup = () => {
   //   setShowPopup((prev) => !prev);
   // };

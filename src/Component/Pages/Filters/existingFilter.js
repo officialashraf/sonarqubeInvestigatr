@@ -1,6 +1,5 @@
-
 import axios from 'axios';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { SortDown, SortUp, Search } from 'react-bootstrap-icons';
 import { useSelector, useDispatch } from 'react-redux';
 import { logFilterCount } from '../../../Redux/Action/filterAction.js';
@@ -10,16 +9,12 @@ import Loader from '../Layout/loader.js';
 const ExistingFilter = ({ selectedFilters, onFilterToggle, onFilterSelect, setShowAddFilter }) => {
   const dispatch = useDispatch();
   const caseId = useSelector((state) => state.caseData.caseData.id);
-
   const [loading, setLoading] = useState(true);
   const [filterdata, setfilterdata] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchBarVisibility, setSearchBarVisibility] = useState(false);
   const [sortDirection, setSortDirection] = useState('asc'); // new state for sort direction
   const token = Cookies.get('accessToken');
-
-
-
   const toggleSearchBar = () => {
     setSearchBarVisibility(!searchBarVisibility);
   };
@@ -52,7 +47,12 @@ const ExistingFilter = ({ selectedFilters, onFilterToggle, onFilterSelect, setSh
       setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
     }
   };
-  const sortFiltersHelper = (filters) => {
+  const isFilterInCurrentCase = useCallback((filter) => {
+    return Array.isArray(filter["case id"]) &&
+      filter["case id"].includes(String(caseId));
+  }, [caseId]);
+
+  const sortFiltersHelper = useCallback((filters) => {
     return filters.sort((a, b) => {
       // First priority: Checked status
       const aInCurrentCase = isFilterInCurrentCase(a);
@@ -70,30 +70,31 @@ const ExistingFilter = ({ selectedFilters, onFilterToggle, onFilterSelect, setSh
       // Third priority: Name
       return a.name.localeCompare(b.name);
     });
-  };
-  const filterData = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.get(`http://5.180.148.40:9002/api/osint-man/v1/filters`, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-      const user = response.data;
-      const sortedFilters = sortFiltersHelper([...user.data]);
+  }, [isFilterInCurrentCase, sortDirection]);
 
-      dispatch(logFilterCount(user));
-      setfilterdata({ ...user, data: sortedFilters });;
-
-    } catch (error) {
-      console.error('There was an error fetching the data!', error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   useEffect(() => {
+    const filterData = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(`http://5.180.148.40:9002/api/osint-man/v1/filters`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+        const user = response.data;
+        const sortedFilters = sortFiltersHelper([...user.data]);
+
+        dispatch(logFilterCount(user));
+        setfilterdata({ ...user, data: sortedFilters });;
+
+      } catch (error) {
+        console.error('There was an error fetching the data!', error);
+      } finally {
+        setLoading(false);
+      }
+    };
     filterData();
     const handleDatabaseUpdate = () => {
       filterData();
@@ -104,12 +105,7 @@ const ExistingFilter = ({ selectedFilters, onFilterToggle, onFilterSelect, setSh
     return () => {
       window.removeEventListener("databaseUpdated", handleDatabaseUpdate);
     };
-  }, []);
-
-  const isFilterInCurrentCase = (filter) => {
-    return Array.isArray(filter["case id"]) &&
-      filter["case id"].includes(String(caseId));
-  };
+  }, [dispatch, token, sortFiltersHelper]);
 
   return (
     <>

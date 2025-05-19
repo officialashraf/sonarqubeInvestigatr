@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Table, Pagination } from "react-bootstrap";
 import "./caseTableData.css";
@@ -32,10 +31,13 @@ const TabulerData = () => {
 
   const [currentPage, setCurrentPage] = useState(page);
 
-  const itemsPerPage = 50;
+
+
+  // const itemsPerPage = 50;
 
 
   useEffect(() => {
+
 
     if (data1?.id) {
       dispatch(fetchSummaryData({
@@ -155,7 +157,6 @@ const TabulerData = () => {
               }
               return null;
             })}
-
             <Pagination.Next
               onClick={() => handlePageChange(currentPage + 1)}
               disabled={currentPage === totalPages}
@@ -165,16 +166,16 @@ const TabulerData = () => {
               disabled={currentPage === totalPages}
             />
           </Pagination>
-
         </>
-
         <div style={{ fontSize: "12px", marginRight: "10px" }}>
-          Page {currentPage} - {itemsPerPage} / {totalResults}
+          Page {currentPage} of {totalPages} / Total Results: {totalResults}
         </div>
+
       </div>
 
     </>
   );
 };
+
 
 export default TabulerData;

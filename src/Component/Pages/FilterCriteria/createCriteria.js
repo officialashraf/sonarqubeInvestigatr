@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Select from 'react-select';
 import DatePickera from './datepicker';
 import { Search, Send, Tune, CalendarToday } from '@mui/icons-material';
 import { Checkbox, FormControlLabel, InputAdornment, TextField } from '@mui/material';
 import '../FilterCriteria/createCriteria.css';
 import { customStyles } from '../Case/createCase';
-import RecentCriteria from './recentCriteria';
-import SavedCriteria from './savedCriteria';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
@@ -62,59 +60,56 @@ const CreateCriteria = ({ togglePopup, setShowPopup, handleCreateCase }) => {
 
 
   // Fetch case IDs on component mount
-  useEffect(() => {
-    fetchCaseData();
-    fetchFileTypes();
-  }, []);
+
   // if (activePopup !== "create") return null;
   // Fetch case data from API
 
+  useEffect(() => {
+    const fetchCaseData = async () => {
+      try {
+        const response = await axios.get('http://5.180.148.40:9001/api/case-man/v1/case', {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${Token}`
+          },
+        });
 
+        // Format the response data for react-select
+        const caseOptionsFormatted = response.data.data.map(caseItem => ({
+          value: caseItem.id,
+          label: `${caseItem.id} - ${caseItem.title || 'Untitled'}`
+        }));
 
-  const fetchCaseData = async () => {
-    try {
-      const response = await axios.get('http://5.180.148.40:9001/api/case-man/v1/case', {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${Token}`
-        },
-      });
+        setCaseOptions(caseOptionsFormatted);
+      } catch (error) {
+        console.error('Error fetching case data:', error);
+      }
+    };
 
-      // Format the response data for react-select
-      const caseOptionsFormatted = response.data.data.map(caseItem => ({
-        value: caseItem.id,
-        label: `${caseItem.id} - ${caseItem.title || 'Untitled'}`
-      }));
+    // Fetch file types from API
+    const fetchFileTypes = async () => {
+      try {
+        const response = await axios.get('http://5.180.148.40:9002/api/osint-man/v1/platforms', {
+          headers: {
+            'Authorization': `Bearer ${Token}`
+          },
+        });
+        console.log("response", response.data.data)
+        // Format the response data for react-select
+        const fileTypeOptionsFormatted = response.data.data.map(platform => ({
+          value: platform,  // Use the platform value directly if it's a string
+          label: platform   // Use the platform value directly if it's a string
+        }));
 
-      setCaseOptions(caseOptionsFormatted);
-    } catch (error) {
-      console.error('Error fetching case data:', error);
-    }
-  };
+        setFileTypeOptions(fileTypeOptionsFormatted);
+      } catch (error) {
+        console.error('Error fetching file types:', error);
 
-  // Fetch file types from API
-  const fetchFileTypes = async () => {
-    try {
-      const response = await axios.get('http://5.180.148.40:9002/api/osint-man/v1/platforms', {
-        headers: {
-          'Authorization': `Bearer ${Token}`
-        },
-      });
-      console.log("response", response.data.data)
-      // Format the response data for react-select
-      const fileTypeOptionsFormatted = response.data.data.map(platform => ({
-        value: platform,  // Use the platform value directly if it's a string
-        label: platform   // Use the platform value directly if it's a string
-      }));
-
-      setFileTypeOptions(fileTypeOptionsFormatted);
-    } catch (error) {
-      console.error('Error fetching file types:', error);
-    }
-  };
-
-
-
+      }
+    };
+    fetchCaseData();
+    fetchFileTypes();
+  }, [Token]);
   // Handle checkbox change for saving criteria
   const handleSaveCriteriaChange = (e) => {
 
@@ -417,7 +412,6 @@ const CreateCriteria = ({ togglePopup, setShowPopup, handleCreateCase }) => {
           <Confirm formData={formData} selectedDates={selectedDates} />
         )
       }
-
     </div>
   );
 };

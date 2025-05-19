@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import "../Case/createCase.css";
 import axios from "axios";
 import Cookies from "js-cookie";
@@ -8,7 +8,7 @@ import Select from 'react-select';
 import "./target.css";
 
 export const customStyles = {
-  control: (base, state) => ({
+  control: (base) => ({
     ...base,
     backgroundColor: 'white',
     color: 'black',

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
@@ -21,8 +21,6 @@ const Confirm = ({ formData, selectedDates, searchChips }) => {
             const criteriaPaylod = {
                 title: searchTitle || "",
 
-
-
                 keyword: Array.isArray(keywordSource)
                     ? keywordSource
                     : keywordSource
@@ -33,6 +31,7 @@ const Confirm = ({ formData, selectedDates, searchChips }) => {
                 case_id: formData.caseIds?.length > 0
                     ? formData.caseIds.map((caseId) => caseId.value.toString())
                     : [], // Handle multiple `caseIds` and return array
+
 
                 file_type: [
                     ...(formData.filetype?.length > 0 ? formData.filetype.map((file) => file.value) : []),
@@ -63,6 +62,7 @@ const Confirm = ({ formData, selectedDates, searchChips }) => {
             console.log('Criteria saved successfully:', response.data); // Debug: API response
             setIsVisible(false)
         } catch (error) {
+            toast.error(error.response.data.detail || "Error saving criteria");
             console.error('Error saving criteria:', error); // Debug: Error log
         }
     };

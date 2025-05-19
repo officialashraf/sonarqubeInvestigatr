@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import Cookies from "js-cookie";
@@ -11,7 +11,6 @@ const CriteriaSentimentChart = () => {
   const queryPayload = useSelector((state) => state.criteriaKeywords.queryPayload);
   console.log("querUseselctor", queryPayload)
   const [loading, setLoading] = useState(true);
-
 
   const COLORS = ['#000000', '#000000'];
 
@@ -66,14 +65,13 @@ const CriteriaSentimentChart = () => {
         setData([]);
       } finally {
         setLoading(false);
-        }
+      }
     };
     fetchData();
-  }, [queryPayload]);
-   if(loading){
-    return <Loader/>
-   } 
-
+  }, [queryPayload, token]);
+  if (loading) {
+    return <Loader />
+  }
   return (
     <div style={{ width: '100%', height: 250 }}>
       <ResponsiveContainer>

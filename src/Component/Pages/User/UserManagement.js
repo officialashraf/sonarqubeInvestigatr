@@ -57,6 +57,7 @@ const UserManagement = () => {
         },
 
       });
+
       console.log("API Response:", response);
       setData(response.data.data);
       setFilteredData(response.data.data);
@@ -71,10 +72,7 @@ const UserManagement = () => {
       setLoading(false);
     }
   };
-  // console.log("users",users)
-  //   useEffect(() => {
-  //     fetchUsers();
-  //   }, []);
+
 
   useEffect(() => {
     fetchUsers();
@@ -239,7 +237,8 @@ const UserManagement = () => {
         <Col xs={1} className="d-flex align-items-center justify-content-flex-start" style={{ width: "20%" }}>
           <FaArrowLeft style={{
             cursor: 'pointer', margin: '0px 40px 0px 38px',
-            fontSize: '18px' }} onClick={() => navigate('/dashboard')} />
+            fontSize: '18px'
+          }} onClick={() => navigate('/dashboard')} />
           <div className="search-bar1" style={{ width: '100%' }}>
             <div className="input-group">
               <input

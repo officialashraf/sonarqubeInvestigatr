@@ -1,4 +1,3 @@
-import React from 'react';
 import { Card, CardContent, Typography, IconButton } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -12,7 +11,6 @@ const UserDashboard = () => {
   const cardData = [
     { title: 'User Management' },
     { title: 'Roles and Permission' },
-
   ];
 
   const handleCheckboxChange = (title) => {

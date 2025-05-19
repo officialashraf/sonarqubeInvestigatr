@@ -1,6 +1,6 @@
 
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
@@ -15,7 +15,6 @@ const AddRole = ({ togglePopup }) => {
     const addRole = async () => {
 
         try {
-
             console.log("Criteria Payload:", searchTitle); // Debug: Payload for API
 
             const response = await axios.post(

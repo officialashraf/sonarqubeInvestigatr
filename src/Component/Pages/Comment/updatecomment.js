@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
 import axios from 'axios';

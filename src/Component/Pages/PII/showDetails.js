@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 import validator from "validator";
 
 const ShowDetails = () => {
-  const [data, setData] = useState([]);
+
 
   const [query, setQuery] = useState("");
   const [searchType, setSearchType] = useState("phone-no");
@@ -28,9 +28,10 @@ const ShowDetails = () => {
     } else if (searchType === "phone-no") {
       // Remove all non-digit characters
 
+
       // Check if the query contains any alphabet character
       const hasAlphabets = /[a-zA-Z]/.test(query);
-      const hasInvalidSpecialChars = /[^0-9\/\-\+]/.test(query);
+      const hasInvalidSpecialChars = /[^0-9/\-+.]/.test(query);
       if (hasAlphabets || hasInvalidSpecialChars) {
         toast.error("Phone number must contain only digits");
         return;
@@ -46,7 +47,7 @@ const ShowDetails = () => {
     try {
       console.log("Final URL:", url);
       const response = await axios.get(url);
-      setData(response.data);
+      // setData(response.data);
       dispatch(searchSuccess(response.data));
       console.log("data", response.data);
     } catch (err) {

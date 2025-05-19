@@ -1,5 +1,5 @@
 
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import { Form, InputGroup, Button, Badge } from 'react-bootstrap';
 import { toast } from 'react-toastify';
@@ -156,15 +156,13 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
       });
 
       setSources(convertedSources);
-
       // Check edit permissions
-      const isEditable = (loggedInUserId == filterDetails.created_by);
+      const isEditable = (String(loggedInUserId) === String(filterDetails.created_by));
       console.log(isEditable)
       setIsEditable(isEditable);
       if (!toastShown.current) {
         toast.info(isEditable ? "You can edit this filter" : "You don't have permission to edit this filter");
         toastShown.current = true;
-
       }
     }
   }, [filterDetails, loggedInUserId]);
@@ -183,43 +181,44 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
     }]);
   };
 
-  const fetchFilterDetails = async () => {
-    try {
-      const response = await axios.get(`http://5.180.148.40:9002/api/osint-man/v1/filter/${filterIde}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setFilterDetails(response.data)
-      console.log("fetchflterdetails", response)
-    } catch (error) {
-      console.error('Platform fetch error:', error);
-      toast.error('Error fetching platforms: ' + (error.response?.data?.detail || error.message));
-    }
-  };
 
   useEffect(() => {
-    if (filterIde) {
-      fetchFilterDetails();
-    }
-  }, [filterIde]);
-  const fetchPlatforms = async () => {
-    try {
-      const response = await axios.get('http://5.180.148.40:9002/api/osint-man/v1/platforms', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setPlatform(response.data.data || []);
-    } catch (error) {
-      console.error('Platform fetch error:', error);
-      toast.error('Error fetching platforms: ' + (error.response?.data?.detail || error.message));
-    }
-  };
+    const fetchFilterDetails = async () => {
+      try {
+        const response = await axios.get(`http://5.180.148.40:9002/api/osint-man/v1/filter/${filterIde}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setFilterDetails(response.data)
+        console.log("fetchflterdetails", response)
+      } catch (error) {
+        console.error('Platform fetch error:', error);
+        toast.error('Error fetching platforms: ' + (error.response?.data?.detail || error.message));
+      }
+    };
+
+    fetchFilterDetails();
+
+  }, [filterIde, token]);
+
 
   useEffect(() => {
+    const fetchPlatforms = async () => {
+      try {
+        const response = await axios.get('http://5.180.148.40:9002/api/osint-man/v1/platforms', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setPlatform(response.data.data || []);
+      } catch (error) {
+        console.error('Platform fetch error:', error);
+        toast.error('Error fetching platforms: ' + (error.response?.data?.detail || error.message));
+      }
+    };
     fetchPlatforms();
-  }, []);
+  }, [token]);
 
 
 
@@ -255,9 +254,9 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
-      }); 
-       window.dispatchEvent(new Event('databaseUpdated'));
-       
+      });
+      window.dispatchEvent(new Event('databaseUpdated'));
+
       console.log("responseFilter", response)
       if (response.status === 200) {
         toast.success(`Filter created successfully: ${response.data.data.name}`);
@@ -474,6 +473,7 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
               className="add-new-filter-button"
               style={{ marginLeft: '5px' }}
               onClick={handleSaveFilter}
+            // disabled={!isEditable}
             >
               {filterDetails?.id ? 'Update Filter' : 'Save Filter'}
             </button>

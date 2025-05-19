@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+
+import { useState, useEffect } from 'react';
 import { Card, Container } from 'react-bootstrap';
 import { Phone, Email, Person, Cake, Wc } from '@mui/icons-material';
 import Carousel from 'react-bootstrap/Carousel';
 import './profileDetails.css';
 import { useSelector } from 'react-redux';
-import userImg from '../../Assets/blank-profile.webp'
+import userImg from '../../Assets/Images/blank-profile.webp'
 
 
 const ProfileDetails = () => {
@@ -50,17 +51,17 @@ const ProfileDetails = () => {
                 <div className="profile-avatar">
 
 
-
                   {profileData && Array.isArray(profileData.images) && profileData.images.length > 0 ? (
                     <Carousel >
                       {profileData.images.map((image, index) => (
                         <Carousel.Item key={index}>
-                          <img src={image} alt={`Profile Image ${index}`} width={100} height={100} />
+                          <img src={image} alt={`Profile Pic ${index}`} width={100} height={100} />
                         </Carousel.Item>
                       ))}
                     </Carousel>
                   ) : (
-                    <img src={userImg} alt={`Profile Image`} width={100} height={100} />
+
+                    <img src={userImg} alt={`Profile Pic`} width={100} height={100} />
                   )}
                 </div>
                 <div className="profile-id"><ul className="email-list">
@@ -106,21 +107,23 @@ const ProfileDetails = () => {
               <div className="detail-label">
                 <Person fontSize="small" /> Aliases
               </div>
-              <div className="detail-value">{profileData && profileData.aliases || "--"}</div>
+
+              <div className="detail-value">{(profileData && profileData.aliases) || "--"}</div>
             </div>
 
             <div className="detail-item">
               <div className="detail-label">
                 <Cake fontSize="small" /> D.O.B/Age
               </div>
-              <div className="detail-value">{profileData && profileData.ages || "--"}</div>
+
+              <div className="detail-value">{(profileData && profileData.ages) || "--"}</div>
             </div>
 
             <div className="detail-item">
               <div className="detail-label">
                 <Wc fontSize="small" /> Gender
               </div>
-              <div className="detail-value" style={{ color: "white" }}>{profileData && profileData.gender || "--"}</div>
+              <div className="detail-value" style={{ color: "white" }}>{(profileData && profileData.gender) || "--"}</div>
             </div>
           </div>
 

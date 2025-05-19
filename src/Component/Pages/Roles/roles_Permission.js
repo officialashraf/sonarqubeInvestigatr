@@ -1,4 +1,4 @@
-import {  Plus } from "react-bootstrap-icons";
+import { Plus } from "react-bootstrap-icons";
 import { Col, Table } from "react-bootstrap";
 import { FiMoreVertical } from "react-icons/fi";
 import "../Case/table.css";
@@ -70,12 +70,17 @@ const RolesPermission = () => {
                 console.error("An error occurred:", error.message);
             }
             console.error(error);
-        } finally{
+        } finally {
             setLoading(false);
         }
     };
-   
+
+
+
+
+
     useEffect(() => {
+
         fetchRoles();
 
         const handleDatabaseUpdated = () => {
@@ -179,6 +184,10 @@ const RolesPermission = () => {
             window.dispatchEvent(new Event("databaseUpdated"));
             toast(`Role ${role} deleted successfully`)
             console.log("Role Deleted:", response.data);
+
+            // After successful deletion, fetch the updated data
+            //fetchData(); // Optionally refresh data after deletion
+
         } catch (err) {
             // Error handling based on the type of error
             console.error('Error during login:', err);
@@ -197,8 +206,8 @@ const RolesPermission = () => {
         }
     };
 
-    if(loading){
-        return <Loader/>
+    if (loading) {
+        return <Loader />
     }
 
     return (
@@ -207,8 +216,9 @@ const RolesPermission = () => {
                 <Col xs={1} className="d-flex align-items-center justify-content-flex-start" style={{ width: "20%" }}>
                     <FaArrowLeft
                         style={{
-                            cursor: 'pointer', margin: '0px 40px 0px 38px',  
-                            fontSize: '18px' }}
+                            cursor: 'pointer', margin: '0px 40px 0px 38px',
+                            fontSize: '18px'
+                        }}
                         onClick={() => navigate('/dashboard')}
                     />
                     <div className="search-bar1" style={{ width: '100%' }}>
@@ -293,8 +303,6 @@ const RolesPermission = () => {
             </div>
             {showPopup && <AddRole togglePopup={togglePopup} />}
             {showPopupB && <DetailsPermission togglePopup={togglePopupB} details={popupDetails} />}
-
-
             {showPopupC && <EditRole togglePopup={togglePopupC} details={popupDetails} />}
             {showPopupD && <AssignRole togglePopup={togglePopupD} details={popupDetails} />}
         </div>

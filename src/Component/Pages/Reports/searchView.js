@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Select from 'react-select';
 import DatePickera from '../FilterCriteria/datepicker';
 import { Search, Send, CalendarToday } from '@mui/icons-material';
@@ -29,12 +29,12 @@ export const sharedSxStyles = {
   }
 };
 
-const SearchView = ({ togglePopup, setShowPopup, handleCreateCase }) => {
+const SearchView = () => {
   const dispatch = useDispatch();
   const Token = Cookies.get('accessToken');
 
   const [formData, setFormData] = useState({
-    searchQuery: '',
+    searchQuery: ' ',
     datatype: [],
     caseIds: [],
 
@@ -47,46 +47,34 @@ const SearchView = ({ togglePopup, setShowPopup, handleCreateCase }) => {
     endTime: { hours: 16, minutes: 30 }
   });
   const [caseOptions, setCaseOptions] = useState([]);
-  const [template, setTemplate] = useState()
-
-
   const activePopup = useSelector((state) => state.popup?.activePopup || null);
   console.log("create popup", activePopup)
   const results = useSelector((state) => state.report?.results || null);
   console.log("result", results)
   // Fetch case IDs on component mount
   useEffect(() => {
+    const fetchCaseData = async () => {
+      try {
+        const response = await axios.get('http://5.180.148.40:9001/api/case-man/v1/case', {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${Token}`
+          },
+        });
+
+        // Format the response data for react-select
+        const caseOptionsFormatted = response.data.data.map(caseItem => ({
+          value: caseItem.id,
+          label: `${caseItem.id} - ${caseItem.title || 'Untitled'}`
+        }));
+
+        setCaseOptions(caseOptionsFormatted);
+      } catch (error) {
+        console.error('Error fetching case data:', error);
+      }
+    };
     fetchCaseData();
-
-  }, []);
-
-
-
-  const fetchCaseData = async () => {
-    try {
-      const response = await axios.get('http://5.180.148.40:9001/api/case-man/v1/case', {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${Token}`
-        },
-      });
-
-      // Format the response data for react-select
-      const caseOptionsFormatted = response.data.data.map(caseItem => ({
-        value: caseItem.id,
-        label: `${caseItem.id} - ${caseItem.title || 'Untitled'}`
-      }));
-
-      setCaseOptions(caseOptionsFormatted);
-    } catch (error) {
-      console.error('Error fetching case data:', error);
-    }
-  };
-
-
-
-
-
+  }, [Token]);
 
 
   const handleInputChange = (e) => {
@@ -96,7 +84,7 @@ const SearchView = ({ togglePopup, setShowPopup, handleCreateCase }) => {
     if (name === "searchQuery") {
       setFormData(prev => ({
         ...prev,
-        [name]: value.split(",").map(keyword => keyword.trim()) // Split by commas and trim extra spaces
+        [name]: value.split(",").map(keyword => keyword) // Split by commas and trim extra spaces
       }));
     } else {
       // For other inputs, handle normally
@@ -106,12 +94,15 @@ const SearchView = ({ togglePopup, setShowPopup, handleCreateCase }) => {
       }));
     }
   };
+
+
+
   const handleSearch = async (e) => {
     e.preventDefault();
     try {
-      let raw = formData.searchQuery;
 
       const payload = {
+
         keyword: Array.isArray(formData.searchQuery) ? formData.searchQuery : [formData.searchQuery],
         report_generation: true,
 
@@ -188,23 +179,6 @@ const SearchView = ({ togglePopup, setShowPopup, handleCreateCase }) => {
     return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
   };
 
-  const handleDownload = async () => {
-    try {
-      console.log("Template:", template.data);
-      const docContent = await template.data;
-      const blob = docContent.blob();
-      const fileHandle = await window.showSaveFilePicker({
-        suggestedName: "social_media_report.docx",
-        types: [{ description: "Word Document", accept: { "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [".docx"] } }]
-      });
-
-      const writable = await fileHandle.createWritable();
-      await writable.write(blob);
-      await writable.close();
-    } catch (error) {
-      console.error("Error downloading .docx file:", error);
-    }
-  };
 
 
   return (
@@ -233,6 +207,7 @@ const SearchView = ({ togglePopup, setShowPopup, handleCreateCase }) => {
               style: {
                 height: '38px',
                 padding: '0 8px',
+                whiteSpace: "pre-wrap"
               },
             }}
             placeholder="Search..."
@@ -301,6 +276,7 @@ const SearchView = ({ togglePopup, setShowPopup, handleCreateCase }) => {
           </div>
 
         </form>
+        {/* <button onClick={fetchReportData}>Download Word File</button> */}
       </div>
 
 

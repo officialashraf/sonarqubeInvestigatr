@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import "./recentCriteria.css"
 import TuneIcon from '@mui/icons-material/Tune';
 import SearchIcon from '@mui/icons-material/Search';
@@ -18,7 +18,6 @@ import axios from "axios";
 
 const RecentCriteria = () => {
 
-  const [recentSearch, setRecentSearch] = useState(["person", "every"]);
   const [savedSearch, setSavedSearch] = useState([]);
   const [criteriaId, setCriteriaId] = useState()
   const [showEditPopup, setShowEditPopup] = useState(false);
@@ -46,15 +45,6 @@ const RecentCriteria = () => {
   console.log("keyword", keyword);
   const reduxPayload = useSelector((state) => state.criteriaKeywords?.queryPayload || '');
   console.log("Redux Payload:", reduxPayload);
-  const [formData, setFormData] = useState({
-    searchQuery: '',
-    datatype: [],
-    filetype: [],
-    caseIds: [],
-    includeArchived: false,
-    latitude: '',
-    longitude: ''
-  });
 
   useEffect(() => {
     const isValid = (val) =>
@@ -86,9 +76,6 @@ const RecentCriteria = () => {
   }, [recentKeyword, caseId, fileType]);
 
 
-  useEffect(() => {
-    fetchData();
-  }, []);
   const dispatch = useDispatch();
   const activePopup = useSelector((state) => state.popup?.activePopup || null);
   console.log("Current Active Popup:", activePopup);
@@ -126,7 +113,7 @@ const RecentCriteria = () => {
   };
 
   const Token = Cookies.get('accessToken');
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const response = await axios.get("http://5.180.148.40:9007/api/das/criteria", {
         headers: {
@@ -134,17 +121,21 @@ const RecentCriteria = () => {
           'Authorization': `Bearer ${Token}`
         },
       });
+
       const data = response
       console.log("resposegetCriteria", data.data)
       if (data && data.data) {
         setSavedSearch(data.data.data); // Extract keywords
         console.log("setSavedSearch", savedSearch)
+
       }
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-
-  };
+  }, [Token])
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   const handleDelete = async (index, id) => {
     try {
@@ -284,6 +275,7 @@ const RecentCriteria = () => {
       if (isValid(item.start_date)) {
         queryPayload.start_date = item.start_date;
       }
+
 
       if (isValid(item.end_date)) {
         queryPayload.end_date = item.end_date;

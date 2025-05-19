@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import ExistingFilters from "./existingFilter";
 import axios from 'axios';
 import AddNewFilter from './addNewFilter';
 import "./main.css"
 import { Plus, X } from 'react-bootstrap-icons'
-import { useSelector, useDispatch } from 'react-redux';
-
+import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import Cookies from 'js-cookie';
 

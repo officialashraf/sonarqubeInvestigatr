@@ -13,6 +13,7 @@ const CaseHeader = ({ onIconClick }) => {
   const backToSnap = () => {
     navigate(`/cases/${caseData1.id}`);
   };
+
   return (
     <>
       <div className="container-fluid">
@@ -30,8 +31,10 @@ const CaseHeader = ({ onIconClick }) => {
             </h5>
             <p className="mb-0">{caseData1.title}</p>
 
+
           </div>
           <div className="col d-flex flex-wrap justify-content-end align-items-center">
+
             <button
               className="add-new-filter-button"
               style={{ marginLeft: "12px" }}
@@ -41,8 +44,9 @@ const CaseHeader = ({ onIconClick }) => {
               Back to Case Snapshot
             </button>
           </div>
+
         </div>
-        {/*end header*/}
+
         <div
           className="row py-0 px-2  align-items-start"
           style={{ backgroundColor: "lightgrey" }}
@@ -54,21 +58,22 @@ const CaseHeader = ({ onIconClick }) => {
               placeholder="Search..."
             />
           </div>
-          <div className="col-auto ms-auto d-flex align-items-center gap-3">
-            <FaPhotoVideo
-              className="icon-styles"
-              onClick={() => onIconClick("resources")}
-            />
-            <PieChart
-              className="icon-style"
-              onClick={() => onIconClick("graphicalData")}
-            />
-            <ListAltOutlined
-              className="icon-style"
-              onClick={() => onIconClick("caseData")}
-            />
-          </div>
+
         </div>
+      </div>
+      <div className="col-auto ms-auto d-flex align-items-center gap-3">
+        <FaPhotoVideo
+          className="icon-styles"
+          onClick={() => onIconClick("resources")}
+        />
+        <PieChart
+          className="icon-style"
+          onClick={() => onIconClick("graphicalData")}
+        />
+        <ListAltOutlined
+          className="icon-style"
+          onClick={() => onIconClick("caseData")}
+        />
       </div>
     </>
   );

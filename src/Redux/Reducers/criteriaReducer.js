@@ -1,3 +1,4 @@
+
 import { SET_SEARCH_RESULTS, SET_PAGE, CLOSE_POPUP, OPEN_POPUP, SET_KEYWORDS } from "../Constants/criteriaConstant";
 
 // Redux Reducer
@@ -48,7 +49,6 @@ export const popupReducer = (state = { activePopup: null }, action) => {
       return state; // Return current state for unhandled actions
   }
 };
-
 const queryState = {
 
   keywords: [],

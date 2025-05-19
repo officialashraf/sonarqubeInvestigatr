@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Button } from 'react-bootstrap';
 import { FaPlus } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
@@ -23,7 +23,7 @@ const MainContainer = () => {
     setShowPopup((prev) => !prev);
   };
 
-  const filterData = async () => {
+  const filterData = useCallback(async () => {
     setIsLoading(true); // Start loading
     try {
       const response = await axios.get(`http://5.180.148.40:9002/api/osint-man/v1/filters`, {
@@ -44,14 +44,14 @@ const MainContainer = () => {
     } finally {
       setIsLoading(false); // End loading regardless of success/error
     }
-  };
+  }, [token]);
 
   useEffect(() => {
     filterData();
     const handleDatabaseUpdate = () => filterData();
     window.addEventListener("databaseUpdated", handleDatabaseUpdate);
     return () => window.removeEventListener("databaseUpdated", handleDatabaseUpdate);
-  }, []);
+  }, [filterData]);
 
   // Check if filters exist for the current case
   const hasFilters = filterdata.some(
@@ -99,5 +99,4 @@ const MainContainer = () => {
     </>
   );
 };
-
 export default MainContainer;

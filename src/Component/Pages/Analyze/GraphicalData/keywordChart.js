@@ -17,7 +17,9 @@ const KeywordChart = () => {
 
 
 
+
   useEffect(() => {
+  
 
     const fetchData = async () => {
 
@@ -53,9 +55,10 @@ const KeywordChart = () => {
         setLoading(false);
       }
     }
-    fetchData();
-  },
-    [caseId]);
+
+      fetchData();
+    },
+      [caseId,token]);
   if (loading) {
     return <Loader />;
   }

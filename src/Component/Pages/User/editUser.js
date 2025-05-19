@@ -16,6 +16,7 @@ const EditUser = ({ togglePopup, item }) => {
 
   const [users, setUsers] = useState({ data: [] });
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const token = Cookies.get("accessToken");
   const userData = async () => {

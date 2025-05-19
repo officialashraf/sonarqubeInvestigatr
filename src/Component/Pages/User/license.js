@@ -1,11 +1,8 @@
-
-
-import React, { useState } from "react";
+import { useState } from "react";
 import { Container, Row, Col, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
-
 import "./login.css";
 
 const LicensePage = () => {

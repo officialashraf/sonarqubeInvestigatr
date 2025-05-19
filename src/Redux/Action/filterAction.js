@@ -5,9 +5,11 @@ import Cookies from "js-cookie";
 import { toast } from 'react-toastify';
 
 export const setTaskFilter = (taskId, filterId) => ({
+
   type: SET_TASK_FILTER_ID,
   payload: { taskId, filterId },
 });
+
 export const logFilterCount = (user) => {
   console.log("filterCount", user);
   return {

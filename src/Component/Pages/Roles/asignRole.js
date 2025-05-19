@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
@@ -26,12 +26,10 @@ const AssignRole = ({ togglePopup, details }) => {
         }
     }, [details]);
 
-    useEffect(() => {
-        fetchEndpoints();
-        fetchRoles();
-    }, []);
 
-    const fetchEndpoints = async () => {
+
+
+    const fetchEndpoints = useCallback(async () => {
         setEndpointsLoading(true);
         try {
             const response = await axios.get(
@@ -60,9 +58,9 @@ const AssignRole = ({ togglePopup, details }) => {
         } finally {
             setEndpointsLoading(false);
         }
-    };
+    }, [token, details.role]);
 
-    const fetchRoles = async () => {
+    const fetchRoles = useCallback(async () => {
         setRolesLoading(true);
         try {
             const response = await axios.get(
@@ -86,7 +84,11 @@ const AssignRole = ({ togglePopup, details }) => {
         } finally {
             setRolesLoading(false);
         }
-    };
+    }, [token]);
+    useEffect(() => {
+        fetchEndpoints();
+        fetchRoles();
+    }, [fetchEndpoints, fetchRoles]);
 
     const assignRole = async () => {
         if (!selectedRole) return toast.warning('Please select a role');
@@ -243,5 +245,4 @@ const AssignRole = ({ togglePopup, details }) => {
         </div>
     );
 };
-
 export default AssignRole;

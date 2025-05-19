@@ -7,7 +7,7 @@ import Select from 'react-select';
 import "./target.css";
 
 export const customStyles = {
-  control: (base, state) => ({
+  control: (base) => ({
     ...base,
     backgroundColor: 'white',
     color: 'black',

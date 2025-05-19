@@ -54,6 +54,7 @@ const AppContent = () => {
     if (path === "/dashboard") return "Admin";
     if (path === "/roles") return "Roles";
     if (path === "/targets") return "Target";
+
     return "Cases";
   };
   const excludedPaths = ["/login", "/", "/license"];

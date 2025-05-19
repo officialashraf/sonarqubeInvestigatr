@@ -1,9 +1,8 @@
-import React from 'react';
 import axios from 'axios';
 import { Card, Container } from 'react-bootstrap';
 import { Folder, FileEarmarkPlus, PieChart, Check2Circle, PauseCircle, Archive, Trash } from 'react-bootstrap-icons';
 import './card.css';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Cookies from "js-cookie";
 
 const cardTemplate = [
@@ -37,8 +36,10 @@ const StatusCard = ({ name, number, icon }) => {
 
 const CardList = () => {
   const [cardData, setCardData] = useState(cardTemplate);
+
+
   const Token = Cookies.get('accessToken');
-  const getCardData = async () => {
+  const getCardData = useCallback(async () => {
     try {
       const response = await axios.get('http://5.180.148.40:9001/api/case-man/v1/case/states-count', {
         headers: {
@@ -59,7 +60,7 @@ const CardList = () => {
     } catch (error) {
       console.error('Error fetching data:', error);
     }
-  };
+  }, [Token]);
 
 
   useEffect(() => {
@@ -73,8 +74,17 @@ const CardList = () => {
     return () => {
       window.removeEventListener("databaseUpdated", handleDatabaseUpdate);
     };
-  }, []);
+  }, [getCardData]);
 
+  //   const carListData = useCallback(() => {
+  //     getCardData()
+  // }, [cardData]);
+  // useEffect(() => {
+  //   if (refresh) {
+  //     carListData(); // Runs only when refresh changes
+  //       setRefresh(false); // Reset refresh state after running
+  //   }
+  // }, [refresh]);
   return (
     <Container fluid className="card-list-container">
       {cardData.map((item, index) => (

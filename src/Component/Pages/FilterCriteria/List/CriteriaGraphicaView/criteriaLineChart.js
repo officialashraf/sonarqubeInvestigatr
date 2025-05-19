@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { Box, Slider } from '@mui/material';
@@ -55,15 +55,16 @@ const CriteriaLineChart = () => {
         console.error('Error fetching data:', error);
         setData([]);
         setRecordTypes([]);
-      }finally{
+      } finally {
         setLoading(false);
       }
     };
 
     fetchData();
-  }, [queryPayload]);
-  if(loading){
-    return <Loader style={{ marginTop: '-120px' }}  />
+
+  }, [queryPayload, token]);
+  if (loading) {
+    return <Loader style={{ marginTop: '-120px' }} />
   }
 
   return (

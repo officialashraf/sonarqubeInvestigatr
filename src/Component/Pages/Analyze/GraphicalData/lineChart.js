@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { Box, Slider } from '@mui/material';
@@ -17,6 +17,7 @@ const LineChart1 = () => {
   const [loading, setLoading] = useState(true); // Add loading state
 
 
+  
 
   useEffect(() => {
 
@@ -67,7 +68,7 @@ const LineChart1 = () => {
     };
 
     fetchData();
-  }, [caseId]);
+  }, [caseId,token]);
 
   if (loading) {
     console.log("Loading state is TRUE");

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Table, Pagination, Spinner } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { setPage, setSearchResults } from '../../../../Redux/Action/criteriaAction';
@@ -9,10 +9,8 @@ import Loader from '../../Layout/loader';
 const CriteriaCaseTable = () => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(true);
-  const [showPopupA, setShowPopupA] = useState(false);
-  const [showPopupB, setShowPopupB] = useState(false);
-  const [selectedData, setSelectedData] = useState(null);
   const [loading, setLoading] = useState(false);
+
 
   // Get the Redux state
   const { totalPages, totalResults, searchResults, currentPage } = useSelector(state => state?.search || '');
@@ -20,7 +18,7 @@ const CriteriaCaseTable = () => {
   const keywords = useSelector((state) => state.criteriaKeywords?.keywords || '');
 
   // Get the token for API requests
-  const Token = localStorage.getItem('token') || Cookies.get('token');
+  const Token = Cookies.get("accessToken");
 
   // Fetch data when page changes
   useEffect(() => {
@@ -79,16 +77,6 @@ const CriteriaCaseTable = () => {
     fetchPageData();
   }, [currentPage, dispatch, Token, keywords, payload]);
 
-  const togglePopupB = (item) => {
-    setShowPopupB((prev) => !prev);
-    setSelectedData(item);
-  };
-
-  const togglePopupA = (item) => {
-    setShowPopupA((prev) => !prev);
-    setSelectedData(item);
-  };
-
   // Handle page change
   const handlePageChange = (pageNumber) => {
     if (pageNumber !== currentPage && pageNumber >= 1 && pageNumber <= totalPages) {
@@ -102,7 +90,6 @@ const CriteriaCaseTable = () => {
 
     // Calculate which page numbers to show
     const pageItems = [];
-    const maxPagesToShow = 5;
 
     // Always add first page
     pageItems.push(
@@ -176,8 +163,8 @@ const CriteriaCaseTable = () => {
       </Pagination>
     );
   };
-  if(loading){
-    <Loader/>
+  if (loading) {
+    <Loader />
   }
 
   return (
@@ -194,14 +181,11 @@ const CriteriaCaseTable = () => {
 
         </div>
         {loading ? (
-          // <div className="d-flex justify-content-center align-items-center" style={{ height: '100%' }}>
-          //   <Spinner animation="border" role="status" variant="primary">
-          //     <span className="visually-hidden">Loading...</span>
-          //   </Spinner>
-          //   <span className="ms-2">Loading data...</span>
-          // </div>
-          <div>
-            <Loader/>
+          <div className="d-flex justify-content-center align-items-center" style={{ height: '100%' }}>
+            <Spinner animation="border" role="status" variant="primary">
+              <span className="visually-hidden">Loading...</span>
+            </Spinner>
+            <span className="ms-2">Loading data...</span>
           </div>
         ) : (
           <Table striped bordered hover>
@@ -236,7 +220,7 @@ const CriteriaCaseTable = () => {
                             whiteSpace: 'nowrap',
                           }}
                           title={typeof item[key] === 'object' ? JSON.stringify(item[key]) : item[key]}
-                          onClick={() => togglePopupA(item)}
+                        // onClick={() => togglePopupA(item)}
                         >
                           {typeof item[key] === 'object' && item[key] !== null
                             ? JSON.stringify(item[key]) // Handle objects/arrays by converting to string
@@ -264,8 +248,9 @@ const CriteriaCaseTable = () => {
         <div style={{ width: '300px', overflow: 'auto' }}>
           {renderPagination()}
         </div>
-        <div style={{ fontSize: "12px" }}>
-          { `Page ${currentPage} of ${totalPages} / Total Results: ${totalResults}`}
+
+        <div style={{ fontSize: "12px", marginRight: '5px' }}>
+          {isLoading ? 'Loading...' : `Page ${currentPage} of ${totalPages} / Total Results: ${totalResults}`}
         </div>
       </div>
     </>
