@@ -1,22 +1,19 @@
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import './savedCriteria.css';
 import SearchIcon from '@mui/icons-material/Search';
-import FilterListIcon from '@mui/icons-material/FilterList';
 import CloseIcon from '@mui/icons-material/Close';
 import InputAdornment from '@mui/material/InputAdornment';
 import { TextField } from '@mui/material';
 import TuneIcon from '@mui/icons-material/Tune';
-import CreateCriteria, { sharedSxStyles } from "./createCriteria";
+import  { sharedSxStyles } from "./createCriteria";
 import SendIcon from '@mui/icons-material/Send';
 import { useNavigate } from 'react-router-dom';
-import RecentCriteria from './recentCriteria';
 import { useSelector, useDispatch } from "react-redux";
 
 import { closePopup, openPopup, setKeywords, setPage, setSearchResults } from '../../../Redux/Action/criteriaAction';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { toast } from 'react-toastify';
 
 const SavedCriteria = () => {
   const navigate = useNavigate();
@@ -25,45 +22,46 @@ const SavedCriteria = () => {
 
   const { searchResults, totalPages, currentPage, totalResults } = useSelector((state) => state.search);
   console.log("searchResult", searchResults, totalPages, currentPage, totalResults);
-  
+
   const [inputValue, setInputValue] = useState('');
   const [searchChips, setSearchChips] = useState([]);
   const [activeTab, setActiveTab] = useState('Cases');
   const [isLoading, setIsLoading] = useState(false);
-  const [enterInput,setEnterInput] = useState([]);
-  
-  const caseId = useSelector((state) => state.criteriaKeywords?.queryPayload?.case_id|| '');
+  const [enterInput, setEnterInput] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const caseId = useSelector((state) => state.criteriaKeywords?.queryPayload?.case_id || '');
   console.log("casId", caseId)
-  const keywords = useSelector((state) => state.criteriaKeywords?.keyword|| '');
-  const fileType = useSelector((state) => state.criteriaKeywords?.queryPayload?.file_type|| '');
-  console.log("filetype",fileType)
-  const keyword = useSelector((state) => state.criteriaKeywords?.queryPayload?.keyword|| '');
+  const keywords = useSelector((state) => state.criteriaKeywords?.keyword || '');
+  const fileType = useSelector((state) => state.criteriaKeywords?.queryPayload?.file_type || '');
+  console.log("filetype", fileType)
+  const keyword = useSelector((state) => state.criteriaKeywords?.queryPayload?.keyword || '');
   console.log("keyword", keyword)
   console.log("savedkeyword", keywords)
-  const reduxPayload = useSelector((state) => state.criteriaKeywords?.queryPayload|| '');
-    console.log("Redux Payload:", reduxPayload);
-   
+  const reduxPayload = useSelector((state) => state.criteriaKeywords?.queryPayload || '');
+  console.log("Redux Payload:", reduxPayload);
+
   useEffect(() => {
     console.log("Keywords object:", keywords);
     console.log("Case ID:", caseId);
     console.log("File Type:", fileType);
-  
+
     const isValid = (val) =>
       val !== null && val !== undefined && val.toString().trim() !== "";
-  
+
     if (keyword && Array.isArray(keyword)) {
       let combinedChips = [...keyword];
-  
-      if (Array.isArray(caseId) && caseId.every(id => (typeof id === "number"|| typeof id === "string"))) {
+
+      if (Array.isArray(caseId) && caseId.every(id => (typeof id === "number" || typeof id === "string"))) {
         combinedChips = [...combinedChips, ...caseId.map((id) => `${id}`)];
-    }
-    
-    // Check if fileType is an array and merge its values
-    if (Array.isArray(fileType) && fileType.length > 0) {
+      }
+
+      // Check if fileType is an array and merge its values
+      if (Array.isArray(fileType) && fileType.length > 0) {
         combinedChips = [...combinedChips, ...fileType];
-    } else if (isValid(fileType)) {
+      } else if (isValid(fileType)) {
         combinedChips.push(fileType); // Add fileType if it's a valid single value
-    }
+      }
       console.log("Combined Chips:", combinedChips);
       setSearchChips(combinedChips);
     } else {
@@ -76,11 +74,11 @@ const SavedCriteria = () => {
     searchQuery: '',
   });
 
-  const displayResults = searchResults 
-  
+  const displayResults = searchResults
+
 
   console.log("searchChips", searchChips);
-  
+
 
 
   // Filter results based on user input
@@ -150,42 +148,42 @@ const SavedCriteria = () => {
   };
 
   const Token = Cookies.get('accessToken');
-  
+
   // Main search function to call API
   const handleSearch = async () => {
     console.log("reduxPayload:", reduxPayload);
     console.log("enterInput:", enterInput);
     console.log("searchChips:", keywords);
-  
+
     try {
       // 1. Redux ke sirf keyword le rahe hain
       const reduxKeywords = Array.isArray(reduxPayload.keyword)
         ? reduxPayload.keyword
         : JSON.parse(reduxPayload.keyword || "[]");
-  console.log("reduxKeyword", reduxKeywords)
-    
-        const userKeywords = Array.isArray(enterInput) 
-        ? enterInput 
+      console.log("reduxKeyword", reduxKeywords)
+
+      const userKeywords = Array.isArray(enterInput)
+        ? enterInput
         : JSON.parse(enterInput || "[]");
 
-  console.log("userKeyword", userKeywords)
+      console.log("userKeyword", userKeywords)
       // 🔥 Keywords only: searchChips se wo elements jo redux keywords ya user keywords me hain
       const allPossibleKeywords = [...reduxKeywords, ...userKeywords];
       console.log("alllProgresskeyword", allPossibleKeywords)
       const finalKeywords = searchChips.filter((chip) => allPossibleKeywords.includes(chip));
-  console.log("finalkeywords",finalKeywords)
+      console.log("finalkeywords", finalKeywords)
       // 2. case_id aur file_type separately treat honge
       const reduxCaseIds = Array.isArray(reduxPayload.case_id)
         ? reduxPayload.case_id
         : JSON.parse(reduxPayload.case_id || "[]");
-  
+
       const reduxFileTypes = Array.isArray(reduxPayload.file_type)
         ? reduxPayload.file_type
         : JSON.parse(reduxPayload.file_type || "[]");
-  console.log("fileType or Caseids",reduxCaseIds,reduxFileTypes)
+      console.log("fileType or Caseids", reduxCaseIds, reduxFileTypes)
       const finalCaseIds = searchChips.filter((chip) => reduxCaseIds.includes(chip));
       const finalFileTypes = searchChips.filter((chip) => reduxFileTypes.includes(chip));
-  console.log("finalcaseid or finalfiletype", finalCaseIds,finalFileTypes)
+      console.log("finalcaseid or finalfiletype", finalCaseIds, finalFileTypes)
       const payload = {
         keyword: finalKeywords,   // Only keywords
         case_id: finalCaseIds,    // Only case_ids
@@ -196,9 +194,9 @@ const SavedCriteria = () => {
         latitude: reduxPayload.latitude || null,
         longitude: reduxPayload.longitude || null
       };
-  
+
       console.log("Sending search query:", payload);
-  
+
       const response = await axios.post(
         'http://5.180.148.40:9007/api/das/search',
         payload,
@@ -209,28 +207,28 @@ const SavedCriteria = () => {
           }
         }
       );
-  
+
       console.log("Search results------:", response);
-  
+
       // Redux store update
       dispatch(setSearchResults({
         results: response.data.results,
         total_pages: response.data.total_pages || 1,
         total_results: response.data.total_results || 0,
       }));
-  
+
       dispatch(setKeywords({
         keyword: response.data.input.keyword,
         queryPayload: response.data.input
       }));
-  
+
       dispatch(setPage(1));
       // dispatch(openPopup("saved"));
     } catch (error) {
       console.error("Error performing search:", error.message);
     }
   };
-  
+
   const ViewScreen = () => {
     navigate('/search');
     dispatch(closePopup());
@@ -260,12 +258,12 @@ const SavedCriteria = () => {
                   ),
                   endAdornment: (
                     <InputAdornment position="end">
-                      <SendIcon 
-                        style={{cursor: isLoading ? 'default' : 'pointer'}} 
+                      <SendIcon
+                        style={{ cursor: isLoading ? 'default' : 'pointer' }}
                         onClick={isLoading ? null : handleSearch}
                       />
-                      <TuneIcon 
-                        style={{cursor:'pointer'}} 
+                      <TuneIcon
+                        style={{ cursor: 'pointer' }}
                         onClick={() => dispatch(openPopup("create"))}
                       />
                     </InputAdornment>
@@ -275,7 +273,7 @@ const SavedCriteria = () => {
                     padding: '0 8px',
                   },
                 }}
-                type="text" 
+                type="text"
                 value={inputValue}
                 onChange={handleInputChange}
                 onKeyPress={handleKeyPress}
@@ -300,9 +298,9 @@ const SavedCriteria = () => {
                   <button className="action-button" onClick={resetSearch}>RESET</button>
                 </div>
               </div>
-              
+
               <div className="tabs">
-                <div 
+                <div
                   className={`tab active`}
                   onClick={() => setActiveTab('Cases')}
                 >
@@ -320,7 +318,7 @@ const SavedCriteria = () => {
                         <div className="card-id">{item.unified_case_id?.join(", ") || "N/A"}</div>
                         <div className="status-badge">{item.status || 'NEW'}</div>
                       </div>
-                      <div className="card-text">{item.site_keywordsmatched  || "N/A"}</div>
+                      <div className="card-text">{item.site_keywordsmatched || "N/A"}</div>
                       <div className="card-subtext">{item.unified_type || "N/A"}</div>
                       {/* <div className="card-subtext">{item.unified_type || "N/A"}</div> */}
                     </div>
@@ -328,7 +326,7 @@ const SavedCriteria = () => {
                 ) : (
                   <div className="card-subtext">❌ No Matched Data</div>
                 )}
-                <button className="add-btn" style={{marginLeft:'0px'}} onClick={ViewScreen}>
+                <button className="add-btn" style={{ marginLeft: '0px' }} onClick={ViewScreen}>
                   VIEW ALL RESULTS IN FULL SCREEN
                 </button>
               </div>

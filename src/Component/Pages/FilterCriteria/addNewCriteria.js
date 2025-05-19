@@ -12,11 +12,11 @@ import { customStyles } from '../Case/createCase';
 import { openPopup, setKeywords, setPage, setSearchResults } from '../../../Redux/Action/criteriaAction';
 import Confirm from './confirmCriteria';
 
-const AddNewCriteria = ({ 
-    togglePopup, 
-    handleCreateCase, 
-    searchChips, 
-    isPopupVisible, 
+const AddNewCriteria = ({
+    togglePopup,
+    handleCreateCase,
+    searchChips,
+    isPopupVisible,
     setIsPopupVisible,
 }) => {
     const dispatch = useDispatch();
@@ -26,9 +26,8 @@ const AddNewCriteria = ({
     const [showSavePopup, setShowSavePopup] = useState(false);
     const [caseOptions, setCaseOptions] = useState([]);
     const [fileTypeOptions, setFileTypeOptions] = useState([]);
-    // const [searchResults, setSearchResults] = useState();
- const Token = Cookies.get('accessToken');
-  
+    const Token = Cookies.get('accessToken');
+
     // State for form data
     const [formData, setFormData] = useState({
         searchQuery: '',
@@ -42,8 +41,8 @@ const AddNewCriteria = ({
         latitude: '',
         longitude: '',
     });
-console.log("formdatgertt...", formData)
- const payload = useSelector((state) => state.criteriaKeywords?.queryPayload|| '');
+    console.log("formdatgertt...", formData)
+    const payload = useSelector((state) => state.criteriaKeywords?.queryPayload || '');
     // Fetch case data from API
     const fetchCaseData = async () => {
         try {
@@ -74,7 +73,7 @@ console.log("formdatgertt...", formData)
                     'Authorization': `Bearer ${Token}`
                 },
             });
-console.log("platforms", response.data)
+            console.log("platforms", response.data)
             const fileTypeOptionsFormatted = response.data.data.map(platform => ({
                 value: platform,
                 label: platform
@@ -98,7 +97,7 @@ console.log("platforms", response.data)
         startTime: { hours: 16, minutes: 30 },
         endTime: { hours: 16, minutes: 30 }
     });
-console.log("selectedDates", selectedDates)
+    console.log("selectedDates", selectedDates)
     const [showPopupD, setShowPopupD] = useState(false);
 
     const toggleDatePickerPopup = () => {
@@ -123,108 +122,103 @@ console.log("selectedDates", selectedDates)
     };
 
     // Perform search API call
-    
+
     console.log("payload---", payload)
     const performSearch = async (e) => {
         e.preventDefault();
-        
+
         console.log(e);
         try {
-          // Build the query payload with the correct structure
-          const payloadS = {
-            keyword: Array.isArray(payload.keyword) ? payload.keyword : JSON.parse(payload.keyword || "[]"),
-            case_id: [
-                ...(Array.isArray(payload.case_id) ? payload.case_id : JSON.parse(payload.case_id || "[]")),
-                ...(Array.isArray(formData.caseIds) ? formData.caseIds.map(caseId => String(caseId.value)) : [])
-              ],
-              
-            file_type: [
-                ...(Array.isArray(payload.file_type) ? payload.file_type : JSON.parse(payload.file_type || "[]")),
-                ...(Array.isArray(formData.platform) ? formData.platform.map(type => type.value) : [])
-            ],
-            page: payload.page || 1
-        };
-        
-        // Combine start time from both sources
-        if (payload.start_time || (selectedDates.startDate && selectedDates.startTime)) {
-            payload.start_time = payload.start_time || `${selectedDates.startDate.toISOString().split('T')[0]}T${String(selectedDates.startTime.hours).padStart(2, '0')}:${String(selectedDates.startTime.minutes).padStart(2, '0')}:00`;
-        }
-        
-        // Combine end time from both sources
-        if (payload.end_time || (selectedDates.endDate && selectedDates.endTime)) {
-            payload.end_time = payload.end_time || `${selectedDates.endDate.toISOString().split('T')[0]}T${String(selectedDates.endTime.hours).padStart(2, '0')}:${String(selectedDates.endTime.minutes).padStart(2, '0')}:00`;
-        }
-          
-          console.log("Query Payload:", payloadS);
-          
-          // Make the API request with the correct payload structure
-          const response = await axios.post(
-            'http://5.180.148.40:9007/api/das/search',
-            payloadS,
-            {
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${Token}`,
-              }
+            // Build the query payload with the correct structure
+            const payloadS = {
+                keyword: Array.isArray(payload.keyword) ? payload.keyword : JSON.parse(payload.keyword || "[]"),
+                case_id: [
+                    ...(Array.isArray(payload.case_id) ? payload.case_id : JSON.parse(payload.case_id || "[]")),
+                    ...(Array.isArray(formData.caseIds) ? formData.caseIds.map(caseId => String(caseId.value)) : [])
+                ],
+
+                file_type: [
+                    ...(Array.isArray(payload.file_type) ? payload.file_type : JSON.parse(payload.file_type || "[]")),
+                    ...(Array.isArray(formData.platform) ? formData.platform.map(type => type.value) : [])
+                ],
+                page: payload.page || 1
+            };
+
+            // Combine start time from both sources
+            if (payload.start_time || (selectedDates.startDate && selectedDates.startTime)) {
+                payload.start_time = payload.start_time || `${selectedDates.startDate.toISOString().split('T')[0]}T${String(selectedDates.startTime.hours).padStart(2, '0')}:${String(selectedDates.startTime.minutes).padStart(2, '0')}:00`;
             }
-          );
-          console.log("response of addnew", response)
-          // Dispatch search results
-          dispatch(setSearchResults({
-            results: response.data.results,
-            total_pages: response.data.total_pages || 1,
-            total_results: response.data.total_results || 0,
-          }));
-          
-          dispatch(setKeywords({
-                 keyword:searchChips,
+
+            // Combine end time from both sources
+            if (payload.end_time || (selectedDates.endDate && selectedDates.endTime)) {
+                payload.end_time = payload.end_time || `${selectedDates.endDate.toISOString().split('T')[0]}T${String(selectedDates.endTime.hours).padStart(2, '0')}:${String(selectedDates.endTime.minutes).padStart(2, '0')}:00`;
+            }
+
+            console.log("Query Payload:", payloadS);
+
+            // Make the API request with the correct payload structure
+            const response = await axios.post(
+                'http://5.180.148.40:9007/api/das/search',
+                payloadS,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${Token}`,
+                    }
+                }
+            );
+            console.log("response of addnew", response)
+            // Dispatch search results
+            dispatch(setSearchResults({
+                results: response.data.results,
+                total_pages: response.data.total_pages || 1,
+                total_results: response.data.total_results || 0,
+            }));
+
+            dispatch(setKeywords({
+                keyword: searchChips,
                 queryPayload: response.data.input  // or other fields if needed
-              }));
-          // Dispatch the initial page number
-          dispatch(setPage(1));
-          console.log("Dispatched setSearchResults with:", response.data.results);
-          
-          // Persist results in local storage with an expiry timestamp
-        //   localStorage.setItem('searchResults', JSON.stringify({
-        //     results: response.data.results,
-        //     expiry: new Date().getTime() + 24 * 60 * 60 * 1000, // 24-hour expiry
-        //   }));
-          
-          console.log('Search results:', response.data);
-          setIsPopupVisible(false);
-          // Reset form data to initial values
-          setFormData({
-            searchQuery: '',
-            datatype: [],
-            filetype: [],
-            caseIds: [],
-            includeArchived: false,
-            latitude: '',
-            longitude: '',
-          });
-          
-          // Handle the search results, if applicable
-          if (handleCreateCase) {
-            handleCreateCase(response.data);
-          }
-          
-          // Show the "saved" popup
-          // dispatch(openPopup("saved"));
+            }));
+            // Dispatch the initial page number
+            dispatch(setPage(1));
+            console.log("Dispatched setSearchResults with:", response.data.results);
+
+
+            console.log('Search results:', response.data);
+            setIsPopupVisible(false);
+            // Reset form data to initial values
+            setFormData({
+                searchQuery: '',
+                datatype: [],
+                filetype: [],
+                caseIds: [],
+                includeArchived: false,
+                latitude: '',
+                longitude: '',
+            });
+
+            // Handle the search results, if applicable
+            if (handleCreateCase) {
+                handleCreateCase(response.data);
+            }
+
+            // Show the "saved" popup
+            // dispatch(openPopup("saved"));
         } catch (error) {
-          console.error('Error performing search:', error);
+            console.error('Error performing search:', error);
         }
-      };
-    
+    };
+
     // Handle Apply button click (Create Criteria)
     const handleCreateCriteria = async (e) => {
         e.preventDefault(); // Prevent default form submission
-    
+
         try {
             // Build the criteria payload
             const criteriaPayload = {
                 keyword: searchChips?.length > 0
-                ? searchChips.map(chip => chip || "")
-                : [],  // Wrap `keywordsString` in an array if it's a single value
+                    ? searchChips.map(chip => chip || "")
+                    : [],  // Wrap `keywordsString` in an array if it's a single value
                 case_id: formData.caseIds?.length > 0
                     ? formData.caseIds.map(caseId => caseId.value.toString())
                     : [], // Handle multiple `caseIds` as an array
@@ -240,9 +234,9 @@ console.log("selectedDates", selectedDates)
                     ? `${selectedDates.endDate.toISOString().split('T')[0]}T${String(selectedDates.endTime.hours).padStart(2, '0')}:${String(selectedDates.endTime.minutes).padStart(2, '0')}:00`
                     : null, // Include end_time if both date and time are provided
             };
-    
+
             console.log("Criteria Payload:", criteriaPayload);
-    
+
             // Make the API request
             const response = await axios.post(
                 'http://5.180.148.40:9007/api/das/criteria',
@@ -254,22 +248,22 @@ console.log("selectedDates", selectedDates)
                     }
                 }
             );
-    
+
             console.log("Response:", response);
-    
+
             // Dispatch popup to indicate criteria creation success
             //dispatch(openPopup("created"));
             dispatch(openPopup("recent"));
             setIsPopupVisible(false);
         } catch (error) {
             console.error('Error creating criteria:', error);
-    
+
             // Optionally handle error further (e.g., show an error popup or toast)
         }
     };
     const handleSaveCriteriaChange = () => {
-            setShowSavePopup(true); // Open the popup  
-      };
+        setShowSavePopup(true); // Open the popup  
+    };
 
     return (
         <>
@@ -283,16 +277,7 @@ console.log("selectedDates", selectedDates)
                             </span>
                             <form>
                                 <h5>Filter</h5>
-                             {/* <div style={{height:'150px', overflowX:'auto'}}>
-                             <p>
-                                    {searchChips?.map((chip, index) => (
-                                        <span key={index} style={{marginRight: '5px'}}>
-                                            {chip.keyword}
-                                            {index < searchChips.length - 1 ? ', ' : ''}
-                                        </span>
-                                    ))}
-                                </p>
-                             </div> */}
+
 
                                 {/* Case Selection */}
                                 <div className="mb-3">
@@ -331,9 +316,9 @@ console.log("selectedDates", selectedDates)
                                         InputProps={{
                                             endAdornment: (
                                                 <InputAdornment position="end">
-                                                    <CalendarTodayIcon 
-                                                        style={{ cursor: 'pointer' }} 
-                                                        onClick={toggleDatePickerPopup} 
+                                                    <CalendarTodayIcon
+                                                        style={{ cursor: 'pointer' }}
+                                                        onClick={toggleDatePickerPopup}
                                                     />
                                                 </InputAdornment>
                                             ),
@@ -351,20 +336,20 @@ console.log("selectedDates", selectedDates)
                                     />
                                 </div>
 
-                               
+
                                 {/* Buttons */}
                                 <div className="button-container">
-                                    <button type="button"  onClick={performSearch}className="add-btn">Search</button>
-                                    <button 
-                                        type="button" 
-                                        className="add-btn" 
+                                    <button type="button" onClick={performSearch} className="add-btn">Search</button>
+                                    <button
+                                        type="button"
+                                        className="add-btn"
                                         onClick={handleSaveCriteriaChange}
                                     >
-                                      Create
+                                        Create
                                     </button>
-                                    <button 
-                                        type="button" 
-                                        className="add-btn" 
+                                    <button
+                                        type="button"
+                                        className="add-btn"
                                         onClick={() => setIsPopupVisible(false)}
                                     >
                                         Cancel
@@ -383,10 +368,10 @@ console.log("selectedDates", selectedDates)
                         />
                     )}
                     {
- showSavePopup && (
-  <Confirm  formData={formData} selectedDates={selectedDates}  searchChips={searchChips} />
- )
-}
+                        showSavePopup && (
+                            <Confirm formData={formData} selectedDates={selectedDates} searchChips={searchChips} />
+                        )
+                    }
                 </div>
             )}
         </>

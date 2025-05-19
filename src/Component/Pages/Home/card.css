@@ -2,95 +2,95 @@
 
 /* ✅ Card Container */
 .card-container {
-    background-color: black; 
-    color: white;
-    width: 180px;
-    margin: 5px 2.5px;
-    display: flex;
-    align-items: center;
-    transition: all 0.3s ease-in-out;
+  background-color: black;
+  color: white;
+  width: 180px;
+  margin: 5px 2.5px;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease-in-out;
 }
 
 /* ✅ Card Body */
 .card-body {
-    display: flex;
-    align-items: center;
-    padding: 0rem;
+  display: flex;
+  align-items: center;
+  padding: 0rem;
 }
 
 /* ✅ Icon */
 .logo-icon {
-    display: flex;
-    font-size: 24px;
-    color: #fff;
-    margin-right: 0.5rem;
-    vertical-align: middle;
+  display: flex;
+  font-size: 24px;
+  color: #fff;
+  margin-right: 0.5rem;
+  vertical-align: middle;
 }
 
 /* ✅ Text Section */
 .text-section {
-    flex: 1;
+  flex: 1;
 }
 
 .card-name {
-    font-size: 12px;
+  font-size: 12px;
 }
 
 .card-number {
-    margin-top: 0.1rem;
-    font-size: 16px;
-    font-weight: bold;
-    color: white;
-    display: flex;
+  margin-top: 0.1rem;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  display: flex;
 }
 
 /* ✅ Card List Wrapper (Scrollable for Small Screens) */
 .card-list-container {
-    padding: 0px 2.5px;
-    display: flex;
-    flex-wrap: nowrap;  /* Keep cards in a row */
-    overflow-x: auto;   /* Enable horizontal scrolling for overflow */
+  padding: 0px 2.5px;
+  display: flex;
+  flex-wrap: nowrap; /* Keep cards in a row */
+  overflow-x: auto; /* Enable horizontal scrolling for overflow */
 }
 
 /* 🔹 Large Screens (1920px) */
 @media (min-width: 1367px) and (max-width: 1920px) {
-    .card-container {
-        width: 200px;
-    }
-      .card-list-container {
-        /* flex-wrap: wrap; */
-        display: flex;
-        justify-content: center;
-        gap: 20px;
-    }
+  .card-container {
+    width: 200px;
+  }
+  .card-list-container {
+    /* flex-wrap: wrap; */
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
 }
 
 /* 🔹 Laptops & Small Desktops (1025px - 1366px) */
 @media (min-width: 1025px) and (max-width: 1366px) {
-    .card-container {
-        width: 180px; 
-        /* margin-top: 10px; */
-    }
+  .card-container {
+    width: 180px;
+    /* margin-top: 10px; */
+  }
 }
 
 /* 🔹 Tablets (Landscape) - 769px to 1024px */
 @media (min-width: 769px) and (max-width: 1024px) {
-    /* .card-list-container {
+  /* .card-list-container {
         flex-wrap: wrap;
         justify-content: center;
     } */
-    /* .card-container {
+  /* .card-container {
         width: 160px;
     } */
 }
 
 /* 🔹 Tablets (Portrait) - 600px to 768px */
 @media (min-width: 600px) and (max-width: 768px) {
-    /* .card-list-container {
+  /* .card-list-container {
         flex-wrap: wrap;
         justify-content: center;
     } */
-    /* .card-container {
+  /* .card-container {
         margin-top: 10px;
         width: 140px;
     } */
@@ -98,7 +98,7 @@
 
 /* 🔹 Mobile Screens - 480px to 599px */
 @media (min-width: 480px) and (max-width: 599px) {
-    /* .card-list-container {
+  /* .card-list-container {
         flex-wrap: wrap;
         justify-content: center;
     }
@@ -109,16 +109,14 @@
 
 /* ✅ Extra Small Screens (Less than 480px) */
 @media (max-width: 479px) {
-    .card-list-container {
-        /* overflow-x: auto; */
-        /* width: 100%; */
-        /* justify-content: center; */
-       
-        flex-direction: column;
-       
-    }
-    .card-container {
-    
-        width: 98%; /* Minimum size for very small screens */
-    }
+  .card-list-container {
+    /* overflow-x: auto; */
+    /* width: 100%; */
+    /* justify-content: center; */
+
+    flex-direction: column;
+  }
+  .card-container {
+    width: 98%; /* Minimum size for very small screens */
+  }
 }

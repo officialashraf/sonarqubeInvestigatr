@@ -1,34 +1,34 @@
-import {configureStore}  from '@reduxjs/toolkit'
-import { caseReducer, summaryReducer, tabReducer } from './Reducers/caseReducer'
+import { configureStore } from '@reduxjs/toolkit'
+import { caseReducer, tabReducer } from './Reducers/caseReducer'
 import { filterReducer, summaryDataReducer, taskFilterReducer } from './Reducers/filterReducer';
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage"; // Local Storage ke liye
 import { combineReducers } from "redux";
-import {searchReducer , popupReducer, criteriaReducer} from './Reducers/criteriaReducer';
-import {thunk }from "redux-thunk";
+import { searchReducer, popupReducer, criteriaReducer } from './Reducers/criteriaReducer';
+import { thunk } from "redux-thunk";
 import searchReducer1 from './Reducers/piiReducer';
 import reportReducer from './Reducers/reportReducer';
 // ✅ Persist Config
 const persistConfig = {
   key: "root",
   storage, // Local Storage
-   blacklist: ['filterData','report'],
-  
+  blacklist: ['filterData', 'report'],
+
 };
 
 
 const rootReducer = combineReducers({
   selectedTab: tabReducer,
-    taskFilterId : taskFilterReducer,
-    caseData : caseReducer ,
+  taskFilterId: taskFilterReducer,
+  caseData: caseReducer,
   filterData: summaryDataReducer,
   summaryData: summaryDataReducer,
   filterCount: filterReducer,
   search: searchReducer,
   popup: popupReducer,
-  pii:searchReducer1,
-    criteriaKeywords: criteriaReducer,
-    report: reportReducer,
+  pii: searchReducer1,
+  criteriaKeywords: criteriaReducer,
+  report: reportReducer,
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 

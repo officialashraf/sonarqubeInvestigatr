@@ -2,7 +2,7 @@
 import Header from './Component/Pages/Home/header.js';
 import Home from './Component/Pages/Home/home';
 import LoginPage from './Component/Pages/User/login';
-import { BrowserRouter , Routes, Route, useLocation  } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import MainFilter from './Component/Pages/Summarymain/mainFilterPage.js';
 import AddFilter2 from './Component/Pages/Filters/addFilter.js';
 import CaseTableDataFilter from './Component/Pages/Analyze/caseTableDataFilter.js';
@@ -53,7 +53,7 @@ const AppContent = () => {
     if (path === "/gemini") return "Gemini";
     if (path === "/dashboard") return "Admin";
     if (path === "/roles") return "Roles";
- if (path === "/targets") return "Targets";
+    if (path === "/targets") return "Target";
     return "Cases";
   };
   const excludedPaths = ["/login", "/", "/license"];
@@ -63,8 +63,8 @@ const AppContent = () => {
 
       <div className="dashboard-container">
         <div className="cont-d">
-        {!excludedPaths.includes(location.pathname) && <Header title={getHeaderTitle()} />}
-    
+          {!excludedPaths.includes(location.pathname) && <Header title={getHeaderTitle()} />}
+
         </div>
         <div className="cont-a">
           {!excludedPaths.includes(location.pathname) && <Sidebar />}
@@ -72,41 +72,41 @@ const AppContent = () => {
 
         <div className="cont-b">
           <Routes>
-            <Route path='/' element={<LicenseValidator/>}/>
-          <Route path="/license" element={<LicensePage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route element={<ProtectedRoute />}>
-            <Route path="/pii" element={<ShowDetails/>} />
-            <Route path="/cases" element={<Home />} />
-            <Route path="/cases/:caseId" element={<MainFilter />} />
-            <Route path="/add-filter" element={<AddFilter2 />} />
-            <Route path='/case-detail' element={<CaseAddFilter />} />
-            <Route path='/cases/:caseID/analysis' element={<CaseTableDataFilter />} />
-            <Route path="/cases/:caseID/case-summary" element={<Summary />} />
-            <Route path="/key" element={< KeywordChart/>} />
-            <Route path="/line" element={<LineChart1 />} />
-            <Route path="/grapg" element={< GraphicalData />} />
-            <Route path="/search" element={< SearchResults />} />
-            <Route path="/confirm" element={< Confirm />} />
-            <Route path="logout" element={< LogoutUser />} />
-            <Route path="/users" element={< UserManagement />} />
-            <Route path="/dashboard" element={< UserDashboard />} />
-            <Route path="/roles" element={< RolesPermission />} />   
-             <Route path="/reports" element={< ReportPage/>} /> 
-            <Route path="/targets" element={< TargetDashboard/>} /> 
+            <Route path='/' element={<LicenseValidator />} />
+            <Route path="/license" element={<LicensePage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route element={<ProtectedRoute />}>
+              <Route path="/pii" element={<ShowDetails />} />
+              <Route path="/cases" element={<Home />} />
+              <Route path="/cases/:caseId" element={<MainFilter />} />
+              <Route path="/add-filter" element={<AddFilter2 />} />
+              <Route path='/case-detail' element={<CaseAddFilter />} />
+              <Route path='/cases/:caseID/analysis' element={<CaseTableDataFilter />} />
+              <Route path="/cases/:caseID/case-summary" element={<Summary />} />
+              <Route path="/key" element={< KeywordChart />} />
+              <Route path="/line" element={<LineChart1 />} />
+              <Route path="/grapg" element={< GraphicalData />} />
+              <Route path="/search" element={< SearchResults />} />
+              <Route path="/confirm" element={< Confirm />} />
+              <Route path="logout" element={< LogoutUser />} />
+              <Route path="/users" element={< UserManagement />} />
+              <Route path="/dashboard" element={< UserDashboard />} />
+              <Route path="/roles" element={< RolesPermission />} />
+              <Route path="/reports" element={< ReportPage />} />
+              <Route path="/targets" element={< TargetDashboard />} />
 
-            <Route path="*" element={<div className='notfound'> <h4>Work in progress........</h4></div>} />
+              <Route path="*" element={<div className='notfound'> <h4>Work in progress........</h4></div>} />
 
 
 
-          </Route>
-          <Route path='loader' element={<Loader/>}/>
+            </Route>
+            <Route path='loader' element={<Loader />} />
 
           </Routes>
         </div>
 
         <div className="cont-c">
-        {!excludedPaths.includes(location.pathname) && <RightSidebar/>}
+          {!excludedPaths.includes(location.pathname) && <RightSidebar />}
         </div>
       </div>
     </div>

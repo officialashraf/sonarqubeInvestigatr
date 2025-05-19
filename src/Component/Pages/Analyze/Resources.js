@@ -52,10 +52,6 @@ const Resources = () => {
 
 
   useEffect(() => {
-    // if (initialRender.current) {
-    //   initialRender.current = false; // Mark first render as completed
-    //   return; // Avoid making the request initially
-    // }
 
     if (data1?.id) {
       setLoading(true);
@@ -166,7 +162,6 @@ const Resources = () => {
       const newScrollTop = currentPage === 1
         ? scrollContainer.scrollHeight * 0 // Move slightly down when at page 1
         : scrollContainer.scrollHeight / 2 - scrollContainer.clientHeight / 2; // Default centering
-      //  const newScrollTop = scrollContainer.scrollHeight / 2 - scrollContainer.clientHeight / 2;
       scrollContainer.scrollTo({
         top: newScrollTop,
         behavior: 'smooth',
@@ -217,7 +212,6 @@ const Resources = () => {
               </span>
               <h5>Resources Insights</h5>
               <div style={{ marginBottom: '10px', color: '#000' }}>
-                {/* <strong>Current Page:</strong> {currentPage} */}
               </div>
               {loading && (
                 <div style={{ textAlign: 'center', padding: '10px', color: 'black' }}>
@@ -236,8 +230,6 @@ const Resources = () => {
                 >
                   <img
                     src={resource.socialmedia_from_imageurl ?? resource.socialmedia_media_url}
-                    // src={resource.socialmedia_from_imageurl} // Fallback to dummy image
-                    // alt={resource.unified_type}
                     onError={(e) => {
                       e.target.onerror = null; // prevents infinite loop
                       e.target.src = 'https://www.kurin.com/wp-content/uploads/placeholder-square.jpg';
@@ -256,12 +248,12 @@ const Resources = () => {
                 "Try again after some time."
               </p>
             )}
-             {/* No More Data Message */}
-          {!hasMore && allResources.length > 0 && (
-            <p style={{ textAlign: "center", marginTop: "2rem", color: "gray" }}>
-              No more data available.
-            </p>
-          )}
+            {/* No More Data Message */}
+            {!hasMore && allResources.length > 0 && (
+              <p style={{ textAlign: "center", marginTop: "2rem", color: "gray" }}>
+                No more data available.
+              </p>
+            )}
             <div style={{ marginBottom: '10px', color: '#000' }}>
               {/* <strong>Current Page:</strong> {currentPage} */}
             </div>
@@ -646,16 +638,6 @@ const Resources = () => {
                   <p className="activityContent">
                     {selectedResource.unified_activity_content}
                   </p>
-                  {/* <img
-                  src={selectedResource.socialmedia_from_imageurl}
-                  alt="Post"
-                  // onError={(e) => {
-                  //   e.target.onerror = null;
-                  //   e.target.src =
-                  //     "https://www.kurin.com/wp-content/uploads/placeholder-square.jpg";
-                  // }}
-                  className="postImage"
-                /> */}
                 </div>
               )}
 
@@ -677,7 +659,6 @@ const Resources = () => {
                       <p className="displayName">
                         {selectedResource.socialmedia_from_displayname}
                       </p>
-                      {/* <p className="postDate">{selectedResource.unified_date_only}</p> */}
                     </div>
 
                   </div>
@@ -704,16 +685,6 @@ const Resources = () => {
                   <p className="activityContent">
                     {selectedResource.unified_activity_content}
                   </p>
-                  {/* <img
-                  src={selectedResource.socialmedia_from_imageurl}
-                  alt="Post"
-                  // onError={(e) => {
-                  //   e.target.onerror = null;
-                  //   e.target.src =
-                  //     "https://www.kurin.com/wp-content/uploads/placeholder-square.jpg";
-                  // }}
-                  className="postImage"
-                /> */}
                   <div className="insta-icon" style={{ justifyContent: "initial" }}>
                     <div className="unified-date">
                       <div className="like-commment-share vk">
@@ -836,7 +807,6 @@ const Resources = () => {
 
           ) : (
             <div className="placeholder">
-              {/* <p>Select a resource to view its details</p> */}
             </div>
 
           )}

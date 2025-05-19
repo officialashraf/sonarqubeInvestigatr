@@ -4,12 +4,12 @@ import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
 import '../User/addUser.css'
 
-const Confirm = ({ formData, selectedDates,  searchChips  }) => {
+const Confirm = ({ formData, selectedDates, searchChips }) => {
     const Token = Cookies.get('accessToken');
     const [isVisible, setIsVisible] = useState(true);
     const [searchTitle, setSearchTitle] = useState('');
-    console.log("formData",   searchChips
-        
+    console.log("formData", searchChips
+
     );
     console.log("selectedDates", selectedDates);
 
@@ -17,31 +17,27 @@ const Confirm = ({ formData, selectedDates,  searchChips  }) => {
         let keywordSource = formData.searchQuery || searchChips;
         console.log("keys", keywordSource)
         try {
-          
+
             const criteriaPaylod = {
-              title: searchTitle || "", 
+                title: searchTitle || "",
 
-             
 
-     keyword : Array.isArray(keywordSource)
-           ? keywordSource
-       : keywordSource
-        ? [keywordSource]
-        : [],
 
-                // keyword: Array.isArray(formData.searchQuery)
-                //     ? formData.searchQuery
-                //     : [formData.searchQuery], // Wrap single keyword in an array
+                keyword: Array.isArray(keywordSource)
+                    ? keywordSource
+                    : keywordSource
+                        ? [keywordSource]
+                        : [],
+
+
                 case_id: formData.caseIds?.length > 0
                     ? formData.caseIds.map((caseId) => caseId.value.toString())
                     : [], // Handle multiple `caseIds` and return array
-                // file_type: formData.filetype?.length > 0
-                //     ? formData.filetype.map((file) => file.value)
-                //     : [], // Handle multiple `filetype` and return array
+
                 file_type: [
                     ...(formData.filetype?.length > 0 ? formData.filetype.map((file) => file.value) : []),
                     ...(formData.platform?.length > 0 ? formData.platform.map((platform) => platform.value) : [])
-                  ],
+                ],
 
                 latitude: formData.latitude || "",
                 longitude: formData.longitude || "",
@@ -63,10 +59,10 @@ const Confirm = ({ formData, selectedDates,  searchChips  }) => {
             });
 
             toast.success("Criteria saved successfully");
-          
+
             console.log('Criteria saved successfully:', response.data); // Debug: API response
             setIsVisible(false)
-          } catch (error) {
+        } catch (error) {
             console.error('Error saving criteria:', error); // Debug: Error log
         }
     };
@@ -76,15 +72,10 @@ const Confirm = ({ formData, selectedDates,  searchChips  }) => {
             top: 0, left: 0, width: "100%", height: "100%", display: "flex",
             justifyContent: "center", alignItems: "center", zIndex: 1050
         }}>
-            <div className="popup-container" style={{display:'flex', alignItems:'center'}}>
-                {/* <button
-                    className="close-icon"
-                    onClick={() => setIsVisible(false)}
-                >
-                    &times;
-                </button> */}
-              
-                <div className="popup-content" style={{width:'70%'}}>
+            <div className="popup-container" style={{ display: 'flex', alignItems: 'center' }}>
+
+
+                <div className="popup-content" style={{ width: '70%' }}>
                     <h5>Save Search as</h5>
                     <form onSubmit={(e) => e.preventDefault()}> {/* Prevent form submission default */}
                         <label>Search Title</label>

@@ -1,33 +1,26 @@
 .css-1bpewfd-MuiGrid-root {
-    /* Remove the unwanted properties */
-    margin-top: 0 !important;
-    width: 100% !important;
-    margin-left: 0 !important;
-    padding: 5px !important;
+  /* Remove the unwanted properties */
+  margin-top: 0 !important;
+  width: 100% !important;
+  margin-left: 0 !important;
+  padding: 5px !important;
 }
 .css-o1iywg-MuiGrid-root {
-    padding-top: 0px !important;
+  padding-top: 0px !important;
 }
-.css-12oizz8-MuiPaper-root-MuiCard-root{
-    box-shadow:  0px 4px 8px rgba(0, 0, 0, 0.1);
+.css-12oizz8-MuiPaper-root-MuiCard-root {
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 
 .responsiveContainer {
-    width: 100%;
-    /* overflow-x: auto; */
-    height: 100%;
-    /* overflow-y: auto; */
-    
-  }
-  
+  width: 100%;
+  height: 100%;
+}
+
+
+@media (min-width: 400px) and (max-width: 1025px) {
   .responsiveGrid {
-    /* min-width: 1025px; */
+    width: 100%;
   }
-  
-  @media (min-width: 400px) and (max-width: 1025px) {
-    .responsiveGrid {
-      width: 100%;
-    }
-  }
-  
+}

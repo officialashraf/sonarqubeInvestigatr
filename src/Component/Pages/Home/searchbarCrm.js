@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 
 const DataTable1 = () => {
-    
+
   const [filter, setFilter] = useState({ search: '', date: '' });
 
-  const data = [ { col1: 'Hello', col2: 'World', dateField: '2024-12-01' },
-    { col1: 'react-table', col2: 'rocks', dateField: '2024-12-02' },
-     { col1: 'whatever', col2: 'you want', dateField: '2024-12-03' }, // Add more data here... 
-    ];
+  const data = [{ col1: 'Hello', col2: 'World', dateField: '2024-12-01' },
+  { col1: 'react-table', col2: 'rocks', dateField: '2024-12-02' },
+  { col1: 'whatever', col2: 'you want', dateField: '2024-12-03' }, // Add more data here... 
+  ];
   // Filter function based on search input and date picker
   const filteredData = data.filter(item => {
     const dateMatch = filter.date ? item.dateField.startsWith(filter.date) : true;

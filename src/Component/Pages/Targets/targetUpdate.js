@@ -59,7 +59,7 @@ const TargetUpdate = ({ togglePopup, details }) => {
   });
 
   const [synonymInput, setSynonymInput] = useState("");
-  
+
   // Threat score options from 0 to 10
   const threatScoreOptions = Array.from({ length: 11 }, (_, i) => ({
     value: i,
@@ -93,9 +93,9 @@ const TargetUpdate = ({ togglePopup, details }) => {
           'Authorization': `Bearer ${token}`
         }
       });
-          window.dispatchEvent(new Event("databaseUpdated"));
-     
-      
+      window.dispatchEvent(new Event("databaseUpdated"));
+
+
       if (response.status === 200) {
         toast.success("Keyword updated successfully");
         togglePopup();
@@ -174,7 +174,7 @@ const TargetUpdate = ({ togglePopup, details }) => {
               placeholder="Enter keyword"
               required
             />
-            
+
             <div>
               <label htmlFor="type">Type:</label>
               <input
@@ -188,7 +188,7 @@ const TargetUpdate = ({ togglePopup, details }) => {
                 required
               />
             </div>
-            
+
             <label htmlFor="description">Description:</label>
             <textarea
               className="com"
@@ -238,7 +238,7 @@ const TargetUpdate = ({ togglePopup, details }) => {
                 onChange={handleThreatScoreChange}
               />
             </div>
-            
+
             <div className="button-container">
               <button type="submit" className="create-btn">
                 Update

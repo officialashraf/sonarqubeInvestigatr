@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
 import "../Case/createCase.css";
 import axios from "axios";
 import Cookies from "js-cookie";
@@ -142,7 +142,7 @@ const TargetCreate = ({ togglePopup }) => {
           &times;
         </button>
         <div className="popup-content">
-          <h5>Add New Keyword</h5>
+          <h5>Add New target</h5>
           <form
             onSubmit={(e) => {
               e.preventDefault();

@@ -15,8 +15,9 @@ import Cookies from 'js-cookie'
 import { setKeywords, setPage, setSearchResults } from '../../../../Redux/Action/criteriaAction';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-import { ListAltOutlined, PieChart, MoreVert } from "@mui/icons-material";
+import { ListAltOutlined, PieChart } from "@mui/icons-material";
 import GrapghicalCriteria from './CriteriaGraphicaView/grapghicalCriteria';
+import Loader from '../../Layout/loader';
 
 
 const SearchResults = ({ onClose }) => {
@@ -26,9 +27,10 @@ const SearchResults = ({ onClose }) => {
   const [inputValue, setInputValue] = useState('');
   const [searchChips, setSearchChips] = useState([]);
   const [activeTab, setActiveTab] = useState('Cases');
-  const [enterInput,setEnterInput] = useState([])
+  const [enterInput, setEnterInput] = useState([])
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [activeComponent, setActiveComponent] = useState('list');
+  const [loading, setLoading] = useState(false);
 
   const { searchResults, totalPages, currentPage, totalResults } = useSelector((state) => state.search);
   console.log("searchResult", searchResults, totalPages, currentPage, totalResults);
@@ -85,12 +87,6 @@ const SearchResults = ({ onClose }) => {
     }
   }, [keywords, caseId, fileType]);
 
-  // useEffect(() => {
-  //   console.log("Updated Search Results:", searchResults);
-  //   console.log("Total Pages:", totalPages);
-  //   console.log("Current Page:", currentPage);
-  //   console.log("Total Results:", totalResults);
-  // }, [searchResults, totalPages, currentPage, totalResults]); 
 
 
   const openPopup = () => {
@@ -112,63 +108,64 @@ const SearchResults = ({ onClose }) => {
   // Add new chip when "Enter" is pressed
   const handleKeyPress = (e) => {
     if (e.key === "Enter" && inputValue.trim() !== "") {
-      const newChip = inputValue.trim(); 
+      const newChip = inputValue.trim();
       if (!searchChips.find((chip) => chip === newChip)) {
-        setSearchChips((prev) => [...prev, newChip]); 
+        setSearchChips((prev) => [...prev, newChip]);
         setEnterInput((prev) => [...prev, newChip]); // user input me add karna hai
       }
-      setInputValue(""); 
+      setInputValue("");
     }
   };
-  
-   const removeChip = (chipToRemove) => {
+
+  const removeChip = (chipToRemove) => {
     const updatedChips = searchChips.filter((chip) => chip !== chipToRemove);
     setSearchChips(updatedChips);
-  
+
     // ❗ Only remove from enterInput if it was user's entered chip
     setEnterInput((prev) => prev.filter((chip) => chip !== chipToRemove));
   };
-  
+
   const resetSearch = () => {
     setSearchChips([]);
     setInputValue('');
     setEnterInput([])
   };
 
-    const handleSearch = async () => {
+  const handleSearch = async () => {
     console.log("reduxPayload:", reduxPayload);
     console.log("enterInput:", enterInput);
     console.log("searchChips:", searchChips);
-  
+
     try {
+      setLoading(true);
       // 1. Redux ke sirf keyword le rahe hain
       const reduxKeywords = Array.isArray(reduxPayload.keyword)
         ? reduxPayload.keyword
         : JSON.parse(reduxPayload.keyword || "[]");
-  console.log("reduxKeyword", reduxKeywords)
-    
-        const userKeywords = Array.isArray(enterInput) 
-        ? enterInput 
+      console.log("reduxKeyword", reduxKeywords)
+
+      const userKeywords = Array.isArray(enterInput)
+        ? enterInput
         : JSON.parse(enterInput || "[]");
 
-  console.log("userKeyword", userKeywords)
+      console.log("userKeyword", userKeywords)
       // 🔥 Keywords only: searchChips se wo elements jo redux keywords ya user keywords me hain
       const allPossibleKeywords = [...reduxKeywords, ...userKeywords];
       console.log("alllProgresskeyword", allPossibleKeywords)
       const finalKeywords = searchChips.filter((chip) => allPossibleKeywords.includes(chip));
-  console.log("finalkeywords",finalKeywords)
+      console.log("finalkeywords", finalKeywords)
       // 2. case_id aur file_type separately treat honge
       const reduxCaseIds = Array.isArray(reduxPayload.case_id)
         ? reduxPayload.case_id
         : JSON.parse(reduxPayload.case_id || "[]");
-  
+
       const reduxFileTypes = Array.isArray(reduxPayload.file_type)
         ? reduxPayload.file_type
         : JSON.parse(reduxPayload.file_type || "[]");
-  console.log("fileType or Caseids",reduxCaseIds,reduxFileTypes)
+      console.log("fileType or Caseids", reduxCaseIds, reduxFileTypes)
       const finalCaseIds = searchChips.filter((chip) => reduxCaseIds.includes(chip));
       const finalFileTypes = searchChips.filter((chip) => reduxFileTypes.includes(chip));
-  console.log("finalcaseid or finalfiletype", finalCaseIds,finalFileTypes)
+      console.log("finalcaseid or finalfiletype", finalCaseIds, finalFileTypes)
       const payload = {
         keyword: finalKeywords,   // Only keywords
         case_id: finalCaseIds,    // Only case_ids
@@ -179,9 +176,9 @@ const SearchResults = ({ onClose }) => {
         latitude: reduxPayload.latitude || null,
         longitude: reduxPayload.longitude || null
       };
-  
+
       console.log("Sending search query:", payload);
-  
+
       const response = await axios.post(
         'http://5.180.148.40:9007/api/das/search',
         payload,
@@ -192,29 +189,34 @@ const SearchResults = ({ onClose }) => {
           }
         }
       );
-  
+
       console.log("Search results------:", response);
-  
+
       // Redux store update
       dispatch(setSearchResults({
         results: response.data.results,
         total_pages: response.data.total_pages || 1,
         total_results: response.data.total_results || 0,
       }));
-  
+
       dispatch(setKeywords({
         keyword: response.data.input.keyword,
         queryPayload: response.data.input
       }));
-  
+
       dispatch(setPage(1));
-  
+
     } catch (error) {
       console.error("Error performing search:", error);
+    }finally{
+      setLoading(false);
     }
   };
-  
-  
+
+   if(loading){
+      return <Loader/>
+    }
+
 
   return (
 
@@ -254,8 +256,6 @@ const SearchResults = ({ onClose }) => {
             placeholder="Search..."
             sx={sharedSxStyles}
           />
-          {/* <button onClick={handleExit}>Exit Full Screen</button> */}
-          {/* </div> */}
 
 
         </div>
@@ -278,35 +278,25 @@ const SearchResults = ({ onClose }) => {
 
       </div>
 
-      {/* <div className="tabs">
-        <div
-          className={`tab active`} // "Cases" will always be active
-          onClick={() => setActiveTab('Cases')}
-        >
-          Cases ({totalResults || "no results"})
-        </div>
-
-        
-      </div> */}
 
       <div className="col-auto  d-flex align-items-center gap-1 justify-content-end  me-2">
-      <PieChart 
-    className="icon-style"
-    onClick={() => handleComponentToggle("graph")} 
-  />
-  <ListAltOutlined 
-    className="icon-style"
-    onClick={() => handleComponentToggle("list")} 
-  />
-            </div>
+        <PieChart
+          className="icon-style"
+          onClick={() => handleComponentToggle("graph")}
+        />
+        <ListAltOutlined
+          className="icon-style"
+          onClick={() => handleComponentToggle("list")}
+        />
+      </div>
       <div className="search-results" style={{ height: 'auto' }}>
 
-      {activeComponent === "graph" && (
-    <GrapghicalCriteria searchChips={searchChips} />
-  )}
-  {activeComponent === "list" && (
-    <CriteriaCaseTable searchChips={searchChips} />
-  )}
+        {activeComponent === "graph" && (
+          <GrapghicalCriteria searchChips={searchChips} />
+        )}
+        {activeComponent === "list" && (
+          <CriteriaCaseTable searchChips={searchChips} />
+        )}
 
       </div>
 

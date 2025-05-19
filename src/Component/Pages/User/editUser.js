@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "./addUser.css"; // You can rename if you want
 import axios from "axios";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
 
-const EditUser = ({ togglePopup, item}) => {
+const EditUser = ({ togglePopup, item }) => {
   const [formData, setFormData] = useState({
     firstName: item.first_name || "",
     lastName: item.last_name || "",
@@ -14,29 +14,28 @@ const EditUser = ({ togglePopup, item}) => {
     role: item.role || "",
   });
 
-  const [users, setUsers] = useState({ data: []});
+  const [users, setUsers] = useState({ data: [] });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  
+
   const token = Cookies.get("accessToken");
   const userData = async () => {
-    
-   try{
-    const response = await axios.get('http://5.180.148.40:9000/api/user-man/v1/user', {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization' : `Bearer ${token}`,
-      },
-    });
-    setUsers(response.data);
-   } catch (error) {
-    console.error('Error fetching user data:', error);
-    toast.error('Failed to fetch user data. Please try again later');
-   }
+
+    try {
+      const response = await axios.get('http://5.180.148.40:9000/api/user-man/v1/user', {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      setUsers(response.data);
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+      toast.error('Failed to fetch user data. Please try again later');
+    }
   };
   useEffect(() => {
     userData();
-  }, []); 
+  }, []);
 
   const handleEditUser = async (formData) => {
     const token = Cookies.get("accessToken");
@@ -45,15 +44,15 @@ const EditUser = ({ togglePopup, item}) => {
       return;
     }
 
-    try{
+    try {
       const hasChanged = {};
       // Only include fields that have actually changed
-      if (formData.firstName !== item.first_name || formData.firstName === "") {hasChanged.first_name = formData.firstName;}
-      if (formData.lastName !== item.last_name || formData.lastName === "") {hasChanged.last_name = formData.lastName;}
-      if (formData.username !== item.username || formData.username === "") {hasChanged.username = formData.username;}
-      if (formData.email !== item.email) {hasChanged.email = formData.email;}
-      if (formData.contactNumber !== item.contact_no) {hasChanged.contact_no = formData.contactNumber;}
-      if (formData.role !== item.role) { hasChanged.role = formData.role;}
+      if (formData.firstName !== item.first_name || formData.firstName === "") { hasChanged.first_name = formData.firstName; }
+      if (formData.lastName !== item.last_name || formData.lastName === "") { hasChanged.last_name = formData.lastName; }
+      if (formData.username !== item.username || formData.username === "") { hasChanged.username = formData.username; }
+      if (formData.email !== item.email) { hasChanged.email = formData.email; }
+      if (formData.contactNumber !== item.contact_no) { hasChanged.contact_no = formData.contactNumber; }
+      if (formData.role !== item.role) { hasChanged.role = formData.role; }
 
 
       // If nothing has changed 
@@ -63,16 +62,16 @@ const EditUser = ({ togglePopup, item}) => {
       }
 
       console.log("Data to be sent:", hasChanged); // Debugging line
-       const response = await axios.put(
+      const response = await axios.put(
         `http://5.180.148.40:9000/api/user-man/v1/user/${item.id}`,
         hasChanged,
         {
           headers: {
-           'Content-Type': 'application/json',
-           'Authorization': `Bearer ${token}`
-         }
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
         },
-      );console.log("respose", response.data)
+      ); console.log("respose", response.data)
       if (response.status === 200) {
         toast.success("User updated successfully.");
         // onUserUpdated?.(response.data); // Notify parent to refresh data
@@ -86,7 +85,7 @@ const EditUser = ({ togglePopup, item}) => {
   };
 
   const handleChange = (e) => {
-     const { name, value } = e.target;
+    const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
       [name]: value
@@ -164,9 +163,9 @@ const EditUser = ({ togglePopup, item}) => {
             />
 
             <div className="button-container">
- <button type="submit" className="create-btn" disabled={loading}>
+              <button type="submit" className="create-btn" disabled={loading}>
                 {loading ? "Updating..." : "Update"}
-              </button>              
+              </button>
               <button type="button" onClick={togglePopup} className="cancel-btn">Cancel</button>
             </div>
           </form>

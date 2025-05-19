@@ -5,7 +5,6 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import Cookies from "js-cookie";
 import Loader from '../../Layout/loader';
-import { useRef } from 'react';
 
 
 const KeywordChart = () => {
@@ -17,12 +16,8 @@ const KeywordChart = () => {
 
 
 
-  // const initialRender = useRef(true);
 
   useEffect(() => {
-    // if (initialRender.current) {
-    //   initialRender.current = false; // Mark first render as completed
-    //   return; // Avoid making the request initially
 
     const fetchData = async () => {
 
@@ -51,16 +46,16 @@ const KeywordChart = () => {
         } else {
           setData([]); // Set data to an empty array if socialmedia_hashtags is undefined
         }
-      } catch (error){
+      } catch (error) {
         setData([]);
         console.log("error", error);
       } finally {
         setLoading(false);
       }
     }
-      fetchData();
-    },
-      [caseId]);
+    fetchData();
+  },
+    [caseId]);
   if (loading) {
     return <Loader />;
   }

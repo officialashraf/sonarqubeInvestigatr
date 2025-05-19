@@ -1,11 +1,11 @@
 .left-div {
   width: 30%;
-   border: 1px solid #ccc; /* Example border */
+  border: 1px solid #ccc; /* Example border */
 }
 
 .right-div {
-  width:70%;
-   border: 1px solid #ddd; /* Example border */
+  width: 70%;
+  border: 1px solid #ddd; /* Example border */
 }
 
 /* To ensure the divs sit side-by-side within the Row component */

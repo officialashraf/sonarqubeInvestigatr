@@ -38,7 +38,7 @@ export const sharedSxStyles = {
 const UnifiedSearchCriteria = ({ onClose, setShowPopup, handleCreateCase }) => {
   const navigate = useNavigate();
   const Token = Cookies.get('accessToken');
-  
+
   // State management
   const [activeView, setActiveView] = useState('saved'); // 'saved', 'recent', 'create'
   const [inputValue, setInputValue] = useState('');
@@ -47,7 +47,7 @@ const UnifiedSearchCriteria = ({ onClose, setShowPopup, handleCreateCase }) => {
   const [showPopupD, setShowPopupD] = useState(false);
   const [showEditPopup, setShowEditPopup] = useState(false);
   const [criteriaId, setCriteriaId] = useState(null);
-  
+
   // Form data for create criteria
   const [formData, setFormData] = useState({
     searchQuery: '',
@@ -58,23 +58,23 @@ const UnifiedSearchCriteria = ({ onClose, setShowPopup, handleCreateCase }) => {
     latitude: '',
     longitude: ''
   });
-  
+
   // Sample data for saved criteria
   const cases = [
     { id: 'C28301', status: 'New', text: 'pcjpmrnplgku', subtext: 'aslshh.rsg' },
     { id: 'C76064', status: 'New', text: 'connectionpcjncn12434', subtext: 'aslshh.rsg' }
   ];
-  
+
   const transactions = [
     { id: 'T12345', status: 'Pending', text: 'transfer38292', subtext: 'cxnpay.io' },
     { id: 'T67890', status: 'Complete', text: 'exchngbtc212', subtext: 'btcwall.net' }
   ];
-  
+
   // Data for recent criteria
   const [recentSearch, setRecentSearch] = useState(['person', 'every']);
   const [savedSearch, setSavedSearch] = useState([]);
   const [recommendations, setRecommendations] = useState(["Currently there are no recommendations for you"]);
-  
+
   // Data for create criteria
   const [selectedDates, setSelectedDates] = useState({
     startDate: null,
@@ -84,14 +84,14 @@ const UnifiedSearchCriteria = ({ onClose, setShowPopup, handleCreateCase }) => {
   });
   const [caseOptions, setCaseOptions] = useState([]);
   const [fileTypeOptions, setFileTypeOptions] = useState([]);
-  
+
   // Fetch data on component mount
   useEffect(() => {
     fetchCaseData();
     fetchFileTypes();
     fetchSavedCriteria();
   }, []);
-  
+
   // API Calls
   const fetchCaseData = async () => {
     try {
@@ -101,18 +101,18 @@ const UnifiedSearchCriteria = ({ onClose, setShowPopup, handleCreateCase }) => {
           'Authorization': `Bearer ${Token}`
         },
       });
-      
+
       const caseOptionsFormatted = response.data.data.map(caseItem => ({
         value: caseItem.id,
         label: `${caseItem.id} - ${caseItem.title || 'Untitled'}`
       }));
-      
+
       setCaseOptions(caseOptionsFormatted);
     } catch (error) {
       console.error('Error fetching case data:', error);
     }
   };
-  
+
   const fetchFileTypes = async () => {
     try {
       const response = await axios.get('http://5.180.148.40:9002/api/osint-man/v1/platforms', {
@@ -120,18 +120,18 @@ const UnifiedSearchCriteria = ({ onClose, setShowPopup, handleCreateCase }) => {
           'Authorization': `Bearer ${Token}`
         },
       });
-      
+
       const fileTypeOptionsFormatted = response.data.data.map(platform => ({
         value: platform,
         label: platform
       }));
-      
+
       setFileTypeOptions(fileTypeOptionsFormatted);
     } catch (error) {
       console.error('Error fetching file types:', error);
     }
   };
-  
+
   const fetchSavedCriteria = async () => {
     try {
       const response = await fetch("http://5.180.148.40:9006/api/das/criteria", {
@@ -148,7 +148,7 @@ const UnifiedSearchCriteria = ({ onClose, setShowPopup, handleCreateCase }) => {
       console.error("Error fetching saved criteria:", error);
     }
   };
-  
+
   const saveCriteria = async () => {
     try {
       const criteriaPayload = {
@@ -160,14 +160,14 @@ const UnifiedSearchCriteria = ({ onClose, setShowPopup, handleCreateCase }) => {
         start_time: selectedDates.startDate ? `${selectedDates.startDate.toISOString().split('T')[0]}T${String(selectedDates.startTime.hours).padStart(2, '0')}:${String(selectedDates.startTime.minutes).padStart(2, '0')}:00` : "",
         end_time: selectedDates.endDate ? `${selectedDates.endDate.toISOString().split('T')[0]}T${String(selectedDates.endTime.hours).padStart(2, '0')}:${String(selectedDates.endTime.minutes).padStart(2, '0')}:00` : ""
       };
-      
+
       const response = await axios.post('http://5.180.148.40:9006/api/das/criteria', criteriaPayload, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${Token}`
         },
       });
-      
+
       toast.success("Criteria saved successfully");
       fetchSavedCriteria(); // Refresh saved criteria list
       return response.data;
@@ -177,7 +177,7 @@ const UnifiedSearchCriteria = ({ onClose, setShowPopup, handleCreateCase }) => {
       return null;
     }
   };
-  
+
   const handleDeleteCriteria = async (id) => {
     try {
       const response = await fetch(`http://5.180.148.40:9006/api/das/criteria/${id}`, {
@@ -187,7 +187,7 @@ const UnifiedSearchCriteria = ({ onClose, setShowPopup, handleCreateCase }) => {
           'Authorization': `Bearer ${Token}`
         },
       });
-  
+
       if (response.ok) {
         fetchSavedCriteria();
         toast.success("Criteria successfully deleted!");
@@ -199,17 +199,17 @@ const UnifiedSearchCriteria = ({ onClose, setShowPopup, handleCreateCase }) => {
       toast.error("Error while deleting criteria");
     }
   };
-  
+
   // Event Handlers
   const handleSearch = async (e) => {
     if (e) e.preventDefault();
-    
+
     try {
       // Save criteria if checkbox is checked
       if (formData.includeArchived) {
         await saveCriteria();
       }
-      
+
       // Prepare search payload
       const queryArray = formData.filetype.map(type => ({
         unified_case_id: formData.caseIds && formData.caseIds.length > 0 ? formData.caseIds[0].value : "",
@@ -218,7 +218,7 @@ const UnifiedSearchCriteria = ({ onClose, setShowPopup, handleCreateCase }) => {
         start_time: selectedDates.startDate ? `${selectedDates.startDate.toISOString().split('T')[0]}T${String(selectedDates.startTime.hours).padStart(2, '0')}:${String(selectedDates.startTime.minutes).padStart(2, '0')}:00` : "",
         end_time: selectedDates.endDate ? `${selectedDates.endDate.toISOString().split('T')[0]}T${String(selectedDates.endTime.hours).padStart(2, '0')}:${String(selectedDates.endTime.minutes).padStart(2, '0')}:00` : ""
       }));
-      
+
       const response = await axios.post('http://5.180.148.40:9007/api/das/search', {
         query: queryArray
       }, {
@@ -227,12 +227,12 @@ const UnifiedSearchCriteria = ({ onClose, setShowPopup, handleCreateCase }) => {
           'Authorization': `Bearer ${Token}`
         },
       });
-      
+
       // Add to recent searches
       if (formData.searchQuery && !recentSearch.includes(formData.searchQuery)) {
         setRecentSearch([formData.searchQuery, ...recentSearch]);
       }
-      
+
       // Reset form
       setFormData({
         searchQuery: '',
@@ -243,21 +243,21 @@ const UnifiedSearchCriteria = ({ onClose, setShowPopup, handleCreateCase }) => {
         latitude: '',
         longitude: ''
       });
-      
+
       // Handle search results
       if (handleCreateCase) {
         handleCreateCase(response.data);
       }
-      
+
       // Switch back to saved view - MODIFIED
       setActiveView('saved');
-      
+
     } catch (error) {
       console.error('Error performing search:', error);
       toast.error("Search failed. Please try again");
     }
   };
-  
+
   const handleKeyPress = (e) => {
     if (e.key === 'Enter' && inputValue.trim() !== '') {
       if (!searchChips.includes(inputValue.trim())) {
@@ -266,52 +266,52 @@ const UnifiedSearchCriteria = ({ onClose, setShowPopup, handleCreateCase }) => {
       setInputValue('');
     }
   };
-  
+
   const removeChip = (chip) => {
     setSearchChips(searchChips.filter(item => item !== chip));
   };
-  
+
   const resetSearch = () => {
     setSearchChips([]);
     setInputValue('');
   };
-  
+
   const handleInputChange = (e) => {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
-  
+
   const handleSaveCriteriaChange = (e) => {
     setFormData(prev => ({ ...prev, includeArchived: e.target.checked }));
   };
-  
+
   const handleDateSelection = (dateData) => {
     setSelectedDates(dateData);
     setShowPopupD(false);
   };
-  
+
   const removeRecentItem = (index) => {
     const updatedSearch = recentSearch.filter((_, i) => i !== index);
     setRecentSearch(updatedSearch);
   };
-  
+
   const handleViewAll = () => {
     navigate('/cases/save');
     onClose();
     setShowPopup(false);
   };
-  
+
   // Format date for display
   const formatDate = (date) => {
     if (!date) return 'No date selected';
     return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
   };
-  
+
   // Toggle Edit Popup
   const toggleEditPopup = (id = null) => {
     if (id) setCriteriaId(id);
     setShowEditPopup(!showEditPopup);
   };
-  
+
   // Clear all recent searches
   const clearRecentSearches = () => {
     setRecentSearch([]);
@@ -334,8 +334,8 @@ const UnifiedSearchCriteria = ({ onClose, setShowPopup, handleCreateCase }) => {
               ),
               endAdornment: (
                 <InputAdornment position="end">
-                  <Send onClick={() => setActiveView('recent')} style={{cursor:'pointer'}} />
-                  <Tune onClick={() => setActiveView('create')} style={{cursor:'pointer'}} />
+                  <Send onClick={() => setActiveView('recent')} style={{ cursor: 'pointer' }} />
+                  <Tune onClick={() => setActiveView('create')} style={{ cursor: 'pointer' }} />
                 </InputAdornment>
               ),
               style: {
@@ -343,7 +343,7 @@ const UnifiedSearchCriteria = ({ onClose, setShowPopup, handleCreateCase }) => {
                 padding: '0 8px',
               },
             }}
-            type="text" 
+            type="text"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyPress={handleKeyPress}
@@ -351,7 +351,7 @@ const UnifiedSearchCriteria = ({ onClose, setShowPopup, handleCreateCase }) => {
             sx={sharedSxStyles}
           />
         </div>
-        
+
         <div className="search-term-indicator">
           <div className="chips-container">
             {searchChips.map((chip, index) => (
@@ -368,22 +368,22 @@ const UnifiedSearchCriteria = ({ onClose, setShowPopup, handleCreateCase }) => {
             <button className="action-button">SAVE SEARCH</button>
           </div>
         </div>
-        
+
         <div className="tabs">
-          <div 
+          <div
             className={`tab ${activeTab === 'Cases' ? 'active' : ''}`}
             onClick={() => setActiveTab('Cases')}
           >
             Cases (87)
           </div>
-          <div 
+          <div
             className={`tab ${activeTab === 'Transactions' ? 'active' : ''}`}
             onClick={() => setActiveTab('Transactions')}
           >
             Transactions (4127)
           </div>
         </div>
-        
+
         <div className="search-results">
           {activeTab === 'Cases' ? (
             cases.map(item => (
@@ -410,17 +410,17 @@ const UnifiedSearchCriteria = ({ onClose, setShowPopup, handleCreateCase }) => {
               </div>
             ))
           )}
-          <button className="add-btn" style={{marginLeft:'0px'}} onClick={handleViewAll}>
+          <button className="add-btn" style={{ marginLeft: '0px' }} onClick={handleViewAll}>
             VIEW ALL RESULTS IN FULL SCREEN
           </button>
         </div>
       </div>
     </>
   );
-  
+
   const renderRecentView = () => (
     <>
-      <div className="container p-4 text-white shadow-lg" style={{ background:'grey' }}>
+      <div className="container p-4 text-white shadow-lg" style={{ background: 'grey' }}>
         <div className="d-flex align-items-center mb-3">
           <TextField
             fullWidth
@@ -434,7 +434,7 @@ const UnifiedSearchCriteria = ({ onClose, setShowPopup, handleCreateCase }) => {
               endAdornment: (
                 <InputAdornment position="end">
                   {/* MODIFIED: Changed Tune icon click handler to go back to saved view */}
-                  <Tune style={{cursor:'pointer'}} onClick={() => setActiveView('saved')} />
+                  <Tune style={{ cursor: 'pointer' }} onClick={() => setActiveView('saved')} />
                 </InputAdornment>
               ),
               style: {
@@ -446,7 +446,7 @@ const UnifiedSearchCriteria = ({ onClose, setShowPopup, handleCreateCase }) => {
             sx={sharedSxStyles}
           />
         </div>
-        
+
         <div>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
             <div style={{ display: "flex", alignItems: "center" }}>
@@ -459,23 +459,23 @@ const UnifiedSearchCriteria = ({ onClose, setShowPopup, handleCreateCase }) => {
             {recentSearch.map((item, index) => (
               <ListItem key={index} className="text-white">
                 <ListItemText primary={item} />
-                <IconButton 
-                  onClick={() => removeRecentItem(index)} 
+                <IconButton
+                  onClick={() => removeRecentItem(index)}
                   style={{ padding: "0", margin: "0" }}
                 >
-                  <CloseIcon style={{fontSize:'15px'}} />
+                  <CloseIcon style={{ fontSize: '15px' }} />
                 </IconButton>
               </ListItem>
             ))}
           </List>
         </div>
-        
+
         <hr />
-        
+
         <div>
           <div style={{ display: "flex", alignItems: "center" }}>
-            <LocationOn color="action"/> 
-            <label style={{marginLeft:'5px'}}>Recommendation</label>
+            <LocationOn color="action" />
+            <label style={{ marginLeft: '5px' }}>Recommendation</label>
           </div>
           <List className="bg-gray rounded border-1">
             {recommendations.map((item, index) => (
@@ -485,13 +485,13 @@ const UnifiedSearchCriteria = ({ onClose, setShowPopup, handleCreateCase }) => {
             ))}
           </List>
         </div>
-        
+
         <hr />
-        
-        <div style={{height:'300px', overflow:'auto'}}>
+
+        <div style={{ height: '300px', overflow: 'auto' }}>
           <div style={{ display: "flex", alignItems: "center" }}>
-            <Save color="action"/>
-            <label style={{marginLeft:'5px'}}>Saved Search</label>
+            <Save color="action" />
+            <label style={{ marginLeft: '5px' }}>Saved Search</label>
           </div>
           <List className="bg-gray">
             {savedSearch.map((item, index) => (
@@ -499,14 +499,14 @@ const UnifiedSearchCriteria = ({ onClose, setShowPopup, handleCreateCase }) => {
                 <ListItemText primary={item.keyword} />
                 <ListItemSecondaryAction>
                   <IconButton edge="end" color="dark">
-                    <Edit 
+                    <Edit
                       onClick={() => toggleEditPopup(item.id)}
-                      style={{ cursor: 'pointer' }} 
+                      style={{ cursor: 'pointer' }}
                     />
                   </IconButton>
-                  <IconButton 
-                    edge="end" 
-                    color="dark" 
+                  <IconButton
+                    edge="end"
+                    color="dark"
                     onClick={() => handleDeleteCriteria(item.id)}
                   >
                     <Delete />
@@ -519,7 +519,7 @@ const UnifiedSearchCriteria = ({ onClose, setShowPopup, handleCreateCase }) => {
       </div>
     </>
   );
-  
+
   const renderCreateView = () => (
     <>
       <div className="popup-content">
@@ -691,7 +691,7 @@ const UnifiedSearchCriteria = ({ onClose, setShowPopup, handleCreateCase }) => {
       </div>
     </>
   );
-  
+
   return (
     <div className="popup-overlay">
       <div className="popup-container">
@@ -704,7 +704,7 @@ const UnifiedSearchCriteria = ({ onClose, setShowPopup, handleCreateCase }) => {
           {activeView === 'create' && renderCreateView()}
         </div>
       </div>
-      
+
       {/* Popup components */}
       {showPopupD && (
         <DatePickera
@@ -713,10 +713,10 @@ const UnifiedSearchCriteria = ({ onClose, setShowPopup, handleCreateCase }) => {
           onClose={() => setShowPopupD(false)}
         />
       )}
-      
+
       {showEditPopup && (
-        <EditCriteria 
-          togglePopup={toggleEditPopup} 
+        <EditCriteria
+          togglePopup={toggleEditPopup}
           criteriaId={criteriaId}
           onSaved={() => {
             fetchSavedCriteria();

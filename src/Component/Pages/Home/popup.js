@@ -5,7 +5,7 @@ import "../../../Assets/Stlyes/createCase.css"; // Popup-specific CSS
 const Popup = ({ togglePopup }) => {
   const handleCreate = (e) => {
     e.preventDefault(); // Form submission default action रोकता है
-    alert("Case created successfully!" ,Response); // Success message
+    alert("Case created successfully!", Response); // Success message
     togglePopup(); // Popup बंद करता है
   };
 

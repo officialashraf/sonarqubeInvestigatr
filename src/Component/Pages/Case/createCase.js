@@ -1,16 +1,15 @@
-import React, {  useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./createCase.css";
 import axios from "axios";
 import Cookies from "js-cookie"; // Make sure you're using this for cookies
-import {  toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import Select from 'react-select';
 
-export   const customStyles = {
-  control: (base,state) => ({
+export const customStyles = {
+  control: (base, state) => ({
     ...base,
     backgroundColor: 'white', // Black background
     color: 'black', // White text
-    // border: '1px solid #fff',
     boxShadow: 'none',
     outline: 'none'
   }),
@@ -25,7 +24,7 @@ export   const customStyles = {
     color: 'black', // White text
     '&:hover': {
       backgroundColor: 'black', // Lighter black on hover
-      color:'white'
+      color: 'white'
     }
   }),
   multiValue: (base) => ({
@@ -35,7 +34,7 @@ export   const customStyles = {
   }),
   multiValueLabel: (base) => ({
     ...base,
-    backgroundColor:'black',
+    backgroundColor: 'black',
     color: 'white', // White text
   }),
   multiValueRemove: (base) => ({
@@ -47,13 +46,13 @@ export   const customStyles = {
     }
   })
 };
-  const CreateCase = ({ togglePopup }) => {
+const CreateCase = ({ togglePopup }) => {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-     status: '',
-     watchers: '',
-     assignee: '',
+    status: '',
+    watchers: '',
+    assignee: '',
   });
 
   const [users, setUsers] = useState([]);
@@ -63,27 +62,28 @@ export   const customStyles = {
   }));
 
 
-const userData = async () => {
-  const token = Cookies.get("accessToken");
-   try { 
-    const response = await axios.get('http://5.180.148.40:9000/api/user-man/v1/user'
-      , {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        }
-      });
-     const user = response.data;
+  const userData = async () => {
+    const token = Cookies.get("accessToken");
+    try {
+      const response = await axios.get('http://5.180.148.40:9000/api/user-man/v1/user'
+        , {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        });
+      const user = response.data;
       setUsers(user); // Update the state with usered data
-       } catch (error) { 
-        console.error('There was an error usering the data!', error); 
-      } };
-    useEffect(() => {
+    } catch (error) {
+      console.error('There was an error usering the data!', error);
+    }
+  };
+  useEffect(() => {
     userData(); // Call the userData function
-    }, []);
+  }, []);
 
 
-const handleCreateCase = async (formData) => {
+  const handleCreateCase = async (formData) => {
     const token = Cookies.get("accessToken");
     if (!token) {
       toast.error("Authentication error: No token found");
@@ -94,24 +94,24 @@ const handleCreateCase = async (formData) => {
         title: formData.title,
         description: formData.description,
         assignee: formData.assignee,
-        watchers:formData.watchers,  
+        watchers: formData.watchers,
       }, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         }
       }
-    );    window.dispatchEvent(new Event("databaseUpdated"));
+      ); window.dispatchEvent(new Event("databaseUpdated"));
       if (response.status === 200) {
         toast.success("Case created successfully");
-        togglePopup(); // पॉपअप बंद करें
+        togglePopup();
       } else {
         toast.error("Unexpected response received from the server");
       }
-  
+
     } catch (err) {
       console.error("Error during case creation:", err.response || err);
-      toast.error( (err.response?.data?.detail || err.message || "Error encountered during case creation: " ));
+      toast.error((err.response?.data?.detail || err.message || "Error encountered during case creation: "));
     }
   };
 
@@ -123,15 +123,15 @@ const handleCreateCase = async (formData) => {
       [name]: value,
     }));
   };
-  
+
   const handleWatchersChange = (selectedOptions) => {
     const selectedLabels = selectedOptions.map((option) => option.label).join(", ");
     setFormData((formData) => ({
       ...formData,
-      watchers: selectedLabels , // Ensure it's an array
+      watchers: selectedLabels, // Ensure it's an array
     }));
   };
-  
+
   const handleAssigneeChange = (selectedOption) => {
     setFormData((prevData) => ({
       ...prevData,
@@ -140,11 +140,11 @@ const handleCreateCase = async (formData) => {
   };
 
 
-   
-    return (
-        <div className="popup-overlay">
+
+  return (
+    <div className="popup-overlay">
       <div className="popup-container">
-      <button className="close-icon" onClick={togglePopup}>
+        <button className="close-icon" onClick={togglePopup}>
           &times;
         </button>
         <div className="popup-content">
@@ -157,7 +157,7 @@ const handleCreateCase = async (formData) => {
           >
             <label htmlFor="title">Title:</label>
             <input
-             className="com"
+              className="com"
               type="text"
               id="title"
               name="title"
@@ -170,42 +170,42 @@ const handleCreateCase = async (formData) => {
             />
             <label htmlFor="description">Description:</label>
             <textarea
-             className="com"
+              className="com"
               id="description"
               name="description"
               value={formData.description}
               onChange={handleInputChange}
               placeholder="Enter description"
             ></textarea>
-           
-    <div>
-      <label htmlFor="assignee">Assignee:</label>
-     
-        
-      <Select
-            options={options}
-            styles={customStyles}
-            className="com"
-            placeholder="Select Assignee"
-            value={options && options.find((option) => option.value === formData.assignee) || null}
-            onChange={handleAssigneeChange}
-          />
-    </div>
-        <label htmlFor="watcher">Watcher:</label>
-        <Select
-        options={options}
-        isMulti
-        styles={customStyles}
-        className="com"
-        name="watchers"
-        placeholder="Select Watchers"
-        value={options && options.filter((option) => formData.watchers.split(", ").includes(option.label)
-           )}
-        onChange={handleWatchersChange}
-        />
+
+            <div>
+              <label htmlFor="assignee">Assignee:</label>
+
+
+              <Select
+                options={options}
+                styles={customStyles}
+                className="com"
+                placeholder="Select Assignee"
+                value={options && options.find((option) => option.value === formData.assignee) || null}
+                onChange={handleAssigneeChange}
+              />
+            </div>
+            <label htmlFor="watcher">Watcher:</label>
+            <Select
+              options={options}
+              isMulti
+              styles={customStyles}
+              className="com"
+              name="watchers"
+              placeholder="Select Watchers"
+              value={options && options.filter((option) => formData.watchers.split(", ").includes(option.label)
+              )}
+              onChange={handleWatchersChange}
+            />
             <div className="button-container">
               <button type="submit" className="create-btn">
-               Create
+                Create
               </button>
               <button type="button" className="cancel-btn" onClick={togglePopup}>
                 Cancel
@@ -214,7 +214,7 @@ const handleCreateCase = async (formData) => {
           </form>
         </div>
       </div>
-      </div>
-    );
-  };
- export default CreateCase;  
+    </div>
+  );
+};
+export default CreateCase;  

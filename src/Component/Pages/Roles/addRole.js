@@ -6,19 +6,15 @@ import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
 import '../User/addUser.css'
 
-const AddRole = ({togglePopup}) => {
+const AddRole = ({ togglePopup }) => {
     const Token = Cookies.get('accessToken');
-    
- 
+
+
     const [searchTitle, setSearchTitle] = useState('');
 
     const addRole = async () => {
-       
+
         try {
-          
-            // const criteriaPaylod = {
-            //   title: searchTitle || "", 
-            // };
 
             console.log("Criteria Payload:", searchTitle); // Debug: Payload for API
 
@@ -32,33 +28,32 @@ const AddRole = ({togglePopup}) => {
                     }
                 }
             );
-            
+
 
             toast.success("Role created successfully");
             window.dispatchEvent(new Event("databaseUpdated"));
-            // window.addEventListener("databaseUpdated", handleDatabaseUpdated)
             console.log('Role Created successfully:', response.data); // Debug: API response
-           togglePopup(false)
-          } catch (error) {
+            togglePopup(false)
+        } catch (error) {
             console.error('Error saving criteria:', error); // Debug: Error log
         }
     };
 
-    return  (
+    return (
         <div className="popup-overlay" style={{
             top: 0, left: 0, width: "100%", height: "100%", display: "flex",
             justifyContent: "center", alignItems: "center", zIndex: 1050
         }}>
-            <div className="popup-container" style={{display:'flex', alignItems:'center'}}>
+            <div className="popup-container" style={{ display: 'flex', alignItems: 'center' }}>
                 <button
                     className="close-icon"
                     onClick={togglePopup}
                 >
                     &times;
                 </button>
-              
-                <div className="popup-content" style={{width:'70%'}}>
-               
+
+                <div className="popup-content" style={{ width: '70%' }}>
+
                     <form onSubmit={(e) => e.preventDefault()}> {/* Prevent form submission default */}
                         <label>Add Role</label>
                         <input

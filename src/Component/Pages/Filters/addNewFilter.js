@@ -3,8 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import { Form, InputGroup, Button, Badge } from 'react-bootstrap';
 import { toast } from 'react-toastify';
-import { useDispatch, useSelector } from 'react-redux';
-import { setTaskFilter } from '../../../Redux/Action/filterAction';
+import { useDispatch } from 'react-redux';
 import Cookies from 'js-cookie';
 import "./main.css"
 import { jwtDecode } from "jwt-decode";
@@ -21,7 +20,6 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
   const [platform, setPlatform] = useState([]);
   const [filterName, setFilterName] = useState('');
   const [description, setDescription] = useState('');
-  // const [taskId, setTaskId] = useState([]);
   const [filterId, setFilterId] = useState([]);
   const [filterDetails, setFilterDetails] = useState(null)
   const [isEditable, setIsEditable] = useState(true);
@@ -30,7 +28,7 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
 
   const [sources, setSources] = useState([
     {
-      id:'',
+      id: '',
       source: '',
       platform: [],
       keywords: [], // Initialize as an array with a single empty string
@@ -41,14 +39,11 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
   const containerRef = useRef(null);
 
   const dispatch = useDispatch();
-  // const caseData1 = useSelector((state) => state.caseData.caseData);
   const token = Cookies.get('accessToken');
   const toastShown = useRef(false);
   useEffect(() => {
-    // localStorage.setItem('taskId', taskId);
     localStorage.setItem('filterId', filterId);
-    // dispatch(setTaskFilter(taskId, filterId));
-  }, [ filterId, dispatch]);
+  }, [filterId, dispatch]);
 
   useEffect(() => {
     if (token) {
@@ -149,7 +144,7 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
 
         return {
           source: criteria.source,
-        id:criteria.id,
+          id: criteria.id,
           platform: criteria.platform || [],
           keywords: criteria.keywords || [],
           urls: criteria.urls || [],
@@ -163,29 +158,20 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
       setSources(convertedSources);
 
       // Check edit permissions
-        const isEditable = (loggedInUserId == filterDetails.created_by);
-        console.log(isEditable)
-        setIsEditable(isEditable);
-        if (!toastShown.current) {
+      const isEditable = (loggedInUserId == filterDetails.created_by);
+      console.log(isEditable)
+      setIsEditable(isEditable);
+      if (!toastShown.current) {
         toast.info(isEditable ? "You can edit this filter" : "You don't have permission to edit this filter");
         toastShown.current = true;
-        // if (loggedInUserId == filterDetails.created_by) {
-        //   setIsEditable(true);
-        //   toast.info("You can edit this filter yet");
-         
-  
-        //   console.log("hey", filterDetails.created_by, loggedInUserId)
-        // } else {
-        //   setIsEditable(false);
-        //   toast.info("You don't have permission to edit this filter yet");
-        // }
-    
-      }}
+
+      }
+    }
   }, [filterDetails, loggedInUserId]);
 
   const handleAddSource = () => {
     setSources([...sources, {
-      id:'',
+      id: '',
       source: '',
       platform: [],
       keywords: [],
@@ -242,13 +228,13 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
       toast.error("You don't have permission to edit this filter");
       return;
     }
-    console.log("saources",sources)
-    console.log("saourcesID",sources.id)
+    console.log("saources", sources)
+    console.log("saourcesID", sources.id)
     const postData = {
       name: filterName,
-      description: description, 
+      description: description,
       filter_criteria: sources.map((source) => ({
-        id:source.id,
+        id: source.id,
         source: source.source,
         platform: source.platform,
         keywords: source.keywords,
@@ -269,7 +255,9 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
-      }); window.dispatchEvent(new Event('databaseUpdated'));
+      }); 
+       window.dispatchEvent(new Event('databaseUpdated'));
+       
       console.log("responseFilter", response)
       if (response.status === 200) {
         toast.success(`Filter created successfully: ${response.data.data.name}`);
@@ -373,9 +361,6 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
                           <option value="minutes">Minutes</option>
                           <option value="hours">Hours</option>
                         </Form.Select>
-                        {/* <InputGroup.Text>
-                    ({source.intervalValue * conversionFactors[source.intervalUnit]} seconds)
-                  </InputGroup.Text> */}
                       </InputGroup>
                     </div>
                   )}
@@ -484,15 +469,11 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
             <button type="button" className="add-new-filter-button" onClick={handleAddSource}>
               Add Sources
             </button>
-            {/* <button type="button" className="add-new-filter-button" style={{ marginLeft: '5px' }} onClick={handleSaveFilter}>
-            Save Filter
-            </button> */}
             <button
               type="button"
               className="add-new-filter-button"
               style={{ marginLeft: '5px' }}
               onClick={handleSaveFilter}
-              // disabled={!isEditable}
             >
               {filterDetails?.id ? 'Update Filter' : 'Save Filter'}
             </button>

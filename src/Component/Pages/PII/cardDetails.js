@@ -19,22 +19,18 @@ import {
   Twitter as TwitterIcon,
   YouTube as YouTubeIcon,
 } from '@mui/icons-material';
-
-
-import './cardDetails.css'; // Import external CSS file
+import './cardDetails.css';
 import { useSelector } from 'react-redux';
-// import { Tiktok } from 'react-bootstrap-icons';
 import { FaSkype, FaGoogle, FaTelegram, FaWhatsapp, FaDiscord, FaSnapchatGhost, FaPinterest } from 'react-icons/fa';
-import {  SiPhonepe, SiGooglepay, SiGmail, SiTiktok, SiVk } from 'react-icons/si';
+import { SiPhonepe, SiGooglepay, SiGmail, SiTiktok, SiVk } from 'react-icons/si';
 
 const UserCards = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [searchValue, setSearchValue] = useState('');
 
 
-  const profiles = useSelector((state) => state.pii?.data?.cyniqBasicResult|| '');
+  const profiles = useSelector((state) => state.pii?.data?.cyniqBasicResult || '');
 
   useEffect(() => {
     // Function to fetch data from API
@@ -68,7 +64,6 @@ const UserCards = () => {
     vk: { icon: SiVk, color: "#45668E" },
     skype: { icon: FaSkype, color: "#00AFF0" },
     google: { icon: FaGoogle, color: "#4285F4" },
-    // msteams: { icon: SiMicrosoftteams, color: "#6264A7" },
     gpay: { icon: SiGooglepay, color: "#4285F4" },
     phonepay: { icon: SiPhonepe, color: "#5F259F" },
     whatsapp: { icon: FaWhatsapp, color: "#25D366" },
@@ -81,25 +76,25 @@ const UserCards = () => {
     // Default for unknown platforms
     default: { icon: Avatar }
   };
-  
+
   const getPlatformIcon = (source) => {
     if (!source) return null;
     const key = source.toLowerCase();
     const platform = platformIconMap[key] || platformIconMap.default;
     const IconComponent = platform.icon;
-    
+
     return (
       <IconComponent
         style={{
           fontSize: '2rem',
           color: platform.color,
-         
+
         }}
       />
     );
   };
 
-  
+
 
   if (loading) {
     return (
@@ -116,19 +111,9 @@ const UserCards = () => {
       </Container>
     );
   }
- 
+
   return (
     <Container maxWidth="lg" className="cards-container">
-      {/* Add search input with validation */}
-      {/* <div className="search-container">
-        <input
-          type="text"
-          className="search-input"
-          placeholder="Search by email or phone..."
-          value={searchValue}
-          onChange={(e) => handleSearch(e.target.value)}
-        />
-      </div> */}
 
       <Grid container spacing={3}>
         {users && users.filter((user) => user.has_account) // Only users with has_account: true
@@ -139,13 +124,13 @@ const UserCards = () => {
                   <div className="user-header">
                     {/* Platform Icon */}
                     {user.pii_source ? (
-                      <div style={{marginRight:'15px'}}>
+                      <div style={{ marginRight: '15px' }}>
                         {getPlatformIcon(user.pii_source)}
                       </div>
                     ) : (
                       <Avatar />
                     )}
-                    
+
                     {/* User Info */}
                     <div className="user-info">
                       {user && Array.isArray(user.names) && user.names.length > 0 ? (

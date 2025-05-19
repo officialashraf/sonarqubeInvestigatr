@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import "../Case/table.css";
 import { useNavigate } from "react-router-dom";
-import { Search, Plus } from "react-bootstrap-icons";
+import { Plus } from "react-bootstrap-icons";
 import { Col, Table } from "react-bootstrap";
 import { FaArrowLeft } from "react-icons/fa";
-import { ArrowDropDown, ArrowDropUp, Category } from "@mui/icons-material";
+import { ArrowDropDown, ArrowDropUp} from "@mui/icons-material";
 import Dropdown from "react-bootstrap/Dropdown";
-import Badge from "react-bootstrap/Badge";
 import { FiMoreVertical } from "react-icons/fi";
 import { toast } from 'react-toastify';
 import axios from "axios";
@@ -14,21 +13,18 @@ import Cookies from 'js-cookie';
 import TargetCreate from "./targetCreate";
 import TargetUpdate from "./targetUpdate";
 import TargetDetails from "./targetDetails";
-
-
-
+import Loader from "../Layout/loader.js"
 
 const TargetList = () => {
   const navigate = useNavigate();
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
-  const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [showPopup, setShowPopup] = useState(false);
   const [showPopupE, setShowPopupE] = useState(false);
-    const [showPopupD, setShowPopupD] = useState(false);
-    const [details, setDetails] = useState([])
+  const [showPopupD, setShowPopupD] = useState(false);
+  const [details, setDetails] = useState([])
 
 
   const fetchUsers = async () => {
@@ -37,7 +33,7 @@ const TargetList = () => {
       const token = Cookies.get("accessToken");
       const response = await axios.get("http://5.180.148.40:9001/api/case-man/v1/target", {
         headers: {
-          Authorization:`Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
           "Content-Type": 'application/json'
         },
 
@@ -45,7 +41,7 @@ const TargetList = () => {
       console.log("API Response:", response);
       setData(response.data);
       setFilteredData(response.data);
-      
+
     } catch (error) {
       if (error.response && error.response.data && error.response.data.detail) {
         toast.error(error.response.data.detail);
@@ -57,18 +53,18 @@ const TargetList = () => {
       setLoading(false);
     }
   };
-  console.log("serrr",filteredData)
+  console.log("serrr", filteredData)
   useEffect(() => {
     const tri = fetchUsers();
     console.log("okk", tri)
     const handleDatabaseUpdated = () => {
-            fetchUsers();
-        };
+      fetchUsers();
+    };
 
-        window.addEventListener("databaseUpdated", handleDatabaseUpdated);
-        return () => {
-            window.removeEventListener("databaseUpdated", handleDatabaseUpdated);
-        };
+    window.addEventListener("databaseUpdated", handleDatabaseUpdated);
+    return () => {
+      window.removeEventListener("databaseUpdated", handleDatabaseUpdated);
+    };
   }, [])
 
   const handleSearch = (event) => {
@@ -89,7 +85,7 @@ const TargetList = () => {
     });
     setFilteredData(filtered);
   };
-  
+
 
 
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
@@ -133,15 +129,15 @@ const TargetList = () => {
 
     setFilteredData(sortedData);
   };
-    const togglePopup = () => {
+  const togglePopup = () => {
 
     setShowPopup((prev) => !prev);
   };
-    const togglePopupE= (details) => {
+  const togglePopupE = (details) => {
     setDetails(details);
     setShowPopupE(prev => !prev);
   };
-   const togglePopupD= (details) => {
+  const togglePopupD = (details) => {
     setDetails(details);
     setShowPopupD(prev => !prev);
   };
@@ -201,6 +197,9 @@ const TargetList = () => {
       }
     }
   };
+  if(loading){
+    return <Loader/>
+  }
   return (
     <div className="data-table-container">
       <div className="top-header" style={{ marginTop: "10px" }}>
@@ -210,7 +209,9 @@ const TargetList = () => {
           style={{ width: "20%" }}
         >
           <FaArrowLeft
-            style={{ cursor: "pointer", marginRight: "10px" }}
+            style={{
+              cursor: "pointer", margin: '0px 40px 0px 38px',
+              fontSize: '18px' }}
             onClick={() => navigate("/Cases")}
           />
           <div className="search-bar1" style={{ width: "100%" }}>
@@ -218,8 +219,8 @@ const TargetList = () => {
               <input
                 type="text"
                 className="form-control"
-                 value={searchTerm}
-                 onChange={handleSearch}
+                value={searchTerm}
+                onChange={handleSearch}
                 placeholder="Search"
               />
             </div>
@@ -227,11 +228,11 @@ const TargetList = () => {
         </Col>
         <div className="header-icons">
           <button className="add-btn"
-             onClick={togglePopup}
+            onClick={togglePopup}
           >
-         
+
             <Plus size={14} style={{ marginRight: "5px" }} />
-            Add New keywords
+            Add New Target
           </button>
         </div>
       </div>
@@ -268,7 +269,7 @@ const TargetList = () => {
                     alignItems: "center"
                   }}
                 >
-                  Keywords
+                  Target
                   <span
                     onClick={() => handleSort("name")}
                     style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
@@ -314,15 +315,15 @@ const TargetList = () => {
                 >
                   Synonyms
                   <span
-                            onClick={() => handleSort("synonyms")}
-                            style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
-                          >
-                  {sortConfig.key === "synonyms" ? (
-                              sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
-                            ) : (
-                              <ArrowDropDown />
-                            )}
-                          </span>
+                    onClick={() => handleSort("synonyms")}
+                    style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
+                  >
+                    {sortConfig.key === "synonyms" ? (
+                      sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
+                    ) : (
+                      <ArrowDropDown />
+                    )}
+                  </span>
                 </div>
               </th>
               <th>
@@ -334,16 +335,16 @@ const TargetList = () => {
                   }}
                 >
                   Threat Score(1-10)
-                   <span
-                            onClick={() => handleSort("threat_weightage")}
-                            style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
-                          >
-                            {sortConfig.key === "threat_weightage" ? (
-                              sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
-                            ) : (
-                              <ArrowDropDown />
-                            )}
-                          </span> 
+                  <span
+                    onClick={() => handleSort("threat_weightage")}
+                    style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
+                  >
+                    {sortConfig.key === "threat_weightage" ? (
+                      sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
+                    ) : (
+                      <ArrowDropDown />
+                    )}
+                  </span>
                 </div>
               </th>
               <th>
@@ -355,16 +356,16 @@ const TargetList = () => {
                   }}
                 >
                   Modified on
-                   <span
-                            onClick={() => handleSort("modified_on")}
-                            style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
-                          >
-                            {sortConfig.key === "modified_on" ? (
-                              sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
-                            ) : (
-                              <ArrowDropDown />
-                            )}
-                          </span> 
+                  <span
+                    onClick={() => handleSort("modified_on")}
+                    style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
+                  >
+                    {sortConfig.key === "modified_on" ? (
+                      sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
+                    ) : (
+                      <ArrowDropDown />
+                    )}
+                  </span>
                 </div>
               </th>
               <th>
@@ -376,16 +377,16 @@ const TargetList = () => {
                   }}
                 >
                   Modified by
-                   <span
-                            onClick={() => handleSort("modified_by")}
-                            style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
-                          >
-                            {sortConfig.key === "modified_by" ? (
-                              sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
-                            ) : (
-                              <ArrowDropDown />
-                            )}
-                          </span> 
+                  <span
+                    onClick={() => handleSort("modified_by")}
+                    style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
+                  >
+                    {sortConfig.key === "modified_by" ? (
+                      sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
+                    ) : (
+                      <ArrowDropDown />
+                    )}
+                  </span>
                 </div>
               </th>
               <th>
@@ -397,16 +398,16 @@ const TargetList = () => {
                   }}
                 >
                   Created_on
-                   <span
-                            onClick={() => handleSort("created_on")}
-                            style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
-                          >
-                            {sortConfig.key === "created_on" ? (
-                              sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
-                            ) : (
-                              <ArrowDropDown />
-                            )}
-                          </span> 
+                  <span
+                    onClick={() => handleSort("created_on")}
+                    style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
+                  >
+                    {sortConfig.key === "created_on" ? (
+                      sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
+                    ) : (
+                      <ArrowDropDown />
+                    )}
+                  </span>
                 </div>
               </th>
               <th>
@@ -417,17 +418,17 @@ const TargetList = () => {
                     alignItems: "center"
                   }}
                 >
-                 Created_by
-                   <span
-                            onClick={() => handleSort("created_by")}
-                            style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
-                          >
-                            {sortConfig.key === "created_by" ? (
-                              sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
-                            ) : (
-                              <ArrowDropDown />
-                            )}
-                          </span> 
+                  Created_by
+                  <span
+                    onClick={() => handleSort("created_by")}
+                    style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
+                  >
+                    {sortConfig.key === "created_by" ? (
+                      sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
+                    ) : (
+                      <ArrowDropDown />
+                    )}
+                  </span>
                 </div>
               </th>
               <th>
@@ -456,8 +457,7 @@ const TargetList = () => {
             {filteredData &&
               filteredData.map(item =>
                 <tr
-                  key={item.
-                    id || Math.random()}
+                  key={item.id || Math.random()}
                   style={{ position: "relative" }}
                 >
                   <td>
@@ -476,7 +476,7 @@ const TargetList = () => {
                     {item.threat_weightage}
                   </td>
                   <td>
-                    {(item.modified_on?item.modified_on.slice(0,10)
+                    {(item.modified_on ? item.modified_on.slice(0, 10)
                       : "-")}
                   </td>
                   <td>
@@ -484,7 +484,7 @@ const TargetList = () => {
                       || "-")}
                   </td>
                   <td>
-                    {(item.created_on.slice(0,10)
+                    {(item.created_on.slice(0, 10)
                       || "-")}
                   </td>
                   <td>
@@ -499,7 +499,7 @@ const TargetList = () => {
                       textAlign: "center"
                     }}
                   >
-                   <span>{item.description}</span>
+                    <span>{item.description}</span>
                     <Dropdown>
                       <Dropdown.Toggle
                         className="menu-button"
@@ -510,9 +510,9 @@ const TargetList = () => {
                           cursor: "pointer"
                         }}
                       >
-                                     
-                 <FiMoreVertical size={16} />
-                        
+
+                        <FiMoreVertical size={16} />
+
                       </Dropdown.Toggle>
                       <Dropdown.Menu
                         className="custom-dropdown-menu"
@@ -528,12 +528,12 @@ const TargetList = () => {
                           Details
                         </Dropdown.Item>
                         <Dropdown.Item
-                        onClick={() => togglePopupE(item)}
+                          onClick={() => togglePopupE(item)}
                         >
                           Edit
                         </Dropdown.Item>
                         <Dropdown.Item
-                        onClick={() => confirmDelete(item.id, item.name)}
+                          onClick={() => confirmDelete(item.id, item.name)}
                         >
                           Delete
                         </Dropdown.Item>
@@ -546,8 +546,8 @@ const TargetList = () => {
         </Table>
       </div>
       {showPopup && <TargetCreate togglePopup={togglePopup} />}
-            {showPopupE && <TargetUpdate togglePopup={togglePopupE}details={details} />}
-              {showPopupD && <TargetDetails togglePopup={togglePopupD}details={details} />}
+      {showPopupE && <TargetUpdate togglePopup={togglePopupE} details={details} />}
+      {showPopupD && <TargetDetails togglePopup={togglePopupD} details={details} />}
     </div>
   );
 };

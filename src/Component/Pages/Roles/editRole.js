@@ -6,26 +6,26 @@ import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
 import '../User/addUser.css'
 
-const EditRole = ({togglePopup,details}) => {
+const EditRole = ({ togglePopup, details }) => {
     const Token = Cookies.get('accessToken');
-    
- console.log("editdetials",details)
+
+    console.log("editdetials", details)
     const [searchTitle, setSearchTitle] = useState('');
 
     const editRole = async () => {
-       
+
         try {
-          
+
             const criteriaPaylod = {
-                new_role: searchTitle || "", 
-            old_role: details
+                new_role: searchTitle || "",
+                old_role: details
             };
 
             console.log("role Payload:", searchTitle); // Debug: Payload for API
 
             const response = await axios.put(
                 `http://5.180.148.40:9000/api/user-man/v1/role`,
-               criteriaPaylod, // empty body
+                criteriaPaylod, // empty body
                 {
                     headers: {
                         'Content-Type': 'application/json',
@@ -33,41 +33,40 @@ const EditRole = ({togglePopup,details}) => {
                     }
                 }
             );
-            
+
 
             toast.success("Role updated successfully");
             window.dispatchEvent(new Event("databaseUpdated"));
-            // window.addEventListener("databaseUpdated", handleDatabaseUpdated)
             console.log('Role Updated successfully:', response.data); // Debug: API response
-           togglePopup(false)
-          } catch (error) {
+            togglePopup(false)
+        } catch (error) {
             console.error('Error saving criteria:', error); // Debug: Error log
         }
     };
     useEffect(
-      () => {
-        if (details) {
-          setSearchTitle(details); // Assuming details is the current role name
-        }
-      },
-      [details]
+        () => {
+            if (details) {
+                setSearchTitle(details); // Assuming details is the current role name
+            }
+        },
+        [details]
     );
 
-    return  (
+    return (
         <div className="popup-overlay" style={{
             top: 0, left: 0, width: "100%", height: "100%", display: "flex",
             justifyContent: "center", alignItems: "center", zIndex: 1050
         }}>
-            <div className="popup-container" style={{display:'flex', alignItems:'center'}}>
+            <div className="popup-container" style={{ display: 'flex', alignItems: 'center' }}>
                 <button
                     className="close-icon"
                     onClick={togglePopup}
                 >
                     &times;
                 </button>
-              
-                <div className="popup-content" style={{width:'70%'}}>
-               
+
+                <div className="popup-content" style={{ width: '70%' }}>
+
                     <form onSubmit={(e) => e.preventDefault()}> {/* Prevent form submission default */}
                         <label>UpdateRole</label>
                         <input
@@ -90,7 +89,7 @@ const EditRole = ({togglePopup,details}) => {
                                 className="create-btn"
                                 onClick={editRole}
                             >
-                              Update
+                                Update
                             </button>
                         </div>
                     </form>
