@@ -113,12 +113,11 @@ const UserManagement = () => {
           return;
         }
         try {
-          const authToken = Cookies.get('accessToken'); // Read the token from cookies 
           const response = await axios.delete(`http://5.180.148.40:9000/api/user-man/v1/user/${id}`,
             {
               headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${authToken}`
+                'Authorization': `Bearer ${token}`
               }
             });
             // window.dispatchEvent(new Event("databaseUpdated"));

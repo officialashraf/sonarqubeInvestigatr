@@ -202,7 +202,6 @@ const TargetList = () => {
       }
     }
   };
-
   return (
     <div className="data-table-container">
       <div className="top-header" style={{ marginTop: "10px" }}>
@@ -535,7 +534,7 @@ const TargetList = () => {
                           Edit
                         </Dropdown.Item>
                         <Dropdown.Item
-                          onClick={() => confirmDelete(item.id, item.name)}
+                        onClick={() => confirmDelete(item.id, item.name)}
                         >
                           Delete
                         </Dropdown.Item>
