@@ -17,8 +17,6 @@ import Loader from "../Layout/loader";
 import { FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
-
-
 const UserManagement = () => {
   const  navigate =  useNavigate()
   const [data, setData] = useState([]);

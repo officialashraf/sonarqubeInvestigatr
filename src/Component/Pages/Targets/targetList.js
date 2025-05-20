@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Plus } from "react-bootstrap-icons";
 import { Col, Table } from "react-bootstrap";
 import { FaArrowLeft } from "react-icons/fa";
-import { ArrowDropDown, ArrowDropUp, Category } from "@mui/icons-material";
+import { ArrowDropDown, ArrowDropUp} from "@mui/icons-material";
 import Dropdown from "react-bootstrap/Dropdown";
 import { FiMoreVertical } from "react-icons/fi";
 import { toast } from 'react-toastify';
@@ -22,7 +22,6 @@ const TargetList = () => {
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
-  const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [showPopup, setShowPopup] = useState(false);
   const [showPopupE, setShowPopupE] = useState(false);
@@ -202,6 +201,7 @@ const TargetList = () => {
       }
     }
   };
+
   return (
     <div className="data-table-container">
       <div className="top-header" style={{ marginTop: "10px" }}>
@@ -457,8 +457,7 @@ const TargetList = () => {
             {filteredData &&
               filteredData.map(item =>
                 <tr
-                  key={item.
-                    id || Math.random()}
+                  key={item.id || Math.random()}
                   style={{ position: "relative" }}
                 >
                   <td>

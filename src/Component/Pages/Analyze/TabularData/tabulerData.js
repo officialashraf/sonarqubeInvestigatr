@@ -93,12 +93,17 @@ const TabulerData = () => {
           <Table striped bordered hover>
             <thead>
               <tr>
-                {headers.map((header) => (
-                  <th key={header} className="fixed-th">
-                    {header}
-                  </th>
-                ))}
-              </tr>
+    {headers.map((header) => (
+        <th key={header} className="fixed-th">
+            {header
+                .split("_") // Split by underscores
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize first letter of each word
+                .join(" ") // Rejoin words with space
+            }
+        </th>
+    ))}
+</tr>
+
             </thead>
             <tbody>
               {data.map((item, index) => (

@@ -84,8 +84,7 @@ const CaseHeader = ({ onIconClick }) => {
             className="icon-style"
             onClick={() => onIconClick("caseData")}
           />
-        
-        </div>
+                </div>
       </div>
    
             </div>
