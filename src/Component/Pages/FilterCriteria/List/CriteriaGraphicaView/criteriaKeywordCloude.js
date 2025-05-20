@@ -4,44 +4,46 @@ import WordCloud from 'react-d3-cloud';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import Cookies from "js-cookie";
+import Loader from '../../../Layout/loader';
 
 
 const CriteriaKeywordChart = () => {
   const token = Cookies.get("accessToken");
   const [data, setData] = useState([]);
-  // const caseId = useSelector((state) => state.caseData.caseData.id);
+  const [loading, setLoading] = useState(true);
 
   const queryPayload = useSelector((state) => state.criteriaKeywords.queryPayload);
 
 
-    
+
 
   useEffect(() => {
     const fetchData = async () => {
 
       try {
+        setLoading(true);
         console.log("querfunction", queryPayload)
         const payload = {
-            query: {
-                unified_case_id: Array.isArray(queryPayload?.case_id) ? queryPayload.case_id : [],
-                file_type: Array.isArray(queryPayload?.file_type) ? queryPayload.file_type : [],
-                keyword: Array.isArray(queryPayload?.keyword) ? queryPayload.keyword : [],
-            },
-            aggs_fields: ["unified_type", "unified_record_type", "sentiment", "unified_date_only", "socialmedia_hashtags"],
-            start_time: queryPayload?.start_time || "",
-            end_time: queryPayload?.end_time || ""
+          query: {
+            unified_case_id: Array.isArray(queryPayload?.case_id) ? queryPayload.case_id : [],
+            file_type: Array.isArray(queryPayload?.file_type) ? queryPayload.file_type : [],
+            keyword: Array.isArray(queryPayload?.keyword) ? queryPayload.keyword : [],
+          },
+          aggs_fields: ["unified_type", "unified_record_type", "sentiment", "unified_date_only", "socialmedia_hashtags"],
+          start_time: queryPayload?.start_time || "",
+          end_time: queryPayload?.end_time || ""
         };
 
-        const response = await axios.post('http://5.180.148.40:9007/api/das/aggregate',payload,
-           {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+        const response = await axios.post('http://5.180.148.40:9007/api/das/aggregate', payload,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+
           },
 
-        },
-        
-      );
+        );
 
 
         console.log("KeywordCloud---", response);
@@ -58,6 +60,8 @@ const CriteriaKeywordChart = () => {
       } catch (error) {
         console.error('Error fetching data:', error);
         setData([]); // Set data to an empty array on error
+      }finally{
+        setLoading(false);
       }
     };
 
@@ -71,6 +75,9 @@ const CriteriaKeywordChart = () => {
 
   const fontSizeMapper = (word) => Math.log2(word.value + 1) * 50; // Size adjust kiya
   const rotate = () => 0; //  Fixed rotation (seedha text dikhane ke liye)
+  if(loading){
+    return <Loader/>
+  }
 
   return (
     <Box width={600} height={230} style={{ marginTop: 0, padding: 0 }}>

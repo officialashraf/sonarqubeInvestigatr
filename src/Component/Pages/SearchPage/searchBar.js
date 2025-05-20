@@ -42,7 +42,6 @@ const SearchBar = () => {
   const handleCreateCase = () => {
     navigate(
       "/home"
-      //, { state: { showPopup: true } }
     );
   };
 
@@ -66,7 +65,6 @@ const SearchBar = () => {
             type="text"
             value={query}
             onChange={handleQueryChange}
-            //  onChange={handleSearch}
             placeholder={`Enter ${searchType} to search`}
             className="search-input"
           />

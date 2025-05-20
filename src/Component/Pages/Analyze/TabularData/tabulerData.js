@@ -13,7 +13,7 @@ import Loader from "../../Layout/loader";
 const TabulerData = () => {
   const dispatch = useDispatch();
   const data1 = useSelector((state) => state.caseData.caseData);
-   const {
+  const {
     data,
     headers,
     page,
@@ -21,16 +21,18 @@ const TabulerData = () => {
     totalResults,
     loading,
     error,
-  
+
   } = useSelector((state) => state.filterData);
-  console.log("currentd",page)
-  console.log("datwq",data)
-  console.log("headerswq",headers)
-  console.log("totalapgeswq",totalPages)
-  console.log("totalresuktswq",totalResults)
+  console.log("currentd", page)
+  console.log("datwq", data)
+  console.log("headerswq", headers)
+  console.log("totalapgeswq", totalPages)
+  console.log("totalresuktswq", totalResults)
 
   const [currentPage, setCurrentPage] = useState(page);
-  
+
+
+
   // const itemsPerPage = 50;
 
 
@@ -45,7 +47,7 @@ const TabulerData = () => {
       }));
     }
   }, [data1, currentPage, dispatch]);
-  
+
 
   const handlePageChange = (page) => {
     setCurrentPage(page); // Update local state
@@ -55,7 +57,7 @@ const TabulerData = () => {
       itemsPerPage: 50
     }));
   };
-  
+
 
 
   if (loading) {
@@ -65,7 +67,7 @@ const TabulerData = () => {
   if (error) {
     return <div>{error.message}</div>;
   }
-  
+
   const pages = [];
   for (let i = 1; i <= totalPages; i++) {
     if (
@@ -81,8 +83,8 @@ const TabulerData = () => {
       pages.push("");
     }
   }
-  
- 
+
+
   return (
     <>
       <div
@@ -124,62 +126,61 @@ const TabulerData = () => {
         )}
       </div>
 
-     
+
       <div className="paginationstabs"
-    style={{
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "space-between",
-    }}
->
- 
-<>
-  <Pagination style={{ width: "200px" }}>
-    <Pagination.First onClick={() => handlePageChange(1)} disabled={currentPage === 1} />
-    <Pagination.Prev onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
 
-    {pages.map((number, index) => {
-      if (
-        number === 1 ||
-        number === totalPages ||
-        number === currentPage ||
-        number === currentPage - 1 ||
-        number === currentPage + 1
-      ) {
-        return (
-          <Pagination.Item
-            key={index}
-            active={number === currentPage}
-            onClick={() => number !== "..." && handlePageChange(number)}
-          >
-            {number}
-          </Pagination.Item>
-        );
-      } else if (number === "...") {
-        return <Pagination.Item key={index} disabled>{number}</Pagination.Item>;
-      }
-      return null;
-    })}
+        <>
+          <Pagination style={{ width: "200px" }}>
+            <Pagination.First onClick={() => handlePageChange(1)} disabled={currentPage === 1} />
+            <Pagination.Prev onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
 
-    <Pagination.Next
-      onClick={() => handlePageChange(currentPage + 1)}
-      disabled={currentPage === totalPages}
-    />
-    <Pagination.Last
-      onClick={() => handlePageChange(totalPages)}
-      disabled={currentPage === totalPages}
-    />
-  </Pagination>
-
-</>
-<div style={{ fontSize: "12px",marginRight: "10px"  }}>
+            {pages.map((number, index) => {
+              if (
+                number === 1 ||
+                number === totalPages ||
+                number === currentPage ||
+                number === currentPage - 1 ||
+                number === currentPage + 1
+              ) {
+                return (
+                  <Pagination.Item
+                    key={index}
+                    active={number === currentPage}
+                    onClick={() => number !== "..." && handlePageChange(number)}
+                  >
+                    {number}
+                  </Pagination.Item>
+                );
+              } else if (number === "...") {
+                return <Pagination.Item key={index} disabled>{number}</Pagination.Item>;
+              }
+              return null;
+            })}
+            <Pagination.Next
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+            />
+            <Pagination.Last
+              onClick={() => handlePageChange(totalPages)}
+              disabled={currentPage === totalPages}
+            />
+          </Pagination>
+        </>
+        <div style={{ fontSize: "12px", marginRight: "10px" }}>
           Page {currentPage} of {totalPages} / Total Results: {totalResults}
         </div>
- 
-</div>
+
+      </div>
 
     </>
   );
 };
 
-export default TabulerData;
+
+export default TabulerData;

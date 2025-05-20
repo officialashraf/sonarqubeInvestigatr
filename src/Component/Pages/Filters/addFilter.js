@@ -9,7 +9,6 @@ import { toast } from 'react-toastify';
 import Cookies from 'js-cookie';
 
 const AddFilter2 = ({ togglePopup }) => {
-
   const [selectedFilters, setSelectedFilters] = useState([]);
   const [initialSelectedFilters, setInitialSelectedFilters] = useState([]);
   const caseData1 = useSelector((state) => state.caseData.caseData);
@@ -62,7 +61,6 @@ const AddFilter2 = ({ togglePopup }) => {
 
   // Proceed handler
   const handleProceed = async () => {
-
     const filtersToStart = selectedFilters.filter(id =>
       !initialSelectedFilters.includes(id)
     );
@@ -117,7 +115,7 @@ const AddFilter2 = ({ togglePopup }) => {
 
       // Refresh data and close popup
 
-      togglePopup();
+      togglePopup(true);
     } catch (error) {
       if (error.response) {
         console.error("Error Status:", error.response.status);

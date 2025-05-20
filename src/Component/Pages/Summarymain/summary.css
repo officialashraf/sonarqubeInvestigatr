@@ -1,118 +1,107 @@
-.css-3ssuu9-MuiTableCell-root  {
-    padding: 0px 5px ;
-    font-size: 12px;
-    height: 10px !important;
-    background-color: lightgrey;
-
-} 
-.css-1orzuox-MuiTableCell-root{
-    padding: 0px 5px ;
-    background-color: lightgrey !important;
+.css-3ssuu9-MuiTableCell-root {
+  padding: 0px 5px;
+  font-size: 12px;
+  height: 10px !important;
+  background-color: lightgrey;
 }
-.css-to33az-MuiTableCell-root{
-    padding: 0px 5px ;
-    background-color: lightgrey !important;
+.css-1orzuox-MuiTableCell-root {
+  padding: 0px 5px;
+  background-color: lightgrey !important;
 }
-.css-1dc80h3-MuiTableCell-root{
-    padding: 0px 5px ;
-    font-size: 12px;
-    height: 10px !important;
-    background-color: lightgrey;
+.css-to33az-MuiTableCell-root {
+  padding: 0px 5px;
+  background-color: lightgrey !important;
+}
+.css-1dc80h3-MuiTableCell-root {
+  padding: 0px 5px;
+  font-size: 12px;
+  height: 10px !important;
+  background-color: lightgrey;
 }
 .css-1xwxv7r-MuiTable-root {
-    background-color: lightgray !important;
+  background-color: lightgray !important;
 }
-g.recharts-layer .recharts-bar :hover{
-    columns: red;
-    background-color: white;
+g.recharts-layer .recharts-bar :hover {
+  columns: red;
+  background-color: white;
 }
-.add-new-filter-button{
-    color: white;
-    font-size: 12px;
-    background-color: gray;
-     border: 1px solid  gray;
-    border-radius: 5px;
-
+.add-new-filter-button {
+  color: white;
+  font-size: 12px;
+  background-color: gray;
+  border: 1px solid gray;
+  border-radius: 5px;
 }
-.add-new-filter-button:hover{
-    background-color: #000000;
-    color: #ffffff;
-    border: 1px solid black;
-    border-radius: 5px;
+.add-new-filter-button:hover {
+  background-color: #000000;
+  color: #ffffff;
+  border: 1px solid black;
+  border-radius: 5px;
 }
 
 .box {
-    flex: 1; /* Allow graphs to grow */
-    min-width: 350px; /* Prevent shrinking */
-    max-width: 400px; /* Adjust if needed */
-    height: 300px; /* Match the chart height */
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  flex: 1; /* Allow graphs to grow */
+  min-width: 350px; /* Prevent shrinking */
+  max-width: 400px; /* Adjust if needed */
+  height: 300px; /* Match the chart height */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-    /* flex: 0 0 auto;  */
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);
-    border-radius: 5px;
-    /* background-color: white; */
-  }
+  /* flex: 0 0 auto;  */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);
+  border-radius: 5px;
+}
 
-  .filterCount{
-    align-items: center;
-  }
+.filterCount {
+  align-items: center;
+}
 
-  .input:-webkit-autofill {
-    background-color: transparent !important;
-    transition: background-color 5000s ease-in-out 0s;
-  }
+.input:-webkit-autofill {
+  background-color: transparent !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
 
-  .graphchats{
-    display: flex;
-    flex-wrap: nowrap; 
-    overflow-x: auto; 
-    gap: 20px; 
-    padding: 10px;
+.graphchats {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 20px;
+  padding: 10px;
 
+  /* justify-content: center; */
+  justify-content: flex-start;
+  align-items: center;
+  scrollbar-width: thin;
+  position: relative;
+}
+/* Ensure each graph has proper width and stays centered */
 
-    /* justify-content: center; */
-    justify-content: flex-start;
-    align-items: center;
-    scrollbar-width: thin;
-    position: relative;
-    
-  }
-  /* Ensure each graph has proper width and stays centered */
-
-
-  
-  
-
- /* ✅ Responsive Design */
+/* ✅ Responsive Design */
 @media (max-width: 1024px) {
-    .add-new-filter-button {
-        /* font-size: 11px; */
-        padding: 4px 8px;
-    }
+  .add-new-filter-button {
+    padding: 4px 8px;
+  }
 }
 
 @media (max-width: 768px) {
-    .add-new-filter-button {
-        /* font-size: 10px; */
-        padding: 3px 6px;
-    }
+  .add-new-filter-button {
+    padding: 3px 6px;
+  }
 
-    .box {
-        min-width: 250px; 
-    }
+  .box {
+    min-width: 250px;
+  }
 }
 
 @media (max-width: 480px) {
-    .add-new-filter-button {
-        width: 100%; 
-        text-align: center;
-        font-size: 10px;
-    }
+  .add-new-filter-button {
+    width: 100%;
+    text-align: center;
+    font-size: 10px;
+  }
 
-    .box {
-        min-width: 220px; 
-    }
+  .box {
+    min-width: 220px;
+  }
 }

@@ -1,5 +1,5 @@
-import { Table, CloseButton } from 'react-bootstrap'
 
+import { Table, CloseButton } from 'react-bootstrap'
 const TargetDetails = ({ togglePopup, details }) => {
   console.log("details", details)
   return (
@@ -26,7 +26,6 @@ const TargetDetails = ({ togglePopup, details }) => {
                 <tr> <th>Threat-Score</th> <td>{details.threat_weightage || '-'}</td> </tr>
                 <tr> <th>Type</th> <td>{details.type || '-'}</td> </tr>
                 <tr> <th>Active</th>  <td>{details.is_active ? 'active' : 'deactive'}</td> </tr>
-                {/* <tr> <th>Deleted</th> <td>{details.is_deleted || '-'}</td> </tr> */}
               </tbody>
             </Table>
           </div>

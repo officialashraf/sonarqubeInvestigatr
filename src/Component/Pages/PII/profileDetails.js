@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Card, Container } from 'react-bootstrap';
 import { Phone, Email, Person, Cake, Wc } from '@mui/icons-material';
@@ -12,7 +13,6 @@ const ProfileDetails = () => {
   const [loading, setLoading] = useState(true);
 
   const profiles = useSelector((state) => state.pii?.data?.cyniqBasicResult || '')
-
   useEffect(() => {
     // Simulating API call - replace with your actual API fetch
     const fetchData = async () => {
@@ -24,7 +24,6 @@ const ProfileDetails = () => {
         } else {
           setProfileData([]); // Set an empty array if profiles is null or empty
         }
-
 
       } catch (error) {
         console.error("Error fetching profile data:", error);
@@ -52,8 +51,6 @@ const ProfileDetails = () => {
                 <div className="profile-avatar">
 
 
-
-
                   {profileData && Array.isArray(profileData.images) && profileData.images.length > 0 ? (
                     <Carousel >
                       {profileData.images.map((image, index) => (
@@ -63,6 +60,7 @@ const ProfileDetails = () => {
                       ))}
                     </Carousel>
                   ) : (
+
                     <img src={userImg} alt={`Profile Pic`} width={100} height={100} />
                   )}
                 </div>
@@ -73,9 +71,7 @@ const ProfileDetails = () => {
                     <li></li>
                   )}
                 </ul></div>
-
               </div>
-
             </div>
             <div className="detail-item">
               <div className="detail-label">
@@ -111,6 +107,7 @@ const ProfileDetails = () => {
               <div className="detail-label">
                 <Person fontSize="small" /> Aliases
               </div>
+
               <div className="detail-value">{(profileData && profileData.aliases) || "--"}</div>
             </div>
 
@@ -118,6 +115,7 @@ const ProfileDetails = () => {
               <div className="detail-label">
                 <Cake fontSize="small" /> D.O.B/Age
               </div>
+
               <div className="detail-value">{(profileData && profileData.ages) || "--"}</div>
             </div>
 

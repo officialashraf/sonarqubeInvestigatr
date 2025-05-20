@@ -23,7 +23,7 @@ const MainContainer = () => {
     setShowPopup((prev) => !prev);
   };
 
-  const filterData =useCallback(async () => {
+  const filterData = useCallback(async () => {
     setIsLoading(true); // Start loading
     try {
       const response = await axios.get(`http://5.180.148.40:9002/api/osint-man/v1/filters`, {
@@ -44,10 +44,9 @@ const MainContainer = () => {
     } finally {
       setIsLoading(false); // End loading regardless of success/error
     }
-  },[token]);
+  }, [token]);
 
   useEffect(() => {
-
     filterData();
     const handleDatabaseUpdate = () => filterData();
     window.addEventListener("databaseUpdated", handleDatabaseUpdate);
@@ -100,7 +99,4 @@ const MainContainer = () => {
     </>
   );
 };
-
 export default MainContainer;
-
-

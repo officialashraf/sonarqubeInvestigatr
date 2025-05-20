@@ -153,7 +153,7 @@ const TargetCreate = ({ togglePopup }) => {
           &times;
         </button>
         <div className="popup-content">
-          <h5>Add New Keyword</h5>
+          <h5>Add New target</h5>
           <form
             onSubmit={(e) => {
               e.preventDefault();

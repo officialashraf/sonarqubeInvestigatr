@@ -1,4 +1,5 @@
-import { SET_SEARCH_RESULTS, SET_PAGE, CLOSE_POPUP,OPEN_POPUP, SET_KEYWORDS } from "../Constants/criteriaConstant";
+
+import { SET_SEARCH_RESULTS, SET_PAGE, CLOSE_POPUP, OPEN_POPUP, SET_KEYWORDS } from "../Constants/criteriaConstant";
 
 // Redux Reducer
 const initialState = {
@@ -29,13 +30,13 @@ export const searchReducer = (state = initialState, action) => {
 
 
 
- export const popupReducer = (state = { activePopup: null}, action) => {
+export const popupReducer = (state = { activePopup: null }, action) => {
   console.log("Reducer Called:", action);
   switch (action.type) {
     case OPEN_POPUP:
       return {
         ...state,
-       activePopup: action.payload, // Set active popup
+        activePopup: action.payload, // Set active popup
       };
 
     case CLOSE_POPUP:
@@ -48,13 +49,9 @@ export const searchReducer = (state = initialState, action) => {
       return state; // Return current state for unhandled actions
   }
 };
-
-
-
-
 const queryState = {
 
-  keywords:[],
+  keywords: [],
   queryPayload: {
     case_id: [],
     file_type: [],
@@ -71,14 +68,14 @@ export const criteriaReducer = (state = queryState, action) => {
   switch (action.type) {
     case SET_KEYWORDS:
       return {
-          ...state,
-          keywords: action.payload.keyword,
-          queryPayload: {
-            ...state.queryPayload,
-            ...action.payload.queryPayload,
-          },
-        };
-     
+        ...state,
+        keywords: action.payload.keyword,
+        queryPayload: {
+          ...state.queryPayload,
+          ...action.payload.queryPayload,
+        },
+      };
+
     default:
       return state;
   }

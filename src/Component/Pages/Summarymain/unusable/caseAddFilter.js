@@ -10,30 +10,29 @@ import Header from '../headerFilter'
 const CaseAddFilter = ({ onAnalyzeClick, caseData1 }) => {
   return (
     <div >
-    <Headerm />
+      <Headerm />
 
-    <div className="dashboard-container">
+      <div className="dashboard-container">
 
-      <div className="cont-a">
-        <Sidebar />
-      </div>
-
-
-      <div className="cont-b">
-      <Header onAnalyzeClick={onAnalyzeClick} caseData1={caseData1} />
-      {/* <Header onAnalyzeClick={onAnalyzeClick} caseData1={caseData1} /> */}
-      <Preheader />
-      
-        <MainContainer caseData1={caseData1} /> 
-       
-      </div>
+        <div className="cont-a">
+          <Sidebar />
+        </div>
 
 
-      <div className="cont-c">
-        <RightSidebar  />
+        <div className="cont-b">
+          <Header onAnalyzeClick={onAnalyzeClick} caseData1={caseData1} />
+          <Preheader />
+
+          <MainContainer caseData1={caseData1} />
+
+        </div>
+
+
+        <div className="cont-c">
+          <RightSidebar />
+        </div>
       </div>
     </div>
-  </div>
   )
 }
 

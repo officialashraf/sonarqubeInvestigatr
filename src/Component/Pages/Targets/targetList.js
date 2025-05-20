@@ -13,9 +13,7 @@ import Cookies from 'js-cookie';
 import TargetCreate from "./targetCreate";
 import TargetUpdate from "./targetUpdate";
 import TargetDetails from "./targetDetails";
-
-
-
+import Loader from "../Layout/loader.js"
 
 const TargetList = () => {
   const navigate = useNavigate();
@@ -132,7 +130,6 @@ const TargetList = () => {
 
     setFilteredData(sortedData);
   };
-
   const togglePopup = () => {
 
     setShowPopup((prev) => !prev);
@@ -202,6 +199,10 @@ const TargetList = () => {
     }
   };
 
+  if (loading) {
+    return <Loader />
+  }
+
   return (
     <div className="data-table-container">
       <div className="top-header" style={{ marginTop: "10px" }}>
@@ -211,7 +212,10 @@ const TargetList = () => {
           style={{ width: "20%" }}
         >
           <FaArrowLeft
-            style={{ cursor: "pointer", marginRight: "10px" }}
+            style={{
+              cursor: "pointer", margin: '0px 40px 0px 38px',
+              fontSize: '18px'
+            }}
             onClick={() => navigate("/Cases")}
           />
           <div className="search-bar1" style={{ width: "100%" }}>
@@ -232,7 +236,7 @@ const TargetList = () => {
           >
 
             <Plus size={14} style={{ marginRight: "5px" }} />
-            Add New keywords
+            Add New Target
           </button>
         </div>
       </div>
@@ -269,7 +273,7 @@ const TargetList = () => {
                     alignItems: "center"
                   }}
                 >
-                  Keywords
+                  Target
                   <span
                     onClick={() => handleSort("name")}
                     style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
@@ -533,7 +537,7 @@ const TargetList = () => {
                           Edit
                         </Dropdown.Item>
                         <Dropdown.Item
-                        onClick={() => confirmDelete(item.id, item.name)}
+                          onClick={() => confirmDelete(item.id, item.name)}
                         >
                           Delete
                         </Dropdown.Item>

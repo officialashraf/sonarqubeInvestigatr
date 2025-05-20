@@ -11,9 +11,10 @@ import { toast } from 'react-toastify';
 import { FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import AddRole from "./addRole";
+import DetailsPermission from "./details_Permission";
 import AssignRole from "./asignRole";
 import EditRole from "./editRole";
-import DetailsPermission from "./details_Permission";
+import Loader from "../Layout/loader";
 
 const RolesPermission = () => {
     const navigate = useNavigate();
@@ -26,7 +27,7 @@ const RolesPermission = () => {
     const [showPopupB, setShowPopupB] = useState(false);
     const [showPopupC, setShowPopupC] = useState(false);
     const [showPopupD, setShowPopupD] = useState(false);
-
+    const [loading, setLoading] = useState(false);
 
 
     const [popupDetails, setPopupDetails] = useState(null);
@@ -50,6 +51,7 @@ const RolesPermission = () => {
 
     const fetchRoles = async () => {
         try {
+            setLoading(true);
             const token = Cookies.get("accessToken");
             const response = await axios.get("http://5.180.148.40:9000/api/user-man/v1/role", {
                 headers: {
@@ -68,14 +70,16 @@ const RolesPermission = () => {
                 console.error("An error occurred:", error.message);
             }
             console.error(error);
+        } finally {
+            setLoading(false);
         }
     };
 
 
 
 
-    useEffect(() => {
 
+    useEffect(() => {
 
         fetchRoles();
 
@@ -100,7 +104,6 @@ const RolesPermission = () => {
         setFilteredData(filtered);
     };
     console.log("filterdata", filteredData)
-
     const handleSort = (key) => {
         let direction = 'asc';
         if (sortConfig.key === key && sortConfig.direction === 'asc') {
@@ -203,12 +206,19 @@ const RolesPermission = () => {
         }
     };
 
+    if (loading) {
+        return <Loader />
+    }
+
     return (
         <div className="data-table-container">
             <div className="top-header" style={{ marginTop: "10px" }}>
                 <Col xs={1} className="d-flex align-items-center justify-content-flex-start" style={{ width: "20%" }}>
                     <FaArrowLeft
-                        style={{ cursor: 'pointer', marginRight: '10px' }}
+                        style={{
+                            cursor: 'pointer', margin: '0px 40px 0px 38px',
+                            fontSize: '18px'
+                        }}
                         onClick={() => navigate('/dashboard')}
                     />
                     <div className="search-bar1" style={{ width: '100%' }}>

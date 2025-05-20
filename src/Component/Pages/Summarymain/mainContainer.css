@@ -1,50 +1,48 @@
 .containerM {
-    border: 1px solid #ccc;
-        border: 1px solid #ccc;
-    height: 545px; 
-    display: flex; /* Flexbox use karein */
-    flex-direction: column; /* Content ko column me rakhe */
-    justify-content: center; /* Vertical center align kare */
-    align-items: center; /* Horizontal center align kare */
-    overflow: hidden ; 
+  border: 1px solid #ccc;
+  border: 1px solid #ccc;
+  height: 545px;
+  display: flex; /* Flexbox use karein */
+  flex-direction: column; /* Content ko column me rakhe */
+  justify-content: center; /* Vertical center align kare */
+  align-items: center; /* Horizontal center align kare */
+  overflow: hidden;
+}
+.resourcesContainer {
+  border: 1px solid #ccc;
+  padding: 20px;
+  border-radius: 5px;
+  /* background-color: white; */
+  display: flex; /* Use Flexbox */
+  flex-direction: column; /* Align items in a column */
+  justify-content: center; /* Center items vertically */
+  align-items: center; /* Center items horizontally */
+  height: 437px;
+  margin-top: 20px;
+}
+.title {
+  font-size: 12px;
+  color: #333;
+}
 
-     
-  }
-  .resourcesContainer {
-    border: 1px solid #ccc;
-    padding: 20px;
-    border-radius: 5px;
-    /* background-color: white; */
-    display: flex; /* Use Flexbox */
-    flex-direction: column; /* Align items in a column */
-    justify-content: center; /* Center items vertically */
-    align-items: center; /* Center items horizontally */
-    height: 437px;
-    margin-top: 20px;
-  }
-  .title {
-    font-size: 12px;
-    color: #333;
-  }
-  
-  .content {
-    font-size: 12px;
-    color: #666;
-  }
-  
-  .button {
-    margin-top: 0px;
-  }
-  .add-resource-button{
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 12px;
-    margin-top: 2px;
-    background-color:gray;
-    color: white;
-  }
-  .add-resource-button:hover{
-      background-color:black;
-      color: white;
-  }
+.content {
+  font-size: 12px;
+  color: #666;
+}
+
+.button {
+  margin-top: 0px;
+}
+.add-resource-button {
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 12px;
+  margin-top: 2px;
+  background-color: gray;
+  color: white;
+}
+.add-resource-button:hover {
+  background-color: black;
+  color: white;
+}

@@ -1,24 +1,20 @@
-
-.page-link{
-    color: black;
-    text-decoration: underline;
-    border: none; 
-    font-size: 12px;
+.page-link {
+  color: black;
+  text-decoration: underline;
+  border: none;
+  font-size: 12px;
 }
-.pagination .page-item:hover .page-link { 
-    background-color: black !important; /* Active background color */ 
-    color: white!important; /* Active text color */ 
-    border: none !important; /* Remove border */
-    box-shadow: white !important; /* Remove box-shadow */
- }
- .pagination .page-link:focus { 
-    box-shadow: none !important; /* Remove focus shadow */
- }
- 
- 
+.pagination .page-item:hover .page-link {
+  background-color: black !important; /* Active background color */
+  color: white !important; /* Active text color */
+  border: none !important; /* Remove border */
+  box-shadow: white !important; /* Remove box-shadow */
+}
+.pagination .page-link:focus {
+  box-shadow: none !important; /* Remove focus shadow */
+}
 
- .pagination{
-    --bs-pagination-focus-bg: none !important;
-    --bs-pagination-focus-color: none !important; 
- }
- 
+.pagination {
+  --bs-pagination-focus-bg: none !important;
+  --bs-pagination-focus-color: none !important;
+}

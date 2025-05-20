@@ -3,14 +3,13 @@
 .search-container {
   background: #f5f5f5;
   color: #000;
-  font-family: 'Roboto', Arial, sans-serif;
+  font-family: "Roboto", Arial, sans-serif;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .search-header {
   display: flex;
   align-items: center;
-  /* border-bottom: 1px solid #e0e0e0; */
   padding: 5px;
   background-color: darkgray;
 }
@@ -127,7 +126,7 @@
 .tabs {
   display: flex;
   border-bottom: 1px solid #e0e0e0;
-  background: darkgray
+  background: darkgray;
 }
 
 .tab {
@@ -140,7 +139,7 @@
 
 .tab.active {
   border-bottom: 2px solid white;
-  color:white;
+  color: white;
 }
 
 .search-results {
@@ -150,8 +149,8 @@
 }
 
 .result-card {
- color: white;
- background-color: darkgray;
+  color: white;
+  background-color: darkgray;
   border-radius: 4px;
   padding: 0px 8px;
   margin-bottom: 8px;
@@ -169,11 +168,10 @@
 }
 
 .status-badge {
-  background:black ;
+  background: black;
   color: white;
   padding: 2px 8px;
   border-radius: 12px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
-

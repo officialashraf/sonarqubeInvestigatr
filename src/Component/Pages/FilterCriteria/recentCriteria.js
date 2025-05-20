@@ -58,9 +58,6 @@ const RecentCriteria = () => {
     } else if (isValid(recentKeyword)) {
       updatedKeywords.push(recentKeyword);
     }
-
-    // Handle caseId
-    // Handle caseId — always as array of strings
     if (Array.isArray(caseId) && caseId.length > 0) {
       updatedKeywords = [...updatedKeywords, ...caseId.map(id => `${id}`)];
     } else if (isValid(caseId)) {
@@ -77,8 +74,6 @@ const RecentCriteria = () => {
     console.log("Updated keyword state (processed):", updatedKeywords);
     setKeyword(updatedKeywords);
   }, [recentKeyword, caseId, fileType]);
-
-
 
 
   const dispatch = useDispatch();
@@ -127,12 +122,12 @@ const RecentCriteria = () => {
         },
       });
 
-      const data = response;
-      console.log("resposegetCriteria", data.data);
-
+      const data = response
+      console.log("resposegetCriteria", data.data)
       if (data && data.data) {
-        setSavedSearch(data.data.data);
-        console.log("setSavedSearch", data.data.data); // Not savedSearch here to avoid stale state
+        setSavedSearch(data.data.data); // Extract keywords
+        console.log("setSavedSearch", savedSearch)
+
       }
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -141,7 +136,7 @@ const RecentCriteria = () => {
   useEffect(() => {
     fetchData();
   }, [fetchData]);
-  
+
   const handleDelete = async (index, id) => {
     try {
       // Making the DELETE API call
@@ -281,6 +276,7 @@ const RecentCriteria = () => {
         queryPayload.start_date = item.start_date;
       }
 
+
       if (isValid(item.end_date)) {
         queryPayload.end_date = item.end_date;
       }
@@ -332,7 +328,6 @@ const RecentCriteria = () => {
       console.error("API call failed in ReuseCriteria:", error);
     }
   };
-
 
   const filteredList = Array.isArray(savedSearch) ? savedSearch.filter((item) =>
     (typeof item.keyword === "string" && item.keyword.toLowerCase().includes(searchQuery.toLowerCase())) ||

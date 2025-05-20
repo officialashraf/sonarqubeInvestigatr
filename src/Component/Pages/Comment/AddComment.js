@@ -2,11 +2,11 @@
 import { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { 
-  List, 
-  ListItem, 
-  ListItemText, 
-  ListItemSecondaryAction, 
+import {
+  List,
+  ListItem,
+  ListItemText,
+  ListItemSecondaryAction,
   IconButton,
   CircularProgress,
   Paper,
@@ -34,7 +34,7 @@ const AddComment = ({ show, onClose, selectedResource }) => {
 
   const getCommentList = useCallback(async () => {
     if (!rowId) return;
-    
+
     setIsLoading(true);
     try {
       const res = await axios.get(`${API_BASE_URL}/comment/${rowId}`, {
@@ -43,7 +43,7 @@ const AddComment = ({ show, onClose, selectedResource }) => {
           Authorization: `Bearer ${token}`,
         },
       });
-      setCommentsArray(res.data || []); 
+      setCommentsArray(res.data || []);
     } catch (err) {
       console.error("Fetch comment list error:", err);
       toast.error("Failed to load comments");
@@ -57,16 +57,16 @@ const AddComment = ({ show, onClose, selectedResource }) => {
       getCommentList();
     }
   }, [show, rowId, getCommentList]);
- 
+
   if (!show) return null;
-   
+
   const handleAddComment = async (e) => {
     e.preventDefault();
     if (!newComment.trim()) return;
- 
+
     setIsSubmitting(true);
     try {
-      await axios.post(`${API_BASE_URL}/comment/${rowId}`, 
+      await axios.post(`${API_BASE_URL}/comment/${rowId}`,
         { comment: newComment.trim() },
         {
           headers: {
@@ -85,7 +85,7 @@ const AddComment = ({ show, onClose, selectedResource }) => {
       setIsSubmitting(false);
     }
   };
-   
+
   const handleDelete = async (id) => {
     const comment_id = id;
     try {
@@ -96,7 +96,7 @@ const AddComment = ({ show, onClose, selectedResource }) => {
           Authorization: `Bearer ${token}`,
         },
       });
-      
+
       if (response.status === 200) {
         toast.success("Comment deleted successfully");
         getCommentList();
@@ -129,7 +129,7 @@ const AddComment = ({ show, onClose, selectedResource }) => {
             &times;
           </IconButton>
         </Box>
-        
+
         <Box sx={{ p: 2, height: '300px', overflow: 'auto' }}>
           {isLoading ? (
             <Box sx={{ display: 'flex', justifyContent: 'center', my: 3 }}>
@@ -139,7 +139,7 @@ const AddComment = ({ show, onClose, selectedResource }) => {
             <List>
               {commentsArray.map((comment, index) => (
                 <ListItem key={index} sx={{ borderBottom: '1px solid #f5f5f5' }}>
-                  <ListItemText 
+                  <ListItemText
                     primary={comment.comment}
                     sx={{ mr: 1 }}
                   />
@@ -160,7 +160,7 @@ const AddComment = ({ show, onClose, selectedResource }) => {
             </Typography>
           )}
         </Box>
-        
+
         <Box component="form" onSubmit={handleAddComment} sx={{ p: 2, borderTop: '1px solid #eee' }}>
           <TextField
             fullWidth
@@ -173,17 +173,17 @@ const AddComment = ({ show, onClose, selectedResource }) => {
             required
             sx={{ mb: 2 }}
           />
-          
+
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
-            <Button 
-              variant="outlined" 
+            <Button
+              variant="outlined"
               onClick={onClose}
             >
               Cancel
             </Button>
-            <Button 
-              type="submit" 
-              variant="contained" 
+            <Button
+              type="submit"
+              variant="contained"
               disabled={isSubmitting || !newComment.trim()}
               startIcon={isSubmitting ? <CircularProgress size={16} /> : null}
             >
@@ -192,11 +192,11 @@ const AddComment = ({ show, onClose, selectedResource }) => {
           </Box>
         </Box>
       </Paper>
-      
+
       {showUpdatePopup && commentToEdit && (
-        <UpdateComment 
-          show={showUpdatePopup} 
-          onClose={handleUpdateClose} 
+        <UpdateComment
+          show={showUpdatePopup}
+          onClose={handleUpdateClose}
           comment={commentToEdit}
           resourceId={rowId}
           getCommentList={getCommentList}

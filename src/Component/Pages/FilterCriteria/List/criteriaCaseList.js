@@ -4,10 +4,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setPage, setSearchResults } from '../../../../Redux/Action/criteriaAction';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import Loader from '../../Layout/loader';
 
 const CriteriaCaseTable = () => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
 
   // Get the Redux state
@@ -21,14 +23,14 @@ const CriteriaCaseTable = () => {
   // Fetch data when page changes
   useEffect(() => {
     const fetchPageData = async () => {
-      setIsLoading(true);
+      setLoading(true);
 
       try {
         const token = Token;
 
         // Don't proceed if there are no keywords
         if (!keywords || keywords.length === 0) {
-          setIsLoading(false);
+          setLoading(false);
           return;
         }
 
@@ -67,17 +69,13 @@ const CriteriaCaseTable = () => {
       } catch (error) {
         console.error('Error fetching page data:', error);
       } finally {
-        setIsLoading(false);
+        setLoading(false);
       }
     };
 
     // Call the function to fetch data
     fetchPageData();
   }, [currentPage, dispatch, Token, keywords, payload]);
-
-
-
-
 
   // Handle page change
   const handlePageChange = (pageNumber) => {
@@ -99,7 +97,7 @@ const CriteriaCaseTable = () => {
         key={1}
         active={1 === currentPage}
         onClick={() => handlePageChange(1)}
-        disabled={isLoading}
+        disabled={loading}
       >
         1
       </Pagination.Item>
@@ -117,7 +115,7 @@ const CriteriaCaseTable = () => {
             key={i}
             active={i === currentPage}
             onClick={() => handlePageChange(i)}
-            disabled={isLoading}
+            disabled={loading}
           >
             {i}
           </Pagination.Item>
@@ -134,7 +132,7 @@ const CriteriaCaseTable = () => {
           key={totalPages}
           active={totalPages === currentPage}
           onClick={() => handlePageChange(totalPages)}
-          disabled={isLoading}
+          disabled={loading}
         >
           {totalPages}
         </Pagination.Item>
@@ -145,26 +143,29 @@ const CriteriaCaseTable = () => {
       <Pagination>
         <Pagination.First
           onClick={() => handlePageChange(1)}
-          disabled={currentPage === 1 || isLoading}
+          disabled={currentPage === 1 || loading}
         />
         <Pagination.Prev
           onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1 || isLoading}
+          disabled={currentPage === 1 || loading}
         />
 
         {pageItems}
 
         <Pagination.Next
           onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages || isLoading}
+          disabled={currentPage === totalPages || loading}
         />
         <Pagination.Last
           onClick={() => handlePageChange(totalPages)}
-          disabled={currentPage === totalPages || isLoading}
+          disabled={currentPage === totalPages || loading}
         />
       </Pagination>
     );
   };
+  if (loading) {
+    <Loader />
+  }
 
   return (
     <>
@@ -179,7 +180,7 @@ const CriteriaCaseTable = () => {
 
 
         </div>
-        {isLoading ? (
+        {loading ? (
           <div className="d-flex justify-content-center align-items-center" style={{ height: '100%' }}>
             <Spinner animation="border" role="status" variant="primary">
               <span className="visually-hidden">Loading...</span>
@@ -247,7 +248,8 @@ const CriteriaCaseTable = () => {
         <div style={{ width: '300px', overflow: 'auto' }}>
           {renderPagination()}
         </div>
-        <div style={{ fontSize: "12px",marginRight:'5px' }}>
+
+        <div style={{ fontSize: "12px", marginRight: '5px' }}>
           {isLoading ? 'Loading...' : `Page ${currentPage} of ${totalPages} / Total Results: ${totalResults}`}
         </div>
       </div>

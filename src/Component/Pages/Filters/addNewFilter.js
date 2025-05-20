@@ -20,7 +20,6 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
   const [platform, setPlatform] = useState([]);
   const [filterName, setFilterName] = useState('');
   const [description, setDescription] = useState('');
-  // const [taskId, setTaskId] = useState([]);
   const [filterId, setFilterId] = useState([]);
   const [filterDetails, setFilterDetails] = useState(null)
   const [isEditable, setIsEditable] = useState(true);
@@ -40,13 +39,10 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
   const containerRef = useRef(null);
 
   const dispatch = useDispatch();
-  // const caseData1 = useSelector((state) => state.caseData.caseData);
   const token = Cookies.get('accessToken');
   const toastShown = useRef(false);
   useEffect(() => {
-    // localStorage.setItem('taskId', taskId);
     localStorage.setItem('filterId', filterId);
-    // dispatch(setTaskFilter(taskId, filterId));
   }, [filterId, dispatch]);
 
   useEffect(() => {
@@ -160,7 +156,6 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
       });
 
       setSources(convertedSources);
-
       // Check edit permissions
       const isEditable = (String(loggedInUserId) === String(filterDetails.created_by));
       console.log(isEditable)
@@ -186,42 +181,42 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
     }]);
   };
 
-  
+
   useEffect(() => {
     const fetchFilterDetails = async () => {
-    try {
-      const response = await axios.get(`http://5.180.148.40:9002/api/osint-man/v1/filter/${filterIde}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setFilterDetails(response.data)
-      console.log("fetchflterdetails", response)
-    } catch (error) {
-      console.error('Platform fetch error:', error);
-      toast.error('Error fetching platforms: ' + (error.response?.data?.detail || error.message));
-    }
-  };
- 
-      fetchFilterDetails();
-   
-  }, [filterIde,token]);
-  
+      try {
+        const response = await axios.get(`http://5.180.148.40:9002/api/osint-man/v1/filter/${filterIde}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setFilterDetails(response.data)
+        console.log("fetchflterdetails", response)
+      } catch (error) {
+        console.error('Platform fetch error:', error);
+        toast.error('Error fetching platforms: ' + (error.response?.data?.detail || error.message));
+      }
+    };
+
+    fetchFilterDetails();
+
+  }, [filterIde, token]);
+
 
   useEffect(() => {
     const fetchPlatforms = async () => {
-    try {
-      const response = await axios.get('http://5.180.148.40:9002/api/osint-man/v1/platforms', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setPlatform(response.data.data || []);
-    } catch (error) {
-      console.error('Platform fetch error:', error);
-      toast.error('Error fetching platforms: ' + (error.response?.data?.detail || error.message));
-    }
-  };
+      try {
+        const response = await axios.get('http://5.180.148.40:9002/api/osint-man/v1/platforms', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setPlatform(response.data.data || []);
+      } catch (error) {
+        console.error('Platform fetch error:', error);
+        toast.error('Error fetching platforms: ' + (error.response?.data?.detail || error.message));
+      }
+    };
     fetchPlatforms();
   }, [token]);
 
@@ -259,7 +254,9 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
-      }); window.dispatchEvent(new Event('databaseUpdated'));
+      });
+      window.dispatchEvent(new Event('databaseUpdated'));
+
       console.log("responseFilter", response)
       if (response.status === 200) {
         toast.success(`Filter created successfully: ${response.data.data.name}`);
@@ -363,9 +360,6 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
                           <option value="minutes">Minutes</option>
                           <option value="hours">Hours</option>
                         </Form.Select>
-                        {/* <InputGroup.Text>
-                    ({source.intervalValue * conversionFactors[source.intervalUnit]} seconds)
-                  </InputGroup.Text> */}
                       </InputGroup>
                     </div>
                   )}
@@ -474,9 +468,6 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
             <button type="button" className="add-new-filter-button" onClick={handleAddSource}>
               Add Sources
             </button>
-            {/* <button type="button" className="add-new-filter-button" style={{ marginLeft: '5px' }} onClick={handleSaveFilter}>
-            Save Filter
-            </button> */}
             <button
               type="button"
               className="add-new-filter-button"
