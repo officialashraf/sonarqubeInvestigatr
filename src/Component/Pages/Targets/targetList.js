@@ -1,14 +1,10 @@
-<<<<<<< HEAD
-import { useEffect, useState } from "react";
-=======
 import{ useEffect, useState } from "react";
->>>>>>> 84636558bfb8a0696bc3ffd06de22e0f52b84c9b
 import "../Case/table.css";
 import { useNavigate } from "react-router-dom";
 import { Plus } from "react-bootstrap-icons";
 import { Col, Table } from "react-bootstrap";
 import { FaArrowLeft } from "react-icons/fa";
-import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
+import { ArrowDropDown, ArrowDropUp} from "@mui/icons-material";
 import Dropdown from "react-bootstrap/Dropdown";
 import { FiMoreVertical } from "react-icons/fi";
 import { toast } from 'react-toastify';
@@ -202,9 +198,11 @@ const TargetList = () => {
       }
     }
   };
+
   if (loading) {
     return <Loader />
   }
+
   return (
     <div className="data-table-container">
       <div className="top-header" style={{ marginTop: "10px" }}>

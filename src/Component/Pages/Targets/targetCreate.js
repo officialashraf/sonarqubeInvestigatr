@@ -49,6 +49,18 @@ export const customStyles = {
 };
 
 const TargetCreate = ({ togglePopup }) => {
+   const token = Cookies.get("accessToken");
+   const targetType = [
+    { value: "Watchword", label: "Watchword" },
+    { value: "Location", label: "Location" },
+    { value: "Application", label: "Application" },
+    { value: "Domain", label: "Domain" },
+    { value: "Protocol", label: "Protocol" },
+    { value: "Port", label: "Port" },
+    { value: "IP Address", label: "IP Address" },
+    { value: "Social Media ID", label: "Social Media ID" },
+    { value: "Target", label: "Target" }
+];
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -66,8 +78,7 @@ const TargetCreate = ({ togglePopup }) => {
   }));
 
   const handleCreateKeyword = async () => {
-    const token = Cookies.get("accessToken");
-    if (!token) {
+       if (!token) {
       toast.error("Authentication error: No token found");
       return;
     }
@@ -149,6 +160,25 @@ const TargetCreate = ({ togglePopup }) => {
               handleCreateKeyword();
             }}
           >
+
+                 <div>
+              <label htmlFor="type">Type:</label>
+             <Select
+    options={targetType}
+    styles={customStyles} // Optional styling
+    placeholder="Select type"
+    value={targetType.find(option => option.value === formData.type)} // Set selected value
+    onChange={(selectedOption) =>
+        setFormData((prev) => ({
+            ...prev,
+            type: selectedOption.value
+        }))
+    }
+    className="basic-single-select"
+    classNamePrefix="select"
+/>
+            </div>
+            
             <label htmlFor="name">Keyword:</label>
             <input
               className="com"
@@ -161,20 +191,7 @@ const TargetCreate = ({ togglePopup }) => {
               required
             />
             
-            <div>
-              <label htmlFor="type">Type:</label>
-              <input
-                className="com"
-                type="text"
-                id="type"
-                name="type"
-                value={formData.type}
-                onChange={handleInputChange}
-                placeholder="Enter type"
-                required
-              />
-            </div>
-            
+       
             <label htmlFor="description">Description:</label>
             <textarea
               className="com"

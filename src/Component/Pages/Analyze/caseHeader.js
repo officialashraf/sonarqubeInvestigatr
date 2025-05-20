@@ -47,6 +47,7 @@ const CaseHeader = ({ onIconClick }) => {
 
         </div>
 
+
         <div
           className="row py-0 px-2  align-items-start"
           style={{ backgroundColor: "lightgrey" }}
@@ -60,6 +61,7 @@ const CaseHeader = ({ onIconClick }) => {
           </div>
 
         </div>
+
       </div>
       <div className="col-auto ms-auto d-flex align-items-center gap-3">
         <FaPhotoVideo
