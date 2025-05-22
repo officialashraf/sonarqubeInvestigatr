@@ -29,7 +29,7 @@ const SearchResults = ({ onClose }) => {
   const [enterInput, setEnterInput] = useState([])
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [activeComponent, setActiveComponent] = useState('list');
-  const [loading, setLoading] = useState(false);
+
 
   const { searchResults, totalPages, currentPage, totalResults } = useSelector((state) => state.search);
   console.log("searchResult", searchResults, totalPages, currentPage, totalResults);
@@ -130,7 +130,7 @@ const SearchResults = ({ onClose }) => {
     console.log("searchChips:", searchChips);
 
     try {
-      setLoading(true);
+      // setLoading(true);
       // 1. Redux ke sirf keyword le rahe hain
       const reduxKeywords = Array.isArray(reduxPayload.keyword)
         ? reduxPayload.keyword
@@ -196,19 +196,13 @@ const SearchResults = ({ onClose }) => {
         keyword: response.data.input.keyword,
         queryPayload: response.data.input
       }));
-
+handleComponentToggle("list")
       dispatch(setPage(1));
 
     } catch (error) {
       console.error("Error performing search:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  if (loading) {
-    return <Loader />
-  }
+    } 
+     };
 
 
   return (

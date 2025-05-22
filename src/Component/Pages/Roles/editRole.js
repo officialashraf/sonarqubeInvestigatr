@@ -13,7 +13,10 @@ const EditRole = ({ togglePopup, details }) => {
     const editRole = async () => {
 
         try {
-
+if (!searchTitle || searchTitle.trim() === "") {
+            toast.error("Please enter the role");
+            return; // Exit the function without making API call
+        }
             const criteriaPaylod = {
                 new_role: searchTitle || "",
                 old_role: details

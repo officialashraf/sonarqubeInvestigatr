@@ -199,7 +199,7 @@ const AddComment = ({ show, onClose, selectedResource }) => {
           onClose={handleUpdateClose}
           comment={commentToEdit}
           resourceId={rowId}
-          getCommentList={getCommentList}
+          GetCommentList={getCommentList}
         />
       )}
     </div>

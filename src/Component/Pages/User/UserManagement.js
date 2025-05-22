@@ -547,18 +547,14 @@ const UserManagement = () => {
                           Details
                         </Dropdown.Item>
                         <Dropdown.Item onClick={() => toggleEditForm(item)}>
-                          Edit
+                        Edit
                         </Dropdown.Item>
                         <Dropdown.Item
                           onClick={() => confirmDelete(item.id, item.username)}
                         >
                           Delete
                         </Dropdown.Item>
-                        <Dropdown.Item>Update Role</Dropdown.Item>
-                        <Dropdown.Item>Deactivate</Dropdown.Item>
-                        <Dropdown.Item>View Password</Dropdown.Item>
-                        <Dropdown.Item>Reset Password</Dropdown.Item>
-                      </Dropdown.Menu>
+                                            </Dropdown.Menu>
                     </Dropdown>
                   </td>
                 </tr>

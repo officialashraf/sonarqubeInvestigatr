@@ -1,6 +1,6 @@
-import { useState, useEffect  } from 'react';
+import { useState, useEffect } from 'react';
 import { Table, InputGroup, FormControl, Dropdown, Badge } from 'react-bootstrap';
-import { Search, Plus} from 'react-bootstrap-icons';
+import { Search, Plus } from 'react-bootstrap-icons';
 import axios from 'axios';
 import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material';
 import './table.css';
@@ -211,6 +211,8 @@ const DataTable = () => {
   if (loading) {
     return <Loader />
   }
+
+
   return (
     <>
       <div className="data-table-container">
@@ -330,14 +332,22 @@ const DataTable = () => {
             </thead>
             <tbody className='tb-1'>
               {filteredData && filteredData.map((item, index) => (
-                <tr key={item.id} >
+                <tr key={item.id}  >
 
-                  <td onClick={() => onFieldClick(item)} style={{ cursor: 'pointer' }} >{`CASE${String(item.id).padStart(4, '0')}`}</td>
+                  <td onClick={() => onFieldClick(item)} style={{ cursor: 'pointer' }}>{`CASE${String(item.id).padStart(4, '0')}`}</td>
                   <td>{item.title}</td>
                   <td>{item.created_on.slice(0, 10)}</td>
                   <td>{item.created_by.slice(0, 8)}</td>
                   <td>{item.assignee}</td>
-                  <td>{item.watchers}</td>
+                 
+                  <td>
+  {Array.isArray(item.watchers)
+    ? item.watchers.join(', ')
+    : typeof item.watchers === 'string'
+      ? item.watchers.split(',').map(w => w.trim()).join(', ')
+      : ''}
+</td>
+
                   <td>{item.modified_on}</td>
                   <td disabled={true} >
                     <Badge pill bg="dark" className="badge-custom">
