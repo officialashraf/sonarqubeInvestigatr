@@ -186,7 +186,7 @@ const AssignRole = ({ togglePopup, details }) => {
         <div className="popup-overlay" style={{ top: 0, left: 0, width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center", zIndex: 1050 }}>
             <div className="popup-container" style={{ display: 'flex', alignItems: 'center' }}>
                 <div className="popup-content" style={{ width: '80%' }}>
-                    <h5 style={{ marginBottom: '20px', textAlign: 'center' }}>Assign Role to Permissions</h5>
+                    <h5 style={{ marginBottom: '20px', textAlign: 'center' }}>Assign permissions to role</h5>
                     <button className="close-icon" onClick={() => togglePopup(false)}>&times;</button>
                     <form onSubmit={(e) => e.preventDefault()}>
                         <div className="form-group" style={{ marginBottom: '15px' }}>
@@ -203,7 +203,7 @@ const AssignRole = ({ togglePopup, details }) => {
                         </div>
 
                         <div className="form-group" style={{ marginBottom: '15px' }}>
-                            <label>Select Permissions (Endpoints)</label>
+                            <label>Select Permissions</label>
                             <Select
                                 options={endpoints}
                                 styles={customStyles}

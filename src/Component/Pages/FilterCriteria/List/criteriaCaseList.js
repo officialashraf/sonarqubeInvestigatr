@@ -8,7 +8,8 @@ import Loader from '../../Layout/loader';
 
 const CriteriaCaseTable = () => {
   const dispatch = useDispatch();
-  const [isLoading, setIsLoading] = useState(true);
+  // const [isLoading, setIsLoading] = useState(true);
+  // console.log("setisloading",setIsLoading)
   const [loading, setLoading] = useState(false);
 
 
@@ -169,8 +170,7 @@ const CriteriaCaseTable = () => {
 
   return (
     <>
-      <div className="data-table" style={{ height: '420px', marginTop: '0px' }}>
-        <div className="tabs">
+     <div className="tabs">
           <div
             className={`tab active`} // "Cases" will always be active
           // onClick={() => setActiveTab('Cases')}
@@ -180,6 +180,8 @@ const CriteriaCaseTable = () => {
 
 
         </div>
+      <div className="data-table" style={{ height: '420px', marginTop: '0px'}}>
+       
         {loading ? (
           <div className="d-flex justify-content-center align-items-center" style={{ height: '100%' }}>
             <Spinner animation="border" role="status" variant="primary">
@@ -188,14 +190,18 @@ const CriteriaCaseTable = () => {
             <span className="ms-2">Loading data...</span>
           </div>
         ) : (
-          <Table striped bordered hover>
-            <thead>
+          <Table striped bordered hover variant='light'>
+            <thead >
               <tr>
                 {/* Dynamically generate headers from all unique keys */}
                 {searchResults.length > 0 && [...new Set(searchResults.flatMap(item => Object.keys(item)))]
                   .map((key, index) => (
                     <th key={index} className="fixed-th">
-                      {key.replace(/_/g, ' ').toUpperCase()} {/* Format headers */}
+                       {key
+                .split("_") // Split by underscores
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize first letter of each word
+                .join(" ") // Rejoin words with space
+            }
                     </th>
                   ))}
               </tr>
@@ -211,13 +217,17 @@ const CriteriaCaseTable = () => {
                           className="cell-content"
                           style={{
                             cursor: 'pointer',
-                            padding: "8px",
-                            height: '37px',
-                            fontFamily: 'sans-serif',
+                            // padding: "0px 0px 0px 5px",
+                            // height: '37px',
+                            // fontFamily: 'sans-serif',
                             fontWeight: 'normal',
                             overflow: 'hidden',
-                            textOverflow: 'ellipsis',
+                            //  textOverflow: 'ellipsis',
                             whiteSpace: 'nowrap',
+                            //  vertical- align: middle;
+                            padding: '0px 5px 0px 5px',
+                            fontSize: '12px',
+                            fontFamily: 'Helvetica'
                           }}
                           title={typeof item[key] === 'object' ? JSON.stringify(item[key]) : item[key]}
                         // onClick={() => togglePopupA(item)}
@@ -250,7 +260,7 @@ const CriteriaCaseTable = () => {
         </div>
 
         <div style={{ fontSize: "12px", marginRight: '5px' }}>
-          {isLoading ? 'Loading...' : `Page ${currentPage} of ${totalPages} / Total Results: ${totalResults}`}
+          {loading ? 'Loading...' : `Page ${currentPage} of ${totalPages} / Total Results: ${totalResults}`}
         </div>
       </div>
     </>

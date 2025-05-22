@@ -4,11 +4,13 @@ import axios from 'axios';
 import AddNewFilter from './addNewFilter';
 import "./main.css"
 import { Plus, X } from 'react-bootstrap-icons'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import Cookies from 'js-cookie';
+import { setCaseData } from '../../../Redux/Action/caseAction';
 
 const AddFilter2 = ({ togglePopup }) => {
+ const dispatch= useDispatch();
   const [selectedFilters, setSelectedFilters] = useState([]);
   const [initialSelectedFilters, setInitialSelectedFilters] = useState([]);
   const caseData1 = useSelector((state) => state.caseData.caseData);
@@ -52,8 +54,8 @@ const AddFilter2 = ({ togglePopup }) => {
   };
 
   // Handler for new filter creation
-  const handleNewFilterCreated = (newFilterId) => {
-    setSelectedFilters(prev => [...prev, newFilterId]);
+  const handleNewFilterCreated = () => {
+    setSelectedFilters(true);
   };
   const handleFilterid = (id) => {
     setFilterIdedit(id);
@@ -101,7 +103,7 @@ const AddFilter2 = ({ togglePopup }) => {
       }
 
       // Update case status
-      await axios.put(`http://5.180.148.40:9001/api/case-man/v1/case/${caseData1.id}`,
+     const reponsecase = await axios.put(`http://5.180.148.40:9001/api/case-man/v1/case/${caseData1.id}`,
         { status: "in progress" },
         {
           headers: {
@@ -110,6 +112,8 @@ const AddFilter2 = ({ togglePopup }) => {
           }
         }
       );
+      dispatch(setCaseData(reponsecase.data.data))
+ console.log('response',reponsecase)
       window.dispatchEvent(new Event('databaseUpdated'));
 
 
@@ -153,7 +157,7 @@ const AddFilter2 = ({ togglePopup }) => {
                     <button onClick={() => setShowAddFilter(false)} className="btn close-add-filter-button">
                       <X />
                     </button>
-                    <AddNewFilter filterIde={filterIdedit} onNewFilterCreated={handleNewFilterCreated} />
+                    <AddNewFilter filterIde={filterIdedit} onClose={() => setShowAddFilter(false)}/>
                   </div>
                 )}
               </div>

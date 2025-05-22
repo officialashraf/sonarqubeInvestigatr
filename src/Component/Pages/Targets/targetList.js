@@ -549,8 +549,8 @@ const TargetList = () => {
           </tbody>
         </Table>
       </div>
-      {showPopup && <TargetCreate togglePopup={togglePopup} />}
-      {showPopupE && <TargetUpdate togglePopup={togglePopupE} details={details} />}
+      {showPopup && <TargetCreate togglePopup={togglePopup}  existingTargets={filteredData}/>}
+      {showPopupE && <TargetUpdate togglePopup={togglePopupE} id={details.id} existingTargets={filteredData}/>}
       {showPopupD && <TargetDetails togglePopup={togglePopupD} details={details} />}
     </div>
   );

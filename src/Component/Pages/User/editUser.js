@@ -16,7 +16,7 @@ const EditUser = ({ togglePopup, item }) => {
 
   const [users, setUsers] = useState({ data: [] });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  
 
   const token = Cookies.get("accessToken");
   const userData = async () => {
@@ -53,7 +53,7 @@ const EditUser = ({ togglePopup, item }) => {
       if (formData.username !== item.username || formData.username === "") { hasChanged.username = formData.username; }
       if (formData.email !== item.email) { hasChanged.email = formData.email; }
       if (formData.contactNumber !== item.contact_no) { hasChanged.contact_no = formData.contactNumber; }
-      if (formData.role !== item.role) { hasChanged.role = formData.role; }
+      // if (formData.role !== item.role) { hasChanged.role = formData.role; }
 
 
       // If nothing has changed 
@@ -153,15 +153,7 @@ const EditUser = ({ togglePopup, item }) => {
               onChange={handleChange}
             />
 
-            <label htmlFor="role">Role:</label>
-            <input
-              className="com"
-              type="text"
-              id="role"
-              name="role"
-              value={formData.role}
-              onChange={handleChange}
-            />
+           
 
             <div className="button-container">
               <button type="submit" className="create-btn" disabled={loading}>
