@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import{ useEffect, useState } from "react";
 import "../Case/table.css";
 import { useNavigate } from "react-router-dom";
 import { Plus } from "react-bootstrap-icons";
 import { Col, Table } from "react-bootstrap";
 import { FaArrowLeft } from "react-icons/fa";
-import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
+import { ArrowDropDown, ArrowDropUp} from "@mui/icons-material";
 import Dropdown from "react-bootstrap/Dropdown";
 import { FiMoreVertical } from "react-icons/fi";
 import { toast } from 'react-toastify';
@@ -198,9 +198,11 @@ const TargetList = () => {
       }
     }
   };
+
   if (loading) {
     return <Loader />
   }
+
   return (
     <div className="data-table-container">
       <div className="top-header" style={{ marginTop: "10px" }}>
@@ -547,8 +549,8 @@ const TargetList = () => {
           </tbody>
         </Table>
       </div>
-      {showPopup && <TargetCreate togglePopup={togglePopup} />}
-      {showPopupE && <TargetUpdate togglePopup={togglePopupE} details={details} />}
+      {showPopup && <TargetCreate togglePopup={togglePopup}  existingTargets={filteredData}/>}
+      {showPopupE && <TargetUpdate togglePopup={togglePopupE} id={details.id} existingTargets={filteredData}/>}
       {showPopupD && <TargetDetails togglePopup={togglePopupD} details={details} />}
     </div>
   );

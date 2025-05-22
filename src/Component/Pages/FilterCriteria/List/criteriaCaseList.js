@@ -8,7 +8,8 @@ import Loader from '../../Layout/loader';
 
 const CriteriaCaseTable = () => {
   const dispatch = useDispatch();
-  const [isLoading, setIsLoading] = useState(true);
+  // const [isLoading, setIsLoading] = useState(true);
+  // console.log("setisloading",setIsLoading)
   const [loading, setLoading] = useState(false);
 
 
@@ -169,6 +170,7 @@ const CriteriaCaseTable = () => {
 
   return (
     <>
+
       <div className="tabs">
         <div
           className={`tab active`} // "Cases" will always be active
@@ -180,14 +182,14 @@ const CriteriaCaseTable = () => {
 
       </div>
       <div className="data-table" style={{ height: '420px', marginTop: '0px' }}>
-       
+
         {loading ? (
           <div>
             <Loader />
           </div>
         ) : (
-            <Table striped bordered hover variant="light"  >
-            <thead>
+          <Table striped bordered hover variant='light'>
+            <thead >
               <tr>
                 {/* Dynamically generate headers from all unique keys */}
                 {searchResults.length > 0 && [...new Set(searchResults.flatMap(item => Object.keys(item)))]
@@ -198,7 +200,7 @@ const CriteriaCaseTable = () => {
                         .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize first letter of each word
                         .join(" ") // Rejoin words with space
                       }
-                    </th>               
+                    </th>
                   ))}
               </tr>
             </thead>
@@ -255,8 +257,8 @@ const CriteriaCaseTable = () => {
           {renderPagination()}
         </div>
 
-       <div style={{ fontSize: "12px" }}>
-          { `Page ${currentPage} of ${totalPages} / Total Results: ${totalResults}`}
+        <div style={{ fontSize: "12px", marginRight: '5px' }}>
+          {loading ? 'Loading...' : `Page ${currentPage} of ${totalPages} / Total Results: ${totalResults}`}
         </div>
       </div>
     </>

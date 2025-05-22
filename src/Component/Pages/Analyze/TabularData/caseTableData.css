@@ -1,14 +1,16 @@
 fixed-th {
   position: sticky;
   top: -2px;
-  z-index: 10;
-  text-align: center;
-  min-width: 40px; /* Minimum width based on header text */ 
-  max-width: 200px; /*Prevents excessive width */
+  background: #fff;
+   text-align: center;
+  vertical-align: middle;
+     min-width: 40px; /* Fixed width */
+  max-width: 200px;
+  color: white;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  padding-right: 5px;
+  height: 24px;
 }
 
 .fixed-td {

@@ -90,12 +90,22 @@ const CreateCase = ({ togglePopup }) => {
       return;
     }
     try {
-      const response = await axios.post('http://5.180.148.40:9001/api/case-man/v1/case', {
-        title: formData.title,
+      const caseQuery = {
+          title: formData.title,
         description: formData.description,
         assignee: formData.assignee,
-        watchers: formData.watchers,
-      }, {
+      watchers: Array.isArray(formData.watchers)
+  ? formData.watchers
+  : formData.watchers
+      ? formData.watchers.split(',').map(w => w.trim())
+      : [],
+
+};
+    
+      console.log("caseQuery",caseQuery)
+      const response = await axios.post('http://5.180.148.40:9001/api/case-man/v1/case', 
+      caseQuery
+      , {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`

@@ -1,11 +1,57 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./addUser.css";
 import { IoMdSearch } from "react-icons/io";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { toast } from 'react-toastify';
+import Select from "react-select";
+
+
+
+export const customStyles = {
+  control: (base) => ({
+    ...base,
+    backgroundColor: 'white',
+    color: 'black',
+    boxShadow: 'none',
+    outline: 'none'
+  }),
+  menu: (base) => ({
+    ...base,
+    backgroundColor: 'white',
+    color: 'black',
+  }),
+  option: (base, state) => ({
+    ...base,
+    backgroundColor: state.isSelected ? 'black' : 'white',
+    color: state.isSelected ? 'white' : 'black',
+    '&:hover': {
+      backgroundColor: 'black',
+      color: 'white'
+    }
+  }),
+  multiValue: (base) => ({
+    ...base,
+    backgroundColor: 'white',
+    color: 'black',
+  }),
+  multiValueLabel: (base) => ({
+    ...base,
+    backgroundColor: 'black',
+    color: 'white',
+  }),
+  multiValueRemove: (base) => ({
+    ...base,
+    color: 'black',
+    '&:hover': {
+      backgroundColor: 'black',
+      color: 'white'
+    }
+  })
+};
 
 const AddUser = ({ onClose }) => {
+    const token = Cookies.get("accessToken");
   const [formData, setFormData] = useState({
     username: "",
     first_name: "",
@@ -15,7 +61,36 @@ const AddUser = ({ onClose }) => {
     contact_no: "",
     password: ""
   });
-  
+const [roles, setRoles] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchRoles = async () => {
+            try {
+                const response = await axios.get("http://5.180.148.40:9000/api/user-man/v1/roles",  {
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          }
+        });
+console.log("response_Data",response.data)
+                // Map roles into dropdown format
+                const formattedRoles = response.data.map(role => ({
+                    value: role,
+                    label: role
+                }));
+console.log("response_Dropdown",formattedRoles)
+                setRoles(formattedRoles);
+                setLoading(false);
+            } catch (error) {
+                console.error("Error fetching roles:", error);
+                setLoading(false);
+            }
+        };
+
+        fetchRoles();
+    }, [token]);
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -36,12 +111,11 @@ const AddUser = ({ onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const token = Cookies.get("accessToken");
-    if (!token) {
+      if (!token) {
       toast.error("Authentication token missing.");
       return;
     }
-
+console.log("queryPyload",formData)
     try {
       const response = await axios.post(
         "http://5.180.148.40:9000/api/user-man/v1/user",
@@ -74,28 +148,46 @@ const AddUser = ({ onClose }) => {
         <div className="popup-content">
           <h5>Add User Form</h5>
           <form onSubmit={handleSubmit}>
-            <label>User Name <span style={{ color: 'black' }}>*</span></label>
+            <label>User Name *</label>
             <input className="com" name="username" value={formData.username} onChange={handleChange} placeholder="Enter User Name" requiblack />
 
-            <label>First Name <span style={{ color: 'black' }}>*</span></label>
+            <label>First Name *</label>
             <input className="com" name="first_name" value={formData.first_name} onChange={handleChange} placeholder="Enter First Name" requiblack />
 
             <label>Last Name</label>
             <input className="com" name="last_name" value={formData.last_name} onChange={handleChange} placeholder="Enter Last Name" />
 
-            <label>Role <span style={{ color: 'black' }}>*</span></label>
-            <div style={{ position: "relative", width: "100%" }}>
-              <input className="com" name="role" value={formData.role} onChange={handleChange} placeholder="Enter Role" style={{ paddingRight: "30px" }} requiblack />
-              <IoMdSearch style={{ position: "absolute", right: "10px", top: "50%", transform: "translateY(-50%)", pointerEvents: "none" }} />
-            </div>
+           <div>
+            <label>Role *</label>
+            <Select
+                options={roles}
+                placeholder="Select a role"
+                isLoading={loading}
+                value={roles.find(role => role.value === formData.role)}
+                onChange={(selectedOption) => setFormData({ ...formData, role: selectedOption.value })}
+                styles={customStyles}
+                classNamePrefix="select"
+            />
+            <IoMdSearch
+                style={{
+                    position: "absolute",
+                    right: "10px",
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    pointerEvents: "none",
+                    color: "black",
+                }}
+            />
+        </div>
 
-            <label>Email ID <span style={{ color: 'black' }}>*</span></label>
+
+            <label>Email ID *</label>
             <input className="com" type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Enter Email ID" requiblack />
 
-            <label>Contact Number <span style={{ color: 'black' }}>*</span></label>
+            <label>Contact Number *</label>
             <input className="com" name="contact_no" value={formData.contact_no} onChange={handleChange} placeholder="Enter Contact Number" requiblack />
 
-            <label>Password <span style={{ color: 'black' }}>*</span></label>
+            <label>Password *</label>
             <input className="com" type="password" name="password" value={formData.password} onChange={handleChange} placeholder="Enter Password" requiblack />
 
             <div className="button-container">

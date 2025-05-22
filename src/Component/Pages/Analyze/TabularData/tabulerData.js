@@ -93,39 +93,40 @@ const TabulerData = () => {
         style={{ overflowY: "auto", height: "420px" }}
       >
         {data && data.length > 0 ? (
-          <Table striped bordered hover variant="light"  >
-            <thead>
+          <Table striped bordered hover variant="light">
+            <thead >
               <tr>
-                {headers.map((header) => (
-                  <th key={header} className="fixed-th">
-                    {header
-                      .split("_") // Split by underscores
-                      .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize first letter of each word
-                      .join(" ") // Rejoin words with space
-                    }              </th>
-                ))}
-              </tr>
+    {headers.map((header) => (
+        <th key={header} className="fixed-th">
+            {header
+                .split("_") // Split by underscores
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize first letter of each word
+                .join(" ") // Rejoin words with space
+            }
+        </th>
+    ))}
+</tr>
             </thead>
             <tbody>
               {data.map((item, index) => (
                 <tr key={index}>
                   {headers.map((header) => (
                     <td key={header} className="fixed-td">
-                      <div className="cell-content" 
-                        style={{
-                          cursor: 'pointer',
-                          // padding: "0px 0px 0px 5px",
-                          // height: '37px',
-                          // fontFamily: 'sans-serif',
-                          fontWeight: 'normal',
-                          overflow: 'hidden',
-                          //  textOverflow: 'ellipsis',
-                          whiteSpace: 'nowrap',
-                          //  vertical- align: middle;
-                          padding: '0px 5px 0px 5px',
-                          fontSize: '12px',
-                          fontFamily: 'Helvetica'
-                        }}
+                      <div className="cell-content"
+                      style={{
+                            cursor: 'pointer',
+                            // padding: "0px 0px 0px 5px",
+                            // height: '37px',
+                            // fontFamily: 'sans-serif',
+                            fontWeight: 'normal',
+                            overflow: 'hidden',
+                            //  textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                            //  vertical- align: middle;
+                            padding: '0px 5px 0px 5px',
+                            fontSize: '12px',
+                            fontFamily: 'Helvetica'
+                          }}
                       title={item[header]}>
                         {item[header]}
                       </div>

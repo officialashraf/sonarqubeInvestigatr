@@ -437,6 +437,7 @@ const RecentCriteria = () => {
         <EditCriteria
           togglePopup={toggleEditPopup}
           criteriaId={criteriaId}
+          onUpdate={fetchData}
         />
       )}
     </div>

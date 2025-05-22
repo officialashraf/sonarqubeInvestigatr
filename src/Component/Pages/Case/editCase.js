@@ -63,7 +63,7 @@ const EditCase = ({ togglePopup, item }) => {
             ? item.watchers
             : [],
       }));
-    }
+    }console.log("item.watchers",item.watchers)
   }, [item, users.data]);
 
 
@@ -87,7 +87,7 @@ const EditCase = ({ togglePopup, item }) => {
 
       // Special handling for watchers array
       const originalWatchers = typeof item.watchers === 'string' ? item.watchers :
-        Array.isArray(item.watchers) ? item.watchers.join(", ") : "";
+        Array.isArray(item.watchers) ? item.watchers.join(", ") : null;
       const newWatchers = Array.isArray(formData.watchers) ? formData.watchers.join(", ") : formData.watchers;
 
       if (newWatchers !== originalWatchers) {
@@ -297,7 +297,8 @@ const EditCase = ({ togglePopup, item }) => {
               value={formData.watchers.map((watcher) => {
                 const existingWatcher = options.find((opt) => opt.label === watcher);
                 return existingWatcher || { value: watcher, label: watcher };
-              })}
+              })
+            }
               onChange={handleWatchersChange}
               required
 

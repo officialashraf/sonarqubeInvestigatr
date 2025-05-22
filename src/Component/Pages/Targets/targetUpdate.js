@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import "../Case/createCase.css";
 import axios from "axios";
@@ -49,53 +48,139 @@ export const customStyles = {
   })
 };
 
-const TargetUpdate = ({ togglePopup, details }) => {
+const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
+  const token = Cookies.get("accessToken");
+  const targetType = [
+    { value: "watchword", label: "Watchword" },
+    { value: "location", label: "Location" },
+    { value: "application", label: "Application" },
+    { value: "domain", label: "Domain" },
+    { value: "protocol", label: "Protocol" },
+    { value: "port", label: "Port" },
+    { value: "ip address", label: "IP Address" },
+    { value: "social media id", label: "Social Media ID" },
+    { value: "target", label: "Target" },
+    { value: "mobile_number", label: "Mobile Number" },
+    { value: "email_id", label: "Email ID" },
+    { value: "address", label: "Address" },
+    { value: "landline", label: "Landline" },
+    { value: "fax_number", label: "Fax Number" },
+    { value: "IMEI", label: "IMEI" },
+    { value: "IMSI", label: "IMSI" },
+    { value: "organization_name", label: "Organization Name" },
+    { value: "university_name", label: "University Name" },
+    { value: "device_model_number", label: "Device Model Number" },
+    { value: "bank_account_number", label: "Bank Account Number" },
+    { value: "bank_account_holder_name", label: "Bank Account Holder Name" },
+    { value: "bank_customer_id", label: "Bank Customer ID" },
+    { value: "bank_holder_address", label: "Bank Holder Address" },
+    { value: "property_owner_name", label: "Property Owner Name" },
+    { value: "national_id", label: "National ID" },
+    { value: "vehicle_number", label: "Vehicle Number" },
+    { value: "vehicle_owner_name", label: "Vehicle Owner Name" },
+    { value: "passport_number", label: "Passport Number" },
+    { value: "criminal_history_offense", label: "Criminal History Offense" },
+    { value: "criminal_history_prisoner_number", label: "Criminal History Prisoner Number" },
+    { value: "arm_type", label: "Arm Type" },
+    { value: "arm_model_number", label: "Arm Model Number" }
+  ];
+
   const [formData, setFormData] = useState({
     name: "",
     description: "",
     synonyms: [],
     type: "",
-    threat_weightage: 0
+    threat_weightage: 0,
+    target_id: []
   });
 
   const [synonymInput, setSynonymInput] = useState("");
-
+  const [subTypeRows, setSubTypeRows] = useState([]);
+  const [availableSubTypes, setAvailableSubTypes] = useState([]);
+  const [loading, setLoading] = useState(true);
+  
   // Threat score options from 0 to 10
   const threatScoreOptions = Array.from({ length: 11 }, (_, i) => ({
     value: i,
     label: i.toString()
   }));
 
-  // Pre-fill the form with existing details when component mounts or details change
-  useEffect(() => {
-    if (details) {
-      setFormData({
-        name: details.name || "",
-        description: details.description || "",
-        synonyms: details.synonyms || [],
-        type: details.type || "",
-        threat_weightage: details.threat_weightage || 0,
-        id: details.id // Make sure to capture the ID for the update API call
-      });
+  // Fetch target details by ID
+  const fetchTargetDetails = async () => {
+    if (!token || !id) {
+      toast.error("Authentication error or missing target ID");
+      return;
     }
-  }, [details]);
+
+    try {
+      setLoading(true);
+      const response = await axios.get(`http://5.180.148.40:9001/api/case-man/v1/target/${id}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.status === 200 && response.data) {
+        const targetData = response.data;
+        
+        // Extract parent IDs from the parents array
+        const parentIds = targetData.parents ? targetData.parents.map(parent => parent.id) : [];
+        
+        setFormData({
+          name: targetData.name || "",
+          description: targetData.description || "",
+          synonyms: targetData.synonyms || [],
+          type: targetData.type || "",
+          threat_weightage: targetData.threat_weightage || 0,
+          target_id: parentIds
+        });
+      }
+    } catch (err) {
+      console.error("Error fetching target details:", err.response || err);
+      toast.error("Failed to fetch target details");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTargetDetails();
+  }, [id]);
+
+  useEffect(() => {
+    // Update available subtypes when target type changes
+    if (formData.type) {
+      setAvailableSubTypes(formData.type);
+    } else {
+      setAvailableSubTypes([]);
+    }
+
+    // Clear existing subtype rows when target type changes
+    if (formData.type === "target") {
+      setSubTypeRows([{ sub_type: "", target_id: null, value: "" }]);
+    } else {
+      setSubTypeRows([]);
+    }
+  }, [formData.type]);
 
   const handleUpdateKeyword = async () => {
-    const token = Cookies.get("accessToken");
     if (!token) {
       toast.error("Authentication error: No token found");
       return;
     }
+    
+    console.log("Update payload", formData);
+    
     try {
-      const response = await axios.put(`http://5.180.148.40:9001/api/case-man/v1/target/${formData.id}`, formData, {
+      const response = await axios.put(`http://5.180.148.40:9001/api/case-man/v1/target/${id}`, formData, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         }
       });
+      
       window.dispatchEvent(new Event("databaseUpdated"));
-
-
+      
       if (response.status === 200) {
         toast.success("Target updated successfully");
         togglePopup();
@@ -103,8 +188,8 @@ const TargetUpdate = ({ togglePopup, details }) => {
         toast.error("Unexpected response received from the server");
       }
     } catch (err) {
-      console.error("Error during keyword update:", err.response || err);
-      toast.error((err.response?.data?.detail || err.message || "Error encountered during keyword update"));
+      console.error("Error during target update:", err.response || err);
+      toast.error((err.response?.data?.detail || err.message || "Error encountered during target update"));
     }
   };
 
@@ -149,6 +234,25 @@ const TargetUpdate = ({ togglePopup, details }) => {
     }));
   };
 
+  // Update subtype row data
+  const updateSubTypeRow = (index, field, value) => {
+    const updatedRows = [...subTypeRows];
+    updatedRows[index] = { ...updatedRows[index], [field]: value };
+    setSubTypeRows(updatedRows);
+  };
+
+  if (loading) {
+    return (
+      <div className="popup-overlay">
+        <div className="popup-container">
+          <div className="popup-content">
+            <div>Loading target details...</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="popup-overlay">
       <div className="popup-container">
@@ -163,7 +267,25 @@ const TargetUpdate = ({ togglePopup, details }) => {
               handleUpdateKeyword();
             }}
           >
-            <label htmlFor="name">Target <span style={{ color: 'black' }}>*</span></label>
+            <div>
+              <label htmlFor="type">Type *</label>
+              <Select
+                options={targetType}
+                styles={customStyles}
+                placeholder="Select type"
+                value={targetType.find(option => option.value === formData.type)}
+                onChange={(selectedOption) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    type: selectedOption.value
+                  }))
+                }
+                className="basic-single-select"
+                classNamePrefix="select"
+              />
+            </div>
+            
+            <label htmlFor="name">Target *</label>
             <input
               className="com"
               type="text"
@@ -174,22 +296,8 @@ const TargetUpdate = ({ togglePopup, details }) => {
               placeholder="Enter Target"
               required
             />
-
-            <div>
-              <label htmlFor="type">Type <span style={{ color: 'black' }}>*</span></label>
-              <input
-                className="com"
-                type="text"
-                id="type"
-                name="type"
-                value={formData.type}
-                onChange={handleInputChange}
-                placeholder="Enter Type"
-                required
-              />
-            </div>
-
-            <label htmlFor="description">Description:</label>
+            
+            <label htmlFor="description">Description</label>
             <textarea
               className="com"
               id="description"
@@ -199,7 +307,8 @@ const TargetUpdate = ({ togglePopup, details }) => {
               placeholder="Enter Description"
             ></textarea>
 
-            <label htmlFor="synonyms">Alternative Keywords/Synonym (up to 5 keywords) </label>
+
+            <label htmlFor="synonyms">Alternative Keywords/Synonym (up to 5 keywords)</label>
             <div className="synonym-input-container">
               <input
                 className="com"
@@ -228,7 +337,7 @@ const TargetUpdate = ({ togglePopup, details }) => {
             </div>
 
             <div>
-              <label htmlFor="threat_weightage">Threat Score </label>
+              <label htmlFor="threat_weightage">Threat Score</label>
               <Select
                 options={threatScoreOptions}
                 styles={customStyles}
@@ -238,7 +347,47 @@ const TargetUpdate = ({ togglePopup, details }) => {
                 onChange={handleThreatScoreChange}
               />
             </div>
-
+            
+            {/* Dynamic SubType Section */}
+            {(formData.type === "target") && availableSubTypes.length > 0 && (
+              <div className="subtype-section">
+                {subTypeRows.map((row, index) => (
+                  <div key={index} className="subtype-row">
+                    {existingTargets.length > 0 && (
+                      <div className="subtype-fields">
+                        <label>Targets:</label>
+                        <Select
+                          isMulti
+                          options={existingTargets
+                            .filter(target => target.id !== parseInt(id)) // Exclude current target from options
+                            .map(target => ({ 
+                              value: target.id, 
+                              label: `${target.id} - ${target.name} - ${target.type}` 
+                            }))}
+                          styles={customStyles}
+                          placeholder="Select targets"
+                          value={
+                            formData.target_id.map(targetId => {
+                              const t = existingTargets.find(t => t.id === targetId);
+                              return t ? { value: t.id, label: `${t.id} - ${t.name} - ${t.type}` } : null;
+                            }).filter(Boolean)
+                          }
+                          onChange={(selectedOptions) => {
+                            const selectedIds = selectedOptions ? selectedOptions.map(option => option.value) : [];
+                            setFormData(prev => ({
+                              ...prev,
+                              target_id: selectedIds
+                            }));
+                          }}
+                          className="target-select"
+                        />
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+            
             <div className="button-container">
               <button type="submit" className="create-btn">
                 Update

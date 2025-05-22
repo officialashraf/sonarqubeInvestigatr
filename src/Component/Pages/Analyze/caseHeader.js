@@ -11,7 +11,7 @@ const CaseHeader = ({ onIconClick }) => {
   const caseData1 = useSelector((state) => state.caseData.caseData);
   const navigate = useNavigate();
   const backToSnap = () => {
-    navigate(`/cases/${ caseData1.id }`);
+    navigate(`/cases/${caseData1.id}`);
   };
 
   return (
@@ -51,16 +51,6 @@ const CaseHeader = ({ onIconClick }) => {
           className="row py-0 px-2  align-items-start"
           style={{ backgroundColor: "lightgrey" }}
         >
-          <div className="col-md-2 col-sm-4 mb-2">
-            <input
-              type="text"
-              className="form-control form-control-sm search-bar-f-option"
-              placeholder="Search..."
-            />
-          </div>
-
-
-
           {/* <div className="col-auto ms-auto ml-3 d-flex justify-content-center align-items-center"  style={{ marginRight:"5px", height:"28px"}}> */}
           <div className="col-auto ms-auto d-flex align-items-center gap-3">
             <FaPhotoVideo

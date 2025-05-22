@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import { Form, InputGroup, Button, Badge } from 'react-bootstrap';
@@ -16,7 +15,7 @@ const conversionFactors = {
   hours: 3600,
 };
 
-const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
+const AddNewFilter = ({ onClose, filterIde }) => {
   const [platform, setPlatform] = useState([]);
   const [filterName, setFilterName] = useState('');
   const [description, setDescription] = useState('');
@@ -40,7 +39,7 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
 
   const dispatch = useDispatch();
   const token = Cookies.get('accessToken');
-  const toastShown = useRef(false);
+  // const toastShown = useRef(false);
   useEffect(() => {
     localStorage.setItem('filterId', filterId);
   }, [filterId, dispatch]);
@@ -160,10 +159,7 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
       const isEditable = (String(loggedInUserId) === String(filterDetails.created_by));
       console.log(isEditable)
       setIsEditable(isEditable);
-      if (!toastShown.current) {
-        toast.info(isEditable ? "You can edit this filter" : "You don't have permission to edit this filter");
-        toastShown.current = true;
-      }
+      isEditable ? toast.info("You can edit this filter") : toast.error("You don't have permission to edit this filter");
     }
   }, [filterDetails, loggedInUserId]);
 
@@ -181,44 +177,43 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
     }]);
   };
 
+  useEffect(() => {
+    const fetchFilterDetails = async () => {
+      if (!filterIde) return; // Prevent the API call if filterIde is undefined
+      try {
+        const response = await axios.get(`http://5.180.148.40:9002/api/osint-man/v1/filter/${filterIde}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setFilterDetails(response.data);
+        console.log("fetchFilterDetails", response);
+      } catch (error) {
+        console.error('Platform fetch error:', error);
+        toast.error('Error fetching platforms: ' + (error.response?.data?.detail || error.message));
+      }
+    };
 
-  const fetchFilterDetails = async () => {
-    try {
-      const response = await axios.get(`http://5.180.148.40:9002/api/osint-man/v1/filter/${filterIde}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setFilterDetails(response.data)
-      console.log("fetchflterdetails", response)
-    } catch (error) {
-      console.error('Platform fetch error:', error);
-      toast.error('Error fetching platforms: ' + (error.response?.data?.detail || error.message));
-    }
-  };
+    fetchFilterDetails();
+  }, [filterIde, token]);
 
   useEffect(() => {
-    if (filterIde) {
-      fetchFilterDetails();
-    }
-  }, [filterIde]);
-  const fetchPlatforms = async () => {
-    try {
-      const response = await axios.get('http://5.180.148.40:9002/api/osint-man/v1/platforms', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setPlatform(response.data.data || []);
-    } catch (error) {
-      console.error('Platform fetch error:', error);
-      toast.error('Error fetching platforms: ' + (error.response?.data?.detail || error.message));
-    }
-  };
-
-  useEffect(() => {
+    const fetchPlatforms = async () => {
+      try {
+        const response = await axios.get('http://5.180.148.40:9002/api/osint-man/v1/platforms', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setPlatform(response.data.data || []);
+      } catch (error) {
+        console.error('Platform fetch error:', error);
+        toast.error('Error fetching platforms: ' + (error.response?.data?.detail || error.message));
+      }
+    };
     fetchPlatforms();
-  }, []);
+  }, [token]);
+
 
   const handleSaveFilter = async () => {
     if (!isEditable) {
@@ -254,7 +249,6 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
         },
       });
       window.dispatchEvent(new Event('databaseUpdated'));
-
       console.log("responseFilter", response)
       if (response.status === 200) {
         const action = filterDetails?.id ? 'updated' : 'created';
@@ -274,11 +268,23 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
     }
   };
   console.log("filetraddnew", filterId)
+  const handleRemoveSource = (sourceIndex) => {
+    if (sources.length > 1) {
+      setSources(prevSources => prevSources.filter((_, index) => index !== sourceIndex));
+    } else {
+      toast.info("At least one source is required");
+    }
+  };
   return (
     <div className="p-1">
-      {filterDetails?.id && <p>Filter ID: {filterDetails.id}</p>}
+      {/* {filterDetails?.id && <p>Filter ID: {filterDetails.id}</p>} */}
       <Form>
-
+        {/* <span  onClick={onClose}style={{
+          position: 'fixed',
+          fontSize: '15px',
+          right: ' 20px',
+          cursor:'pointer'
+        }}>&times;</span> */}
         <Form.Group className="mb-3">
           <Form.Label>Filter Name <span style={{ color: 'black' }}>*</span> </Form.Label>
           <Form.Control
@@ -286,7 +292,7 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
             value={filterName}
             onChange={(e) => setFilterName(e.target.value.replace(/\b\w/g, (char) => char.toUpperCase()))}
             disabled={!isEditable}
-            placeholder = "Enter here..."
+            placeholder="Enter here..."
             required
           />
         </Form.Group>
@@ -313,9 +319,23 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
             {sources.map((source, sourceIndex) => (
 
               <div key={sourceIndex} className="mb-3 border rounded" >
+                {sources.length > 1 && (
+                  <span style={{
+                    position: 'fixed',
+                    fontSize: '15px',
+                    right: ' 20px',
+                    cursor: 'pointer'
+                  }} onClick={() => handleRemoveSource(sourceIndex)}
+                    disabled={!isEditable}>&times;</span>
+
+                )}
+
                 <div className="row g-3">
+
                   <div className="col-md-6">
-                    <Form.Label>Source <span style={{ color: 'black' }}>*</span></Form.Label>
+
+
+                    <Form.Label>Source *</Form.Label>
                     <Form.Select
                       value={source.source}
                       onChange={(e) => handleSourceChange(sourceIndex, e)}
@@ -438,7 +458,7 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
                         disabled={!isEditable}
                       />
                       <div className="mt-2">
-                        {source.urls.map((url, urlIndex) => (
+                        {source.urls.filter((url) => url.trim() !== "").map((url, urlIndex) => (
                           <Badge
                             key={urlIndex}
                             pill
@@ -479,6 +499,9 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
             <button type="button" className="add-new-filter-button" onClick={handleAddSource}>
               Add Sources
             </button>
+            {/* <button type="button" className="add-new-filter-button" onClick={onClose}>
+              Close          
+                </button> */}
             <button
               type="button"
               className="add-new-filter-button"

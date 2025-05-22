@@ -7,7 +7,6 @@ import '../FilterCriteria/createCriteria.css';
 import { customStyles } from '../Case/createCase';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from "react-redux";
 import { closePopup, openPopup, setKeywords, setPage, setSearchResults } from '../../../Redux/Action/criteriaAction';
 import Confirm from './confirmCriteria';
@@ -30,7 +29,7 @@ export const sharedSxStyles = {
   }
 };
 
-const CreateCriteria = ({ togglePopup, setShowPopup, handleCreateCase }) => {
+const CreateCriteria = ({ handleCreateCase }) => {
   const dispatch = useDispatch();
   const Token = Cookies.get('accessToken');
 
@@ -130,20 +129,15 @@ const CreateCriteria = ({ togglePopup, setShowPopup, handleCreateCase }) => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
-    // If updating `searchQuery`, split input into an array of keywords
-    if (name === "searchQuery") {
-      setFormData(prev => ({
-        ...prev,
-        [name]: value.split(",").map(keyword => keyword) // Split by commas and trim extra spaces
-      }));
-    } else {
-      // For other inputs, handle normally
-      setFormData(prev => ({
-        ...prev,
-        [name]: value
-      }));
-    }
+
+    setFormData(prev => ({
+      ...prev,
+      [name]: name === "searchQuery"
+        ? value.split(',').map(k => k).filter(k => k !== "") // Clean and filter empty
+        : value
+    }));
   };
+
 
 
   const handleSearch = async (e) => {
@@ -152,7 +146,7 @@ const CreateCriteria = ({ togglePopup, setShowPopup, handleCreateCase }) => {
 
 
       const payload = {
-        keyword: Array.isArray(formData.searchQuery) ? formData.searchQuery : [formData.searchQuery],
+        keyword: formData.searchQuery?.length > 0 ? formData.searchQuery : [],
         case_id: formData.caseIds?.length > 0
           ? (formData.caseIds.map(caseId => caseId.value.toString()))
           : "[]",
@@ -201,7 +195,7 @@ const CreateCriteria = ({ togglePopup, setShowPopup, handleCreateCase }) => {
       dispatch(setPage(1));
 
       setFormData({
-        searchQuery: '',
+        searchQuery: [],
         datatype: [],
         filetype: [],
         caseIds: [],
