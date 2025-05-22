@@ -82,7 +82,7 @@ const TargetCreate = ({ togglePopup }) => {
       window.dispatchEvent(new Event("databaseUpdated"));
       
       if (response.status === 200) {
-        toast.success("Keyword created successfully");
+        toast.success("Target created successfully");
         togglePopup();
        
       } else {
@@ -142,14 +142,14 @@ const TargetCreate = ({ togglePopup }) => {
           &times;
         </button>
         <div className="popup-content">
-          <h5>Add New target</h5>
+          <h5>Add New Target</h5>
           <form
             onSubmit={(e) => {
               e.preventDefault();
               handleCreateKeyword();
             }}
           >
-            <label htmlFor="name">Keyword:</label>
+            <label htmlFor="name">Target <span style={{ color: 'black' }}>*</span></label>
             <input
               className="com"
               type="text"
@@ -157,12 +157,12 @@ const TargetCreate = ({ togglePopup }) => {
               name="name"
               value={formData.name}
               onChange={handleInputChange}
-              placeholder="Enter keyword"
+              placeholder="Enter Target"
               required
             />
             
             <div>
-              <label htmlFor="type">Type:</label>
+              <label htmlFor="type">Type <span style={{ color: 'black' }}>*</span></label>
               <input
                 className="com"
                 type="text"
@@ -170,7 +170,7 @@ const TargetCreate = ({ togglePopup }) => {
                 name="type"
                 value={formData.type}
                 onChange={handleInputChange}
-                placeholder="Enter type"
+                placeholder="Enter Type"
                 required
               />
             </div>
@@ -182,10 +182,10 @@ const TargetCreate = ({ togglePopup }) => {
               name="description"
               value={formData.description}
               onChange={handleInputChange}
-              placeholder="Enter description"
+              placeholder="Enter Description"
             ></textarea>
 
-            <label htmlFor="synonyms">Alternative Keywords/Synonym (up to 5 keywords):</label>
+            <label htmlFor="synonyms">Alternative Keywords/Synonym (up to 5 keywords) </label>
             <div className="synonym-input-container">
               <input
                 className="com"
@@ -214,7 +214,7 @@ const TargetCreate = ({ togglePopup }) => {
             </div>
 
             <div>
-              <label htmlFor="threat_weightage">Threat Score:</label>
+              <label htmlFor="threat_weightage">Threat Score</label>
               <Select
                 options={threatScoreOptions}
                 styles={customStyles}

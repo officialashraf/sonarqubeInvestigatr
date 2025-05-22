@@ -219,10 +219,18 @@ const AddNewCriteria = ({
                 <div className="popup-overlay" style={{ justifyContent: 'center' }}>
                     <div className="popup-container" style={{ width: '40%' }}>
                         <div className="popup-content" style={{ marginTop: '4rem' }}>
-                            <h5>Filter Criteria</h5>
-                            <span style={{ cursor: "pointer", marginLeft: '14rem' }} onClick={() => setIsPopupVisible(false)}>
-                                &times;
-                            </span>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <h5 style={{ margin: 0 }}>Filter Criteria</h5>
+                                <span
+                                    style={{ cursor: 'pointer', fontSize: '20px' }}
+                                    onClick={() => setIsPopupVisible(false)}
+                                >
+                                    &times;
+                                </span>
+                            </div>
+
+                            
+                            
                             <form>
                                 <h5>Filter</h5>
 

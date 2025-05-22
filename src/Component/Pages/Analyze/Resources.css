@@ -8,7 +8,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #ccc;
   padding: 2px;
 }
 
@@ -79,6 +78,7 @@
 }
 .inner-content {
   padding-bottom: 60px; /* ya jitna space chahiye */
+  height: 100px;
 }
 
 .sidebar-header {
@@ -151,7 +151,7 @@
   margin-top: 50%;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 888px) {
   .left-sidebar {
     width: 30%; /* Sidebar takes full width on small screens */
     padding: 8px;
@@ -161,14 +161,17 @@
     width: 100%;
     padding: 8px;
   }
+  .h4{
+    font-size: 12px;
+  }
 
   .top-header {
-    flex-direction: column; /* Stack elements vertically */
+    /* flex-direction: column; Stack elements vertically */
     align-items: flex-start;
     padding: 8px;
   }
   .title h5 {
-    font-size: 12px; /* Adjust font size for small screens */
+    font-size: 15px; /* Adjust font size for small screens */
   }
 
   .subscribeButton {
@@ -181,12 +184,41 @@
   }
 
   .channel-action {
-    flex-direction: column;
+    /* flex-direction: column; */
     gap: 8px; /* Reduce spacing on smaller screens */
   }
 
   .actionButton {
-    font-size: 14px; /* Smaller font size for small screens */
+    font-size: 12px; /* Smaller font size for small screens */
+  }
+  .actions {
+    justify-content: space-between;
+  }
+
+  .actionButton {
+    font-size: 0.75rem;
+    padding: 4px 6px;
+    flex: 1 1 45%; /* Let buttons occupy approx half the row */
+  }
+
+  .like, .comment {
+    font-size: 10px;
+  }
+}
+@media (max-width: 360px) {
+  .actionButton span + span {
+    display: none; /* Hides label text */
+  }
+}
+
+@media (max-width: 888px) {
+  .right-content {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: scroll;
+    overflow-y: auto;
+    padding: 8px;
+    height: 100%; /* Optional: or adjust based on screen size */
   }
 }
 
@@ -200,12 +232,14 @@
   padding-left: 10px;
   padding-top: 10px;
   width: 50%;
+  overflow-x: auto;
   overflow-y: auto;
   background-color: #f4f4f4;
   border-left: 1px solid #ddd;
   align-items: center;
   justify-content: center;
   height: 450px;
+  /* min-width: 620px; */
 }
 .resourceDetailsView {
   padding: 10px;
@@ -405,6 +439,8 @@ video {
   gap: 16px; /* Adds spacing between sections */
   padding: 10px;
   border-bottom: 1px solid #646464;
+    flex-wrap: wrap; /* Important for small screens */
+
 }
 .channelInfo {
   display: flex;
@@ -452,21 +488,48 @@ video {
   gap: 16px;
   /* width: 100%; */
   gap: 12px;
+    flex-wrap: wrap; /* Allow buttons to move to next line on small screens */
 
   max-width: 800px;
 }
 
 .actionButton {
+    display: flex; /* Align icon + text */
   background-color: #f1f1f1;
   color: #000;
   border: none;
+  align-items: center;
   /* padding: 8px 16px; */
   border-radius: 12px;
   font-size: 1rem;
   cursor: pointer;
   gap: 4px;
+    white-space: nowrap; /* Prevent text from wrapping inside button */
+
 }
 
 .actionButton:hover {
   background-color: #e0e0e0;
 }
+@media (max-width: 600px) {
+  .channel-action {
+    flex-direction: column; /* Stack vertically */
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .channelLogo {
+    width: 36px;
+    height: 36px;
+  }
+
+  .channelName {
+    font-size: 0.9rem;
+  }
+
+  .subscribeButton {
+    font-size: 0.85rem;
+    padding: 2px 6px;
+  }
+}
+

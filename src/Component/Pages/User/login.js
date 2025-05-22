@@ -80,22 +80,22 @@ const LoginPage = () => {
                 <Col md={6} className="right-column">
                     <Form className="login-form" onSubmit={handleLogin} >
                         <InputField
-                            label="User Name"
+                            label="User Name *"
                             type="text"
                             value={formData.username}
                             onChange={handleChange}
-                            placeholder="Enter your username"
+                            placeholder="Enter Your Username"
                             controlId="Username"
                             autocomplete="off"
                             name="username"
 
                         />
                         <InputField
-                            label="Password"
+                            label="Password *"
                             type="password"
                             value={formData.password}
                             onChange={handleChange}
-                            placeholder="Enter your password"
+                            placeholder="Enter Your Password"
                             controlId="Username"
                             autocomplete="off"
                             name="password"

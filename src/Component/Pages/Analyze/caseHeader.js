@@ -11,7 +11,7 @@ const CaseHeader = ({ onIconClick }) => {
   const caseData1 = useSelector((state) => state.caseData.caseData);
   const navigate = useNavigate();
   const backToSnap = () => {
-    navigate(`/cases/${caseData1.id}`);
+    navigate(`/cases/${ caseData1.id }`);
   };
 
   return (
@@ -59,21 +59,26 @@ const CaseHeader = ({ onIconClick }) => {
             />
           </div>
 
+
+
+          {/* <div className="col-auto ms-auto ml-3 d-flex justify-content-center align-items-center"  style={{ marginRight:"5px", height:"28px"}}> */}
+          <div className="col-auto ms-auto d-flex align-items-center gap-3">
+            <FaPhotoVideo
+              className="icon-styles"
+              onClick={() => onIconClick("resources")}
+            />
+            <PieChart
+              className="icon-style"
+              onClick={() => onIconClick("graphicalData")}
+            />
+            <ListAltOutlined
+              className="icon-style"
+              onClick={() => onIconClick("caseData")}
+            />
+
+          </div>
         </div>
-      </div>
-      <div className="col-auto ms-auto d-flex align-items-center gap-3">
-        <FaPhotoVideo
-          className="icon-styles"
-          onClick={() => onIconClick("resources")}
-        />
-        <PieChart
-          className="icon-style"
-          onClick={() => onIconClick("graphicalData")}
-        />
-        <ListAltOutlined
-          className="icon-style"
-          onClick={() => onIconClick("caseData")}
-        />
+
       </div>
     </>
   );

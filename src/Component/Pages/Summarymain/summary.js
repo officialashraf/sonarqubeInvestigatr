@@ -173,7 +173,7 @@ const Summary = ({ filters }) => {
                   <TableHead >
                     <TableRow>
                       <TableCell >Type</TableCell>
-                      <TableCell align="right" >No. of Records</TableCell>
+                      <TableCell align="right" >No. of records</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>

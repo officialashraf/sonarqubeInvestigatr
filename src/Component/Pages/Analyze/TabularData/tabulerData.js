@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Table, Pagination } from "react-bootstrap";
 import "./caseTableData.css";
+import "../../Case/table.css"
 import { useSelector, useDispatch } from "react-redux";
 import "./pagination.css";
 import {
@@ -88,17 +89,20 @@ const TabulerData = () => {
   return (
     <>
       <div
-        className="case-t"
-        style={{ overflowY: "auto", height: "450px", fontSize: "10px" }}
+        className="data-table"
+        style={{ overflowY: "auto", height: "420px" }}
       >
         {data && data.length > 0 ? (
-          <Table striped bordered hover>
+          <Table striped bordered hover variant="light"  >
             <thead>
               <tr>
                 {headers.map((header) => (
                   <th key={header} className="fixed-th">
-                    {header}
-                  </th>
+                    {header
+                      .split("_") // Split by underscores
+                      .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize first letter of each word
+                      .join(" ") // Rejoin words with space
+                    }              </th>
                 ))}
               </tr>
             </thead>
@@ -107,7 +111,22 @@ const TabulerData = () => {
                 <tr key={index}>
                   {headers.map((header) => (
                     <td key={header} className="fixed-td">
-                      <div className="cell-content" title={item[header]}>
+                      <div className="cell-content" 
+                        style={{
+                          cursor: 'pointer',
+                          // padding: "0px 0px 0px 5px",
+                          // height: '37px',
+                          // fontFamily: 'sans-serif',
+                          fontWeight: 'normal',
+                          overflow: 'hidden',
+                          //  textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                          //  vertical- align: middle;
+                          padding: '0px 5px 0px 5px',
+                          fontSize: '12px',
+                          fontFamily: 'Helvetica'
+                        }}
+                      title={item[header]}>
                         {item[header]}
                       </div>
                     </td>
@@ -117,7 +136,8 @@ const TabulerData = () => {
             </tbody>
           </Table>
         ) : (
-          <p>No data available.</p>
+            <p className="text-center" style=
+              {{ margin: '20px 0px', border: '1px solid #ccc', }}>No data available.</p>
         )}
       </div>
 

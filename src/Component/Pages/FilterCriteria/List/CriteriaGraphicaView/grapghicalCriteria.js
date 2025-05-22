@@ -53,8 +53,8 @@ const ComponentOne = () => (
   </Card>);
 
 
-const ComponentTwo = () => (
-  <Card sx={{ height: "350px", backgroundColor: "lightgray" }}>
+const ComponentTwo = () => ( 
+<Card sx={{ height: "350px", backgroundColor: "lightgray"}}>
 
     <Header title="Keywords" />
     <CardContent>

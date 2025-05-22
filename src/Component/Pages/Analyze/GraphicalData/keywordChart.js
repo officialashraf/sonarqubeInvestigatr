@@ -5,6 +5,8 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import Cookies from "js-cookie";
 import Loader from '../../Layout/loader';
+import {  ResponsiveContainer } from 'recharts';
+
 
 
 const KeywordChart = () => {
@@ -74,7 +76,9 @@ const KeywordChart = () => {
   const rotate = () => 0; //  Fixed rotation (seedha text dikhane ke liye)
 
   return (
-    <Box width={600} height={230} style={{ marginTop: 0, padding: 0 }}>
+    <div style={{ width: '100%', height: 280 }}>
+        <ResponsiveContainer>
+    <Box width='100%' style={{ marginTop: 0, padding: 0 }}>
       {data.length > 0
         ? <WordCloud
           data={dataa}
@@ -82,7 +86,7 @@ const KeywordChart = () => {
           rotate={rotate}
           margin={0}
           width={600}
-          height={250}
+          height={280}
         />
         : <Typography
           variant="h6"
@@ -93,6 +97,8 @@ const KeywordChart = () => {
           No Data Available
         </Typography>}
     </Box>
+      </ResponsiveContainer>
+        </div>
   );
 };
 

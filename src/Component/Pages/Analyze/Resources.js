@@ -187,7 +187,7 @@ useEffect(() => {
         <div className="title">
           <h5>All Resources</h5>
         </div>
-        <div className="jobs">
+        {/* <div className="jobs">
           <div className="job-content">
             <h6>VIEW JOBS</h6>
             <IoChevronDown className="dropdown-icon" />
@@ -197,7 +197,7 @@ useEffect(() => {
               <BsThreeDotsVertical />
             </span>
           </div>
-        </div>
+        </div> */}
       </div>
 
       {/* Content Section */}
@@ -764,12 +764,12 @@ useEffect(() => {
                         </span>
                         Share
                       </button>
-                      <button className="actionButton">
+                      {/* <button className="actionButton">
                         <span className="comment">
                           <LiaDownloadSolid />
                         </span>
                         Download
-                      </button>
+                      </button> */}
                       <button className="actionButton">
                         <span >
                           <BsThreeDots />

@@ -97,7 +97,7 @@ const TargetUpdate = ({ togglePopup, details }) => {
 
 
       if (response.status === 200) {
-        toast.success("Keyword updated successfully");
+        toast.success("Target updated successfully");
         togglePopup();
       } else {
         toast.error("Unexpected response received from the server");
@@ -156,14 +156,14 @@ const TargetUpdate = ({ togglePopup, details }) => {
           &times;
         </button>
         <div className="popup-content">
-          <h5>Edit Keyword</h5>
+          <h5>Edit Target</h5>
           <form
             onSubmit={(e) => {
               e.preventDefault();
               handleUpdateKeyword();
             }}
           >
-            <label htmlFor="name">Keyword:</label>
+            <label htmlFor="name">Target <span style={{ color: 'black' }}>*</span></label>
             <input
               className="com"
               type="text"
@@ -171,12 +171,12 @@ const TargetUpdate = ({ togglePopup, details }) => {
               name="name"
               value={formData.name}
               onChange={handleInputChange}
-              placeholder="Enter keyword"
+              placeholder="Enter Target"
               required
             />
 
             <div>
-              <label htmlFor="type">Type:</label>
+              <label htmlFor="type">Type <span style={{ color: 'black' }}>*</span></label>
               <input
                 className="com"
                 type="text"
@@ -184,7 +184,7 @@ const TargetUpdate = ({ togglePopup, details }) => {
                 name="type"
                 value={formData.type}
                 onChange={handleInputChange}
-                placeholder="Enter type"
+                placeholder="Enter Type"
                 required
               />
             </div>
@@ -196,10 +196,10 @@ const TargetUpdate = ({ togglePopup, details }) => {
               name="description"
               value={formData.description}
               onChange={handleInputChange}
-              placeholder="Enter description"
+              placeholder="Enter Description"
             ></textarea>
 
-            <label htmlFor="synonyms">Alternative Keywords/Synonym (up to 5 keywords):</label>
+            <label htmlFor="synonyms">Alternative Keywords/Synonym (up to 5 keywords) </label>
             <div className="synonym-input-container">
               <input
                 className="com"
@@ -228,7 +228,7 @@ const TargetUpdate = ({ togglePopup, details }) => {
             </div>
 
             <div>
-              <label htmlFor="threat_weightage">Threat Score:</label>
+              <label htmlFor="threat_weightage">Threat Score </label>
               <Select
                 options={threatScoreOptions}
                 styles={customStyles}

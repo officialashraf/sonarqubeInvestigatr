@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import { useEffect, useState } from "react";
-=======
-import{ useEffect, useState } from "react";
->>>>>>> 84636558bfb8a0696bc3ffd06de22e0f52b84c9b
 import "../Case/table.css";
 import { useNavigate } from "react-router-dom";
 import { Plus } from "react-bootstrap-icons";

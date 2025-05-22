@@ -118,12 +118,22 @@ const CreateCase = ({ togglePopup }) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
+
+    let formattedValue = value || ""; // Ensure it's a string
+
+    if (name === 'title') {
+      // Capitalize the first letter of each word
+      formattedValue = formattedValue.replace(/\b\w/g, (char) => char.toUpperCase());
+    } else if (name === 'description') {
+      // Capitalize only the first letter of the sentence
+      formattedValue = formattedValue.charAt(0).toUpperCase() + formattedValue.slice(1);
+    }
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: formattedValue,
     }));
   };
-
   const handleWatchersChange = (selectedOptions) => {
     const selectedLabels = selectedOptions.map((option) => option.label).join(", ");
     setFormData((formData) => ({
@@ -155,7 +165,7 @@ const CreateCase = ({ togglePopup }) => {
               handleCreateCase(formData);
             }}
           >
-            <label htmlFor="title">Title:</label>
+            <label htmlFor="title">Title <span style={{ color: 'black' }}>*</span></label>
             <input
               className="com"
               type="text"
@@ -163,23 +173,23 @@ const CreateCase = ({ togglePopup }) => {
               name="title"
               value={formData.title}
               onChange={(e) =>
-                setFormData((prev) => ({ ...prev, title: e.target.value }))
+                setFormData((prev) => ({ ...prev, title: e.target.value.replace(/\b\w/g, (char) => char.toUpperCase()) }))
               }
-              placeholder="Enter title"
+              placeholder="Enter Title"
               required
             />
-            <label htmlFor="description">Description:</label>
+            <label htmlFor="description">Description </label>
             <textarea
               className="com"
               id="description"
               name="description"
               value={formData.description}
               onChange={handleInputChange}
-              placeholder="Enter description"
+              placeholder="Enter Description"
             ></textarea>
 
             <div>
-              <label htmlFor="assignee">Assignee:</label>
+              <label htmlFor="assignee">Assignee <span style={{ color: 'black' }}>*</span></label>
 
 
               <Select
@@ -191,7 +201,7 @@ const CreateCase = ({ togglePopup }) => {
                 onChange={handleAssigneeChange}
               />
             </div>
-            <label htmlFor="watcher">Watcher:</label>
+            <label htmlFor="watcher">Watcher <span style={{ color: 'black' }}>*</span></label>
             <Select
               options={options}
               isMulti

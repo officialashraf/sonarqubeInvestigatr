@@ -134,7 +134,7 @@ const CreateCriteria = ({ togglePopup, setShowPopup, handleCreateCase }) => {
     if (name === "searchQuery") {
       setFormData(prev => ({
         ...prev,
-        [name]: value.split(",").map(keyword => keyword.trim()) // Split by commas and trim extra spaces
+        [name]: value.split(",").map(keyword => keyword) // Split by commas and trim extra spaces
       }));
     } else {
       // For other inputs, handle normally
@@ -282,7 +282,7 @@ const CreateCriteria = ({ togglePopup, setShowPopup, handleCreateCase }) => {
 
             {/* Filetype Dropdown (Multi Select) */}
             <div className="mb-3">
-              <label>Filetype</label>
+              <label>File Type</label>
               <Select
                 isMulti
                 options={fileTypeOptions}
@@ -310,7 +310,7 @@ const CreateCriteria = ({ togglePopup, setShowPopup, handleCreateCase }) => {
 
             {/* DatePicker */}
             <div className="mb-3">
-              <label>DatePicker</label>
+              <label>Daten Picker</label>
               <TextField
                 fullWidth
                 className="com mb-3"

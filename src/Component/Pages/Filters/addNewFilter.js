@@ -182,45 +182,43 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
   };
 
 
-  useEffect(() => {
-    const fetchFilterDetails = async () => {
-      try {
-        const response = await axios.get(`http://5.180.148.40:9002/api/osint-man/v1/filter/${filterIde}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setFilterDetails(response.data)
-        console.log("fetchflterdetails", response)
-      } catch (error) {
-        console.error('Platform fetch error:', error);
-        toast.error('Error fetching platforms: ' + (error.response?.data?.detail || error.message));
-      }
-    };
-
-    fetchFilterDetails();
-
-  }, [filterIde, token]);
-
+  const fetchFilterDetails = async () => {
+    try {
+      const response = await axios.get(`http://5.180.148.40:9002/api/osint-man/v1/filter/${filterIde}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setFilterDetails(response.data)
+      console.log("fetchflterdetails", response)
+    } catch (error) {
+      console.error('Platform fetch error:', error);
+      toast.error('Error fetching platforms: ' + (error.response?.data?.detail || error.message));
+    }
+  };
 
   useEffect(() => {
-    const fetchPlatforms = async () => {
-      try {
-        const response = await axios.get('http://5.180.148.40:9002/api/osint-man/v1/platforms', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setPlatform(response.data.data || []);
-      } catch (error) {
-        console.error('Platform fetch error:', error);
-        toast.error('Error fetching platforms: ' + (error.response?.data?.detail || error.message));
-      }
-    };
+    if (filterIde) {
+      fetchFilterDetails();
+    }
+  }, [filterIde]);
+  const fetchPlatforms = async () => {
+    try {
+      const response = await axios.get('http://5.180.148.40:9002/api/osint-man/v1/platforms', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setPlatform(response.data.data || []);
+    } catch (error) {
+      console.error('Platform fetch error:', error);
+      toast.error('Error fetching platforms: ' + (error.response?.data?.detail || error.message));
+    }
+  };
+
+  useEffect(() => {
     fetchPlatforms();
-  }, [token]);
-
-
+  }, []);
 
   const handleSaveFilter = async () => {
     if (!isEditable) {
@@ -259,7 +257,8 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
 
       console.log("responseFilter", response)
       if (response.status === 200) {
-        toast.success(`Filter created successfully: ${response.data.data.name}`);
+        const action = filterDetails?.id ? 'updated' : 'created';
+        toast.success(`Filter ${action} successfully: ${response.data.data.name}`);
         const newFilterId = Number(response.data.data.id);
         setFilterId((prevFilterIds) => [...prevFilterIds, newFilterId]);
         // onNewFilterCreated(newFilterId);
@@ -281,13 +280,14 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
       <Form>
 
         <Form.Group className="mb-3">
-          <Form.Label>Filter Name </Form.Label>
+          <Form.Label>Filter Name <span style={{ color: 'black' }}>*</span> </Form.Label>
           <Form.Control
             type="text"
             value={filterName}
-            onChange={(e) => setFilterName(e.target.value)}
+            onChange={(e) => setFilterName(e.target.value.replace(/\b\w/g, (char) => char.toUpperCase()))}
             disabled={!isEditable}
-
+            placeholder = "Enter here..."
+            required
           />
         </Form.Group>
 
@@ -297,8 +297,15 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
             as="textarea"
             rows={3}
             value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            onChange={(e) => setDescription(e.target.value)}  // Just update raw text
+            onBlur={() => {
+              // Format to sentence case on blur
+              setDescription((prev) =>
+                prev.charAt(0).toUpperCase() + prev.slice(1).toLowerCase()
+              );
+            }}
             disabled={!isEditable}
+            placeholder="Enter Description"
           />
         </Form.Group>
         <div>
@@ -308,13 +315,14 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
               <div key={sourceIndex} className="mb-3 border rounded" >
                 <div className="row g-3">
                   <div className="col-md-6">
-                    <Form.Label>Source</Form.Label>
+                    <Form.Label>Source <span style={{ color: 'black' }}>*</span></Form.Label>
                     <Form.Select
                       value={source.source}
                       onChange={(e) => handleSourceChange(sourceIndex, e)}
                       disabled={!isEditable}
+                      required
                     >
-                      <option value="" disabled selected>Select Source</option>
+                      <option value="" disabled selected>Select Source <span style={{ color: 'black' }}>*</span></option>
                       <option value="social media">Social Media</option>
                       <option value="social media profile">Social Media Profile</option>
                       <option value="rss feed">RSS Feed</option>
@@ -323,12 +331,13 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
 
                   {source.source && source.source !== 'rss feed' && (
                     <div className="col-md-6">
-                      <Form.Label>Platform</Form.Label>
+                      <Form.Label>Platforms  <span style={{ color: 'black' }}>*</span></Form.Label>
                       <Form.Select
                         // multiple
                         value={source.platform}
                         onChange={(e) => handlePlatformChange(sourceIndex, e)}
                         disabled={!isEditable}
+                        required
                       >
                         <option value="" disabled selected>Select Platform</option>
                         {platform.map((plat) => (
@@ -340,7 +349,7 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
                   )}
                   {source.source && (
                     <div className="col-md-6">
-                      <Form.Label>Monitoring Interval</Form.Label>
+                      <Form.Label>Monitoring Interval <span style={{ color: 'black' }}>*</span></Form.Label>
                       <InputGroup>
                         <Form.Control
                           type="number"
@@ -349,6 +358,7 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
                           onChange={(e) => handleIntervalValueChange(sourceIndex, e.target.value)}
                           style={{ maxWidth: '100px' }}
                           disabled={!isEditable}
+                          required
                         />
                         <Form.Select
                           value={source.intervalUnit}
@@ -365,14 +375,15 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
                   )}
                   {source.source && (
                     <div className="col-md-6">
-                      <Form.Label>Keywords</Form.Label>
+                      <Form.Label>Keywords <span style={{ color: 'black' }}>*</span></Form.Label>
                       <Form.Control
                         type="text"
-                        placeholder="Enter keyword and press Enter"
+                        placeholder="Enter Keyword and Press Enter"
                         value={source.keywordInput}
                         onChange={(e) => handleKeywordChange(sourceIndex, e.target.value)}
                         onKeyDown={(e) => handleKeywordKeyDown(sourceIndex, e)}
                         disabled={!isEditable}
+                        required
                       />
                       <div className="mt-2">
                         {source.keywords.map((keyword, keyIndex) => (
@@ -415,7 +426,7 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde }) => {
                       <Form.Label>RSS URL</Form.Label>
                       <Form.Control
                         type="url"
-                        placeholder="Enter RSS URL and press Enter"
+                        placeholder="Enter RSS URL and press enter"
                         value={source.urlInput}
                         onChange={(e) => {
                           const newSources = [...sources];
