@@ -187,7 +187,7 @@ const SearchView = () => {
         <h5>Search Report</h5>
         <form onSubmit={handleSearch}>
           {/* Search Bar with Icons */}
-          <label>Search</label>
+          <label>Search <span style={{ color: 'black' }}>*</span></label>
           <TextField
             fullWidth
             className="com mb-3"
@@ -220,7 +220,7 @@ const SearchView = () => {
 
           {/* Case Selection Field */}
           <div className="mb-3">
-            <label>Case</label>
+            <label>Case <span style={{ color: 'black' }}>*</span></label>
             <Select
               isMulti
               options={caseOptions}

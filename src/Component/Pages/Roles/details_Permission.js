@@ -1,4 +1,3 @@
-import React from 'react'
 import { Table, CloseButton } from 'react-bootstrap'
 const DetailsPermission = ({ togglePopup, details }) => {
     console.log("details", details)

@@ -31,9 +31,10 @@ const AddRole = ({ togglePopup }) => {
 
             toast.success("Role created successfully");
             window.dispatchEvent(new Event("databaseUpdated"));
-            console.log('Role Created successfully:', response.data); // Debug: API response
+            console.log('Role created successfully:', response.data); // Debug: API response
             togglePopup(false)
         } catch (error) {
+            toast("Role name already exists. Kindly use a different role name", error.response.data.detail);
             console.error('Error saving criteria:', error); // Debug: Error log
         }
     };
@@ -54,13 +55,18 @@ const AddRole = ({ togglePopup }) => {
                 <div className="popup-content" style={{ width: '70%' }}>
 
                     <form onSubmit={(e) => e.preventDefault()}> {/* Prevent form submission default */}
-                        <label>Add Role</label>
+                        <label>Add Role <span style={{ color: 'black' }}>*</span></label>
                         <input
                             type="text"
-                            placeholder="Enter title"
+                            placeholder="Enter Role"
                             className="com"
                             value={searchTitle} // Bind input value to state
                             onChange={(e) => setSearchTitle(e.target.value)} // Update state on input
+                            onBlur={() => {
+                                // Format to sentence case on blur
+                                setSearchTitle((prev) =>
+                                    prev.replace(/\b\w/g, (char) => char.toUpperCase())                                );
+                              }}
                         />
                         <div className="button-container">
                             <button

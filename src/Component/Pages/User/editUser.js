@@ -16,7 +16,7 @@ const EditUser = ({ togglePopup, item }) => {
 
   const [users, setUsers] = useState({ data: [] });
   const [loading, setLoading] = useState(false);
-  
+
 
   const token = Cookies.get("accessToken");
   const userData = async () => {
@@ -87,9 +87,17 @@ const EditUser = ({ togglePopup, item }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    // Fields to apply capitalization
+    const capitalizeFields = ['firstName', 'lastName', 'role'];
+
+    // Capitalize first letter of each word if the field is in the list
+    const formattedValue = capitalizeFields.includes(name)
+      ? value.replace(/\b\w/g, (char) => char.toUpperCase())
+      : value;
+
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: formattedValue
     }));
   };
 
@@ -103,7 +111,7 @@ const EditUser = ({ togglePopup, item }) => {
         <div className="popup-content">
           <h5>Edit User</h5>
           <form onSubmit={(e) => { e.preventDefault(); handleEditUser(formData); }}>
-            <label htmlFor="firstName">First Name:</label>
+            <label htmlFor="firstName">First Name <span style={{ color: 'black' }}>*</span></label>
             <input
               className="com"
               type="text"
@@ -111,9 +119,10 @@ const EditUser = ({ togglePopup, item }) => {
               name="firstName"
               value={formData.firstName}
               onChange={handleChange}
+              required
             />
 
-            <label htmlFor="lastName">Last Name:</label>
+            <label htmlFor="lastName">Last Name</label>
             <input
               className="com"
               type="text"
@@ -123,7 +132,7 @@ const EditUser = ({ togglePopup, item }) => {
               onChange={handleChange}
             />
 
-            <label htmlFor="username">Username:</label>
+            <label htmlFor="username">Username <span style={{ color: 'black' }}>*</span></label>
             <input
               className="com"
               type="text"
@@ -131,9 +140,10 @@ const EditUser = ({ togglePopup, item }) => {
               name="username"
               value={formData.username}
               onChange={handleChange}
+              required
             />
 
-            <label htmlFor="email">Email ID:</label>
+            <label htmlFor="email">Email ID <span style={{ color: 'black' }}>*</span></label>
             <input
               className="com"
               type="email"
@@ -141,9 +151,10 @@ const EditUser = ({ togglePopup, item }) => {
               name="email"
               value={formData.email}
               onChange={handleChange}
+              required
             />
 
-            <label htmlFor="contactNumber">Contact Number:</label>
+            <label htmlFor="contactNumber">Contact Number <span style={{ color: 'black' }}>*</span></label>
             <input
               className="com"
               type="text"
@@ -151,9 +162,8 @@ const EditUser = ({ togglePopup, item }) => {
               name="contactNumber"
               value={formData.contactNumber}
               onChange={handleChange}
+              required
             />
-
-           
 
             <div className="button-container">
               <button type="submit" className="create-btn" disabled={loading}>

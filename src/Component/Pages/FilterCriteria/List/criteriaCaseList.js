@@ -170,24 +170,22 @@ const CriteriaCaseTable = () => {
 
   return (
     <>
-     <div className="tabs">
-          <div
-            className={`tab active`} // "Cases" will always be active
-          // onClick={() => setActiveTab('Cases')}
-          >
-            Cases ({totalResults || "no results"})
-          </div>
 
-
+      <div className="tabs">
+        <div
+          className={`tab active`} // "Cases" will always be active
+        // onClick={() => setActiveTab('Cases')}
+        >
+          Cases ({totalResults || "no results"})
         </div>
-      <div className="data-table" style={{ height: '420px', marginTop: '0px'}}>
-       
+
+
+      </div>
+      <div className="data-table" style={{ height: '420px', marginTop: '0px' }}>
+
         {loading ? (
-          <div className="d-flex justify-content-center align-items-center" style={{ height: '100%' }}>
-            <Spinner animation="border" role="status" variant="primary">
-              <span className="visually-hidden">Loading...</span>
-            </Spinner>
-            <span className="ms-2">Loading data...</span>
+          <div>
+            <Loader />
           </div>
         ) : (
           <Table striped bordered hover variant='light'>
@@ -197,11 +195,11 @@ const CriteriaCaseTable = () => {
                 {searchResults.length > 0 && [...new Set(searchResults.flatMap(item => Object.keys(item)))]
                   .map((key, index) => (
                     <th key={index} className="fixed-th">
-                       {key
-                .split("_") // Split by underscores
-                .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize first letter of each word
-                .join(" ") // Rejoin words with space
-            }
+                      {key
+                        .split("_") // Split by underscores
+                        .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize first letter of each word
+                        .join(" ") // Rejoin words with space
+                      }
                     </th>
                   ))}
               </tr>
@@ -212,7 +210,7 @@ const CriteriaCaseTable = () => {
                   <tr key={rowIndex}>
                     {/* Dynamically generate table cells */}
                     {[...new Set(searchResults.flatMap(item => Object.keys(item)))].map((key, colIndex) => (
-                      <td key={colIndex} className="fixed-th">
+                      <td key={colIndex} className="fixed-t">
                         <div
                           className="cell-content"
                           style={{

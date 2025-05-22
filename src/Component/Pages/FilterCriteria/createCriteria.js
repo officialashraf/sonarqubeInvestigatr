@@ -129,6 +129,7 @@ const CreateCriteria = ({ handleCreateCase }) => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
+
     setFormData(prev => ({
       ...prev,
       [name]: name === "searchQuery"
@@ -275,7 +276,7 @@ const CreateCriteria = ({ handleCreateCase }) => {
 
             {/* Filetype Dropdown (Multi Select) */}
             <div className="mb-3">
-              <label>Filetype</label>
+              <label>File Type</label>
               <Select
                 isMulti
                 options={fileTypeOptions}
@@ -303,7 +304,7 @@ const CreateCriteria = ({ handleCreateCase }) => {
 
             {/* DatePicker */}
             <div className="mb-3">
-              <label>DatePicker</label>
+              <label>Daten Picker</label>
               <TextField
                 fullWidth
                 className="com mb-3"

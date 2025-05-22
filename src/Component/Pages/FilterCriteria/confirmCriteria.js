@@ -76,15 +76,23 @@ const Confirm = ({ formData, selectedDates, searchChips }) => {
 
 
                 <div className="popup-content" style={{ width: '70%' }}>
-                    <h5>Save Search as</h5>
+                    <h5>Save Search As</h5>
                     <form onSubmit={(e) => e.preventDefault()}> {/* Prevent form submission default */}
                         <label>Search Title</label>
                         <input
                             type="text"
-                            placeholder="Enter title"
+                            placeholder="Enter Title"
                             className="com"
                             value={searchTitle} // Bind input value to state
                             onChange={(e) => setSearchTitle(e.target.value)} // Update state on input
+                            onBlur={() => {
+                                setSearchTitle((prev) => {
+                                    if (!prev) return prev; // handle empty string or null
+                                    // Capitalize first letter of the whole string only (sentence case)
+                                    const formattedValue = prev.charAt(0).toUpperCase() + prev.slice(1);
+                                    return formattedValue;
+                                });
+                              }}
                         />
                         <div className="button-container">
                             <button
@@ -92,14 +100,14 @@ const Confirm = ({ formData, selectedDates, searchChips }) => {
                                 className="cancel-btn"
                                 onClick={() => setIsVisible(false)}
                             >
-                                CANCEL
+                                Cancel
                             </button>
                             <button
                                 type="submit"
                                 className="create-btn"
                                 onClick={saveCriteria}
                             >
-                                SAVE
+                                Save
                             </button>
                         </div>
                     </form>

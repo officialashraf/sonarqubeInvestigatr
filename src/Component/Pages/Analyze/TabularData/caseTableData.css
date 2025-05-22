@@ -1,4 +1,4 @@
-.fixed-th {
+fixed-th {
   position: sticky;
   top: -2px;
   background: #fff;
@@ -14,24 +14,25 @@
 }
 
 .fixed-td {
-  min-width: 40px; /* Fixed width */
-  max-width: 200px; /* Match header width */
-  height: 20px; /* Fix row height */
+  min-width: 40px;  /*Fixed width */
+  max-width: 200px;/* Match header width */
+  height: 20px; /* Fix row height */ 
   padding: 5px;
   text-align: left;
   overflow: hidden;
 }
 
-.cell-content {
+
+/* .cell-content {
   overflow: hidden;
   white-space: nowrap;
   height: 20px;
   text-overflow: ellipsis;
   display: block;
   width: 100%;
-}
+} */
 
-.fixed-td:hover .cell-content {
+/* .fixed-td:hover .cell-content {
   white-space: normal;
   word-wrap: break-word;
   background: rgba(0, 0, 0, 0.1);
@@ -40,7 +41,7 @@
   min-width: 80px;
   max-width: 100%;
   z-index: 100;
-}
+} */
 
 .table-container {
   overflow-x: auto; /* Enable horizontal scroll if content exceeds table width */

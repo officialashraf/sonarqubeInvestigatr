@@ -126,9 +126,23 @@ const EditCase = ({ togglePopup, item }) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+
+    let formattedValue;
+
+    if (name === 'title') {
+      // Capitalize first letter of each word
+      formattedValue = value.replace(/\b\w/g, (char) => char.toUpperCase());
+    } else if (name === 'description') {
+      // Capitalize only the first letter of the whole input
+      formattedValue = value.charAt(0).toUpperCase() + value.slice(1);
+    } else {
+      // For other fields, keep as is
+      formattedValue = value;
+    }
+
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: formattedValue,
     }));
   };
   const handleWatchersChange = (selectedOptions) => {
@@ -232,7 +246,7 @@ const EditCase = ({ togglePopup, item }) => {
             e.preventDefault();
             handleEditCase(formData);
           }}>
-            <label htmlFor="title">Title:</label>
+            <label htmlFor="title">Title <span style={{ color: 'black' }}>*</span></label>
             <input
               className="com"
               type="text"
@@ -241,10 +255,10 @@ const EditCase = ({ togglePopup, item }) => {
               value={formData.title}
               onChange={handleInputChange}
               placeholder="Enter title"
-            // required
+              required
             />
 
-            <label htmlFor="description">Description:</label>
+            <label htmlFor="description">Description <span style={{ color: 'black' }}>*</span></label>
             <input
               className="com"
               id="description"
@@ -252,9 +266,10 @@ const EditCase = ({ togglePopup, item }) => {
               value={formData.description}
               onChange={handleInputChange}
               placeholder="Enter description"
+              required
             />
 
-            <label htmlFor="assignee">Assignee:</label>
+            <label htmlFor="assignee">Assignee <span style={{ color: 'black' }}>*</span></label>
             <Select
               options={options}
               name="assignee"
@@ -266,11 +281,12 @@ const EditCase = ({ togglePopup, item }) => {
               onChange={handleAssigneeChange}
               defaultMenuIsOpen={false}
               openMenuOnClick={true}
+              required
             />
 
 
 
-            <label htmlFor="watchers">Watchers:</label>
+            <label htmlFor="watchers">Watchers <span style={{ color: 'black' }}>*</span></label>
             <Select
               options={options}
               isMulti
@@ -284,6 +300,7 @@ const EditCase = ({ togglePopup, item }) => {
               })
             }
               onChange={handleWatchersChange}
+              required
 
             />
 

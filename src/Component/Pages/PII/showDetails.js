@@ -13,19 +13,19 @@ const ShowDetails = () => {
 
 
   const [query, setQuery] = useState("");
-  const [searchType, setSearchType] = useState("phone-no");
+  const [searchType, setSearchType] = useState("Phone-no");
   const dispatch = useDispatch();
 
   const handleSearch = async () => {
     if (!query.trim()) return;
     console.log("Seartype", searchType)
 
-    if (searchType === "email") {
+    if (searchType === "Email") {
       if (!validator.isEmail(query) || !query.endsWith("@gmail.com")) {
         toast.error("Please enter a valid email address");
         return;
       }
-    } else if (searchType === "phone-no") {
+    } else if (searchType === "Phone-no") {
       // Remove all non-digit characters
 
 
@@ -38,7 +38,7 @@ const ShowDetails = () => {
       }
     }
 
-    let url = searchType === "email"
+    let url = searchType === "Email"
       ? `http://5.180.148.40:9002/api/osint-man/v1/email/${query}`
       : `http://5.180.148.40:9002/api/osint-man/v1/phone-no/${query}`;
 
@@ -61,8 +61,8 @@ const ShowDetails = () => {
       <div className="search-bar-container">
         <div className="search-bar">
           <select className="search-dropdown" value={searchType} onChange={(e) => setSearchType(e.target.value)}>
-            <option value="phone-no">Phone</option> {/* Default selected */}
-            <option value="email">Email</option>
+            <option value="Phone-no">Phone</option> {/* Default selected */}
+            <option value="Email">Email</option>
           </select>
 
           <input

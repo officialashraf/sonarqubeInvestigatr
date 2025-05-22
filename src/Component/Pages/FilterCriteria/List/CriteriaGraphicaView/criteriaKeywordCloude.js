@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import Cookies from "js-cookie";
 import Loader from '../../../Layout/loader';
+import {  ResponsiveContainer } from 'recharts';
 
 
 const CriteriaKeywordChart = () => {
@@ -80,14 +81,15 @@ const CriteriaKeywordChart = () => {
   }
 
   return (
-    <Box width={600} height={230} style={{ marginTop: 0, padding: 0 }}>
+    <div style={{ width: '100%', height: 250 }}>
+     <ResponsiveContainer>
+    <Box width='100%'  style={{ marginTop: 0, padding: 0 }}>
       {data.length > 0 ? (
         <WordCloud
           data={dataa}
           fontSizeMapper={fontSizeMapper}
           rotate={rotate}
           margin={0}
-
           width={600}
           height={250}
         />
@@ -97,6 +99,8 @@ const CriteriaKeywordChart = () => {
         </Typography>
       )}
     </Box>
+     </ResponsiveContainer>
+    </div>
   );
 }
 

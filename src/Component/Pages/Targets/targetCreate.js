@@ -162,6 +162,7 @@ const [formData, setFormData] = useState({
         // );console.log("sub_type_response",sub_type_response)
       // }
       window.dispatchEvent(new Event("databaseUpdated"));
+
       toast.success("Target created successfully");
       togglePopup();
     } catch (err) {
@@ -233,6 +234,7 @@ const [formData, setFormData] = useState({
               handleCreateKeyword();
             }}
           >
+
             <div>
               <label htmlFor="type">Type *</label>
               <Select
@@ -262,7 +264,6 @@ const [formData, setFormData] = useState({
               placeholder="Enter Target"
               required
             />
-            
             <label htmlFor="description">Description</label>
             <textarea
               className="com"
@@ -270,9 +271,8 @@ const [formData, setFormData] = useState({
               name="description"
               value={formData.description}
               onChange={handleInputChange}
-              placeholder="Enter description"
+              placeholder="Enter Description"
             ></textarea>
-
             <label htmlFor="synonyms">Alternative Keywords/Synonym (up to 5 keywords)</label>
             <div className="synonym-input-container">
               <input

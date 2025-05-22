@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Table, Pagination } from "react-bootstrap";
 import "./caseTableData.css";
+import "../../Case/table.css"
 import { useSelector, useDispatch } from "react-redux";
 import "./pagination.css";
 import {
@@ -105,7 +106,6 @@ const TabulerData = () => {
         </th>
     ))}
 </tr>
-
             </thead>
             <tbody>
               {data.map((item, index) => (
@@ -137,7 +137,8 @@ const TabulerData = () => {
             </tbody>
           </Table>
         ) : (
-          <p>No data available.</p>
+            <p className="text-center" style=
+              {{ margin: '20px 0px', border: '1px solid #ccc', }}>No data available.</p>
         )}
       </div>
 

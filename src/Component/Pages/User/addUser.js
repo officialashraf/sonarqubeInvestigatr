@@ -91,11 +91,21 @@ console.log("response_Dropdown",formattedRoles)
         fetchRoles();
     }, [token]);
 
+
   const handleChange = (e) => {
     const { name, value } = e.target;
+  
+    // Fields to apply capitalization
+    const capitalizeFields = ['first_name', 'last_name', 'role'];
+  
+    // Capitalize first letter of each word if the field is in the list
+    const formattedValue = capitalizeFields.includes(name)
+      ? value.replace(/\b\w/g, (char) => char.toUpperCase())
+      : value;
+  
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value
+      [name]: formattedValue
     }));
   };
 
@@ -119,7 +129,7 @@ console.log("queryPyload",formData)
       );
 
       if (response.status === 201 || response.status === 200) {
-        toast.success("User added successfully!");
+        toast.success("User added successfully");
         window.dispatchEvent(new Event("databaseUpdated"));
         onClose();
       } else {
@@ -138,17 +148,17 @@ console.log("queryPyload",formData)
         <div className="popup-content">
           <h5>Add User Form</h5>
           <form onSubmit={handleSubmit}>
-            <label>User Name:</label>
-            <input className="com" name="username" value={formData.username} onChange={handleChange} placeholder="Enter User Name" required />
+            <label>User Name *</label>
+            <input className="com" name="username" value={formData.username} onChange={handleChange} placeholder="Enter User Name" requiblack />
 
-            <label>First Name:</label>
-            <input className="com" name="first_name" value={formData.first_name} onChange={handleChange} placeholder="Enter First Name" required />
+            <label>First Name *</label>
+            <input className="com" name="first_name" value={formData.first_name} onChange={handleChange} placeholder="Enter First Name" requiblack />
 
-            <label>Last Name:</label>
+            <label>Last Name</label>
             <input className="com" name="last_name" value={formData.last_name} onChange={handleChange} placeholder="Enter Last Name" />
 
            <div>
-            <label>Role:</label>
+            <label>Role *</label>
             <Select
                 options={roles}
                 placeholder="Select a role"
@@ -170,14 +180,15 @@ console.log("queryPyload",formData)
             />
         </div>
 
-            <label>Email ID:</label>
-            <input className="com" type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Enter Email ID" required />
 
-            <label>Contact Number:</label>
-            <input className="com" name="contact_no" value={formData.contact_no} onChange={handleChange} placeholder="Enter Contact Number" required />
+            <label>Email ID *</label>
+            <input className="com" type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Enter Email ID" requiblack />
 
-            <label>Password :</label>
-            <input className="com" type="password" name="password" value={formData.password} onChange={handleChange} placeholder="Enter Password" required />
+            <label>Contact Number *</label>
+            <input className="com" name="contact_no" value={formData.contact_no} onChange={handleChange} placeholder="Enter Contact Number" requiblack />
+
+            <label>Password *</label>
+            <input className="com" type="password" name="password" value={formData.password} onChange={handleChange} placeholder="Enter Password" requiblack />
 
             <div className="button-container">
               <button type="submit" className="create-btn">Create</button>

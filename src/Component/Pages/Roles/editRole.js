@@ -69,13 +69,18 @@ if (!searchTitle || searchTitle.trim() === "") {
                 <div className="popup-content" style={{ width: '70%' }}>
 
                     <form onSubmit={(e) => e.preventDefault()}> {/* Prevent form submission default */}
-                        <label>UpdateRole</label>
+                        <label>UpdateRole <span style={{ color: 'black' }}>*</span></label>
                         <input
                             type="text"
                             placeholder="Enter Role"
                             className="com"
                             value={searchTitle} // Bind input value to state
                             onChange={(e) => setSearchTitle(e.target.value)} // Update state on input
+                            onBlur={() => {
+                                // Format to sentence case on blur
+                                setSearchTitle((prev) =>
+                                    prev.replace(/\b\w/g, (char) => char.toUpperCase()));
+                            }}
                         />
                         <div className="button-container">
                             <button

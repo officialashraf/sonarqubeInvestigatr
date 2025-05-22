@@ -47,7 +47,7 @@ const UpdateComment = ({ onClose, comment, resourceId, GetCommentList }) => {
         <div className="popup-content">
           <form onSubmit={handleUpdate}>
 
-            <label htmlFor="title">UpdateComment:</label>
+            <label htmlFor="title">Update Comment:</label>
             <input
               className="com"
               type="text"
@@ -55,7 +55,7 @@ const UpdateComment = ({ onClose, comment, resourceId, GetCommentList }) => {
               name="title"
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
-              placeholder="Enter Your Comment"
+              placeholder="Enter your comment"
               required
             />
 

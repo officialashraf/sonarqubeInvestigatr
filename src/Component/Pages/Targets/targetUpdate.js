@@ -304,8 +304,9 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
               name="description"
               value={formData.description}
               onChange={handleInputChange}
-              placeholder="Enter description"
+              placeholder="Enter Description"
             ></textarea>
+
 
             <label htmlFor="synonyms">Alternative Keywords/Synonym (up to 5 keywords)</label>
             <div className="synonym-input-container">

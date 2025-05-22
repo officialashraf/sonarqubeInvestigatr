@@ -45,7 +45,7 @@ const LicensePage = () => {
         </Col>
         <Col md={6} className="right-column">
           <Form className="login-form" onSubmit={handleSubmit}>
-            <label style={{ color: "white" }}>License Key</label>
+            <label style={{ color: "white" }}>License Key <span style={{ color: 'white' }}>*</span></label>
             <textarea
               type="text"
               placeholder="Paste your license key here"
