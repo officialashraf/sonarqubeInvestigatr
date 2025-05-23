@@ -324,10 +324,14 @@ const [formData, setFormData] = useState({
     <label>Targets:</label>
     <Select
       isMulti
-      options={existingTargets.map(target => ({ 
-        value: target.id, 
-        label: `${target.id} - ${target.name} - ${target.type}` 
-      }))}
+   options={existingTargets
+  .filter(target => target.type !== "target")
+  .map(target => ({ 
+    value: target.id, 
+    label: `${target.id} - ${target.name} - ${target.type}` 
+  }))
+}
+
       styles={customStyles}
       placeholder="Select targets"
       value={

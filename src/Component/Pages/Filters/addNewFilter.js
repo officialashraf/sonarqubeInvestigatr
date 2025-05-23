@@ -1,3 +1,4 @@
+
 import { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import { Form, InputGroup, Button, Badge } from 'react-bootstrap';
@@ -177,6 +178,7 @@ const AddNewFilter = ({ onClose, filterIde }) => {
     }]);
   };
 
+
   useEffect(() => {
     const fetchFilterDetails = async () => {
       if (!filterIde) return; // Prevent the API call if filterIde is undefined
@@ -197,6 +199,8 @@ const AddNewFilter = ({ onClose, filterIde }) => {
     fetchFilterDetails();
   }, [filterIde, token]);
 
+
+
   useEffect(() => {
     const fetchPlatforms = async () => {
       try {
@@ -213,6 +217,7 @@ const AddNewFilter = ({ onClose, filterIde }) => {
     };
     fetchPlatforms();
   }, [token]);
+
 
 
   const handleSaveFilter = async () => {
@@ -251,8 +256,7 @@ const AddNewFilter = ({ onClose, filterIde }) => {
       window.dispatchEvent(new Event('databaseUpdated'));
       console.log("responseFilter", response)
       if (response.status === 200) {
-        const action = filterDetails?.id ? 'updated' : 'created';
-        toast.success(`Filter ${action} successfully: ${response.data.data.name}`);
+        toast.success(`Filter created successfully: ${response.data.data.name}`);
         const newFilterId = Number(response.data.data.id);
         setFilterId((prevFilterIds) => [...prevFilterIds, newFilterId]);
         // onNewFilterCreated(newFilterId);
@@ -286,14 +290,13 @@ const AddNewFilter = ({ onClose, filterIde }) => {
           cursor:'pointer'
         }}>&times;</span> */}
         <Form.Group className="mb-3">
-          <Form.Label>Filter Name <span style={{ color: 'black' }}>*</span> </Form.Label>
+          <Form.Label>Filter Name </Form.Label>
           <Form.Control
             type="text"
             value={filterName}
-            onChange={(e) => setFilterName(e.target.value.replace(/\b\w/g, (char) => char.toUpperCase()))}
+            onChange={(e) => setFilterName(e.target.value)}
             disabled={!isEditable}
-            placeholder="Enter here..."
-            required
+
           />
         </Form.Group>
 
@@ -303,15 +306,8 @@ const AddNewFilter = ({ onClose, filterIde }) => {
             as="textarea"
             rows={3}
             value={description}
-            onChange={(e) => setDescription(e.target.value)}  // Just update raw text
-            onBlur={() => {
-              // Format to sentence case on blur
-              setDescription((prev) =>
-                prev.charAt(0).toUpperCase() + prev.slice(1).toLowerCase()
-              );
-            }}
+            onChange={(e) => setDescription(e.target.value)}
             disabled={!isEditable}
-            placeholder="Enter Description"
           />
         </Form.Group>
         <div>
@@ -319,12 +315,12 @@ const AddNewFilter = ({ onClose, filterIde }) => {
             {sources.map((source, sourceIndex) => (
 
               <div key={sourceIndex} className="mb-3 border rounded" >
-                {sources.length > 1 && (
+                {sources.length >1 && (
                   <span style={{
                     position: 'fixed',
                     fontSize: '15px',
                     right: ' 20px',
-                    cursor: 'pointer'
+                   cursor:'pointer'
                   }} onClick={() => handleRemoveSource(sourceIndex)}
                     disabled={!isEditable}>&times;</span>
 
@@ -334,15 +330,13 @@ const AddNewFilter = ({ onClose, filterIde }) => {
 
                   <div className="col-md-6">
 
-
                     <Form.Label>Source *</Form.Label>
                     <Form.Select
                       value={source.source}
                       onChange={(e) => handleSourceChange(sourceIndex, e)}
                       disabled={!isEditable}
-                      required
                     >
-                      <option value="" disabled selected>Select Source <span style={{ color: 'black' }}>*</span></option>
+                      <option value="" disabled selected>Select Source</option>
                       <option value="social media">Social Media</option>
                       <option value="social media profile">Social Media Profile</option>
                       <option value="rss feed">RSS Feed</option>
@@ -351,13 +345,12 @@ const AddNewFilter = ({ onClose, filterIde }) => {
 
                   {source.source && source.source !== 'rss feed' && (
                     <div className="col-md-6">
-                      <Form.Label>Platforms  <span style={{ color: 'black' }}>*</span></Form.Label>
+                      <Form.Label>Platform</Form.Label>
                       <Form.Select
                         // multiple
                         value={source.platform}
                         onChange={(e) => handlePlatformChange(sourceIndex, e)}
                         disabled={!isEditable}
-                        required
                       >
                         <option value="" disabled selected>Select Platform</option>
                         {platform.map((plat) => (
@@ -369,7 +362,7 @@ const AddNewFilter = ({ onClose, filterIde }) => {
                   )}
                   {source.source && (
                     <div className="col-md-6">
-                      <Form.Label>Monitoring Interval <span style={{ color: 'black' }}>*</span></Form.Label>
+                      <Form.Label>Monitoring Interval</Form.Label>
                       <InputGroup>
                         <Form.Control
                           type="number"
@@ -378,7 +371,6 @@ const AddNewFilter = ({ onClose, filterIde }) => {
                           onChange={(e) => handleIntervalValueChange(sourceIndex, e.target.value)}
                           style={{ maxWidth: '100px' }}
                           disabled={!isEditable}
-                          required
                         />
                         <Form.Select
                           value={source.intervalUnit}
@@ -395,15 +387,14 @@ const AddNewFilter = ({ onClose, filterIde }) => {
                   )}
                   {source.source && (
                     <div className="col-md-6">
-                      <Form.Label>Keywords <span style={{ color: 'black' }}>*</span></Form.Label>
+                      <Form.Label>Keywords</Form.Label>
                       <Form.Control
                         type="text"
-                        placeholder="Enter Keyword and Press Enter"
+                        placeholder="Enter keyword and press Enter"
                         value={source.keywordInput}
                         onChange={(e) => handleKeywordChange(sourceIndex, e.target.value)}
                         onKeyDown={(e) => handleKeywordKeyDown(sourceIndex, e)}
                         disabled={!isEditable}
-                        required
                       />
                       <div className="mt-2">
                         {source.keywords.map((keyword, keyIndex) => (
@@ -446,7 +437,7 @@ const AddNewFilter = ({ onClose, filterIde }) => {
                       <Form.Label>RSS URL</Form.Label>
                       <Form.Control
                         type="url"
-                        placeholder="Enter RSS URL and press enter"
+                        placeholder="Enter RSS URL and press Enter"
                         value={source.urlInput}
                         onChange={(e) => {
                           const newSources = [...sources];
@@ -499,7 +490,7 @@ const AddNewFilter = ({ onClose, filterIde }) => {
             <button type="button" className="add-new-filter-button" onClick={handleAddSource}>
               Add Sources
             </button>
-            {/* <button type="button" className="add-new-filter-button" onClick={onClose}>
+              {/* <button type="button" className="add-new-filter-button" onClick={onClose}>
               Close          
                 </button> */}
             <button

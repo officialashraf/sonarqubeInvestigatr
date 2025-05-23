@@ -211,7 +211,7 @@ const CreateCase = ({ togglePopup }) => {
                 onChange={handleAssigneeChange}
               />
             </div>
-            <label htmlFor="watcher">Watcher <span style={{ color: 'black' }}>*</span></label>
+            <label htmlFor="watcher">Watcher </label>
             <Select
               options={options}
               isMulti

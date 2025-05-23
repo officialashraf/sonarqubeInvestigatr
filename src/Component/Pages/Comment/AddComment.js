@@ -121,27 +121,25 @@ const AddComment = ({ show, onClose, selectedResource }) => {
   };
 
   return (
-    <div className="popup-overlay" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1000 }}>
-      <Paper className="popup-container" style={{ width: '500px', maxWidth: '90%', maxHeight: '90vh', overflow: 'hidden', borderRadius: '8px', position: 'relative' }}>
-        <Box sx={{ p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #eee' }}>
-          <Typography variant="h6">Comments</Typography>
-          <IconButton onClick={onClose} size="small">
-            &times;
-          </IconButton>
-        </Box>
-
-        <Box sx={{ p: 2, height: '300px', overflow: 'auto' }}>
+    <div className="popup-overlay" >
+      <div className="popup-container">
+   <div className="popup-content">
+     <label htmlFor="title">Comments</label>
+           <button className="close-icon" onClick={onClose}>
+          &times;
+        </button>
+        
           {isLoading ? (
             <Box sx={{ display: 'flex', justifyContent: 'center', my: 3 }}>
               <CircularProgress size={30} />
             </Box>
           ) : commentsArray.length > 0 ? (
-            <List>
+            <List style={{minHeight:'auto',maxHeight:'400px',overflow:'auto'}}>
               {commentsArray.map((comment, index) => (
-                <ListItem key={index} sx={{ borderBottom: '1px solid #f5f5f5' }}>
+                <ListItem key={index}>
                   <ListItemText
                     primary={comment.comment}
-                    sx={{ mr: 1 }}
+                  
                   />
                   <ListItemSecondaryAction>
                     <IconButton edge="end" size="small" onClick={() => handleEditClick(comment)}>
@@ -159,22 +157,21 @@ const AddComment = ({ show, onClose, selectedResource }) => {
               No comments found
             </Typography>
           )}
-        </Box>
-
-        <Box component="form" onSubmit={handleAddComment} sx={{ p: 2, borderTop: '1px solid #eee' }}>
-          <TextField
-            fullWidth
-            label="Add New Comment"
-            variant="outlined"
-            size="small"
+   <form onSubmit={handleAddComment}>
+    <label htmlFor="title">Add Comment</label>
+          <input
+            className="com"
+              type="text"
+              id="title"
+              name="title"
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
             placeholder="Enter your comment"
             required
-            sx={{ mb: 2 }}
+          
           />
 
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
+          {/* <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
             <Button
               variant="outlined"
               onClick={onClose}
@@ -189,10 +186,17 @@ const AddComment = ({ show, onClose, selectedResource }) => {
             >
               {isSubmitting ? 'Adding...' : 'Add Comment'}
             </Button>
-          </Box>
-        </Box>
-      </Paper>
+          </Box> */}
 
+          <div className="button-container">
+              <button type="submit" className="create-btn">Create</button>
+              <button type="button" className="cancel-btn" onClick={onClose}>
+                Cancel
+              </button>
+              </div>
+           </form>
+      </div>
+</div>
       {showUpdatePopup && commentToEdit && (
         <UpdateComment
           show={showUpdatePopup}

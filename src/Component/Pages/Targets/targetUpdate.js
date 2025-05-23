@@ -5,6 +5,7 @@ import Cookies from "js-cookie";
 import { toast } from 'react-toastify';
 import Select from 'react-select';
 import "./target.css";
+import Loader from '../Layout/loader'
 
 export const customStyles = {
   control: (base) => ({
@@ -91,14 +92,15 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
     synonyms: [],
     type: "",
     threat_weightage: 0,
-    target_id: []
+    target_id: [],
+    remove_target: []
   });
 
   const [synonymInput, setSynonymInput] = useState("");
   const [subTypeRows, setSubTypeRows] = useState([]);
   const [availableSubTypes, setAvailableSubTypes] = useState([]);
   const [loading, setLoading] = useState(true);
-  
+
   // Threat score options from 0 to 10
   const threatScoreOptions = Array.from({ length: 11 }, (_, i) => ({
     value: i,
@@ -122,10 +124,10 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
 
       if (response.status === 200 && response.data) {
         const targetData = response.data;
-        
+
         // Extract parent IDs from the parents array
         const parentIds = targetData.parents ? targetData.parents.map(parent => parent.id) : [];
-        
+
         setFormData({
           name: targetData.name || "",
           description: targetData.description || "",
@@ -168,9 +170,9 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
       toast.error("Authentication error: No token found");
       return;
     }
-    
+
     console.log("Update payload", formData);
-    
+
     try {
       const response = await axios.put(`http://5.180.148.40:9001/api/case-man/v1/target/${id}`, formData, {
         headers: {
@@ -178,9 +180,9 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
           'Authorization': `Bearer ${token}`
         }
       });
-      
+
       window.dispatchEvent(new Event("databaseUpdated"));
-      
+
       if (response.status === 200) {
         toast.success("Target updated successfully");
         togglePopup();
@@ -235,19 +237,20 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
   };
 
   // Update subtype row data
-  const updateSubTypeRow = (index, field, value) => {
-    const updatedRows = [...subTypeRows];
-    updatedRows[index] = { ...updatedRows[index], [field]: value };
-    setSubTypeRows(updatedRows);
-  };
+  // const updateSubTypeRow = (index, field, value) => {
+  //   const updatedRows = [...subTypeRows];
+  //   updatedRows[index] = { ...updatedRows[index], [field]: value };
+  //   setSubTypeRows(updatedRows);
+  // };
 
   if (loading) {
     return (
       <div className="popup-overlay">
         <div className="popup-container">
           <div className="popup-content">
-            <div>Loading target details...</div>
+       <div>   <Loader/></div>
           </div>
+          
         </div>
       </div>
     );
@@ -284,7 +287,7 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
                 classNamePrefix="select"
               />
             </div>
-            
+
             <label htmlFor="name">Target *</label>
             <input
               className="com"
@@ -296,7 +299,7 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
               placeholder="Enter Target"
               required
             />
-            
+
             <label htmlFor="description">Description</label>
             <textarea
               className="com"
@@ -347,7 +350,7 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
                 onChange={handleThreatScoreChange}
               />
             </div>
-            
+
             {/* Dynamic SubType Section */}
             {(formData.type === "target") && availableSubTypes.length > 0 && (
               <div className="subtype-section">
@@ -359,11 +362,12 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
                         <Select
                           isMulti
                           options={existingTargets
-                            .filter(target => target.id !== parseInt(id)) // Exclude current target from options
-                            .map(target => ({ 
-                              value: target.id, 
-                              label: `${target.id} - ${target.name} - ${target.type}` 
-                            }))}
+                            .filter(target => (target.type !== "target") && (target.id !== parseInt(id)))
+                            .map(target => ({
+                              value: target.id,
+                              label: `${target.id} - ${target.name} - ${target.type}`
+                            }))
+                          }
                           styles={customStyles}
                           placeholder="Select targets"
                           value={
@@ -374,9 +378,11 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
                           }
                           onChange={(selectedOptions) => {
                             const selectedIds = selectedOptions ? selectedOptions.map(option => option.value) : [];
+                              const removedIds = formData.target_id.filter(id => !selectedIds.includes(id));
                             setFormData(prev => ({
                               ...prev,
-                              target_id: selectedIds
+                              target_id: selectedIds,
+                               remove_target: [...(prev.remove_target || []), ...removedIds]
                             }));
                           }}
                           className="target-select"
@@ -387,7 +393,7 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
                 ))}
               </div>
             )}
-            
+
             <div className="button-container">
               <button type="submit" className="create-btn">
                 Update

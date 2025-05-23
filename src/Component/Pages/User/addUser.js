@@ -146,7 +146,7 @@ console.log("queryPyload",formData)
       <div className="popup-container">
         <button className="close-icon" onClick={onClose}>&times;</button>
         <div className="popup-content">
-          <h5>Add User Form</h5>
+          <h5>Add User</h5>
           <form onSubmit={handleSubmit}>
             <label>User Name *</label>
             <input className="com" name="username" value={formData.username} onChange={handleChange} placeholder="Enter User Name" requiblack />
@@ -168,17 +168,7 @@ console.log("queryPyload",formData)
                 styles={customStyles}
                 classNamePrefix="select"
             />
-            <IoMdSearch
-                style={{
-                    position: "absolute",
-                    right: "10px",
-                    top: "50%",
-                    transform: "translateY(-50%)",
-                    pointerEvents: "none",
-                    color: "black",
-                }}
-            />
-        </div>
+                  </div>
 
 
             <label>Email ID *</label>
