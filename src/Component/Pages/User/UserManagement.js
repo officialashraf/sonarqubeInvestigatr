@@ -232,10 +232,10 @@ const UserManagement = () => {
   return (
     <div className="data-table-container">
       <div className="top-header" style={{ marginTop: "10px" }}>
-        <Col xs={1} className="d-flex align-items-center justify-content-flex-start" style={{ width: "20%" }}>
+        <Col xs={1} className="d-flex align-items-center justify-content-flex-start" style={{ width: "350px", minWidth: '350px' }}>
           <FaArrowLeft style={{
             cursor: 'pointer', margin: '0px 40px 0px 38px',
-            fontSize: '18px'
+            fontSize: '16px'
           }} onClick={() => navigate('/dashboard')} />
           <div className="search-bar1" style={{ width: '100%' }}>
             <div className="input-group">

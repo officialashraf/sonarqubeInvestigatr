@@ -8,7 +8,7 @@ const DetailsPermission = ({ togglePopup, details }) => {
                 <div className="popup-content">
 
                     <div className="header">
-                        <span> <h5>Permission Details</h5></span>
+                        <span> <h5>Role Details</h5></span>
                         <CloseButton onClick={togglePopup} />
                     </div>
                     <div className="case-details-container">

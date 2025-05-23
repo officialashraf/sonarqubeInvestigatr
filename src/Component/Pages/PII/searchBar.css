@@ -12,7 +12,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1px;
+  padding-right:  2px;
   gap: 10px;
   border: 1px solid #dfe1e5;
   border-radius: 5px;
@@ -143,10 +143,10 @@
     /* padding: 10px; */
   }
 
-  .search-bar {
+  /* .search-bar {
     /* flex-direction: column; */
-    align-items: stretch;
-  }
+    /* align-items: stretch;
+  } */ 
 
   .search-dropdown,
   .search-input,

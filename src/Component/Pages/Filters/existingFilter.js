@@ -109,14 +109,14 @@ const ExistingFilter = ({ selectedFilters, onFilterToggle, onFilterSelect, setSh
 
   return (
     <>
-      <div className='existingFil' style={{ display: 'flex', alignItems: 'center', width: '200px' }}>
+      <div className='existingFil'>
         <p style={{ margin: '0' }}>Existing Filters</p>
         {searchBarVisibility && (
           <input
             className="search_input"
             placeholder="Search..."
             onChange={handleSearch}
-            style={{ marginLeft: 'auto' }}
+            style={{ marginLeft: '2px' }}
           />
         )}
         {!searchBarVisibility && (
@@ -127,7 +127,7 @@ const ExistingFilter = ({ selectedFilters, onFilterToggle, onFilterSelect, setSh
         <button
           className="btn btn-sm me-2 sort-filters"
           onClick={sortFilters}
-          style={{ marginLeft: '0', marginRight: '0', width: '10px' }}
+          style={{ marginLeft: '0px', marginRight: '0px', width: '8px' }}
         >
           {sortDirection === 'asc' ? <SortDown /> : <SortUp />}
         </button>

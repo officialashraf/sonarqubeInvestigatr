@@ -119,7 +119,7 @@ const EditCase = ({ togglePopup, item }) => {
       }
     } catch (err) {
       console.error("Error updating case:", err);
-      toast.error(err.response?.data?.detail || "Failed to update case");
+      toast.info(err.response?.data|| "Failed to update case");
     }
   };
 

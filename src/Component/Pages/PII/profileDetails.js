@@ -131,6 +131,6 @@ const ProfileDetails = () => {
       </Card>
     </Container>
   );
-};
+}; 
 
 export default ProfileDetails;
