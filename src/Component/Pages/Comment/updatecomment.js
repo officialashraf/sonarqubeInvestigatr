@@ -25,7 +25,7 @@ const UpdateComment = ({ onClose, comment, resourceId, GetCommentList }) => {
       );
 
       console.log("Updated", comment);
-      toast.success("Update comment  successfully");
+      toast.success("Comment updated successfully");
       GetCommentList()
       console.log("Updated Comment:", response.data);
       onClose()

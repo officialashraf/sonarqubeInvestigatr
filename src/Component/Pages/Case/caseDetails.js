@@ -40,19 +40,19 @@ const CaseDetails = ({ item, togglePopupA }) => {
                                     {" "}<th>Edited By</th> <td>{item.editedBy}</td>{" "}
                                 </tr>
                                 <tr>
-                                    {" "}<th>Last Data Upload On</th>{" "}
+                                    {" "}<th>Last Data Uploaded On</th>{" "}
                                     <td>{item.lastDataUploadOn}</td>{" "}
                                 </tr>
                                 <tr>
-                                    {" "}<th>Last Data Upload By</th>{" "}
+                                    {" "}<th>Last Data Uploaded By</th>{" "}
                                     <td>{item.lastDataUploadBy}</td>{" "}
                                 </tr>
                                 <tr>
-                                    {" "}<th>Last Data Proceed On</th>{" "}
+                                    {" "}<th>Last Data Processed On</th>{" "}
                                     <td>{item.lastDataProceedOn}</td>{" "}
                                 </tr>
                                 <tr>
-                                    {" "}<th>Last Data Proceed By</th>{" "}
+                                    {" "}<th>Last Data Processed By</th>{" "}
                                     <td>{item.lastDataProceedBy}</td>{" "}
                                 </tr>
                                 <tr>

@@ -51,7 +51,7 @@ export const customStyles = {
 };
 
 const AddUser = ({ onClose }) => {
-    const token = Cookies.get("accessToken");
+  const token = Cookies.get("accessToken");
   const [formData, setFormData] = useState({
     username: "",
     first_name: "",
@@ -61,48 +61,48 @@ const AddUser = ({ onClose }) => {
     contact_no: "",
     password: ""
   });
-const [roles, setRoles] = useState([]);
-    const [loading, setLoading] = useState(true);
+  const [roles, setRoles] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        const fetchRoles = async () => {
-            try {
-                const response = await axios.get("http://5.180.148.40:9000/api/user-man/v1/roles",  {
+  useEffect(() => {
+    const fetchRoles = async () => {
+      try {
+        const response = await axios.get("http://5.180.148.40:9000/api/user-man/v1/roles", {
           headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`
           }
         });
-console.log("response_Data",response.data)
-                // Map roles into dropdown format
-                const formattedRoles = response.data.map(role => ({
-                    value: role,
-                    label: role
-                }));
-console.log("response_Dropdown",formattedRoles)
-                setRoles(formattedRoles);
-                setLoading(false);
-            } catch (error) {
-                console.error("Error fetching roles:", error);
-                setLoading(false);
-            }
-        };
+        console.log("response_Data", response.data)
+        // Map roles into dropdown format
+        const formattedRoles = response.data.map(role => ({
+          value: role,
+          label: role
+        }));
+        console.log("response_Dropdown", formattedRoles)
+        setRoles(formattedRoles);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching roles:", error);
+        setLoading(false);
+      }
+    };
 
-        fetchRoles();
-    }, [token]);
+    fetchRoles();
+  }, [token]);
 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-  
+
     // Fields to apply capitalization
     const capitalizeFields = ['first_name', 'last_name', 'role'];
-  
+
     // Capitalize first letter of each word if the field is in the list
     const formattedValue = capitalizeFields.includes(name)
       ? value.replace(/\b\w/g, (char) => char.toUpperCase())
       : value;
-  
+
     setFormData((prevData) => ({
       ...prevData,
       [name]: formattedValue
@@ -111,11 +111,11 @@ console.log("response_Dropdown",formattedRoles)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-      if (!token) {
+    if (!token) {
       toast.error("Authentication token missing.");
       return;
     }
-console.log("queryPyload",formData)
+    console.log("queryPyload", formData)
     try {
       const response = await axios.post(
         "http://5.180.148.40:9000/api/user-man/v1/user",
@@ -157,9 +157,9 @@ console.log("queryPyload",formData)
             <label>Last Name</label>
             <input className="com" name="last_name" value={formData.last_name} onChange={handleChange} placeholder="Enter Last Name" />
 
-           <div>
-            <label>Role *</label>
-            <Select
+            <div>
+              <label>Role *</label>
+              <Select
                 options={roles}
                 placeholder="Select a role"
                 isLoading={loading}
@@ -167,10 +167,8 @@ console.log("queryPyload",formData)
                 onChange={(selectedOption) => setFormData({ ...formData, role: selectedOption.value })}
                 styles={customStyles}
                 classNamePrefix="select"
-            />
-                  </div>
-
-
+              />
+            </div>
             <label>Email ID *</label>
             <input className="com" type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Enter Email ID" requiblack />
 

@@ -213,7 +213,7 @@ const RolesPermission = () => {
     return (
         <div className="data-table-container">
             <div className="top-header" style={{ marginTop: "10px" }}>
-                <Col xs={1} className="d-flex align-items-center justify-content-flex-start" style={{ width: "20%" }}>
+                <Col xs={1} className="d-flex align-items-center justify-content-flex-start" style={{ width: "300px", minWidth: "300px" }}>
                     <FaArrowLeft
                         style={{
                             cursor: 'pointer', margin: '0px 40px 0px 38px',
