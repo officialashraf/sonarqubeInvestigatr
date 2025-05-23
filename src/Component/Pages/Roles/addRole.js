@@ -16,7 +16,10 @@ const AddRole = ({ togglePopup }) => {
 
         try {
             console.log("Criteria Payload:", searchTitle); // Debug: Payload for API
-
+if (!searchTitle.trim()) { 
+    toast.error("Please enter Role before proceeding."); // Show toast error
+    return; // Stop function execution
+}
             const response = await axios.post(
                 `http://5.180.148.40:9000/api/user-man/v1/role/${searchTitle}`,
                 {}, // empty body
@@ -34,7 +37,7 @@ const AddRole = ({ togglePopup }) => {
             console.log('Role created successfully:', response.data); // Debug: API response
             togglePopup(false)
         } catch (error) {
-            toast("Role name already exists. Kindly use a different role name", error.response.data.detail);
+            toast(error.response.data.detail || "Role name already exists. Kindly use a different role name", );
             console.error('Error saving criteria:', error); // Debug: Error log
         }
     };
@@ -69,6 +72,13 @@ const AddRole = ({ togglePopup }) => {
                               }}
                         />
                         <div className="button-container">
+                             <button
+                                type="submit"
+                                className="create-btn"
+                                onClick={addRole}
+                            >
+                                Create
+                            </button>
                             <button
                                 type="button"
                                 className="cancel-btn"
@@ -76,13 +86,7 @@ const AddRole = ({ togglePopup }) => {
                             >
                                 Cancel
                             </button>
-                            <button
-                                type="submit"
-                                className="create-btn"
-                                onClick={addRole}
-                            >
-                                Create
-                            </button>
+                           
                         </div>
                     </form>
                 </div>
