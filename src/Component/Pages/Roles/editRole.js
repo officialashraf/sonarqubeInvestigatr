@@ -69,7 +69,7 @@ if (!searchTitle || searchTitle.trim() === "") {
                 <div className="popup-content" style={{ width: '70%' }}>
 
                     <form onSubmit={(e) => e.preventDefault()}> {/* Prevent form submission default */}
-                        <label>UpdateRole <span style={{ color: 'black' }}>*</span></label>
+                        <label>Update Role <span style={{ color: 'black' }}>*</span></label>
                         <input
                             type="text"
                             placeholder="Enter Role"
@@ -83,6 +83,13 @@ if (!searchTitle || searchTitle.trim() === "") {
                             }}
                         />
                         <div className="button-container">
+                              <button
+                                type="submit"
+                                className="create-btn"
+                                onClick={editRole}
+                            >
+                                Update
+                            </button>
                             <button
                                 type="button"
                                 className="cancel-btn"
@@ -90,13 +97,7 @@ if (!searchTitle || searchTitle.trim() === "") {
                             >
                                 Cancel
                             </button>
-                            <button
-                                type="submit"
-                                className="create-btn"
-                                onClick={editRole}
-                            >
-                                Update
-                            </button>
+                          
                         </div>
                     </form>
                 </div>

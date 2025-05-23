@@ -246,7 +246,7 @@ const EditCase = ({ togglePopup, item }) => {
             e.preventDefault();
             handleEditCase(formData);
           }}>
-            <label htmlFor="title">Title <span style={{ color: 'black' }}>*</span></label>
+            <label htmlFor="title">Title *</label>
             <input
               className="com"
               type="text"
@@ -258,7 +258,7 @@ const EditCase = ({ togglePopup, item }) => {
               required
             />
 
-            <label htmlFor="description">Description <span style={{ color: 'black' }}>*</span></label>
+            <label htmlFor="description">Description </label>
             <input
               className="com"
               id="description"
@@ -266,10 +266,9 @@ const EditCase = ({ togglePopup, item }) => {
               value={formData.description}
               onChange={handleInputChange}
               placeholder="Enter description"
-              required
-            />
+                   />
 
-            <label htmlFor="assignee">Assignee <span style={{ color: 'black' }}>*</span></label>
+            <label htmlFor="assignee">Assignee *</label>
             <Select
               options={options}
               name="assignee"
@@ -286,7 +285,7 @@ const EditCase = ({ togglePopup, item }) => {
 
 
 
-            <label htmlFor="watchers">Watchers <span style={{ color: 'black' }}>*</span></label>
+            <label htmlFor="watchers">Watchers</label>
             <Select
               options={options}
               isMulti
@@ -300,9 +299,7 @@ const EditCase = ({ togglePopup, item }) => {
               })
             }
               onChange={handleWatchersChange}
-              required
-
-            />
+                     />
 
 
             <label htmlFor="status">Status:</label>

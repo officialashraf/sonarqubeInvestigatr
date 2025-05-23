@@ -201,22 +201,34 @@ const GridView = () => {
       </div>
 
       <div
-        className="case-t"
-        style={{ overflowY: "auto", height: "450px", fontSize: "10px" }}
+        className="data-table"
+        style={{ height: '420px', marginTop: '0px' }}
       >
         {!dataAvailable ? (
-          <div className="no-data-message" style={{ textAlign: 'center', padding: '50px' }}>
-            <h4>No Data Available</h4>
-            <p>There are no records to display.</p>
-          </div>
+           <Table striped bordered hover variant='light'>
+            <thead></thead>
+            <tbody>
+            <tr>
+            <td className="text-center">
+  No Data Available
+
+            </td>
+          </tr>
+          </tbody>
+      </Table>
         ) : (
-          <Table striped bordered hover>
+          <Table striped bordered hover variant='light'>
+            
             <thead>
+              
               <tr>
                 {data.length > 0 && [...new Set(data.flatMap(item => Object.keys(item)))]
                   .map((key, index) => (
                     <th key={index} className="fixed-th">
-                      {key.replace(/_/g, ' ').toUpperCase()}
+                      {key.split("_") // Split by underscores
+                        .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize first letter of each word
+                        .join(" ") 
+                        }
                     </th>
                   ))}
               </tr>
@@ -229,15 +241,19 @@ const GridView = () => {
                       <td key={colIndex} className="fixed-td">
                         <div
                           className="cell-content"
-                          style={{
+                         style={{
                             cursor: 'pointer',
-                            padding: "2px",
-                            height: '17px',
-                            fontFamily: 'sans-serif',
+                            // padding: "0px 0px 0px 5px",
+                            // height: '37px',
+                            // fontFamily: 'sans-serif',
                             fontWeight: 'normal',
                             overflow: 'hidden',
-                            textOverflow: 'ellipsis',
+                            //  textOverflow: 'ellipsis',
                             whiteSpace: 'nowrap',
+                            //  vertical- align: middle;
+                            padding: '0px 5px 0px 5px',
+                            fontSize: '12px',
+                            fontFamily: 'Helvetica'
                           }}
                           title={typeof item[key] === 'object' ? JSON.stringify(item[key]) : item[key]}
                         >

@@ -210,7 +210,7 @@ const CriteriaCaseTable = () => {
                   <tr key={rowIndex}>
                     {/* Dynamically generate table cells */}
                     {[...new Set(searchResults.flatMap(item => Object.keys(item)))].map((key, colIndex) => (
-                      <td key={colIndex} className="fixed-t">
+                      <td key={colIndex} className="fixed-td">
                         <div
                           className="cell-content"
                           style={{

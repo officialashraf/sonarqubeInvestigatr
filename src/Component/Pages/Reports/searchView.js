@@ -217,10 +217,9 @@ const SearchView = () => {
           />
 
 
-
           {/* Case Selection Field */}
           <div className="mb-3">
-            <label>Case <span style={{ color: 'black' }}>*</span></label>
+            <label>Case</label>
             <Select
               isMulti
               options={caseOptions}
