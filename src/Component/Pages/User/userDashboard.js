@@ -10,13 +10,13 @@ const UserDashboard = () => {
   const navigate = useNavigate();
   const cardData = [
     { title: 'User Management' },
-    { title: 'Roles and Permission' },
+    { title: 'Roles and Permissions' },
   ];
 
   const handleCheckboxChange = (title) => {
     if (title === "User Management") {
       navigate("/users");
-    } else if (title === "Roles and Permission") {
+    } else if (title === "Roles and Permissions") {
       navigate("/roles");
     }
   };

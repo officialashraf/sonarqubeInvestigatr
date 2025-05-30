@@ -99,6 +99,30 @@ const [formData, setFormData] = useState({
   const [synonymInput, setSynonymInput] = useState("");
   const [subTypeRows, setSubTypeRows] = useState([]);
   const [availableSubTypes, setAvailableSubTypes] = useState([]);
+    const [error, setError] = useState({});
+  
+
+  const validateForm = () => {
+    const errors = {};
+
+    if (!formData.name) {
+      errors.name = "Target is required";
+    }
+
+    if (!formData.description) {
+      errors.description = "Description is required";
+    } 
+    if (formData.synonyms.length === 0) {
+      errors.synonyms = "At least one synonym is required";
+    } else if (formData.synonyms.length > 5) {
+      errors.synonyms = "You can add a maximum of 5 synonyms only";
+    }
+    if (!formData.type) {
+      errors.type = "Type is required";
+    }
+
+    return errors;
+  };
   
   // Threat score options from 0 to 10
   const threatScoreOptions = Array.from({ length: 11 }, (_, i) => ({
@@ -127,12 +151,25 @@ const [formData, setFormData] = useState({
       toast.error("Authentication error: No token found");
       return;
     }
+    const validationErrors = validateForm();
+    if (Object.keys(validationErrors).length > 0) {
+      setError(validationErrors);
+      return;
+    }
+    const payloadData = Object.fromEntries(
+      Object.entries(formData).filter(([_, value]) => {
+        if (value === null || value === undefined) return false;
+        if (typeof value === "string" && value.trim() === "") return false;
+        if (Array.isArray(value) && value.length === 0) return false;
+        return true;
+      })
+    );
    
     console.log("query payload", formData);
     
     try {
       // First, create the target
-      const targetResponse = await axios.post('http://5.180.148.40:9001/api/case-man/v1/target', formData, {
+      const targetResponse = await axios.post('http://5.180.148.40:9001/api/case-man/v1/target', payloadData, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
@@ -173,9 +210,27 @@ const [formData, setFormData] = useState({
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+
+    let formattedValue = value || ""; // Ensure it's a string
+
+    if (name === 'name') {
+      // Capitalize the first letter of each word
+      formattedValue = formattedValue.replace(/\b\w/g, (char) => char.toUpperCase());
+    } else if (name === 'description') {
+      // Capitalize only the first letter of the sentence
+      formattedValue = formattedValue.charAt(0).toUpperCase() + formattedValue.slice(1);
+    }
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value,
+      [name]: formattedValue,
+    }));
+    setError((prevErrors) => ({
+      ...prevErrors,
+      [name]: ""  // Remove the specific error message
+    }));
+    setError((prevErrors) => ({
+      ...prevErrors,
+      type: "" // Clear the type error when a type is selected
     }));
   };
 
@@ -188,6 +243,10 @@ const [formData, setFormData] = useState({
 
   const handleSynonymInputChange = (e) => {
     setSynonymInput(e.target.value);
+    setError((prevErrors) => ({
+      ...prevErrors,
+      synonyms: ""  // Clear synonym-related errors
+    }));
   };
 
   const handleSynonymKeyDown = (e) => {
@@ -251,6 +310,7 @@ const [formData, setFormData] = useState({
                 className="basic-single-select"
                 classNamePrefix="select"
               />
+              {error.type && <p style={{ color: "red", margin: '0px' }} >{error.type}</p>}
             </div>
             
             <label htmlFor="name">Target *</label>
@@ -262,9 +322,9 @@ const [formData, setFormData] = useState({
               value={formData.name}
               onChange={handleInputChange}
               placeholder="Enter Target"
-              required
             />
-            <label htmlFor="description">Description</label>
+            {error.name && <p style={{ color: "red", margin: '0px' }} >{error.name}</p>}
+            <label htmlFor="description">Description *</label>
             <textarea
               className="com"
               id="description"
@@ -273,7 +333,8 @@ const [formData, setFormData] = useState({
               onChange={handleInputChange}
               placeholder="Enter Description"
             ></textarea>
-            <label htmlFor="synonyms">Alternative Keywords/Synonym (up to 5 keywords)</label>
+            {error.description && <p style={{ color: "red", margin: '0px' }} >{error.description}</p>}
+            <label htmlFor="synonyms">Alternative Keywords/Synonym *(up to 5 keywords) </label>
             <div className="synonym-input-container">
               <input
                 className="com"
@@ -282,7 +343,7 @@ const [formData, setFormData] = useState({
                 value={synonymInput}
                 onChange={handleSynonymInputChange}
                 onKeyDown={handleSynonymKeyDown}
-                placeholder="Type in Keywords/Synonym and press Enter to add..."
+                placeholder="Type in Synonym and press Enter to add..."
                 disabled={formData.synonyms.length >= 5}
               />
               <div className="synonym-chips">
@@ -299,6 +360,7 @@ const [formData, setFormData] = useState({
                   </div>
                 ))}
               </div>
+              {error.synonyms && <p style={{ color: "red", margin: '0px' }} >{error.synonyms}</p>}
             </div>
 
             <div>

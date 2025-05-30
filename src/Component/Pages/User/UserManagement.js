@@ -269,7 +269,7 @@ const UserManagement = () => {
                     alignItems: "center"
                   }}
                 >
-                  UserId
+                  User Id
                   <span
                     onClick={() => handleSort("id")}
                     style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
@@ -290,7 +290,7 @@ const UserManagement = () => {
                     alignItems: "center"
                   }}
                 >
-                  UserName
+                  Username
                   <span
                     onClick={() => handleSort("username")}
                     style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}

@@ -1,9 +1,9 @@
 import React from 'react';
 import { Form } from 'react-bootstrap';
 
-const InputField = ({ label, type, value, onChange, placeholder, controlId, name, autocomplete }) => {
+const InputField = ({ label, type, value, onChange, placeholder,  name, autocomplete }) => {
     return (
-        <Form.Group controlId={controlId} className="mb-3">
+        <Form.Group  className="mb-3">
             <Form.Label className='labell'>{label}</Form.Label>
             <Form.Control
                 type={type}

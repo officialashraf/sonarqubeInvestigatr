@@ -18,6 +18,10 @@ const Confirm = ({ formData, selectedDates, searchChips }) => {
         console.log("keys", keywordSource)
         try {
 
+            if (searchTitle.trim() === ""){
+                toast.info("Please enter the title");
+                return;
+            }
             const criteriaPaylod = {
                 title: searchTitle || "",
 
@@ -78,7 +82,7 @@ const Confirm = ({ formData, selectedDates, searchChips }) => {
                 <div className="popup-content" style={{ width: '70%' }}>
                     <h5>Save Search As</h5>
                     <form onSubmit={(e) => e.preventDefault()}> {/* Prevent form submission default */}
-                        <label>Search Title</label>
+                        <label>Search Title *</label>
                         <input
                             type="text"
                             placeholder="Enter Title"
@@ -106,6 +110,7 @@ const Confirm = ({ formData, selectedDates, searchChips }) => {
                                 type="submit"
                                 className="create-btn"
                                 onClick={saveCriteria}
+                              
                             >
                                 Save
                             </button>

@@ -52,7 +52,17 @@ const CreateCriteria = ({ handleCreateCase }) => {
   });
   const [caseOptions, setCaseOptions] = useState([]);
   const [fileTypeOptions, setFileTypeOptions] = useState([]);
-
+  const [error, setError] = useState({});
+    
+  
+    const validateForm = () => {
+      const errors = {};
+  
+      if (!formData.searchQuery) {
+        errors.searchQuery = "At least one keyword is required";
+      }
+      return errors;
+    };
 
   const activePopup = useSelector((state) => state.popup?.activePopup || null);
   console.log("create popup", activePopup)
@@ -136,12 +146,21 @@ const CreateCriteria = ({ handleCreateCase }) => {
         ? value.split(',').map(k => k).filter(k => k !== "") // Clean and filter empty
         : value
     }));
+    setError((prevErrors) => ({
+      ...prevErrors,
+      [name]: ""  // Remove the specific error message
+    }));
   };
 
 
 
   const handleSearch = async (e) => {
     e.preventDefault();
+    const validationErrors = validateForm();
+    if (Object.keys(validationErrors).length > 0) {
+      setError(validationErrors);
+      return;
+    }
     try {
 
 
@@ -149,7 +168,7 @@ const CreateCriteria = ({ handleCreateCase }) => {
         keyword: formData.searchQuery?.length > 0 ? formData.searchQuery : [],
         case_id: formData.caseIds?.length > 0
           ? (formData.caseIds.map(caseId => caseId.value.toString()))
-          : "[]",
+          : [] ,
 
 
 
@@ -246,7 +265,7 @@ const CreateCriteria = ({ handleCreateCase }) => {
           <h5>Create Criteria</h5>
           <form onSubmit={handleSearch}>
             {/* Search Bar with Icons */}
-            <label>Search</label>
+            <label>Search *</label>
             <TextField
               fullWidth
               className="com mb-3"
@@ -273,6 +292,8 @@ const CreateCriteria = ({ handleCreateCase }) => {
               onChange={handleInputChange}
               sx={sharedSxStyles}
             />
+            {error.searchQuery && <p style={{ color: "red", margin: '0px' }} >{error.searchQuery}</p>}
+
 
             {/* Filetype Dropdown (Multi Select) */}
             <div className="mb-3">
@@ -297,7 +318,7 @@ const CreateCriteria = ({ handleCreateCase }) => {
                 styles={customStyles}
                 className="com"
                 value={formData.caseIds}
-                onChange={(selected) => setFormData(prev => ({ ...prev, caseIds: selected }))}
+                onChange={(selected) => {setFormData(prev => ({ ...prev, caseIds: selected }));}}
                 placeholder="Select Cases"
               />
             </div>

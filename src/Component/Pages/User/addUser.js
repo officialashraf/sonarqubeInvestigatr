@@ -63,6 +63,31 @@ const AddUser = ({ onClose }) => {
   });
   const [roles, setRoles] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState({});
+
+  const validateForm = () => {
+    const errors = {};
+    const emailRegex = /^\S+@\S+\.\S+$/;
+    const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{6,}$/;
+
+    if (!formData.username.trim()) {
+      errors.username = "Username is required";
+    }
+
+    if (!formData.email.trim()) {
+      errors.email = "Email is required";
+    } else if (!emailRegex.test(formData.email)) {
+      errors.email = "Invalid email format";
+    }
+
+    if (!formData.password.trim()) {
+      errors.password = "Password is required";
+    } else if (!passwordRegex.test(formData.password)) {
+      errors.password = "Password must be at least 6 characters, include 1 capital letter and 1 special character.";
+    }
+
+    return errors;
+  };
 
   useEffect(() => {
     const fetchRoles = async () => {
@@ -107,6 +132,10 @@ const AddUser = ({ onClose }) => {
       ...prevData,
       [name]: formattedValue
     }));
+    setError((prevErrors) => ({
+      ...prevErrors,
+      [name]: ""  // Remove the specific error message
+    }));
   };
 
   const handleSubmit = async (e) => {
@@ -115,12 +144,27 @@ const AddUser = ({ onClose }) => {
       toast.error("Authentication token missing.");
       return;
     }
+
+    const validationErrors = validateForm();
+    if (Object.keys(validationErrors).length > 0) {
+      setError(validationErrors);
+      return;
+    }
+     const payloadData = Object.fromEntries(
+       Object.entries(formData).filter(([_, value]) => {
+      if (value === null || value === undefined) return false;
+      if (typeof value === "string" && value.trim() === "") return false;
+      if (Array.isArray(value) && value.length === 0) return false;
+      return true;
+    })
+  );
+
     console.log("queryPyload", formData)
     try {
       const response = await axios.post(
         "http://5.180.148.40:9000/api/user-man/v1/user",
-        formData,
-        {
+        payloadData,
+              {
           headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`
@@ -150,15 +194,17 @@ const AddUser = ({ onClose }) => {
           <form onSubmit={handleSubmit}>
             <label>User Name *</label>
             <input className="com" name="username" value={formData.username} onChange={handleChange} placeholder="Enter User Name" requiblack />
+            {error.username && <p style={{ color: "red" , margin: '0px' }} >{error.username}</p>}
 
-            <label>First Name *</label>
-            <input className="com" name="first_name" value={formData.first_name} onChange={handleChange} placeholder="Enter First Name" requiblack />
+
+            <label>First Name</label>
+            <input className="com" name="first_name" value={formData.first_name} onChange={handleChange} placeholder="Enter First Name" />
 
             <label>Last Name</label>
             <input className="com" name="last_name" value={formData.last_name} onChange={handleChange} placeholder="Enter Last Name" />
 
             <div>
-              <label>Role *</label>
+              <label>Role</label>
               <Select
                 options={roles}
                 placeholder="Select a role"
@@ -166,17 +212,20 @@ const AddUser = ({ onClose }) => {
                 value={roles.find(role => role.value === formData.role)}
                 onChange={(selectedOption) => setFormData({ ...formData, role: selectedOption.value })}
                 styles={customStyles}
-                classNamePrefix="select"
+                // classNamePrefix="select"
+                className="com"
               />
             </div>
             <label>Email ID *</label>
             <input className="com" type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Enter Email ID" requiblack />
+            {error.email && <p style={{ color: "red",  margin: '0px' }}>{error.email}</p>}
 
-            <label>Contact Number *</label>
-            <input className="com" name="contact_no" value={formData.contact_no} onChange={handleChange} placeholder="Enter Contact Number" requiblack />
+            <label>Contact Number</label>
+            <input className="com" name="contact_no" value={formData.contact_no} onChange={handleChange} placeholder="Enter Contact Number" />
 
             <label>Password *</label>
             <input className="com" type="password" name="password" value={formData.password} onChange={handleChange} placeholder="Enter Password" requiblack />
+            {error.password && <p style={{ color: "red", margin: '0px' }}>{error.password}</p>}
 
             <div className="button-container">
               <button type="submit" className="create-btn">Create</button>

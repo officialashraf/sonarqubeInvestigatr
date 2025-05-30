@@ -252,7 +252,7 @@ const TargetList = () => {
                     alignItems: "center"
                   }}
                 >
-                  TargetId
+                  Target Id
                   <span
                     onClick={() => handleSort("id")}
                     style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
@@ -359,7 +359,7 @@ const TargetList = () => {
                     alignItems: "center"
                   }}
                 >
-                  Modified on
+                  Modified On
                   <span
                     onClick={() => handleSort("modified_on")}
                     style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
@@ -380,7 +380,7 @@ const TargetList = () => {
                     alignItems: "center"
                   }}
                 >
-                  Modified by
+                  Modified By
                   <span
                     onClick={() => handleSort("modified_by")}
                     style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
@@ -401,7 +401,7 @@ const TargetList = () => {
                     alignItems: "center"
                   }}
                 >
-                  Created_on
+                  Created On
                   <span
                     onClick={() => handleSort("created_on")}
                     style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
@@ -422,7 +422,7 @@ const TargetList = () => {
                     alignItems: "center"
                   }}
                 >
-                  Created_by
+                  Created By
                   <span
                     onClick={() => handleSort("created_by")}
                     style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
@@ -551,7 +551,7 @@ const TargetList = () => {
       </div>
       {showPopup && <TargetCreate togglePopup={togglePopup}  existingTargets={filteredData}/>}
       {showPopupE && <TargetUpdate togglePopup={togglePopupE} id={details.id} existingTargets={filteredData}/>}
-      {showPopupD && <TargetDetails togglePopup={togglePopupD} details={details} />}
+      {showPopupD && <TargetDetails togglePopup={togglePopupD} id={details.id} />}
     </div>
   );
 };

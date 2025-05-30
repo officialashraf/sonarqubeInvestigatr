@@ -100,6 +100,32 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
   const [subTypeRows, setSubTypeRows] = useState([]);
   const [availableSubTypes, setAvailableSubTypes] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [initialFormData, setInitialFormData] = useState({});
+  const [isBtnDisabled, setIsBtnDisabled] = useState(true);
+  const [error, setError] = useState({});
+
+
+  const validateForm = () => {
+    const errors = {};
+
+    if (!formData.name) {
+      errors.name = "Target is required";
+    }
+
+    if (!formData.description) {
+      errors.description = "Description is required";
+    }
+    if (formData.synonyms.length === 0) {
+      errors.synonyms = "At least one synonym is required";
+    } else if (formData.synonyms.length > 5) {
+      errors.synonyms = "You can add a maximum of 5 synonyms only";
+    }
+    if (!formData.type) {
+      errors.type = "Type is required";
+    }
+
+    return errors;
+  };
 
   // Threat score options from 0 to 10
   const threatScoreOptions = Array.from({ length: 11 }, (_, i) => ({
@@ -122,20 +148,24 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
         }
       });
 
+      console.log("response", response)
       if (response.status === 200 && response.data) {
         const targetData = response.data;
 
         // Extract parent IDs from the parents array
         const parentIds = targetData.parents ? targetData.parents.map(parent => parent.id) : [];
 
-        setFormData({
+        const newData = {
           name: targetData.name || "",
           description: targetData.description || "",
           synonyms: targetData.synonyms || [],
           type: targetData.type || "",
           threat_weightage: targetData.threat_weightage || 0,
           target_id: parentIds
-        });
+        };
+
+        setFormData(newData);
+        setInitialFormData(newData);
       }
     } catch (err) {
       console.error("Error fetching target details:", err.response || err);
@@ -170,11 +200,24 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
       toast.error("Authentication error: No token found");
       return;
     }
+    const validationErrors = validateForm();
+    if (Object.keys(validationErrors).length > 0) {
+      setError(validationErrors);
+      return;
+    }
+    const payloadData = Object.fromEntries(
+      Object.entries(formData).filter(([_, value]) => {
+        if (value === null || value === undefined) return false;
+        if (typeof value === "string" && value.trim() === "") return false;
+        if (Array.isArray(value) && value.length === 0) return false;
+        return true;
+      })
+    );
 
     console.log("Update payload", formData);
 
     try {
-      const response = await axios.put(`http://5.180.148.40:9001/api/case-man/v1/target/${id}`, formData, {
+      const response = await axios.put(`http://5.180.148.40:9001/api/case-man/v1/target/${id}`, payloadData, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
@@ -194,12 +237,30 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
       toast.error((err.response?.data?.detail || err.message || "Error encountered during target update"));
     }
   };
+  useEffect(() => {
+    const isSame =
+      formData.name === initialFormData.name &&
+      formData.description === initialFormData.description &&
+      JSON.stringify(formData.synonyms) === JSON.stringify(initialFormData.synonyms) &&
+      formData.type === initialFormData.type &&
+      formData.threat_weightage === initialFormData.threat_weightage &&
+      JSON.stringify(formData.target_id) === JSON.stringify(initialFormData.target_id);
 
+    setIsBtnDisabled(isSame);
+  }, [formData, initialFormData]);
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
+    }));
+    setError((prevErrors) => ({
+      ...prevErrors,
+      [name]: ""  // Remove the specific error message
+    }));
+    setError((prevErrors) => ({
+      ...prevErrors,
+      type: "" // Clear the type error when a type is selected
     }));
   };
 
@@ -212,6 +273,10 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
 
   const handleSynonymInputChange = (e) => {
     setSynonymInput(e.target.value);
+    setError((prevErrors) => ({
+      ...prevErrors,
+      synonyms: ""  // Clear synonym-related errors
+    }));
   };
 
   const handleSynonymKeyDown = (e) => {
@@ -286,6 +351,7 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
                 className="basic-single-select"
                 classNamePrefix="select"
               />
+              {error.type && <p style={{ color: "red", margin: '0px' }} >{error.type}</p>}
             </div>
 
             <label htmlFor="name">Target *</label>
@@ -297,10 +363,10 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
               value={formData.name}
               onChange={handleInputChange}
               placeholder="Enter Target"
-              required
             />
+            {error.name && <p style={{ color: "red", margin: '0px' }} >{error.name}</p>}
 
-            <label htmlFor="description">Description</label>
+            <label htmlFor="description">Description *</label>
             <textarea
               className="com"
               id="description"
@@ -309,9 +375,8 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
               onChange={handleInputChange}
               placeholder="Enter Description"
             ></textarea>
-
-
-            <label htmlFor="synonyms">Alternative Keywords/Synonym (up to 5 keywords)</label>
+            {error.description && <p style={{ color: "red", margin: '0px' }} >{error.description}</p>}
+            <label htmlFor="synonyms">Alternative Keywords/Synonym (up to 5 keywords) *</label>
             <div className="synonym-input-container">
               <input
                 className="com"
@@ -322,6 +387,7 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
                 onKeyDown={handleSynonymKeyDown}
                 placeholder="Type in Keywords/Synonym and press Enter to add..."
                 disabled={formData.synonyms.length >= 5}
+                // required
               />
               <div className="synonym-chips">
                 {formData.synonyms.map((synonym, index) => (
@@ -337,6 +403,7 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
                   </div>
                 ))}
               </div>
+              {error.synonyms && <p style={{ color: "red", margin: '0px' }} >{error.synonyms}</p>}
             </div>
 
             <div>
@@ -395,7 +462,8 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
             )}
 
             <div className="button-container">
-              <button type="submit" className="create-btn">
+              <button type="submit" className="create-btn" disabled={isBtnDisabled}
+              >
                 Update
               </button>
               <button type="button" className="cancel-btn" onClick={togglePopup}>

@@ -109,10 +109,23 @@ textarea {
   margin-top: 15px;
 }
 
-.cancel-btn,
+.cancel-btn {
+  background-color: #ccc;
+  color: #000;
+  transition: 0.3s;
+}
+
 .create-btn {
   background-color: #ccc;
   color: #000;
+  transition: 0.3s;
+}
+.create-btn:disabled {
+  background-color: #fffdfd;  /* gray when disabled */
+  color: #666;             /* dim the text */
+  cursor: not-allowed;
+  border: none;
+  opacity: 0.7;
 }
 
 .cancel-btn:hover,
