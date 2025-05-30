@@ -10,6 +10,8 @@ const EditRole = ({ togglePopup, details }) => {
     console.log("editdetials", details)
     const [searchTitle, setSearchTitle] = useState('');
 
+    const [initialSearchTitle, setInitialSearchTitle] = useState('');
+    const [isBtnDisabled, setIsBtnDisabled] = useState(true);
     const editRole = async () => {
         try {
             if (!searchTitle || searchTitle.trim() === "") {
@@ -46,10 +48,15 @@ const EditRole = ({ togglePopup, details }) => {
         () => {
             if (details) {
                 setSearchTitle(details); // Assuming details is the current role name
+                setInitialSearchTitle(details);
             }
         },
         [details]
     );
+    useEffect(() => {
+        const isSame = searchTitle.trim() === initialSearchTitle.trim();
+        setIsBtnDisabled(isSame);
+    }, [searchTitle, initialSearchTitle]);
 
     return (
         <div className="popup-overlay" style={{
@@ -89,6 +96,8 @@ const EditRole = ({ togglePopup, details }) => {
                                 type="submit"
                                 className="create-btn"
                                 onClick={editRole}
+                                disabled={isBtnDisabled}
+
                             >
                                 Update
                             </button>

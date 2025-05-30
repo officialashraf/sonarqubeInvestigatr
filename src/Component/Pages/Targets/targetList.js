@@ -250,7 +250,7 @@ const TargetList = () => {
                     alignItems: "center"
                   }}
                 >
-                  TargetID
+                  Target ID
                   <span
                     onClick={() => handleSort("id")}
                     style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
@@ -546,9 +546,9 @@ const TargetList = () => {
           </tbody>
         </Table>
       </div>
-      {showPopup && <TargetCreate togglePopup={togglePopup} existingTargets={filteredData} />}
-      {showPopupE && <TargetUpdate togglePopup={togglePopupE} id={details.id} existingTargets={filteredData} />}
-      {showPopupD && <TargetDetails togglePopup={togglePopupD} details={details} />}
+      {showPopup && <TargetCreate togglePopup={togglePopup}  existingTargets={filteredData}/>}
+      {showPopupE && <TargetUpdate togglePopup={togglePopupE} id={details.id} existingTargets={filteredData}/>}
+      {showPopupD && <TargetDetails togglePopup={togglePopupD} id={details.id} />}
     </div>
   );
 };

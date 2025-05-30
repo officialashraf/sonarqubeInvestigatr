@@ -1,4 +1,4 @@
-import{ useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { toast } from 'react-toastify';
@@ -29,6 +29,24 @@ const EditCase = ({ togglePopup, item }) => {
     { value: "on hold", label: "On Hold" },
     { value: "closed", label: "Closed" }
   ];
+  const [initialFormData, setInitialFormData] = useState({});
+  const [isBtnDisabled, setIsBtnDisabled] = useState(true);
+  const [error, setError] = useState({});
+
+
+  const validateForm = () => {
+    const errors = {};
+
+    if (!formData.title || formData.title.trim() === "") {
+      errors.title = "Title is required";
+    }
+
+    if (!formData.description) {
+      errors.description = "Description is required";
+    }
+    return errors;
+  };
+
 
   const getUserData = async () => {
     const token = Cookies.get("accessToken");
@@ -64,9 +82,8 @@ const EditCase = ({ togglePopup, item }) => {
             ? item.watchers
             : [],
       }));
-    }console.log("item.watchers",item.watchers)
+    } console.log("item.watchers", item.watchers)
   }, [item, users.data]);
-
 
   const handleEditCase = async (formData) => {
     const token = Cookies.get("accessToken");
@@ -75,48 +92,58 @@ const EditCase = ({ togglePopup, item }) => {
       return;
     }
 
-    try {
+    const validationErrors = validateForm();
+    if (Object.keys(validationErrors).length > 0) {
+      setError(validationErrors);
+      return;
+    }
 
+    const payloadData = Object.fromEntries(
+      Object.entries(formData).filter(([_, value]) => {
+        if (value === null || value === undefined) return false;
+        if (typeof value === "string" && value.trim() === "") return false;
+        if (Array.isArray(value) && value.length === 0) return false;
+        return true;
+      })
+    );
+
+    try {
       const hasChanged = {};
 
-      // Only include fields that have actually changed
-      if (formData.title !== item.title) hasChanged.title = formData.title;
-      if (formData.description !== item.description) hasChanged.description = formData.description;
-      if (formData.status !== item.status) hasChanged.status = formData.status;
-      if (formData.assignee !== item.assignee) hasChanged.assignee = formData.assignee;
-      if (formData.comment !== item.comment) hasChanged.comment = formData.comment;
+      // Compare simple fields
+      ["title", "description", "status", "assignee", "comment"].forEach((key) => {
+        if (payloadData[key] !== item[key]) {
+          hasChanged[key] = payloadData[key];
+        }
+      });
 
-      // Special handling for watchers array
-      // const originalWatchers = typeof item.watchers === 'string' ? item.watchers :
-      //   Array.isArray(item.watchers) ? item.watchers.join(", ") : null;
-      // const newWatchers = Array.isArray(formData.watchers) ? formData.watchers.join(", ") : formData.watchers;
+      // Compare watchers carefully (normalize both before comparing)
+      const originalWatchers = Array.isArray(item.watchers)
+        ? item.watchers.map(w => w.trim()).filter(Boolean)
+        : typeof item.watchers === "string"
+          ? item.watchers.split(",").map(w => w.trim()).filter(Boolean)
+          : [];
 
-      // if (newWatchers !== originalWatchers) {
-      //   hasChanged.watchers = newWatchers;
-      // }
-const originalWatchers = typeof item.watchers === "string" && item.watchers.trim() !== ""
-    ? item.watchers.split(", ").filter(Boolean) //  Convert string to array safely
-    : Array.isArray(item.watchers)
-    ? item.watchers
-    : [];
+      const currentWatchers = Array.isArray(formData.watchers)
+        ? formData.watchers.map(w => w.trim()).filter(Boolean)
+        : [];
 
-const newWatchers = Array.isArray(formData.watchers) && formData.watchers.length > 0
-    ? formData.watchers.join(", ") //  Keep string only if there are items
-    : []; //  Ensure empty array when no watchers exist
+      const areWatchersDifferent = originalWatchers.length !== currentWatchers.length ||
+        originalWatchers.sort().join(",") !== currentWatchers.sort().join(",");
 
-if (JSON.stringify(newWatchers) !== JSON.stringify(originalWatchers)) {
-    hasChanged.watchers = newWatchers;
-}
+      if (areWatchersDifferent && currentWatchers.length > 0) {
+        hasChanged.watchers = currentWatchers.join(", ");
+      } else if (currentWatchers.length === 0) {
+        hasChanged.watchers = []; // Explicitly set to an empty array if no watchers exist
+      }
 
-      // If nothing has changed, just close the popup
       if (Object.keys(hasChanged).length === 0) {
         togglePopup();
         return;
       }
-console.log("handlechange",hasChanged)
+      console.log("handlechange", hasChanged)
       const response = await axios.put(
         `http://5.180.148.40:9001/api/case-man/v1/case/${item.id}`,
-        // updateData,
         hasChanged,
         {
           headers: {
@@ -133,10 +160,9 @@ console.log("handlechange",hasChanged)
       }
     } catch (err) {
       console.error("Error updating case:", err);
-      toast.info(err.response?.data|| "Failed to update case");
+      toast.info(err.response?.data || "Failed to update case");
     }
   };
-
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -157,6 +183,10 @@ console.log("handlechange",hasChanged)
     setFormData((prev) => ({
       ...prev,
       [name]: formattedValue,
+    }));
+    setError((prevErrors) => ({
+      ...prevErrors,
+      [name]: ""  // Remove the specific error message
     }));
   };
   const handleWatchersChange = (selectedOptions) => {
@@ -250,6 +280,44 @@ console.log("handlechange",hasChanged)
     return formData.status ? { value: formData.status, label: formData.status.charAt(0).toUpperCase() + formData.status.slice(1) } : null;
   };
 
+  useEffect(() => {
+    if (users.data?.length > 0) {
+      const formattedWatchers = typeof item.watchers === 'string'
+        ? item.watchers.split(",").map(w => w.trim()).filter(Boolean)
+        : Array.isArray(item.watchers) ? item.watchers : [];
+
+      setInitialFormData({
+        title: item.title || "",
+        description: item.description || "",
+        status: item.status || "",
+        watchers: formattedWatchers,
+        assignee: item.assignee || "",
+        comment: item.comment || "",
+      });
+
+      setFormData({
+        title: item.title || "",
+        description: item.description || "",
+        status: item.status || "",
+        watchers: formattedWatchers,
+        assignee: item.assignee || "",
+        comment: item.comment || "",
+      });
+    }
+  }, [item, users.data]);
+  useEffect(() => {
+    const isSame =
+      formData.title === initialFormData.title &&
+      formData.description === initialFormData.description &&
+      formData.status === initialFormData.status &&
+      formData.assignee === initialFormData.assignee &&
+      formData.comment === initialFormData.comment &&
+      JSON.stringify([...formData.watchers].sort()) === JSON.stringify([...initialFormData.watchers || []].sort());
+
+    setIsBtnDisabled(isSame);
+  }, [formData, initialFormData]);
+
+
   return (
     <div className="popup-overlay">
       <div className="popup-container">
@@ -269,10 +337,10 @@ console.log("handlechange",hasChanged)
               value={formData.title}
               onChange={handleInputChange}
               placeholder="Enter title"
-              required
             />
+            {error.title && <p style={{ color: "red", margin: '0px' }} >{error.title}</p>}
 
-            <label htmlFor="description">Description </label>
+            <label htmlFor="description">Description *</label>
             <input
               className="com"
               id="description"
@@ -280,9 +348,10 @@ console.log("handlechange",hasChanged)
               value={formData.description}
               onChange={handleInputChange}
               placeholder="Enter description"
-                   />
+            />
+            {error.description && <p style={{ color: "red", margin: '0px' }} >{error.description}</p>}
 
-            <label htmlFor="assignee">Assignee *</label>
+            <label htmlFor="assignee">Assignee </label>
             <Select
               options={options}
               name="assignee"
@@ -294,7 +363,6 @@ console.log("handlechange",hasChanged)
               onChange={handleAssigneeChange}
               defaultMenuIsOpen={false}
               openMenuOnClick={true}
-              required
             />
 
 
@@ -311,9 +379,9 @@ console.log("handlechange",hasChanged)
                 const existingWatcher = options.find((opt) => opt.label === watcher);
                 return existingWatcher || { value: watcher, label: watcher };
               })
-            }
+              }
               onChange={handleWatchersChange}
-                     />
+            />
 
 
             <label htmlFor="status">Status:</label>
@@ -340,7 +408,7 @@ console.log("handlechange",hasChanged)
             />
 
             <div className="button-container">
-              <button type="submit" className="create-btn">Update</button>
+              <button type="submit" className="create-btn" disabled={isBtnDisabled}>Update</button>
               <button type="button" className="cancel-btn" onClick={togglePopup}>Cancel</button>
             </div>
           </form>

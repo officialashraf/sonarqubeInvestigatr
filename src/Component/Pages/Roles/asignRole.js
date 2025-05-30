@@ -184,7 +184,7 @@ const AssignRole = ({ togglePopup, details }) => {
 
     return (
         <div className="popup-overlay" style={{ top: 0, left: 0, width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center", zIndex: 1050 }}>
-            <div className="popup-container" style={{ display: 'flex', alignItems: 'center' }}>
+            <div className="popup-container" style={{  alignItems: 'center' }}>
                 <div className="popup-content" style={{ width: '80%' }}>
                     <span style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
                         <h5 >Assign Role to Permissions</h5>

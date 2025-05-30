@@ -10,6 +10,7 @@ import Cookies from 'js-cookie';
 import { useDispatch, useSelector } from "react-redux";
 import { setPage } from '../../../Redux/Action/criteriaAction';
 import { setReportResults } from '../../../Redux/Action/reportAction';
+import { toast } from 'react-toastify';
 
 
 export const sharedSxStyles = {
@@ -97,12 +98,13 @@ const SearchView = () => {
     }
   };
 
-
-
   const handleSearch = async (e) => {
     e.preventDefault();
     try {
-
+      if(formData.searchQuery.trim()===""){
+        toast.error("Please enter at least one keyword to search");
+        return;
+      }
       const payload = {
         keyword: Array.isArray(formData.searchQuery) ? formData.searchQuery : [formData.searchQuery],
         report_generation: true,

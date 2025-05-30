@@ -207,6 +207,10 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
     const handleSaveCriteriaChange = () => {
         setShowSavePopup(true); // Open the popup  
     };
+    const isSearchDisabled =
+        (!formData.caseIds || formData.caseIds.length === 0) &&
+        (!formData.platform || formData.platform.length === 0) &&
+        (!selectedDates.startDate || !selectedDates.endDate);
 
     return (
         <>
@@ -227,7 +231,6 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
 
 
                             <form>
-                                <h5>Filter</h5>
 
                                 {/* Case Selection */}
                                 <div className="mb-3">
@@ -289,7 +292,11 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
 
                                 {/* Buttons */}
                                 <div className="button-container">
-                                    <button type="button" onClick={performSearch} className="add-btn">Search</button>
+                                    <button type="button" onClick={performSearch} className="add-btn" disabled={isSearchDisabled}
+                                        style={{
+                                            backgroundColor: isSearchDisabled ? '#fffff' : '#00000',
+                                            cursor: isSearchDisabled ? 'not-allowed' : 'pointer'
+                                        }}>Search</button>
                                     <button
                                         type="button"
                                         className="add-btn"

@@ -13,6 +13,7 @@ import { closePopup, openPopup, setKeywords, setPage, setSearchResults } from '.
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import Loader from '../Layout/loader';
+import { toast } from 'react-toastify';
 
 
 const SavedCriteria = () => {
@@ -141,10 +142,15 @@ const SavedCriteria = () => {
   // Main search function to call API
   const handleSearch = async () => {
     console.log("reduxPayload:", reduxPayload);
-    console.log("enterInput:", enterInput);
-
     setIsLoading(true);
     try {
+      // console.log("gsdhgfshgdf", searchChips, keyword)
+      // if (searchChips.length === 0 && keyword.length === 0 && enterInput.length===0) {
+      //   console.log("Both searchChips and keyword are empty");
+      //   toast.error("Please enter at least one keyword to search");
+      //   return;
+      // }
+      setIsLoading(true);
       // 1. Redux ke sirf keyword le rahe hain
       const reduxKeywords = Array.isArray(reduxPayload.keyword)
         ? reduxPayload.keyword
@@ -317,7 +323,7 @@ const SavedCriteria = () => {
                   <div className="card-subtext">❌ No Matched Data</div>
                 )}
                 <button className="add-btn" style={{ marginLeft: '0px' }} onClick={ViewScreen}>
-                  VIEW ALL RESULTS IN FULL SCREEN
+                  View All Results In Full Screen
                 </button>
               </div>
             </div>

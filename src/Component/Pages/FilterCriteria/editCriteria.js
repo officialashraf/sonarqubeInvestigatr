@@ -22,6 +22,8 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [dataFetched, setDataFetched] = useState(false);
+  const [initialFormData, setInitialFormData] = useState({});
+  const [isBtnDisabled, setIsBtnDisabled] = useState(true);
 
   const [formData, setFormData] = useState({
     searchQuery: '',
@@ -37,6 +39,7 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
     startTime: { hours: 16, minutes: 30 },
     endTime: { hours: 16, minutes: 30 }
   });
+
   // Fetch case data from API
   const fetchCaseData = useCallback(async () => {
     try {
@@ -195,6 +198,14 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
         longitude: criteriaData.longitude || ''
       });
 
+      setInitialFormData({
+        searchQuery: processedKeywords,
+        caseIds: selectedCaseIds,
+        filetype: selectedFileTypes,
+        latitude: criteriaData.latitude || '',
+        longitude: criteriaData.longitude || ''
+      });
+
       setIsLoading(false);
 
     } catch (error) {
@@ -232,11 +243,16 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
   const handleUpdate = async (e) => {
     e.preventDefault();
 
-    // Validation
+ //   Validation
     if (!formData.searchQuery.trim()) {
       toast.error('Search query is required');
       return;
     }
+    // const validationErrors = validateForm();
+    // if (Object.keys(validationErrors).length > 0) {
+    //   setError(validationErrors);
+    //   return;
+    // }
 
     try {
       const keywordsArray = formatKeywordsForAPI(formData.searchQuery);
@@ -277,9 +293,26 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
     }
   };
 
+  useEffect(() => {
+
+    const isSame =
+      formData.searchQuery.trim() === initialFormData.searchQuery &&
+      JSON.stringify(formData.caseIds.map(caseId => caseId.value.toString())) ===
+      JSON.stringify(initialFormData.caseIds.map(caseId => caseId.value.toString())) &&
+      JSON.stringify(formData.filetype.map(file => file.value.toString())) ===
+      JSON.stringify(initialFormData.filetype.map(file => file.value.toString()));
+
+    setIsBtnDisabled(isSame);
+  }, [formData, initialFormData]);
+
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+    // setError((prevErrors) => ({
+    //   ...prevErrors,
+    //   [name]: ""  // Remove the specific error message
+    // }));
   };
 
   // Toggle date picker popup visibility
@@ -357,7 +390,8 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
                 sx={sharedSxStyles}
                 multiline={false}
               />
-            </div>
+              {/* {error.searchQuery && <p style={{ color: "red", margin: '0px' }} >{error.searchQuery}</p>} */}
+                          </div>
 
             {/* Filetype Dropdown (Multi Select) */}
             <div className="mb-3">
@@ -463,6 +497,7 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
               <button
                 type="submit"
                 className="create-btn"
+                disabled={isBtnDisabled}
               >
                 Update
               </button>

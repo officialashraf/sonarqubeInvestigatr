@@ -10,10 +10,24 @@ const LicensePage = () => {
   const [licenseKey, setLicenseKey] = useState("");
   const [error, setError] = useState("");
   console.log("key", licenseKey)
-  
+
+  const validateForm = () => {
+    if (!licenseKey.trim()) {
+      setError("License key is required.");
+      return false;
+    }
+    return error;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent default form submission
     console.log("key", licenseKey)
+
+    const validationError = validateForm();
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
     try {
       console.log("key", typeof licenseKey)
       const response = await axios.post("http://5.180.148.40:9008/api/license/register",
@@ -55,7 +69,7 @@ const LicensePage = () => {
               onChange={(e) => setLicenseKey(e.target.value)}
             />
             <div className="d-flex justify-content-end mt-2">
-              <button type="submit" className="login-button">
+              <button type="submit" className="login-button" disabled={!licenseKey.trim()}>
                 Apply
               </button>
             </div>

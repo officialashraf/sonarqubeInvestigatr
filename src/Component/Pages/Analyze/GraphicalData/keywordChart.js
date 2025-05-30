@@ -68,7 +68,7 @@ const KeywordChart = () => {
   return (
     <div style={{ width: '100%', height: 280 }}>
         <ResponsiveContainer>
-    <Box width='100%' style={{ marginTop: 0, padding: 0 }}>
+    <Box width='100%' style={{ marginTop: 0, padding: 0, alignContent: 'center' }}>
       {data.length > 0
         ? <WordCloud
           data={dataa}

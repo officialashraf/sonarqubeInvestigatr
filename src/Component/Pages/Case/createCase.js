@@ -60,6 +60,21 @@ const CreateCase = ({ togglePopup }) => {
     value: user.id,
     label: user.username
   }));
+      const [error, setError] = useState({});
+  
+
+  const validateForm = () => {
+    const errors = {};
+
+    if (!formData.title || formData.title.trim() === "") {
+      errors.title = "Title is required";
+    }
+
+    if (!formData.description) {
+      errors.description = "Description is required";
+    }
+    return errors;
+  };
 
 
   const getUserData = async () => {
@@ -89,28 +104,48 @@ const CreateCase = ({ togglePopup }) => {
       toast.error("Authentication error: No token found");
       return;
     }
+    const validationErrors = validateForm();
+    if (Object.keys(validationErrors).length > 0) {
+      setError(validationErrors);
+      return;
+    }
+    const payloadData = Object.fromEntries(
+      Object.entries(formData).filter(([_, value]) => {
+        if (value === null || value === undefined) return false;
+        if (typeof value === "string" && value.trim() === "") return false;
+        if (Array.isArray(value) && value.length === 0) return false;
+        return true;
+      })
+    );
     try {
       const caseQuery = {
-        title: formData.title,
-        description: formData.description,
-        assignee: formData.assignee,
-        watchers: Array.isArray(formData.watchers)
-          ? formData.watchers
-          : formData.watchers
-            ? formData.watchers.split(',').map(w => w.trim())
-            : [],
+          title: payloadData.title,
+        description: payloadData.description,
+        assignee: payloadData.assignee,
+ 
+};
+      if (payloadData.watchers) {
+        const watcherList =
+          typeof payloadData.watchers === "string"
+            ? payloadData.watchers.split(",").map(w => w.trim()).filter(w => w !== "")
+            : Array.isArray(payloadData.watchers)
+              ? payloadData.watchers.filter(w => w !== "")
+              : [];
 
-      };
-
-      console.log("caseQuery", caseQuery)
-      const response = await axios.post('http://5.180.148.40:9001/api/case-man/v1/case',
-        caseQuery
-        , {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          }
+        if (watcherList.length > 0) {
+          caseQuery.watchers = watcherList;
         }
+      }
+    
+      console.log("caseQuery",caseQuery)
+      const response = await axios.post('http://5.180.148.40:9001/api/case-man/v1/case', 
+      caseQuery
+      , {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      }
       ); window.dispatchEvent(new Event("databaseUpdated"));
       if (response.status === 200) {
         toast.success("Case created successfully");
@@ -143,6 +178,11 @@ const CreateCase = ({ togglePopup }) => {
       ...prev,
       [name]: formattedValue,
     }));
+    setError((prevErrors) => ({
+      ...prevErrors,
+      [name]: ""  // Remove the specific error message
+    }));
+    
   };
 
   const handleWatchersChange = (selectedOptions) => {
@@ -174,7 +214,7 @@ const CreateCase = ({ togglePopup }) => {
               handleCreateCase(formData);
             }}
           >
-            <label htmlFor="title">Title <span style={{ color: 'black' }}>*</span></label>
+            <label htmlFor="title">Title *</label>
             <input
               className="com"
               type="text"
@@ -185,9 +225,11 @@ const CreateCase = ({ togglePopup }) => {
                 setFormData((prev) => ({ ...prev, title: e.target.value.replace(/\b\w/g, (char) => char.toUpperCase()) }))
               }
               placeholder="Enter Title"
-              required
             />
-            <label htmlFor="description">Description </label>
+            {error.title && <p style={{ color: "red", margin: '0px' }} >{error.title}</p>}
+
+
+            <label htmlFor="description">Description *</label>
             <textarea
               className="com"
               id="description"
@@ -196,9 +238,11 @@ const CreateCase = ({ togglePopup }) => {
               onChange={handleInputChange}
               placeholder="Enter Description"
             ></textarea>
+            {error.description && <p style={{ color: "red", margin: '0px' }} >{error.description}</p>}
+
 
             <div>
-              <label htmlFor="assignee">Assignee <span style={{ color: 'black' }}>*</span></label>
+              <label htmlFor="assignee">Assignee</label>
 
 
               <Select

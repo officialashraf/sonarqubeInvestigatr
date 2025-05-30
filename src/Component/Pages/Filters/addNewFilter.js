@@ -25,6 +25,8 @@ const AddNewFilter = ({ onClose, filterIde }) => {
   const [filterDetails, setFilterDetails] = useState(null)
   const [isEditable, setIsEditable] = useState(true);
   const [loggedInUserId, setLoggedInUserId] = useState(null);
+  const [formChanged, setFormChanged] = useState(false);
+
   const [sources, setSources] = useState([
     {
       id: '',
@@ -35,6 +37,64 @@ const AddNewFilter = ({ onClose, filterIde }) => {
       interval: '',
     },
   ]);
+
+  const [error, setError] = useState({});
+  
+const validateForm = () => {
+  const errors = {};
+
+  // Validate main filter fields
+  if (!filterName.trim()) {
+    errors.name = "Filter name is required";
+  }
+
+  if (!description.trim()) {
+    errors.description = "Description is required";
+  }
+  
+  const sourceErrors = [];
+
+  sources.forEach((source, sourceIndex) => {
+    const sourceError = {};
+
+    if (!source.source || source.source.trim() === "") {
+      sourceError.source = "Source type is required";
+    }
+    if (source.source && source.source !== 'rss feed' && (!source.platform || source.platform.length === 0)) {
+      sourceError.platform = "At least one platform is required";
+    }
+    if (!source.intervalValue || source.intervalValue <= 0) {
+      sourceError.intervalValue = "Interval value must be greater than 0";
+    }
+    if (!source.intervalUnit) {
+      sourceError.intervalUnit = "Interval unit is required";
+    }
+    if (source.source === 'rss feed' && source.urls.length === 0) {
+      sourceError.urls = "At least one RSS URL is required";  
+    }
+    if (source.source !== 'rss feed' && source.keywords.length === 0) {
+      sourceError.keywords = "At least one keyword is required";
+    }
+    if (source.source === 'rss feed' && source.urls.length === 0) {
+      sourceError.urls = "RSS URLs cannot be empty";
+    }
+
+    if (Object.keys(sourceError).length > 0) {
+      sourceErrors[sourceIndex] = sourceError;
+    }
+  });
+
+  if (sourceErrors.length > 0) {
+    errors.sources = sourceErrors;
+  }
+
+
+  return errors;
+};
+
+  const markFormAsChanged = () => {
+    if (!formChanged) setFormChanged(true);
+  };
 
   // const toastShown = useRef(false);
   useEffect(() => {
@@ -51,28 +111,55 @@ const AddNewFilter = ({ onClose, filterIde }) => {
   }, [token]);
 
   const handlePlatformChange = (sourceIndex, event) => {
+    markFormAsChanged();
     const selected = Array.from(event.target.selectedOptions, opt => opt.value);
     const newSources = [...sources];
     newSources[sourceIndex].platform = selected;
     setSources(newSources);
+    setError(prevErrors => {
+      const newErrors = { ...prevErrors };
+      if (newErrors.sources?.[sourceIndex]?.platform) {
+        newErrors.sources[sourceIndex] = { ...newErrors.sources[sourceIndex], platform: "" };
+      }
+      return newErrors;
+    });
+
   };
 
   const handleSourceChange = (index, event) => {
+    markFormAsChanged();
     const value = event.target.value;
     const newSources = [...sources];
     newSources[index].source = value;
     newSources[index].platform = [];
     newSources[index].urls = [''];
     setSources(newSources);
+
+    setError(prevErrors => {
+      const newErrors = { ...prevErrors };
+      if (newErrors.sources?.[index]?.source) {
+        newErrors.sources[index] = { ...newErrors.sources[index], source: "" };
+      }
+      return newErrors;
+    });
   };
 
   const handleKeywordChange = (index, value) => {
+    markFormAsChanged();
     const newSources = [...sources];
     newSources[index].keywordInput = value;
     setSources(newSources);
+    setError(prevErrors => {
+      const newErrors = { ...prevErrors };
+      if (newErrors.sources?.[index]?.keywords) {
+        newErrors.sources[index] = { ...newErrors.sources[index], keywords: "" };
+      }
+      return newErrors;
+    });
   };
 
   const handleKeywordKeyDown = (index, event) => {
+    markFormAsChanged();
     if (event.key === 'Enter' && sources[index].keywordInput.trim()) {
       const newSources = [...sources];
       newSources[index].keywords.push(sources[index].keywordInput.trim());
@@ -83,37 +170,67 @@ const AddNewFilter = ({ onClose, filterIde }) => {
   };
 
   const handleUrlKeyDown = (index, event) => {
+    markFormAsChanged();
     if (event.key === 'Enter' && sources[index].urlInput.trim()) {
       const newSources = [...sources];
       newSources[index].urls.push(sources[index].urlInput.trim());
       newSources[index].urlInput = '';
       setSources(newSources);
       event.preventDefault();
+      // Clear URL error
+      setError(prevErrors => {
+        const newErrors = { ...prevErrors };
+        if (newErrors.sources?.[index]?.urls) {
+          newErrors.sources[index] = { ...newErrors.sources[index], urls: "" };
+        }
+        return newErrors;
+      });
     }
+    
   };
 
   const handleDeleteKeyword = (sourceIndex, keyIndex) => {
+    markFormAsChanged();
     const newSources = [...sources];
     newSources[sourceIndex].keywords = newSources[sourceIndex].keywords.filter((_, i) => i !== keyIndex);
     setSources(newSources);
   };
 
   const handleDeleteUrl = (sourceIndex, urlIndex) => {
+    markFormAsChanged();
     const newSources = [...sources];
     newSources[sourceIndex].urls = newSources[sourceIndex].urls.filter((_, i) => i !== urlIndex);
     setSources(newSources);
   };
   const handleIntervalValueChange = (sourceIndex, value) => {
+    markFormAsChanged();
     const newSources = [...sources];
     const numericValue = Math.max(1, parseInt(value, 10) || 1);
     newSources[sourceIndex].intervalValue = numericValue;
     setSources(newSources);
+
+    // Clear intervalValue error
+    setError(prevErrors => {
+      const newErrors = { ...prevErrors };
+      if (newErrors.sources?.[sourceIndex]?.intervalValue) {
+        newErrors.sources[sourceIndex] = { ...newErrors.sources[sourceIndex], intervalValue: "" };
+      }
+      return newErrors;
+    });
   };
 
   const handleIntervalUnitChange = (sourceIndex, unit) => {
+    markFormAsChanged();
     const newSources = [...sources];
     newSources[sourceIndex].intervalUnit = unit;
     setSources(newSources);
+    setError(prevErrors => {
+      const newErrors = { ...prevErrors };
+      if (newErrors.sources?.[sourceIndex]?.intervalUnit) {
+        newErrors.sources[sourceIndex] = { ...newErrors.sources[sourceIndex], intervalUnit: "" };
+      }
+      return newErrors;
+    });
   };
 
   useEffect(() => {
@@ -163,6 +280,7 @@ const AddNewFilter = ({ onClose, filterIde }) => {
   }, [filterDetails, loggedInUserId]);
 
   const handleAddSource = () => {
+    markFormAsChanged();
     setSources([...sources, {
       id: '',
       source: '',
@@ -216,27 +334,86 @@ const AddNewFilter = ({ onClose, filterIde }) => {
     fetchPlatforms();
   }, [token]);
 
-
+  function cleanObject(obj) {
+    return Object.fromEntries(
+      Object.entries(obj).filter(([_, v]) => {
+        if (v === null || v === undefined) return false;
+        if (typeof v === 'string' && v.trim() === '') return false;
+        if (Array.isArray(v) && v.length === 0) return false;
+        return true;
+      })
+    );
+  }
 
   const handleSaveFilter = async () => {
     if (!isEditable) {
       toast.error("You don't have permission to edit this filter");
       return;
     }
+
+    const validationErrors = validateForm();
+    if (Object.keys(validationErrors).length > 0) {
+      setError(validationErrors);
+      return;
+    }
+    
+
     console.log("saources", sources)
     console.log("saourcesID", sources.id)
-    const postData = {
-      name: filterName,
-      description: description,
-      filter_criteria: sources.map((source) => ({
+
+
+    // Clean each source object in sources
+    const cleanedSources = sources.map(source => {
+      // Prepare urls array properly if source is 'rss feed'
+      const urls = source.source === 'rss feed' ? source.urls.filter(url => url.trim() !== '') : undefined;
+
+      // Build cleaned source object
+      const cleanedSource = {
         id: source.id,
         source: source.source,
         platform: source.platform,
         keywords: source.keywords,
-        urls: source.source === 'rss feed' ? [source.urls.join(',')] : undefined,
+        urls,
         interval: source.intervalValue * conversionFactors[source.intervalUnit],
-      })),
+      };
+
+      return cleanObject(cleanedSource);
+    });
+    const postData = {
+      name: filterName,
+      description: description,
+      filter_criteria: cleanedSources.filter(source => Object.keys(source).length > 0), // remove empty objects
     };
+
+    // Clean postData top level (if needed)
+    const payloadData = Object.fromEntries(
+      Object.entries(postData).filter(([_, value]) => {
+        if (value === null || value === undefined) return false;
+        if (typeof value === "string" && value.trim() === "") return false;
+        if (Array.isArray(value) && value.length === 0) return false;
+        return true;
+      })
+    );
+    // const postData = {
+    //   name: filterName,
+    //   description: description,
+    //   filter_criteria: sources.map((source) => ({
+    //     id: source.id,
+    //     source: source.source,
+    //     platform: source.platform,
+    //     keywords: source.keywords,
+    //     urls: source.source === 'rss feed' ? [source.urls.join(',')] : undefined,
+    //     interval: source.intervalValue * conversionFactors[source.intervalUnit],
+    //   })),
+    // };
+    // const payloadData = Object.fromEntries(
+    //   Object.entries(postData).filter(([_, value]) => {
+    //     if (value === null || value === undefined) return false;
+    //     if (typeof value === "string" && value.trim() === "") return false;
+    //     if (Array.isArray(value) && value.length === 0) return false;
+    //     return true;
+    //   })
+    // );
     console.log("postdata save filter", postData);
     try {
       const url = filterDetails?.id
@@ -245,7 +422,7 @@ const AddNewFilter = ({ onClose, filterIde }) => {
 
       const method = filterDetails?.id ? 'put' : 'post';
 
-      const response = await axios[method](url, postData, {
+      const response = await axios[method](url, payloadData, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
@@ -288,25 +465,35 @@ const AddNewFilter = ({ onClose, filterIde }) => {
           cursor:'pointer'
         }}>&times;</span> */}
         <Form.Group className="mb-3">
-          <Form.Label>Filter Name </Form.Label>
+          <Form.Label>Filter Name *</Form.Label>
           <Form.Control
             type="text"
             value={filterName}
-            onChange={(e) => setFilterName(e.target.value)}
+            onChange={(e) => {
+              setFilterName(e.target.value.replace(/\b\w/g, (char) => char.toUpperCase()));
+              setFormChanged(true);
+              setError(prev => ({ ...prev, name: '' }));
+            }}
             disabled={!isEditable}
 
           />
+          {error.name && <p style={{ color: "black", margin: '0px' }} >{error.name}</p>}
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>Description</Form.Label>
+          <Form.Label>Description *</Form.Label>
           <Form.Control
             as="textarea"
             rows={3}
             value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            onChange={(e) => {
+              setDescription(e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1));
+              setFormChanged(true); 
+              setError(prev => ({ ...prev, description: '' })); 
+            }}
             disabled={!isEditable}
           />
+          {error.description && <p style={{ color: "black", margin: '0px' }} >{error.description}</p>}
         </Form.Group>
         <div>
           <div ref={containerRef} className='sourceDiv'>
@@ -339,6 +526,9 @@ const AddNewFilter = ({ onClose, filterIde }) => {
                       <option value="social media profile">Social Media Profile</option>
                       <option value="rss feed">RSS Feed</option>
                     </Form.Select>
+                    {error.sources?.[sourceIndex]?.source && (
+                      <p style={{ color: 'red', margin: 0 }}>{error.sources[sourceIndex].source}</p>
+                    )}
                   </div>
 
                   {source.source && source.source !== 'rss feed' && (
@@ -356,6 +546,9 @@ const AddNewFilter = ({ onClose, filterIde }) => {
                           <option key={plat} value={plat}>{plat}</option>
                         ))}
                       </Form.Select>
+                      {error.sources?.[sourceIndex]?.platform && (
+                        <p style={{ color: 'red', margin: 0 }}>{error.sources[sourceIndex].platform}</p>
+                      )}
                     </div>
                   )}
                   {source.source && (
@@ -381,6 +574,12 @@ const AddNewFilter = ({ onClose, filterIde }) => {
                           <option value="hours">Hours</option>
                         </Form.Select>
                       </InputGroup>
+                      {error.sources?.[sourceIndex]?.intervalValue && (
+                        <p style={{ color: 'red', margin: 0 }}>{error.sources[sourceIndex].intervalValue}</p>
+                      )}
+                      {error.sources?.[sourceIndex]?.intervalUnit && (
+                        <p style={{ color: 'red', margin: 0 }}>{error.sources[sourceIndex].intervalUnit}</p>
+                      )}
                     </div>
                   )}
                   {source.source && (
@@ -424,6 +623,9 @@ const AddNewFilter = ({ onClose, filterIde }) => {
                         ))}
 
                       </div>
+                      {error.sources?.[sourceIndex]?.keywords && (
+                        <p style={{ color: 'red', margin: 0 }}>{error.sources[sourceIndex].keywords}</p>
+                      )}
 
 
                     </div>
@@ -474,6 +676,9 @@ const AddNewFilter = ({ onClose, filterIde }) => {
                           </Badge>
                         ))}
                       </div>
+                      {error.sources?.[sourceIndex]?.urls && (
+                        <p style={{ color: 'red', margin: 0 }}>{error.sources[sourceIndex].urls}</p>
+                      )}
                     </div>
 
                   )}
@@ -493,10 +698,12 @@ const AddNewFilter = ({ onClose, filterIde }) => {
                 </button> */}
             <button
               type="button"
-              className="add-new-filter-button"
+              // className="add-new-filter-button"
+              className="create-btn"
               style={{ marginLeft: '5px' }}
               onClick={handleSaveFilter}
             // disabled={!isEditable}
+              disabled={!formChanged || !isEditable}
             >
               {filterDetails?.id ? 'Update Filter' : 'Save Filter'}
             </button>

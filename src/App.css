@@ -69,6 +69,7 @@ span {
 }
 .ContainerDashboard {
   height: 100vh !important;
+    /* min-height: 100vh; */
   display: grid;
   flex-direction: column;
 }

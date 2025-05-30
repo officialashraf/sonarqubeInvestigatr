@@ -166,7 +166,7 @@ const AddComment = ({ show, onClose, selectedResource }) => {
               name="title"
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
-            placeholder="Enter your comment"
+            placeholder="Enter Your Comment"
             required
           
           />
@@ -189,7 +189,7 @@ const AddComment = ({ show, onClose, selectedResource }) => {
           </Box> */}
 
           <div className="button-container">
-              <button type="submit" className="create-btn">Create</button>
+              <button type="submit" className="create-btn">Add</button>
               <button type="button" className="cancel-btn" onClick={onClose}>
                 Cancel
               </button>

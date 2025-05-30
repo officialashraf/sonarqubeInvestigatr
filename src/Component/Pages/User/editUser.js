@@ -12,6 +12,10 @@ const EditUser = ({ togglePopup, item }) => {
   const [roles, setRoles] = useState([]);
   const [users, setUsers] = useState({ data: [] });
   const [loading, setLoading] = useState(false);
+  const [initialFormData, setInitialFormData] = useState({});
+  const [isBtnDisabled, setIsBtnDisabled] = useState(true);
+  const [error, setError] = useState({});
+
   const [formData, setFormData] = useState({
     firstName: item.first_name || "",
     lastName: item.last_name || "",
@@ -22,6 +26,24 @@ const EditUser = ({ togglePopup, item }) => {
   });
   console.log("formDate", formData)
 
+  const validateForm = () => {
+    const errors = {};
+    const emailRegex = /^\S+@\S+\.\S+$/;
+
+    if (!formData.username.trim()) {
+      errors.username = "Username is required";
+    }
+
+    if (!formData.email.trim()) {
+      errors.email = "Email is required";
+    } else if (!emailRegex.test(formData.email)) {
+      errors.email = "Invalid email format";
+    }
+
+    return errors;
+  };
+
+  
   const getUserData = async () => {
     try {
       const response = await axios.get('http://5.180.148.40:9000/api/user-man/v1/user', {
@@ -72,15 +94,36 @@ const EditUser = ({ togglePopup, item }) => {
       return;
     }
 
+    const validationErrors = validateForm();
+    if (Object.keys(validationErrors).length > 0) {
+      setError(validationErrors);
+      return;
+    }
+    const payloadData = Object.fromEntries(
+      Object.entries(formData).filter(([_, value]) => {
+        if (value === null || value === undefined) return false;
+        if (typeof value === "string" && value.trim() === "") return false;
+        if (Array.isArray(value) && value.length === 0) return false;
+        return true;
+      })
+    );
     try {
       const hasChanged = {};
-      // Only include fields that have actually changed
-      if (formData.firstName !== item.first_name || formData.firstName === "") { hasChanged.first_name = formData.firstName; }
-      if (formData.lastName !== item.last_name || formData.lastName === "") { hasChanged.last_name = formData.lastName; }
-      if (formData.username !== item.username || formData.username === "") { hasChanged.username = formData.username; }
-      if (formData.email !== item.email) { hasChanged.email = formData.email; }
-      if (formData.contactNumber !== item.contact_no) { hasChanged.contact_no = formData.contactNumber; }
-      if (formData.role !== item.role) { hasChanged.role = formData.role; }
+      if (payloadData.firstName && payloadData.firstName !== item.first_name) {
+        hasChanged.first_name = payloadData.firstName;
+      }
+      if (payloadData.lastName && payloadData.lastName !== item.last_name) {
+        hasChanged.last_name = payloadData.lastName;
+      }
+      if (payloadData.username && payloadData.username !== item.username) {
+        hasChanged.username = payloadData.username;
+      }
+      if (payloadData.email && payloadData.email !== item.email) {
+        hasChanged.email = payloadData.email;
+      }
+      if (payloadData.contactNumber && payloadData.contactNumber !== item.contact_no) {
+        hasChanged.contact_no = payloadData.contactNumber;
+      } // if (formData.role !== item.role) { hasChanged.role = formData.role; }
 
 
       // If nothing has changed 
@@ -126,7 +169,35 @@ const EditUser = ({ togglePopup, item }) => {
       ...prev,
       [name]: formattedValue
     }));
+    setError((prevErrors) => ({
+      ...prevErrors,
+      [name]: ""  // Remove the specific error message
+    }));
   };
+
+  useEffect(() => {
+    setInitialFormData({
+      firstName: item.first_name || "",
+      lastName: item.last_name || "",
+      username: item.username || "",
+      email: item.email || "",
+      contactNumber: item.contact_no || "",
+      role: item.role || "",
+    });
+  }, [item]);
+
+  useEffect(() => {
+    const isSame =
+      formData.firstName === initialFormData.firstName &&
+      formData.lastName === initialFormData.lastName &&
+      formData.username === initialFormData.username &&
+      formData.email === initialFormData.email &&
+      formData.contactNumber === initialFormData.contactNumber &&
+      formData.role === initialFormData.role;
+
+    setIsBtnDisabled(isSame);
+  }, [formData, initialFormData]);
+  
 
 
   return (
@@ -146,9 +217,9 @@ const EditUser = ({ togglePopup, item }) => {
               name="username"
               value={formData.username}
               onChange={handleChange}
-              required
             />
-            <label htmlFor="firstName">First Name <span style={{ color: 'black' }}>*</span></label>
+            {error.username && <p style={{ color: "red", margin: '0px' }} >{error.username}</p>}
+            <label htmlFor="firstName">First Name </label>
             <input
               className="com"
               type="text"
@@ -156,7 +227,6 @@ const EditUser = ({ togglePopup, item }) => {
               name="firstName"
               value={formData.firstName}
               onChange={handleChange}
-              required
             />
 
             <label htmlFor="lastName">Last Name</label>
@@ -169,7 +239,7 @@ const EditUser = ({ togglePopup, item }) => {
               onChange={handleChange}
             />
             <div>
-              <label>Role *</label>
+              <label>Role </label>
               <Select
                 options={roles}
                 placeholder="Select a role"
@@ -180,9 +250,7 @@ const EditUser = ({ togglePopup, item }) => {
                 classNamePrefix="select"
               />
             </div>
-
-
-            <label htmlFor="email">Email ID <span style={{ color: 'black' }}>*</span></label>
+            <label htmlFor="email">Email ID *</label>
             <input
               className="com"
               type="email"
@@ -190,10 +258,11 @@ const EditUser = ({ togglePopup, item }) => {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              required
             />
+            {error.email && <p style={{ color: "red", margin: '0px' }}>{error.email}</p>}
 
-            <label htmlFor="contactNumber">Contact Number <span style={{ color: 'black' }}>*</span></label>
+
+            <label htmlFor="contactNumber">Contact Number</label>
             <input
               className="com"
               type="text"
@@ -201,11 +270,10 @@ const EditUser = ({ togglePopup, item }) => {
               name="contactNumber"
               value={formData.contactNumber}
               onChange={handleChange}
-              required
             />
 
             <div className="button-container">
-              <button type="submit" className="create-btn" disabled={loading}>
+              <button type="submit" className="create-btn" disabled={isBtnDisabled || loading}>
                 {loading ? "Updating..." : "Update"}
               </button>
               <button type="button" onClick={togglePopup} className="cancel-btn">Cancel</button>

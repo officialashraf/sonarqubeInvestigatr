@@ -292,7 +292,7 @@ const RolesPermission = () => {
                                             <Dropdown.Item onClick={() => togglePopupC(item.role)}>Edit</Dropdown.Item>
 
 
-                                            <Dropdown.Item onClick={() => togglePopupD(item)}>Assign Role&Permissions</Dropdown.Item>
+                                            <Dropdown.Item onClick={() => togglePopupD(item)}>Assign Permissions</Dropdown.Item>
                                         </Dropdown.Menu>
                                     </Dropdown>
                                 </td>

@@ -89,8 +89,8 @@ const DataTable = () => {
       <div>
         <p>Are you sure you want to delete {title} case?</p>
         <p>Warning: Deleting this case will unapply all filters</p>
-        <button className='custom-confirm-button' onClick={() => { deleteCase(id, title); toast.dismiss(t.id); }}>Yes</button>
-        <button className='custom-confirm-button' onClick={() => toast.dismiss(t.id)}>No</button> </div>),
+        <button className='custom-confirm-button' onClick={() => { deleteCase(id, title); toast.dismiss(t.id); }} style={{ padding: "4px 1px", fontSize: "12px", width: "20%" }}>Yes</button>
+        <button className='custom-confirm-button' onClick={() => toast.dismiss(t.id)} style={{ padding: "4px 1px", fontSize: "12px", width: "20%" }}>No</button> </div>),
       {
         autoClose: false, closeOnClick: false, draggable: false, style: {
           position: 'fixed',
@@ -239,7 +239,7 @@ const DataTable = () => {
               <tr>
                 <th>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    CaseID
+                    Case ID
                     <span onClick={() => handleSort('id')} style={{ cursor: 'pointer', display: 'inline-flex', alignItems: 'center' }}>
                       {sortConfig.key === 'id' ? (
                         sortConfig.direction === 'asc' ? <ArrowDropUp /> : <ArrowDropDown />
@@ -252,6 +252,16 @@ const DataTable = () => {
                     Title
                     <span onClick={() => handleSort('title')} style={{ cursor: 'pointer', display: 'inline-flex', alignItems: 'center' }}>
                       {sortConfig.key === 'title' ? (
+                        sortConfig.direction === 'asc' ? <ArrowDropUp /> : <ArrowDropDown />
+                      ) : <ArrowDropDown />}
+                    </span>
+                  </div>
+                </th>
+                <th>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    Description
+                    <span onClick={() => handleSort('description')} style={{ cursor: 'pointer', display: 'inline-flex', alignItems: 'center' }}>
+                      {sortConfig.key === 'description' ? (
                         sortConfig.direction === 'asc' ? <ArrowDropUp /> : <ArrowDropDown />
                       ) : <ArrowDropDown />}
                     </span>
@@ -317,16 +327,6 @@ const DataTable = () => {
                     </span>
                   </div>
                 </th>
-                <th>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    Description
-                    <span onClick={() => handleSort('description')} style={{ cursor: 'pointer', display: 'inline-flex', alignItems: 'center' }}>
-                      {sortConfig.key === 'description' ? (
-                        sortConfig.direction === 'asc' ? <ArrowDropUp /> : <ArrowDropDown />
-                      ) : <ArrowDropDown />}
-                    </span>
-                  </div>
-                </th>
               </tr>
             </thead>
             <tbody className='tb-1'>
@@ -335,6 +335,7 @@ const DataTable = () => {
 
                   <td onClick={() => onFieldClick(item)} style={{ cursor: 'pointer' }}>{`CASE${String(item.id).padStart(4, '0')}`}</td>
                   <td>{item.title}</td>
+                  <td>{item.description}</td>
                   <td>{item.created_on.slice(0, 10)}</td>
                   <td>{item.created_by.slice(0, 8)}</td>
                   <td>{item.assignee}</td>
@@ -348,13 +349,10 @@ const DataTable = () => {
                   </td>
 
                   <td>{item.modified_on}</td>
-                  <td disabled={true} >
+                  <td className="d-flex justify-content-between align-items-center" disabled={true}>
                     <Badge pill bg="dark" className="badge-custom">
                       <span>{item.status}</span>
                     </Badge>
-                  </td>
-                  <td className="d-flex justify-content-between align-items-center">
-                    <span>{item.description}</span>
                     <span> <Dropdown>
                       <Dropdown.Toggle className="custom-dropdown-toggle custom-btn"> ⋮ </Dropdown.Toggle>
                       <Dropdown.Menu className="custom-dropdown-menu">
