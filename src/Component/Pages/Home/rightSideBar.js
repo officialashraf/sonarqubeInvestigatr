@@ -12,8 +12,8 @@ import SavedCriteria from '../FilterCriteria/savedCriteria';
 const RightSidebar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  
   const activePopup = useSelector((state) => state.popup?.activePopup || null);
-
   console.log("actvepopup", activePopup)
 
   const handleItemClick = (item) => {
@@ -25,12 +25,10 @@ const RightSidebar = () => {
     }
   }
 
-
-
   const menuItems = [
-    { label: 'Gemini', icon: <Cpu size={15} />, path: '/gemini' },
+    // { label: 'Gemini', icon: <Cpu size={15} />, path: '/gemini' },
     { label: 'Search', icon: <Search size={15} />, isPopup: true },
-    { label: 'Docs', icon: <FileEarmarkText size={15} />, path: '/documents' },
+    // { label: 'Docs', icon: <FileEarmarkText size={15} />, path: '/documents' },
   ];
 
   return (

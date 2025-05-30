@@ -17,6 +17,8 @@ import { toast } from 'react-toastify';
 
 
 const SavedCriteria = () => {
+  const Token = Cookies.get('accessToken');
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const activePopup = useSelector((state) => state.popup.activePopup);
@@ -41,7 +43,6 @@ const SavedCriteria = () => {
   console.log("Redux Payload:", reduxPayload);
 
   useEffect(() => {
-    ;
     console.log("Case ID:", caseId);
     console.log("File Type:", fileType);
 
@@ -69,13 +70,8 @@ const SavedCriteria = () => {
     }
   }, [keyword, caseId, fileType]);
 
-
   const displayResults = searchResults
-
-
   console.log("searchChips", searchChips);
-
-
 
   // Filter results based on user input
   const filterResults = (chips, query) => {
@@ -143,13 +139,10 @@ const SavedCriteria = () => {
     setInputValue('');
   };
 
-  const Token = Cookies.get('accessToken');
-
   // Main search function to call API
   const handleSearch = async () => {
     console.log("reduxPayload:", reduxPayload);
-
-  
+    setIsLoading(true);
     try {
       // console.log("gsdhgfshgdf", searchChips, keyword)
       // if (searchChips.length === 0 && keyword.length === 0 && enterInput.length===0) {
@@ -210,7 +203,6 @@ const SavedCriteria = () => {
           }
         }
       );
-
       console.log("Search results------:", response);
 
       setIsLoading(false);

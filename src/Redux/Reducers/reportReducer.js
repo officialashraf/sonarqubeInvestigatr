@@ -6,7 +6,6 @@ const initialState = {
   total_pages: 1,
   total_results: 0,
 };
-
 const reportReducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_REPORT_RESULTS:

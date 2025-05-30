@@ -7,24 +7,14 @@ import Cookies from "js-cookie";
 import Loader from '../../Layout/loader';
 import {  ResponsiveContainer } from 'recharts';
 
-
-
 const KeywordChart = () => {
   const token = Cookies.get("accessToken");
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const caseId = useSelector((state) => state.caseData.caseData.id);
 
-
-
-
-
-
   useEffect(() => {
-  
-
-    const fetchData = async () => {
-
+      const fetchKeywordData = async () => {
       try {
         setLoading(true);
         const payload = {
@@ -57,10 +47,10 @@ const KeywordChart = () => {
         setLoading(false);
       }
     }
-
-      fetchData();
+      fetchKeywordData();
     },
       [caseId,token]);
+
   if (loading) {
     return <Loader />;
   }
@@ -88,14 +78,11 @@ const KeywordChart = () => {
           width={600}
           height={280}
         />
-        : <Typography
-          variant="h6"
-          color="textSecondary"
-          align="center"
-          height={250}
-        >
-          No Data Available
-        </Typography>}
+        : 
+        <div className="h-[150px] flex items-center justify-center">
+          <p className="text-gray-500 text-xl">No Data Available</p>
+        </div>
+      }
     </Box>
       </ResponsiveContainer>
         </div>

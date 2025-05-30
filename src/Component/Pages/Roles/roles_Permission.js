@@ -251,13 +251,13 @@ const RolesPermission = () => {
                             </th>
                             <th onClick={() => handleSort('created_by')} style={{ cursor: 'pointer', textAlign: 'center' }}>
                                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                    <span>Created_BY</span>
+                                    <span>Created By</span>
                                     {getSortIcon('created_by')}
                                 </div>
                             </th>
                             <th onClick={() => handleSort('created_on')} style={{ cursor: 'pointer', textAlign: 'center' }}>
                                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                    <span>Created_On</span>
+                                    <span>Created On</span>
                                     {getSortIcon('created_on')}
                                 </div>
                             </th>

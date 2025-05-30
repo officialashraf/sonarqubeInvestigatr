@@ -11,7 +11,6 @@ const LoginPage = () => {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({ username: "", password: "" });
     const [error, setError] = useState({});
-    // const [err, setErr] = useState('');
 
     const validateForm = () => {
         const errors = {};
@@ -40,9 +39,7 @@ const LoginPage = () => {
             [name]: ""  // Remove the specific error message
         }));
        
-        // Clear the error message when the user starts typing
-        // if (error) setErr('');
-    };
+          };
 
     // Handle form submission
     const handleLogin = async (e) => {
@@ -72,12 +69,12 @@ const LoginPage = () => {
 
 
                 // Navigate to the next page after successful login
-                toast("You have successfully logged in");
+                toast.success("You have successfully logged in");
                 navigate('/cases');
 
             } else {
                 // Handle errors when the response is not 200
-                toast('An unexpected error has occurred. Please try again');
+                toast.error('An unexpected error has occurred. Please try again');
             }
         } catch (err) {
             // Error handling based on the type of error
@@ -96,7 +93,7 @@ const LoginPage = () => {
             }
         }
     };
-    // const isButtonDisabled = !formData.username.trim() || !formData.password.trim();
+ 
     return (
         <Container fluid className="login-container">
             <Row className="login-row">
@@ -140,7 +137,6 @@ const LoginPage = () => {
                                 Login
                             </button>
                         </div>
-                        {/* {err && <p className="error-text mt-3">{err}</p>} */}
                     </Form>
                 </Col>
             </Row>

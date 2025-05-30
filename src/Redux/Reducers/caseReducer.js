@@ -4,9 +4,7 @@ import {
     SET_SUMMARY_DATA,
 } from '../Constants/caseCaontant';
 
-
 const initialState = { selectedTab: 'default', };
-
 export const tabReducer = (state = initialState, action) => {
 
     switch (action.type) {
@@ -44,7 +42,6 @@ export const summaryReducer = (state = {
                 social_media: action.payload.social_media,
                 count: action.payload.count,
                 dates: action.payload.dates
-
             };
         default:
             return state;

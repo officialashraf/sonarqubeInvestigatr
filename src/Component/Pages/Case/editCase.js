@@ -1,4 +1,4 @@
-import{ useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { toast } from 'react-toastify';
@@ -17,6 +17,7 @@ const EditCase = ({ togglePopup, item }) => {
     assignee: item.assignee || "",
     comment: item.comment || "",
   });
+
   const [users, setUsers] = useState({ data: [] });
 
   const options = users.data?.map(user => ({
@@ -31,23 +32,23 @@ const EditCase = ({ togglePopup, item }) => {
   const [initialFormData, setInitialFormData] = useState({});
   const [isBtnDisabled, setIsBtnDisabled] = useState(true);
   const [error, setError] = useState({});
-    
-  
-    const validateForm = () => {
-      const errors = {};
-  
-      if (!formData.title || formData.title.trim() === "") {
-        errors.title = "Title is required";
-      }
-  
-      if (!formData.description) {
-        errors.description = "Description is required";
-      }
-      return errors;
-    };
 
 
-  const userData = async () => {
+  const validateForm = () => {
+    const errors = {};
+
+    if (!formData.title || formData.title.trim() === "") {
+      errors.title = "Title is required";
+    }
+
+    if (!formData.description) {
+      errors.description = "Description is required";
+    }
+    return errors;
+  };
+
+
+  const getUserData = async () => {
     const token = Cookies.get("accessToken");
     try {
       const response = await axios.get('http://5.180.148.40:9000/api/user-man/v1/user', {
@@ -64,7 +65,7 @@ const EditCase = ({ togglePopup, item }) => {
   };
 
   useEffect(() => {
-    userData();
+    getUserData();
   }, []);
 
   // Update formData when item or users change
@@ -81,7 +82,7 @@ const EditCase = ({ togglePopup, item }) => {
             ? item.watchers
             : [],
       }));
-    }console.log("item.watchers",item.watchers)
+    } console.log("item.watchers", item.watchers)
   }, [item, users.data]);
 
   const handleEditCase = async (formData) => {
@@ -116,7 +117,6 @@ const EditCase = ({ togglePopup, item }) => {
         }
       });
 
-      
       // Compare watchers carefully (normalize both before comparing)
       const originalWatchers = Array.isArray(item.watchers)
         ? item.watchers.map(w => w.trim()).filter(Boolean)
@@ -141,7 +141,7 @@ const EditCase = ({ togglePopup, item }) => {
         togglePopup();
         return;
       }
-
+      console.log("handlechange", hasChanged)
       const response = await axios.put(
         `http://5.180.148.40:9001/api/case-man/v1/case/${item.id}`,
         hasChanged,
@@ -163,76 +163,6 @@ const EditCase = ({ togglePopup, item }) => {
       toast.info(err.response?.data || "Failed to update case");
     }
   };
-  
-  // const handleEditCase = async (formData) => {
-  //   const token = Cookies.get("accessToken");
-  //   if (!token) {
-  //     toast.error("Authentication error: No token found");
-  //     return;
-  //   }
-
-  //   const validationErrors = validateForm();
-  //   if (Object.keys(validationErrors).length > 0) {
-  //     setError(validationErrors);
-  //     return;
-  //   }
-  //   const payloadData = Object.fromEntries(
-  //     Object.entries(formData).filter(([_, value]) => {
-  //       if (value === null || value === undefined) return false;
-  //       if (typeof value === "string" && value.trim() === "") return false;
-  //       if (Array.isArray(value) && value.length === 0) return false;
-  //       return true;
-  //     })
-  //   );
-  //   try {
-
-  //     const hasChanged = {};
-
-  //     // Only include fields that have actually changed
-  //     if (payloadData.title !== item.title) hasChanged.title = payloadData.title;
-  //     if (payloadData.description !== item.description) hasChanged.description = payloadData.description;
-  //     if (payloadData.status !== item.status) hasChanged.status = payloadData.status;
-  //     if (payloadData.assignee !== item.assignee) hasChanged.assignee = payloadData.assignee;
-  //     if (payloadData.comment !== item.comment) hasChanged.comment = payloadData.comment;
-
-  //     // Special handling for watchers array
-  //     const originalWatchers = typeof item.watchers === 'string' ? item.watchers :
-  //       Array.isArray(item.watchers) ? item.watchers.join(", ") : null;
-  //     const newWatchers = Array.isArray(formData.watchers) ? formData.watchers.join(", ") : formData.watchers;
-
-  //     if (newWatchers !== originalWatchers) {
-  //       hasChanged.watchers = newWatchers;
-  //     }
-
-  //     // If nothing has changed, just close the popup
-  //     if (Object.keys(hasChanged).length === 0) {
-  //       togglePopup();
-  //       return;
-  //     }
-
-  //     const response = await axios.put(
-  //       `http://5.180.148.40:9001/api/case-man/v1/case/${item.id}`,
-  //       // updateData,
-  //       hasChanged,
-  //       {
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //           'Authorization': `Bearer ${token}`
-  //         }
-  //       }
-  //     );
-
-  //     if (response.status === 200) {
-  //       toast.success("Case updated successfully");
-  //       window.dispatchEvent(new Event("databaseUpdated"));
-  //       togglePopup();
-  //     }
-  //   } catch (err) {
-  //     console.error("Error updating case:", err);
-  //     toast.info(err.response?.data|| "Failed to update case");
-  //   }
-  // };
-
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -376,7 +306,7 @@ const EditCase = ({ togglePopup, item }) => {
     }
   }, [item, users.data]);
   useEffect(() => {
-    const isSame = 
+    const isSame =
       formData.title === initialFormData.title &&
       formData.description === initialFormData.description &&
       formData.status === initialFormData.status &&
@@ -386,8 +316,8 @@ const EditCase = ({ togglePopup, item }) => {
 
     setIsBtnDisabled(isSame);
   }, [formData, initialFormData]);
-  
-  
+
+
   return (
     <div className="popup-overlay">
       <div className="popup-container">
@@ -418,7 +348,7 @@ const EditCase = ({ togglePopup, item }) => {
               value={formData.description}
               onChange={handleInputChange}
               placeholder="Enter description"
-                   />
+            />
             {error.description && <p style={{ color: "red", margin: '0px' }} >{error.description}</p>}
 
             <label htmlFor="assignee">Assignee </label>
@@ -449,9 +379,9 @@ const EditCase = ({ togglePopup, item }) => {
                 const existingWatcher = options.find((opt) => opt.label === watcher);
                 return existingWatcher || { value: watcher, label: watcher };
               })
-            }
+              }
               onChange={handleWatchersChange}
-                     />
+            />
 
 
             <label htmlFor="status">Status:</label>

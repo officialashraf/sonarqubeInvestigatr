@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
 import "./addUser.css";
-import { IoMdSearch } from "react-icons/io";
+// import { IoMdSearch } from "react-icons/io";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { toast } from 'react-toastify';
 import Select from "react-select";
-
-
 
 export const customStyles = {
   control: (base) => ({
@@ -52,6 +50,11 @@ export const customStyles = {
 
 const AddUser = ({ onClose }) => {
   const token = Cookies.get("accessToken");
+
+    const [roles, setRoles] = useState([]);
+  const [loading, setLoading] = useState(true)  ;
+  const [error, setError] = useState({});
+
   const [formData, setFormData] = useState({
     username: "",
     first_name: "",
@@ -61,9 +64,6 @@ const AddUser = ({ onClose }) => {
     contact_no: "",
     password: ""
   });
-  const [roles, setRoles] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState({});
 
   const validateForm = () => {
     const errors = {};
@@ -138,7 +138,7 @@ const AddUser = ({ onClose }) => {
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleCreateUser = async (e) => {
     e.preventDefault();
     if (!token) {
       toast.error("Authentication token missing.");
@@ -191,18 +191,14 @@ const AddUser = ({ onClose }) => {
         <button className="close-icon" onClick={onClose}>&times;</button>
         <div className="popup-content">
           <h5>Add User</h5>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleCreateUser}>
             <label>User Name *</label>
             <input className="com" name="username" value={formData.username} onChange={handleChange} placeholder="Enter User Name" requiblack />
             {error.username && <p style={{ color: "red" , margin: '0px' }} >{error.username}</p>}
-
-
             <label>First Name</label>
             <input className="com" name="first_name" value={formData.first_name} onChange={handleChange} placeholder="Enter First Name" />
-
             <label>Last Name</label>
             <input className="com" name="last_name" value={formData.last_name} onChange={handleChange} placeholder="Enter Last Name" />
-
             <div>
               <label>Role</label>
               <Select
@@ -219,14 +215,11 @@ const AddUser = ({ onClose }) => {
             <label>Email ID *</label>
             <input className="com" type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Enter Email ID" requiblack />
             {error.email && <p style={{ color: "red",  margin: '0px' }}>{error.email}</p>}
-
             <label>Contact Number</label>
             <input className="com" name="contact_no" value={formData.contact_no} onChange={handleChange} placeholder="Enter Contact Number" />
-
             <label>Password *</label>
             <input className="com" type="password" name="password" value={formData.password} onChange={handleChange} placeholder="Enter Password" requiblack />
             {error.password && <p style={{ color: "red", margin: '0px' }}>{error.password}</p>}
-
             <div className="button-container">
               <button type="submit" className="create-btn">Create</button>
               <button type="button" onClick={onClose} className="cancel-btn">Cancel</button>

@@ -5,21 +5,20 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
 import '../User/addUser.css'
+import { CloseButton } from 'react-bootstrap';
 
 const AddRole = ({ togglePopup }) => {
     const Token = Cookies.get('accessToken');
-
-
     const [searchTitle, setSearchTitle] = useState('');
 
     const addRole = async () => {
-
         try {
             console.log("Criteria Payload:", searchTitle); // Debug: Payload for API
-if (!searchTitle.trim()) { 
-    toast.error("Please enter Role before proceeding."); // Show toast error
-    return; // Stop function execution
-}
+
+            if (!searchTitle.trim()) {
+                toast.error("Please enter role before proceeding."); // Show toast error
+                return; // Stop function execution
+            }
             const response = await axios.post(
                 `http://5.180.148.40:9000/api/user-man/v1/role/${searchTitle}`,
                 {}, // empty body
@@ -31,13 +30,12 @@ if (!searchTitle.trim()) {
                 }
             );
 
-
             toast.success("Role created successfully");
             window.dispatchEvent(new Event("databaseUpdated"));
             console.log('Role created successfully:', response.data); // Debug: API response
             togglePopup(false)
         } catch (error) {
-            toast(error.response.data.detail || "Role name already exists. Kindly use a different role name", );
+            toast(error.response.data.detail || "Role name already exists. Kindly use a different role name",);
             console.error('Error saving criteria:', error); // Debug: Error log
         }
     };
@@ -56,9 +54,12 @@ if (!searchTitle.trim()) {
                 </button>
 
                 <div className="popup-content" style={{ width: '70%' }}>
-
+ 
                     <form onSubmit={(e) => e.preventDefault()}> {/* Prevent form submission default */}
-                        <label>Add Role <span style={{ color: 'black' }}>*</span></label>
+                    <span style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
+        <label>Add Role *</label> 
+        <CloseButton onClick={togglePopup} />
+    </span>
                         <input
                             type="text"
                             placeholder="Enter Role"
@@ -68,11 +69,11 @@ if (!searchTitle.trim()) {
                             onBlur={() => {
                                 // Format to sentence case on blur
                                 setSearchTitle((prev) =>
-                                    prev.replace(/\b\w/g, (char) => char.toUpperCase())                                );
-                              }}
+                                    prev.replace(/\b\w/g, (char) => char.toUpperCase()));
+                            }}
                         />
                         <div className="button-container">
-                             <button
+                            <button
                                 type="submit"
                                 className="create-btn"
                                 onClick={addRole}
@@ -86,7 +87,7 @@ if (!searchTitle.trim()) {
                             >
                                 Cancel
                             </button>
-                           
+
                         </div>
                     </form>
                 </div>

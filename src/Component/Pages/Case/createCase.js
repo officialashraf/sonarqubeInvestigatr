@@ -77,7 +77,7 @@ const CreateCase = ({ togglePopup }) => {
   };
 
 
-  const userData = async () => {
+  const getUserData = async () => {
     const token = Cookies.get("accessToken");
     try {
       const response = await axios.get('http://5.180.148.40:9000/api/user-man/v1/user'
@@ -94,7 +94,7 @@ const CreateCase = ({ togglePopup }) => {
     }
   };
   useEffect(() => {
-    userData(); // Call the userData function
+    getUserData(); // Call the getUserData function
   }, []);
 
 
@@ -122,13 +122,7 @@ const CreateCase = ({ togglePopup }) => {
           title: payloadData.title,
         description: payloadData.description,
         assignee: payloadData.assignee,
-      
-  //     watchers: Array.isArray(payloadData.watchers)
-  // ? payloadData.watchers
-  // : typeof payloadData.watchers === "string"
-  // ? payloadData.watchers.split(',').map(w => w.trim())
-  //     : [],
-
+ 
 };
       if (payloadData.watchers) {
         const watcherList =
@@ -190,6 +184,7 @@ const CreateCase = ({ togglePopup }) => {
     }));
     
   };
+
   const handleWatchersChange = (selectedOptions) => {
     const selectedLabels = selectedOptions.map((option) => option.label).join(", ");
     setFormData((formData) => ({
@@ -204,8 +199,6 @@ const CreateCase = ({ togglePopup }) => {
       assignee: selectedOption ? parseInt(selectedOption.value, 10) : ''
     }));
   };
-
-
 
   return (
     <div className="popup-overlay">

@@ -6,6 +6,7 @@ import Cookies from "js-cookie";
 import Loader from '../../../Layout/loader';
 
 const CriteriaSentimentChart = () => {
+
   const token = Cookies.get("accessToken");
   let [data, setData] = useState([]);
   const queryPayload = useSelector((state) => state.criteriaKeywords.queryPayload);
@@ -15,11 +16,9 @@ const CriteriaSentimentChart = () => {
   const COLORS = ['#000000', '#000000'];
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchSentimentData = async () => {
       try {
         setLoading(true);
-        const token = Cookies.get("accessToken"); // Retrieve token from cookies
-
         if (!token) {
           console.error("Token not found! Authentication required.");
           return;
@@ -42,6 +41,7 @@ const CriteriaSentimentChart = () => {
             Authorization: `Bearer ${token}`
           }
         });
+
         console.log("queryPayload", payload)
         console.log("Aggregate API Response:", response.data);
         // return response.data; // Return response for further use
@@ -67,8 +67,9 @@ const CriteriaSentimentChart = () => {
         setLoading(false);
       }
     };
-    fetchData();
+    fetchSentimentData();
   }, [queryPayload, token]);
+
   if (loading) {
     return <Loader />
   }

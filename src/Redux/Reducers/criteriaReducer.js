@@ -1,4 +1,3 @@
-
 import { SET_SEARCH_RESULTS, SET_PAGE, CLOSE_POPUP, OPEN_POPUP, SET_KEYWORDS } from "../Constants/criteriaConstant";
 
 // Redux Reducer
@@ -8,7 +7,6 @@ const initialState = {
   totalResults: 0,
   currentPage: 1,
 };
-
 export const searchReducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_SEARCH_RESULTS:
@@ -27,8 +25,6 @@ export const searchReducer = (state = initialState, action) => {
       return state;
   }
 };
-
-
 
 export const popupReducer = (state = { activePopup: null }, action) => {
   console.log("Reducer Called:", action);
@@ -49,8 +45,8 @@ export const popupReducer = (state = { activePopup: null }, action) => {
       return state; // Return current state for unhandled actions
   }
 };
-const queryState = {
 
+const queryState = {
   keywords: [],
   queryPayload: {
     case_id: [],

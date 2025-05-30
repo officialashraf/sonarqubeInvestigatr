@@ -8,13 +8,15 @@ import Cookies from "js-cookie";
 import Loader from '../../../Layout/loader';
 
 const CriteriaLineChart = () => {
+
   const token = Cookies.get("accessToken");
   const [data, setData] = useState([]);
   const [recordTypes, setRecordTypes] = useState([]);
   const queryPayload = useSelector((state) => state.criteriaKeywords.queryPayload);
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchKeywordData = async () => {
       try {
         setLoading(true);
         const payload = {
@@ -60,7 +62,7 @@ const CriteriaLineChart = () => {
       }
     };
 
-    fetchData();
+    fetchKeywordData();
 
   }, [queryPayload, token]);
   if (loading) {

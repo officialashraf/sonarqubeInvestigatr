@@ -1,4 +1,3 @@
-
 import { Table, CloseButton } from 'react-bootstrap'
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -10,6 +9,8 @@ import Loader from '../Layout/loader'
 const TargetDetails = ({ togglePopup, id }) => {
 // const id = details
 // console.log("id", id)
+  const [loading, setLoading] = useState(true);
+  const token = Cookies.get("accessToken");
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -26,8 +27,6 @@ const TargetDetails = ({ togglePopup, id }) => {
     linked_to: ""
   });
 
-  const [loading, setLoading] = useState(true);
-  const token = Cookies.get("accessToken");
 
   // Fetch target details by ID
   const fetchTargetDetails = async () => {
@@ -83,36 +82,36 @@ const TargetDetails = ({ togglePopup, id }) => {
     fetchTargetDetails();
   }, [id, token]);
 
-
   return (
 
     <div className="popup-overlay">
       <div className="popup-containera">
         <div className="popup-content">
-
           <div className="header">
             <span> <h5>Target Details</h5></span>
             <CloseButton onClick={togglePopup} />
           </div>
           <div className="case-details-container">
-            <Table bordered hover className='custom-table custom-table-th' >
-              <tr> <th>Name</th> <td>{formData.name}</td> </tr>
-              <tbody>
-                <tr> <th>ID</th> <td>{id}</td> </tr>
-                <tr> <th>Created On</th> <td>{formData?.created_on ? formData.created_on.slice(0, 18) : '-'}</td> </tr>
-                <tr> <th>Created By</th> <td>{formData?.created_by ? formData.created_by.slice(0, 12) : '-'}</td> </tr>
-                <tr> <th>Modified On</th> <td>{formData?.modified_on ? formData.modified_on.slice(0, 18) : '-'}</td> </tr>
-                <tr> <th>Modified By</th> <td>{formData?.modified_by ? formData.modified_by.slice(0, 12) : '-'}</td> </tr>
-                <tr> <th>Description</th> <td>{formData.description || '-'}</td> </tr>
-                <tr> <th>Synonyms</th> <td>{formData.synonyms.join(', ') || '-'}</td> </tr>
-                <tr> <th>Threat-Score</th> <td>{formData.threat_weightage}</td> </tr>
-                <tr> <th>Type</th> <td>{formData.type || '-'}</td> </tr>
-                <tr> <th>Active</th>  <td>{formData.is_active ? 'active' : 'deactive'}</td> </tr>
-                <tr> <th>Linked To</th> <td>{formData.linked_to}</td> </tr>
-
-
-              </tbody>
-            </Table>
+           {loading ?(
+            <Loader/>
+           ):(
+                <Table bordered hover className='custom-table custom-table-th' >
+                  <tr> <th>Name</th> <td>{formData.name}</td> </tr>
+                  <tbody>
+                    <tr> <th>ID</th> <td>{id}</td> </tr>
+                    <tr> <th>Created On</th> <td>{formData?.created_on ? formData.created_on.slice(0, 18) : '-'}</td> </tr>
+                    <tr> <th>Created By</th> <td>{formData?.created_by ? formData.created_by.slice(0, 12) : '-'}</td> </tr>
+                    <tr> <th>Modified On</th> <td>{formData?.modified_on ? formData.modified_on.slice(0, 18) : '-'}</td> </tr>
+                    <tr> <th>Modified By</th> <td>{formData?.modified_by ? formData.modified_by.slice(0, 12) : '-'}</td> </tr>
+                    <tr> <th>Description</th> <td>{formData.description || '-'}</td> </tr>
+                    <tr> <th>Synonyms</th> <td>{formData.synonyms.join(', ') || '-'}</td> </tr>
+                    <tr> <th>Threat-Score</th> <td>{formData.threat_weightage}</td> </tr>
+                    <tr> <th>Type</th> <td>{formData.type || '-'}</td> </tr>
+                    <tr> <th>Active</th>  <td>{formData.is_active ? 'active' : 'deactive'}</td> </tr>
+                    <tr> <th>Linked To</th> <td>{formData.linked_to}</td> </tr>
+                  </tbody>
+                </Table>
+           )}
           </div>
           <div className="button-container">
             <button type="button" className="cancel-btn" onClick={togglePopup}>

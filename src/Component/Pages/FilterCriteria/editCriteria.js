@@ -13,7 +13,18 @@ import Loader from '../Layout/loader'
 
 const API_BASE_URL = 'http://5.180.148.40';
 
-const EditCriteria = ({ togglePopup, criteriaId, onUpdate  }) => {
+const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
+  const Token = Cookies.get('accessToken');
+
+  const [showPopupD, setShowPopupD] = useState(false);
+  const [caseOptions, setCaseOptions] = useState([]);
+  const [fileTypeOptions, setFileTypeOptions] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [dataFetched, setDataFetched] = useState(false);
+  const [initialFormData, setInitialFormData] = useState({});
+  const [isBtnDisabled, setIsBtnDisabled] = useState(true);
+
   const [formData, setFormData] = useState({
     searchQuery: '',
     filetype: [],
@@ -21,34 +32,13 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate  }) => {
     latitude: '',
     longitude: ''
   });
-  const [showPopupD, setShowPopupD] = useState(false);
+
   const [selectedDates, setSelectedDates] = useState({
     startDate: null,
     endDate: null,
     startTime: { hours: 16, minutes: 30 },
     endTime: { hours: 16, minutes: 30 }
   });
-  const [caseOptions, setCaseOptions] = useState([]);
-  const [fileTypeOptions, setFileTypeOptions] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [dataFetched, setDataFetched] = useState(false);
-  const Token = Cookies.get('accessToken');
-   const [initialFormData, setInitialFormData] = useState({});
-    const [isBtnDisabled, setIsBtnDisabled] = useState(true);
-  // const [iserrors, setIserror] = useState({});
-
-
-  // const validateForm = () => {
-  //   const errors = {};
-
-  //   if (!formData.searchQuery || formData.searchQuery.trim() === "") {
-  //     errors.searchQuery = "At least one keyword is required";
-  //   }
-
-
-  //   return errors;
-  // };
 
   // Fetch case data from API
   const fetchCaseData = useCallback(async () => {
@@ -59,12 +49,12 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate  }) => {
           'Authorization': `Bearer ${Token}`
         },
       });
-      
+
       const caseOptionsFormatted = response.data.data.map(caseItem => ({
         value: caseItem.id,
         label: `${caseItem.id}`
       }));
-      
+
       setCaseOptions(caseOptionsFormatted);
       return caseOptionsFormatted;
     } catch (error) {
@@ -83,12 +73,12 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate  }) => {
           'Authorization': `Bearer ${Token}`
         },
       });
-    
+
       const fileTypeOptionsFormatted = response.data.data.map(platform => ({
         value: platform,
         label: platform
       }));
-      
+
       setFileTypeOptions(fileTypeOptionsFormatted);
       return fileTypeOptionsFormatted;
     } catch (error) {
@@ -101,7 +91,7 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate  }) => {
   // Process keywords - handle both string and array formats
   const processKeywords = (keywords) => {
     if (!keywords) return '';
-    
+
     if (Array.isArray(keywords)) {
       // If it's already an array, join them with commas
       return keywords.join(', ');
@@ -109,14 +99,14 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate  }) => {
       // If it's a string, return as is
       return keywords;
     }
-    
+
     return '';
   };
 
   // Convert keywords string to array format for API
   const formatKeywordsForAPI = (keywordString) => {
     if (!keywordString || typeof keywordString !== 'string') return [];
-    
+
     // Split by comma and clean up each keyword
     return keywordString
       .split(',')
@@ -170,7 +160,7 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate  }) => {
       const selectedCaseIds = [];
       if (criteriaData.case_id) {
         const caseIdsArray = Array.isArray(criteriaData.case_id) ? criteriaData.case_id : [criteriaData.case_id];
-        
+
         caseIdsArray.forEach(caseId => {
           const matchingOption = caseOpts.find(option => option.value.toString() === caseId.toString());
           if (matchingOption) {
@@ -244,7 +234,7 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate  }) => {
           setIsLoading(false);
         }
       };
-      
+
       fetchAllData();
     }
   }, [dataFetched, Token, criteriaId, fetchCaseData, fetchFileTypes, fetchCriteriaDetails]);
@@ -266,18 +256,18 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate  }) => {
 
     try {
       const keywordsArray = formatKeywordsForAPI(formData.searchQuery);
-      
+
       const updatePayload = {
         keyword: keywordsArray, // Now properly formatted as array
         case_id: formData.caseIds.map(caseId => caseId.value.toString()),
         file_type: formData.filetype.map(file => file.value.toString()),
         latitude: formData.latitude || "",
         longitude: formData.longitude || "",
-        start_time: selectedDates.startDate ? 
-          `${selectedDates.startDate.toISOString().split('T')[0]}T${String(selectedDates.startTime.hours).padStart(2, '0')}:${String(selectedDates.startTime.minutes).padStart(2, '0')}:00` 
+        start_time: selectedDates.startDate ?
+          `${selectedDates.startDate.toISOString().split('T')[0]}T${String(selectedDates.startTime.hours).padStart(2, '0')}:${String(selectedDates.startTime.minutes).padStart(2, '0')}:00`
           : null,
-        end_time: selectedDates.endDate ? 
-          `${selectedDates.endDate.toISOString().split('T')[0]}T${String(selectedDates.endTime.hours).padStart(2, '0')}:${String(selectedDates.endTime.minutes).padStart(2, '0')}:00` 
+        end_time: selectedDates.endDate ?
+          `${selectedDates.endDate.toISOString().split('T')[0]}T${String(selectedDates.endTime.hours).padStart(2, '0')}:${String(selectedDates.endTime.minutes).padStart(2, '0')}:00`
           : null
       };
 
@@ -290,13 +280,13 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate  }) => {
           'Authorization': `Bearer ${Token}`
         },
       });
-      
+
       console.log("updateResponse", updateResponse);
       toast.success('Criteria updated successfully');
       togglePopup();
       if (onUpdate) {
-      onUpdate();
-    }
+        onUpdate();
+      }
     } catch (error) {
       console.error('Error updating criteria:', error);
       toast.error('Failed to update criteria: ' + (error.response?.data?.message || error.message));
@@ -346,8 +336,7 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate  }) => {
     return (
       <div className="popup-overlay">
         <div className="popup-container">
-         <Loader/>
-        
+          <Loader />
         </div>
       </div>
     );
@@ -500,7 +489,7 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate  }) => {
                 />
               </div>
             </div>
-            
+
             {/* <h5 className="mb-3">SELECT ON MAP</h5> */}
 
             {/* Update Button */}
@@ -515,7 +504,6 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate  }) => {
               <button
                 type="button"
                 className="create-btn"
-               
                 onClick={togglePopup}
               >
                 Cancel

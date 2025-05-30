@@ -3,8 +3,19 @@ import "./addUser.css"; // You can rename if you want
 import axios from "axios";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
+import Select from "react-select";
+import { customStyles } from "./addUser";
 
 const EditUser = ({ togglePopup, item }) => {
+  const token = Cookies.get("accessToken");
+
+  const [roles, setRoles] = useState([]);
+  const [users, setUsers] = useState({ data: [] });
+  const [loading, setLoading] = useState(false);
+  const [initialFormData, setInitialFormData] = useState({});
+  const [isBtnDisabled, setIsBtnDisabled] = useState(true);
+  const [error, setError] = useState({});
+
   const [formData, setFormData] = useState({
     firstName: item.first_name || "",
     lastName: item.last_name || "",
@@ -13,12 +24,7 @@ const EditUser = ({ togglePopup, item }) => {
     contactNumber: item.contact_no || "",
     role: item.role || "",
   });
-
-  const [users, setUsers] = useState({ data: [] });
-  const [loading, setLoading] = useState(false);
-  const [initialFormData, setInitialFormData] = useState({});
-  const [isBtnDisabled, setIsBtnDisabled] = useState(true);
-  const [error, setError] = useState({});
+  console.log("formDate", formData)
 
   const validateForm = () => {
     const errors = {};
@@ -37,10 +43,8 @@ const EditUser = ({ togglePopup, item }) => {
     return errors;
   };
 
-
-  const token = Cookies.get("accessToken");
-  const userData = async () => {
-
+  
+  const getUserData = async () => {
     try {
       const response = await axios.get('http://5.180.148.40:9000/api/user-man/v1/user', {
         headers: {
@@ -55,9 +59,34 @@ const EditUser = ({ togglePopup, item }) => {
     }
   };
   useEffect(() => {
-    userData();
+    getUserData();
   }, []);
 
+  useEffect(() => {
+    const fetchRoles = async () => {
+      try {
+        const response = await axios.get("http://5.180.148.40:9000/api/user-man/v1/roles", {
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          }
+        });
+        console.log("response_Data", response.data)
+        // Map roles into dropdown format
+        const formattedRoles = response.data.map(role => ({
+          value: role,
+          label: role
+        }));
+        console.log("response_Dropdown", formattedRoles)
+        setRoles(formattedRoles);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching roles:", error);
+        setLoading(false);
+      }
+    };
+    fetchRoles();
+  }, [token]);
   const handleEditUser = async (formData) => {
     const token = Cookies.get("accessToken");
     if (!token) {
@@ -180,7 +209,17 @@ const EditUser = ({ togglePopup, item }) => {
         <div className="popup-content">
           <h5>Edit User</h5>
           <form onSubmit={(e) => { e.preventDefault(); handleEditUser(formData); }}>
-            <label htmlFor="firstName">First Name</label>
+            <label htmlFor="username">Username <span style={{ color: 'black' }}>*</span></label>
+            <input
+              className="com"
+              type="text"
+              id="username"
+              name="username"
+              value={formData.username}
+              onChange={handleChange}
+            />
+            {error.username && <p style={{ color: "red", margin: '0px' }} >{error.username}</p>}
+            <label htmlFor="firstName">First Name </label>
             <input
               className="com"
               type="text"
@@ -199,19 +238,19 @@ const EditUser = ({ togglePopup, item }) => {
               value={formData.lastName}
               onChange={handleChange}
             />
-
-            <label htmlFor="username">Username <span style={{ color: 'black' }}>*</span></label>
-            <input
-              className="com"
-              type="text"
-              id="username"
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
-            />
-            {error.username && <p style={{ color: "red", margin: '0px' }} >{error.username}</p>}
-
-            <label htmlFor="email">Email ID <span style={{ color: 'black' }}>*</span></label>
+            <div>
+              <label>Role </label>
+              <Select
+                options={roles}
+                placeholder="Select a role"
+                isLoading={loading}
+                value={roles.find(role => role.value === formData.role)}
+                onChange={(selectedOption) => setFormData({ ...formData, role: selectedOption.value })}
+                styles={customStyles}
+                classNamePrefix="select"
+              />
+            </div>
+            <label htmlFor="email">Email ID *</label>
             <input
               className="com"
               type="email"

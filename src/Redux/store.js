@@ -9,16 +9,17 @@ import { searchReducer, popupReducer, criteriaReducer } from './Reducers/criteri
 import { thunk } from "redux-thunk";
 import searchReducer1 from './Reducers/piiReducer';
 import reportReducer from './Reducers/reportReducer';
+import { userReducer } from './Reducers/userReducer';
 // ✅ Persist Config
 const persistConfig = {
   key: "root",
   storage, // Local Storage
-  blacklist: ['filterData', 'report'],
+  blacklist: ['filterData', 'report','user'],
 
 };
 
-
 const rootReducer = combineReducers({
+  user: userReducer,
   selectedTab: tabReducer,
   taskFilterId: taskFilterReducer,
   caseData: caseReducer,

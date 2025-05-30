@@ -50,6 +50,7 @@ export const customStyles = {
 
 const TargetCreate = ({ togglePopup, existingTargets = [] }) => {
   const token = Cookies.get("accessToken");
+
   const targetType = [
     { value: "watchword", label: "Watchword" },
     { value: "location", label: "Location" },
@@ -85,7 +86,10 @@ const TargetCreate = ({ togglePopup, existingTargets = [] }) => {
     { value: "arm_model_number", label: "Arm Model Number" }
   ];
 
-
+  const [synonymInput, setSynonymInput] = useState("");
+  const [subTypeRows, setSubTypeRows] = useState([]);
+  const [availableSubTypes, setAvailableSubTypes] = useState([]);
+  const [error, setError] = useState({});
 const [formData, setFormData] = useState({
   name: "",
   description: "",
@@ -94,13 +98,6 @@ const [formData, setFormData] = useState({
   threat_weightage: 0,
   target_id: []
 });
-
-
-  const [synonymInput, setSynonymInput] = useState("");
-  const [subTypeRows, setSubTypeRows] = useState([]);
-  const [availableSubTypes, setAvailableSubTypes] = useState([]);
-    const [error, setError] = useState({});
-  
 
   const validateForm = () => {
     const errors = {};
@@ -123,7 +120,7 @@ const [formData, setFormData] = useState({
 
     return errors;
   };
-  
+
   // Threat score options from 0 to 10
   const threatScoreOptions = Array.from({ length: 11 }, (_, i) => ({
     value: i,
@@ -270,7 +267,6 @@ const [formData, setFormData] = useState({
       synonyms: prevData.synonyms.filter((_, i) => i !== index)
     }));
   };
-
 
   // Update subtype row data
   const updateSubTypeRow = (index, field, value) => {

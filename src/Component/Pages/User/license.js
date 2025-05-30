@@ -18,6 +18,7 @@ const LicensePage = () => {
     }
     return error;
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent default form submission
     console.log("key", licenseKey)

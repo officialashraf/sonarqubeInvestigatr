@@ -18,15 +18,11 @@ const Summary = ({ filters }) => {
   const [totalCount, setTotalCount] = useState(0);
   const [showPopup, setShowPopup] = useState(false);
 
-
-
   const caseId = useSelector((state) => state.caseData.caseData.id);
   console.log("casiId", caseId)
   useEffect(() => {
     const fetchData = async () => {
-
       try {
-
         const response = await axios.post('http://5.180.148.40:9007/api/das/aggregate', {
           query: { unified_case_id: String(caseId) },
 
@@ -165,7 +161,7 @@ const Summary = ({ filters }) => {
                 </BarChart>
               </ResponsiveContainer>
             </Box>
-
+           
             {/* Table */}
             <Box className="box">
               <TableContainer component={Paper} width="100%" height={300}>

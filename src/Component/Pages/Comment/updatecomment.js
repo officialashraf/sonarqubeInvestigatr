@@ -3,10 +3,10 @@ import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 
-
 const UpdateComment = ({ onClose, comment, resourceId, GetCommentList }) => {
   const [newComment, setNewComment] = useState(comment.comment || "");
   const token = Cookies.get("accessToken");
+
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
@@ -37,7 +37,6 @@ const UpdateComment = ({ onClose, comment, resourceId, GetCommentList }) => {
   };
 
   return (
-
 
     <div className="popup-overlay" style={{ padding: '150px 100px 0px 0px' }}>
       <div className="popup-container">

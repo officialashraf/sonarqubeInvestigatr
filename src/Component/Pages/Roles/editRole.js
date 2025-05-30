@@ -3,22 +3,21 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
 import '../User/addUser.css'
+import { CloseButton } from 'react-bootstrap';
 
 const EditRole = ({ togglePopup, details }) => {
     const Token = Cookies.get('accessToken');
-
     console.log("editdetials", details)
     const [searchTitle, setSearchTitle] = useState('');
 
     const [initialSearchTitle, setInitialSearchTitle] = useState('');
     const [isBtnDisabled, setIsBtnDisabled] = useState(true);
     const editRole = async () => {
-
         try {
-if (!searchTitle || searchTitle.trim() === "") {
-            toast.error("Please enter the role");
-            return; // Exit the function without making API call
-        }
+            if (!searchTitle || searchTitle.trim() === "") {
+                toast.error("Please enter the role");
+                return; // Exit the function without making API call
+            }
             const criteriaPaylod = {
                 new_role: searchTitle || "",
                 old_role: details
@@ -36,7 +35,6 @@ if (!searchTitle || searchTitle.trim() === "") {
                     }
                 }
             );
-
 
             toast.success("Role updated successfully");
             window.dispatchEvent(new Event("databaseUpdated"));
@@ -76,7 +74,11 @@ if (!searchTitle || searchTitle.trim() === "") {
                 <div className="popup-content" style={{ width: '70%' }}>
 
                     <form onSubmit={(e) => e.preventDefault()}> {/* Prevent form submission default */}
-                        <label>Update Role <span style={{ color: 'black' }}>*</span></label>
+
+                        <span style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
+                            <label>Update Role *</label>
+                            <CloseButton onClick={togglePopup} />
+                        </span>
                         <input
                             type="text"
                             placeholder="Enter Role"
@@ -90,7 +92,7 @@ if (!searchTitle || searchTitle.trim() === "") {
                             }}
                         />
                         <div className="button-container">
-                              <button
+                            <button
                                 type="submit"
                                 className="create-btn"
                                 onClick={editRole}
@@ -106,7 +108,7 @@ if (!searchTitle || searchTitle.trim() === "") {
                             >
                                 Cancel
                             </button>
-                          
+
                         </div>
                     </form>
                 </div>

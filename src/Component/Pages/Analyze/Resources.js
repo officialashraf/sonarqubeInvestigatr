@@ -17,14 +17,10 @@ import { PinAngle, ChatLeftText } from 'react-bootstrap-icons';
 import AddComment from '../Comment/AddComment';
 import { fetchSummaryData } from "../../../Redux/Action/filterAction";
 
-
-
 const Resources = () => {
 
   const dispatch = useDispatch();
- 
-  const [showPopup, setShowPopup] = useState(false);
-  const data1 = useSelector((state) => state.caseData.caseData);
+    const data1 = useSelector((state) => state.caseData.caseData);
   const {
     data,
     headers,
@@ -38,6 +34,8 @@ const Resources = () => {
   console.log("totalapges", totalPages)
   console.log("Summary Data from Redux:", summaryData);
   console.log("Summary Headers from Redux:", summaryHeaders);
+
+  const [showPopup, setShowPopup] = useState(false);
   const [currentPage, setCurrentPage] = useState(page);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false); // Loader state
@@ -46,7 +44,7 @@ const Resources = () => {
   const [selectedResource, setSelectedResource] = useState(null); // State to track the selected resource
   const [allResources, setAllResources] = useState([]);
   const [loadedPages, setLoadedPages] = useState([]);
-
+const loadedPagesRef = useRef(loadedPages);
 
   useEffect(() => {
 
@@ -60,7 +58,10 @@ const Resources = () => {
         setLoading(false);
       });
     }
-  }, [currentPage, data1?.id,dispatch]);
+  }, [currentPage, data1?.id, dispatch]);
+    useEffect(() => {
+    loadedPagesRef.current = loadedPages;
+  }, [loadedPages]);
 
   // Manage loaded pages and allResources to avoid duplicates and keep max 2 pages and max 100 items
   useEffect(() => {
@@ -75,7 +76,7 @@ const Resources = () => {
             // Append new page data
             updatedResources = [...updatedResources, ...summaryData];
             updatedLoadedPages.push(currentPage);
-            
+
             // Keep only last 2 pages
             if (updatedLoadedPages.length > 2) {
               const removedPage = updatedLoadedPages.shift();
@@ -86,7 +87,7 @@ const Resources = () => {
             // Prepend new page data
             updatedResources = [...summaryData, ...updatedResources];
             updatedLoadedPages.unshift(currentPage);
-            
+
             // Keep only last 2 pages
             if (updatedLoadedPages.length > 2) {
               const removedPage = updatedLoadedPages.pop();
@@ -107,7 +108,7 @@ const Resources = () => {
 
         // Update loadedPages state
         setLoadedPages(updatedLoadedPages);
-        
+
         // Update hasMore based on the new state
         setHasMore(updatedLoadedPages.length === 0 || Math.max(...updatedLoadedPages) < totalPages);
 
@@ -115,12 +116,9 @@ const Resources = () => {
       });
     }
   }, [summaryData, currentPage, totalPages]); // Added loadedPages to dependencies
- 
-  const loadedPagesRef = useRef(loadedPages);
-useEffect(() => {
-  loadedPagesRef.current = loadedPages;
-}, [loadedPages]);
-  // ... rest of your component ...
+
+
+ // ... rest of your component ...
 
   // Infinite scroll listener
   useEffect(() => {
@@ -171,6 +169,7 @@ useEffect(() => {
     console.log("Selected Resource:", resource);
     setSelectedResource(resource); // Set the selected resource to display in the right content area
   };
+
   const getYouTubeVideoId = (url) => {
     console.log("url", url);
     const regExp = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/|v\/|shorts\/)|youtu\.be\/)([^#&?]{11})/;
@@ -178,7 +177,6 @@ useEffect(() => {
     console.log("match", match);
     return match ? match[1] : null;
   }
-
 
   return (
     <div className="container-r">
@@ -541,7 +539,7 @@ useEffect(() => {
                   <video src={selectedResource.socialmedia_from_imageurl} autoplay muted loop></video>
 
                   <div class="right-panel">
-                    <img src="your-profile.jpg"alt="pic_not_found" class="profile-pic" />
+                    <img src="your-profile.jpg" alt="pic_not_found" class="profile-pic" />
                     <div class="icon"><GoEye /><span>{selectedResource.socialmedia_activity_view_count}</span></div>
                     <div class="icon">❤<span>{selectedResource.socialmedia_activity_like_count}</span></div>
                     <div class="icon"><FaRegCommentDots /><span></span></div>
@@ -822,4 +820,4 @@ useEffect(() => {
   );
 };
 
-export default Resources;
+export default Resources;

@@ -10,11 +10,9 @@ import { toast } from 'react-toastify';
 import validator from "validator";
 
 const ShowDetails = () => {
-
-
-  const [query, setQuery] = useState("");
-  const [searchType, setSearchType] = useState("Phone-no");
   const dispatch = useDispatch();
+  const [query, setQuery] = useState("");
+  const [searchType, setSearchType] = useState("Phone number");
 
   const handleSearch = async () => {
     if (!query.trim()) return;
@@ -25,9 +23,8 @@ const ShowDetails = () => {
         toast.error("Please enter a valid email address");
         return;
       }
-    } else if (searchType === "Phone-no") {
+    } else if (searchType === "Phone number") {
       // Remove all non-digit characters
-
 
       // Check if the query contains any alphabet character
       const hasAlphabets = /[a-zA-Z]/.test(query);
@@ -61,7 +58,7 @@ const ShowDetails = () => {
       <div className="search-bar-container">
         <div className="search-bar">
           <select className="search-dropdown" value={searchType} onChange={(e) => setSearchType(e.target.value)}>
-            <option value="Phone-no">Phone</option> {/* Default selected */}
+            <option value="Phone number">Phone</option> {/* Default selected */}
             <option value="Email">Email</option>
           </select>
 

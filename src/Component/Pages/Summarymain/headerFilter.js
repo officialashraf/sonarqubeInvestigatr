@@ -6,13 +6,14 @@ import './headerfilter.css';
 import { useNavigate, useParams } from 'react-router-dom';
 
 const HeaderFilter = () => {
-  const caseData1 = useSelector((state) => state.caseData.caseData);
   const { caseId } = useParams()
-  console.log("parms id", caseId)
-  console.log("headeData", caseData1)
   const navigate = useNavigate()
+  const caseData = useSelector((state) => state.caseData.caseData);
+  console.log("parms id", caseId)
+  console.log("headeData", caseData)
+
   const handleClick = () => {
-    const caseID = caseData1.id
+    const caseID = caseData.id
     navigate(`/cases/${caseID}/analysis`)
   }
 
@@ -29,8 +30,8 @@ const HeaderFilter = () => {
               <span>ID:{`CASE${String(caseId).padStart(4, '0')}`}</span>
             </Nav.Item>
             <Nav.Item>
-              <span className='caseName'>{caseData1.title} </span> <FaFileAlt className="ml-3" />  <Badge pill bg="dark">
-                <span>{caseData1.status}</span>
+              <span className='caseName'>{caseData.title} </span> <FaFileAlt className="ml-3" />  <Badge pill bg="dark">
+                <span>{caseData.status}</span>
               </Badge>
             </Nav.Item>
           </Nav>
