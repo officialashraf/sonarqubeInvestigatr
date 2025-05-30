@@ -6,7 +6,6 @@ import { MdAdminPanelSettings } from "react-icons/md";
 import { FaUsersBetweenLines } from "react-icons/fa6";
 
 const UserDashboard = () => {
-
   const navigate = useNavigate();
   const cardData = [
     { title: 'User Management' },

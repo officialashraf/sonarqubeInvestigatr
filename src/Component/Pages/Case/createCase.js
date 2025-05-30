@@ -62,7 +62,7 @@ const CreateCase = ({ togglePopup }) => {
   }));
 
 
-  const userData = async () => {
+  const getUserData = async () => {
     const token = Cookies.get("accessToken");
     try {
       const response = await axios.get('http://5.180.148.40:9000/api/user-man/v1/user'
@@ -79,7 +79,7 @@ const CreateCase = ({ togglePopup }) => {
     }
   };
   useEffect(() => {
-    userData(); // Call the userData function
+    getUserData(); // Call the getUserData function
   }, []);
 
 
@@ -91,26 +91,26 @@ const CreateCase = ({ togglePopup }) => {
     }
     try {
       const caseQuery = {
-          title: formData.title,
+        title: formData.title,
         description: formData.description,
         assignee: formData.assignee,
-      watchers: Array.isArray(formData.watchers)
-  ? formData.watchers
-  : formData.watchers
-      ? formData.watchers.split(',').map(w => w.trim())
-      : [],
+        watchers: Array.isArray(formData.watchers)
+          ? formData.watchers
+          : formData.watchers
+            ? formData.watchers.split(',').map(w => w.trim())
+            : [],
 
-};
-    
-      console.log("caseQuery",caseQuery)
-      const response = await axios.post('http://5.180.148.40:9001/api/case-man/v1/case', 
-      caseQuery
-      , {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+      };
+
+      console.log("caseQuery", caseQuery)
+      const response = await axios.post('http://5.180.148.40:9001/api/case-man/v1/case',
+        caseQuery
+        , {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
         }
-      }
       ); window.dispatchEvent(new Event("databaseUpdated"));
       if (response.status === 200) {
         toast.success("Case created successfully");
@@ -144,6 +144,7 @@ const CreateCase = ({ togglePopup }) => {
       [name]: formattedValue,
     }));
   };
+
   const handleWatchersChange = (selectedOptions) => {
     const selectedLabels = selectedOptions.map((option) => option.label).join(", ");
     setFormData((formData) => ({
@@ -158,8 +159,6 @@ const CreateCase = ({ togglePopup }) => {
       assignee: selectedOption ? parseInt(selectedOption.value, 10) : ''
     }));
   };
-
-
 
   return (
     <div className="popup-overlay">

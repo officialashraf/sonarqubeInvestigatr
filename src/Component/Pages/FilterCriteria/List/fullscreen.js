@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import '../savedCriteria.css';
 import SearchIcon from '@mui/icons-material/Search';
@@ -17,19 +16,12 @@ import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { ListAltOutlined, PieChart } from "@mui/icons-material";
 import GrapghicalCriteria from './CriteriaGraphicaView/grapghicalCriteria';
-import Loader from '../../Layout/loader';
+// import Loader from '../../Layout/loader';
 
-
-const SearchResults = ({ onClose }) => {
-
+const SearchResults = () => {
+  const token = Cookies.get('accessToken');
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [inputValue, setInputValue] = useState('');
-  const [searchChips, setSearchChips] = useState([]);
-  const [enterInput, setEnterInput] = useState([])
-  const [isPopupVisible, setIsPopupVisible] = useState(false);
-  const [activeComponent, setActiveComponent] = useState('list');
-
 
   const { searchResults, totalPages, currentPage, totalResults } = useSelector((state) => state.search);
   console.log("searchResult", searchResults, totalPages, currentPage, totalResults);
@@ -42,10 +34,15 @@ const SearchResults = ({ onClose }) => {
 
   const fileType = useSelector((state) => state.criteriaKeywords?.queryPayload?.file_type || '');
   console.log("filetype", fileType)
+
   const reduxPayload = useSelector((state) => state.criteriaKeywords?.queryPayload || '');
   console.log("Full Redux Payload:", reduxPayload);
 
-
+  const [inputValue, setInputValue] = useState('');
+  const [searchChips, setSearchChips] = useState([]);
+  const [enterInput, setEnterInput] = useState([])
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const [activeComponent, setActiveComponent] = useState('list');
 
   const handleComponentToggle = (componentName) => {
     setActiveComponent(componentName);
@@ -89,15 +86,13 @@ const SearchResults = ({ onClose }) => {
     navigate('/cases')
   }
 
-  const Token = Cookies.get('accessToken');
-
   console.log("Keywords saerch:", searchChips);
   const filteredChips = searchChips.filter((chip) =>
     (typeof chip === "string" && chip.toLowerCase().includes(inputValue.toLowerCase())) ||
     (typeof chip === "number" && chip.toString().includes(inputValue)) // Search for numbers
   );
-
   console.log("filterdeChpis", filteredChips)
+
   // Add new chip when "Enter" is pressed
   const handleKeyPress = (e) => {
     if (e.key === "Enter" && inputValue.trim() !== "") {
@@ -113,7 +108,6 @@ const SearchResults = ({ onClose }) => {
   const removeChip = (chipToRemove) => {
     const updatedChips = searchChips.filter((chip) => chip !== chipToRemove);
     setSearchChips(updatedChips);
-
     // ❗ Only remove from enterInput if it was user's entered chip
     setEnterInput((prev) => prev.filter((chip) => chip !== chipToRemove));
   };
@@ -159,6 +153,7 @@ const SearchResults = ({ onClose }) => {
       const finalCaseIds = searchChips.filter((chip) => reduxCaseIds.includes(chip));
       const finalFileTypes = searchChips.filter((chip) => reduxFileTypes.includes(chip));
       console.log("finalcaseid or finalfiletype", finalCaseIds, finalFileTypes)
+
       const payload = {
         keyword: finalKeywords,   // Only keywords
         case_id: finalCaseIds,    // Only case_ids
@@ -169,7 +164,6 @@ const SearchResults = ({ onClose }) => {
         latitude: reduxPayload.latitude || null,
         longitude: reduxPayload.longitude || null
       };
-
       console.log("Sending search query:", payload);
 
       const response = await axios.post(
@@ -178,7 +172,7 @@ const SearchResults = ({ onClose }) => {
         {
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${Token}`
+            'Authorization': `Bearer ${token}`
           }
         }
       );
@@ -196,13 +190,13 @@ const SearchResults = ({ onClose }) => {
         keyword: response.data.input.keyword,
         queryPayload: response.data.input
       }));
-handleComponentToggle("list")
+      handleComponentToggle("list")
       dispatch(setPage(1));
 
     } catch (error) {
       console.error("Error performing search:", error);
-    } 
-     };
+    }
+  };
 
 
   return (
@@ -211,7 +205,6 @@ handleComponentToggle("list")
       <div style={{ display: 'flex', justifyContent: 'space-between', aligntems: 'center', marginTop: '5px' }}>
         {/* 
   <h6 >Search Results</h6 > */}
-
         <div className="search-header" style={{ width: '50%' }}>
 
           <TextField

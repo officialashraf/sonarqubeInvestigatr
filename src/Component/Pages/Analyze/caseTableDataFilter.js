@@ -11,7 +11,6 @@ const CaseTableDataFilter = () => {
     setView(viewType); // Update the view when a button is clicked
   };
 
-
   return (
 
     <>

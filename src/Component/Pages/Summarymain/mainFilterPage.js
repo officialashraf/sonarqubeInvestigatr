@@ -3,11 +3,9 @@ import MainContainer from './mainContainer';
 
 const MainFilter = () => {
 
-
   return (
     <>
       <div style={{ height: "100%", flexDirection: "column", overflow: "hidden" }}>
-
         <Header />
         <MainContainer />
       </div>

@@ -38,12 +38,9 @@ const LoginPage = () => {
             if (response.status === 200) {
                 const { access_token, refresh_token } = response.data; // Extract tokens from REST response
 
-
                 // Set cookies for 1 day
                 Cookies.set('accessToken', access_token, { expires: 10 });
                 Cookies.set('refreshToken', refresh_token, { expires: 10 });
-
-
 
                 // Navigate to the next page after successful login
                 toast("You have successfully logged in");
@@ -96,7 +93,7 @@ const LoginPage = () => {
                             value={formData.password}
                             onChange={handleChange}
                             placeholder="Enter Your Password"
-                            controlId="Username"
+                            // controlId="Username"
                             autocomplete="off"
                             name="password"
 

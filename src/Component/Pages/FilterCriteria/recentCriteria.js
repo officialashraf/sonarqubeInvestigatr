@@ -17,6 +17,7 @@ import { closePopup, openPopup, setPage, setSearchResults, setKeywords } from ".
 import axios from "axios";
 
 const RecentCriteria = () => {
+  const Token = Cookies.get('accessToken');
 
   const [savedSearch, setSavedSearch] = useState([]);
   const [criteriaId, setCriteriaId] = useState()
@@ -70,11 +71,9 @@ const RecentCriteria = () => {
     } else if (isValid(fileType)) {
       updatedKeywords.push(`${fileType}`);
     }
-
     console.log("Updated keyword state (processed):", updatedKeywords);
     setKeyword(updatedKeywords);
   }, [recentKeyword, caseId, fileType]);
-
 
   const dispatch = useDispatch();
   const activePopup = useSelector((state) => state.popup?.activePopup || null);
@@ -84,9 +83,8 @@ const RecentCriteria = () => {
     console.log("🚀 Create button clicked! Dispatching openPopup('create')");
     dispatch(openPopup("create"))
   }
+
   // Debugging
-
-
   const toggleEditPopup = () => {
     setShowEditPopup(!showEditPopup);
   };
@@ -112,7 +110,6 @@ const RecentCriteria = () => {
     setEnterInput([]);
   };
 
-  const Token = Cookies.get('accessToken');
   const fetchData = useCallback(async () => {
     try {
       const response = await axios.get("http://5.180.148.40:9007/api/das/criteria", {
@@ -160,11 +157,7 @@ const RecentCriteria = () => {
       console.error("Error deleting item:", error);
     }
   };
-
   console.log("keyword", keywords, searchQuery)
-
-
-
 
   const handleSearch = async () => {
     console.log("reduxPayload:", reduxPayload);
@@ -305,16 +298,16 @@ const RecentCriteria = () => {
       console.log("Reusee Qeury Payload", queryPayload)
       console.log("QueryResponse", response)
       console.log("updatedetRecent", updatedKeywords)
-      // ✅ Dispatch updated keywords
+      // Dispatch updated keywords
       dispatch(setKeywords({
         keyword: updatedKeywords,
         queryPayload: response.data.input // or other fields if needed
       }));
 
-      // ✅ Update local state if needed
+      // Update local state if needed
       setKeyword(updatedKeywords);
 
-      // ✅ Store API result in Redux
+      // Store API result in Redux
       dispatch(setSearchResults({
         results: response.data.results,
         total_pages: response.data.total_pages || 1,
@@ -396,15 +389,14 @@ const RecentCriteria = () => {
                 ))}
               </div>
 
-
             </div>
             <hr />
             <div style={{ height: '300px', overflow: 'auto' }}>
-
               <div style={{ display: "flex", alignItems: "center" }}>
                 <SaveIcon color="action" />
                 <label style={{ marginLeft: '5px' }}>Saved Search</label>
               </div>
+
               <List className="bg-gray">
                 {filteredList.length > 0 ? (
                   filteredList.map((item, index) => (
@@ -429,6 +421,7 @@ const RecentCriteria = () => {
                   <p className="text-gray-400">No matched keyword</p>
                 )}
               </List>
+
             </div>
           </div>
         </div>

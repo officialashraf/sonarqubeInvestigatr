@@ -10,6 +10,7 @@ const LicensePage = () => {
   const [licenseKey, setLicenseKey] = useState("");
   const [error, setError] = useState("");
   console.log("key", licenseKey)
+  
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent default form submission
     console.log("key", licenseKey)

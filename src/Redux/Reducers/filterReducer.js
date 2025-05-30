@@ -5,9 +5,7 @@ const initialState = {
   taskId: null,
   filterId: null,
 };
-
 export const taskFilterReducer = (state = initialState, action) => {
-
   switch (action.type) {
     case SET_TASK_FILTER_ID:
       return {
@@ -19,7 +17,6 @@ export const taskFilterReducer = (state = initialState, action) => {
       return state;
   }
 };
-
 
 export const filterReducer = (state = { filterCount: {} }, action) => {
   switch (action.type) {
@@ -44,7 +41,6 @@ const initialState1 = {
   loading: false,
   error: null,
 };
-
 export const summaryDataReducer = (state = initialState1, action) => {
   switch (action.type) {
     case SET_DATA:

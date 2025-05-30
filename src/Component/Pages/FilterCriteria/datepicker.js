@@ -294,7 +294,6 @@ const DatePicker = ({ onSubmit, initialDates, onClose }) => {
                   <button className="btn-clear" onClick={handleClear}>Clear</button>
                   <button className="btn-done" onClick={handleSubmit}>Done</button>
                 </div>
-
               </div>
             </div>
           </div>

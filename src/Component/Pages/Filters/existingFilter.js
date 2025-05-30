@@ -7,14 +7,16 @@ import Cookies from 'js-cookie';
 import Loader from '../Layout/loader.js';
 
 const ExistingFilter = ({ selectedFilters, onFilterToggle, onFilterSelect, setShowAddFilter }) => {
+  const token = Cookies.get('accessToken');
   const dispatch = useDispatch();
   const caseId = useSelector((state) => state.caseData.caseData.id);
+
   const [loading, setLoading] = useState(true);
   const [filterdata, setfilterdata] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchBarVisibility, setSearchBarVisibility] = useState(false);
   const [sortDirection, setSortDirection] = useState('asc'); // new state for sort direction
-  const token = Cookies.get('accessToken');
+
   const toggleSearchBar = () => {
     setSearchBarVisibility(!searchBarVisibility);
   };

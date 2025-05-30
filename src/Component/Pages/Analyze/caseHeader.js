@@ -6,18 +6,18 @@ import { FaArrowLeft } from 'react-icons/fa';
 import "./tabulerHeader.css";
 import { useNavigate } from "react-router-dom";
 
-
 const CaseHeader = ({ onIconClick }) => {
-  const caseData1 = useSelector((state) => state.caseData.caseData);
+
+  const caseData = useSelector((state) => state.caseData.caseData);
   const navigate = useNavigate();
+
   const backToSnap = () => {
-    navigate(`/cases/${caseData1.id}`);
+    navigate(`/cases/${caseData.id}`);
   };
 
   return (
     <>
       <div className="container-fluid">
-
         <div
           className="row header-row p-2 text-dark align-items-center"
           style={{ background: "lightgray" }}
@@ -27,13 +27,11 @@ const CaseHeader = ({ onIconClick }) => {
           </Col>
           <div className="col">
             <h5 className="mb-1">
-              Case ID: {`CASE${String(caseData1.id).padStart(4, "0")}`}
+              Case ID: {`CASE${String(caseData.id).padStart(4, "0")}`}
             </h5>
-            <p className="mb-0">{caseData1.title}</p>
-
-
+            <p className="mb-0">{caseData.title}</p>
           </div>
-          <div className="col d-flex flex-wrap justify-content-end align-items-center">
+          {/* <div className="col d-flex flex-wrap justify-content-end align-items-center">
 
             <button
               className="add-new-filter-button"
@@ -43,8 +41,7 @@ const CaseHeader = ({ onIconClick }) => {
               {" "}
               Back to Case Snapshot
             </button>
-          </div>
-
+          </div> */}
         </div>
 
         <div

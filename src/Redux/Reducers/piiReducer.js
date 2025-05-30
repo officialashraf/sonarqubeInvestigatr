@@ -9,7 +9,6 @@ const initialState = {
   data: null,
   error: null,
 };
-
 const searchReducer1 = (state = initialState, action) => {
   switch (action.type) {
     case SEARCH_REQUEST:

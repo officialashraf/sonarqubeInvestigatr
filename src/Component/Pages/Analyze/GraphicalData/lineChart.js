@@ -8,20 +8,16 @@ import Cookies from "js-cookie";
 import Loader from '../../Layout/loader';
 import { toast } from 'react-toastify';
 
-
-const LineChart1 = () => {
+const LineGraph = () => {
   const token = Cookies.get("accessToken");
   const [data, setData] = useState([]);
   const [recordTypes, setRecordTypes] = useState([]);
   const caseId = useSelector((state) => state.caseData.caseData.id);
   const [loading, setLoading] = useState(true); // Add loading state
 
-
-  
-
   useEffect(() => {
 
-    const fetchData = async () => {
+    const fetchLineData = async () => {
       try {
         setLoading(true);
         const response = await axios.post('http://5.180.148.40:9007/api/das/aggregate', {
@@ -67,8 +63,8 @@ const LineChart1 = () => {
       }
     };
 
-    fetchData();
-  }, [caseId,token]);
+    fetchLineData();
+  }, [caseId, token]);
 
   if (loading) {
     console.log("Loading state is TRUE");
@@ -156,4 +152,4 @@ const LineChart1 = () => {
   );
 };
 
-export default LineChart1;
+export default LineGraph;

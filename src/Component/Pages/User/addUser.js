@@ -6,8 +6,6 @@ import Cookies from "js-cookie";
 import { toast } from 'react-toastify';
 import Select from "react-select";
 
-
-
 export const customStyles = {
   control: (base) => ({
     ...base,
@@ -52,6 +50,9 @@ export const customStyles = {
 
 const AddUser = ({ onClose }) => {
   const token = Cookies.get("accessToken");
+
+    const [roles, setRoles] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
     username: "",
     first_name: "",
@@ -61,8 +62,6 @@ const AddUser = ({ onClose }) => {
     contact_no: "",
     password: ""
   });
-  const [roles, setRoles] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchRoles = async () => {
@@ -109,7 +108,7 @@ const AddUser = ({ onClose }) => {
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleCreateUser = async (e) => {
     e.preventDefault();
     if (!token) {
       toast.error("Authentication token missing.");
@@ -147,16 +146,13 @@ const AddUser = ({ onClose }) => {
         <button className="close-icon" onClick={onClose}>&times;</button>
         <div className="popup-content">
           <h5>Add User</h5>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleCreateUser}>
             <label>User Name *</label>
             <input className="com" name="username" value={formData.username} onChange={handleChange} placeholder="Enter User Name" requiblack />
-
             <label>First Name *</label>
             <input className="com" name="first_name" value={formData.first_name} onChange={handleChange} placeholder="Enter First Name" requiblack />
-
             <label>Last Name</label>
             <input className="com" name="last_name" value={formData.last_name} onChange={handleChange} placeholder="Enter Last Name" />
-
             <div>
               <label>Role *</label>
               <Select
@@ -171,13 +167,10 @@ const AddUser = ({ onClose }) => {
             </div>
             <label>Email ID *</label>
             <input className="com" type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Enter Email ID" requiblack />
-
             <label>Contact Number *</label>
             <input className="com" name="contact_no" value={formData.contact_no} onChange={handleChange} placeholder="Enter Contact Number" requiblack />
-
             <label>Password *</label>
             <input className="com" type="password" name="password" value={formData.password} onChange={handleChange} placeholder="Enter Password" requiblack />
-
             <div className="button-container">
               <button type="submit" className="create-btn">Create</button>
               <button type="button" onClick={onClose} className="cancel-btn">Cancel</button>

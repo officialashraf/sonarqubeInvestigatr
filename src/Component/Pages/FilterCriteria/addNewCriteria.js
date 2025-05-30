@@ -12,21 +12,18 @@ import { customStyles } from '../Case/createCase';
 import { setKeywords, setPage, setSearchResults } from '../../../Redux/Action/criteriaAction';
 import Confirm from './confirmCriteria';
 
+const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPopupVisible, }) => {
 
-const AddNewCriteria = ({
-    handleCreateCase,
-    searchChips,
-    isPopupVisible,
-    setIsPopupVisible,
-}) => {
+    const Token = Cookies.get('accessToken');
     const dispatch = useDispatch();
     console.log("searaddnew", searchChips)
     // State for dynamic options
+    const payload = useSelector((state) => state.criteriaKeywords?.queryPayload || '');
 
+    const [showPopupD, setShowPopupD] = useState(false);
     const [showSavePopup, setShowSavePopup] = useState(false);
     const [caseOptions, setCaseOptions] = useState([]);
     const [fileTypeOptions, setFileTypeOptions] = useState([]);
-    const Token = Cookies.get('accessToken');
 
     // State for form data
     const [formData, setFormData] = useState({
@@ -42,9 +39,8 @@ const AddNewCriteria = ({
         longitude: '',
     });
     console.log("formdatgertt...", formData)
-    const payload = useSelector((state) => state.criteriaKeywords?.queryPayload || '');
-    // Fetch case data from API
 
+    // Fetch case data from API
     useEffect(() => {
         const fetchCaseData = async () => {
             try {
@@ -99,7 +95,6 @@ const AddNewCriteria = ({
         endTime: { hours: 16, minutes: 30 }
     });
     console.log("selectedDates", selectedDates)
-    const [showPopupD, setShowPopupD] = useState(false);
 
     const toggleDatePickerPopup = () => {
         setShowPopupD(!showPopupD);
@@ -229,8 +224,8 @@ const AddNewCriteria = ({
                                 </span>
                             </div>
 
-                            
-                            
+
+
                             <form>
                                 <h5>Filter</h5>
 

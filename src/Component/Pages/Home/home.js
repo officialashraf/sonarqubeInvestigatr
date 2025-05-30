@@ -1,4 +1,3 @@
-
 import CardList from './cards.js'
 import './dashboard.css'
 import DataTable from '../Case/caseList.js'
@@ -13,9 +12,7 @@ const Home = () => {
       </div>
       <div className="row-2" >
         <DataTable />
-
       </div>
-
     </div>
   )
 }

@@ -18,6 +18,7 @@ import { FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
 const UserManagement = () => {
+
   const navigate = useNavigate()
   const [data, setData] = useState([]);
   const [users, setUsers] = useState([]);
@@ -28,7 +29,7 @@ const UserManagement = () => {
   const [showEditForm, setShowEditForm] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
   console.log(selectedUser);
 
 
@@ -71,7 +72,6 @@ const UserManagement = () => {
     }
   };
 
-
   useEffect(() => {
     fetchUsers();
     const handleDatabaseUpdated = () => {
@@ -84,7 +84,6 @@ const UserManagement = () => {
       window.removeEventListener("databaseUpdated", handleDatabaseUpdated);
     };
   }, []);
-
 
   const confirmDelete = (id, username) => {
     toast((t) => (
@@ -141,7 +140,7 @@ const UserManagement = () => {
     }
   };
 
-  const userData = async () => {
+  const getUserData = async () => {
     const token = Cookies.get("accessToken");
     try {
       const response = await axios.get('http://5.180.148.40:9000/api/user-man/v1/user'
@@ -159,7 +158,7 @@ const UserManagement = () => {
     }
   };
   useEffect(() => {
-    userData(); // Call the userData function
+    getUserData(); // Call the getUserData function
   }, []);
 
 
@@ -181,9 +180,6 @@ const UserManagement = () => {
     });
     setFilteredData(filtered);
   };
-
-  const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
-
 
   const handleSort = (key) => {
     let direction = "asc";
@@ -547,14 +543,14 @@ const UserManagement = () => {
                           Details
                         </Dropdown.Item>
                         <Dropdown.Item onClick={() => toggleEditForm(item)}>
-                        Edit
+                          Edit
                         </Dropdown.Item>
                         <Dropdown.Item
                           onClick={() => confirmDelete(item.id, item.username)}
                         >
                           Delete
                         </Dropdown.Item>
-                                            </Dropdown.Menu>
+                      </Dropdown.Menu>
                     </Dropdown>
                   </td>
                 </tr>

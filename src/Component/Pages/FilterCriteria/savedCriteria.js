@@ -16,6 +16,8 @@ import Loader from '../Layout/loader';
 
 
 const SavedCriteria = () => {
+  const Token = Cookies.get('accessToken');
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const activePopup = useSelector((state) => state.popup.activePopup);
@@ -40,7 +42,6 @@ const SavedCriteria = () => {
   console.log("Redux Payload:", reduxPayload);
 
   useEffect(() => {
-    ;
     console.log("Case ID:", caseId);
     console.log("File Type:", fileType);
 
@@ -68,13 +69,8 @@ const SavedCriteria = () => {
     }
   }, [keyword, caseId, fileType]);
 
-
   const displayResults = searchResults
-
-
   console.log("searchChips", searchChips);
-
-
 
   // Filter results based on user input
   const filterResults = (chips, query) => {
@@ -142,13 +138,10 @@ const SavedCriteria = () => {
     setInputValue('');
   };
 
-  const Token = Cookies.get('accessToken');
-
   // Main search function to call API
   const handleSearch = async () => {
     console.log("reduxPayload:", reduxPayload);
     console.log("enterInput:", enterInput);
-
 
     setIsLoading(true);
     try {
@@ -180,6 +173,7 @@ const SavedCriteria = () => {
       const finalCaseIds = searchChips.filter((chip) => reduxCaseIds.includes(chip));
       const finalFileTypes = searchChips.filter((chip) => reduxFileTypes.includes(chip));
       console.log("finalcaseid or finalfiletype", finalCaseIds, finalFileTypes)
+
       const payload = {
         keyword: finalKeywords,   // Only keywords
         case_id: finalCaseIds,    // Only case_ids
@@ -203,7 +197,6 @@ const SavedCriteria = () => {
           }
         }
       );
-
       console.log("Search results------:", response);
 
       setIsLoading(false);
