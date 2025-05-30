@@ -8,27 +8,17 @@ import "./login.css";
 const LicensePage = () => {
   const navigate = useNavigate();
   const [licenseKey, setLicenseKey] = useState("");
-  const [error, setError] = useState("");
   console.log("key", licenseKey)
-
-  const validateForm = () => {
-    if (!licenseKey.trim()) {
-      setError("License key is required.");
-      return false;
-    }
-    return error;
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent default form submission
     console.log("key", licenseKey)
 
-    const validationError = validateForm();
-    if (validationError) {
-      setError(validationError);
-      return;
-    }
     try {
+      if(licenseKey.trim()===""){
+        toast.info("Please enter a license key before processing");
+        return;
+      }
       console.log("key", typeof licenseKey)
       const response = await axios.post("http://5.180.148.40:9008/api/license/register",
         { key: licenseKey }, // Ensure key is passed correctly
@@ -69,11 +59,13 @@ const LicensePage = () => {
               onChange={(e) => setLicenseKey(e.target.value)}
             />
             <div className="d-flex justify-content-end mt-2">
-              <button type="submit" className="login-button" disabled={!licenseKey.trim()}>
+              <button type="submit" className="login-button" 
+              // disabled={!licenseKey.trim()}
+              >
                 Apply
               </button>
             </div>
-            {error && <p className="error-text mt-3">{error}</p>}
+            {/* {error && <p className="error-text mt-3">{error}</p>} */}
           </Form>
 
         </Col>
