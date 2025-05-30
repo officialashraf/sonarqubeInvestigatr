@@ -49,10 +49,6 @@ const UserDetails = ({ item, users, toggleDetails }) => {
                   </span>
                 </td>
               </tr>
-              <tr>
-                <th>Password</th>
-                <td>*******</td>
-              </tr>
             </tbody>
           </Table>
         </div>

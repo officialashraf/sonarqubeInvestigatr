@@ -86,6 +86,10 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
     { value: "arm_model_number", label: "Arm Model Number" }
   ];
 
+  const [synonymInput, setSynonymInput] = useState("");
+  const [subTypeRows, setSubTypeRows] = useState([]);
+  const [availableSubTypes, setAvailableSubTypes] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -95,11 +99,6 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
     target_id: [],
     remove_target: []
   });
-
-  const [synonymInput, setSynonymInput] = useState("");
-  const [subTypeRows, setSubTypeRows] = useState([]);
-  const [availableSubTypes, setAvailableSubTypes] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   // Threat score options from 0 to 10
   const threatScoreOptions = Array.from({ length: 11 }, (_, i) => ({
@@ -247,10 +246,13 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
     return (
       <div className="popup-overlay">
         <div className="popup-container">
-          <div className="popup-content">
-       <div>   <Loader/></div>
+           <button className="close-icon" onClick={togglePopup}>
+          &times;
+        </button>
+          <div className="popup-content"style={{height:'300px'}}>
+            <div>   <Loader /></div>
           </div>
-          
+
         </div>
       </div>
     );
@@ -378,11 +380,11 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
                           }
                           onChange={(selectedOptions) => {
                             const selectedIds = selectedOptions ? selectedOptions.map(option => option.value) : [];
-                              const removedIds = formData.target_id.filter(id => !selectedIds.includes(id));
+                            const removedIds = formData.target_id.filter(id => !selectedIds.includes(id));
                             setFormData(prev => ({
                               ...prev,
                               target_id: selectedIds,
-                               remove_target: [...(prev.remove_target || []), ...removedIds]
+                              remove_target: [...(prev.remove_target || []), ...removedIds]
                             }));
                           }}
                           className="target-select"

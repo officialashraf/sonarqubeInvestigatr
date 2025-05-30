@@ -8,17 +8,13 @@ const ReportPage = () => {
     <Container fluid>
       <Row>
         <Col xs={12} md={4} style={{ margin: '0', padding: '0' }} className="left-div">
-
           <SearchView />
         </Col>
+        
         <Col xs={12} md={4} className="right-div">
-
-
           <GridView />
         </Col>
-
       </Row>
-
     </Container>
   );
 };

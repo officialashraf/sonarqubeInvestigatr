@@ -35,10 +35,9 @@ const StatusCard = ({ name, number, icon }) => {
 }
 
 const CardList = () => {
+  const Token = Cookies.get('accessToken');
   const [cardData, setCardData] = useState(cardTemplate);
 
-
-  const Token = Cookies.get('accessToken');
   const getCardData = useCallback(async () => {
     try {
       const response = await axios.get('http://5.180.148.40:9001/api/case-man/v1/case/states-count', {

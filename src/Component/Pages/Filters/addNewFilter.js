@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import { Form, InputGroup, Button, Badge } from 'react-bootstrap';
@@ -8,8 +7,6 @@ import Cookies from 'js-cookie';
 import "./main.css"
 import { jwtDecode } from "jwt-decode";
 
-
-
 const conversionFactors = {
   seconds: 1,
   minutes: 60,
@@ -17,6 +14,10 @@ const conversionFactors = {
 };
 
 const AddNewFilter = ({ onClose, filterIde }) => {
+  const token = Cookies.get('accessToken');
+  const dispatch = useDispatch();
+  const containerRef = useRef(null);
+
   const [platform, setPlatform] = useState([]);
   const [filterName, setFilterName] = useState('');
   const [description, setDescription] = useState('');
@@ -24,8 +25,6 @@ const AddNewFilter = ({ onClose, filterIde }) => {
   const [filterDetails, setFilterDetails] = useState(null)
   const [isEditable, setIsEditable] = useState(true);
   const [loggedInUserId, setLoggedInUserId] = useState(null);
-
-
   const [sources, setSources] = useState([
     {
       id: '',
@@ -36,10 +35,7 @@ const AddNewFilter = ({ onClose, filterIde }) => {
       interval: '',
     },
   ]);
-  const containerRef = useRef(null);
 
-  const dispatch = useDispatch();
-  const token = Cookies.get('accessToken');
   // const toastShown = useRef(false);
   useEffect(() => {
     localStorage.setItem('filterId', filterId);
@@ -60,6 +56,7 @@ const AddNewFilter = ({ onClose, filterIde }) => {
     newSources[sourceIndex].platform = selected;
     setSources(newSources);
   };
+
   const handleSourceChange = (index, event) => {
     const value = event.target.value;
     const newSources = [...sources];
@@ -118,6 +115,7 @@ const AddNewFilter = ({ onClose, filterIde }) => {
     newSources[sourceIndex].intervalUnit = unit;
     setSources(newSources);
   };
+
   useEffect(() => {
     if (filterDetails && filterDetails.id) {
       console.log('useEffect triggered');
@@ -315,12 +313,12 @@ const AddNewFilter = ({ onClose, filterIde }) => {
             {sources.map((source, sourceIndex) => (
 
               <div key={sourceIndex} className="mb-3 border rounded" >
-                {sources.length >1 && (
+                {sources.length > 1 && (
                   <span style={{
                     position: 'fixed',
                     fontSize: '15px',
                     right: ' 20px',
-                   cursor:'pointer'
+                    cursor: 'pointer'
                   }} onClick={() => handleRemoveSource(sourceIndex)}
                     disabled={!isEditable}>&times;</span>
 
@@ -490,7 +488,7 @@ const AddNewFilter = ({ onClose, filterIde }) => {
             <button type="button" className="add-new-filter-button" onClick={handleAddSource}>
               Add Sources
             </button>
-              {/* <button type="button" className="add-new-filter-button" onClick={onClose}>
+            {/* <button type="button" className="add-new-filter-button" onClick={onClose}>
               Close          
                 </button> */}
             <button

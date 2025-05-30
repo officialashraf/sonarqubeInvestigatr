@@ -30,8 +30,13 @@ export const sharedSxStyles = {
 };
 
 const SearchView = () => {
-  const dispatch = useDispatch();
   const Token = Cookies.get('accessToken');
+  const dispatch = useDispatch();
+
+  const activePopup = useSelector((state) => state.popup?.activePopup || null);
+  console.log("create popup", activePopup)
+  const results = useSelector((state) => state.report?.results || null);
+  console.log("result", results)
 
   const [formData, setFormData] = useState({
     searchQuery: ' ',
@@ -47,10 +52,7 @@ const SearchView = () => {
     endTime: { hours: 16, minutes: 30 }
   });
   const [caseOptions, setCaseOptions] = useState([]);
-  const activePopup = useSelector((state) => state.popup?.activePopup || null);
-  console.log("create popup", activePopup)
-  const results = useSelector((state) => state.report?.results || null);
-  console.log("result", results)
+
   // Fetch case IDs on component mount
   useEffect(() => {
     const fetchCaseData = async () => {
@@ -102,7 +104,6 @@ const SearchView = () => {
     try {
 
       const payload = {
-
         keyword: Array.isArray(formData.searchQuery) ? formData.searchQuery : [formData.searchQuery],
         report_generation: true,
 
@@ -139,12 +140,6 @@ const SearchView = () => {
       }));
 
       console.log("dispatchresponse", response.data.results);
-
-
-      // Dispatch search results
-
-
-
       // Dispatch initial page number
       dispatch(setPage(1));
 
@@ -165,8 +160,6 @@ const SearchView = () => {
     setShowPopupD(!showPopupD);
   };
 
-
-
   // Handle data from DatePicker
   const handleDateSelection = (dateData) => {
     setSelectedDates(dateData);
@@ -178,8 +171,6 @@ const SearchView = () => {
     if (!date) return 'No date selected';
     return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
   };
-
-
 
   return (
     <div>
@@ -201,7 +192,6 @@ const SearchView = () => {
               endAdornment: (
                 <button position="end" style={{ border: 'none', backgroundColor: 'white' }}>
                   <Send onClick={handleSearch} />
-
                 </button>
               ),
               style: {
@@ -215,7 +205,6 @@ const SearchView = () => {
             onChange={handleInputChange}
             sx={sharedSxStyles}
           />
-
 
           {/* Case Selection Field */}
           <div className="mb-3">
@@ -233,7 +222,7 @@ const SearchView = () => {
 
           {/* DatePicker */}
           <div className="mb-3">
-            <label>DatePicker</label>
+            <label>Date</label>
             <TextField
               fullWidth
               className="com mb-3"
@@ -259,16 +248,12 @@ const SearchView = () => {
             />
           </div>
 
-
-
-
           {/* Submit Button */}
           <div className="button-container" style={{ textAlign: 'center' }}>
             <button
               type="submit"
               style={{ width: '100%', height: '30px', marginTop: '10px' }}
               className="add-btn"
-
             >
               Search
             </button>
@@ -277,7 +262,6 @@ const SearchView = () => {
         </form>
         {/* <button onClick={fetchReportData}>Download Word File</button> */}
       </div>
-
 
       {/* Popup components */}
       {showPopupD && (

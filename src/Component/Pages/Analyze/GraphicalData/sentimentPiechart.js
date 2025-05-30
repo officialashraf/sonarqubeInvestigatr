@@ -13,7 +13,8 @@ const SentimentPieChart = () => {
   const caseId = useSelector(state => state.caseData.caseData.id);
 
 
-  const COLORS = ["#000000", "#000000"];
+const COLORS = ["#000000", "#555555", "#005A5A"];
+
 
   useEffect(
     () => {
@@ -67,6 +68,7 @@ const SentimentPieChart = () => {
     return <Loader />
   }
   return <div style={{ width: "100%", height: 250 }}>
+    {data.length>0?
     <ResponsiveContainer>
       <PieChart height={250}>
         <Legend align="center" verticalAlign="top" formatter={(value, entry) => `${value}: ${entry.payload.value}`} />
@@ -81,6 +83,11 @@ const SentimentPieChart = () => {
         <Tooltip formatter={value => `Total: ${value}`} />
       </PieChart>
     </ResponsiveContainer>
+     : 
+        <div className="h-[150px] flex items-center justify-center">
+          <p className="text-gray-500 text-xl">No Data Available</p>
+        </div>
+      }
   </div>;
 };;
 

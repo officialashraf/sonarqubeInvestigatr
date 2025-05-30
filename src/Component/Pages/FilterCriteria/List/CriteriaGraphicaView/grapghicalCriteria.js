@@ -6,7 +6,7 @@ import {
   ArrowForward,
   MoreVert
 } from "@mui/icons-material";
-import LineChart1 from "./criteriaLineChart";
+import LineGrapgh from "./criteriaLineChart";
 import KeywordChart from "./criteriaKeywordCloude";
 import SentimentPieChart from "./criteriaSentiment";
 
@@ -48,7 +48,7 @@ const ComponentOne = () => (
   <Card sx={{ height: "235px", backgroundColor: "lightgray" }}>
     <Header title="Timeline" />
     <CardContent>
-      <LineChart1 />
+      <LineGrapgh />
     </CardContent>
   </Card>);
 

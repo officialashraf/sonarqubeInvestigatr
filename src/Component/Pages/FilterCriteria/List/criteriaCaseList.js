@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Table, Pagination, Spinner } from 'react-bootstrap';
+import { Table, Pagination } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { setPage, setSearchResults } from '../../../../Redux/Action/criteriaAction';
 import axios from 'axios';
@@ -7,19 +7,14 @@ import Cookies from 'js-cookie';
 import Loader from '../../Layout/loader';
 
 const CriteriaCaseTable = () => {
+  const token = Cookies.get("accessToken");
   const dispatch = useDispatch();
-  // const [isLoading, setIsLoading] = useState(true);
-  // console.log("setisloading",setIsLoading)
-  const [loading, setLoading] = useState(false);
-
-
-  // Get the Redux state
   const { totalPages, totalResults, searchResults, currentPage } = useSelector(state => state?.search || '');
   const payload = useSelector((state) => state.criteriaKeywords?.queryPayload || '');
   const keywords = useSelector((state) => state.criteriaKeywords?.keywords || '');
-
-  // Get the token for API requests
-  const Token = Cookies.get("accessToken");
+  // const [isLoading, setIsLoading] = useState(true);
+  // console.log("setisloading",setIsLoading)
+  const [loading, setLoading] = useState(false);
 
   // Fetch data when page changes
   useEffect(() => {
@@ -27,8 +22,6 @@ const CriteriaCaseTable = () => {
       setLoading(true);
 
       try {
-        const token = Token;
-
         // Don't proceed if there are no keywords
         if (!keywords || keywords.length === 0) {
           setLoading(false);
@@ -39,11 +32,8 @@ const CriteriaCaseTable = () => {
         let paginatedQuery;
 
         if (payload) {
-
           paginatedQuery = { ...payload, page: currentPage };
-
         }
-
         console.log("Sending queryQWQ:", paginatedQuery);
 
         const response = await axios.post(
@@ -76,7 +66,7 @@ const CriteriaCaseTable = () => {
 
     // Call the function to fetch data
     fetchPageData();
-  }, [currentPage, dispatch, Token, keywords, payload]);
+  }, [currentPage, dispatch, token, keywords, payload]);
 
   // Handle page change
   const handlePageChange = (pageNumber) => {
@@ -124,8 +114,6 @@ const CriteriaCaseTable = () => {
       }
     }
 
-
-
     // Always add last page if different from first
     if (totalPages > 1) {
       pageItems.push(
@@ -164,13 +152,13 @@ const CriteriaCaseTable = () => {
       </Pagination>
     );
   };
+
   if (loading) {
     <Loader />
   }
 
   return (
     <>
-
       <div className="tabs">
         <div
           className={`tab active`} // "Cases" will always be active
@@ -178,7 +166,6 @@ const CriteriaCaseTable = () => {
         >
           Cases ({totalResults || "no results"})
         </div>
-
 
       </div>
       <div className="data-table" style={{ height: '420px', marginTop: '0px' }}>

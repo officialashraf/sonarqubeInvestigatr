@@ -30,8 +30,8 @@ export const sharedSxStyles = {
 };
 
 const CreateCriteria = ({ handleCreateCase }) => {
-  const dispatch = useDispatch();
   const Token = Cookies.get('accessToken');
+  const dispatch = useDispatch();
 
   const [formData, setFormData] = useState({
     searchQuery: '',
@@ -53,13 +53,10 @@ const CreateCriteria = ({ handleCreateCase }) => {
   const [caseOptions, setCaseOptions] = useState([]);
   const [fileTypeOptions, setFileTypeOptions] = useState([]);
 
-
   const activePopup = useSelector((state) => state.popup?.activePopup || null);
   console.log("create popup", activePopup)
 
-
   // Fetch case IDs on component mount
-
   // if (activePopup !== "create") return null;
   // Fetch case data from API
 
@@ -125,11 +122,8 @@ const CreateCriteria = ({ handleCreateCase }) => {
 
   };
 
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-
-
     setFormData(prev => ({
       ...prev,
       [name]: name === "searchQuery"
@@ -138,20 +132,15 @@ const CreateCriteria = ({ handleCreateCase }) => {
     }));
   };
 
-
-
   const handleSearch = async (e) => {
     e.preventDefault();
     try {
-
 
       const payload = {
         keyword: formData.searchQuery?.length > 0 ? formData.searchQuery : [],
         case_id: formData.caseIds?.length > 0
           ? (formData.caseIds.map(caseId => caseId.value.toString()))
-          : "[]",
-
-
+          : [],
 
         file_type: formData.filetype?.length > 0 ? formData.filetype.map(type => type.value) : [],
         page: 1, // Start at page 1
@@ -220,8 +209,6 @@ const CreateCriteria = ({ handleCreateCase }) => {
     setShowPopupD(!showPopupD);
   };
 
-
-
   // Handle data from DatePicker
   const handleDateSelection = (dateData) => {
     setSelectedDates(dateData);
@@ -233,8 +220,6 @@ const CreateCriteria = ({ handleCreateCase }) => {
     if (!date) return 'No date selected';
     return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
   };
-
-
 
   return (
     <div className="popup-overlay">
@@ -384,7 +369,6 @@ const CreateCriteria = ({ handleCreateCase }) => {
                 type="submit"
                 style={{ width: '100%', height: '30px' }}
                 className="add-btn"
-
               >
                 Search
               </button>

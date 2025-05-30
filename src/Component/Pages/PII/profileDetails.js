@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Card, Container } from 'react-bootstrap';
 import { Phone, Email, Person, Cake, Wc } from '@mui/icons-material';
@@ -6,7 +5,6 @@ import Carousel from 'react-bootstrap/Carousel';
 import './profileDetails.css';
 import { useSelector } from 'react-redux';
 import userImg from '../../Assets/Images/blank-profile.webp'
-
 
 const ProfileDetails = () => {
   const [profileData, setProfileData] = useState(null);
@@ -44,13 +42,10 @@ const ProfileDetails = () => {
       <Card className="profile-card">
         <Card.Body className="p-0">
 
-
           <div className="profile-details">
             <div className="profile-header">
               <div className="profile-avatar-section">
                 <div className="profile-avatar">
-
-
                   {profileData && Array.isArray(profileData.images) && profileData.images.length > 0 ? (
                     <Carousel >
                       {profileData.images.map((image, index) => (

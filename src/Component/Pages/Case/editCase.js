@@ -17,6 +17,7 @@ const EditCase = ({ togglePopup, item }) => {
     assignee: item.assignee || "",
     comment: item.comment || "",
   });
+
   const [users, setUsers] = useState({ data: [] });
 
   const options = users.data?.map(user => ({
@@ -29,7 +30,7 @@ const EditCase = ({ togglePopup, item }) => {
     { value: "closed", label: "Closed" }
   ];
 
-  const userData = async () => {
+  const getUserData = async () => {
     const token = Cookies.get("accessToken");
     try {
       const response = await axios.get('http://5.180.148.40:9000/api/user-man/v1/user', {
@@ -46,7 +47,7 @@ const EditCase = ({ togglePopup, item }) => {
   };
 
   useEffect(() => {
-    userData();
+    getUserData();
   }, []);
 
   // Update formData when item or users change
@@ -86,20 +87,33 @@ const EditCase = ({ togglePopup, item }) => {
       if (formData.comment !== item.comment) hasChanged.comment = formData.comment;
 
       // Special handling for watchers array
-      const originalWatchers = typeof item.watchers === 'string' ? item.watchers :
-        Array.isArray(item.watchers) ? item.watchers.join(", ") : null;
-      const newWatchers = Array.isArray(formData.watchers) ? formData.watchers.join(", ") : formData.watchers;
+      // const originalWatchers = typeof item.watchers === 'string' ? item.watchers :
+      //   Array.isArray(item.watchers) ? item.watchers.join(", ") : null;
+      // const newWatchers = Array.isArray(formData.watchers) ? formData.watchers.join(", ") : formData.watchers;
 
-      if (newWatchers !== originalWatchers) {
-        hasChanged.watchers = newWatchers;
-      }
+      // if (newWatchers !== originalWatchers) {
+      //   hasChanged.watchers = newWatchers;
+      // }
+const originalWatchers = typeof item.watchers === "string" && item.watchers.trim() !== ""
+    ? item.watchers.split(", ").filter(Boolean) //  Convert string to array safely
+    : Array.isArray(item.watchers)
+    ? item.watchers
+    : [];
+
+const newWatchers = Array.isArray(formData.watchers) && formData.watchers.length > 0
+    ? formData.watchers.join(", ") //  Keep string only if there are items
+    : []; //  Ensure empty array when no watchers exist
+
+if (JSON.stringify(newWatchers) !== JSON.stringify(originalWatchers)) {
+    hasChanged.watchers = newWatchers;
+}
 
       // If nothing has changed, just close the popup
       if (Object.keys(hasChanged).length === 0) {
         togglePopup();
         return;
       }
-
+console.log("handlechange",hasChanged)
       const response = await axios.put(
         `http://5.180.148.40:9001/api/case-man/v1/case/${item.id}`,
         // updateData,

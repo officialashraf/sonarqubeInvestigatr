@@ -15,6 +15,7 @@ import LineChart1 from './Component/Pages/Analyze/GraphicalData/lineChart.js';
 import KeywordChart from './Component/Pages/Analyze/GraphicalData/keywordChart.js';
 import GraphicalData from './Component/Pages/Analyze/GraphicalData/graphicalData.js';
 import './App.css'
+import axios from 'axios';
 import ProtectedRoute from './utils/protectRoute.js';
 import Loader from './Component/Pages/Layout/loader.js';
 import SearchResults from './Component/Pages/FilterCriteria/List/fullscreen.js';
@@ -28,10 +29,13 @@ import UserManagement from './Component/Pages/User/UserManagement.js';
 import RolesPermission from './Component/Pages/Roles/roles_Permission.js';
 import ReportPage from './Component/Pages/Reports/reportPage.js';
 import TargetDashboard from './Component/Pages/Targets/targetDashboard.js';
+// import injectGlobalInterceptors from './utils/axiosConfig.js';
+
 
 
 const AppContent = () => {
   const location = useLocation();
+  // injectGlobalInterceptors(axios);
 
   const getHeaderTitle = () => {
     const path = location.pathname;
@@ -97,9 +101,6 @@ const AppContent = () => {
               <Route path="/targets" element={< TargetDashboard />} />
 
               <Route path="*" element={<div className='notfound'> <h4>Work in progress........</h4></div>} />
-
-
-
             </Route>
             <Route path='loader' element={<Loader />} />
 

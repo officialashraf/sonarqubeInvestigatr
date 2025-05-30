@@ -16,9 +16,11 @@ import Loader from '../Layout/loader';
 import { SET_PAGINATION } from '../../../Redux/Constants/filterConstant';
 
 const DataTable = () => {
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
+
   const [data, setData] = useState([]);
   const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -35,9 +37,9 @@ const DataTable = () => {
     const caseId = item.id // Set the case data in Redux store
     navigate(`/cases/${caseId}`); // Navigate to the new page
   };
+
   useEffect(() => {
     if (location.pathname === "/cases") {
-
       dispatch({
         type: SET_PAGINATION,
         payload: { page: 1 } // Explicitly set page to 1
@@ -45,7 +47,7 @@ const DataTable = () => {
     }
   }, [location.pathname, dispatch]);
 
-  const fetchData = async () => {
+  const fetchCaseData = async () => {
     try {
       setLoading(true);
       const Token = Cookies.get('accessToken');
@@ -70,9 +72,9 @@ const DataTable = () => {
 
 
   useEffect(() => {
-    fetchData()
+    fetchCaseData()
     const handleDatabaseUpdate = () => {
-      fetchData()
+      fetchCaseData()
     };
 
     window.addEventListener("databaseUpdated", handleDatabaseUpdate);
@@ -127,7 +129,7 @@ const DataTable = () => {
     }
   };
 
-  const userData = async () => {
+  const getUserData = async () => {
     const token = Cookies.get("accessToken");
     try {
       const response = await axios.get('http://5.180.148.40:9000/api/user-man/v1/user'
@@ -145,7 +147,7 @@ const DataTable = () => {
     }
   };
   useEffect(() => {
-    userData(); // Call the userData function
+    getUserData(); // Call the getUserData function
   }, []);
 
   const handleSearch = (event) => {
@@ -228,9 +230,6 @@ const DataTable = () => {
           </InputGroup>
 
           <div className="header-icons">
-
-
-
             <button className='add-btn' title='Add New Case' onClick={togglePopup}><Plus size={20} />Add New Case</button>
           </div>
         </div>
@@ -240,7 +239,7 @@ const DataTable = () => {
               <tr>
                 <th>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    CaseId
+                    CaseID
                     <span onClick={() => handleSort('id')} style={{ cursor: 'pointer', display: 'inline-flex', alignItems: 'center' }}>
                       {sortConfig.key === 'id' ? (
                         sortConfig.direction === 'asc' ? <ArrowDropUp /> : <ArrowDropDown />
@@ -339,14 +338,14 @@ const DataTable = () => {
                   <td>{item.created_on.slice(0, 10)}</td>
                   <td>{item.created_by.slice(0, 8)}</td>
                   <td>{item.assignee}</td>
-                 
+
                   <td>
-  {Array.isArray(item.watchers)
-    ? item.watchers.join(', ')
-    : typeof item.watchers === 'string'
-      ? item.watchers.split(',').map(w => w.trim()).join(', ')
-      : ''}
-</td>
+                    {Array.isArray(item.watchers)
+                      ? item.watchers.join(', ')
+                      : typeof item.watchers === 'string'
+                        ? item.watchers.split(',').map(w => w.trim()).join(', ')
+                        : ''}
+                  </td>
 
                   <td>{item.modified_on}</td>
                   <td disabled={true} >

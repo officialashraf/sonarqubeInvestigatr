@@ -3,9 +3,7 @@ import { Table, Pagination } from "react-bootstrap";
 import "../Analyze/TabularData/caseTableData.css";
 import { useSelector, useDispatch } from "react-redux";
 import "../Layout/pagination.css";
-import {
-  fetchSummaryData,
-} from "../../../Redux/Action/filterAction";
+import {  fetchSummaryData} from "../../../Redux/Action/filterAction";
 import Loader from "../Layout/loader";
 import { FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -14,10 +12,9 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 
 const GridView = () => {
+  const Token = Cookies.get('accessToken');
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const Token = Cookies.get('accessToken');
-
   const data1 = useSelector((state) => state.caseData.caseData);
   const {
     results,
@@ -38,7 +35,6 @@ const GridView = () => {
   const [dataAvailable, setDataAvailable] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [isInitialLoad, setIsInitialLoad] = useState(true); // Track initial load
-
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -46,8 +42,6 @@ const GridView = () => {
   }, [results]);
 
   const itemsPerPage = 50;
-
-
 
   // Fetch report data function
   const fetchReportData = async () => {
@@ -180,7 +174,7 @@ const GridView = () => {
   return (
     <>
       <div className="top-header" style={{ marginTop: "10px" }}>
-        <Col xs={1} className="d-flex align-items-center justify-content-flex-start" style={{ width: "350px" , minWidth: '350px' }}>
+        <Col xs={1} className="d-flex align-items-center justify-content-flex-start" style={{ width: "350px", minWidth: '350px' }}>
           <FaArrowLeft
             style={{
               cursor: 'pointer', margin: '0px 40px 0px 38px',
@@ -205,30 +199,30 @@ const GridView = () => {
         style={{ height: '420px', marginTop: '0px' }}
       >
         {!dataAvailable ? (
-           <Table striped bordered hover variant='light'>
+          <Table striped bordered hover variant='light'>
             <thead></thead>
             <tbody>
-            <tr>
-            <td className="text-center">
-  No Data Available
+              <tr>
+                <td className="text-center">
+                  No Data Available
 
-            </td>
-          </tr>
-          </tbody>
-      </Table>
+                </td>
+              </tr>
+            </tbody>
+          </Table>
         ) : (
           <Table striped bordered hover variant='light'>
-            
+
             <thead>
-              
+
               <tr>
                 {data.length > 0 && [...new Set(data.flatMap(item => Object.keys(item)))]
                   .map((key, index) => (
                     <th key={index} className="fixed-th">
                       {key.split("_") // Split by underscores
                         .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize first letter of each word
-                        .join(" ") 
-                        }
+                        .join(" ")
+                      }
                     </th>
                   ))}
               </tr>
@@ -241,7 +235,7 @@ const GridView = () => {
                       <td key={colIndex} className="fixed-td">
                         <div
                           className="cell-content"
-                         style={{
+                          style={{
                             cursor: 'pointer',
                             // padding: "0px 0px 0px 5px",
                             // height: '37px',

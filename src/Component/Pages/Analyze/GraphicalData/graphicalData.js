@@ -1,4 +1,4 @@
-import { Card, CardContent, Typography, Grid} from "@mui/material";
+import { Card, CardContent, Typography, Grid } from "@mui/material";
 import "./graphicalData.css";
 import {
   ListAltOutlined,
@@ -6,9 +6,15 @@ import {
   ArrowForward,
   MoreVert
 } from "@mui/icons-material";
-import LineChart1 from "./lineChart";
+import LineGraph from "./lineChart";
 import KeywordChart from "./keywordChart";
 import SentimentPieChart from "./sentimentPiechart";
+import LocationBar from "./locationBar";
+import DateBar from "./dateBar";
+import EventBar from "./eventBar";
+import PersonBar from "./personBar";
+import LanguageBar from "./languageBar";
+import OrgBar from "./orgBar";
 
 const Header = ({ title }) =>
   <Grid
@@ -48,7 +54,7 @@ const ComponentOne = () => (
   <Card sx={{ height: "235px", backgroundColor: "lightgray" }}>
     <Header title="Timeline" />
     <CardContent>
-      <LineChart1 />
+      <LineGraph />
     </CardContent>
   </Card>);
 
@@ -73,13 +79,14 @@ const ComponentThree = () => (
         align="center"
         height={250}
       >
-        {" "}No Data{" "}
+        <LocationBar/>
+        {/* {" "}No Data{" "} */}
       </Typography>
     </CardContent>
   </Card>);
 const ComponentFour = () => (
   <Card
-    sx={{ height: "350px", backgroundColor: "lightgray", marginBottom: "5rem" }}
+    sx={{ height: "350px", backgroundColor: "lightgray" }}
   >
     <Header title="Sentiment" />
     <CardContent>
@@ -87,9 +94,57 @@ const ComponentFour = () => (
     </CardContent>
   </Card>
 );
+const ComponentFive = () => (
+  <Card
+    sx={{ height: "350px", backgroundColor: "lightgray" }}
+  >
+    <Header title="Date" />
+    <CardContent>
+      <DateBar/>
+    </CardContent>
+  </Card>
+);
+const ComponentSix = () => (
+  <Card
+    sx={{ height: "350px", backgroundColor: "lightgray" }}
+  >
+    <Header title="Events" />
+    <CardContent>
+      <EventBar/>
+    </CardContent>
+  </Card>
+);
+const ComponentSeven = () => (
+  <Card
+    sx={{ height: "350px", backgroundColor: "lightgray" }}
+  >
+    <Header title="Persons" />
+    <CardContent>
+      <PersonBar />
+    </CardContent>
+  </Card>
+);
+const ComponentEight = () => (
+  <Card
+    sx={{ height: "350px", backgroundColor: "lightgray" }}
+  >
+    <Header title="Language" />
+    <CardContent>
+      <LanguageBar />
+    </CardContent>
+  </Card>
+);
 
-
-
+const ComponentNine = () => (
+  <Card
+    sx={{ height: "350px", backgroundColor: "lightgray",marginBottom:'5rem' }}
+  >
+    <Header title="Organisation" />
+    <CardContent>
+      <OrgBar />
+    </CardContent>
+  </Card>
+);
 const GraphicalData = () => {
   return (
     <div className="responsiveContainer" >
@@ -107,12 +162,25 @@ const GraphicalData = () => {
         <Grid item xs={6} p={1} pb={0} >
           <ComponentThree />
         </Grid>
-        <Grid item xs={6} p={1} pb={0} mb={10} >
+        <Grid item xs={6} p={1} pb={0} >
           <ComponentFour />
         </Grid>
-        <Grid item xs={6} p={1} pb={0} mb={10} >
-          <ComponentThree />
+        <Grid item xs={6} p={1} pb={0} >
+          <ComponentFive />
         </Grid>
+        <Grid item xs={6} p={1} pb={0} >
+          <ComponentSix />
+        </Grid>
+        <Grid item xs={6} p={1} pb={0} >
+          <ComponentSeven />
+        </Grid>
+        <Grid item xs={6} p={1} pb={0} mb={10} >
+          <ComponentEight />
+        </Grid>
+        <Grid item xs={6} p={1} pb={0} mb={10} >
+          <ComponentNine />
+        </Grid>
+
       </Grid>
 
     </div>

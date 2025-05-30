@@ -3,14 +3,17 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
 import '../User/addUser.css'
+import { CloseButton } from 'react-bootstrap';
+import { useDispatch } from 'react-redux';
+import { closePopup } from '../../../Redux/Action/criteriaAction';
 
 const Confirm = ({ formData, selectedDates, searchChips }) => {
+    const dispatch = useDispatch();
     const Token = Cookies.get('accessToken');
+
     const [isVisible, setIsVisible] = useState(true);
     const [searchTitle, setSearchTitle] = useState('');
-    console.log("formData", searchChips
-
-    );
+    console.log("formData", searchChips);
     console.log("selectedDates", selectedDates);
 
     const saveCriteria = async () => {
@@ -74,11 +77,15 @@ const Confirm = ({ formData, selectedDates, searchChips }) => {
         }}>
             <div className="popup-container" style={{ display: 'flex', alignItems: 'center' }}>
 
-
+                
                 <div className="popup-content" style={{ width: '70%' }}>
-                    <h5>Save Search As</h5>
+                    
+                     <span style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
+                           <h5>Save Criteria</h5>
+                            <CloseButton onClick={() => dispatch(closePopup())} />
+                        </span>
                     <form onSubmit={(e) => e.preventDefault()}> {/* Prevent form submission default */}
-                        <label>Search Title</label>
+                        <label>Title *</label>
                         <input
                             type="text"
                             placeholder="Enter Title"
@@ -92,7 +99,7 @@ const Confirm = ({ formData, selectedDates, searchChips }) => {
                                     const formattedValue = prev.charAt(0).toUpperCase() + prev.slice(1);
                                     return formattedValue;
                                 });
-                              }}
+                            }}
                         />
                         <div className="button-container">
                             <button

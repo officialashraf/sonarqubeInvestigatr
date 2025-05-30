@@ -4,16 +4,12 @@ import "./caseTableData.css";
 import "../../Case/table.css"
 import { useSelector, useDispatch } from "react-redux";
 import "./pagination.css";
-import {
-  fetchSummaryData,
-
-} from "../../../../Redux/Action/filterAction";
+import {fetchSummaryData} from "../../../../Redux/Action/filterAction";
 import Loader from "../../Layout/loader";
-
 
 const TabulerData = () => {
   const dispatch = useDispatch();
-  const data1 = useSelector((state) => state.caseData.caseData);
+  const caseData = useSelector((state) => state.caseData.caseData);
   const {
     data,
     headers,
@@ -22,7 +18,6 @@ const TabulerData = () => {
     totalResults,
     loading,
     error,
-
   } = useSelector((state) => state.filterData);
   console.log("currentd", page)
   console.log("datwq", data)
@@ -32,34 +27,25 @@ const TabulerData = () => {
 
   const [currentPage, setCurrentPage] = useState(page);
 
-
-
-  // const itemsPerPage = 50;
-
-
   useEffect(() => {
-
-
-    if (data1?.id) {
+    if (caseData?.id) {
       dispatch(fetchSummaryData({
-        queryPayload: { unified_case_id: data1.id },
+        queryPayload: { unified_case_id: caseData.id },
         page: currentPage,
         itemsPerPage: 50
       }));
     }
-  }, [data1, currentPage, dispatch]);
+  }, [caseData, currentPage, dispatch]);
 
 
   const handlePageChange = (page) => {
     setCurrentPage(page); // Update local state
     dispatch(fetchSummaryData({
-      queryPayload: { unified_case_id: data1?.id }, // dynamic query
+      queryPayload: { unified_case_id: caseData?.id }, // dynamic query
       page: page,
       itemsPerPage: 50
     }));
   };
-
-
 
   if (loading) {
     return <Loader />;
@@ -85,7 +71,6 @@ const TabulerData = () => {
     }
   }
 
-
   return (
     <>
       <div
@@ -96,16 +81,16 @@ const TabulerData = () => {
           <Table striped bordered hover variant="light">
             <thead >
               <tr>
-    {headers.map((header) => (
-        <th key={header} className="fixed-th">
-            {header
-                .split("_") // Split by underscores
-                .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize first letter of each word
-                .join(" ") // Rejoin words with space
-            }
-        </th>
-    ))}
-</tr>
+                {headers.map((header) => (
+                  <th key={header} className="fixed-th">
+                    {header
+                      .split("_") // Split by underscores
+                      .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize first letter of each word
+                      .join(" ") // Rejoin words with space
+                    }
+                  </th>
+                ))}
+              </tr>
             </thead>
             <tbody>
               {data.map((item, index) => (
@@ -113,21 +98,21 @@ const TabulerData = () => {
                   {headers.map((header) => (
                     <td key={header} className="fixed-td">
                       <div className="cell-content"
-                      style={{
-                            cursor: 'pointer',
-                            // padding: "0px 0px 0px 5px",
-                            // height: '37px',
-                            // fontFamily: 'sans-serif',
-                            fontWeight: 'normal',
-                            overflow: 'hidden',
-                            //  textOverflow: 'ellipsis',
-                            whiteSpace: 'nowrap',
-                            //  vertical- align: middle;
-                            padding: '0px 5px 0px 5px',
-                            fontSize: '12px',
-                            fontFamily: 'Helvetica'
-                          }}
-                      title={item[header]}>
+                        style={{
+                          cursor: 'pointer',
+                          // padding: "0px 0px 0px 5px",
+                          // height: '37px',
+                          // fontFamily: 'sans-serif',
+                          fontWeight: 'normal',
+                          overflow: 'hidden',
+                          //  textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                          //  vertical- align: middle;
+                          padding: '0px 5px 0px 5px',
+                          fontSize: '12px',
+                          fontFamily: 'Helvetica'
+                        }}
+                        title={item[header]}>
                         {item[header]}
                       </div>
                     </td>
@@ -137,8 +122,8 @@ const TabulerData = () => {
             </tbody>
           </Table>
         ) : (
-            <p className="text-center" style=
-              {{ margin: '20px 0px', border: '1px solid #ccc', }}>No data available.</p>
+          <p className="text-center" style=
+            {{ margin: '20px 0px', border: '1px solid #ccc', }}>No data available.</p>
         )}
       </div>
 

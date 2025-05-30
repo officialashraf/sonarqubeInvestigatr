@@ -7,20 +7,15 @@ import Cookies from "js-cookie";
 import Loader from '../../../Layout/loader';
 import {  ResponsiveContainer } from 'recharts';
 
-
 const CriteriaKeywordChart = () => {
+
   const token = Cookies.get("accessToken");
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-
   const queryPayload = useSelector((state) => state.criteriaKeywords.queryPayload);
 
-
-
-
   useEffect(() => {
-    const fetchData = async () => {
-
+    const fetchKeywordData = async () => {
       try {
         setLoading(true);
         console.log("querfunction", queryPayload)
@@ -45,14 +40,9 @@ const CriteriaKeywordChart = () => {
           },
 
         );
-
-
         console.log("KeywordCloud---", response);
-
-
-
-
         const { socialmedia_hashtags } = response.data;
+
         if (socialmedia_hashtags) {
           setData(socialmedia_hashtags);
         } else {
@@ -66,7 +56,7 @@ const CriteriaKeywordChart = () => {
       }
     };
 
-    fetchData();
+    fetchKeywordData();
   }, [queryPayload,token]);
 
   const dataa = data && data.map((item) => ({
@@ -76,6 +66,7 @@ const CriteriaKeywordChart = () => {
 
   const fontSizeMapper = (word) => Math.log2(word.value + 1) * 50; // Size adjust kiya
   const rotate = () => 0; //  Fixed rotation (seedha text dikhane ke liye)
+  
   if(loading){
     return <Loader/>
   }

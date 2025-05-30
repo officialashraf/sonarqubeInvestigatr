@@ -10,13 +10,13 @@ import Cookies from 'js-cookie';
 import { setCaseData } from '../../../Redux/Action/caseAction';
 
 const AddFilter2 = ({ togglePopup }) => {
+    const token = Cookies.get('accessToken');
+  const caseData = useSelector((state) => state.caseData.caseData);
+
  const dispatch= useDispatch();
   const [selectedFilters, setSelectedFilters] = useState([]);
   const [initialSelectedFilters, setInitialSelectedFilters] = useState([]);
-  const caseData1 = useSelector((state) => state.caseData.caseData);
-  const token = Cookies.get('accessToken');
   const [filterIdedit, setFilterIdedit] = useState()
-
   const [showAddFilter, setShowAddFilter] = useState(false);
 
 
@@ -33,7 +33,7 @@ const AddFilter2 = ({ togglePopup }) => {
         });
         const filters = response.data.data.filter(filter =>
           Array.isArray(filter["case id"]) &&
-          filter["case id"].includes(String(caseData1.id))
+          filter["case id"].includes(String(caseData.id))
         );
         const initialIds = filters.map(f => f.id);
         setInitialSelectedFilters(initialIds);
@@ -43,7 +43,7 @@ const AddFilter2 = ({ togglePopup }) => {
       }
     };
     fetchInitialFilters();
-  }, [caseData1.id, token]);
+  }, [caseData.id, token]);
 
   // Handler for filter toggle
   const handleFilterToggle = (filterId, isChecked) => {
@@ -75,7 +75,7 @@ const AddFilter2 = ({ togglePopup }) => {
       if (filtersToStart.length > 0) {
         const payload = {
           filter_id: filtersToStart,
-          case_id: String(caseData1.id)
+          case_id: String(caseData.id)
         };
         console.log('Payload being sent start:', payload);
         await axios.post('http://5.180.148.40:9002/api/osint-man/v1/start', payload, {
@@ -91,7 +91,7 @@ const AddFilter2 = ({ togglePopup }) => {
       if (filtersToStop.length > 0) {
         const payload = {
           filter_id_list: filtersToStop,
-          case_id: String(caseData1.id)
+          case_id: String(caseData.id)
         };
         console.log('Payload being sent stop:', payload);
         await axios.post('http://5.180.148.40:9002/api/osint-man/v1/stop/batch', payload, {
@@ -103,7 +103,7 @@ const AddFilter2 = ({ togglePopup }) => {
       }
 
       // Update case status
-     const reponsecase = await axios.put(`http://5.180.148.40:9001/api/case-man/v1/case/${caseData1.id}`,
+     const reponsecase = await axios.put(`http://5.180.148.40:9001/api/case-man/v1/case/${caseData.id}`,
         { status: "in progress" },
         {
           headers: {

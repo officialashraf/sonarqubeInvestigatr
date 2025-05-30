@@ -1,7 +1,7 @@
-
 import { Table, CloseButton } from 'react-bootstrap'
 const TargetDetails = ({ togglePopup, details }) => {
   console.log("details", details)
+  
   return (
 
     <div className="popup-overlay">
@@ -9,7 +9,7 @@ const TargetDetails = ({ togglePopup, details }) => {
         <div className="popup-content">
 
           <div className="header">
-            <span> <h5>Keyword Details</h5></span>
+            <span> <h5>Terget Details</h5></span>
             <CloseButton onClick={togglePopup} />
           </div>
           <div className="case-details-container">

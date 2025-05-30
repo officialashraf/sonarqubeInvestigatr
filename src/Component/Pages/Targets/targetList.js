@@ -1,10 +1,10 @@
-import{ useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "../Case/table.css";
 import { useNavigate } from "react-router-dom";
 import { Plus } from "react-bootstrap-icons";
 import { Col, Table } from "react-bootstrap";
 import { FaArrowLeft } from "react-icons/fa";
-import { ArrowDropDown, ArrowDropUp} from "@mui/icons-material";
+import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
 import Dropdown from "react-bootstrap/Dropdown";
 import { FiMoreVertical } from "react-icons/fi";
 import { toast } from 'react-toastify';
@@ -16,6 +16,7 @@ import TargetDetails from "./targetDetails";
 import Loader from "../Layout/loader.js"
 
 const TargetList = () => {
+  const token = Cookies.get("accessToken");
   const navigate = useNavigate();
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -25,12 +26,11 @@ const TargetList = () => {
   const [showPopupE, setShowPopupE] = useState(false);
   const [showPopupD, setShowPopupD] = useState(false);
   const [details, setDetails] = useState([])
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
 
-
-  const fetchUsers = async () => {
+  const fetchTargets = async () => {
     try {
       setLoading(true);
-      const token = Cookies.get("accessToken");
       const response = await axios.get("http://5.180.148.40:9001/api/case-man/v1/target", {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -55,10 +55,10 @@ const TargetList = () => {
   };
   console.log("serrr", filteredData)
   useEffect(() => {
-    const tri = fetchUsers();
+    const tri = fetchTargets();
     console.log("okk", tri)
     const handleDatabaseUpdated = () => {
-      fetchUsers();
+      fetchTargets();
     };
 
     window.addEventListener("databaseUpdated", handleDatabaseUpdated);
@@ -86,11 +86,6 @@ const TargetList = () => {
     });
     setFilteredData(filtered);
   };
-
-
-
-  const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
-
 
   const handleSort = (key) => {
     let direction = "asc";
@@ -127,21 +122,23 @@ const TargetList = () => {
 
       return 0;
     });
-
     setFilteredData(sortedData);
   };
-  const togglePopup = () => {
 
+  const togglePopup = () => {
     setShowPopup((prev) => !prev);
   };
+
   const togglePopupE = (details) => {
     setDetails(details);
     setShowPopupE(prev => !prev);
   };
+
   const togglePopupD = (details) => {
     setDetails(details);
     setShowPopupD(prev => !prev);
   };
+
   const confirmDelete = (id, name) => {
     toast((t) => (
       <div>
@@ -159,6 +156,7 @@ const TargetList = () => {
         }
       },)
   };
+
   const deleteTarget = async (id, name) => {
     const token = Cookies.get("accessToken");
     if (!token) {
@@ -179,7 +177,7 @@ const TargetList = () => {
       console.log("Target deleted:", response.data);
 
       // After successful deletion, fetch the updated data
-      fetchUsers(); // Optionally refresh data after deletion
+      fetchTargets(); // Optionally refresh data after deletion
 
     } catch (err) {
       // Error handling based on the type of error
@@ -252,7 +250,7 @@ const TargetList = () => {
                     alignItems: "center"
                   }}
                 >
-                  TargetId
+                  TargetID
                   <span
                     onClick={() => handleSort("id")}
                     style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
@@ -359,7 +357,7 @@ const TargetList = () => {
                     alignItems: "center"
                   }}
                 >
-                  Modified on
+                  Modified On
                   <span
                     onClick={() => handleSort("modified_on")}
                     style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
@@ -380,7 +378,7 @@ const TargetList = () => {
                     alignItems: "center"
                   }}
                 >
-                  Modified by
+                  Modified By
                   <span
                     onClick={() => handleSort("modified_by")}
                     style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
@@ -401,7 +399,7 @@ const TargetList = () => {
                     alignItems: "center"
                   }}
                 >
-                  Created_on
+                  Created On
                   <span
                     onClick={() => handleSort("created_on")}
                     style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
@@ -422,7 +420,7 @@ const TargetList = () => {
                     alignItems: "center"
                   }}
                 >
-                  Created_by
+                  Created By
                   <span
                     onClick={() => handleSort("created_by")}
                     style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
@@ -451,7 +449,6 @@ const TargetList = () => {
                       alignItems: "center"
                     }}
                   >
-                    <FiMoreVertical size={16} />
                   </span>
                 </div>
               </th>
@@ -549,8 +546,8 @@ const TargetList = () => {
           </tbody>
         </Table>
       </div>
-      {showPopup && <TargetCreate togglePopup={togglePopup}  existingTargets={filteredData}/>}
-      {showPopupE && <TargetUpdate togglePopup={togglePopupE} id={details.id} existingTargets={filteredData}/>}
+      {showPopup && <TargetCreate togglePopup={togglePopup} existingTargets={filteredData} />}
+      {showPopupE && <TargetUpdate togglePopup={togglePopupE} id={details.id} existingTargets={filteredData} />}
       {showPopupD && <TargetDetails togglePopup={togglePopupD} details={details} />}
     </div>
   );

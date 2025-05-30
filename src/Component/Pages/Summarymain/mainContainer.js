@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback } from 'react';
 import { Button } from 'react-bootstrap';
 import { FaPlus } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
-
 import Summary from './summary.js';
 import axios from 'axios';
 import Cookies from 'js-cookie';
@@ -12,12 +11,12 @@ import Loader from '../Layout/loader.js';
 import { toast } from 'react-toastify';
 
 const MainContainer = () => {
+  const token = Cookies.get('accessToken');
 
   const [filterdata, setfilterdata] = useState([]);
   const caseData = useSelector((state) => state.caseData.caseData);
   const [showPopup, setShowPopup] = useState(false);
   const [isLoading, setIsLoading] = useState(true); // Track loading state
-  const token = Cookies.get('accessToken');
 
   const togglePopup = () => {
     setShowPopup((prev) => !prev);
