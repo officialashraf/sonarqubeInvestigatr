@@ -101,7 +101,7 @@ const SearchView = () => {
   const handleSearch = async (e) => {
     e.preventDefault();
     try {
-      if(formData.searchQuery.trim()===""){
+      if(formData.searchQuery===""){
         toast.error("Please enter at least one keyword to search");
         return;
       }
