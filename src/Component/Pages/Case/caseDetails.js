@@ -31,7 +31,7 @@ const CaseDetails = ({ item, togglePopupA }) => {
                                 </tr>
                                 <tr>
                                     {" "}<th>Created By</th>{" "}
-                                    <td>{item.created_by.slice(0, 8)}</td>{" "}
+                                    <td>{item.created_by}</td>{" "}
                                 </tr>
                                 <tr>
                                     {" "}<th>Edited On</th> <td>{item.editedOn}</td>{" "}
