@@ -311,7 +311,7 @@ const CreateCriteria = ({ handleCreateCase }) => {
 
             {/* DatePicker */}
             <div className="mb-3">
-              <label>Daten Picker</label>
+              <label>Date</label>
               <TextField
                 fullWidth
                 className="com mb-3"

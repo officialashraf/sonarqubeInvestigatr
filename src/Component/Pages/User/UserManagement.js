@@ -16,6 +16,7 @@ import UserDetails from "./userDetails";
 import Loader from "../Layout/loader";
 import { FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import ResetPassword from "./resetPassword";
 
 const UserManagement = () => {
 
@@ -27,6 +28,7 @@ const UserManagement = () => {
   const [showAddForm, setShowAddForm] = useState(false);
   const [showDetail, setShowDetail] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
+   const [showResetForm, setShowResetForm] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
@@ -45,6 +47,10 @@ const UserManagement = () => {
     setShowEditForm((prev) => !prev);
   };
 
+    const toggleResetForm = (item) => {
+    setSelectedUser(item);
+    setShowResetForm((prev) => !prev);
+  };
   const fetchUsers = async () => {
     try {
       setLoading(true);
@@ -226,340 +232,354 @@ const UserManagement = () => {
 
 
   return (
-    <div className="data-table-container">
-      <div className="top-header" style={{ marginTop: "10px" }}>
-        <Col xs={1} className="d-flex align-items-center justify-content-flex-start" style={{ width: "350px", minWidth: '350px' }}>
-          <FaArrowLeft style={{
-            cursor: 'pointer', margin: '0px 40px 0px 38px',
-            fontSize: '16px'
-          }} onClick={() => navigate('/dashboard')} />
-          <div className="search-bar1" style={{ width: '100%' }}>
-            <div className="input-group">
-              <input
-                type="text"
-                className="form-control"
-                value={searchTerm}
-                onChange={handleSearch}
-                placeholder="Search"
-              />
+    <>
+      {filteredData && filteredData.length > 0 ?
+        (
+          <div className="data-table-container">
+            <div className="top-header" style={{ marginTop: "10px" }}>
+              <Col xs={1} className="d-flex align-items-center justify-content-flex-start" style={{ width: "350px", minWidth: '350px' }}>
+                <FaArrowLeft style={{
+                  cursor: 'pointer', margin: '0px 40px 0px 38px',
+                  fontSize: '16px'
+                }} onClick={() => navigate('/dashboard')} />
+                <div className="search-bar1" style={{ width: '100%' }}>
+                  <div className="input-group">
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={searchTerm}
+                      onChange={handleSearch}
+                      placeholder="Search"
+                    />
+                  </div>
+                </div>
+              </Col>
+              <div className="header-icons">
+                <button className="add-btn" onClick={togglePopup}>
+                  <Plus size={14} style={{ marginRight: "5px" }} />
+                  Add New User
+                </button>
+              </div>
+            </div>
+
+            <div className="data-table" style={{ height: "550px" }}>
+              <Table striped bordered hover variant="light">
+                <thead>
+                  <tr>
+                    <th>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center"
+                        }}
+                      >
+                        User Id
+                        <span
+                          onClick={() => handleSort("id")}
+                          style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
+                        >
+                          {sortConfig.key === "id" ? (
+                            sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
+                          ) : (
+                            <ArrowDropDown />
+                          )}
+                        </span>
+                      </div>
+                    </th>
+                    <th>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center"
+                        }}
+                      >
+                        Username
+                        <span
+                          onClick={() => handleSort("username")}
+                          style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
+                        >
+                          {sortConfig.key === "username" ? (
+                            sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
+                          ) : (
+                            <ArrowDropDown />
+                          )}
+                        </span>
+                      </div>
+                    </th>
+                    <th>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center"
+                        }}
+                      >
+                        First Name
+                        <span
+                          onClick={() => handleSort("first_name")}
+                          style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
+                        >
+                          {sortConfig.key === "first_name" ? (
+                            sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
+                          ) : (
+                            <ArrowDropDown />
+                          )}
+                        </span>
+                      </div>
+                    </th>
+                    <th>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center"
+                        }}
+                      >
+                        Last Name
+                        <span
+                          onClick={() => handleSort("last_name")}
+                          style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
+                        >
+                          {sortConfig.key === "last_name" ? (
+                            sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
+                          ) : (
+                            <ArrowDropDown />
+                          )}
+                        </span>
+                      </div>
+                    </th>
+                    <th>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center"
+                        }}
+                      >
+                        Role
+                        <span
+                          onClick={() => handleSort("role")}
+                          style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
+                        >
+                          {sortConfig.key === "role" ? (
+                            sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
+                          ) : (
+                            <ArrowDropDown />
+                          )}
+                        </span>
+                      </div>
+                    </th>
+                    <th>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center"
+                        }}
+                      >
+                        Email
+                        <span
+                          onClick={() => handleSort("email")}
+                          style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
+                        >
+                          {sortConfig.key === "email" ? (
+                            sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
+                          ) : (
+                            <ArrowDropDown />
+                          )}
+                        </span>
+                      </div>
+                    </th>
+                    <th>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center"
+                        }}
+                      >
+                        Last Active
+                        <span
+                          onClick={() => handleSort("last_logout")}
+                          style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
+                        >
+                          {sortConfig.key === "last_logout" ? (
+                            sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
+                          ) : (
+                            <ArrowDropDown />
+                          )}
+                        </span>
+                      </div>
+                    </th>
+                    <th>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center"
+                        }}
+                      >
+                        Last Modified
+                        <span
+                          onClick={() => handleSort("created_on")}
+                          style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
+                        >
+                          {sortConfig.key === "created_on" ? (
+                            sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
+                          ) : (
+                            <ArrowDropDown />
+                          )}
+                        </span>
+                      </div>
+                    </th>
+                    <th>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center"
+                        }}
+                      >
+                        Status
+                        <span onClick={() => handleSort('status')} style={{ cursor: 'pointer', display: 'inline-flex', alignItems: 'center' }}>
+                          {sortConfig.key === 'status' ? (
+                            sortConfig.direction === 'asc' ? <ArrowDropUp /> : <ArrowDropDown />
+                          ) : <ArrowDropDown />}
+                        </span>
+                      </div>
+                    </th>
+                    <th>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center"
+                        }}
+                      >
+                        Action
+                        <span
+                          style={{
+                            cursor: "pointer",
+                            display: "inline-flex",
+                            alignItems: "center"
+                          }}
+                        >
+                          <ArrowDropDown />
+                        </span>
+                      </div>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredData &&
+                    filteredData.map(item =>
+                      <tr
+                        key={item.id || Math.random()}
+                        style={{ position: "relative" }}
+                      >
+                        <td>
+                          {`USER${String(item.id).padStart(4, '0')}`}
+                        </td>
+                        <td>
+                          {item.username}
+                        </td>
+                        <td>
+                          {item.first_name || "-"}
+                        </td>
+                        <td>
+                          {item.last_name || "-"}
+                        </td>
+                        <td>
+                          {item.role}
+                        </td>
+                        <td>
+                          {item.email}
+                        </td>
+                        <td>
+                          {(item.last_logout ? item.last_logout.slice(0, 10) : "-")}
+                        </td>
+                        <td>
+                          {
+                            (item.updatedOn ? item.updatedOn.slice(0, 10) : "-")
+                          }
+                        </td>
+                        <td>
+                          <Badge pill bg="dark" className="badge-custom">
+                            <span>
+                              {item.status === "active" ? "Active" : "Deactivate"}
+                            </span>
+                          </Badge>
+                        </td>
+                        <td
+                          style={{
+                            display: "flex",
+                            justifyContent: "end",
+                            alignItems: "center",
+                            textAlign: "center"
+                          }}
+                        >
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "10px"
+                            }}
+                          />
+                          <Dropdown>
+                            <Dropdown.Toggle
+                              className="menu-button"
+                              style={{
+                                background: "none",
+                                border: "none",
+                                cursor: "pointer"
+                              }}
+                            >
+                              <FiMoreVertical size={16} />
+                            </Dropdown.Toggle>
+                            <Dropdown.Menu
+                              className="custom-dropdown-menu"
+                              style={{
+                                minWidth: "150px",
+                                textAlign: "left"
+                              }}
+                            >
+                              <Dropdown.Item
+                                onClick={() => toggleDetails(item)}
+                                style={{ cursor: "pointer" }}
+                              >
+                                Details
+                              </Dropdown.Item>
+                              <Dropdown.Item onClick={() => toggleEditForm(item)}>
+                                Edit
+                              </Dropdown.Item>
+                               <Dropdown.Item onClick={() => toggleResetForm(item.id)}>
+                               Reset Password
+                              </Dropdown.Item>
+                              <Dropdown.Item
+                                onClick={() => confirmDelete(item.id, item.username)}
+                              >
+                                Delete
+                              </Dropdown.Item>
+                            </Dropdown.Menu>
+                          </Dropdown>
+                        </td>
+                      </tr>
+                    )}
+                </tbody>
+              </Table>
             </div>
           </div>
-        </Col>
-        <div className="header-icons">
-          <button className="add-btn" onClick={togglePopup}>
-            <Plus size={14} style={{ marginRight: "5px" }} />
-            Add New User
-          </button>
-        </div>
-      </div>
-
-      <div className="data-table" style={{ height: "550px" }}>
-        <Table striped bordered hover variant="light">
-          <thead>
-            <tr>
-              <th>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center"
-                  }}
-                >
-                  User Id
-                  <span
-                    onClick={() => handleSort("id")}
-                    style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
-                  >
-                    {sortConfig.key === "id" ? (
-                      sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
-                    ) : (
-                      <ArrowDropDown />
-                    )}
-                  </span>
-                </div>
-              </th>
-              <th>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center"
-                  }}
-                >
-                  Username
-                  <span
-                    onClick={() => handleSort("username")}
-                    style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
-                  >
-                    {sortConfig.key === "username" ? (
-                      sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
-                    ) : (
-                      <ArrowDropDown />
-                    )}
-                  </span>
-                </div>
-              </th>
-              <th>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center"
-                  }}
-                >
-                  First Name
-                  <span
-                    onClick={() => handleSort("first_name")}
-                    style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
-                  >
-                    {sortConfig.key === "first_name" ? (
-                      sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
-                    ) : (
-                      <ArrowDropDown />
-                    )}
-                  </span>
-                </div>
-              </th>
-              <th>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center"
-                  }}
-                >
-                  Last Name
-                  <span
-                    onClick={() => handleSort("last_name")}
-                    style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
-                  >
-                    {sortConfig.key === "last_name" ? (
-                      sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
-                    ) : (
-                      <ArrowDropDown />
-                    )}
-                  </span>
-                </div>
-              </th>
-              <th>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center"
-                  }}
-                >
-                  Role
-                  <span
-                    onClick={() => handleSort("role")}
-                    style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
-                  >
-                    {sortConfig.key === "role" ? (
-                      sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
-                    ) : (
-                      <ArrowDropDown />
-                    )}
-                  </span>
-                </div>
-              </th>
-              <th>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center"
-                  }}
-                >
-                  Email
-                  <span
-                    onClick={() => handleSort("email")}
-                    style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
-                  >
-                    {sortConfig.key === "email" ? (
-                      sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
-                    ) : (
-                      <ArrowDropDown />
-                    )}
-                  </span>
-                </div>
-              </th>
-              <th>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center"
-                  }}
-                >
-                  Last Active
-                  <span
-                    onClick={() => handleSort("last_logout")}
-                    style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
-                  >
-                    {sortConfig.key === "last_logout" ? (
-                      sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
-                    ) : (
-                      <ArrowDropDown />
-                    )}
-                  </span>
-                </div>
-              </th>
-              <th>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center"
-                  }}
-                >
-                  Last Modified
-                  <span
-                    onClick={() => handleSort("created_on")}
-                    style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
-                  >
-                    {sortConfig.key === "created_on" ? (
-                      sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
-                    ) : (
-                      <ArrowDropDown />
-                    )}
-                  </span>
-                </div>
-              </th>
-              <th>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center"
-                  }}
-                >
-                  Status
-                  <span onClick={() => handleSort('status')} style={{ cursor: 'pointer', display: 'inline-flex', alignItems: 'center' }}>
-                    {sortConfig.key === 'status' ? (
-                      sortConfig.direction === 'asc' ? <ArrowDropUp /> : <ArrowDropDown />
-                    ) : <ArrowDropDown />}
-                  </span>
-                </div>
-              </th>
-              <th>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center"
-                  }}
-                >
-                  Action
-                  <span
-                    style={{
-                      cursor: "pointer",
-                      display: "inline-flex",
-                      alignItems: "center"
-                    }}
-                  >
-                    <ArrowDropDown />
-                  </span>
-                </div>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredData &&
-              filteredData.map(item =>
-                <tr
-                  key={item.id || Math.random()}
-                  style={{ position: "relative" }}
-                >
-                  <td>
-                    {`USER${String(item.id).padStart(4, '0')}`}
-                  </td>
-                  <td>
-                    {item.username}
-                  </td>
-                  <td>
-                    {item.first_name || "-"}
-                  </td>
-                  <td>
-                    {item.last_name || "-"}
-                  </td>
-                  <td>
-                    {item.role}
-                  </td>
-                  <td>
-                    {item.email}
-                  </td>
-                  <td>
-                    {(item.last_logout ? item.last_logout.slice(0, 10) : "-")}
-                  </td>
-                  <td>
-                    {
-                      (item.updatedOn ? item.updatedOn.slice(0, 10) : "-")
-                    }
-                  </td>
-                  <td>
-                    <Badge pill bg="dark" className="badge-custom">
-                      <span>
-                        {item.status === "active" ? "Active" : "Deactivate"}
-                      </span>
-                    </Badge>
-                  </td>
-                  <td
-                    style={{
-                      display: "flex",
-                      justifyContent: "end",
-                      alignItems: "center",
-                      textAlign: "center"
-                    }}
-                  >
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "10px"
-                      }}
-                    />
-                    <Dropdown>
-                      <Dropdown.Toggle
-                        className="menu-button"
-                        style={{
-                          background: "none",
-                          border: "none",
-                          cursor: "pointer"
-                        }}
-                      >
-                        <FiMoreVertical size={16} />
-                      </Dropdown.Toggle>
-                      <Dropdown.Menu
-                        className="custom-dropdown-menu"
-                        style={{
-                          minWidth: "150px",
-                          textAlign: "left"
-                        }}
-                      >
-                        <Dropdown.Item
-                          onClick={() => toggleDetails(item)}
-                          style={{ cursor: "pointer" }}
-                        >
-                          Details
-                        </Dropdown.Item>
-                        <Dropdown.Item onClick={() => toggleEditForm(item)}>
-                          Edit
-                        </Dropdown.Item>
-                        <Dropdown.Item
-                          onClick={() => confirmDelete(item.id, item.username)}
-                        >
-                          Delete
-                        </Dropdown.Item>
-                      </Dropdown.Menu>
-                    </Dropdown>
-                  </td>
-                </tr>
-              )}
-          </tbody>
-        </Table>
-      </div>
-
-
+        ) : (
+          <div className="resourcesContainer"style={{border:'none'}}>
+            <h3 className="title">Let's Get Started!</h3>
+            <p className="content">Add users to get started</p>
+            <button className='add-btn' title='Add New Case' onClick={togglePopup}><Plus size={20} />Add New Users</button>
+          </div>
+        )
+      }
+{showResetForm && <ResetPassword onClose={toggleResetForm} id={selectedUser}/>}
       {showAddForm && <AddUser onClose={togglePopup} />}
       {showDetail && <UserDetails item={selectedUser} users={users} toggleDetails={toggleDetails} />}
       {showEditForm &&
@@ -567,7 +587,7 @@ const UserManagement = () => {
           togglePopup={toggleEditForm}
           item={selectedUser} // Pass selected user data
         />}
-    </div>
+    </>
   );
 };
 

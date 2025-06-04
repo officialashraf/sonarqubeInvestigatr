@@ -1,5 +1,5 @@
 import { Card, CardContent, Typography, Grid} from "@mui/material";
-import "../../../Analyze/GraphicalData/graphical.css";
+import "../../../../Analyze/GraphicalData/graphical.css";
 import {
   ListAltOutlined,
   ArrowBack,
@@ -9,6 +9,12 @@ import {
 import LineGrapgh from "./criteriaLineChart";
 import KeywordChart from "./criteriaKeywordCloude";
 import SentimentPieChart from "./criteriaSentiment";
+import DateGraph from "./dateGraph";
+import EventGraph from "./eventGarph";
+import PersonGraph from "./personGarph";
+import OrgGraph from "./organisationGraph";
+import LanguageGraph from "./languageGraph";
+import LocationGraph from "./locationGraph";
 
 const Header = ({ title }) =>
   <Grid
@@ -67,14 +73,7 @@ const ComponentThree = () => (
   <Card sx={{ height: "350px", backgroundColor: "lightgray" }}>
     <Header title="Location" />
     <CardContent>
-      <Typography
-        variant="h6"
-        color="textSecondary"
-        align="center"
-        height={250}
-      >
-        {" "}No Data{" "}
-      </Typography>
+      <LocationGraph/>
     </CardContent>
   </Card>);
 const ComponentFour = () => (
@@ -88,7 +87,57 @@ const ComponentFour = () => (
   </Card>
 );
 
+const ComponentFive = () => (
+  <Card
+    sx={{ height: "350px", backgroundColor: "lightgray" }}
+  >
+    <Header title="Time" />
+    <CardContent>
+      <DateGraph/>
+    </CardContent>
+  </Card>
+);
+const ComponentSix = () => (
+  <Card
+    sx={{ height: "350px", backgroundColor: "lightgray" }}
+  >
+    <Header title="Events" />
+    <CardContent>
+      <EventGraph/>
+    </CardContent>
+  </Card>
+);
+const ComponentSeven = () => (
+  <Card
+    sx={{ height: "350px", backgroundColor: "lightgray" }}
+  >
+    <Header title="Persons" />
+    <CardContent>
+      <PersonGraph />
+    </CardContent>
+  </Card>
+);
+const ComponentEight = () => (
+  <Card
+    sx={{ height: "350px", backgroundColor: "lightgray" }}
+  >
+    <Header title="Languages" />
+    <CardContent>
+      <LanguageGraph />
+    </CardContent>
+  </Card>
+);
 
+const ComponentNine = () => (
+  <Card
+    sx={{ height: "350px", backgroundColor: "lightgray",marginBottom:'5rem' }}
+  >
+    <Header title="Organisations" />
+    <CardContent>
+      <OrgGraph />
+    </CardContent>
+  </Card>
+);
 
 const GrapghicalCriteria = () => {
   return (
@@ -107,12 +156,25 @@ const GrapghicalCriteria = () => {
         <Grid item xs={6} p={1} pb={0} >
           <ComponentThree />
         </Grid>
-        <Grid item xs={6} p={1} pb={0} mb={10} >
+        <Grid item xs={6} p={1} pb={0}  >
           <ComponentFour />
         </Grid>
-        <Grid item xs={6} p={1} pb={0} mb={10} >
-          <ComponentThree />
-        </Grid>
+       
+              <Grid item xs={6} p={1} pb={0} >
+                <ComponentFive />
+              </Grid>
+              <Grid item xs={6} p={1} pb={0} >
+                <ComponentSix />
+              </Grid>
+              <Grid item xs={6} p={1} pb={0} >
+                <ComponentSeven />
+              </Grid>
+              <Grid item xs={6} p={1} pb={0} mb={10} >
+                <ComponentEight />
+              </Grid>
+              <Grid item xs={6} p={1} pb={0} mb={10} >
+                <ComponentNine />
+              </Grid>
       </Grid>
 
     </div>

@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { logFilterCount } from '../../../Redux/Action/filterAction.js';
 import Cookies from 'js-cookie';
 import Loader from '../Layout/loader.js';
+import { toast } from 'react-toastify';
 
 const ExistingFilter = ({ selectedFilters, onFilterToggle, onFilterSelect, setShowAddFilter }) => {
   const token = Cookies.get('accessToken');
@@ -92,6 +93,7 @@ const ExistingFilter = ({ selectedFilters, onFilterToggle, onFilterSelect, setSh
         setfilterdata({ ...user, data: sortedFilters });;
 
       } catch (error) {
+        toast.error(error.message)
         console.error('There was an error fetching the data!', error);
       } finally {
         setLoading(false);
@@ -160,8 +162,8 @@ const ExistingFilter = ({ selectedFilters, onFilterToggle, onFilterSelect, setSh
                       style={{ cursor: 'pointer' }}>
                       {filter.name}
                     </span>
-                    <p className="existing-filters-li-p">created_by: {filter.created_by}</p>
-                    <p className="existing-filters-li-p">created_on: {filter.created_on.slice(0, 10)}</p>
+                    <p className="existing-filters-li-p">Created By: {filter.created_by}</p>
+                    <p className="existing-filters-li-p">Created On: {filter.created_on.slice(0, 10)}</p>
                   </li>
                 ))
             ) : (

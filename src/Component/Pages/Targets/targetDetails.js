@@ -100,9 +100,9 @@ const TargetDetails = ({ togglePopup, id }) => {
                   <tbody>
                     <tr> <th>ID</th> <td>{id}</td> </tr>
                     <tr> <th>Created On</th> <td>{formData?.created_on ? formData.created_on.slice(0, 18) : '-'}</td> </tr>
-                    <tr> <th>Created By</th> <td>{formData?.created_by ? formData.created_by.slice(0, 12) : '-'}</td> </tr>
+                    <tr> <th>Created By</th> <td>{formData?.created_by ? formData.created_by : '-'}</td> </tr>
                     <tr> <th>Modified On</th> <td>{formData?.modified_on ? formData.modified_on.slice(0, 18) : '-'}</td> </tr>
-                    <tr> <th>Modified By</th> <td>{formData?.modified_by ? formData.modified_by.slice(0, 12) : '-'}</td> </tr>
+                    <tr> <th>Modified By</th> <td>{formData?.modified_by ? formData.modified_by : '-'}</td> </tr>
                     <tr> <th>Description</th> <td>{formData.description || '-'}</td> </tr>
                     <tr> <th>Synonyms</th> <td>{formData.synonyms.join(', ') || '-'}</td> </tr>
                     <tr> <th>Threat-Score</th> <td>{formData.threat_weightage}</td> </tr>

@@ -11,10 +11,9 @@ const SentimentPieChart = () => {
   let [data, setData] = useState([]);
 
   const caseId = useSelector(state => state.caseData.caseData.id);
+//const COLORS =["#FF0000", "#00FF00","#FF8C00"] // red, green, yellow, dark orange
 
-
-const COLORS = ["#000000", "#555555", "#005A5A"];
-
+const COLORS =["#B22222", "#556B2F",  "#CC5500"]
 
   useEffect(
     () => {
@@ -85,7 +84,7 @@ const COLORS = ["#000000", "#555555", "#005A5A"];
     </ResponsiveContainer>
      : 
         <div className="h-[150px] flex items-center justify-center">
-          <p className="text-gray-500 text-xl">No Data Available</p>
+          <p className="text-gray-500 text-xl">No data available</p>
         </div>
       }
   </div>;

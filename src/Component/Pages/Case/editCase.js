@@ -132,7 +132,8 @@ const EditCase = ({ togglePopup, item }) => {
         originalWatchers.sort().join(",") !== currentWatchers.sort().join(",");
 
       if (areWatchersDifferent && currentWatchers.length > 0) {
-        hasChanged.watchers = currentWatchers.join(", ");
+    hasChanged.watchers = [...currentWatchers]; // ✅ Ensures it stays an array of strings
+
       } else if (currentWatchers.length === 0) {
         hasChanged.watchers = []; // Explicitly set to an empty array if no watchers exist
       }

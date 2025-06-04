@@ -30,7 +30,7 @@ const HeaderFilter = () => {
               <span>ID:{`CASE${String(caseId).padStart(4, '0')}`}</span>
             </Nav.Item>
             <Nav.Item>
-              <span className='caseName'>{caseData.title} </span> <FaFileAlt className="ml-3" />  <Badge pill bg="dark">
+              <span >{caseData.title} </span> <FaFileAlt className="ml-3" />  <Badge pill bg="dark">
                 <span>{caseData.status}</span>
               </Badge>
             </Nav.Item>

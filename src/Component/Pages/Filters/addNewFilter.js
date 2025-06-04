@@ -39,58 +39,58 @@ const AddNewFilter = ({ onClose, filterIde }) => {
   ]);
 
   const [error, setError] = useState({});
-  
-const validateForm = () => {
-  const errors = {};
 
-  // Validate main filter fields
-  if (!filterName.trim()) {
-    errors.name = "Filter name is required";
-  }
+  const validateForm = () => {
+    const errors = {};
 
-  if (!description.trim()) {
-    errors.description = "Description is required";
-  }
-  
-  const sourceErrors = [];
-
-  sources.forEach((source, sourceIndex) => {
-    const sourceError = {};
-
-    if (!source.source || source.source.trim() === "") {
-      sourceError.source = "Source type is required";
-    }
-    if (source.source && source.source !== 'rss feed' && (!source.platform || source.platform.length === 0)) {
-      sourceError.platform = "At least one platform is required";
-    }
-    if (!source.intervalValue || source.intervalValue <= 0) {
-      sourceError.intervalValue = "Interval value must be greater than 0";
-    }
-    if (!source.intervalUnit) {
-      sourceError.intervalUnit = "Interval unit is required";
-    }
-    if (source.source === 'rss feed' && source.urls.length === 0) {
-      sourceError.urls = "At least one RSS URL is required";  
-    }
-    if (source.source !== 'rss feed' && source.keywords.length === 0) {
-      sourceError.keywords = "At least one keyword is required";
-    }
-    if (source.source === 'rss feed' && source.urls.length === 0) {
-      sourceError.urls = "RSS URLs cannot be empty";
+    // Validate main filter fields
+    if (!filterName.trim()) {
+      errors.name = "Filter name is required";
     }
 
-    if (Object.keys(sourceError).length > 0) {
-      sourceErrors[sourceIndex] = sourceError;
+    if (!description.trim()) {
+      errors.description = "Description is required";
     }
-  });
 
-  if (sourceErrors.length > 0) {
-    errors.sources = sourceErrors;
-  }
+    const sourceErrors = [];
+
+    sources.forEach((source, sourceIndex) => {
+      const sourceError = {};
+
+      if (!source.source || source.source.trim() === "") {
+        sourceError.source = "Source type is required";
+      }
+      if (source.source && source.source !== 'rss feed' && (!source.platform || source.platform.length === 0)) {
+        sourceError.platform = "At least one platform is required";
+      }
+      if (!source.intervalValue || source.intervalValue <= 0) {
+        sourceError.intervalValue = "Interval value must be greater than 0";
+      }
+      if (!source.intervalUnit) {
+        sourceError.intervalUnit = "Interval unit is required";
+      }
+      if (source.source === 'rss feed' && source.urls.length === 0) {
+        sourceError.urls = "At least one RSS URL is required";
+      }
+      if (source.source !== 'rss feed' && source.keywords.length === 0) {
+        sourceError.keywords = "At least one keyword is required";
+      }
+      if (source.source === 'rss feed' && source.urls.length === 0) {
+        sourceError.urls = "RSS URLs cannot be empty";
+      }
+
+      if (Object.keys(sourceError).length > 0) {
+        sourceErrors[sourceIndex] = sourceError;
+      }
+    });
+
+    if (sourceErrors.length > 0) {
+      errors.sources = sourceErrors;
+    }
 
 
-  return errors;
-};
+    return errors;
+  };
 
   const markFormAsChanged = () => {
     if (!formChanged) setFormChanged(true);
@@ -186,7 +186,7 @@ const validateForm = () => {
         return newErrors;
       });
     }
-    
+
   };
 
   const handleDeleteKeyword = (sourceIndex, keyIndex) => {
@@ -275,7 +275,7 @@ const validateForm = () => {
       const isEditable = (String(loggedInUserId) === String(filterDetails.created_by));
       console.log(isEditable)
       setIsEditable(isEditable);
-      isEditable ? toast.info("You can edit this filter") : toast.error("You don't have permission to edit this filter");
+      // isEditable ? toast.info("You can edit this filter") : toast.error("You don't have permission to edit this filter");
     }
   }, [filterDetails, loggedInUserId]);
 
@@ -346,17 +346,12 @@ const validateForm = () => {
   }
 
   const handleSaveFilter = async () => {
-    if (!isEditable) {
-      toast.error("You don't have permission to edit this filter");
-      return;
-    }
-
     const validationErrors = validateForm();
     if (Object.keys(validationErrors).length > 0) {
       setError(validationErrors);
       return;
     }
-    
+
 
     console.log("saources", sources)
     console.log("saourcesID", sources.id)
@@ -443,7 +438,7 @@ const validateForm = () => {
       }
     } catch (error) {
       console.error('Error posting data:', error);
-      toast.error('Error during filter creation: ' + (error.response?.data?.detail || error.message));
+      toast.error((error.response?.data?.detail || error.message)|| 'Error during filter creation' );
     }
   };
   console.log("filetraddnew", filterId)
@@ -454,6 +449,7 @@ const validateForm = () => {
       toast.info("At least one source is required");
     }
   };
+  console.log("souerce",sources)
   return (
     <div className="p-1">
       {/* {filterDetails?.id && <p>Filter ID: {filterDetails.id}</p>} */}
@@ -488,8 +484,8 @@ const validateForm = () => {
             value={description}
             onChange={(e) => {
               setDescription(e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1));
-              setFormChanged(true); 
-              setError(prev => ({ ...prev, description: '' })); 
+              setFormChanged(true);
+              setError(prev => ({ ...prev, description: '' }));
             }}
             disabled={!isEditable}
           />
@@ -567,6 +563,7 @@ const validateForm = () => {
                           value={source.intervalUnit}
                           onChange={(e) => handleIntervalUnitChange(sourceIndex, e.target.value)}
                           style={{ maxWidth: '150px' }}
+                          disabled={!isEditable}
                         >
                           <option value="" disabled selected>Units</option>
                           <option value="seconds">Seconds</option>
@@ -584,7 +581,7 @@ const validateForm = () => {
                   )}
                   {source.source && (
                     <div className="col-md-6">
-                      <Form.Label>Keywords</Form.Label>
+                    <Form.Label>{ source.source === "social media profile" ? "User ID" : "Keywords"}</Form.Label>
                       <Form.Control
                         type="text"
                         placeholder="Enter keyword and press Enter"
@@ -593,7 +590,7 @@ const validateForm = () => {
                         onKeyDown={(e) => handleKeywordKeyDown(sourceIndex, e)}
                         disabled={!isEditable}
                       />
-                      <div className="mt-2">
+                      <div className="mt-2" style={{ display: "flex", flexWrap: "wrap", gap: "5px" }}>
                         {source.keywords.map((keyword, keyIndex) => (
                           <Badge
                             key={keyIndex}
@@ -601,13 +598,14 @@ const validateForm = () => {
                             bg="dark"
                             className="me-2 mb-1 d-inline-flex align-items-center"
                             style={{
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              minWidth: `${keyword.length * 10}px`,
-                              maxWidth: '100%',
-                              whiteSpace: 'nowrap',
-                              overflow: 'hidden',
-                              textOverflow: 'ellipsis',
+                              display: "inline-flex",
+                              alignItems: "center",
+                              minWidth: "auto", /*  Removes hard minWidth */
+                              maxWidth: "100%", /*  Ensures full width use */
+                              whiteSpace: "normal", /*  Allows text wrapping */
+                              wordBreak: "break-word", /*  Breaks long words */
+                              overflowWrap: "break-word", /*  Ensures smooth wrapping */
+                              // padding: "5px 10px" /*  Adds better spacing */
                             }}
                           >
                             {keyword}
@@ -619,10 +617,9 @@ const validateForm = () => {
                               ×
                             </Button>
                           </Badge>
-
                         ))}
-
                       </div>
+
                       {error.sources?.[sourceIndex]?.keywords && (
                         <p style={{ color: 'red', margin: 0 }}>{error.sources[sourceIndex].keywords}</p>
                       )}
@@ -648,7 +645,7 @@ const validateForm = () => {
                         onKeyDown={(e) => handleUrlKeyDown(sourceIndex, e)}
                         disabled={!isEditable}
                       />
-                      <div className="mt-2">
+                      <div className="mt-2"  style={{ display: "flex", flexWrap: "wrap", gap: "5px" }}>
                         {source.urls.filter((url) => url.trim() !== "").map((url, urlIndex) => (
                           <Badge
                             key={urlIndex}
@@ -656,13 +653,14 @@ const validateForm = () => {
                             bg="dark"
                             className="me-2 mb-2 d-inline-flex align-items-center"
                             style={{
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              minWidth: `${url.length * 10}px`,
-                              maxWidth: '100%',
-                              whiteSpace: 'nowrap',
-                              overflow: 'hidden',
-                              textOverflow: 'ellipsis',
+                              display: "inline-flex",
+                              alignItems: "center",
+                              minWidth: "auto", /*  Removes hard minWidth */
+                              maxWidth: "100%", /*  Ensures full width use */
+                              whiteSpace: "normal", /*  Allows text wrapping */
+                              wordBreak: "break-word", /*  Breaks long words */
+                              overflowWrap: "break-word", /*  Ensures smooth wrapping */
+                              // padding: "5px 10px" /*  Adds better spacing */
                             }}
                           >
                             {url}
@@ -699,10 +697,10 @@ const validateForm = () => {
             <button
               type="button"
               // className="add-new-filter-button"
-              className="create-btn"
+              className="add-new-filter-button"
               style={{ marginLeft: '5px' }}
               onClick={handleSaveFilter}
-            // disabled={!isEditable}
+              // disabled={!isEditable}
               disabled={!formChanged || !isEditable}
             >
               {filterDetails?.id ? 'Update Filter' : 'Save Filter'}

@@ -211,7 +211,9 @@ const RolesPermission = () => {
     }
 
     return (
-        <div className="data-table-container">
+        <>
+{filteredData && filteredData.length>0?
+       (<div className="data-table-container">
             <div className="top-header" style={{ marginTop: "10px" }}>
                 <Col xs={1} className="d-flex align-items-center justify-content-flex-start" style={{ width: "300px", minWidth: "300px" }}>
                     <FaArrowLeft
@@ -301,11 +303,20 @@ const RolesPermission = () => {
                     </tbody>
                 </Table>
             </div>
+            </div>
+             ) : (
+                      <div className="resourcesContainer"style={{border:'none'}}>
+                        <h3 className="title">Let's Get Started!</h3>
+                        <p className="content">Add roles to get started</p>
+                        <button className='add-btn' title='Add New Case' onClick={togglePopup}><Plus size={20} />Add New Roles</button>
+                      </div>
+                    )
+                 }
             {showPopup && <AddRole togglePopup={togglePopup} />}
             {showPopupB && <DetailsPermission togglePopup={togglePopupB} details={popupDetails} />}
             {showPopupC && <EditRole togglePopup={togglePopupC} details={popupDetails} />}
             {showPopupD && <AssignRole togglePopup={togglePopupD} details={popupDetails} />}
-        </div>
+        </>
     );
 };
 
