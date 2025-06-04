@@ -35,7 +35,7 @@
 .custom-nav {
   display: flex;
   align-items: center;
-  gap: 15px; /* Space between icons */
+  gap: 5px; /* Space between icons */
 }
 
 /* ✅ Remove Dropdown Arrow */

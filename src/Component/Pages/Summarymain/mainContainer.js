@@ -57,7 +57,7 @@ const MainContainer = () => {
     (filter) => filter["case id"]?.includes(String(caseData?.id))
   );
 
-  const isCaseInProgress = caseData?.status === 'In Progress';
+  const isCaseInProgress = caseData?.status === ('In Progress' || 'On Hold'|| 'Closed');
 
   const isFilterZero = filterdata.length > 0;
 

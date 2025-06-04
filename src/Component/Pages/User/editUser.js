@@ -124,9 +124,9 @@ const EditUser = ({ togglePopup, item }) => {
       if (payloadData.contactNumber && payloadData.contactNumber !== item.contact_no) {
         hasChanged.contact_no = payloadData.contactNumber;
       } 
+
       if (payloadData.role && payloadData.role !== item.role)
          { hasChanged.role = payloadData.role; }
-
 
       // If nothing has changed 
       if (Object.keys(hasChanged).length === 0) {

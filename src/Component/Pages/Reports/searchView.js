@@ -101,7 +101,7 @@ const SearchView = () => {
   const handleSearch = async (e) => {
     e.preventDefault();
     try {
-      if(formData.searchQuery.trim()===""){
+      if(formData.searchQuery===""){
         toast.error("Please enter at least one keyword to search");
         return;
       }
@@ -191,11 +191,11 @@ const SearchView = () => {
                   <Search />
                 </InputAdornment>
               ),
-              endAdornment: (
-                <button position="end" style={{ border: 'none', backgroundColor: 'white' }}>
-                  <Send onClick={handleSearch} />
-                </button>
-              ),
+              // endAdornment: (
+              //   <button position="end" style={{ border: 'none', backgroundColor: 'white' }}>
+              //     <Send onClick={handleSearch} />
+              //   </button>
+              // ),
               style: {
                 height: '38px',
                 padding: '0 8px',

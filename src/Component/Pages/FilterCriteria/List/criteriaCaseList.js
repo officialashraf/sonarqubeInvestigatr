@@ -230,7 +230,7 @@ const CriteriaCaseTable = () => {
                   <td colSpan={searchResults.length > 0 ?
                     [...new Set(searchResults.flatMap(item => Object.keys(item)))].length : 1}
                     className="text-center">
-                    No Data Available
+                    No data available
                   </td>
                 </tr>
               )}

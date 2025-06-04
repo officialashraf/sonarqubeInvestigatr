@@ -4,7 +4,7 @@ import WordCloud from 'react-d3-cloud';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import Cookies from "js-cookie";
-import Loader from '../../../Layout/loader';
+import Loader from '../../../../Layout/loader';
 import {  ResponsiveContainer } from 'recharts';
 
 const CriteriaKeywordChart = () => {

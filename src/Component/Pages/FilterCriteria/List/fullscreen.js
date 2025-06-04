@@ -15,7 +15,7 @@ import { setKeywords, setPage, setSearchResults } from '../../../../Redux/Action
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { ListAltOutlined, PieChart } from "@mui/icons-material";
-import GrapghicalCriteria from './CriteriaGraphicaView/grapghicalCriteria';
+import GrapghicalCriteria from './CriteriaGraphicaView/Grapghs/grapghicalCriteria';
 // import Loader from '../../Layout/loader';
 
 const SearchResults = () => {
@@ -42,7 +42,7 @@ const SearchResults = () => {
   const [searchChips, setSearchChips] = useState([]);
   const [enterInput, setEnterInput] = useState([])
   const [isPopupVisible, setIsPopupVisible] = useState(false);
-  const [activeComponent, setActiveComponent] = useState('list');
+  const [activeComponent, setActiveComponent] = useState('graph');
 
   const handleComponentToggle = (componentName) => {
     setActiveComponent(componentName);
@@ -258,14 +258,15 @@ const SearchResults = () => {
 
       </div>
       <div className="col-auto  d-flex align-items-center gap-1 justify-content-end  me-2">
-        <PieChart
-          className="icon-style"
-          onClick={() => handleComponentToggle("graph")}
-        />
-        <ListAltOutlined
-          className="icon-style"
-          onClick={() => handleComponentToggle("list")}
-        />
+<PieChart
+    className={`icon-style ${activeComponent === "graph" ? "active-icon" : ""}`}
+    onClick={() => handleComponentToggle("graph")}
+/>
+<ListAltOutlined
+    className={`icon-style ${activeComponent === "list" ? "active-icon" : ""}`}
+    onClick={() => handleComponentToggle("list")}
+/>
+
       </div>
       <div className="search-results" style={{ height: 'auto' }}>
 

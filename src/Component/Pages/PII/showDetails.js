@@ -8,22 +8,27 @@ import { useDispatch } from 'react-redux';
 import { searchSuccess } from "../../../Redux/Action/piiAction";
 import { toast } from 'react-toastify';
 import validator from "validator";
+import Cookies from 'js-cookie';
+import Loader from "../Layout/loader";
 
 const ShowDetails = () => {
   const dispatch = useDispatch();
+  const token = Cookies.get('accessToken');
   const [query, setQuery] = useState("");
-  const [searchType, setSearchType] = useState("Phone number");
+  const [loading, setLoading] = useState(false);
+  const [searchType, setSearchType] = useState("phone number");
 
   const handleSearch = async () => {
+
     if (!query.trim()) return;
     console.log("Seartype", searchType)
 
-    if (searchType === "Email") {
+    if (searchType === "email") {
       if (!validator.isEmail(query) || !query.endsWith("@gmail.com")) {
         toast.error("Please enter a valid email address");
         return;
       }
-    } else if (searchType === "Phone number") {
+    } else if (searchType === "phone number") {
       // Remove all non-digit characters
 
       // Check if the query contains any alphabet character
@@ -34,22 +39,31 @@ const ShowDetails = () => {
         return;
       }
     }
-
-    let url = searchType === "Email"
+    setLoading(true);
+    let url = searchType === "email"
       ? `${window.runtimeConfig.REACT_APP_API_OSINT_MAN}/api/osint-man/v1/email/${query}`
       : `${window.runtimeConfig.REACT_APP_API_OSINT_MAN}/api/osint-man/v1/phone-no/${query}`;
+
 
     url = encodeURI(url); // Encode URL to handle special characters
 
     try {
       console.log("Final URL:", url);
-      const response = await axios.get(url);
+      const response = await axios.get(url, { // Pass headers inside request
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        }
+      });
       // setData(response.data);
       dispatch(searchSuccess(response.data));
       console.log("data", response.data);
     } catch (err) {
       console.log("error", err.message);
+      toast.error(err.response?.data?.detail || 'Failed to search');
       console.log("full error", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -58,8 +72,8 @@ const ShowDetails = () => {
       <div className="search-bar-container">
         <div className="search-bar">
           <select className="search-dropdown" value={searchType} onChange={(e) => setSearchType(e.target.value)}>
-            <option value="Phone number">Phone</option> {/* Default selected */}
-            <option value="Email">Email</option>
+            <option value="phone number">Phone</option> {/* Default selected */}
+            <option value="email">Email</option>
           </select>
 
           <input
@@ -84,12 +98,17 @@ const ShowDetails = () => {
         </div>
         <div className="search-results-container">
           <div className="searchresult"  >
-
-            <div className="wrapper">
-              <ProfileDetails />
-              <UserCards />
-            </div>
-
+             <div className="wrapper">
+            {loading ? (
+              <Loader />
+            ) : (<>
+                <ProfileDetails />
+                <UserCards />
+                </>
+             
+            )
+            }
+             </div>
           </div>
         </div>
 

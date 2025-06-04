@@ -36,8 +36,8 @@ h1 {
 }
 
 .login-form .form-control {
-  background-color: grey;
-  color: white;
+  /* background-color: grey; */
+  color: black;
   border: none;
   margin-bottom: 15px;
   font-size: 12px;
@@ -66,6 +66,7 @@ h1 {
 }
 .login-button:hover {
   background-color: #282828;
+  color: white;
 }
 
 .labell {

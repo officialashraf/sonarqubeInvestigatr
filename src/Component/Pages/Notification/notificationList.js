@@ -149,7 +149,7 @@ const NotificationList = ({ isOpen, setIsOpen }) => {
             setNotifications(response.data);
             
         } catch (error) {
-             toast.error(error.response.data.details||"Error fetching Notifications")
+             toast.error(error.response?.data?.details||"Error fetching Notifications")
             console.error("❌ Error fetching Notifications:", error);
             console.error("Error details:", error.response?.data);
         } finally {
@@ -237,7 +237,7 @@ const NotificationList = ({ isOpen, setIsOpen }) => {
                 align="end" 
                 show={isOpen} 
                 onToggle={(isOpen) => setIsOpen(isOpen)}
-                style={{ display: isOpen ? "block" : "none", height: "500px", overflow: "auto" }}
+                style={{ display: isOpen ? "block" : "none", height: "500px", overflowY: "auto" }}
             >
                 <div style={{ padding: '10px', borderBottom: '1px solid #eee', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <button 
@@ -267,8 +267,10 @@ const NotificationList = ({ isOpen, setIsOpen }) => {
                 </div>
 
                 {loading ? (
-                    <NavDropdown.Item>
-                        <span><Loader/></span>
+                    <NavDropdown.Item
+                     className="nav-dropdown-item"
+                     >  
+                       <Loader/>
                     </NavDropdown.Item>
                 ) : notifications.length === 0 ? (
                     <NavDropdown.Item>

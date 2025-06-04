@@ -90,7 +90,7 @@ const Summary = ({ filters }) => {
       setShowPopup((prev) => !prev); // fallback toggle
     }
   };
-
+const COLORS =["#B22222", "#556B2F",  "#CC5500"]
   // const togglePopup = () => {
   //   setShowPopup((prev) => !prev);
   // };
@@ -125,7 +125,7 @@ const Summary = ({ filters }) => {
                     label={({ name }) => name}
                   >
                     {pieData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill="#333" />
+                      <Cell key={`cell-${index}`}  fill={COLORS[index % COLORS.length]} />
                     ))}
                   </Pie>
                   <Tooltip formatter={(value) => `Total: ${value}`} />
@@ -165,7 +165,7 @@ const Summary = ({ filters }) => {
             {/* Table */}
             <Box className="box">
               <TableContainer component={Paper} width="100%" height={300}>
-                <Table width={340} height={300}>
+                <Table width={300} height={300}>
                   <TableHead >
                     <TableRow>
                       <TableCell >Type</TableCell>

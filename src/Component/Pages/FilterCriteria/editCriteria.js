@@ -289,7 +289,7 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
       }
     } catch (error) {
       console.error('Error updating criteria:', error);
-      toast.error('Failed to update criteria: ' + (error.response?.data?.message || error.message));
+      toast.error( (error.response?.data?.detail || error.message) || 'Failed to update criteria' );
     }
   };
 

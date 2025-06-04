@@ -123,6 +123,9 @@ const CreateCase = ({ togglePopup }) => {
         description: payloadData.description,
         assignee: payloadData.assignee,
  
+
+
+        
 };
       if (payloadData.watchers) {
         const watcherList =

@@ -52,7 +52,7 @@ const Header = ({ title }) =>
 
 const ComponentOne = () => (
   <Card sx={{ height: "235px", backgroundColor: "lightgray" }}>
-    <Header title="Timeline" />
+    <Header title="Timelines" />
     <CardContent>
       <LineGraph />
     </CardContent>
@@ -71,7 +71,7 @@ const ComponentTwo = () => (
 
 const ComponentThree = () => (
   <Card sx={{ height: "350px", backgroundColor: "lightgray" }}>
-    <Header title="Location" />
+    <Header title="Locations" />
     <CardContent>
       <Typography
         variant="h6"
@@ -88,7 +88,7 @@ const ComponentFour = () => (
   <Card
     sx={{ height: "350px", backgroundColor: "lightgray" }}
   >
-    <Header title="Sentiment" />
+    <Header title="Sentiments" />
     <CardContent>
       <SentimentPieChart height={250} />
     </CardContent>
@@ -98,7 +98,7 @@ const ComponentFive = () => (
   <Card
     sx={{ height: "350px", backgroundColor: "lightgray" }}
   >
-    <Header title="Date" />
+    <Header title="Time" />
     <CardContent>
       <DateBar/>
     </CardContent>
@@ -128,7 +128,7 @@ const ComponentEight = () => (
   <Card
     sx={{ height: "350px", backgroundColor: "lightgray" }}
   >
-    <Header title="Language" />
+    <Header title="Languages" />
     <CardContent>
       <LanguageBar />
     </CardContent>
@@ -139,7 +139,7 @@ const ComponentNine = () => (
   <Card
     sx={{ height: "350px", backgroundColor: "lightgray",marginBottom:'5rem' }}
   >
-    <Header title="Organisation" />
+    <Header title="Organisations" />
     <CardContent>
       <OrgBar />
     </CardContent>

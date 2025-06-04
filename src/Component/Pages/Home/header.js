@@ -12,6 +12,7 @@ import NotificationList from '../Notification/notificationList';
 import useWebSocket from "../../../utils/WebSocket/useWebsocket";
 import { clearUsername, setUsername } from "../../../Redux/Action/userAction";
 import { disconnectWebSocket } from '../../../utils/WebSocket/websocket';
+import { CLEAR_SEARCH } from '../../../Redux/Constants/piiConstant';
 
 const Header = ({ title }) => {
   const dispatch = useDispatch();
@@ -22,6 +23,7 @@ const Header = ({ title }) => {
   const [loggedInUserId, setLoggedInUserId] = useState('');
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [username, setusername] = useState('')
 
   useEffect(() => {
     if (token) {
@@ -31,6 +33,7 @@ const Header = ({ title }) => {
         
         if (decodedToken?.sub) {
           dispatch(setUsername(decodedToken.sub));
+          setusername(decodedToken.sub)
         }
         
         console.log("Token decoded successfully for user:", decodedToken.sub);
@@ -92,7 +95,8 @@ const Header = ({ title }) => {
       // Always perform client-side cleanup
       Cookies.remove('accessToken');
       Cookies.remove('refreshToken');
-      
+      dispatch({ type: CLEAR_SEARCH }); // ✅ Triggers reset
+
       // Clear any remaining state
       setLoggedInUserId('');
       setIsPopupOpen(false);
@@ -142,13 +146,18 @@ const Header = ({ title }) => {
                   {notificationCount}
                 </span>
               )}
-            </div>
-
+            
+        </div>
+   
             <NavDropdown
               title={<PersonCircle size={20} color="white" />}
               id="profile-dropdown"
               align="end"
             >
+            
+              <NavDropdown.Item disabled>
+                 {username}
+              </NavDropdown.Item>
               <NavDropdown.Item 
                 onClick={handleLogout}
                 disabled={isLoggingOut}

@@ -123,7 +123,7 @@ const TabulerData = () => {
           </Table>
         ) : (
           <p className="text-center" style=
-            {{ margin: '20px 0px', border: '1px solid #ccc', }}>No data available.</p>
+            {{ margin: '20px 0px', border: '1px solid #ccc', }}>No data available</p>
         )}
       </div>
 
