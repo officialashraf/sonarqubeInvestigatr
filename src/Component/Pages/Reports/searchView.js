@@ -191,11 +191,11 @@ const SearchView = () => {
                   <Search />
                 </InputAdornment>
               ),
-              endAdornment: (
-                <button position="end" style={{ border: 'none', backgroundColor: 'white' }}>
-                  <Send onClick={handleSearch} />
-                </button>
-              ),
+              // endAdornment: (
+              //   <button position="end" style={{ border: 'none', backgroundColor: 'white' }}>
+              //     <Send onClick={handleSearch} />
+              //   </button>
+              // ),
               style: {
                 height: '38px',
                 padding: '0 8px',

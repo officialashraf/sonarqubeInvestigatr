@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Table, InputGroup, FormControl, Dropdown, Badge } from 'react-bootstrap';
-import { Search, Plus } from 'react-bootstrap-icons';
+import { Table, InputGroup, FormControl, Dropdown, Badge, Button } from 'react-bootstrap';
+import { Search, Plus, FileEarmarkPlus } from 'react-bootstrap-icons';
 import axios from 'axios';
 import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material';
 import './table.css';
@@ -216,8 +216,9 @@ const DataTable = () => {
 
 
   return (
-    <>
-      <div className="data-table-container">
+<>{filteredData && filteredData.length> 0 ?
+  (
+          <div className="data-table-container"style={{border:'none'}}>
         <div className="top-header">
           <InputGroup className="search-bar1">
             <InputGroup.Text className="search-icon"><Search /></InputGroup.Text>
@@ -333,11 +334,24 @@ const DataTable = () => {
               {filteredData && filteredData.map((item, index) => (
                 <tr key={item.id}  >
 
-                  <td onClick={() => onFieldClick(item)} style={{ cursor: 'pointer' }}>{`CASE${String(item.id).padStart(4, '0')}`}</td>
+                  <td>
+                    <a
+                    title='Click here'
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault(); // Prevents page navigation
+                        onFieldClick(item);
+                      }}
+                      style={{ textDecoration: "underline",borderBottom:'1px solid blue', color: "blue", cursor: "pointer" }} // Link styling
+                    >
+                      {`CASE${String(item.id).padStart(4, "0")}`}
+                    </a>
+                  </td>
+
                   <td>{item.title}</td>
                   <td>{item.description}</td>
                   <td>{item.created_on.slice(0, 10)}</td>
-                  <td>{item.created_by.slice(0, 8)}</td>
+                  <td>{item.created_by}</td>
                   <td>{item.assignee}</td>
 
                   <td>
@@ -372,10 +386,18 @@ const DataTable = () => {
           </Table>
         </div>
       </div>
+    ): (
+      <div className="resourcesContainer"style={{border:'none'}}>
+        <h3 className="title">Let's Get Started!</h3>
+        <p className="content">Add cases to get started</p>
+      <button className='add-btn' title='Add New Case' onClick={togglePopup}><Plus size={20} />Add New Case</button>
+      </div>
+    )
+}
       {showPopup && <CreateCase togglePopup={togglePopup} />}
       {showPopupB && <EditCase item={selectedData} togglePopup={togglePopupB} />}
       {showPopupA && <CaseDetails item={selectedData} users={users} togglePopupA={togglePopupA} />}
-
+     
     </>
   );
 };

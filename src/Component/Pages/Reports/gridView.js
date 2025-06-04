@@ -5,9 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import "../Layout/pagination.css";
 import {  fetchSummaryData} from "../../../Redux/Action/filterAction";
 import Loader from "../Layout/loader";
-import { FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { Col } from "react-bootstrap";
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
@@ -33,7 +31,6 @@ const GridView = () => {
   const [currentPage, setCurrentPage] = useState(page || 1);
   const [loading, setLoading] = useState(false); // Initialize as false to prevent loader at first load
   const [dataAvailable, setDataAvailable] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
   const [isInitialLoad, setIsInitialLoad] = useState(true); // Track initial load
   const [data, setData] = useState([]);
 
@@ -126,13 +123,6 @@ const GridView = () => {
     }));
   };
 
-  const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
-    // You can implement search functionality here
-  };
-  const filteredData = data.filter((item) =>
-    Object.values(item).some((value) => typeof value === "string" && value.toLowerCase().includes(searchTerm.toLowerCase()))
-  );
 
   // Calculate pagination
   const pages = [];
@@ -173,30 +163,10 @@ const GridView = () => {
 
   return (
     <>
-      <div className="top-header" style={{ marginTop: "10px" }}>
-        <Col xs={1} className="d-flex align-items-center justify-content-flex-start" style={{ width: "350px", minWidth: '350px' }}>
-          <FaArrowLeft
-            style={{
-              cursor: 'pointer', margin: '0px 40px 0px 38px',
-              fontSize: '16px'
-            }}
-            onClick={() => navigate('/cases')}
-          />
-          <div className="search-bar1" style={{ width: '100%' }}>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Search"
-              value={searchTerm}
-              onChange={handleSearch}
-            />
-          </div>
-        </Col>
-      </div>
-
+      
       <div
         className="data-table"
-        style={{ height: '420px', marginTop: '0px' }}
+        style={{ height: '420px', marginTop: '12px' }}
       >
         {!dataAvailable ? (
           <Table striped bordered hover variant='light'>
@@ -204,7 +174,7 @@ const GridView = () => {
             <tbody>
               <tr>
                 <td className="text-center">
-                  No Data Available
+                  No data available
 
                 </td>
               </tr>
@@ -228,8 +198,8 @@ const GridView = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredData.length > 0 ? (
-                filteredData.map((item, rowIndex) => (
+              {data.length > 0 ? (
+                data.map((item, rowIndex) => (
                   <tr key={rowIndex}>
                     {[...new Set(data.flatMap(item => Object.keys(item)))].map((key, colIndex) => (
                       <td key={colIndex} className="fixed-td">

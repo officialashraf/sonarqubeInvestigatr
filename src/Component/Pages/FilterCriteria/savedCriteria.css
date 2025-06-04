@@ -175,3 +175,8 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
+.active-icon {
+    color: white !important; /*  Darkens icon */
+    filter: brightness(0.6); /*  Reduces brightness */
+    transform: scale(1.1); /*  Slight enlargement */
+}

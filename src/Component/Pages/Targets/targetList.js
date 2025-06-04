@@ -202,6 +202,8 @@ const TargetList = () => {
   }
 
   return (
+    <>{filteredData &&
+              filteredData.length>0?(
     <div className="data-table-container">
       <div className="top-header" style={{ marginTop: "10px" }}>
         <Col
@@ -546,10 +548,18 @@ const TargetList = () => {
           </tbody>
         </Table>
       </div>
+         </div> ): (
+      <div className="resourcesContainer"style={{border:'none'}}>
+        <h3 className="title">Let's Get Started!</h3>
+        <p className="content">Add targets to get started</p>
+      <button className='add-btn' title='Add New Case' onClick={togglePopup}><Plus size={20} />Add New Target</button>
+      </div>
+    )
+}
       {showPopup && <TargetCreate togglePopup={togglePopup}  existingTargets={filteredData}/>}
       {showPopupE && <TargetUpdate togglePopup={togglePopupE} id={details.id} existingTargets={filteredData}/>}
       {showPopupD && <TargetDetails togglePopup={togglePopupD} id={details.id} />}
-    </div>
+</>
   );
 };
 

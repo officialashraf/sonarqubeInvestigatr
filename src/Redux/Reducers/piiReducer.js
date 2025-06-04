@@ -2,6 +2,7 @@ import {
   SEARCH_REQUEST,
   SEARCH_SUCCESS,
   SEARCH_FAILURE,
+  CLEAR_SEARCH,
 } from "../Constants/piiConstant";
 
 const initialState = {
@@ -17,6 +18,8 @@ const searchReducer1 = (state = initialState, action) => {
       return { ...state, loading: false, data: action.payload };
     case SEARCH_FAILURE:
       return { ...state, loading: false, error: action.payload };
+       case CLEAR_SEARCH: 
+      return { ...initialState }
     default:
       return state;
   }

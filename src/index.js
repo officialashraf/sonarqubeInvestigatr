@@ -21,7 +21,7 @@ root.render(
         <App />
         <ToastContainer
           position="top-center" // Position of the toasts
-          autoClose={2000} // Auto close after 2000ms
+          autoClose={5000} // Auto close after 2000ms
           closeOnClick={true} // Close when clicked
           transition={Zoom} // Zoom effect for transitions
           pauseOnHover // Pause timer when hovered

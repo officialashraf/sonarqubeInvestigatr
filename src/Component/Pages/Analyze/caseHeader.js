@@ -6,7 +6,7 @@ import { FaArrowLeft } from 'react-icons/fa';
 import "./tabulerHeader.css";
 import { useNavigate } from "react-router-dom";
 
-const CaseHeader = ({ onIconClick }) => {
+const CaseHeader = ({ onIconClick, activeView }) => {
 
   const caseData = useSelector((state) => state.caseData.caseData);
   const navigate = useNavigate();
@@ -50,19 +50,18 @@ const CaseHeader = ({ onIconClick }) => {
         >
           {/* <div className="col-auto ms-auto ml-3 d-flex justify-content-center align-items-center"  style={{ marginRight:"5px", height:"28px"}}> */}
           <div className="col-auto ms-auto d-flex align-items-center gap-3">
-            <FaPhotoVideo
-              className="icon-styles"
-              onClick={() => onIconClick("resources")}
-            />
             <PieChart
-              className="icon-style"
+              className={`icon-style ${activeView === 'graphicalData' ? 'active-icon' : ''}`}
               onClick={() => onIconClick("graphicalData")}
             />
+                        <FaPhotoVideo
+              className={`icon-style ${activeView === 'resources' ? 'active-icon' : ''}`}
+              onClick={() => onIconClick("resources")}
+            />
             <ListAltOutlined
-              className="icon-style"
+              className={`icon-style ${activeView === 'caseData' ? 'active-icon' : ''}`}
               onClick={() => onIconClick("caseData")}
             />
-
           </div>
         </div>
 

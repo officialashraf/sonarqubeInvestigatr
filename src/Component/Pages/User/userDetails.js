@@ -45,7 +45,7 @@ const UserDetails = ({ item, users, toggleDetails }) => {
                 <th>Status</th>
                 <td>
                   <span className={item.status === "Active" ? "status-active-1" : "status-inactive"}>
-                    ● {item.status}
+                  {item.status}
                   </span>
                 </td>
               </tr>

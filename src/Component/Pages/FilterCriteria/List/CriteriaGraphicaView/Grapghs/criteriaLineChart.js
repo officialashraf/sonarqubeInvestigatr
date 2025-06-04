@@ -3,9 +3,9 @@ import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { Box, Slider } from '@mui/material';
 import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, CartesianGrid, ResponsiveContainer, ReferenceLine } from 'recharts';
-import "../../../Analyze/GraphicalData/lineChart.css";
+import "../../../../Analyze/GraphicalData/lineChart.css";
 import Cookies from "js-cookie";
-import Loader from '../../../Layout/loader';
+import Loader from '../../../../Layout/loader';
 
 const CriteriaLineChart = () => {
 

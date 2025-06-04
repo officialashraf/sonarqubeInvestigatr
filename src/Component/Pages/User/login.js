@@ -103,7 +103,7 @@ const LoginPage = () => {
                 <Col md={6} className="right-column">
                     <Form className="login-form" onSubmit={handleLogin} noValidate>
                         <InputField
-                            label="User Name *"
+                            label="Username *"
                             type="text"
                             value={formData.username}
                             onChange={handleChange}
@@ -127,11 +127,8 @@ const LoginPage = () => {
                         />
                         {error.password && <p style={{ color: "red", margin: '0px' }}>{error.password}</p>}
 
-                        <div className="d-flex justify-content-between mt-2">
-                            <a href="/forgotPassword" className="forgot-password-link">
-                                Forgot Password?
-                            </a>
-                            <button type="submit" className="login-button"
+                        <div className="d-flex justify-content-end mt-2">
+                             <button type="submit" className="login-button"
                             // disabled={isButtonDisabled}
                             >
                                 Login

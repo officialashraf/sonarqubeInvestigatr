@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import Cookies from "js-cookie";
-import Loader from '../../../Layout/loader';
+import Loader from '../../../../Layout/loader';
 
 const CriteriaSentimentChart = () => {
 
@@ -30,7 +30,7 @@ const CriteriaSentimentChart = () => {
             file_type: Array.isArray(queryPayload?.file_type) ? queryPayload.file_type : [],
             keyword: Array.isArray(queryPayload?.keyword) ? queryPayload.keyword : [],
           },
-          aggs_fields: ["unified_type", "unified_record_type", "sentiment", "unified_date_only", "socialmedia_hashtags"],
+          aggs_fields: ["unified_type", "unified_record_type", "sentiment", "unified_date_only", "socialmedia_hashtags","LOC","EVENT","ORG","DATE","LANGUAGE","PERSON"],
           start_time: queryPayload?.start_time || "",
           end_time: queryPayload?.end_time || ""
         };
@@ -42,7 +42,7 @@ const CriteriaSentimentChart = () => {
           }
         });
 
-        console.log("queryPayload", payload)
+        console.log("queryPayload..", payload)
         console.log("Aggregate API Response:", response.data);
         // return response.data; // Return response for further use
         const { sentiment } = response.data;
