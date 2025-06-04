@@ -131,7 +131,7 @@ const NotificationList = ({ isOpen, setIsOpen }) => {
             setLoading(true);
             console.log("🔄 Fetching notifications for user:", loggedInUser);
             
-            const response = await axios.get(`http://5.180.148.40:9009/api/notifications/${loggedInUser}`, {
+            const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_NOTIFICATION}/api/notifications/${loggedInUser}`, {
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`
@@ -166,7 +166,7 @@ const NotificationList = ({ isOpen, setIsOpen }) => {
             setMarkingAsRead(true);
             console.log("🔄 Marking notification as read:", notificationId);
             
-            const response = await axios.post(`http://5.180.148.40:9009/api/notifications/mark-as-read/${loggedInUser}`, {
+            const response = await axios.post(`${window.runtimeConfig.REACT_APP_API_NOTIFICATION}/api/notifications/mark-as-read/${loggedInUser}`, {
                 notification_id: [notificationId]
             }, {
                 headers: {
@@ -206,7 +206,7 @@ const NotificationList = ({ isOpen, setIsOpen }) => {
             }
 
             // Send array of IDs to mark all as read
-            const response = await axios.post(`http://5.180.148.40:9009/api/notifications/mark-as-read/${loggedInUser}`, {
+            const response = await axios.post(`${window.runtimeConfig.REACT_APP_API_NOTIFICATION}/api/notifications/mark-as-read/${loggedInUser}`, {
                 notification_id: unreadIds  // Array of integers [1,2,3,4,5]
             }, {
                 headers: {

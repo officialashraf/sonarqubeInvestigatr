@@ -51,7 +51,7 @@ const EditCase = ({ togglePopup, item }) => {
   const getUserData = async () => {
     const token = Cookies.get("accessToken");
     try {
-      const response = await axios.get('http://5.180.148.40:9000/api/user-man/v1/user', {
+      const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_USER_MAN}/api/user-man/v1/user`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
@@ -144,7 +144,7 @@ const EditCase = ({ togglePopup, item }) => {
       }
       console.log("handlechange", hasChanged)
       const response = await axios.put(
-        `http://5.180.148.40:9001/api/case-man/v1/case/${item.id}`,
+        `${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/case/${item.id}`,
         hasChanged,
         {
           headers: {
@@ -375,7 +375,7 @@ const EditCase = ({ togglePopup, item }) => {
               styles={customStyles}
               className="com"
               name="watchers"
-              placeholder="Select Watchers"
+              placeholder="Select watchers"
               value={formData.watchers.map((watcher) => {
                 const existingWatcher = options.find((opt) => opt.label === watcher);
                 return existingWatcher || { value: watcher, label: watcher };
@@ -391,7 +391,7 @@ const EditCase = ({ togglePopup, item }) => {
               name="status"
               styles={customStyles}
               className="com"
-              placeholder="Select Status"
+              placeholder="Select status"
               value={getCurrentStatus()}
               onChange={handleStatusChange}
               defaultMenuIsOpen={false}  // Ensures menu starts closed

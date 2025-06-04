@@ -112,7 +112,7 @@ const RecentCriteria = () => {
 
   const fetchData = useCallback(async () => {
     try {
-      const response = await axios.get("http://5.180.148.40:9007/api/das/criteria", {
+      const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/criteria`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${Token}`
@@ -137,7 +137,7 @@ const RecentCriteria = () => {
   const handleDelete = async (index, id) => {
     try {
       // Making the DELETE API call
-      const response = await fetch(`http://5.180.148.40:9007/api/das/criteria/${id}`, {
+      const response = await fetch(`${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/criteria/${id}`, {
         method: "DELETE",
         headers: {
           'Content-Type': 'application/json',
@@ -207,7 +207,7 @@ const RecentCriteria = () => {
       console.log("Sending search query:", payload);
 
       const response = await axios.post(
-        'http://5.180.148.40:9007/api/das/search',
+        `${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/search`,
         payload,
         {
           headers: {
@@ -235,6 +235,7 @@ const RecentCriteria = () => {
       dispatch(openPopup("saved"));
     } catch (error) {
       console.error("Error performing search:", error);
+      toast.error(error);
     }
   };
 
@@ -286,7 +287,7 @@ const RecentCriteria = () => {
 
     try {
       const response = await axios.post(
-        'http://5.180.148.40:9007/api/das/search',
+        `${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/search`,
         queryPayload,
         {
           headers: {

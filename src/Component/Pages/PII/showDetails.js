@@ -41,14 +41,15 @@ const ShowDetails = () => {
     }
     setLoading(true);
     let url = searchType === "email"
-      ? `http://5.180.148.40:9002/api/osint-man/v1/email/${query}`
-      : `http://5.180.148.40:9002/api/osint-man/v1/phone-no/${query}`;
+      ? `${window.runtimeConfig.REACT_APP_API_OSINT_MAN}/api/osint-man/v1/email/${query}`
+      : `${window.runtimeConfig.REACT_APP_API_OSINT_MAN}/api/osint-man/v1/phone-no/${query}`;
+
 
     url = encodeURI(url); // Encode URL to handle special characters
 
     try {
       console.log("Final URL:", url);
-      const response = await axios.get(url, { // ✅ Pass headers inside request
+      const response = await axios.get(url, { // Pass headers inside request
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`

@@ -26,7 +26,7 @@ const EditRole = ({ togglePopup, details }) => {
             console.log("role Payload:", searchTitle); // Debug: Payload for API
 
             const response = await axios.put(
-                `http://5.180.148.40:9000/api/user-man/v1/role`,
+                `${window.runtimeConfig.REACT_APP_API_USER_MAN}/api/user-man/v1/role`,
                 criteriaPaylod, // empty body
                 {
                     headers: {
@@ -81,7 +81,7 @@ const EditRole = ({ togglePopup, details }) => {
                         </span>
                         <input
                             type="text"
-                            placeholder="Enter Role"
+                            placeholder="Enter role"
                             className="com"
                             value={searchTitle} // Bind input value to state
                             onChange={(e) => setSearchTitle(e.target.value)} // Update state on input

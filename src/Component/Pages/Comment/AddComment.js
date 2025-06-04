@@ -19,7 +19,7 @@ import { Edit as EditIcon, Delete as DeleteIcon } from "@mui/icons-material";
 import Cookies from 'js-cookie';
 import UpdateComment from './updatecomment';
 
-const API_BASE_URL = 'http://5.180.148.40:9001/api/case-man/v1';
+//const API_BASE_URL = `${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1`;
 
 const AddComment = ({ show, onClose, selectedResource }) => {
   const token = Cookies.get("accessToken");
@@ -32,12 +32,21 @@ const AddComment = ({ show, onClose, selectedResource }) => {
 
   const rowId = selectedResource?.row_id || '';
 
+  const [error, setError] = useState({});
+
+  const validateForm = () => {
+    const Errors = {};
+    if (!newComment) {
+      Errors.comment = "Please enter a comment before clicking the Add button.";
+  }
+  return Errors;
+}
   const getCommentList = useCallback(async () => {
     if (!rowId) return;
 
     setIsLoading(true);
     try {
-      const res = await axios.get(`${API_BASE_URL}/comment/${rowId}`, {
+      const res = await axios.get(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/comment/${rowId}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -62,11 +71,17 @@ const AddComment = ({ show, onClose, selectedResource }) => {
 
   const handleAddComment = async (e) => {
     e.preventDefault();
+    const validationErrors = validateForm();
+    if (Object.keys(validationErrors).length > 0) {
+      setError(validationErrors);
+      return;
+    }
+
     if (!newComment.trim()) return;
 
     setIsSubmitting(true);
     try {
-      await axios.post(`${API_BASE_URL}/comment/${rowId}`,
+      await axios.post(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/comment/${rowId}`,
         { comment: newComment.trim() },
         {
           headers: {
@@ -89,7 +104,7 @@ const AddComment = ({ show, onClose, selectedResource }) => {
   const handleDelete = async (id) => {
     const comment_id = id;
     try {
-      const response = await axios.delete(`${API_BASE_URL}/comment/${rowId}`, {
+      const response = await axios.delete(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/comment/${rowId}`, {
         data: { comment_id },
         headers: {
           "Content-Type": "application/json",
@@ -165,11 +180,17 @@ const AddComment = ({ show, onClose, selectedResource }) => {
               id="title"
               name="title"
             value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
-            placeholder="Enter Your Comment"
-            required
+              onChange={(e) => {
+                setNewComment(e.target.value);
+                setError((prevErrors) => ({
+                  ...prevErrors,
+                  comment: "",
+                }));
+            }}
+            placeholder="Enter your comment"
           
           />
+            {error.comment && <p style={{ color: "red", margin: '0px' }} >{error.comment}</p>}
 
           {/* <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
             <Button

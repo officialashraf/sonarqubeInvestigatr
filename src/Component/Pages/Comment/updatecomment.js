@@ -11,7 +11,7 @@ const UpdateComment = ({ onClose, comment, resourceId, GetCommentList }) => {
     e.preventDefault();
     try {
       console.log("Updated", comment)
-      const response = await axios.put(`http://5.180.148.40:9001/api/case-man/v1/comment/${resourceId}`,
+      const response = await axios.put(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/comment/${resourceId}`,
         {
           comment_id: comment.id,
           comment: newComment,

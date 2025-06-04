@@ -30,7 +30,7 @@ export const fetchSummaryData =
         const token = Cookies.get("accessToken");
 
         const response = await axios.post(
-          "http://5.180.148.40:9007/api/das/search",
+          `${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/search`,
           {
             query: queryPayload,
             page,

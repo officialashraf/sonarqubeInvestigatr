@@ -92,7 +92,7 @@ const AddUser = ({ onClose }) => {
   useEffect(() => {
     const fetchRoles = async () => {
       try {
-        const response = await axios.get("http://5.180.148.40:9000/api/user-man/v1/roles", {
+        const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_USER_MAN}/api/user-man/v1/roles`, {
           headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`
@@ -162,7 +162,7 @@ const AddUser = ({ onClose }) => {
     console.log("queryPyload", formData)
     try {
       const response = await axios.post(
-        "http://5.180.148.40:9000/api/user-man/v1/user",
+        `${window.runtimeConfig.REACT_APP_API_USER_MAN}/api/user-man/v1/user`,
         payloadData,
               {
           headers: {
@@ -193,12 +193,12 @@ const AddUser = ({ onClose }) => {
           <h5>Add User</h5>
           <form onSubmit={handleCreateUser}>
             <label>User Name *</label>
-            <input className="com" name="username" value={formData.username} onChange={handleChange} placeholder="Enter User Name" requiblack />
+            <input className="com" name="username" value={formData.username} onChange={handleChange} placeholder="Enter user name" requiblack />
             {error.username && <p style={{ color: "red" , margin: '0px' }} >{error.username}</p>}
             <label>First Name</label>
-            <input className="com" name="first_name" value={formData.first_name} onChange={handleChange} placeholder="Enter First Name" />
+            <input className="com" name="first_name" value={formData.first_name} onChange={handleChange} placeholder="Enter first name" />
             <label>Last Name</label>
-            <input className="com" name="last_name" value={formData.last_name} onChange={handleChange} placeholder="Enter Last Name" />
+            <input className="com" name="last_name" value={formData.last_name} onChange={handleChange} placeholder="Enter last name" />
             <div>
               <label>Role</label>
               <Select
@@ -213,12 +213,12 @@ const AddUser = ({ onClose }) => {
               />
             </div>
             <label>Email ID *</label>
-            <input className="com" type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Enter Email ID" requiblack />
+            <input className="com" type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Enter email id" requiblack />
             {error.email && <p style={{ color: "red",  margin: '0px' }}>{error.email}</p>}
             <label>Contact Number</label>
-            <input className="com" name="contact_no" value={formData.contact_no} onChange={handleChange} placeholder="Enter Contact Number" />
+            <input className="com" name="contact_no" value={formData.contact_no} onChange={handleChange} placeholder="Enter contact number" />
             <label>Password *</label>
-            <input className="com" type="password" name="password" value={formData.password} onChange={handleChange} placeholder="Enter Password" requiblack />
+            <input className="com" type="password" name="password" value={formData.password} onChange={handleChange} placeholder="Enter password" requiblack />
             {error.password && <p style={{ color: "red", margin: '0px' }}>{error.password}</p>}
             <div className="button-container">
               <button type="submit" className="create-btn">Create</button>

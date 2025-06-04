@@ -7,18 +7,35 @@ import "./login.css";
 
 const LicensePage = () => {
   const navigate = useNavigate();
+  const [error, setError] = useState("");
   const [licenseKey, setLicenseKey] = useState("");
   console.log("key", licenseKey)
+
+  const validateForm = () => {
+    const errors = {};
+
+    if (!licenseKey.trim()) {
+      errors.licenseKey = "Username is required";
+    }
+
+
+    return errors;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent default form submission
     console.log("key", licenseKey)
+    const validationErrors = validateForm();
+    if (Object.keys(validationErrors).length > 0) {
+      setError(validationErrors);
+      return;
+    }
 
     try {
-      if(licenseKey.trim()===""){
-        toast.info("Please enter a license key before processing");
-        return;
-      }
+      // if(licenseKey.trim()===""){
+      //   toast.info("Please enter a license key before processing");
+      //   return;
+      // }
       console.log("key", typeof licenseKey)
       const response = await axios.post("http://5.180.148.40:9008/api/license/register",
         { key: licenseKey }, // Ensure key is passed correctly
@@ -34,10 +51,10 @@ const LicensePage = () => {
 
       // Redirect to login page upon success
       navigate("/login");
-    } catch (error) {
-      toast.error("License registration failed" || error)
+    } catch (err) {
+      toast.error("License registration failed" || err)
       //   setError(error.response ? error.response.data.message : "Registration error");
-      console.error("Error:", error);
+      // console.err("Error:", error);
     }
   };
 
@@ -56,8 +73,16 @@ const LicensePage = () => {
               placeholder="Paste your license key here"
               className="customfiled"
               value={licenseKey}
-              onChange={(e) => setLicenseKey(e.target.value)}
+              onChange={(e) => {
+                setLicenseKey(e.target.value);
+
+                setError((prevErrors) => ({
+                  ...prevErrors,
+                  licenseKey: "", // Clear the licenseKey error
+                }));
+              }}
             />
+            {error.licenseKey&& <p style={{ color: "red", margin: '0px' }} >{error.licenseKey}</p>}
             <div className="d-flex justify-content-end mt-2">
               <button type="submit" className="login-button" 
               // disabled={!licenseKey.trim()}

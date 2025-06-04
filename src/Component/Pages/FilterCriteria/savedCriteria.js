@@ -194,7 +194,7 @@ const SavedCriteria = () => {
       console.log("Sending search query:", payload);
 
       const response = await axios.post(
-        'http://5.180.148.40:9007/api/das/search',
+        `${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/search`,
         payload,
         {
           headers: {

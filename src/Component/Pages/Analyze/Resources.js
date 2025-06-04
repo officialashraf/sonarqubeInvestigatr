@@ -795,7 +795,7 @@ const loadedPagesRef = useRef(loadedPages);
                     marginRight: '10px'
                   }}
                 >
-                  {selectedResource.sentiment}
+                  {selectedResource.sentiment.charAt(0).toUpperCase() + selectedResource.sentiment.slice(1)}
                 </span>
                 {selectedResource && (
                   <div className="commentBar" style={{ width: '60px' }}>

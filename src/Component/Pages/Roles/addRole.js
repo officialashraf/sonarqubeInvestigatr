@@ -20,8 +20,9 @@ const AddRole = ({ togglePopup }) => {
     const fetchEndpoints = useCallback(async () => {
         setEndpointsLoading(true);
         try {
+
             const response = await axios.get(
-                'http://5.180.148.40:9000/api/user-man/v1/endpoints',
+                `${window.runtimeConfig.REACT_APP_API_USER_MAN}/api/user-man/v1/endpoints`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -63,12 +64,12 @@ const AddRole = ({ togglePopup }) => {
                 endpoint => !initialEndpoints.includes(endpoint.value)
             );
             console.log("newlyse;ected", newlySelectedEndpoints)
-            console.log("selectedrole", selectedRole)
+           
+            // Only process newly selected endpoints console.log("selectedrole", selectedRole)
             if (!selectedRole.trim()) {
                 toast.error("Please enter role before proceeding."); // Show toast error
                 return; // Stop function execution
             }
-            // Only process newly selected endpoints
             if (newlySelectedEndpoints.length === 0) {
                 toast.info("No new permissions to assign");
                 setLoading(false);
@@ -81,7 +82,7 @@ const AddRole = ({ togglePopup }) => {
             console.log("payload", payload)
             const requests =
                 axios.post(
-                    "http://5.180.148.40:9000/api/user-man/v1/role", payload
+                    `${window.runtimeConfig.REACT_APP_API_USER_MAN}/api/user-man/v1/role`, payload
                     ,
                     {
                         headers: {
@@ -166,6 +167,7 @@ const AddRole = ({ togglePopup }) => {
             <div className="popup-container" style={{ alignItems: 'center' }}>
                 <div className="popup-content" style={{ width: '80%', minHeight: isDropdownOpen ? "60vh" : "230px", position: "relative" }}>
                     <span style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
+
                         <h5 >Assign role to permissions</h5>
                         <CloseButton onClick={togglePopup} />
                     </span>

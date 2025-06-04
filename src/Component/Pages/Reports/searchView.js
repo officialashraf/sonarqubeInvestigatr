@@ -58,7 +58,7 @@ const SearchView = () => {
   useEffect(() => {
     const fetchCaseData = async () => {
       try {
-        const response = await axios.get('http://5.180.148.40:9001/api/case-man/v1/case', {
+        const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_CASE_MAN }/api/case-man/v1/case`, {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${Token}`
@@ -126,7 +126,7 @@ const SearchView = () => {
       console.log("search payload", payload);
 
       const response = await axios.post(
-        'http://5.180.148.40:9007/api/das/search',
+        `${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/search`,
         payload,
         {
           headers: {
@@ -218,7 +218,7 @@ const SearchView = () => {
               className="com"
               value={formData.caseIds}
               onChange={(selected) => setFormData(prev => ({ ...prev, caseIds: selected }))}
-              placeholder="Select Cases"
+              placeholder="Select cases"
             />
           </div>
 
@@ -239,7 +239,7 @@ const SearchView = () => {
                   padding: '0 2px',
                 },
               }}
-              placeholder="Select Date..."
+              placeholder="Select date..."
               value={
                 selectedDates.startDate && selectedDates.endDate
                   ? `${formatDate(selectedDates.startDate)} to ${formatDate(selectedDates.endDate)}`

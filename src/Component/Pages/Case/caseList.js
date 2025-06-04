@@ -51,7 +51,7 @@ const DataTable = () => {
     try {
       setLoading(true);
       const Token = Cookies.get('accessToken');
-      const response = await axios.get('http://5.180.148.40:9001/api/case-man/v1/case',
+      const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/case`,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -64,6 +64,7 @@ const DataTable = () => {
       setFilteredData(response.data.data);
       console.log("data", response.data)
     } catch (error) {
+      toast.error(error.response?.data?.detail || "Error fetching case data");
       console.error('Error fetching data:', error);
     } finally {
       setLoading(false);
@@ -112,7 +113,7 @@ const DataTable = () => {
     }
     try {
       const authToken = Cookies.get('accessToken'); // Read the token from cookies 
-      const response = await axios.delete(`http://5.180.148.40:9001/api/case-man/v1/case/${id}`,
+      const response = await axios.delete(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/case/${id}`,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -132,7 +133,7 @@ const DataTable = () => {
   const getUserData = async () => {
     const token = Cookies.get("accessToken");
     try {
-      const response = await axios.get('http://5.180.148.40:9000/api/user-man/v1/user'
+      const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_USER_MAN}/api/user-man/v1/user`
         , {
           headers: {
             'Content-Type': 'application/json',
@@ -223,7 +224,7 @@ const DataTable = () => {
           <InputGroup className="search-bar1">
             <InputGroup.Text className="search-icon"><Search /></InputGroup.Text>
             <FormControl
-              placeholder="Search Case"
+              placeholder="Search case"
               aria-label="Search"
               value={searchTerm}
               onChange={handleSearch}

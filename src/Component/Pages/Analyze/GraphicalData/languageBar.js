@@ -18,7 +18,7 @@ const LanguageBar = () => {
         const fetchData = async () => {
             try {
                 setLoading(true)
-                const response = await axios.post('http://5.180.148.40:9007/api/das/aggregate', {
+                const response = await axios.post(`${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/aggregate`, {
                     query: { unified_case_id: String(caseId) },
 
                     aggs_fields: ["LANGUAGE"]

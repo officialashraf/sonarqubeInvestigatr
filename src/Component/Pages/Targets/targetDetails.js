@@ -38,7 +38,7 @@ const TargetDetails = ({ togglePopup, id }) => {
 
     try {
       setLoading(true);
-      const response = await axios.get(`http://5.180.148.40:9001/api/case-man/v1/target/${id}`, {
+      const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/target/${id}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -107,7 +107,7 @@ const TargetDetails = ({ togglePopup, id }) => {
                     <tr> <th>Synonyms</th> <td>{formData.synonyms.join(', ') || '-'}</td> </tr>
                     <tr> <th>Threat-Score</th> <td>{formData.threat_weightage}</td> </tr>
                     <tr> <th>Type</th> <td>{formData.type || '-'}</td> </tr>
-                    <tr> <th>Active</th>  <td>{formData.is_active ? 'active' : 'deactive'}</td> </tr>
+                    <tr> <th>Active</th>  <td>{formData.is_active ? 'Active' : 'Deactive'}</td> </tr>
                     <tr> <th>Linked To</th> <td>{formData.linked_to}</td> </tr>
                   </tbody>
                 </Table>

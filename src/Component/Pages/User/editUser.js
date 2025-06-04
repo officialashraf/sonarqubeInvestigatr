@@ -46,7 +46,7 @@ const EditUser = ({ togglePopup, item }) => {
   
   const getUserData = async () => {
     try {
-      const response = await axios.get('http://5.180.148.40:9000/api/user-man/v1/user', {
+      const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_USER_MAN}/api/user-man/v1/user`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
@@ -65,7 +65,7 @@ const EditUser = ({ togglePopup, item }) => {
   useEffect(() => {
     const fetchRoles = async () => {
       try {
-        const response = await axios.get("http://5.180.148.40:9000/api/user-man/v1/roles", {
+        const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_USER_MAN}/api/user-man/v1/roles`, {
           headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`
@@ -124,9 +124,9 @@ const EditUser = ({ togglePopup, item }) => {
       if (payloadData.contactNumber && payloadData.contactNumber !== item.contact_no) {
         hasChanged.contact_no = payloadData.contactNumber;
       } 
-       if (payloadData.role && payloadData.role !== item.role) 
-        { hasChanged.role = payloadData.role; }
 
+      if (payloadData.role && payloadData.role !== item.role)
+         { hasChanged.role = payloadData.role; }
 
       // If nothing has changed 
       if (Object.keys(hasChanged).length === 0) {
@@ -136,7 +136,7 @@ const EditUser = ({ togglePopup, item }) => {
 
       console.log("Data to be sent:", hasChanged); // Debugging line
       const response = await axios.put(
-        `http://5.180.148.40:9000/api/user-man/v1/user/${item.id}`,
+        `${window.runtimeConfig.REACT_APP_API_USER_MAN}/api/user-man/v1/user/${item.id}`,
         hasChanged,
         {
           headers: {

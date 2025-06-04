@@ -13,11 +13,30 @@
 
 /* Popup Container */
 .popup-container {
-  width: 40%;
+  width: 50%;
   height: 100%;
   padding: 10px;
   position: relative; /* For the close icon */
 }
+@media screen and (max-width: 768px){
+  .popup-container{
+    width: 70%;
+  }
+  
+}
+@media screen and (max-width: 820px){
+  .popup-container{
+    width: 70%;
+  }
+  
+}
+@media screen and (max-width: 912px){
+  .popup-container{
+    width: 60%;
+  }
+  
+}
+
 
 /* Close Icon */
 .close-icon {

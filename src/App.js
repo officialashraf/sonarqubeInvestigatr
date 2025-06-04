@@ -1,4 +1,3 @@
-
 import Header from './Component/Pages/Home/header.js';
 import Home from './Component/Pages/Home/home';
 import LoginPage from './Component/Pages/User/login';
@@ -29,18 +28,18 @@ import UserManagement from './Component/Pages/User/UserManagement.js';
 import RolesPermission from './Component/Pages/Roles/roles_Permission.js';
 import ReportPage from './Component/Pages/Reports/reportPage.js';
 import TargetDashboard from './Component/Pages/Targets/targetDashboard.js';
-// import injectGlobalInterceptors from './utils/axiosConfig.js';
+import { injectGlobalInterceptors } from './utils/axiosConfig.js';
 
 
 
 const AppContent = () => {
   const location = useLocation();
-  // injectGlobalInterceptors(axios);
+  injectGlobalInterceptors();
 
   const getHeaderTitle = () => {
     const path = location.pathname;
     if (path === "/cases") return "Cases";
-    if (path === "/pii") return "PII";
+    if (path === "/pii") return "Personally Identifiable Information";
     if (path.startsWith("/cases/") && path.endsWith("/analysis"))
       return "Case Analysis";
     if (path.startsWith("/cases/") && path.endsWith("/case-summary"))

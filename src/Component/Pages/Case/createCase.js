@@ -80,7 +80,7 @@ const CreateCase = ({ togglePopup }) => {
   const getUserData = async () => {
     const token = Cookies.get("accessToken");
     try {
-      const response = await axios.get('http://5.180.148.40:9000/api/user-man/v1/user'
+      const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_USER_MAN}/api/user-man/v1/user`
         , {
           headers: {
             'Content-Type': 'application/json',
@@ -141,7 +141,7 @@ const CreateCase = ({ togglePopup }) => {
       }
     
       console.log("caseQuery",caseQuery)
-      const response = await axios.post('http://5.180.148.40:9001/api/case-man/v1/case', 
+      const response = await axios.post(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/case`, 
       caseQuery
       , {
         headers: {
@@ -227,7 +227,7 @@ const CreateCase = ({ togglePopup }) => {
               onChange={(e) =>
                 setFormData((prev) => ({ ...prev, title: e.target.value.replace(/\b\w/g, (char) => char.toUpperCase()) }))
               }
-              placeholder="Enter Title"
+              placeholder="Enter title"
             />
             {error.title && <p style={{ color: "red", margin: '0px' }} >{error.title}</p>}
 
@@ -239,7 +239,7 @@ const CreateCase = ({ togglePopup }) => {
               name="description"
               value={formData.description}
               onChange={handleInputChange}
-              placeholder="Enter Description"
+              placeholder="Enter description"
             ></textarea>
             {error.description && <p style={{ color: "red", margin: '0px' }} >{error.description}</p>}
 
@@ -252,7 +252,7 @@ const CreateCase = ({ togglePopup }) => {
                 options={options}
                 styles={customStyles}
                 className="com"
-                placeholder="Select Assignee"
+                placeholder="Select assignee"
                 value={(options && options.find((option) => option.value === formData.assignee)) || null}
                 onChange={handleAssigneeChange}
               />
@@ -264,7 +264,7 @@ const CreateCase = ({ togglePopup }) => {
               styles={customStyles}
               className="com"
               name="watchers"
-              placeholder="Select Watchers"
+              placeholder="Select watchers"
               value={options && options.filter((option) => formData.watchers.split(", ").includes(option.label)
               )}
               onChange={handleWatchersChange}

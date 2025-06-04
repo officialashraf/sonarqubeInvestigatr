@@ -31,7 +31,7 @@ const TargetList = () => {
   const fetchTargets = async () => {
     try {
       setLoading(true);
-      const response = await axios.get("http://5.180.148.40:9001/api/case-man/v1/target", {
+      const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/target`, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": 'application/json'
@@ -165,7 +165,7 @@ const TargetList = () => {
     }
     try {
 
-      const response = await axios.delete(`http://5.180.148.40:9001/api/case-man/v1/target/${id}`,
+      const response = await axios.delete(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/target/${id}`,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -240,7 +240,7 @@ const TargetList = () => {
           </button>
         </div>
       </div>
-      <div className="data-table" style={{ height: "550px" }}>
+      <div className="data-table">
         <Table striped bordered hover variant="light">
           <thead>
             <tr>

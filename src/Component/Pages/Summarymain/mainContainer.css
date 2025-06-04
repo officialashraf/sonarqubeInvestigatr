@@ -8,6 +8,21 @@
   align-items: center; /* Horizontal center align kare */
   overflow: hidden;
 }
+@media screen and (max-width: 1920px) {
+  .containerM {
+    height: 100%; /* Adjust height to content */
+    padding: 20px; /* Add some space inside */
+    /* align-items: flex-start; /* Align content to left on small screen */
+    justify-content: flex-start; 
+  }
+}
+@media screen and (max-width: 768){
+  .containerM{
+    height: 100%;
+    align-items: center;
+        justify-content: center;
+  }
+}
 .resourcesContainer {
   border: 1px solid #ccc;
   padding: 20px;

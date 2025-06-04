@@ -161,7 +161,7 @@
   }
 
   .button-container {
-    justify-content: center;
+    justify-content: end;
   }
 
   .create-case-button {

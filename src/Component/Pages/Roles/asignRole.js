@@ -35,7 +35,7 @@ console.warn("detailsrole",details)
         setEndpointsLoading(true);
         try {
             const response = await axios.get(
-                'http://5.180.148.40:9000/api/user-man/v1/endpoints',
+                `${window.runtimeConfig.REACT_APP_API_USER_MAN}/api/user-man/v1/endpoints`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -66,7 +66,7 @@ console.warn("detailsrole",details)
         setRolesLoading(true);
         try {
             const response = await axios.get(
-                'http://5.180.148.40:9000/api/user-man/v1/role',
+                `${window.runtimeConfig.REACT_APP_API_USER_MAN}/api/user-man/v1/role`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -132,7 +132,7 @@ console.warn("detailsrole",details)
 
             // Make API call with the new structure
             await axios.post(
-                'http://5.180.148.40:9000/api/user-man/v1/assign-role',
+                `${window.runtimeConfig.REACT_APP_API_USER_MAN}/api/user-man/v1/assign-role`,
                 payload,
                 {
                     headers: {
@@ -144,6 +144,7 @@ console.warn("detailsrole",details)
  window.dispatchEvent(new Event("databaseUpdated"));
             toast.success("Role permissions updated successfully");
                         togglePopup(false);
+
 
         } catch (error) {
             console.error("API Error:", error);
@@ -201,7 +202,7 @@ console.warn("detailsrole",details)
                 />
                 {/* <label>
                     {data.label}
-                    {data.isAssigned && <span style={{ color: '#666', marginLeft: 5 }}>(currently assigned)</span>}
+                    {data.isAssigned && <span style={{ color: '#666', marginLeft: 5 }}>(already assigned)</span>} 
                 </label> */}
                 <label>
                     {isSelectAll ? 'Select All' : data.label}
@@ -227,7 +228,7 @@ console.warn("detailsrole",details)
             <div className="popup-container" style={{ alignItems: 'center' }}>
                 <div className="popup-content" style={{ width: '80%', minHeight: isDropdownOpen ? "60vh" : "230px", position: "relative"  }}>
                     <span style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
-                        <h5>Assign role to permissions</h5>
+                       <h5 >Assign Permissions to Role</h5>
                         <CloseButton onClick={togglePopup} />
                     </span>
                     <form onSubmit={(e) => e.preventDefault()}>
@@ -245,7 +246,9 @@ console.warn("detailsrole",details)
                         <div className="form-group" style={{ marginBottom: '15px',height:'50px' }}>
                             <label>Select Permissions</label>
                             <Select
-                               options={[{ label: 'Select All', value: '_select_all_' }, ...endpoints]}
+
+                                options={[{ label: 'Select All', value: '__select_all__' }, ...endpoints]}
+                                // options={endpoints}
                                 styles={customStyles}
                                 placeholder="Select permissions"
                                 isLoading={endpointsLoading}
@@ -255,7 +258,6 @@ console.warn("detailsrole",details)
                                     if (!selected) return setSelectedEndpoints([]);
 
                                     const isSelectAllClicked = selected.find(opt => opt.value === '_select_all_');
-
                                     if (isSelectAllClicked) {
                                         const areAllSelected = selectedEndpoints.length === endpoints.length;
                                         if (areAllSelected) {

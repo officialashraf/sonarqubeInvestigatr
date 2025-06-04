@@ -53,7 +53,7 @@ const RolesPermission = () => {
         try {
             setLoading(true);
             const token = Cookies.get("accessToken");
-            const response = await axios.get("http://5.180.148.40:9000/api/user-man/v1/role", {
+            const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_USER_MAN}/api/user-man/v1/role`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     "Content-Type": "application/json"
@@ -174,7 +174,7 @@ const RolesPermission = () => {
         }
         try {
 
-            const response = await axios.delete(`http://5.180.148.40:9000/api/user-man/v1/role/${role}`,
+            const response = await axios.delete(`${window.runtimeConfig.REACT_APP_API_USER_MAN}/api/user-man/v1/role/${role}`,
                 {
                     headers: {
                         'Content-Type': 'application/json',
