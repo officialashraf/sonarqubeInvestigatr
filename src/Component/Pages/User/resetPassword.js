@@ -9,13 +9,27 @@ const ResetPassword = ({ onClose, id }) => {
     console.log("id", id)
     const [newPassword, setNewPassword] = useState('')
     const [showPassword, setShowPassword] = useState(false);
+    const [isPasswordTouched, setIsPasswordTouched] = useState(false);
+
 
     const token = Cookies.get("accessToken");
 
+    const validatePassword = (password) => {
+        const regex = /^(?=.*[A-Z])(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{6,}$/;
+        return regex.test(password);
+    };
+
+
     const handleReset = async (e) => {
         e.preventDefault();
+        setIsPasswordTouched(true);
+
+        if (!validatePassword(newPassword)) {
+            toast.error("Please enter a valid password.");
+            return; // आगे मत बढ़ो
+        }
+
         try {
-            console.log("newPassword", newPassword)
             const response = await axios.post(`http://5.180.148.40:9000/api/user-man/v1/user/resetpassword`,
                 {
                     new_password: newPassword,
@@ -29,16 +43,14 @@ const ResetPassword = ({ onClose, id }) => {
                 }
             );
 
-            console.log("response", response);
             toast.success("Password reset successfully");
-            console.log("Passwrod reset :", response.data);
-            onClose()
+            onClose();
 
         } catch (error) {
-            toast.error(error.response?.data?.detail || "Error while reset password");
-            console.error("Error:", error.response ? error.response.data : error.message);
+            toast.error(error.response?.data?.detail || "Error while resetting password");
         }
     };
+
 
     return (
 
@@ -51,17 +63,22 @@ const ResetPassword = ({ onClose, id }) => {
                     <form onSubmit={handleReset}>
 
                         <label htmlFor="title">New Password *</label>
-                        <div style={{ position: "relative", display: "inline-block",width: "100%" }}>
+                        <div style={{ position: "relative", display: "inline-block", width: "100%" }}>
                             <input
                                 className="com"
                                 type={showPassword ? "text" : "password"}
                                 id="title"
                                 name="title"
                                 value={newPassword}
-                                onChange={(e) => setNewPassword(e.target.value)}
+                                onChange={(e) => {
+                                    setNewPassword(e.target.value);
+                                    if (!isPasswordTouched) setIsPasswordTouched(true);
+                                }}
+                                onBlur={() => setIsPasswordTouched(true)}
                                 placeholder="Enter your new password"
                                 required
-                                />
+                            />
+
                             <span
                                 onClick={() => setShowPassword((prev) => !prev)}
                                 style={{
@@ -72,9 +89,16 @@ const ResetPassword = ({ onClose, id }) => {
                                     cursor: "pointer"
                                 }}
                             >
-                                {showPassword ? <VisibilityIcon/> : <VisibilityOffIcon/>} {/* Changes icon based on visibility */}
+                                {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />} {/* Changes icon based on visibility */}
                             </span>
                         </div>
+                        {isPasswordTouched && !validatePassword(newPassword) && (
+                            <p style={{ color: "red", fontSize: "12px", marginTop: "5px" }}>
+                                Password must be at least 6 characters, include 1 capital letter and 1 special character.
+                            </p>
+                        )}
+
+
 
                         <div className="button-container">
                             <button type="submit" className="create-btn">Reset</button>
