@@ -142,7 +142,7 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
 
     try {
       setLoading(true);
-      const response = await axios.get(`http://5.180.148.40:9001/api/case-man/v1/target/${id}`, {
+      const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/target/${id}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -217,7 +217,7 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
     console.log("Update payload", formData);
 
     try {
-      const response = await axios.put(`http://5.180.148.40:9001/api/case-man/v1/target/${id}`, payloadData, {
+      const response = await axios.put(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/target/${id}`, payloadData, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
@@ -365,7 +365,7 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
               name="name"
               value={formData.name}
               onChange={handleInputChange}
-              placeholder="Enter Target"
+              placeholder="Enter target"
             />
             {error.name && <p style={{ color: "red", margin: '0px' }} >{error.name}</p>}
 
@@ -376,7 +376,7 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
               name="description"
               value={formData.description}
               onChange={handleInputChange}
-              placeholder="Enter Description"
+              placeholder="Enter description"
             ></textarea>
             {error.description && <p style={{ color: "red", margin: '0px' }} >{error.description}</p>}
             <label htmlFor="synonyms">Alternative Keywords/Synonym (up to 5 keywords) *</label>
@@ -388,7 +388,7 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
                 value={synonymInput}
                 onChange={handleSynonymInputChange}
                 onKeyDown={handleSynonymKeyDown}
-                placeholder="Type in Keywords/Synonym and press Enter to add..."
+                placeholder="Type in keywords/synonym and press enter to add..."
                 disabled={formData.synonyms.length >= 5}
                 // required
               />
@@ -415,7 +415,7 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
                 options={threatScoreOptions}
                 styles={customStyles}
                 className="com"
-                placeholder="Select Threat Score"
+                placeholder="Select threat score"
                 value={threatScoreOptions.find((option) => option.value === formData.threat_weightage) || null}
                 onChange={handleThreatScoreChange}
               />

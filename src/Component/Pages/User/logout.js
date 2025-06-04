@@ -28,7 +28,7 @@ const LogoutUser = () => {
         }
 
         try {
-            const response = await fetch(`http://5.180.148.40:9000/api/user-man/v1/user/logout/${loggedInUserId}`, {
+            const response = await fetch(`/api/user-man/v1/user/logout/${loggedInUserId}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

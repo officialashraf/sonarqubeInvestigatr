@@ -299,7 +299,7 @@ const validateForm = () => {
     const fetchFilterDetails = async () => {
       if (!filterIde) return; // Prevent the API call if filterIde is undefined
       try {
-        const response = await axios.get(`http://5.180.148.40:9002/api/osint-man/v1/filter/${filterIde}`, {
+        const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_OSINT_MAN }/api/osint-man/v1/filter/${filterIde}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -320,7 +320,7 @@ const validateForm = () => {
   useEffect(() => {
     const fetchPlatforms = async () => {
       try {
-        const response = await axios.get('http://5.180.148.40:9002/api/osint-man/v1/platforms', {
+        const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_OSINT_MAN}/api/osint-man/v1/platforms`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -417,8 +417,8 @@ const validateForm = () => {
     console.log("postdata save filter", postData);
     try {
       const url = filterDetails?.id
-        ? `http://5.180.148.40:9002/api/osint-man/v1/filter/${filterDetails.id}`
-        : 'http://5.180.148.40:9002/api/osint-man/v1/filter';
+        ? `${window.runtimeConfig.REACT_APP_API_OSINT_MAN}/api/osint-man/v1/filter/${filterDetails.id}`
+        : `${window.runtimeConfig.REACT_APP_API_OSINT_MAN}/api/osint-man/v1/filter`;
 
       const method = filterDetails?.id ? 'put' : 'post';
 
@@ -458,12 +458,12 @@ const validateForm = () => {
     <div className="p-1">
       {/* {filterDetails?.id && <p>Filter ID: {filterDetails.id}</p>} */}
       <Form>
-        {/* <span  onClick={onClose}style={{
-          position: 'fixed',
+        <span  onClick={onClose}style={{
+          position: 'absolute',
           fontSize: '15px',
-          right: ' 20px',
+          right: ' 2px',
           cursor:'pointer'
-        }}>&times;</span> */}
+        }}>&times;</span>
         <Form.Group className="mb-3">
           <Form.Label>Filter Name *</Form.Label>
           <Form.Control
@@ -477,7 +477,7 @@ const validateForm = () => {
             disabled={!isEditable}
 
           />
-          {error.name && <p style={{ color: "black", margin: '0px' }} >{error.name}</p>}
+          {error.name && <p style={{ color: "red", margin: '0px' }} >{error.name}</p>}
         </Form.Group>
 
         <Form.Group className="mb-3">
@@ -493,7 +493,7 @@ const validateForm = () => {
             }}
             disabled={!isEditable}
           />
-          {error.description && <p style={{ color: "black", margin: '0px' }} >{error.description}</p>}
+          {error.description && <p style={{ color: "red", margin: '0px' }} >{error.description}</p>}
         </Form.Group>
         <div>
           <div ref={containerRef} className='sourceDiv'>
@@ -502,10 +502,10 @@ const validateForm = () => {
               <div key={sourceIndex} className="mb-3 border rounded" >
                 {sources.length > 1 && (
                   <span style={{
-                    position: 'fixed',
+                    position: 'absolute',
                     fontSize: '15px',
-                    right: ' 20px',
-                    cursor: 'pointer'
+                    right: ' 6px',
+                    cursor: 'pointer',
                   }} onClick={() => handleRemoveSource(sourceIndex)}
                     disabled={!isEditable}>&times;</span>
 
@@ -539,6 +539,7 @@ const validateForm = () => {
                         value={source.platform}
                         onChange={(e) => handlePlatformChange(sourceIndex, e)}
                         disabled={!isEditable}
+                        style={{ width: '96%' }}
                       >
                         <option value="" disabled selected>Select Platform</option>
                         {platform.map((plat) => (
@@ -587,13 +588,14 @@ const validateForm = () => {
                       <Form.Label>Keywords</Form.Label>
                       <Form.Control
                         type="text"
-                        placeholder="Enter keyword and press Enter"
+                        placeholder="Enter keyword"
                         value={source.keywordInput}
                         onChange={(e) => handleKeywordChange(sourceIndex, e.target.value)}
                         onKeyDown={(e) => handleKeywordKeyDown(sourceIndex, e)}
                         disabled={!isEditable}
+                        style={{ width: '96%'}}
                       />
-                      <div className="mt-2">
+                      <div className="mt-2" style={{ display: 'flex', flexWrap: 'wrap', gap: '5px' }}>
                         {source.keywords.map((keyword, keyIndex) => (
                           <Badge
                             key={keyIndex}
@@ -601,13 +603,16 @@ const validateForm = () => {
                             bg="dark"
                             className="me-2 mb-1 d-inline-flex align-items-center"
                             style={{
-                              display: 'inline-flex',
+                              display: 'inline-block',
+                              wordWrap: 'break-word',
+                              overflowWrap: 'break-word',
+                              // display: 'inline-flex',
                               alignItems: 'center',
-                              minWidth: `${keyword.length * 10}px`,
+                              // minWidth: `${keyword.length * 10}px`,
                               maxWidth: '100%',
-                              whiteSpace: 'nowrap',
-                              overflow: 'hidden',
-                              textOverflow: 'ellipsis',
+                              whiteSpace: 'normal',
+                              // overflow: 'hidden',
+                              // textOverflow: 'ellipsis',
                             }}
                           >
                             {keyword}
@@ -698,8 +703,8 @@ const validateForm = () => {
                 </button> */}
             <button
               type="button"
-              // className="add-new-filter-button"
-              className="create-btn"
+             className="add-new-filter-button"
+              // className="create-btn"
               style={{ marginLeft: '5px' }}
               onClick={handleSaveFilter}
             // disabled={!isEditable}

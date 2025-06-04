@@ -11,6 +11,14 @@ import { Provider } from "react-redux"
 import store, { persistor } from "./Redux/store"; // Store aur Persistor import karo
 import { PersistGate } from "redux-persist/integration/react";
 
+
+const loadConfig = async () => {
+  const response = await fetch('/config.json');
+  const config = await response.json();
+  window.runtimeConfig = config;
+};
+
+loadConfig().then(() => {
 const root = createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
@@ -40,3 +48,4 @@ root.render(
 originalWarn();
 reportWebVitals();
 
+});

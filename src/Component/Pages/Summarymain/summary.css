@@ -52,6 +52,13 @@ g.recharts-layer .recharts-bar :hover {
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);
   border-radius: 5px;
 }
+@media (max-width: 1920px) {
+
+  .box {
+    min-width: 400px;
+    height: 100%;
+  }
+}
 
 .filterCount {
   align-items: center;
@@ -76,7 +83,12 @@ g.recharts-layer .recharts-bar :hover {
   position: relative;
 }
 /* Ensure each graph has proper width and stays centered */
-
+@media screen and (max-width: 1920px) {
+  .graphchats{
+    justify-content: space-around;
+    
+  }
+}
 /* ✅ Responsive Design */
 @media (max-width: 1024px) {
   .add-new-filter-button {

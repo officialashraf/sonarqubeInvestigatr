@@ -13,7 +13,7 @@ const DetailsPermission = ({ togglePopup, details }) => {
                     </div>
                     <div className="case-details-container">
                         <Table bordered hover className='custom-table custom-table-th' >
-                            <tbody> <tr> <th>Roles</th> <td>{details.role}</td> </tr>
+                            <tbody> <tr> <th>Role</th> <td>{details.role}</td> </tr>
                                 <tr> <th>Created On</th> <td>{details?.created_on ? details.created_on.slice(0, 12) : '-'}</td> </tr>
                                 <tr> <th>Created By</th> <td>{details?.created_by ? details.created_by.slice(0, 8) : '-'}</td> </tr>
                                 <tr> <th>Edited On</th> <td>{details.editedOn || '-'}</td> </tr>

@@ -60,7 +60,7 @@
   .card-list-container {
     /* flex-wrap: wrap; */
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     gap: 20px;
   }
 }
@@ -108,7 +108,7 @@
 }
 
 /* ✅ Extra Small Screens (Less than 480px) */
-@media (max-width: 479px) {
+@media (max-width: 540px) {
   .card-list-container {
     /* overflow-x: auto; */
     /* width: 100%; */

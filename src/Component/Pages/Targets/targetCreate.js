@@ -166,7 +166,7 @@ const [formData, setFormData] = useState({
     
     try {
       // First, create the target
-      const targetResponse = await axios.post('http://5.180.148.40:9001/api/case-man/v1/target', payloadData, {
+      const targetResponse = await axios.post(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/target`, payloadData, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
@@ -317,7 +317,7 @@ const [formData, setFormData] = useState({
               name="name"
               value={formData.name}
               onChange={handleInputChange}
-              placeholder="Enter Target"
+              placeholder="Enter target"
             />
             {error.name && <p style={{ color: "red", margin: '0px' }} >{error.name}</p>}
             <label htmlFor="description">Description *</label>
@@ -327,7 +327,7 @@ const [formData, setFormData] = useState({
               name="description"
               value={formData.description}
               onChange={handleInputChange}
-              placeholder="Enter Description"
+              placeholder="Enter description"
             ></textarea>
             {error.description && <p style={{ color: "red", margin: '0px' }} >{error.description}</p>}
             <label htmlFor="synonyms">Alternative Keywords/Synonym *(up to 5 keywords) </label>
@@ -339,7 +339,7 @@ const [formData, setFormData] = useState({
                 value={synonymInput}
                 onChange={handleSynonymInputChange}
                 onKeyDown={handleSynonymKeyDown}
-                placeholder="Type in Synonym and press Enter to add..."
+                placeholder="Type synonym and press Enter to add..."
                 disabled={formData.synonyms.length >= 5}
               />
               <div className="synonym-chips">
@@ -365,7 +365,7 @@ const [formData, setFormData] = useState({
                 options={threatScoreOptions}
                 styles={customStyles}
                 className="com"
-                placeholder="Select Threat Score"
+                placeholder="Select threat score"
                 value={threatScoreOptions.find((option) => option.value === formData.threat_weightage) || null}
                 onChange={handleThreatScoreChange}
               />

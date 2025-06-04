@@ -57,7 +57,7 @@ const Confirm = ({ formData, selectedDates, searchChips }) => {
 
             console.log("Criteria Payload:", criteriaPaylod); // Debug: Payload for API
 
-            const response = await axios.post('http://5.180.148.40:9007/api/das/criteria', criteriaPaylod, {
+            const response = await axios.post(`${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/criteria`, criteriaPaylod, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${Token}`
@@ -94,7 +94,7 @@ const Confirm = ({ formData, selectedDates, searchChips }) => {
 
                         <input
                             type="text"
-                            placeholder="Enter Title"
+                            placeholder="Enter title"
                             className="com"
                             value={searchTitle} // Bind input value to state
                             onChange={(e) => setSearchTitle(e.target.value)} // Update state on input

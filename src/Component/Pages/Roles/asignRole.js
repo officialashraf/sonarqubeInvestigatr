@@ -32,7 +32,7 @@ const AssignRole = ({ togglePopup, details }) => {
         setEndpointsLoading(true);
         try {
             const response = await axios.get(
-                'http://5.180.148.40:9000/api/user-man/v1/endpoints',
+                `${window.runtimeConfig.REACT_APP_API_USER_MAN}/api/user-man/v1/endpoints`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -63,7 +63,7 @@ const AssignRole = ({ togglePopup, details }) => {
         setRolesLoading(true);
         try {
             const response = await axios.get(
-                'http://5.180.148.40:9000/api/user-man/v1/role',
+                `${window.runtimeConfig.REACT_APP_API_USER_MAN}/api/user-man/v1/role`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -110,7 +110,7 @@ const AssignRole = ({ togglePopup, details }) => {
 
             const requests = newlySelectedEndpoints.map(endpoint =>
                 axios.post(
-                    'http://5.180.148.40:9000/api/user-man/v1/assign-role',
+                    `${window.runtimeConfig.REACT_APP_API_USER_MAN}/api/user-man/v1/assign-role`,
                     {
                         role: selectedRole.value,
                         permission: String(endpoint.value).toLowerCase(),
@@ -161,6 +161,7 @@ const AssignRole = ({ togglePopup, details }) => {
     // Custom checkbox option
     const CheckboxOption = props => {
         const { data, isSelected, innerRef, innerProps } = props;
+        const isSelectAll = data.value === '__select_all__';
         return (
             <div ref={innerRef} {...innerProps} style={{
                 display: 'flex',
@@ -174,9 +175,13 @@ const AssignRole = ({ togglePopup, details }) => {
                     onChange={() => null}
                     style={{ marginRight: 10 }}
                 />
-                <label>
+                {/* <label>
                     {data.label}
                     {data.isAssigned && <span style={{ color: '#666', marginLeft: 5 }}>(already assigned)</span>}
+                </label> */}
+                <label>
+                    {isSelectAll ? 'Select All' : data.label}
+                    {!isSelectAll && data.isAssigned}
                 </label>
             </div>
         );
@@ -187,7 +192,7 @@ const AssignRole = ({ togglePopup, details }) => {
             <div className="popup-container" style={{  alignItems: 'center' }}>
                 <div className="popup-content" style={{ width: '80%' }}>
                     <span style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
-                        <h5 >Assign Role to Permissions</h5>
+                        <h5 >Assign Permissions to Role</h5>
                         <CloseButton onClick={togglePopup} />
                     </span>
                     <form onSubmit={(e) => e.preventDefault()}>
@@ -207,12 +212,29 @@ const AssignRole = ({ togglePopup, details }) => {
                         <div className="form-group" style={{ marginBottom: '15px' }}>
                             <label>Select Permissions</label>
                             <Select
-                                options={endpoints}
+                                options={[{ label: 'Select All', value: '__select_all__' }, ...endpoints]}
+                                // options={endpoints}
                                 styles={customStyles}
                                 placeholder="Select permissions"
                                 isLoading={endpointsLoading}
                                 value={selectedEndpoints}
-                                onChange={setSelectedEndpoints}
+                                //  onChange={setSelectedEndpoints}
+                                onChange={(selected) => {
+                                    if (!selected) return setSelectedEndpoints([]);
+
+                                    const isSelectAllClicked = selected.find(opt => opt.value === '__select_all__');
+
+                                    if (isSelectAllClicked) {
+                                        const areAllSelected = selectedEndpoints.length === endpoints.length;
+                                        if (areAllSelected) {
+                                            setSelectedEndpoints([]);
+                                        } else {
+                                            setSelectedEndpoints(endpoints);
+                                        }
+                                    } else {
+                                        setSelectedEndpoints(selected);
+                                    }
+                                }}
                                 isMulti
                                 closeMenuOnSelect={false}
                                 hideSelectedOptions={false}

@@ -74,7 +74,7 @@ const CreateCriteria = ({ handleCreateCase }) => {
   useEffect(() => {
     const fetchCaseData = async () => {
       try {
-        const response = await axios.get('http://5.180.148.40:9001/api/case-man/v1/case', {
+        const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/case`, {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${Token}`
@@ -96,7 +96,7 @@ const CreateCriteria = ({ handleCreateCase }) => {
     // Fetch file types from API
     const fetchFileTypes = async () => {
       try {
-        const response = await axios.get('http://5.180.148.40:9002/api/osint-man/v1/platforms', {
+        const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_OSINT_MAN}/api/osint-man/v1/platforms`, {
           headers: {
             'Authorization': `Bearer ${Token}`
           },
@@ -177,7 +177,7 @@ const CreateCriteria = ({ handleCreateCase }) => {
       console.log("search payload", payload);
 
       const response = await axios.post(
-        'http://5.180.148.40:9007/api/das/search',
+        `${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/search`,
         payload,
         {
           headers: {
@@ -291,7 +291,7 @@ const CreateCriteria = ({ handleCreateCase }) => {
                 className="com"
                 value={formData.filetype}
                 onChange={(selected) => setFormData(prev => ({ ...prev, filetype: selected }))}
-                placeholder="Select Filetypes"
+                placeholder="Select file types"
               />
             </div>
 
@@ -305,13 +305,13 @@ const CreateCriteria = ({ handleCreateCase }) => {
                 className="com"
                 value={formData.caseIds}
                 onChange={(selected) => { setFormData(prev => ({ ...prev, caseIds: selected })); }}
-                placeholder="Select Cases"
+                placeholder="Select cases"
               />
             </div>
 
             {/* DatePicker */}
             <div className="mb-3">
-              <label>Daten Picker</label>
+              <label>Date Picker</label>
               <TextField
                 fullWidth
                 className="com mb-3"
@@ -326,7 +326,7 @@ const CreateCriteria = ({ handleCreateCase }) => {
                     padding: '0 8px',
                   },
                 }}
-                placeholder="Select Date..."
+                placeholder="Select date..."
                 value={
                   selectedDates.startDate && selectedDates.endDate
                     ? `${formatDate(selectedDates.startDate)} to ${formatDate(selectedDates.endDate)}`

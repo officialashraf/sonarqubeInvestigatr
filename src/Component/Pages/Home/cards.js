@@ -40,7 +40,7 @@ const CardList = () => {
 
   const getCardData = useCallback(async () => {
     try {
-      const response = await axios.get('http://5.180.148.40:9001/api/case-man/v1/case/states-count', {
+      const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/case/states-count`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${Token}`

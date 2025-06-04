@@ -54,9 +54,14 @@ td {
   color: #000;
   table-layout: fixed;
   border-collapse: collapse;
-  height: 500px;
+  height: 100%;
   overflow-x: auto;
   overflow-y: auto;
+}
+@media screen and (max-width: 768){
+  .data-table{
+    height: 900px;
+  }
 }
 
 .data-table th {

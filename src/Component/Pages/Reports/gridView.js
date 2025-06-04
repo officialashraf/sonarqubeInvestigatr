@@ -50,7 +50,7 @@ const GridView = () => {
       setLoading(true);
 
       const response2 = await axios.post(
-        'http://5.180.148.40:9002/api/osint-man/v1/report',
+        `${window.runtimeConfig.REACT_APP_API_OSINT_MAN}/api/osint-man/v1/report`,
         { rows: results },
         {
           responseType: 'blob',

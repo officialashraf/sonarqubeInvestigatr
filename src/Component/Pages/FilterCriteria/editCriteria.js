@@ -11,7 +11,7 @@ import { sharedSxStyles } from './createCriteria';
 import { toast } from 'react-toastify';
 import Loader from '../Layout/loader'
 
-const API_BASE_URL = 'http://5.180.148.40';
+// const API_BASE_URL = 'http://5.180.148.40';
 
 const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
   const Token = Cookies.get('accessToken');
@@ -43,7 +43,7 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
   // Fetch case data from API
   const fetchCaseData = useCallback(async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}:9001/api/case-man/v1/case`, {
+      const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/case`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${Token}`
@@ -67,7 +67,7 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
   // Fetch file types from API
   const fetchFileTypes = useCallback(async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}:9002/api/osint-man/v1/platforms`, {
+      const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_OSINT_MAN}/api/osint-man/v1/platforms`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${Token}`
@@ -117,7 +117,7 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
   // Fetch criteria details by ID
   const fetchCriteriaDetails = useCallback(async (caseOpts, fileTypeOpts) => {
     try {
-      const response = await axios.get(`${API_BASE_URL}:9007/api/das/criteria/${criteriaId}`, {
+      const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/criteria/${criteriaId}`, {
         headers: {
           'Authorization': `Bearer ${Token}`
         },
@@ -274,7 +274,7 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
       console.log("updatePayload", updatePayload);
       console.log("Keywords formatted as:", keywordsArray);
 
-      const updateResponse = await axios.put(`${API_BASE_URL}:9007/api/das/criteria/${criteriaId}`, updatePayload, {
+      const updateResponse = await axios.put(`${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/criteria/${criteriaId}`, updatePayload, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${Token}`
@@ -403,7 +403,7 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
                 className="com"
                 value={formData.filetype}
                 onChange={(selected) => setFormData(prev => ({ ...prev, filetype: selected || [] }))}
-                placeholder="Select Filetypes"
+                placeholder="Select file types"
                 isLoading={fileTypeOptions.length === 0}
               />
             </div>
@@ -418,7 +418,7 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
                 className="com"
                 value={formData.caseIds}
                 onChange={(selected) => setFormData(prev => ({ ...prev, caseIds: selected || [] }))}
-                placeholder="Select Cases"
+                placeholder="Select cases"
                 isLoading={caseOptions.length === 0}
               />
             </div>
@@ -440,7 +440,7 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
                     padding: '0 8px',
                   },
                 }}
-                placeholder="Select Date..."
+                placeholder="Select date..."
                 value={
                   selectedDates.startDate && selectedDates.endDate
                     ? `${formatDate(selectedDates.startDate)} to ${formatDate(selectedDates.endDate)}`

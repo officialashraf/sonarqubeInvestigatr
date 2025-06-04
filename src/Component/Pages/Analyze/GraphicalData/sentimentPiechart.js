@@ -22,7 +22,7 @@ const COLORS = ["#000000", "#555555", "#005A5A"];
         try {
           setLoading(true);
           const response = await axios.post(
-            "http://5.180.148.40:9007/api/das/aggregate",
+            `${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/aggregate`,
             {
               query: { unified_case_id: String(caseId) },
               aggs_fields: ["sentiment"]

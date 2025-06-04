@@ -65,7 +65,7 @@ const CriteriaTransactionTable = () => {
   const userData = async () => {
     const token = Cookies.get("accessToken");
     try {
-      const response = await axios.get('http://5.180.148.40:9000/api/user-man/v1/user'
+      const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_USER_MAN}/api/user-man/v1/user`
         , {
           headers: {
             'Content-Type': 'application/json',

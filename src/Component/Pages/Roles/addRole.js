@@ -20,7 +20,7 @@ const AddRole = ({ togglePopup }) => {
                 return; // Stop function execution
             }
             const response = await axios.post(
-                `http://5.180.148.40:9000/api/user-man/v1/role/${searchTitle}`,
+                `${window.runtimeConfig.REACT_APP_API_USER_MAN}/api/user-man/v1/role/${searchTitle}`,
                 {}, // empty body
                 {
                     headers: {
@@ -62,7 +62,7 @@ const AddRole = ({ togglePopup }) => {
     </span>
                         <input
                             type="text"
-                            placeholder="Enter Role"
+                            placeholder="Enter role"
                             className="com"
                             value={searchTitle} // Bind input value to state
                             onChange={(e) => setSearchTitle(e.target.value)} // Update state on input

@@ -45,7 +45,7 @@ const UserDetails = ({ item, users, toggleDetails }) => {
                 <th>Status</th>
                 <td>
                   <span className={item.status === "Active" ? "status-active-1" : "status-inactive"}>
-                    ● {item.status}
+                    {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
                   </span>
                 </td>
               </tr>
@@ -54,7 +54,7 @@ const UserDetails = ({ item, users, toggleDetails }) => {
         </div>
         <div className="button-container">
           <button type="button" className="cancel-btn" onClick={toggleDetails}>
-            OK
+            Cancel
           </button>
         </div>
       </div>
