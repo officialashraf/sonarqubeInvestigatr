@@ -52,9 +52,9 @@ const LicensePage = () => {
       // Redirect to login page upon success
       navigate("/login");
     } catch (err) {
-      toast.error("License registration failed" || err)
-      //   setError(error.response ? error.response.data.message : "Registration error");
-      // console.err("Error:", error);
+      toast.error(err.response?.data?.detail || "License registration failed");
+      console.warn(err.response?.data?.detail || "Registration err");
+      console.log("Err:", err);
     }
   };
 

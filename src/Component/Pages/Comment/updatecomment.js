@@ -31,7 +31,7 @@ const UpdateComment = ({ onClose, comment, resourceId, GetCommentList }) => {
       onClose()
 
     } catch (error) {
-      toast.error("Error while updating comment");
+      toast.error(error.response?.data?.detail || "Error while updating comment");
       console.error("Error:", error.response ? error.response.data : error.message);
     }
   };

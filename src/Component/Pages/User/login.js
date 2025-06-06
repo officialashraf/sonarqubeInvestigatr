@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Container, Row, Col, Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-// import axios from 'axios';
-import {axiosInstance} from '../../../utils/axiosConfig';
+import axios from 'axios';
+// import {axiosInstance} from '../../../utils/axiosConfig';
 import Cookies from 'js-cookie';
 import './login.css';
 import InputField from './inputField'; // reusable input field
@@ -53,7 +53,8 @@ const LoginPage = () => {
         }
         try {
             // Sending REST API request with username and password
-            const response = await axiosInstance.post(`${window.runtimeConfig.REACT_APP_API_USER_MAN}/v1/user/validate`, {
+
+            const response = await axios.post(`${window.runtimeConfig.REACT_APP_API_USER_MAN}/api/user-man/v1/user/validate`, {
                 username: formData.username,
                 password: formData.password
             });
@@ -109,7 +110,7 @@ const LoginPage = () => {
                             value={formData.username}
                             onChange={handleChange}
                             placeholder="Enter your username"
-                            autocomplete="off"
+                            autoComplete="username"
                             name="username"
 
 
@@ -122,7 +123,7 @@ const LoginPage = () => {
                             onChange={handleChange}
                             placeholder="Enter your password"
 
-                            autocomplete="off"
+                            autoComplete="current-password"
                             name="password"
 
                         />

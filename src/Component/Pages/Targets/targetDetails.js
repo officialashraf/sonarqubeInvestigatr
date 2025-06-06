@@ -71,11 +71,10 @@ const TargetDetails = ({ togglePopup, id }) => {
         });
       }
     } catch (err) {
-      console.error("Error fetching target details:", err.response || err);
-      toast.error("Failed to fetch target details");
-    } finally {
-      setLoading(false);
-    }
+            toast.error(err.response?.data?.detail||"Failed to fetch target details");
+           console.error("Error fetching target details:", err.response || err);
+          //  togglePopup();
+    } 
   };
 
   useEffect(() => {

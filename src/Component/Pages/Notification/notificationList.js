@@ -176,14 +176,14 @@ const NotificationList = ({ isOpen, setIsOpen }) => {
             });
 
             console.log("✅ Mark as read API response:", response.data);
-            toast.success(response.data.response)
+            toast.success("Notification marked as read sucessfully")
             
             // Fetch latest notifications after marking as read
             await fetchNotifications();
             console.log("🔄 Fetched latest notifications after mark as read");
 
         } catch (error) {
-             toast.error(error.response.data.details||"Error marking notification as read")
+             toast.error(error.response?.data?.detail||"Error marking notification as read")
             console.error("❌ Error marking notification as read:", error);
             console.error("Error details:", error.response?.data);
         } finally {
@@ -216,13 +216,13 @@ const NotificationList = ({ isOpen, setIsOpen }) => {
             });
 
             console.log("✅ Mark all as read API response:", response.data);
-             toast.success(response.data.response)
+             toast.success("Notifications marked as read sucessfully")
             // Fetch latest notifications after marking all as read
             await fetchNotifications();
             console.log("🔄 Fetched latest notifications after mark all as read");
 
         } catch (error) {
-            toast.error(error.response.data.details||"Error marking all notifications as read")
+            toast.error(error.response?.data?.detail||"Error marking all notifications as read")
             console.error("❌ Error marking all notifications as read:", error);
             console.error("Error details:", error.response?.data);
         } finally {
@@ -231,7 +231,7 @@ const NotificationList = ({ isOpen, setIsOpen }) => {
     };
 
     return (
-        <div style={{ height: '400px' }}>
+        <div style={{ height: '500px' }}>
             <NavDropdown 
                 id="profile-dropdown" 
                 align="end" 
@@ -269,6 +269,7 @@ const NotificationList = ({ isOpen, setIsOpen }) => {
                 {loading ? (
                     <NavDropdown.Item
                      className="nav-dropdown-item"
+                     
                      >  
                        <Loader/>
                     </NavDropdown.Item>

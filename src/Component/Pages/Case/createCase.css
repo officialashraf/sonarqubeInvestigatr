@@ -82,14 +82,15 @@ label {
   background-color: #fff;
   color: #000;
   font-size: 12px;
-}
+  height: 38px;
+ }
 .com:focus {
   border-color: transparent; /* Focus border color ko remove karne ke liye */
   box-shadow: none; /* Focus box-shadow ko remove karne ke liye */
   outline: none; /* Focus outline ko remove karne ke liye */
 }
 textarea {
-  height: 60px;
+  height: 22px;
   resize: vertical;
 }
 

@@ -120,11 +120,11 @@ const DataTable = () => {
           }
         });
       window.dispatchEvent(new Event("databaseUpdated"));
-      toast(`Case ${title} Deleted Successfully`)
+      toast.success(`Case ${title} Deleted Successfully`)
       console.log("Case Deleted:", response.data);
 
     } catch (error) {
-      toast("Error deleting case:", error)
+      toast.error(error.response?.data?.detail ||"Error deleting case")
       console.error("Error deleting case:", error);
     }
   };

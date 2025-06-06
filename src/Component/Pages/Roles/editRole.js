@@ -41,7 +41,8 @@ const EditRole = ({ togglePopup, details }) => {
             console.log('Role Updated successfully:', response.data); // Debug: API response
             togglePopup(false)
         } catch (error) {
-            console.error('Error saving criteria:', error); // Debug: Error log
+            toast.error(error.response?.data?.detail || "Error updating role")
+            console.error('Error updating role:', error); // Debug: Error log
         }
     };
     useEffect(

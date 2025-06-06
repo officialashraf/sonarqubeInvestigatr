@@ -28,13 +28,13 @@ import UserManagement from './Component/Pages/User/UserManagement.js';
 import RolesPermission from './Component/Pages/Roles/roles_Permission.js';
 import ReportPage from './Component/Pages/Reports/reportPage.js';
 import TargetDashboard from './Component/Pages/Targets/targetDashboard.js';
-import { injectGlobalInterceptors } from './utils/axiosConfig.js';
+import {setupAxiosInterceptors } from './utils/axiosConfig.js';
 
 
 
 const AppContent = () => {
   const location = useLocation();
-  injectGlobalInterceptors();
+  setupAxiosInterceptors();
 
   const getHeaderTitle = () => {
     const path = location.pathname;
@@ -50,7 +50,7 @@ const AppContent = () => {
     if (path === "/search") return "Search";
     if (path === "/users") return "Users";
     if (path === "/reports") return "Reports";
-    if (path === "/ comments") return "Comm";
+    if (path === "/comments") return "Comments";
     if (path === "/pin") return "Pin";
     if (path === "/documents") return "Docs";
     if (path === "/gemini") return "Gemini";

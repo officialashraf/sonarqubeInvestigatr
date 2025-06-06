@@ -372,7 +372,7 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
           <h5>Edit Criteria</h5>
           <form onSubmit={handleUpdate}>
             {/* Search Bar */}
-            <div className="mb-3">
+            <div >
               <label>Search Keywords </label>
               <TextField
                 fullWidth
@@ -394,7 +394,7 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
                           </div>
 
             {/* Filetype Dropdown (Multi Select) */}
-            <div className="mb-3">
+            <div >
               <label>Filetype</label>
               <Select
                 isMulti
@@ -409,7 +409,7 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
             </div>
 
             {/* Case Selection Field */}
-            <div className="mb-3">
+            <div >
               <label>Case</label>
               <Select
                 isMulti
@@ -424,7 +424,7 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
             </div>
 
             {/* DatePicker */}
-            <div className="mb-3">
+            <div >
               <label>DatePicker</label>
               <TextField
                 fullWidth
@@ -452,7 +452,7 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
             </div>
 
             {/* Location Fields */}
-            <div className="mb-3">
+            <div >
               <label>Focus your search to a particular location or area</label>
               <div className="d-flex gap-2">
                 <TextField
@@ -490,7 +490,7 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
               </div>
             </div>
 
-            {/* <h5 className="mb-3">SELECT ON MAP</h5> */}
+            {/* <h5 >SELECT ON MAP</h5> */}
 
             {/* Update Button */}
             <div className="button-container d-flex gap-2" style={{ textAlign: 'center' }}>

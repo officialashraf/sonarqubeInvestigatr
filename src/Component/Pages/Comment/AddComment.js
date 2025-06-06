@@ -95,7 +95,7 @@ const AddComment = ({ show, onClose, selectedResource }) => {
       getCommentList();
     } catch (err) {
       console.error("Add comment error:", err);
-      toast.error("Failed to add comment");
+      toast.error(err.response?.data?.detail || "Failed to add comment");
     } finally {
       setIsSubmitting(false);
     }
@@ -117,11 +117,11 @@ const AddComment = ({ show, onClose, selectedResource }) => {
         getCommentList();
       } else {
         console.error("Failed to delete comment:", response.status);
-        toast.error("Failed to delete comment");
+        toast.error(error.response?.data?.detail || "Failed to delete comment");
       }
     } catch (error) {
       console.error("Error deleting comment:", error);
-      toast.error("Failed to delete comment");
+      toast.error(error.response?.data?.detail || "Failed to delete comment");
     }
   };
 
