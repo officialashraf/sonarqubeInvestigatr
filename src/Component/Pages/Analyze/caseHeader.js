@@ -49,7 +49,7 @@ const CaseHeader = ({ onIconClick, activeView }) => {
           style={{ backgroundColor: "lightgrey" }}
         >
           {/* <div className="col-auto ms-auto ml-3 d-flex justify-content-center align-items-center"  style={{ marginRight:"5px", height:"28px"}}> */}
-          <div className="col-auto ms-auto d-flex align-items-center gap-3">
+          <div className="col-auto ms-auto d-flex align-items-center gap-3" style={{ margin: "5px" }}>
             <PieChart
               className={`icon-style ${activeView === 'graphicalData' ? 'active-icon' : ''}`}
               onClick={() => onIconClick("graphicalData")}

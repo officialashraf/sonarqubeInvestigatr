@@ -262,7 +262,7 @@ const UserManagement = () => {
               </div>
             </div>
 
-            <div className="data-table" style={{ height: "550px" }}>
+            <div className="data-table" >
               <Table striped bordered hover variant="light">
                 <thead>
                   <tr>
@@ -274,7 +274,7 @@ const UserManagement = () => {
                           alignItems: "center"
                         }}
                       >
-                        User Id
+                        User ID
                         <span
                           onClick={() => handleSort("id")}
                           style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}

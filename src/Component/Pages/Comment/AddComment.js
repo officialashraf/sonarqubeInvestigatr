@@ -210,7 +210,7 @@ const AddComment = ({ show, onClose, selectedResource }) => {
           </Box> */}
 
           <div className="button-container">
-              <button type="submit" className="create-btn">Add</button>
+              <button type="submit" className="create-btn" disabled={isSubmitting || !newComment.trim()}> {isSubmitting ? 'Adding...' : 'Add'}</button>
               <button type="button" className="cancel-btn" onClick={onClose}>
                 Cancel
               </button>

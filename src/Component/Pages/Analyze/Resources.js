@@ -200,7 +200,7 @@ const loadedPagesRef = useRef(loadedPages);
 
       {/* Content Section */}
       <div className="contents">
-        <div className="left-sidebar" ref={sidebarRef} style={{ marginBottom: "4rem" }}>
+        <div className="left-sidebar" ref={sidebarRef}>
           <div className="inner-content" style={{ paddingBottom: '60px', paddingTop: '60px' }}>
             <div className="sidebar-header">
               <span className="search-icon">
@@ -456,11 +456,14 @@ const loadedPagesRef = useRef(loadedPages);
                     {selectedResource.unified_activity_content}
                   </p>
                   {selectedResource.socialmedia_media_url && (() => {
-                    let urls = selectedResource.socialmedia_media_url;
+                    let urls = [];
 
-                    // Step 1: Clean karo array ko
-                    if (typeof urls === 'string') {
-                      urls = urls.replace(/[\]"]+/g, '').split(',');
+                    try {
+                      // Step 1: Parse the stringified array
+                      urls = JSON.parse(selectedResource.socialmedia_media_url);
+                    } catch (error) {
+                      console.error("Failed to parse media URL:", error);
+                      return <p>Invalid media format</p>;
                     }
 
                     // Step 2: Single URL nahi multiple URL array hai ab
@@ -471,7 +474,7 @@ const loadedPagesRef = useRef(loadedPages);
 
                           if (url.includes('video')) {
                             return (
-                              <video key={index} controls className="postImage">
+                              <video key={index} controls className="postImage" preload="metadata">
                                 <source src={url} type="video/mp4" />
                                 Your browser does not support the video tag.
                               </video>
@@ -510,7 +513,7 @@ const loadedPagesRef = useRef(loadedPages);
                         {new Date(selectedResource.unified_capture_time).getFullYear()}.
                       </span>
                     </div>
-                    <span><strong>{selectedResource.socialmedia_activity_view_count}</strong>view</span>
+                    <span><strong>{selectedResource.socialmedia_activity_view_count}</strong>Views</span>
                   </div>
                   <div className="insta-icon">
                     <div className="like-commment-share">
@@ -776,7 +779,7 @@ const loadedPagesRef = useRef(loadedPages);
                     </div>
                   </div>
                   <div>
-                    <strong>{selectedResource.socialmedia_activity_view_count}</strong>{" "}View
+                    <strong>{selectedResource.socialmedia_activity_view_count}</strong>{" "}Views
                   </div>
 
                 </div>

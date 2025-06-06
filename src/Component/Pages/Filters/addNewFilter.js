@@ -590,7 +590,6 @@ const AddNewFilter = ({ onClose, filterIde }) => {
                         onChange={(e) => handleKeywordChange(sourceIndex, e.target.value)}
                         onKeyDown={(e) => handleKeywordKeyDown(sourceIndex, e)}
                         disabled={!isEditable}
-                        style={{ width: '96%'}}
                       />
 
                       <div className="mt-2" style={{ display: "flex", flexWrap: "wrap", gap: "5px" }}>
@@ -649,6 +648,7 @@ const AddNewFilter = ({ onClose, filterIde }) => {
                         }}
                         onKeyDown={(e) => handleUrlKeyDown(sourceIndex, e)}
                         disabled={!isEditable}
+                        style={{ width: '96%' }}
                       />
                       <div className="mt-2"  style={{ display: "flex", flexWrap: "wrap", gap: "5px" }}>
                         {source.urls.filter((url) => url.trim() !== "").map((url, urlIndex) => (

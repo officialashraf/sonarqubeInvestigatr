@@ -60,9 +60,15 @@ td {
 }
 @media screen and (max-width: 768){
   .data-table{
-    height: 900px;
+    height: 100%px;
   }
 }
+@media screen and (max-width: 1920px) and (min-width: 1280px){
+  .data-table{
+    height: 500px;
+  }
+}
+
 
 .data-table th {
   vertical-align: middle;
@@ -74,7 +80,7 @@ td {
 
 .data-table td {
   vertical-align: middle;
-  padding: 0px 0px 0px 5px;
+  padding: 0px 2px 0px 5px;
   white-space: nowrap;
   font-size: 12px;
   font-family: Helvetica;

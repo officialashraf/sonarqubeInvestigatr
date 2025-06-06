@@ -53,7 +53,7 @@ const LoginPage = () => {
         }
         try {
             // Sending REST API request with username and password
-            const response = await axiosInstance.post('/api/user-man/v1/user/validate', {
+            const response = await axiosInstance.post(`${window.runtimeConfig.REACT_APP_API_USER_MAN}/v1/user/validate`, {
                 username: formData.username,
                 password: formData.password
             });

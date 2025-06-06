@@ -17,7 +17,7 @@ const CaseDetails = ({ item, togglePopupA }) => {
                         <Table bordered hover className="custom-table custom-table-th">
                             <tbody>
                                 {" "}<tr>
-                                    {" "}<th>Case ID</th> <td>{item.id}</td>{" "}
+                                    {" "}<th>Case ID</th> <td>{`CASE${String(item.id).padStart(4, "0")}`}</td>{" "}
                                 </tr>
                                 <tr>
                                     {" "}<th>Status</th> <td>{item.status}</td>{" "}

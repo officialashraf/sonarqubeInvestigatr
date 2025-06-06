@@ -26,7 +26,7 @@ const UserDetails = ({ item, users, toggleDetails }) => {
               <tr>
                 <th>User ID</th>
                 <td>
-                  {item.id}
+                  {`USER${String(item.id).padStart(4, '0')}`}
                 </td>
               </tr>
               <tr>

@@ -98,7 +98,7 @@ const TargetDetails = ({ togglePopup, id }) => {
                 <Table bordered hover className='custom-table custom-table-th' >
                   <tr> <th>Name</th> <td>{formData.name}</td> </tr>
                   <tbody>
-                    <tr> <th>ID</th> <td>{id}</td> </tr>
+                    <tr> <th>ID</th> <td>{`TAR${String(id).padStart(4, '0')}`}</td> </tr>
                     <tr> <th>Created On</th> <td>{formData?.created_on ? formData.created_on.slice(0, 18) : '-'}</td> </tr>
                     <tr> <th>Created By</th> <td>{formData?.created_by ? formData.created_by : '-'}</td> </tr>
                     <tr> <th>Modified On</th> <td>{formData?.modified_on ? formData.modified_on.slice(0, 18) : '-'}</td> </tr>

@@ -24,6 +24,8 @@ const injectGlobalInterceptors = () => {
       config.baseURL = window.runtimeConfig.REACT_APP_API_DAS_SEARCH;
     } else if (url.startsWith('/api/notifications')) {
       config.baseURL = window.runtimeConfig.REACT_APP_API_NOTIFICATION;
+    } else if (url.startsWith('/api/license')) {
+      config.baseURL = window.runtimeConfig.REACT_APP_API_LICENSE;
     }
     return config;
   });

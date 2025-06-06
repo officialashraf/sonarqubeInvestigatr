@@ -71,7 +71,14 @@
   padding: 16px;
   overflow: auto;
   margin-bottom: 45px;
-  height: 78vh;
+  /* height: 78vh; */
+}
+@media screen and (max-width: 1920px) and (min-width: 1280px){
+  .left-sidebar {
+    max-height: 78vh;
+    overflow-y: auto; /* Allow vertical scrolling */
+  }
+  
 }
 #scrollableDiv {
   border: 2px solid red;
@@ -151,10 +158,11 @@
   margin-top: 50%;
 }
 
-@media (max-width: 888px) {
+@media (max-width: 1280px) and (min-width: 768px) {
   .left-sidebar {
     width: 30%; /* Sidebar takes full width on small screens */
     padding: 8px;
+    margin-bottom: 4rem;
   }
 
   .right-content {
@@ -226,11 +234,13 @@
 
 .resourceDetailsContainer {
   display: flex;
+  justify-content: center;
 }
 .right-content {
   flex: 1;
   padding-left: 10px;
   padding-top: 10px;
+  padding-bottom: 50px;
   width: 50%;
   overflow-x: auto;
   overflow-y: auto;
@@ -238,21 +248,31 @@
   border-left: 1px solid #ddd;
   align-items: center;
   justify-content: center;
-  height: 450px;
+   height: 100%;
+  /* height: 450px; */
   /* min-width: 620px; */
+}
+@media screen and (max-width: 1920px) and (min-width: 1280px){
+  .right-content {
+    max-height: 80vh;
+    overflow-y: auto; /* Allow vertical scrolling */
+  }
+  
 }
 .resourceDetailsView {
   padding: 10px;
   background-color: white;
   width: 100%;
-  max-width: 800px;
-  height: auto;
+  max-width: 600px;
+  height: fit-content;
+  max-height: 100%;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
   margin: auto;
   overflow: hidden;
+  flex-shrink: 1;
 }
 .vkIframe {
   width: 100%;
@@ -315,16 +335,33 @@
   flex-wrap: wrap;
   gap: 8px; /* Space between images */
   margin-top: 10px;
-  justify-content: flex-start;
+  justify-content: center;
+}
+.imageGridWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center; /* Center the items */
+  margin-top: 10px;
 }
 
 .postMedia {
-  width: calc(50% - 4px); /* 2 images in one row */
-  height: 200px; /* Fixed height */
-  object-fit: cover; /* Crop nicely */
+  height: calc(50% - 4px); /* Fixed height */
+ object-fit: contain; 
   border-radius: 0px; /* Soft rounded corners */
+  display: block; /* Ensures it behaves like a block element */
+   margin: auto;    
 }
 
+.imageGridWrapper .postMedia:only-child {
+  height: auto;
+  object-fit: contain;
+  width: 100%; /* Full width for single image */
+}
+
+.imageGridWrapper .postMedia {
+  width: calc(50% - 4px);
+}
 body {
   overflow-x: hidden;
 }

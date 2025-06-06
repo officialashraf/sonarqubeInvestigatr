@@ -241,7 +241,7 @@ const RolesPermission = () => {
                 </div>
             </div>
 
-            <div className="data-table" style={{ height: "500px", overflowY: 'auto' }}>
+            <div className="data-table" style={{  overflowY: 'auto' }}>
                 <Table striped bordered hover variant="light">
                     <thead>
                         <tr>
