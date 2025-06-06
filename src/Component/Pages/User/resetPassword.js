@@ -5,8 +5,8 @@ import axios from 'axios';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 
-const ResetPassword = ({ onClose, id }) => {
-    console.log("id", id)
+const ResetPassword = ({ onClose, item }) => {
+    console.log("item", item)
     const [newPassword, setNewPassword] = useState('')
     const [showPassword, setShowPassword] = useState(false);
     const [isPasswordTouched, setIsPasswordTouched] = useState(false);
@@ -33,7 +33,7 @@ const ResetPassword = ({ onClose, id }) => {
             const response = await axios.post(`http://5.180.148.40:9000/api/user-man/v1/user/resetpassword`,
                 {
                     new_password: newPassword,
-                    user_id: id,
+                    user_id:item.id,
                 },
                 {
                     headers: {
@@ -61,7 +61,7 @@ const ResetPassword = ({ onClose, id }) => {
                 </button>
                 <div className="popup-content">
                     <form onSubmit={handleReset}>
-
+<h5>{item.username}</h5>
                         <label htmlFor="title">New Password *</label>
                         <div style={{ position: "relative", display: "inline-block", width: "100%" }}>
                             <input

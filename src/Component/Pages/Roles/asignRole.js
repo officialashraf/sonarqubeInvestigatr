@@ -262,6 +262,7 @@ console.warn("detailsrole",details)
                                 hideSelectedOptions={false}
                                 components={{ Option: CheckboxOption, MultiValue: () => null }}
                                 onMenuOpen={() => setIsDropdownOpen(true)} //
+                                
                             />
                             
                                                 <small className="text-muted">

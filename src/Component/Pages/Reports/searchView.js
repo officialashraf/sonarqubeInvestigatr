@@ -183,7 +183,7 @@ const SearchView = () => {
           <label>Search <span style={{ color: 'black' }}>*</span></label>
           <TextField
             fullWidth
-            className="com mb-3"
+            className="com"
             name="searchQuery"
             InputProps={{
               startAdornment: (
@@ -209,7 +209,7 @@ const SearchView = () => {
           />
 
           {/* Case Selection Field */}
-          <div className="mb-3">
+          <div >
             <label>Case</label>
             <Select
               isMulti
@@ -223,11 +223,11 @@ const SearchView = () => {
           </div>
 
           {/* DatePicker */}
-          <div className="mb-3">
+          <div>
             <label>Date</label>
             <TextField
               fullWidth
-              className="com mb-3"
+              className="com"
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">

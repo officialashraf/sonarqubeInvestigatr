@@ -233,7 +233,7 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
                             <form>
 
                                 {/* Case Selection */}
-                                <div className="mb-3">
+                                <div >
                                     <label>Case</label>
                                     <Select
                                         isMulti
@@ -247,7 +247,7 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
                                 </div>
 
                                 {/* Platform Selection */}
-                                <div className="mb-3">
+                                <div >
                                     <label>Platform</label>
                                     <Select
                                         isMulti
@@ -261,11 +261,11 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
                                 </div>
 
                                 {/* Date Range */}
-                                <div className="mb-3">
+                                <div >
                                     <label>Date Range</label>
                                     <TextField
                                         fullWidth
-                                        className="com mb-3"
+                                        className="com "
                                         InputProps={{
                                             endAdornment: (
                                                 <InputAdornment position="end">

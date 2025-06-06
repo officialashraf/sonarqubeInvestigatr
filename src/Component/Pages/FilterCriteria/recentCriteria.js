@@ -148,12 +148,11 @@ const RecentCriteria = () => {
       if (response.ok) {
         // Filter the list to remove the item locally
         fetchData()
-        toast("Criteria successfully deleted")
+        toast.success("Criteria successfully deleted")
         console.log("Criteria successfully deleted!");
-      } else {
-        console.error("Failed to delete item:", response.status);
-      }
+      } 
     } catch (error) {
+toast.error(error.response?.data?.detail ||"Failed deleting criteria")
       console.error("Error deleting item:", error);
     }
   };

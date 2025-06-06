@@ -554,7 +554,7 @@ const UserManagement = () => {
                               <Dropdown.Item onClick={() => toggleEditForm(item)}>
                                 Edit
                               </Dropdown.Item>
-                               <Dropdown.Item onClick={() => toggleResetForm(item.id)}>
+                               <Dropdown.Item onClick={() => toggleResetForm(item)}>
                                Reset Password
                               </Dropdown.Item>
                               <Dropdown.Item
@@ -579,7 +579,7 @@ const UserManagement = () => {
           </div>
         )
       }
-{showResetForm && <ResetPassword onClose={toggleResetForm} id={selectedUser}/>}
+{showResetForm && <ResetPassword onClose={toggleResetForm} item={selectedUser}/>}
       {showAddForm && <AddUser onClose={togglePopup} />}
       {showDetail && <UserDetails item={selectedUser} users={users} toggleDetails={toggleDetails} />}
       {showEditForm &&
