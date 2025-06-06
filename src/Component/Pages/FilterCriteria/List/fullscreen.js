@@ -257,15 +257,15 @@ const SearchResults = () => {
         </div>
 
       </div>
-      <div className="col-auto  d-flex align-items-center gap-1 justify-content-end  me-2">
-<PieChart
-    className={`icon-style ${activeComponent === "graph" ? "active-icon" : ""}`}
-    onClick={() => handleComponentToggle("graph")}
-/>
-<ListAltOutlined
-    className={`icon-style ${activeComponent === "list" ? "active-icon" : ""}`}
-    onClick={() => handleComponentToggle("list")}
-/>
+      <div className="col-auto  d-flex align-items-center gap-1 justify-content-end  me-2" style={{ margin: "5px" }}>
+        <PieChart
+          className={`icon-style ${activeComponent === "graph" ? "active-icon" : ""}`}
+          onClick={() => handleComponentToggle("graph")}
+        />
+        <ListAltOutlined
+          className={`icon-style ${activeComponent === "list" ? "active-icon" : ""}`}
+          onClick={() => handleComponentToggle("list")}
+        />
 
       </div>
       <div className="search-results" style={{ height: 'auto' }}>

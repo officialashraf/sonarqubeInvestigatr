@@ -89,7 +89,6 @@ const DataTable = () => {
     toast((t) => (
       <div>
         <p>Are you sure you want to delete {title} case?</p>
-        <p>Warning: Deleting this case will unapply all filters</p>
         <button className='custom-confirm-button' onClick={() => { deleteCase(id, title); toast.dismiss(t.id); }} style={{ padding: "4px 1px", fontSize: "12px", width: "20%" }}>Yes</button>
         <button className='custom-confirm-button' onClick={() => toast.dismiss(t.id)} style={{ padding: "4px 1px", fontSize: "12px", width: "20%" }}>No</button> </div>),
       {
@@ -240,7 +239,7 @@ const DataTable = () => {
             <thead>
               <tr>
                 <th>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100px' }}>
                     Case ID
                     <span onClick={() => handleSort('id')} style={{ cursor: 'pointer', display: 'inline-flex', alignItems: 'center' }}>
                       {sortConfig.key === 'id' ? (

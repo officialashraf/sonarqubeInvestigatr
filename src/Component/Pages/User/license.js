@@ -37,7 +37,7 @@ const LicensePage = () => {
       //   return;
       // }
       console.log("key", typeof licenseKey)
-      const response = await axios.post("http://5.180.148.40:9008/api/license/register",
+      const response = await axios.post(`${window.runtimeConfig.REACT_APP_API_LICENSE}/register`,
         { key: licenseKey }, // Ensure key is passed correctly
         {
           headers: {
