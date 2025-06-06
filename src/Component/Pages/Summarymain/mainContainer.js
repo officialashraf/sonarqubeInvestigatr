@@ -57,7 +57,7 @@ const MainContainer = () => {
     (filter) => filter["case id"]?.includes(String(caseData?.id))
   );
 
-  const isCaseInProgress = caseData?.status === ('In Progress' || 'On Hold'|| 'Closed');
+  const isCaseInProgress = caseData?.status !== 'New';
 
   const isFilterZero = filterdata.length > 0;
 
@@ -70,6 +70,7 @@ const MainContainer = () => {
 
   const renderContent = () => {
     if (isLoading) {
+
       return <>
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', marginTop: '30rem', width: '100%' }}> <Loader />; </div> </>// Show loading state
     }

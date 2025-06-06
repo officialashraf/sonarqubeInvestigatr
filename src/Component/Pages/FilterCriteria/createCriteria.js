@@ -135,16 +135,19 @@ const CreateCriteria = ({ handleCreateCase }) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: name === "searchQuery"
-        ? value.split(',').map(k => k).filter(k => k !== "") // Clean and filter empty
-        : value
-    }));
-    setError((prevErrors) => ({
-      ...prevErrors,
-      [name]: ""  // Remove the specific error message
-    }));
+     if (name === "searchQuery") {
+      setFormData(prev => ({
+        ...prev,
+        [name]: value.split(",").map(keyword => keyword) // Split by commas and trim extra spaces
+      }));
+    } else {
+      // For other inputs, handle normally
+      setFormData(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    }
+  
   };
 
   const handleSearch = async (e) => {
@@ -254,8 +257,9 @@ const CreateCriteria = ({ handleCreateCase }) => {
             <label>Search *</label>
             <TextField
               fullWidth
-              className="com mb-3"
+              className="com"
               name="searchQuery"
+              
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -277,12 +281,13 @@ const CreateCriteria = ({ handleCreateCase }) => {
               value={formData.searchQuery}
               onChange={handleInputChange}
               sx={sharedSxStyles}
+              
             />
             {error.searchQuery && <p style={{ color: "red", margin: '0px' }} >{error.searchQuery}</p>}
 
 
             {/* Filetype Dropdown (Multi Select) */}
-            <div className="mb-3">
+            <div >
               <label>File Type</label>
               <Select
                 isMulti
@@ -296,7 +301,7 @@ const CreateCriteria = ({ handleCreateCase }) => {
             </div>
 
             {/* Case Selection Field */}
-            <div className="mb-3">
+            <div >
               <label>Case</label>
               <Select
                 isMulti
@@ -310,12 +315,12 @@ const CreateCriteria = ({ handleCreateCase }) => {
             </div>
 
             {/* DatePicker */}
-            <div className="mb-3">
+            <div >
 
               <label>Date</label>
               <TextField
                 fullWidth
-                className="com mb-3"
+                className="com"
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
@@ -340,11 +345,11 @@ const CreateCriteria = ({ handleCreateCase }) => {
 
             {/* Location Fields */}
             <label>Focus your search to a particular location or area</label>
-            <div className="mb-3 d-flex">
+            <div className="d-flex">
               <TextField
                 name="latitude"
                 placeholder="Latitude"
-                className="com mb-3 me-2"
+                className="com me-2"
                 value={formData.latitude}
                 onChange={handleInputChange}
                 InputProps={{
@@ -358,7 +363,7 @@ const CreateCriteria = ({ handleCreateCase }) => {
               <TextField
                 name="longitude"
                 placeholder="Longitude"
-                className="com mb-3"
+                className="com "
                 value={formData.longitude}
                 onChange={handleInputChange}
                 InputProps={{
@@ -370,8 +375,7 @@ const CreateCriteria = ({ handleCreateCase }) => {
                 sx={sharedSxStyles}
               />
             </div>
-            <h5 className="mb-3">SELECT ON MAP</h5>
-
+          
             {/* Save Criteria Checkbox */}
             <FormControlLabel
               control={
@@ -383,7 +387,7 @@ const CreateCriteria = ({ handleCreateCase }) => {
                 />
               }
               label="Save this search"
-              className="mb-3"
+              
             />
 
             {/* Submit Button */}

@@ -15,7 +15,7 @@ const AddRole = ({ togglePopup }) => {
     const [initialEndpoints, setInitialEndpoints] = useState([]);
     const [loading, setLoading] = useState(false);
     const [endpointsLoading, setEndpointsLoading] = useState(false);
-      const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
     const fetchEndpoints = useCallback(async () => {
         setEndpointsLoading(true);
@@ -64,7 +64,7 @@ const AddRole = ({ togglePopup }) => {
                 endpoint => !initialEndpoints.includes(endpoint.value)
             );
             console.log("newlyse;ected", newlySelectedEndpoints)
-           
+
             // Only process newly selected endpoints console.log("selectedrole", selectedRole)
             if (!selectedRole.trim()) {
                 toast.error("Please enter role before proceeding."); // Show toast error
@@ -80,8 +80,8 @@ const AddRole = ({ togglePopup }) => {
                 permissions: newlySelectedEndpoints.map(endpoint => endpoint.value),
             }
             console.log("payload", payload)
-            const requests =
-                axios.post(
+            const response =
+              await axios.post(
                     `${window.runtimeConfig.REACT_APP_API_USER_MAN}/api/user-man/v1/role`, payload
                     ,
                     {
@@ -91,12 +91,16 @@ const AddRole = ({ togglePopup }) => {
                         }
                     }
                 )
- window.dispatchEvent(new Event("databaseUpdated"));
-            toast.success("New role created successfully");
-          
-            togglePopup(false);
-        } catch (error) {
-            toast.error(error.response?.data?.detail || 'Failed to assign role');
+     
+            if (response.status === 200) {
+                toast.success("New role created successfully");
+                window.dispatchEvent(new Event("databaseUpdated"));
+                togglePopup(false);
+            }
+            console.log(response)
+        } catch(error) {
+            console.error("Error during role creation:", error.response || error);
+            toast.error(error.response?.data?.detail || error.message  || 'Failed to assign role');
         } finally {
             setLoading(false);
         }
@@ -153,7 +157,7 @@ const AddRole = ({ togglePopup }) => {
                     {data.label}
                     {data.isAssigned && <span style={{ color: '#666', marginLeft: 5 }}>(already assigned)</span>}
                 </label> */}
-              
+
                 <label>
                     {isSelectAll ? 'Select All' : data.label}
                     {!isSelectAll && data.isAssigned}
@@ -191,7 +195,7 @@ const AddRole = ({ togglePopup }) => {
                         <div className="form-group" style={{ marginBottom: '15px' }}>
                             <label>Select Permissions</label>
                             <Select
-                               options={[{ label: 'Select All', value: '_select_all_' }, ...endpoints]}
+                                options={[{ label: 'Select All', value: '_select_all_' }, ...endpoints]}
                                 styles={customStyles}
                                 placeholder="Select permissions"
                                 isLoading={endpointsLoading}
@@ -218,7 +222,6 @@ const AddRole = ({ togglePopup }) => {
                                 hideSelectedOptions={false}
                                 components={{ Option: CheckboxOption, MultiValue: () => null }}
                                 onMenuOpen={() => setIsDropdownOpen(true)} // ✅ Set dropdown open
-                                onMenuClose={() => setIsDropdownOpen(false)}
                             />
                             <small className="text-muted">
                                 Only newly selected permissions will be assigned
@@ -237,7 +240,6 @@ const AddRole = ({ togglePopup }) => {
                             <button
                                 type="submit"
                                 className="create-btn"
-
                                 onClick={assignRole}
                                 disabled={loading}
                             >

@@ -84,7 +84,7 @@ const AddFilter2 = ({ togglePopup }) => {
             'Authorization': `Bearer ${token}`,
           }
         });
-        window.dispatchEvent(new Event('databaseUpdated'));
+        // window.dispatchEvent(new Event('databaseUpdated'));
       }
 
       // Stop deselected filters
@@ -99,7 +99,8 @@ const AddFilter2 = ({ togglePopup }) => {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`,
           },
-        }); window.dispatchEvent(new Event('databaseUpdated'));
+        }); 
+        // window.dispatchEvent(new Event('databaseUpdated'));
       }
 
       // Update case status
