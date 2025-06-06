@@ -211,16 +211,6 @@ console.warn("detailsrole",details)
             </div>
         );
     };
-
-    // Helper function to get current changes for display
-    const getCurrentChanges = () => {
-        const currentSelectedValues = selectedEndpoints.map(endpoint => endpoint.value);
-        const toAdd = currentSelectedValues.filter(val => !initialEndpoints.includes(val));
-        const toRemove = initialEndpoints.filter(val => !currentSelectedValues.includes(val));
-        
-        return { toAdd, toRemove };
-    };
-
     return (
         <div className="popup-overlay" style={{ top: 0, left: 0, width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center", zIndex: 1050 }}>
             <div className="popup-container" style={{ alignItems: 'center' }}>
@@ -244,8 +234,7 @@ console.warn("detailsrole",details)
                         <div className="form-group" style={{ marginBottom: '15px',height:'50px' }}>
                             <label>Select Permissions</label>
                             <Select
-
-                                options={[{ label: 'Select All', value: '__select_all__' }, ...endpoints]}
+                                options={[{ label: 'Select All', value: '_select_all_' }, ...endpoints]}
                                 // options={endpoints}
                                 styles={customStyles}
                                 placeholder="Select permissions"
