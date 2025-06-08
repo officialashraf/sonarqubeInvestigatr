@@ -37,7 +37,7 @@ const LicensePage = () => {
       //   return;
       // }
       console.log("key", typeof licenseKey)
-      const response = await axios.post(`${window.runtimeConfig.REACT_APP_API_LICENSE}/register`,
+      const response = await axios.post(`${window.runtimeConfig.REACT_APP_API_LICENSE}/api/license/register`,
         { key: licenseKey }, // Ensure key is passed correctly
         {
           headers: {
