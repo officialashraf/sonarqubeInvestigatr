@@ -13,6 +13,7 @@ import useWebSocket from "../../../utils/WebSocket/useWebsocket";
 import { clearUsername, setUsername } from "../../../Redux/Action/userAction";
 import { disconnectWebSocket } from '../../../utils/WebSocket/websocket';
 import { CLEAR_SEARCH } from '../../../Redux/Constants/piiConstant';
+import AboutUs from './aboutUs';
 
 const Header = ({ title }) => {
   const dispatch = useDispatch();
@@ -22,6 +23,7 @@ const Header = ({ title }) => {
   
   const [loggedInUserId, setLoggedInUserId] = useState('');
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [abouUsOpen, setAbouUsOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [username, setusername] = useState('')
 
@@ -107,10 +109,15 @@ const Header = ({ title }) => {
     }
   };
 
+
   const handleNotificationClick = () => {
     setNotificationCount(0); // Reset count to zero on click
     setIsPopupOpen(true);
   };
+  
+  const toggleAboutUs = () => {
+    setAbouUsOpen(prevState => !prevState); // True ko False aur False ko True karega
+};
 
   return (
     <>
@@ -158,6 +165,11 @@ const Header = ({ title }) => {
               <NavDropdown.Item disabled>
                  {username}
               </NavDropdown.Item>
+                <NavDropdown.Item
+               
+              onClick={toggleAboutUs} >
+                About Us
+              </NavDropdown.Item>
               <NavDropdown.Item 
                 onClick={handleLogout}
                 disabled={isLoggingOut}
@@ -174,6 +186,9 @@ const Header = ({ title }) => {
           isOpen={isPopupOpen} 
           setIsOpen={setIsPopupOpen} 
         />
+      )}
+      {abouUsOpen&&(
+        <AboutUs togglePopup={toggleAboutUs}/>
       )}
     </>
   );
