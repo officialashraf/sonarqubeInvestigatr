@@ -51,6 +51,7 @@ span {
 .App-link {
   color: #61dafb;
 }
+
 input:-webkit-autofill {
   background-color: #fff !important;
   color: #000 !important;
@@ -60,6 +61,7 @@ input:-webkit-autofill {
 .css-qve9l1-MuiInputBase-input-MuiOutlinedInput-input:-webkit-autofill {
   height:5px;
 }
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
