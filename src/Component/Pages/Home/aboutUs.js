@@ -18,7 +18,7 @@ const AboutUs = ({ togglePopup }) => {
                     </div>
                     <div className="case-details-container">
                         <Table bordered hover className='custom-table custom-table-th' >
-                            <tbody> <tr> <th>Product Name</th> <td>{buildInfo.productName}</td> </tr>
+                            <tbody style={{textAlign:'left'}}> <tr> <th>Product Name</th> <td>{buildInfo.productName}</td> </tr>
                                 <tr> <th> Version </th> <td>{buildInfo.version}</td> </tr>
                                 {/* <tr> <th>LastModified On</th> <td>{buildInfo.lastModifiedOn}</td> </tr>
                                 <tr> <th>Updated By:</th> <td>{buildInfo.updatedBy}</td> </tr>

@@ -20,102 +20,127 @@ import { fetchSummaryData } from "../../../Redux/Action/filterAction";
 const Resources = () => {
 
   const dispatch = useDispatch();
-    const data1 = useSelector((state) => state.caseData.caseData);
-  const {
-    data,
-    headers,
-    page,
-    totalPages,
-    totalResults,
-  } = useSelector((state) => state.filterData);
-  const summaryData = data
-  const summaryHeaders = headers
-  console.log("totalresultes", totalResults)
-  console.log("totalapges", totalPages)
-  console.log("Summary Data from Redux:", summaryData);
-  console.log("Summary Headers from Redux:", summaryHeaders);
+const data1 = useSelector((state) => state.caseData.caseData);
+const {
+  data,
+  headers,
+  page,
+  totalPages,
+  totalResults,
+} = useSelector((state) => state.filterData);
 
-  const [showPopup, setShowPopup] = useState(false);
-  const [currentPage, setCurrentPage] = useState(page);
-  const [hasMore, setHasMore] = useState(true);
-  const [loading, setLoading] = useState(false); // Loader state
-  const sidebarRef = useRef(null);
-  const scrollDirectionRef = useRef(null);
-  const [selectedResource, setSelectedResource] = useState(null); // State to track the selected resource
-  const [allResources, setAllResources] = useState([]);
-  const [loadedPages, setLoadedPages] = useState([]);
-const loadedPagesRef = useRef(loadedPages);
+const summaryData = data;
+const summaryHeaders = headers;
+console.log("totalresultes", totalResults);
+console.log("totalapges", totalPages);
+console.log("Summary Data from Redux:", summaryData);
+console.log("Summary Headers from Redux:", summaryHeaders);
 
-  useEffect(() => {
+const [showPopup, setShowPopup] = useState(false);
+const [currentPage, setCurrentPage] = useState(page);
+const [hasMore, setHasMore] = useState(true);
+const [loading, setLoading] = useState(false);
+const sidebarRef = useRef(null);
+const scrollDirectionRef = useRef(null);
+const [selectedResource, setSelectedResource] = useState(null);
+const [allResources, setAllResources] = useState([]);
+const [loadedPages, setLoadedPages] = useState([]);
 
-    if (data1?.id) {
-      setLoading(true);
-      dispatch(fetchSummaryData({
-        queryPayload: { unified_case_id: data1.id },
-        page: currentPage,
-        itemsPerPage: 50,
-      })).then(() => {
-        setLoading(false);
-      });
-    }
-  }, [currentPage, data1?.id, dispatch]);
-    useEffect(() => {
-    loadedPagesRef.current = loadedPages;
-  }, [loadedPages]);
+// Initialize with first page
+useEffect(() => {
+  console.log("data1.id:", data1?.id);
+  if (data1?.id) {
+    setLoading(true);
+    // Reset states for new case
+    setAllResources([]);
+    setLoadedPages([]);
+    setCurrentPage(1); // Start from page 1
+    
+    dispatch(fetchSummaryData({
+      queryPayload: { unified_case_id: data1.id },
+      page: 1, // Always start from page 1
+      itemsPerPage: 50,
+    })).then(() => {
+      setLoading(false);
+    });
+  }
+}, [data1?.id, dispatch]); // Only depend on data1.id
 
-  // Manage loaded pages and allResources to avoid duplicates and keep max 2 pages and max 100 items
-  useEffect(() => {
-    if (summaryData && Array.isArray(summaryData)) {
-      setAllResources(prevResources => {
-        const currentLoadedPages = [...loadedPagesRef.current]; // Capture current loadedPages
-        let updatedResources = [...prevResources];
-        let updatedLoadedPages = [...currentLoadedPages];
+// Load additional pages
+useEffect(() => {
+  if (data1?.id && currentPage > 1) {
+    setLoading(true);
+    dispatch(fetchSummaryData({
+      queryPayload: { unified_case_id: data1.id },
+      page: currentPage,
+      itemsPerPage: 50,
+    })).then(() => {
+      setLoading(false);
+    });
+  }
+}, [currentPage, data1?.id, dispatch]);
 
-        if (!currentLoadedPages.includes(currentPage)) {
-          if (scrollDirectionRef.current === 'down') {
-            // Append new page data
-            updatedResources = [...updatedResources, ...summaryData];
-            updatedLoadedPages.push(currentPage);
-
-            // Keep only last 2 pages
-            if (updatedLoadedPages.length > 2) {
-              const removedPage = updatedLoadedPages.shift();
-              const removedPageSize = prevResources.filter(item => item.page === removedPage).length;
-              updatedResources = updatedResources.slice(removedPageSize);
-            }
-          } else if (scrollDirectionRef.current === 'up') {
-            // Prepend new page data
-            updatedResources = [...summaryData, ...updatedResources];
-            updatedLoadedPages.unshift(currentPage);
-
-            // Keep only last 2 pages
-            if (updatedLoadedPages.length > 2) {
-              const removedPage = updatedLoadedPages.pop();
-              const removedPageSize = prevResources.filter(item => item.page === removedPage).length;
-              updatedResources = updatedResources.slice(0, updatedResources.length - removedPageSize);
-            }
-          } else {
-            // Initial load or unknown scroll direction
-            updatedResources = [...summaryData];
-            updatedLoadedPages = [currentPage];
-          }
+// Simplified resource management
+useEffect(() => {
+  if (summaryData && Array.isArray(summaryData) && summaryData.length > 0) {
+    const pageFromRedux = page; // Get current page from Redux
+    
+    setLoadedPages(prevLoadedPages => {
+      // If this page is already loaded, don't add it again
+      if (prevLoadedPages.includes(pageFromRedux)) {
+        return prevLoadedPages;
+      }
+      
+      const updatedLoadedPages = [...prevLoadedPages, pageFromRedux].sort((a, b) => a - b);
+      
+      // Keep only last 2 pages
+      if (updatedLoadedPages.length > 2) {
+        return updatedLoadedPages.slice(-2);
+      }
+      
+      return updatedLoadedPages;
+    });
+    
+    setAllResources(prevResources => {
+      // Create a map to store resources by page
+      const resourcesByPage = new Map();
+      
+      // Add existing resources
+      prevResources.forEach(resource => {
+        const resourcePage = resource.page || pageFromRedux;
+        if (!resourcesByPage.has(resourcePage)) {
+          resourcesByPage.set(resourcePage, []);
         }
-
-        // Ensure max 100 items
-        if (updatedResources.length > 100) {
-          updatedResources = updatedResources.slice(-100);
-        }
-
-        // Update loadedPages state
-        setLoadedPages(updatedLoadedPages);
-
-        // Update hasMore based on the new state
-        setHasMore(updatedLoadedPages.length === 0 || Math.max(...updatedLoadedPages) < totalPages);
-
-        return updatedResources;
+        resourcesByPage.get(resourcePage).push(resource);
       });
-    }
-  }, [summaryData, currentPage, totalPages]); // Added loadedPages to dependencies
+      
+      // Add new resources
+      const newResourcesWithPage = summaryData.map(resource => ({
+        ...resource,
+        page: pageFromRedux
+      }));
+      
+      resourcesByPage.set(pageFromRedux, newResourcesWithPage);
+      
+      // Keep only resources from the last 2 pages
+      const sortedPages = Array.from(resourcesByPage.keys()).sort((a, b) => a - b);
+      const pagesToKeep = sortedPages.slice(-2);
+      
+      const finalResources = [];
+      pagesToKeep.forEach(page => {
+        if (resourcesByPage.has(page)) {
+          finalResources.push(...resourcesByPage.get(page));
+        }
+      });
+      
+      // Ensure max 100 items
+      return finalResources.slice(-100);
+    });
+    
+    // Update hasMore
+    setHasMore(pageFromRedux < totalPages);
+  }
+}, [summaryData, page, totalPages]);
 
 
  // ... rest of your component ...
@@ -148,6 +173,7 @@ const loadedPagesRef = useRef(loadedPages);
     return () => sidebarElement.removeEventListener("scroll", handleInfiniteScroll);
   }, [loading, hasMore, currentPage]);
 
+  
   // Adjust scroll position after loading previous page to avoid jumpiness
   useEffect(() => {
     const scrollContainer = sidebarRef.current;
@@ -216,7 +242,7 @@ const loadedPagesRef = useRef(loadedPages);
               )}
             </div>
 
-            {allResources.length > 0 ? (
+            {allResources && allResources.length > 0 ? (
               allResources.map((resource) => (
                 <div
                   key={resource.row_id}
