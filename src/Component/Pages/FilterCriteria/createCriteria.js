@@ -26,7 +26,7 @@ export const sharedSxStyles = {
   },
   '& .MuiInputBase-root': {
     boxShadow: 'none',
-  }
+  },
 };
 
 const CreateCriteria = ({ handleCreateCase }) => {
@@ -276,6 +276,9 @@ const CreateCriteria = ({ handleCreateCase }) => {
                   height: '38px',
                   padding: '0 8px',
                 },
+               
+      
+    
               }}
               placeholder="Search..."
               value={formData.searchQuery}

@@ -52,6 +52,16 @@ span {
   color: #61dafb;
 }
 
+input:-webkit-autofill {
+  background-color: #fff !important;
+  color: #000 !important;
+  -webkit-text-fill-color: #000 !important;
+  box-shadow: 0 0 0 1000px white inset !important;
+}
+.css-qve9l1-MuiInputBase-input-MuiOutlinedInput-input:-webkit-autofill {
+  height:5px;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
