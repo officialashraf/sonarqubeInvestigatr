@@ -29,6 +29,7 @@ import RolesPermission from './Component/Pages/Roles/roles_Permission.js';
 import ReportPage from './Component/Pages/Reports/reportPage.js';
 import TargetDashboard from './Component/Pages/Targets/targetDashboard.js';
 import {setupAxiosInterceptors } from './utils/axiosConfig.js';
+import AboutUs from './Component/Pages/Home/aboutUs.js';
 
 
 
@@ -98,7 +99,7 @@ const AppContent = () => {
               <Route path="/roles" element={< RolesPermission />} />
               <Route path="/reports" element={< ReportPage />} />
               <Route path="/targets" element={< TargetDashboard />} />
-
+    <Route path="/about" element={< AboutUs />} />
               <Route path="*" element={<div className='notfound'> <h4>Work in progress........</h4></div>} />
             </Route>
             <Route path='loader' element={<Loader />} />

@@ -1,7 +1,11 @@
+import React from 'react';
+import buildInfo from '../../../constants/build-info';
+
+
 
 import { Table, CloseButton } from 'react-bootstrap'
-const AboutUs = ({ togglePopup}) => {
-    
+const AboutUs = ({ togglePopup }) => {
+
     return (
 
         <div className="popup-overlay">
@@ -14,11 +18,12 @@ const AboutUs = ({ togglePopup}) => {
                     </div>
                     <div className="case-details-container">
                         <Table bordered hover className='custom-table custom-table-th' >
-                            <tbody> <tr> <th>Product Name</th> <td>{"DataSearch"}</td> </tr>
-                                <tr> <th>Current Version </th> <td>{"1.0.0"}</td> </tr>
-                                <tr> <th>Maintain By</th> <td>{"DataSearc"}</td> </tr>
-                                <tr> <th>LastModified On</th> <td>{"6/6/2025"}</td> </tr>
-                             
+                            <tbody> <tr> <th>Product Name</th> <td>{buildInfo.productName}</td> </tr>
+                                <tr> <th> Version </th> <td>{buildInfo.version}</td> </tr>
+                                {/* <tr> <th>LastModified On</th> <td>{buildInfo.lastModifiedOn}</td> </tr>
+                                <tr> <th>Updated By:</th> <td>{buildInfo.updatedBy}</td> </tr>
+                                <tr> <th>Maintain By</th> <td>{buildInfo.maintainedBy}</td> </tr> */}
+
                             </tbody>
                         </Table>
                     </div>

@@ -216,7 +216,7 @@ const DataTable = () => {
 
 
   return (
-<>{filteredData && filteredData.length> 0 ?
+<>{data && data.length> 0 ?
   (
           <div className="data-table-container"style={{border:'none'}}>
         <div className="top-header">
