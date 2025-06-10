@@ -71,7 +71,10 @@ const ShowDetails = () => {
     <>
       <div className="search-bar-container">
         <div className="search-bar">
-          <select className="search-dropdown" value={searchType} onChange={(e) => setSearchType(e.target.value)}>
+          <select className="search-dropdown" value={searchType} onChange={(e) => {
+            setSearchType(e.target.value);
+            setQuery('');
+          }}>
             <option value="phone number">Phone</option> {/* Default selected */}
             <option value="email">Email</option>
           </select>

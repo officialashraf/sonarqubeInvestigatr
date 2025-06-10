@@ -37,6 +37,8 @@
 .user-header {
   display: flex;
   align-items: center;
+   word-break: break-word;
+   flex-wrap: wrap; 
 }
 .user-details {
   flex: 1;
@@ -51,9 +53,13 @@
 .user-info {
   margin-bottom: 8px !important;
   color: white !important;
+   word-break: break-word;
+   flex-wrap: wrap; 
 }
 
 .info-icon {
   margin-right: 5px !important;
   width: 15px !important;
+   word-break: break-word;
+   flex-wrap: wrap; 
 }

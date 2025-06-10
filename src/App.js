@@ -29,6 +29,7 @@ import RolesPermission from './Component/Pages/Roles/roles_Permission.js';
 import ReportPage from './Component/Pages/Reports/reportPage.js';
 import TargetDashboard from './Component/Pages/Targets/targetDashboard.js';
 import {setupAxiosInterceptors } from './utils/axiosConfig.js';
+import LicenseGuard from './utils/licenseGaurd.js';
 
 
 
@@ -78,7 +79,10 @@ const AppContent = () => {
           <Routes>
             <Route path='/' element={<LicenseValidator />} />
             <Route path="/license" element={<LicensePage />} />
-            <Route path="/login" element={<LoginPage />} />
+            {/* <Route path="/login" element={<LoginPage />} /> */}
+            <Route element={<LicenseGuard />}>
+              <Route path="/login" element={<LoginPage />} />
+            </Route>
             <Route element={<ProtectedRoute />}>
               <Route path="/pii" element={<ShowDetails />} />
               <Route path="/cases" element={<Home />} />

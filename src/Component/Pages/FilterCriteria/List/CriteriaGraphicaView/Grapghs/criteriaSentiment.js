@@ -13,7 +13,8 @@ const CriteriaSentimentChart = () => {
   console.log("querUseselctor", queryPayload)
   const [loading, setLoading] = useState(true);
 
-  const COLORS = ['#000000', '#000000'];
+  // const COLORS = ['#000000', '#000000'];
+  const COLORS = ["#556B2F", "#B22222", "#CC5500"]
 
   useEffect(() => {
     const fetchSentimentData = async () => {

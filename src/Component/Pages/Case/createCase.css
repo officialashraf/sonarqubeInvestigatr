@@ -89,6 +89,11 @@ label {
   box-shadow: none; /* Focus box-shadow ko remove karne ke liye */
   outline: none; /* Focus outline ko remove karne ke liye */
 }
+.watcher-container {
+  /* max-height: 120px; jitna height chahiye */
+  /* overflow-y: auto; */
+  /* margin-bottom: 10px; Buttons se gap maintain hoga */
+}
 textarea {
   height: 22px;
   resize: vertical;

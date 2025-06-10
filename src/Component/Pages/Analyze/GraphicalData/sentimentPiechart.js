@@ -68,7 +68,7 @@ const COLORS =["#B22222", "#556B2F",  "#CC5500"]
   }
   return <div style={{ width: "100%", height: 250 }}>
     {data.length>0?
-    <ResponsiveContainer>
+    <ResponsiveContainer style={{ width: "100%" }}>
       <PieChart height={250}>
         <Legend align="center" verticalAlign="top" formatter={(value, entry) => `${value}: ${entry.payload.value}`} />
         <Pie data={data} cx="50%" cy="50%" innerRadius={60} outerRadius={80} fill="#000000" dataKey="value" label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}>

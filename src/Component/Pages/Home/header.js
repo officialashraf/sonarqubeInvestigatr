@@ -13,6 +13,7 @@ import useWebSocket from "../../../utils/WebSocket/useWebsocket";
 import { clearUsername, setUsername } from "../../../Redux/Action/userAction";
 import { disconnectWebSocket } from '../../../utils/WebSocket/websocket';
 import { CLEAR_SEARCH } from '../../../Redux/Constants/piiConstant';
+import LicenseRenew from '../User/licenseRenew';
 
 const Header = ({ title }) => {
   const dispatch = useDispatch();
@@ -23,8 +24,12 @@ const Header = ({ title }) => {
   const [loggedInUserId, setLoggedInUserId] = useState('');
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
-  const [username, setusername] = useState('')
+  const [username, setusername] = useState('');
+  const [showPopup, setShowPopup] = useState(false);
 
+  const togglePopup = () => {
+    setShowPopup(prev => !prev);
+  };
   useEffect(() => {
     if (token) {
       try {
@@ -157,6 +162,9 @@ const Header = ({ title }) => {
             
               <NavDropdown.Item disabled>
                  {username}
+              </NavDropdown.Item> 
+              <NavDropdown.Item onClick={togglePopup}>
+                {"License Renew"}
               </NavDropdown.Item>
               <NavDropdown.Item 
                 onClick={handleLogout}
@@ -175,12 +183,36 @@ const Header = ({ title }) => {
           setIsOpen={setIsPopupOpen} 
         />
       )}
+      {showPopup && <LicenseRenew togglePopup={togglePopup} />}
     </>
   );
 };
-
+{/* <div className="popup-overlay">
+  <div className="popup-container">
+    <button className="close-icon" onClick={togglePopup}>
+      &times;
+    </button>
+    <div className="popup-content">
+      <h5>License Renewal</h5>
+      <p>To renew your license, please contact support.</p>
+      <button className="create-btn" onClick={togglePopup}>Close</button>
+    </div>
+  </div>
+</div> */}
 export default Header;
 
+{/* <div className="popup-overlay">
+  <div className="popup-container">
+    <button className="close-icon" onClick={togglePopup}>
+      &times;
+    </button>
+    <div className="popup-content">
+      <h5>License Renewal</h5>
+      <p>To renew your license, please contact support.</p>
+      <button className="create-btn" onClick={togglePopup}>Close</button>
+    </div>
+  </div>
+</div> */}
 // import React, { useEffect, useState } from 'react';
 // import { Navbar, Nav, NavDropdown, Container } from 'react-bootstrap';
 // import { Bell, PersonCircle } from 'react-bootstrap-icons'; // Bootstrap Icons

@@ -354,7 +354,7 @@ toast.error(error.response?.data?.detail ||"Failed deleting criteria")
                     </InputAdornment>
                   ), style: {
                     height: '38px', // Use consistent height
-                    padding: '0 8px', // Ensure uniform padding
+                    padding: '0 0px', // Ensure uniform padding
 
                   },
                 }}

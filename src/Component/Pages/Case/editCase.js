@@ -3,6 +3,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { toast } from 'react-toastify';
 import Select from 'react-select';
+import {customStyles} from '../Case/createCase';
 
 const EditCase = ({ togglePopup, item }) => {
   // Initialize formData with item values, ensuring proper format for each field
@@ -211,46 +212,46 @@ const EditCase = ({ togglePopup, item }) => {
     }));
   };
 
-  const customStyles = {
-    control: (base) => ({
-      ...base,
-      backgroundColor: 'white',
-      color: 'black',
-      boxShadow: 'none',
-      outline: 'none'
-    }),
-    menu: (base) => ({
-      ...base,
-      backgroundColor: 'white',
-      color: 'black',
-    }),
-    option: (base, state) => ({
-      ...base,
-      backgroundColor: state.isSelected ? 'black' : 'white',
-      color: state.isSelected ? 'white' : 'black',
-      '&:hover': {
-        backgroundColor: 'black',
-        color: 'white'
-      }
-    }),
-    multiValue: (base) => ({
-      ...base,
-      backgroundColor: 'white',
-    }),
-    multiValueLabel: (base) => ({
-      ...base,
-      backgroundColor: 'black',
-      color: 'white',
-    }),
-    multiValueRemove: (base) => ({
-      ...base,
-      color: 'black',
-      '&:hover': {
-        backgroundColor: 'black',
-        color: 'white'
-      }
-    })
-  };
+  // const customStyles = {
+  //   control: (base) => ({
+  //     ...base,
+  //     backgroundColor: 'white',
+  //     color: 'black',
+  //     boxShadow: 'none',
+  //     outline: 'none'
+  //   }),
+  //   menu: (base) => ({
+  //     ...base,
+  //     backgroundColor: 'white',
+  //     color: 'black',
+  //   }),
+  //   option: (base, state) => ({
+  //     ...base,
+  //     backgroundColor: state.isSelected ? 'black' : 'white',
+  //     color: state.isSelected ? 'white' : 'black',
+  //     '&:hover': {
+  //       backgroundColor: 'black',
+  //       color: 'white'
+  //     }
+  //   }),
+  //   multiValue: (base) => ({
+  //     ...base,
+  //     backgroundColor: 'white',
+  //   }),
+  //   multiValueLabel: (base) => ({
+  //     ...base,
+  //     backgroundColor: 'black',
+  //     color: 'white',
+  //   }),
+  //   multiValueRemove: (base) => ({
+  //     ...base,
+  //     color: 'black',
+  //     '&:hover': {
+  //       backgroundColor: 'black',
+  //       color: 'white'
+  //     }
+  //   })
+  // };
 
   // Prepare values for Select components
   // const watcherValues = formData.watchers.map(watcher => ({

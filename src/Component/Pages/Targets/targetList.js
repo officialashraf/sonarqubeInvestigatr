@@ -202,8 +202,8 @@ const TargetList = () => {
   }
 
   return (
-    <>{filteredData &&
-              filteredData.length>0?(
+    <>{data &&
+              data.length>0?(
     <div className="data-table-container">
       <div className="top-header" style={{ marginTop: "10px" }}>
         <Col

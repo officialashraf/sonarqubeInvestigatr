@@ -426,7 +426,11 @@ const AddNewFilter = ({ onClose, filterIde }) => {
       window.dispatchEvent(new Event('databaseUpdated'));
       console.log("responseFilter", response)
       if (response.status === 200) {
-        toast.success(`Filter created successfully: ${response.data.data.name}`);
+        if (filterDetails?.id) {
+          toast.success(`Filter updated successfully: ${response.data.data.name}`);
+        } else {
+          toast.success(`Filter created successfully: ${response.data.data.name}`);
+        }
         const newFilterId = Number(response.data.data.id);
         setFilterId((prevFilterIds) => [...prevFilterIds, newFilterId]);
         // onNewFilterCreated(newFilterId);
