@@ -64,7 +64,7 @@ td {
   color: #000;
   table-layout: fixed;
   border-collapse: collapse;
-  height: 500px;
+  /* height: 500px; */
   overflow-x: auto;
   overflow-y: auto;
 }
@@ -213,7 +213,7 @@ td {
   border-radius: 5px;
   cursor: pointer;
   font-size: 12px;
-  margin-left: 5px;
+  /* margin-left: 5px; */
   margin-top: 0px;
   background-color: #ccc;
   color: #000;

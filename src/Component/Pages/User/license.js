@@ -15,7 +15,7 @@ const LicensePage = () => {
     const errors = {};
 
     if (!licenseKey.trim()) {
-      errors.licenseKey = "Username is required";
+      errors.licenseKey = "Please enter the license key before proceeding";
     }
 
 
@@ -50,7 +50,30 @@ const LicensePage = () => {
       console.log("License Response:", response);
 
       // Redirect to login page upon success
-      navigate("/login");
+      //  navigate("/login");
+
+      // Retry GET check up to 3 times
+      let attempts = 0;
+      let licenseConfirmed = false;
+
+      while (attempts < 3 && !licenseConfirmed) {
+        const res = await axios.get(`${window.runtimeConfig.REACT_APP_API_LICENSE}/api/license`);
+        if (res.data?.license_registered) {
+          licenseConfirmed = true;
+          break;
+        }
+
+        // Wait 500ms before retrying
+        await new Promise((resolve) => setTimeout(resolve, 500));
+        attempts++;
+      }
+
+      if (licenseConfirmed) {
+        localStorage.setItem("licenseKey", "VALID");
+        navigate("/login");
+      } else {
+        toast.error("License registered but verification failed. Try again.");
+      }
     } catch (err) {
       toast.error(err.response?.data?.detail || "License registration failed");
       console.warn(err.response?.data?.detail || "Registration err");

@@ -269,7 +269,7 @@ const NotificationList = ({ isOpen, setIsOpen }) => {
                 {loading ? (
                     <NavDropdown.Item
                      className="nav-dropdown-item"
-                     
+                     style={{ maxWidth: '252px', padding: '10px', display: 'flex', justifyContent: 'center' }}
                      >  
                        <Loader/>
                     </NavDropdown.Item>

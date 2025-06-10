@@ -151,17 +151,15 @@ const DataTable = () => {
   }, []);
 
   const handleSearch = (event) => {
-    const searchValue = event.target.value;
+    const searchValue = event.target.value.toLowerCase();;
     setSearchTerm(searchValue);
 
 
     const filtered = data.filter((item) => {
       return Object.values(item).some((value) => {
-        if (value !== null && value !== undefined) {
-          // Convert the value to a string and check if it includes the search value
-          return value.toString().toLowerCase().includes(searchValue.toLowerCase());
-        }
-        return false;
+        return String(value ?? '') // convert null/undefined to empty string
+          .toLowerCase()
+          .includes(searchValue);
       });
     });
     setFilteredData(filtered);

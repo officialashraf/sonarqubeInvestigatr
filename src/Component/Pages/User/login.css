@@ -95,9 +95,17 @@ h1 {
 /* .css-qve9l1-MuiInputBase-input-MuiOutlinedInput-input:-webkit-autofill {
   height:5px;
 } */
+
+input:-webkit-autofill {
+  box-shadow: 0 0 0 1000px white inset !important;
+  -webkit-text-fill-color: #000 !important;
+  transition: background-color 9999s ease-out 0s;
+   padding: 0px 0px;
+  /* height:5px; */
+}
 .customfiled {
-  background-color: grey;
-  color: white;
+  background-color: rgb(255, 255, 255);
+  color: rgb(0, 0, 0);
   border: none;
   /* margin-bottom: 15px; */
   font-size: 12px;

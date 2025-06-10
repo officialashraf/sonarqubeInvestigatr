@@ -375,11 +375,12 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde,onClose }) => {
       console.log("responseFilter", response)
       
       if (response.status === 200) {
-        const successMessage = filterDetails?.id 
-          ? `Filter Updated Successfully: ${response.data.data.name}`
-          : `Filter Created Successfully: ${response.data.data.name}`;
-        toast.success(successMessage);
-        
+        if (filterDetails?.id) {
+          toast.success(`Filter updated successfully: ${response.data.data.name}`);
+        } else {
+          toast.success(`Filter created successfully: ${response.data.data.name}`);
+        }
+
         const newFilterId = Number(response.data.data.id);
         setFilterId((prevFilterIds) => [...prevFilterIds, newFilterId]);
         
