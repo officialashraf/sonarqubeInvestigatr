@@ -333,6 +333,7 @@ const CreateCriteria = ({ handleCreateCase }) => {
                   style: {
                     height: '38px',
                     padding: '0 8px',
+                    fontSize: '12px',
                   },
                 }}
                 placeholder="Select date..."

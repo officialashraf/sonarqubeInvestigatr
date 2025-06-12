@@ -319,23 +319,55 @@ input.search_input:focus-visible {
   width: 100%;
   margin: auto;
 }
+.rss-monitoring-interval-select{
+  max-width: 150px;
+}
+.rss-monitoring-interval-input{
+  max-width: 100px;
+}
+@media screen and (max-width: 1680px) {
+  .rss-monitoring-interval-select {
+    max-width: 100px;
+  }
+  
+}
+@media screen and (max-width: 1270px) {
+  .rss-monitoring-interval-select {
+    max-width: 80px;
+  }
+  .rss-monitoring-interval-input {
+    max-width: 60px;
+  }
+  
+}
 @media screen and (max-width: 768px) {
   .sourceDiv {
     flex-direction: column;
   }
 }
-@media (max-width: 1320px) {
+@media ( min-width: 1320px) {
   .p-1 {
     /* width: 100%; */
      margin-left: 20px; 
   }
 }
- 
+@media ( min-width: 1060px) {
+  .p-1 {
+    /* width: 100%; */
+     /* margin-left: 45px;  */
+  }
+}
+ @media (max-width: 768px) {
+  .p-1 {
+    /* width: 100%; */
+     margin-left: 45px; 
+  }
+}
 /* Media query for screens 1024px or smaller */
-  @media (max-width: 1111px) {
+  @media (max-width: 1120px) {
   .p-1 {
     /* width: 100%; Adjust the width as needed */
-    /* margin-left: 70px; */
+    margin-left: 40px;
   } 
 }/*
 @media (max-width: 920px) {

@@ -165,7 +165,7 @@ const AddFilter2 = ({ togglePopup }) => {
                   />
                 </div>
                 {showAddFilter && (
-                  <div className="col-md-8" style={{ marginTop: "-15px" }}>
+                  <div className="col-md-8" style={{ marginTop: "15px" }}>
                     <button onClick={handleCloseAddFilter} className="btn close-add-filter-button">
                       <X />
                     </button> 

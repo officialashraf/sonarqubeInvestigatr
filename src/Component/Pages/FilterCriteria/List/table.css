@@ -64,7 +64,7 @@ td {
   color: #000;
   table-layout: fixed;
   border-collapse: collapse;
-  /* height: 500px; */
+  max-height: 80vh;
   overflow-x: auto;
   overflow-y: auto;
 }
