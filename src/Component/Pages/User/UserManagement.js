@@ -31,6 +31,7 @@ const UserManagement = () => {
    const [showResetForm, setShowResetForm] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [loading, setLoading] = useState(true);
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
   console.log(selectedUser);
 
@@ -233,7 +234,7 @@ const UserManagement = () => {
 
   return (
     <>
-      {filteredData && filteredData.length > 0 ?
+      {data && data.length > 0 ?
         (
           <div className="data-table-container">
             <div className="top-header" style={{ marginTop: "10px" }}>
@@ -262,7 +263,7 @@ const UserManagement = () => {
               </div>
             </div>
 
-            <div className="data-table" >
+           <div className="data-table" style={{ minHeight: isDropdownOpen ? "200px" : "auto" }}>
               <Table striped bordered hover variant="light">
                 <thead>
                   <tr>
@@ -527,7 +528,7 @@ const UserManagement = () => {
                               gap: "10px"
                             }}
                           />
-                          <Dropdown>
+                          <Dropdown onToggle={(isOpen) => setIsDropdownOpen(isOpen)}>
                             <Dropdown.Toggle
                               className="menu-button"
                               style={{

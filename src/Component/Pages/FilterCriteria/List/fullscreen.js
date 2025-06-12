@@ -257,7 +257,7 @@ const SearchResults = () => {
         </div>
 
       </div>
-      <div className="col-auto  d-flex align-items-center gap-1 justify-content-end  me-2" style={{ margin: "5px" }}>
+      <div className="col-auto  d-flex align-items-center gap-1 justify-content-end  me-2" style={{ margin: "5px",  marginBottom: "15px" }}>
         <PieChart
           className={`icon-style ${activeComponent === "graph" ? "active-icon" : ""}`}
           onClick={() => handleComponentToggle("graph")}

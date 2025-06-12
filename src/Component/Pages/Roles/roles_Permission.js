@@ -27,6 +27,7 @@ const RolesPermission = () => {
     const [showPopupB, setShowPopupB] = useState(false);
     const [showPopupC, setShowPopupC] = useState(false);
     const [showPopupD, setShowPopupD] = useState(false);
+     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [loading, setLoading] = useState(false);
 
 
@@ -212,7 +213,7 @@ const RolesPermission = () => {
 
     return (
         <>
-{filteredData && filteredData.length>0?
+{data && data.length>0?
        (<div className="data-table-container">
             <div className="top-header" style={{ marginTop: "10px" }}>
                 <Col xs={1} className="d-flex align-items-center justify-content-flex-start" style={{ width: "300px", minWidth: "300px" }}>
@@ -241,7 +242,7 @@ const RolesPermission = () => {
                 </div>
             </div>
 
-            <div className="data-table" style={{  overflowY: 'auto' }}>
+           <div className="data-table" style={{ minHeight: isDropdownOpen ? "200px" : "auto" }}>
                 <Table striped bordered hover variant="light">
                     <thead>
                         <tr>
@@ -273,7 +274,7 @@ const RolesPermission = () => {
                                 <td>{item.created_by}</td>
                                 <td>{item.created_on}</td>
                                 <td style={{ textAlign: 'right' }}>
-                                    <Dropdown>
+                                    <Dropdown onToggle={(isOpen) => setIsDropdownOpen(isOpen)}>
                                         <Dropdown.Toggle
                                             className="menu-button"
                                             style={{

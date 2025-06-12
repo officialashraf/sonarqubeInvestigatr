@@ -12,7 +12,7 @@ const useWebSocket = () => {
   useEffect(() => {
     // Check if username has changed
     const usernameChanged = previousUsernameRef.current !== username;
-    
+   
     // If username is cleared (logout), disconnect
     if (!username && previousUsernameRef.current) {
       console.log("Username cleared, disconnecting WebSocket");

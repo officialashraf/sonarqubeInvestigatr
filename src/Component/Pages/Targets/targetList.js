@@ -26,6 +26,7 @@ const TargetList = () => {
   const [showPopupE, setShowPopupE] = useState(false);
   const [showPopupD, setShowPopupD] = useState(false);
   const [details, setDetails] = useState([])
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
 
   const fetchTargets = async () => {
@@ -202,8 +203,8 @@ const TargetList = () => {
   }
 
   return (
-    <>{filteredData &&
-              filteredData.length>0?(
+    <>{data &&
+              data.length>0?(
     <div className="data-table-container">
       <div className="top-header" style={{ marginTop: "10px" }}>
         <Col
@@ -240,7 +241,7 @@ const TargetList = () => {
           </button>
         </div>
       </div>
-      <div className="data-table">
+      <div className="data-table" style={{ minHeight: isDropdownOpen ? "200px" : "auto" }}>
         <Table striped bordered hover variant="light">
           <thead>
             <tr>
@@ -503,7 +504,7 @@ const TargetList = () => {
                     }}
                   >
                     <span>{item.description}</span>
-                    <Dropdown>
+                    <Dropdown onToggle={(isOpen) => setIsDropdownOpen(isOpen)}>
                       <Dropdown.Toggle
                         className="menu-button"
                         style={{

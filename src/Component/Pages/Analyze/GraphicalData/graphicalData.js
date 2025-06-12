@@ -90,7 +90,7 @@ const ComponentFour = () => (
   >
     <Header title="Sentiments" />
     <CardContent>
-      <SentimentPieChart height={250} />
+      <SentimentPieChart  />
     </CardContent>
   </Card>
 );

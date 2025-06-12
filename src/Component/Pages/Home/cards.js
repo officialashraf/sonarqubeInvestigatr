@@ -4,6 +4,7 @@ import { Folder, FileEarmarkPlus, PieChart, Check2Circle, PauseCircle, Archive, 
 import './card.css';
 import { useCallback, useEffect, useState } from 'react';
 import Cookies from "js-cookie";
+import { toast } from 'react-toastify';
 
 const cardTemplate = [
   { icon: <Folder size={15} />, name: 'All Cases', key: 'case_count' },
@@ -57,7 +58,7 @@ const CardList = () => {
       setCardData(updatedData);
 
     } catch (error) {
-      console.error('Error fetching data:', error);
+         console.error('Error fetching data:', error);
     }
   }, [Token]);
 

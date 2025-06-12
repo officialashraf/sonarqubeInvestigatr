@@ -101,9 +101,9 @@ g.recharts-layer .recharts-bar :hover {
     padding: 3px 6px;
   }
 
-  .box {
+  /* .box {
     min-width: 250px;
-  }
+  } */
 }
 
 @media (max-width: 480px) {

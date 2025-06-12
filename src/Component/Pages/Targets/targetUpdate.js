@@ -13,7 +13,10 @@ export const customStyles = {
     backgroundColor: 'white',
     color: 'black',
     boxShadow: 'none',
-    outline: 'none'
+    outline: 'none',
+    minHeight: '38px',
+    maxHeight: '100px',
+    overflowY: 'auto',
   }),
   menu: (base) => ({
     ...base,

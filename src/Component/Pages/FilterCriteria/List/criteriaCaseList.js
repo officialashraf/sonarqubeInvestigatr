@@ -168,7 +168,7 @@ const CriteriaCaseTable = () => {
         </div>
 
       </div>
-      <div className="data-table" style={{ height: '420px', marginTop: '0px' }}>
+      <div className="data-table" style={{ maxheight: '75vh', marginTop: '0px' }}>
 
         {loading ? (
           <div>

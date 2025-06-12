@@ -166,7 +166,7 @@ const GridView = () => {
       
       <div
         className="data-table"
-        style={{ height: '420px', marginTop: '12px' }}
+        style={{ marginTop: '12px' }}
       >
         {!dataAvailable ? (
           <Table striped bordered hover variant='light'>

@@ -6,46 +6,69 @@ import { toast } from 'react-toastify';
 import Select from 'react-select';
 
 export const customStyles = {
-  control: (base, state) => ({
-    ...base,
-    backgroundColor: 'white', // Black background
-    color: 'black', // White text
+  control: (provided, state) => ({
+    ...provided,
+    minHeight: '38px',
+    maxHeight: '38px',
+    overflowY: 'auto',
+    flexWrap: 'wrap', // ensure tags wrap to next line
+    alignItems: 'flex-start',
+    backgroundColor: 'white',
+    color: 'black',
     boxShadow: 'none',
-    outline: 'none'
+    outline: 'none',
   }),
-  menu: (base) => ({
-    ...base,
-    backgroundColor: 'white', // Black background
-    color: 'black', // White text
+  valueContainer: (provided, state) => ({
+    ...provided,
+    maxHeight: '500px', // limit height of selected area
+    // overflowY: 'auto', // enable scroll if overflow
+    flexWrap: 'wrap',
+    backgroundColor: 'white',
+    color: 'black',
   }),
-  option: (base, state) => ({
-    ...base,
-    backgroundColor: state.isSelected ? 'black' : 'white', // Darker black for selected option
-    color: 'black', // White text
-    '&:hover': {
-      backgroundColor: 'black', // Lighter black on hover
-      color: 'white'
-    }
-  }),
-  multiValue: (base) => ({
-    ...base,
-    backgroundColor: 'white', // Dark background for selected values
-    color: 'black', // White text
-  }),
-  multiValueLabel: (base) => ({
-    ...base,
-    backgroundColor: 'black',
-    color: 'white', // White text
-  }),
-  multiValueRemove: (base) => ({
-    ...base,
-    color: 'black', // White text
-    '&:hover': {
-      backgroundColor: 'black', // Lighter black on hover
-      color: 'white' // White text
-    }
-  })
+
 };
+// export const customStyles = {
+//   control: (base, state) => ({
+//     ...base,
+//     backgroundColor: 'white', // Black background
+//     color: 'black', // White text
+//     boxShadow: 'none',
+//     outline: 'none'
+//   }),
+//   menu: (base) => ({
+//     ...base,
+//     backgroundColor: 'white', // Black background
+//     color: 'black', // White text
+//   }),
+//   option: (base, state) => ({
+//     ...base,
+//     backgroundColor: state.isSelected ? 'black' : 'white', // Darker black for selected option
+//     color: 'black', // White text
+//     '&:hover': {
+//       backgroundColor: 'black', // Lighter black on hover
+//       color: 'white'
+//     }
+//   }),
+//   multiValue: (base) => ({
+//     ...base,
+//     backgroundColor: 'white', // Dark background for selected values
+//     color: 'black', // White text
+//   }),
+//   multiValueLabel: (base) => ({
+//     ...base,
+//     backgroundColor: 'black',
+//     color: 'white', // White text
+//   }),
+//   multiValueRemove: (base) => ({
+//     ...base,
+//     color: 'black', // White text
+//     '&:hover': {
+//       backgroundColor: 'black', // Lighter black on hover
+//       color: 'white' // White text
+//     }
+//   })
+// };
 const CreateCase = ({ togglePopup }) => {
   const [formData, setFormData] = useState({
     title: "",
@@ -202,6 +225,22 @@ const CreateCase = ({ togglePopup }) => {
       assignee: selectedOption ? parseInt(selectedOption.value, 10) : ''
     }));
   };
+  const customStyles = {
+    control: (provided, state) => ({
+      ...provided,
+      minHeight: '38px',
+      maxHeight: '38px',
+      overflowY: 'auto',
+      flexWrap: 'wrap', // ensure tags wrap to next line
+      alignItems: 'flex-start',
+    }),
+    valueContainer: (provided, state) => ({
+      ...provided,
+      maxHeight: '500px', // limit height of selected area
+      // overflowY: 'auto', // enable scroll if overflow
+      flexWrap: 'wrap',
+    }),
+  };
 
   return (
     <div className="popup-overlay">
@@ -257,6 +296,7 @@ const CreateCase = ({ togglePopup }) => {
                 onChange={handleAssigneeChange}
               />
             </div>
+            <div className="watcher-container">
             <label htmlFor="watcher">Watcher </label>
             <Select
               options={options}
@@ -269,6 +309,7 @@ const CreateCase = ({ togglePopup }) => {
               )}
               onChange={handleWatchersChange}
             />
+            </div>
             <div className="button-container">
               <button type="submit" className="create-btn">
                 Create
