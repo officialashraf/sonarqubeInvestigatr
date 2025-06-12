@@ -114,7 +114,7 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
         if (selectedDates.startDate && selectedDates.endDate) {
             return `${selectedDates.startDate.toLocaleDateString()} - ${selectedDates.endDate.toLocaleDateString()}`;
         }
-        return 'Select Date Range';
+        return 'Select date range';
     };
 
     // Perform search API call
@@ -275,7 +275,7 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
                                                     />
                                                 </InputAdornment>
                                             ),
-                                            style: { height: '38px', padding: '0 8px' },
+                                            style: { height: '38px', padding: '0 8px', fontSize: '12px' }   ,
                                         }}
                                         placeholder="Select date range"
                                         value={formatDateRange()}
@@ -291,7 +291,7 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
 
 
                                 {/* Buttons */}
-                                <div className="button-container">
+                                <div className="button-container" style={{ marginTop: '10px'}}>
                                     <button type="button" onClick={performSearch} className="add-btn" disabled={isSearchDisabled}
                                         style={{
                                             backgroundColor: isSearchDisabled ? '#fffff' : '#00000',

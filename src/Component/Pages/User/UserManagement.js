@@ -39,7 +39,7 @@ const UserManagement = () => {
   const togglePopup = () => setShowAddForm(!showAddForm);
   const toggleDetails = (item) => {
     console.log("Selected item for details:", item);
-    setSelectedUser(item);
+    setSelectedUser(item.id);
     setShowDetail((prev) => !prev);
   };
 
@@ -582,7 +582,7 @@ const UserManagement = () => {
       }
 {showResetForm && <ResetPassword onClose={toggleResetForm} item={selectedUser}/>}
       {showAddForm && <AddUser onClose={togglePopup} />}
-      {showDetail && <UserDetails item={selectedUser} users={users} toggleDetails={toggleDetails} />}
+      {showDetail && <UserDetails userId={selectedUser} toggleDetails={toggleDetails} />}
       {showEditForm &&
         <EditUser
           togglePopup={toggleEditForm}

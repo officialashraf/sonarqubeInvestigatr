@@ -510,14 +510,16 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde,onClose }) => {
                           min="1"
                           value={source.intervalValue}
                           onChange={(e) => handleIntervalValueChange(sourceIndex, e.target.value)}
-                          style={{ maxWidth: '100px' }}
+                          // style={{ maxWidth: '100px' }}
                           disabled={filterDetails?.id && !isEditable}
+                          className='rss-monitoring-interval-input'
                         />
                         <Form.Select
                           value={source.intervalUnit}
                           onChange={(e) => handleIntervalUnitChange(sourceIndex, e.target.value)}
-                          style={{ maxWidth: '150px' }}
+                          // style={{ maxWidth: '150px' }}
                           disabled={filterDetails?.id && !isEditable}
+                          className='rss-monitoring-interval-select'
                         >
                           <option value="" disabled>Units</option>
                           <option value="seconds">Seconds</option>
@@ -546,6 +548,8 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde,onClose }) => {
                         onChange={(e) => handleKeywordChange(sourceIndex, e.target.value)}
                         onKeyDown={(e) => handleKeywordKeyDown(sourceIndex, e)}
                         disabled={filterDetails?.id && !isEditable}
+                        style={{ maxWidth: '96%' }}
+
                       />
                       <div className="mt-2"style={{ display: "flex", flexWrap: "wrap", gap: "5px" }}>
                         {source.keywords.map((keyword, keyIndex) => (

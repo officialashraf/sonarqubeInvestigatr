@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { toast } from 'react-toastify';
-import Loader from '../Layout/loader'
 
 
 const TargetDetails = ({ togglePopup, id }) => {
@@ -85,6 +84,30 @@ const TargetDetails = ({ togglePopup, id }) => {
     fetchTargetDetails();
   }, [id, token]);
 
+  if (loading) {
+    return (
+      <div className="popup-overlay">
+        <div className="popup-containera">
+          <div className="popup-content">Loading role details...</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!formData) {
+    return (
+      <div className="popup-overlay">
+        <div className="popup-containera">
+          <div className="popup-content">
+            <p>No target details found.</p>
+            <button type="button" className="cancel-btn" onClick={togglePopup}>
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
   return (
 
     <div className="popup-overlay">
@@ -95,9 +118,7 @@ const TargetDetails = ({ togglePopup, id }) => {
             <CloseButton onClick={togglePopup} />
           </div>
           <div className="case-details-container">
-           {loading ?(
-            <Loader/>
-           ):(
+           
                 <Table bordered hover className='custom-table custom-table-th' >
                   <tr> <th>Name</th> <td>{formData.name}</td> </tr>
                   <tbody>
@@ -114,8 +135,7 @@ const TargetDetails = ({ togglePopup, id }) => {
                     <tr> <th>Linked To</th> <td>{formData.linked_to}</td> </tr>
                   </tbody>
                 </Table>
-           )}
-          </div>
+           </div>
           <div className="button-container">
             <button type="button" className="cancel-btn" onClick={togglePopup}>
               Cancel
