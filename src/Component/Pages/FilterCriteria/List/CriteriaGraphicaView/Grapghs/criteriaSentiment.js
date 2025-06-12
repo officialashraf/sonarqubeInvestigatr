@@ -13,9 +13,11 @@ const CriteriaSentimentChart = () => {
   console.log("querUseselctor", queryPayload)
   const [loading, setLoading] = useState(true);
 
-  // const COLORS = ['#000000', '#000000'];
-  const COLORS = ["#556B2F", "#B22222", "#CC5500"]
-
+ const COLORS = {
+  positive: "#556B2F",  //  Green for Positive
+  negative: "#B22222",  //  Red for Negative
+  neutral: "#CC5500"    //  Orange for Neutral
+};
   useEffect(() => {
     const fetchSentimentData = async () => {
       try {
@@ -75,8 +77,8 @@ const CriteriaSentimentChart = () => {
     return <Loader />
   }
   return (
-    <div style={{ width: '100%', height: 250 }}>
-      <ResponsiveContainer>
+    <div style={{ width: '100%', height: 250,overflowX:'auto' }}>
+      <ResponsiveContainer width={350}>
         <PieChart height={250}>
           <Legend
             align="center"
@@ -95,7 +97,7 @@ const CriteriaSentimentChart = () => {
             label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
           >
             {data.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+              <Cell  key={entry.name} fill={COLORS[entry.name] || "#000000"}  />
             ))}
           </Pie>
           <Tooltip formatter={(value) => `Total: ${value}`} />

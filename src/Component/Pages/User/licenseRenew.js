@@ -1,12 +1,10 @@
 import React, { useState } from "react";
-import { Container, Row, Col, Form, Modal, Button } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "./login.css";
 
 const LicenseRenew = ({ togglePopup }) => {
-  const navigate = useNavigate();
+
   const [error, setError] = useState({});
   const [licenseKey, setLicenseKey] = useState("");
 
@@ -27,7 +25,7 @@ const LicenseRenew = ({ togglePopup }) => {
     }
 
     try {
-      const response = await axios.post(
+      await axios.post(
         `${window.runtimeConfig.REACT_APP_API_LICENSE}/api/license/register`,
         { key: licenseKey },
         {

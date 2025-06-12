@@ -37,7 +37,7 @@ const TargetDetails = ({ togglePopup, id }) => {
     }
 
     try {
-      setLoading(true);
+// setFormData(true)
       const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/target/${id}`, {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -45,6 +45,7 @@ const TargetDetails = ({ togglePopup, id }) => {
       });
 
       console.log("response", response)
+    
       if (response.status === 200 && response.data) {
         const targetData = response.data;
 
@@ -53,7 +54,7 @@ const TargetDetails = ({ togglePopup, id }) => {
         const parentNames = targetData.parents && targetData.parents.length > 0
           ? targetData.parents.map(p => `${p.name} (${p.id})`).join(", ")
           : "None";
-
+   
         setFormData({
           name: targetData.name || "",
           description: targetData.description || "",
@@ -70,11 +71,14 @@ const TargetDetails = ({ togglePopup, id }) => {
           linked_to: parentNames
         });
       }
+  
     } catch (err) {
             toast.error(err.response?.data?.detail||"Failed to fetch target details");
            console.error("Error fetching target details:", err.response || err);
           //  togglePopup();
-    } 
+    } finally{
+      setLoading(false)
+    }
   };
 
   useEffect(() => {
@@ -103,7 +107,7 @@ const TargetDetails = ({ togglePopup, id }) => {
                     <tr> <th>Modified On</th> <td>{formData?.modified_on ? formData.modified_on.slice(0, 18) : '-'}</td> </tr>
                     <tr> <th>Modified By</th> <td>{formData?.modified_by ? formData.modified_by : '-'}</td> </tr>
                     <tr> <th>Description</th> <td>{formData.description || '-'}</td> </tr>
-                    <tr> <th>Synonyms</th> <td>{formData.synonyms.join(', ') || '-'}</td> </tr>
+                    <tr> <th>Synonyms</th> <td>{formData.synonyms?formData.synonyms.join(', ') : '-'}</td> </tr>
                     <tr> <th>Threat-Score</th> <td>{formData.threat_weightage}</td> </tr>
                     <tr> <th>Type</th> <td>{formData.type || '-'}</td> </tr>
                     <tr> <th>Active</th>  <td>{formData.is_active ? 'Active' : 'Deactive'}</td> </tr>

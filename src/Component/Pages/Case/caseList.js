@@ -30,6 +30,7 @@ const DataTable = () => {
   const [showPopupB, setShowPopupB] = useState(false);
   const [selectedData, setSelectedData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
 
   const onFieldClick = (item) => {
@@ -232,7 +233,7 @@ const DataTable = () => {
             <button className='add-btn' title='Add New Case' onClick={togglePopup}><Plus size={20} />Add New Case</button>
           </div>
         </div>
-        <div className="data-table">
+       <div className="data-table" style={{ minHeight: isDropdownOpen ? "200px" : "auto" }}>
           <Table striped bordered hover variant="light"  >
             <thead>
               <tr>
@@ -365,7 +366,7 @@ const DataTable = () => {
                     <Badge pill bg="dark" className="badge-custom">
                       <span>{item.status}</span>
                     </Badge>
-                    <span> <Dropdown>
+                    <span> <Dropdown onToggle={(isOpen) => setIsDropdownOpen(isOpen)}>
                       <Dropdown.Toggle className="custom-dropdown-toggle custom-btn"> ⋮ </Dropdown.Toggle>
                       <Dropdown.Menu className="custom-dropdown-menu">
                         <Dropdown.Item onClick={() => { togglePopupA(item) }} style={{ cursor: "pointer" }}>Details</Dropdown.Item>
