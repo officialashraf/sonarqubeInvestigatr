@@ -10,6 +10,7 @@ import Cookies from 'js-cookie';
 import { useDispatch, useSelector } from "react-redux";
 import { closePopup, openPopup, setKeywords, setPage, setSearchResults } from '../../../Redux/Action/criteriaAction';
 import Confirm from './confirmCriteria';
+import { toast } from 'react-toastify';
 
 
 export const sharedSxStyles = {
@@ -223,6 +224,7 @@ const CreateCriteria = ({ handleCreateCase }) => {
 
       dispatch(openPopup("saved"));
     } catch (error) {
+      toast.error(error?.response?.data?.detail || "Failed to search")
       console.error('Error performing search:', error);
     }
   };

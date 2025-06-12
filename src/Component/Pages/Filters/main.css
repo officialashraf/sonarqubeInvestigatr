@@ -369,28 +369,28 @@ input.search_input:focus-visible {
     /* width: 100%; Adjust the width as needed */
     margin-left: 40px;
   } 
-}/*
+}
 @media (max-width: 920px) {
   .p-1 {
     width: 70%; /* Adjust the width as needed */
-   /* margin-left: 85px;
+    margin-left: 60px;
   }
-} */
+}
 /* Media query for screens 768px or smaller */
 
 
 /* Media query for screens 576px or smaller */
-/*@media (max-width: 576px) {
+@media (max-width: 576px) {
   .p-1 {
     width: 40%; /* Adjust the width as needed */
-   /* margin-left: 100px;
+    margin-left: 20px;
   }
-} */
+} 
 
 /* Media query for screens 480px or smaller */
-/* @media (max-width: 480px) {
+ @media (max-width: 480px) {
   .p-1 {
-    width: 30%; /* Adjust the width as needed */
-   /* margin-left: 100px;
+    width: 30%; /* Adjust the width as needed*/ 
+    margin-left: 20px;
   }
-} */
+}

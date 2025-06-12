@@ -2,7 +2,6 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 
-
 export const setupAxiosInterceptors = () => {
   axios.interceptors.response.use(
     (response) => response,
@@ -17,5 +16,4 @@ export const setupAxiosInterceptors = () => {
       return Promise.reject(error);
     }
   );
-  
 };
