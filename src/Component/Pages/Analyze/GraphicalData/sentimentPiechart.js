@@ -11,9 +11,12 @@ const SentimentPieChart = () => {
   let [data, setData] = useState([]);
 
   const caseId = useSelector(state => state.caseData.caseData.id);
-//const COLORS =["#FF0000", "#00FF00","#FF8C00"] // red, green, yellow, dark orange
 
-const COLORS =["#B22222", "#556B2F",  "#CC5500"]
+const COLORS = {
+  positive: "#556B2F",  //  Green for Positive
+  negative: "#B22222",  //  Red for Negative
+  neutral: "#CC5500"    //  Orange for Neutral
+};
 
   useEffect(
     () => {
@@ -66,29 +69,35 @@ const COLORS =["#B22222", "#556B2F",  "#CC5500"]
   if (loading) {
     return <Loader />
   }
-  return <div style={{ width: "100%", height: 250 }}>
-    {data.length>0?
-    <ResponsiveContainer style={{ width: "100%" }}>
-      <PieChart height={250}>
-        <Legend align="center" verticalAlign="top" formatter={(value, entry) => `${value}: ${entry.payload.value}`} />
-        <Pie data={data} cx="50%" cy="50%" innerRadius={60} outerRadius={80} fill="#000000" dataKey="value" label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}>
-          {data.map((entry, index) =>
-            <Cell
-              key={`cell-${index}`}
-              fill={COLORS[index % COLORS.length]}
-            />
-          )}
-        </Pie>
-        <Tooltip formatter={value => `Total: ${value}`} />
-      </PieChart>
-    </ResponsiveContainer>
-     : 
+  return <div style={{ width: "100%", height: 250, overflowX: "auto" }}> {/* Enables horizontal scroll */}
+    {data.length > 0 ? (
+        <ResponsiveContainer width={350}> {/* Set fixed width to allow scrolling */}
+            <PieChart height={250}>
+                <Legend align="center" verticalAlign="top" formatter={(value, entry) => `${value}: ${entry.payload.value}`} />
+                <Pie 
+                    data={data} 
+                    cx="50%" 
+                    cy="50%" 
+                    innerRadius={60} 
+                    outerRadius={80} 
+                    fill="#000000" 
+                    dataKey="value" 
+                    label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                >
+                    {data.map((entry) => (
+                        <Cell key={entry.name} fill={COLORS[entry.name] || "#000000"} />
+                    ))}
+                </Pie>
+                <Tooltip formatter={(value) => `Total: ${value}`} />
+            </PieChart>
+        </ResponsiveContainer>
+    ) : (
         <div className="h-[150px] flex items-center justify-center">
-          <p className="text-gray-500 text-xl">No data available</p>
+            <p className="text-gray-500 text-xl">No data available</p>
         </div>
-      }
-  </div>;
-};;
+    )}
+</div>;
+};
 
 export default SentimentPieChart;
 
