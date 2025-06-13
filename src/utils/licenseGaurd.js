@@ -13,7 +13,7 @@ const LicenseGuard = () => {
     useEffect(() => {
         const checkLicense = async () => {
             try {
-                const res = await axios.get("http://5.180.148.40:9000/api/license");
+                const res = await axios.get(`${window.runtimeConfig.REACT_APP_API_LICENSE}/api/license`);
                 setLicenseValid(res.data?.license_registered || false);
             } catch (err) {
                 console.error("License check failed:", err);

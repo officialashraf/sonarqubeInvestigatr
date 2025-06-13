@@ -298,7 +298,7 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde,onClose }) => {
 
   const fetchFilterDetails = async () => {
     try {
-      const response = await axios.get(`http://5.180.148.40:9002/api/osint-man/v1/filter/${filterIde}`, {
+      const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_OSINT_MAN}/api/osint-man/v1/filter/${filterIde}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -319,7 +319,7 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde,onClose }) => {
   
   const fetchPlatforms = async () => {
     try {
-      const response = await axios.get('http://5.180.148.40:9002/api/osint-man/v1/platforms', {
+      const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_OSINT_MAN}/api/osint-man/v1/platforms`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -359,8 +359,8 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde,onClose }) => {
     console.log("postdata save filter", postData);
     try {
       const url = filterDetails?.id
-        ? `http://5.180.148.40:9002/api/osint-man/v1/filter/${filterDetails.id}`
-        : 'http://5.180.148.40:9002/api/osint-man/v1/filter';
+        ? `${window.runtimeConfig.REACT_APP_API_OSINT_MAN}/api/osint-man/v1/filter/${filterDetails.id}`
+        : `${window.runtimeConfig.REACT_APP_API_OSINT_MAN}/api/osint-man/v1/filter`;
 
       const method = filterDetails?.id ? 'put' : 'post';
 
@@ -510,14 +510,16 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde,onClose }) => {
                           min="1"
                           value={source.intervalValue}
                           onChange={(e) => handleIntervalValueChange(sourceIndex, e.target.value)}
-                          style={{ maxWidth: '100px' }}
+                          // style={{ maxWidth: '100px' }}
                           disabled={filterDetails?.id && !isEditable}
+                          className='rss-monitoring-interval-input'
                         />
                         <Form.Select
                           value={source.intervalUnit}
                           onChange={(e) => handleIntervalUnitChange(sourceIndex, e.target.value)}
-                          style={{ maxWidth: '150px' }}
+                          // style={{ maxWidth: '150px' }}
                           disabled={filterDetails?.id && !isEditable}
+                          className='rss-monitoring-interval-select'
                         >
                           <option value="" disabled>Units</option>
                           <option value="seconds">Seconds</option>
@@ -546,6 +548,8 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde,onClose }) => {
                         onChange={(e) => handleKeywordChange(sourceIndex, e.target.value)}
                         onKeyDown={(e) => handleKeywordKeyDown(sourceIndex, e)}
                         disabled={filterDetails?.id && !isEditable}
+                        style={{ maxWidth: '96%' }}
+
                       />
                       <div className="mt-2"style={{ display: "flex", flexWrap: "wrap", gap: "5px" }}>
                         {source.keywords.map((keyword, keyIndex) => (

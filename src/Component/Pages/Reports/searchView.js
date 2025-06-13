@@ -237,6 +237,7 @@ const SearchView = () => {
                 style: {
                   height: '38px',
                   padding: '0 2px',
+                  fontSize: '12px',
                 },
               }}
               placeholder="Select date..."

@@ -33,11 +33,15 @@ const RolesPermission = () => {
 
     const [popupDetails, setPopupDetails] = useState(null);
 
+    // const togglePopup = () => {
+    //     setShowPopup(prev => !prev);
+    // };
+    const [selectedRoleId, setSelectedRoleId] = useState(null);
     const togglePopup = () => {
         setShowPopup(prev => !prev);
     };
-    const togglePopupB = (details) => {
-        setPopupDetails(details); // Store details in state
+    const toggleDetailsPopup = (roleId) => {
+        setSelectedRoleId(roleId);
         setShowPopupB(prev => !prev);
     };
 
@@ -286,7 +290,7 @@ const RolesPermission = () => {
                                             <FiMoreVertical size={16} />
                                         </Dropdown.Toggle>
                                         <Dropdown.Menu className="custom-dropdown-menu">
-                                            <Dropdown.Item onClick={() => togglePopupB(item)}>Details</Dropdown.Item>
+                                            <Dropdown.Item onClick={() => toggleDetailsPopup(item.id)}>Details</Dropdown.Item>
 
                                             <Dropdown.Item
                                                 onClick={() => confirmDelete(item.role)}
@@ -314,7 +318,7 @@ const RolesPermission = () => {
                     )
                  }
             {showPopup && <AddRole togglePopup={togglePopup} />}
-            {showPopupB && <DetailsPermission togglePopup={togglePopupB} details={popupDetails} />}
+            {showPopupB && <DetailsPermission roleId={selectedRoleId} toggleDetails={toggleDetailsPopup} />}
             {showPopupC && <EditRole togglePopup={togglePopupC} details={popupDetails} />}
             {showPopupD && <AssignRole togglePopup={togglePopupD} details={popupDetails} />}
         </>

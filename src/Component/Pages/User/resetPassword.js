@@ -30,7 +30,7 @@ const ResetPassword = ({ onClose, item }) => {
         }
 
         try {
-            const response = await axios.post(`http://5.180.148.40:9000/api/user-man/v1/user/resetpassword`,
+            const response = await axios.post(`${window.runtimeConfig.REACT_APP_API_USER_MAN}/api/user-man/v1/user/resetpassword`,
                 {
                     new_password: newPassword,
                     user_id:item.id,
