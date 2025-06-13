@@ -32,7 +32,7 @@ const AddFilter2 = ({ togglePopup }) => {
   useEffect(() => {
     const fetchInitialFilters = async () => {
       try {
-        const response = await axios.get('http://5.180.148.40:9002/api/osint-man/v1/filters', {
+        const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_OSINT_MAN}/api/osint-man/v1/filters`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         const filters = response.data.data.filter(filter =>
@@ -93,7 +93,7 @@ const AddFilter2 = ({ togglePopup }) => {
           case_id: String(caseData1.id)
       };
       console.log('Payload being sent start:', payload);
-        await axios.post('http://5.180.148.40:9002/api/osint-man/v1/start',payload, {   headers: {
+        await axios.post(`${window.runtimeConfig.REACT_APP_API_OSINT_MAN}/api/osint-man/v1/start`,payload, {   headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         }});
@@ -107,7 +107,7 @@ const AddFilter2 = ({ togglePopup }) => {
           case_id: String(caseData1.id)
       };
       console.log('Payload being sent stop:', payload);
-        await axios.post('http://5.180.148.40:9002/api/osint-man/v1/stop/batch', payload, {
+        await axios.post(`${window.runtimeConfig.REACT_APP_API_OSINT_MAN}/api/osint-man/v1/stop/batch`, payload, {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`,
@@ -116,7 +116,7 @@ const AddFilter2 = ({ togglePopup }) => {
       }
 
      // Update case status
-     const reponsecase=await axios.put(`http://5.180.148.40:9001/api/case-man/v1/case/${caseData1.id}`,
+      const reponsecase = await axios.put(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/case/${caseData1.id}`,
       { status: "in progress" },
       {
         headers: {

@@ -28,7 +28,7 @@ const DateGraph = () => {
                     start_time: queryPayload?.start_time || "",
                     end_time: queryPayload?.end_time || ""
                 };
-                const response = await axios.post('http://5.180.148.40:9007/api/das/aggregate', payload,
+                const response = await axios.post(`${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/das/aggregate`, payload,
                     {
                         headers: {
                             "Content-Type": "application/json",
