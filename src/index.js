@@ -13,7 +13,14 @@ import { PersistGate } from "redux-persist/integration/react";
 
 
 const loadConfig = async () => {
-  const response = await fetch('/config.json');
+const timestamp = new Date().getTime();
+    const response = await fetch(`/config.json?t=${timestamp}`, {
+      cache: 'no-store',
+      headers: {
+        'Cache-Control': 'no-cache',
+        'Pragma': 'no-cache'
+      }
+    });
   const config = await response.json();
   window.runtimeConfig = config;
 };
