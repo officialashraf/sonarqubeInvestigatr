@@ -1,9 +1,7 @@
-// utils/LicenseGuard.jsx
-
 import { useEffect, useState } from "react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import axios from "axios";
-import Loader from "../Component/Pages/Layout/loader"; // adjust path as needed
+import Loader from "../Component/Pages/Layout/loader"; 
 
 const LicenseGuard = () => {
     const [loading, setLoading] = useState(true);

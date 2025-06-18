@@ -22,11 +22,11 @@ const UserDetails = ({ userId, toggleDetails }) => {
         });
         console.log("response", response);
         setItem(response.data.data || response.data);
-      }  catch (err) {
-                  toast.error(err.response?.data?.detail||"Failed to fetch target details");
-                 console.error("Error fetching target details:", err.response || err);
-                //  togglePopup();
-          } finally {
+      } catch (err) {
+        toast.error(err.response?.data?.detail || "Failed to fetch target details");
+        console.error("Error fetching target details:", err.response || err);
+        //  togglePopup();
+      } finally {
         setLoading(false);
       }
     };

@@ -6,19 +6,17 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 
 const ResetPassword = ({ onClose, item }) => {
+    const token = Cookies.get("accessToken");
     console.log("item", item)
     const [newPassword, setNewPassword] = useState('')
     const [showPassword, setShowPassword] = useState(false);
     const [isPasswordTouched, setIsPasswordTouched] = useState(false);
 
 
-    const token = Cookies.get("accessToken");
-
     const validatePassword = (password) => {
         const regex = /^(?=.*[A-Z])(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{6,}$/;
         return regex.test(password);
     };
-
 
     const handleReset = async (e) => {
         e.preventDefault();
@@ -30,10 +28,10 @@ const ResetPassword = ({ onClose, item }) => {
         }
 
         try {
-            const response = await axios.post(`${window.runtimeConfig.REACT_APP_API_USER_MAN}/api/user-man/v1/user/resetpassword`,
+         await axios.post(`${window.runtimeConfig.REACT_APP_API_USER_MAN}/api/user-man/v1/user/resetpassword`,
                 {
                     new_password: newPassword,
-                    user_id:item.id,
+                    user_id: item.id,
                 },
                 {
                     headers: {
@@ -51,7 +49,6 @@ const ResetPassword = ({ onClose, item }) => {
         }
     };
 
-
     return (
 
         <div className="popup-overlay" style={{ padding: '150px 100px 0px 0px' }}>
@@ -61,7 +58,7 @@ const ResetPassword = ({ onClose, item }) => {
                 </button>
                 <div className="popup-content">
                     <form onSubmit={handleReset}>
-<h5>{item.username}</h5>
+                        <h5>{item.username}</h5>
                         <label htmlFor="title">New Password *</label>
                         <div style={{ position: "relative", display: "inline-block", width: "100%" }}>
                             <input
@@ -97,8 +94,6 @@ const ResetPassword = ({ onClose, item }) => {
                                 Password must be at least 6 characters, include 1 capital letter and 1 special character.
                             </p>
                         )}
-
-
 
                         <div className="button-container">
                             <button type="submit" className="create-btn">Reset</button>

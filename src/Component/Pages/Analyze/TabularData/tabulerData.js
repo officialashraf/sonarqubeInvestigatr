@@ -4,7 +4,7 @@ import "./caseTableData.css";
 import "../../Case/table.css"
 import { useSelector, useDispatch } from "react-redux";
 import "./pagination.css";
-import {fetchSummaryData} from "../../../../Redux/Action/filterAction";
+import { fetchSummaryData } from "../../../../Redux/Action/filterAction";
 import Loader from "../../Layout/loader";
 
 const TabulerData = () => {
@@ -85,8 +85,13 @@ const TabulerData = () => {
                   <th key={header} className="fixed-th">
                     {header
                       .split("_") // Split by underscores
-                      .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize first letter of each word
+                      .map(word => {
+                        return word === word.toUpperCase() //  Check if it's fully uppercase
+                          ? word.charAt(0).toUpperCase() + word.slice(1).toLowerCase() //  Convert all except first letter to lowercase
+                          : word.charAt(0).toUpperCase() + word.slice(1); //  Keep normal capitalization
+                      })
                       .join(" ") // Rejoin words with space
+
                     }
                   </th>
                 ))}

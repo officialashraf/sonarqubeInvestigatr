@@ -113,9 +113,9 @@ const ExistingFilter = ({ selectedFilters, onFilterToggle, onFilterSelect, setSh
 
   return (
     <>
-      <div className="filters-wrapper" style={{margin: '1px'}}>
+      <div className="filters-wrapper" style={{ margin: '1px' }}>
         <div className='existingFil'>
-          <p  className='existing-title' style={{ margin: '0' }}>Existing Filters</p>
+          <p className='existing-title' style={{ margin: '0' }}>Existing Filters</p>
           {searchBarVisibility && (
             <input
               className="search_input"
@@ -162,10 +162,12 @@ const ExistingFilter = ({ selectedFilters, onFilterToggle, onFilterSelect, setSh
                       }}
                         style={{ cursor: 'pointer' }}>
                         {filter.name}
+
+                        <p className="existing-filters-li-p">Created By: {filter.created_by}</p>
+                        <p className="existing-filters-li-p">Created On: {filter.created_on.slice(0, 10)}</p>
                       </span>
-                      <p className="existing-filters-li-p">Created By: {filter.created_by}</p>
-                      <p className="existing-filters-li-p">Created On: {filter.created_on.slice(0, 10)}</p>
                     </li>
+
                   ))
               ) : (
                 <li className="list-group-item existing-filters-li" style={{ display: "flex", height: "400px", justifyContent: "center", alignItems: "center", border: "none" }}>

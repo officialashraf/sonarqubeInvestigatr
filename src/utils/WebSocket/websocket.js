@@ -1,4 +1,3 @@
-// websocket.js - Fixed Implementation
 let socket = null;
 let reconnectInterval = null;
 let isConnecting = false;
@@ -24,7 +23,7 @@ export const connectWebSocket = (username, onMessage) => {
   isConnecting = true;
 
   try {
-    socket = new WebSocket(`ws://5.180.148.40:9009/ws/${username}`);
+    socket = new WebSocket(`${window.runtimeConfig.REACT_APP_API_NOTIFICATION}/ws/${username}`);
     console.log("WebSocket connection initiated for:", username);
 
     socket.onopen = () => {
@@ -110,50 +109,6 @@ export const getSocketStatus = () => {
     default: return 'UNKNOWN';
   }
 };
-// let socket = null;
-// let reconnectInterval = null;
 
-
-// export const connectWebSocket = ( onMessage) => {
-//    const username = useUsername(); // Calls custom hook inside function
-
-//     if (!username) {
-//         console.error("Username is undefined. WebSocket connection cannot be established.");
-//         return;
-//     }
-//   if (socket && socket.readyState === WebSocket.OPEN) return;
- 
-//   socket = new WebSocket(`ws://5.180.148.40:9009/ws/${username}`);
-// console.log("sokcet",socket)
-//   socket.onopen = () => {
-//     console.log("WebSocket connected");
-//   };
-
-//   socket.onmessage = (event) => {
-//     console.log("event",event)
-//     if (onMessage) onMessage(event);
-//   };
-
-//   socket.onclose = () => {
-//     console.log("WebSocket disconnected, trying to reconnect...");
-//     reconnectInterval   =0
-//     //  = setInterval(() => connectWebSocket(token, onMessage), 3000);
-//   };
-
-//   socket.onerror = (err) => {
-//     console.error("WebSocket error:", err);
-//      if (socket.readyState !== WebSocket.CLOSED) {
-//       socket.close();
-//     }
-//   };
-// };
-
-// export const disconnectWebSocket = () => {
-//   if (socket) {
-//     socket.close();
-//     socket = null;
-//     clearInterval(reconnectInterval);
-//   }
-// };
 
 

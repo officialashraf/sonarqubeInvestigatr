@@ -182,11 +182,16 @@ const CriteriaCaseTable = () => {
                 {searchResults.length > 0 && [...new Set(searchResults.flatMap(item => Object.keys(item)))]
                   .map((key, index) => (
                     <th key={index} className="fixed-th">
-                      {key
-                        .split("_") // Split by underscores
-                        .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize first letter of each word
-                        .join(" ") // Rejoin words with space
-                      }
+                       {key
+                      .split("_") // Split by underscores
+                      .map(word => {
+                        return word === word.toUpperCase() //  Check if it's fully uppercase
+                          ? word.charAt(0).toUpperCase() + word.slice(1).toLowerCase() //  Convert all except first letter to lowercase
+                          : word.charAt(0).toUpperCase() + word.slice(1); //  Keep normal capitalization
+                      })
+                      .join(" ") // Rejoin words with space
+
+                    }
                     </th>
                   ))}
               </tr>

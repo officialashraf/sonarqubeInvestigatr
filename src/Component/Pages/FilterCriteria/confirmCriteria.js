@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import '../User/addUser.css'
 import { CloseButton } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
-import { closePopup } from '../../../Redux/Action/criteriaAction';
+import { closePopup, openPopup } from '../../../Redux/Action/criteriaAction';
 
 const Confirm = ({ formData, selectedDates, searchChips }) => {
     const dispatch = useDispatch();
@@ -68,6 +68,7 @@ const Confirm = ({ formData, selectedDates, searchChips }) => {
 
             console.log('Criteria saved successfully:', response.data); // Debug: API response
             setIsVisible(false)
+             dispatch(openPopup("recent"));
         } catch (error) {
             toast.error(error.response.data.detail || "Error saving criteria");
             console.error('Error saving criteria:', error); // Debug: Error log

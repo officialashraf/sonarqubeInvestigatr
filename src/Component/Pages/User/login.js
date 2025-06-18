@@ -7,6 +7,7 @@ import Cookies from 'js-cookie';
 import './login.css';
 import InputField from './inputField'; // reusable input field
 import { toast } from 'react-toastify';
+import {jwtDecode} from "jwt-decode";
 
 const LoginPage = () => {
     const navigate = useNavigate();
@@ -34,13 +35,13 @@ const LoginPage = () => {
             ...prevData,
             [name]: value,
         }));
-        
+
         setError((prevErrors) => ({
             ...prevErrors,
             [name]: ""  // Remove the specific error message
         }));
-       
-          };
+
+    };
 
     // Handle form submission
     const handleLogin = async (e) => {
@@ -63,16 +64,17 @@ const LoginPage = () => {
             if (response.status === 200) {
                 const { access_token, refresh_token } = response.data; // Extract tokens from REST response
 
-
                 // Set cookies for 1 day
                 Cookies.set('accessToken', access_token, { expires: 10 });
                 Cookies.set('refreshToken', refresh_token, { expires: 10 });
 
+                const decodedToken = jwtDecode(access_token); // Decode JWT token
+                console.log("admin", decodedToken)
+                const username = decodedToken?.sub; //  Extract username
 
-
-                // Navigate to the next page after successful login
-                toast.success("You have successfully logged in");
-                navigate('/cases');
+                // Redirect based on username
+                navigate(username === "admin" ? "/admin" : "/cases");
+                // navigate('/cases');
 
             } else {
                 // Handle errors when the response is not 200
@@ -88,14 +90,14 @@ const LoginPage = () => {
 
             } else if (err.request) {
                 // No response from the server
-               toast.error('No response from the server. Please check your connection.');
+                toast.error('No response from the server. Please check your connection.');
             } else {
                 // Unknown err occurred
-               toast.error('An unknown error occurred. Please try again.');
+                toast.error('An unknown error occurred. Please try again.');
             }
         }
     };
- 
+
     return (
         <Container fluid className="login-container">
             <Row className="login-row">
@@ -112,8 +114,6 @@ const LoginPage = () => {
                             placeholder="Enter your username"
                             autoComplete="username"
                             name="username"
-
-
                         />
                         {error.username && <p style={{ color: "red", margin: '0px' }} >{error.username}</p>}
                         <InputField
@@ -125,12 +125,11 @@ const LoginPage = () => {
 
                             autoComplete="current-password"
                             name="password"
-
                         />
                         {error.password && <p style={{ color: "red", margin: '0px' }}>{error.password}</p>}
 
                         <div className="d-flex justify-content-end mt-2">
-                             <button type="submit" className="login-button"
+                            <button type="submit" className="login-button"
                             // disabled={isButtonDisabled}
                             >
                                 Login

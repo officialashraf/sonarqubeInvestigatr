@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
-import { Box, Slider } from '@mui/material';
 import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, CartesianGrid, ResponsiveContainer, ReferenceLine } from 'recharts';
 import './lineChart.css'
 import Cookies from "js-cookie";
@@ -46,6 +45,7 @@ const LineGraph = () => {
         if (unified_record_type) {
           setRecordTypes(unified_record_type);
 
+          console.log("LineGraph - recordTypes:", recordTypes);
 
         }
       } catch (error) {
@@ -72,12 +72,15 @@ const LineGraph = () => {
   }
 
   return (
-    <Box className="mt-1 h-[200px]">
+
+    <div style={{ width: "100%", height: 250, overflowX: "auto", whiteSpace: "nowrap" }}>
       {data.length > 0 ? (
-        <ResponsiveContainer width="100%" height={150}>
+
+        <ResponsiveContainer minWidth={600} height={200}> {/*  Ensures enough space */}
+
           <LineChart
             data={data}
-            margin={{ right: 50 }}
+            margin={{ right: 80 }}
 
           >
             <CartesianGrid strokeDasharray="3 3" />
@@ -135,7 +138,7 @@ const LineGraph = () => {
         </div>
       )}
 
-      <div className="w-full mt-2">
+      {/* <div className="w-full mt-2">
         <Slider
           defaultValue={[50]}
           min={0}
@@ -147,8 +150,8 @@ const LineGraph = () => {
 
           }}
         />
-      </div>
-    </Box>
+      </div> */}
+    </div>
   );
 };
 
