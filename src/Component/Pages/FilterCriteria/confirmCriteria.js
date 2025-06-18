@@ -21,7 +21,7 @@ const Confirm = ({ formData, selectedDates, searchChips }) => {
         console.log("keys", keywordSource)
         try {
 
-            if (searchTitle.trim() === ""){
+            if (searchTitle.trim() === "") {
                 toast.info("Please enter the title");
                 return;
             }
@@ -82,13 +82,13 @@ const Confirm = ({ formData, selectedDates, searchChips }) => {
         }}>
             <div className="popup-container" style={{ display: 'flex', alignItems: 'center' }}>
 
-                
+
                 <div className="popup-content" style={{ width: '70%' }}>
-                    
-                     <span style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
-                           <h5>Save Criteria</h5>
-                            <CloseButton onClick={() => dispatch(closePopup())} />
-                        </span>
+
+                    <span style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
+                        <h5>Save Criteria</h5>
+                        <CloseButton onClick={() => dispatch(closePopup())} />
+                    </span>
                     <form onSubmit={(e) => e.preventDefault()}> {/* Prevent form submission default */}
 
                         <label>Search Title *</label>
@@ -120,7 +120,7 @@ const Confirm = ({ formData, selectedDates, searchChips }) => {
                                 type="submit"
                                 className="create-btn"
                                 onClick={saveCriteria}
-                              
+
                             >
                                 Save
                             </button>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Card, CardContent, Typography, Grid, Container, CircularProgress, Avatar} from '@mui/material';
+import { Card, CardContent, Typography, Grid, Container, CircularProgress, Avatar } from '@mui/material';
 import {
   Link as LinkIcon,
   Email as EmailIcon,

@@ -3,7 +3,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { toast } from 'react-toastify';
 import Select from 'react-select';
-import {customStyles} from '../Case/createCase';
+import { customStyles } from '../Case/createCase';
 
 const EditCase = ({ togglePopup, item }) => {
   // Initialize formData with item values, ensuring proper format for each field
@@ -133,7 +133,7 @@ const EditCase = ({ togglePopup, item }) => {
         originalWatchers.sort().join(",") !== currentWatchers.sort().join(",");
 
       if (areWatchersDifferent && currentWatchers.length > 0) {
-    hasChanged.watchers = [...currentWatchers]; // ✅ Ensures it stays an array of strings
+        hasChanged.watchers = [...currentWatchers]; // ✅ Ensures it stays an array of strings
 
       } else if (currentWatchers.length === 0) {
         hasChanged.watchers = []; // Explicitly set to an empty array if no watchers exist
@@ -162,7 +162,7 @@ const EditCase = ({ togglePopup, item }) => {
       }
     } catch (err) {
       console.error("Error updating case:", err);
-      toast.info(err.response?.data?.detail || "Failed to update case");
+      toast.error(err.response?.data?.detail || "Failed to update case");
     }
   };
 

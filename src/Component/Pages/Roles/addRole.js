@@ -67,7 +67,7 @@ const AddRole = ({ togglePopup }) => {
 
             // Only process newly selected endpoints console.log("selectedrole", selectedRole)
             if (!selectedRole.trim()) {
-                toast.error("Please enter role before proceeding."); // Show toast error
+                toast.info("Please enter role before proceeding."); // Show toast error
                 return; // Stop function execution
             }
             if (newlySelectedEndpoints.length === 0) {
@@ -81,7 +81,7 @@ const AddRole = ({ togglePopup }) => {
             }
             console.log("payload", payload)
             const response =
-              await axios.post(
+                await axios.post(
                     `${window.runtimeConfig.REACT_APP_API_USER_MAN}/api/user-man/v1/role`, payload
                     ,
                     {
@@ -91,16 +91,16 @@ const AddRole = ({ togglePopup }) => {
                         }
                     }
                 )
-     
+
             if (response.status === 200) {
                 toast.success("New role created successfully");
                 window.dispatchEvent(new Event("databaseUpdated"));
                 togglePopup(false);
             }
             console.log(response)
-        } catch(error) {
+        } catch (error) {
             console.error("Error during role creation:", error.response || error);
-            toast.error(error.response?.data?.detail || error.message  || 'Failed to assign role');
+            toast.error(error.response?.data?.detail || error.message || 'Failed to assign role');
         } finally {
             setLoading(false);
         }
@@ -180,7 +180,7 @@ const AddRole = ({ togglePopup }) => {
                             <label>Add Role</label>
                             <input
                                 type="text"
-                                placeholder="Enter Role"
+                                placeholder="Enter role"
                                 className="com"
                                 value={selectedRole} // Bind input value to state
                                 onChange={(e) => setSelectedRole(e.target.value)} // Update state on input

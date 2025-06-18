@@ -20,130 +20,130 @@ import { fetchSummaryData } from "../../../Redux/Action/filterAction";
 const Resources = () => {
 
   const dispatch = useDispatch();
-const data1 = useSelector((state) => state.caseData.caseData);
-const {
-  data,
-  headers,
-  page,
-  totalPages,
-  totalResults,
-} = useSelector((state) => state.filterData);
+  const data1 = useSelector((state) => state.caseData.caseData);
+  const {
+    data,
+    headers,
+    page,
+    totalPages,
+    totalResults,
+  } = useSelector((state) => state.filterData);
 
-const summaryData = data;
-const summaryHeaders = headers;
-console.log("totalresultes", totalResults);
-console.log("totalapges", totalPages);
-console.log("Summary Data from Redux:", summaryData);
-console.log("Summary Headers from Redux:", summaryHeaders);
+  const summaryData = data;
+  const summaryHeaders = headers;
+  console.log("totalresultes", totalResults);
+  console.log("totalapges", totalPages);
+  console.log("Summary Data from Redux:", summaryData);
+  console.log("Summary Headers from Redux:", summaryHeaders);
 
-const [showPopup, setShowPopup] = useState(false);
-const [currentPage, setCurrentPage] = useState(page);
-const [hasMore, setHasMore] = useState(true);
-const [loading, setLoading] = useState(false);
-const sidebarRef = useRef(null);
-const scrollDirectionRef = useRef(null);
-const [selectedResource, setSelectedResource] = useState(null);
-const [allResources, setAllResources] = useState([]);
-const [loadedPages, setLoadedPages] = useState([]);
+  const [showPopup, setShowPopup] = useState(false);
+  const [currentPage, setCurrentPage] = useState(page);
+  const [hasMore, setHasMore] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const sidebarRef = useRef(null);
+  const scrollDirectionRef = useRef(null);
+  const [selectedResource, setSelectedResource] = useState(null);
+  const [allResources, setAllResources] = useState([]);
+  const [loadedPages, setLoadedPages] = useState([]);
 
-// Initialize with first page
-useEffect(() => {
-  console.log("data1.id:", data1?.id);
-  if (data1?.id) {
-    setLoading(true);
-    // Reset states for new case
-    setAllResources([]);
-    setLoadedPages([]);
-    setCurrentPage(1); // Start from page 1
-    
-    dispatch(fetchSummaryData({
-      queryPayload: { unified_case_id: data1.id },
-      page: 1, // Always start from page 1
-      itemsPerPage: 50,
-    })).then(() => {
-      setLoading(false);
-    });
-  }
-}, [data1?.id, dispatch]); // Only depend on data1.id
+  // Initialize with first page
+  useEffect(() => {
+    console.log("data1.id:", data1?.id);
+    if (data1?.id) {
+      setLoading(true);
+      // Reset states for new case
+      setAllResources([]);
+      setLoadedPages([]);
+      setCurrentPage(1); // Start from page 1
 
-// Load additional pages
-useEffect(() => {
-  if (data1?.id && currentPage > 1) {
-    setLoading(true);
-    dispatch(fetchSummaryData({
-      queryPayload: { unified_case_id: data1.id },
-      page: currentPage,
-      itemsPerPage: 50,
-    })).then(() => {
-      setLoading(false);
-    });
-  }
-}, [currentPage, data1?.id, dispatch]);
-
-// Simplified resource management
-useEffect(() => {
-  if (summaryData && Array.isArray(summaryData) && summaryData.length > 0) {
-    const pageFromRedux = page; // Get current page from Redux
-    
-    setLoadedPages(prevLoadedPages => {
-      // If this page is already loaded, don't add it again
-      if (prevLoadedPages.includes(pageFromRedux)) {
-        return prevLoadedPages;
-      }
-      
-      const updatedLoadedPages = [...prevLoadedPages, pageFromRedux].sort((a, b) => a - b);
-      
-      // Keep only last 2 pages
-      if (updatedLoadedPages.length > 2) {
-        return updatedLoadedPages.slice(-2);
-      }
-      
-      return updatedLoadedPages;
-    });
-    
-    setAllResources(prevResources => {
-      // Create a map to store resources by page
-      const resourcesByPage = new Map();
-      
-      // Add existing resources
-      prevResources.forEach(resource => {
-        const resourcePage = resource.page || pageFromRedux;
-        if (!resourcesByPage.has(resourcePage)) {
-          resourcesByPage.set(resourcePage, []);
-        }
-        resourcesByPage.get(resourcePage).push(resource);
+      dispatch(fetchSummaryData({
+        queryPayload: { unified_case_id: data1.id },
+        page: 1, // Always start from page 1
+        itemsPerPage: 50,
+      })).then(() => {
+        setLoading(false);
       });
-      
-      // Add new resources
-      const newResourcesWithPage = summaryData.map(resource => ({
-        ...resource,
-        page: pageFromRedux
-      }));
-      
-      resourcesByPage.set(pageFromRedux, newResourcesWithPage);
-      
-      // Keep only resources from the last 2 pages
-      const sortedPages = Array.from(resourcesByPage.keys()).sort((a, b) => a - b);
-      const pagesToKeep = sortedPages.slice(-2);
-      
-      const finalResources = [];
-      pagesToKeep.forEach(page => {
-        if (resourcesByPage.has(page)) {
-          finalResources.push(...resourcesByPage.get(page));
-        }
+    }
+  }, [data1?.id, dispatch]); // Only depend on data1.id
+
+  // Load additional pages
+  useEffect(() => {
+    if (data1?.id && currentPage > 1) {
+      setLoading(true);
+      dispatch(fetchSummaryData({
+        queryPayload: { unified_case_id: data1.id },
+        page: currentPage,
+        itemsPerPage: 50,
+      })).then(() => {
+        setLoading(false);
       });
-      
-      // Ensure max 100 items
-      return finalResources.slice(-100);
-    });
-    
-    // Update hasMore
-    setHasMore(pageFromRedux < totalPages);
-  }
-}, [summaryData, page, totalPages]);
+    }
+  }, [currentPage, data1?.id, dispatch]);
+
+  // Simplified resource management
+  useEffect(() => {
+    if (summaryData && Array.isArray(summaryData) && summaryData.length > 0) {
+      const pageFromRedux = page; // Get current page from Redux
+
+      setLoadedPages(prevLoadedPages => {
+        // If this page is already loaded, don't add it again
+        if (prevLoadedPages.includes(pageFromRedux)) {
+          return prevLoadedPages;
+        }
+
+        const updatedLoadedPages = [...prevLoadedPages, pageFromRedux].sort((a, b) => a - b);
+
+        // Keep only last 2 pages
+        if (updatedLoadedPages.length > 2) {
+          return updatedLoadedPages.slice(-2);
+        }
+
+        return updatedLoadedPages;
+      });
+
+      setAllResources(prevResources => {
+        // Create a map to store resources by page
+        const resourcesByPage = new Map();
+
+        // Add existing resources
+        prevResources.forEach(resource => {
+          const resourcePage = resource.page || pageFromRedux;
+          if (!resourcesByPage.has(resourcePage)) {
+            resourcesByPage.set(resourcePage, []);
+          }
+          resourcesByPage.get(resourcePage).push(resource);
+        });
+
+        // Add new resources
+        const newResourcesWithPage = summaryData.map(resource => ({
+          ...resource,
+          page: pageFromRedux
+        }));
+
+        resourcesByPage.set(pageFromRedux, newResourcesWithPage);
+
+        // Keep only resources from the last 2 pages
+        const sortedPages = Array.from(resourcesByPage.keys()).sort((a, b) => a - b);
+        const pagesToKeep = sortedPages.slice(-2);
+
+        const finalResources = [];
+        pagesToKeep.forEach(page => {
+          if (resourcesByPage.has(page)) {
+            finalResources.push(...resourcesByPage.get(page));
+          }
+        });
+
+        // Ensure max 100 items
+        return finalResources.slice(-100);
+      });
+
+      // Update hasMore
+      setHasMore(pageFromRedux < totalPages);
+    }
+  }, [summaryData, page, totalPages]);
 
 
- // ... rest of your component ...
+  // ... rest of your component ...
 
   // Infinite scroll listener
   useEffect(() => {
@@ -173,7 +173,7 @@ useEffect(() => {
     return () => sidebarElement.removeEventListener("scroll", handleInfiniteScroll);
   }, [loading, hasMore, currentPage]);
 
-  
+
   // Adjust scroll position after loading previous page to avoid jumpiness
   useEffect(() => {
     const scrollContainer = sidebarRef.current;
@@ -211,17 +211,6 @@ useEffect(() => {
         <div className="title">
           <h5>All Resources</h5>
         </div>
-        {/* <div className="jobs">
-          <div className="job-content">
-            <h6>VIEW JOBS</h6>
-            <IoChevronDown className="dropdown-icon" />
-            <span className="icons">
-              <LuPin />
-              <RiInformation2Line />
-              <BsThreeDotsVertical />
-            </span>
-          </div>
-        </div> */}
       </div>
 
       {/* Content Section */}

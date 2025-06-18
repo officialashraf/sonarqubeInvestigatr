@@ -90,7 +90,7 @@ const Summary = ({ filters }) => {
       setShowPopup((prev) => !prev); // fallback toggle
     }
   };
-const COLORS =["#B22222", "#556B2F",  "#CC5500"]
+  const COLORS = ["#B22222", "#556B2F", "#CC5500"]
   // const togglePopup = () => {
   //   setShowPopup((prev) => !prev);
   // };
@@ -125,7 +125,7 @@ const COLORS =["#B22222", "#556B2F",  "#CC5500"]
                     label={({ name }) => name}
                   >
                     {pieData.map((entry, index) => (
-                      <Cell key={`cell-${index}`}  fill={COLORS[index % COLORS.length]} />
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                     ))}
                   </Pie>
                   <Tooltip formatter={(value) => `Total: ${value}`} />
@@ -161,7 +161,7 @@ const COLORS =["#B22222", "#556B2F",  "#CC5500"]
                 </BarChart>
               </ResponsiveContainer>
             </Box>
-           
+
             {/* Table */}
             <Box className="box">
               <TableContainer component={Paper} width="100%" height={300}>

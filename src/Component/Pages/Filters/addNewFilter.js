@@ -251,9 +251,6 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
           } else if (criteria.interval % 60 === 0) {
             intervalValue = criteria.interval / 60;
             intervalUnit = 'minutes';
-          } else {
-            intervalValue = criteria.interval;
-            intervalUnit = 'seconds';
           }
         }
 
@@ -338,7 +335,7 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
 
   const handleSaveFilter = async () => {
     if (filterDetails?.id && !isEditable) {
-      toast.error("You don't have permission to edit this filter");
+      toast.info("You don't have permission to edit this filter");
       return;
     }
     const validationErrors = validateForm();
@@ -371,8 +368,8 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
           'Authorization': `Bearer ${token}`,
         },
       });
-      onClose();
-      // window.dispatchEvent(new Event('databaseUpdated'));
+
+      window.dispatchEvent(new Event('databaseUpdated'));
       console.log("responseFilter", response)
 
       if (response.status === 200) {
@@ -523,7 +520,6 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
                           className='rss-monitoring-interval-select'
                         >
                           <option value="" disabled>Units</option>
-                          <option value="seconds">Seconds</option>
                           <option value="minutes">Minutes</option>
                           <option value="hours">Hours</option>
                         </Form.Select>
@@ -678,4 +674,3 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
 };
 
 export default AddNewFilter;
-

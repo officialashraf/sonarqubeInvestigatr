@@ -47,6 +47,7 @@ const CardList = () => {
           'Authorization': `Bearer ${Token}`
         },
       });
+      console.log("response", response.data)
 
       const apiData = response.data;
 
@@ -58,7 +59,7 @@ const CardList = () => {
       setCardData(updatedData);
 
     } catch (error) {
-         console.error('Error fetching data:', error);
+      console.error('Error fetching data:', error);
     }
   }, [Token]);
 

@@ -52,7 +52,7 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
 
       const caseOptionsFormatted = response.data.data.map(caseItem => ({
         value: caseItem.id,
-        label: `${caseItem.id}`
+        label: `${`CASE${String(caseItem.id).padStart(4, "0")}`}`
       }));
 
       setCaseOptions(caseOptionsFormatted);
@@ -243,9 +243,9 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
   const handleUpdate = async (e) => {
     e.preventDefault();
 
- //   Validation
+    //   Validation
     if (!formData.searchQuery.trim()) {
-      toast.error('Search query is required');
+      toast.info('Search query is required');
       return;
     }
     // const validationErrors = validateForm();
@@ -289,7 +289,7 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
       }
     } catch (error) {
       console.error('Error updating criteria:', error);
-      toast.error( (error.response?.data?.detail || error.message) || 'Failed to update criteria' );
+      toast.error((error.response?.data?.detail || error.message) || 'Failed to update criteria');
     }
   };
 
@@ -391,7 +391,7 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
                 multiline={false}
               />
               {/* {error.searchQuery && <p style={{ color: "red", margin: '0px' }} >{error.searchQuery}</p>} */}
-                          </div>
+            </div>
 
             {/* Filetype Dropdown (Multi Select) */}
             <div >

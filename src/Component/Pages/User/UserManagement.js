@@ -125,7 +125,7 @@ const UserManagement = () => {
           }
         });
       window.dispatchEvent(new Event("databaseUpdated"));
-      toast(`User ${username} deleted successfully`)
+      toast.success(`User ${username} deleted successfully`)
       console.log("User Deleted:", response.data);
 
     } catch (err) {
@@ -134,14 +134,14 @@ const UserManagement = () => {
 
       if (err.response) {
 
-        toast(err.response?.data?.detail || 'Something went wrong. Please try again');
+        toast.error(err.response?.data?.detail || 'Something went wrong. Please try again');
 
       } else if (err.request) {
         // No response from the server
-        toast('No response from the server. Please check your connection');
+        toast.error('No response from the server. Please check your connection');
       } else {
         // Unknown error occurred
-        toast('An unknown error occurred. Please try again');
+        toast.error('An unknown error occurred. Please try again');
       }
     }
   };
@@ -167,7 +167,7 @@ const UserManagement = () => {
 
 
   const handleSearch = (event) => {
-    const searchValue = event.target.value.trim().toLowerCase();
+    const searchValue = event.target.value;
     setSearchTerm(searchValue);
 
     const filtered = data.filter(item => {
@@ -177,7 +177,7 @@ const UserManagement = () => {
           return value
             .toString()
             .toLowerCase()
-            .includes(searchValue);
+            .includes(searchValue.toLowerCase());
         }
         return false;
       });

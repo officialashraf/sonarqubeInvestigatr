@@ -85,7 +85,8 @@ const CreateCriteria = ({ handleCreateCase }) => {
         // Format the response data for react-select
         const caseOptionsFormatted = response.data.data.map(caseItem => ({
           value: caseItem.id,
-          label: `${caseItem.id} - ${caseItem.title || 'Untitled'}`
+          label: `${`CASE${String(caseItem.id).padStart(4, "0")}`} - ${caseItem.title || 'Untitled'}`
+          // {`CASE${String(caseItem.id).padStart(4, "0")}`}
         }));
 
         setCaseOptions(caseOptionsFormatted);
@@ -136,7 +137,7 @@ const CreateCriteria = ({ handleCreateCase }) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-     if (name === "searchQuery") {
+    if (name === "searchQuery") {
       setFormData(prev => ({
         ...prev,
         [name]: value.split(",").map(keyword => keyword) // Split by commas and trim extra spaces
@@ -148,7 +149,7 @@ const CreateCriteria = ({ handleCreateCase }) => {
         [name]: value
       }));
     }
-  
+
   };
 
   const handleSearch = async (e) => {
@@ -261,7 +262,7 @@ const CreateCriteria = ({ handleCreateCase }) => {
               fullWidth
               className="com"
               name="searchQuery"
-              
+
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -278,15 +279,15 @@ const CreateCriteria = ({ handleCreateCase }) => {
                   height: '38px',
                   padding: '0 8px',
                 },
-               
-      
-    
+
+
+
               }}
               placeholder="Search..."
               value={formData.searchQuery}
               onChange={handleInputChange}
               sx={sharedSxStyles}
-              
+
             />
             {error.searchQuery && <p style={{ color: "red", margin: '0px' }} >{error.searchQuery}</p>}
 
@@ -381,7 +382,7 @@ const CreateCriteria = ({ handleCreateCase }) => {
                 sx={sharedSxStyles}
               />
             </div>
-          
+
             {/* Save Criteria Checkbox */}
             <FormControlLabel
               control={
@@ -393,7 +394,7 @@ const CreateCriteria = ({ handleCreateCase }) => {
                 />
               }
               label="Save this search"
-              
+
             />
 
             {/* Submit Button */}

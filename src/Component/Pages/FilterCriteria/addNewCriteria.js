@@ -53,7 +53,7 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
 
                 const caseOptionsFormatted = response.data.data.map(caseItem => ({
                     value: caseItem.id,
-                    label: `${caseItem.id} - ${caseItem.title || 'Untitled'}`
+                    label: `${`CASE${String(caseItem.id).padStart(4, "0")}`} - ${caseItem.title || 'Untitled'}`
                 }));
 
                 setCaseOptions(caseOptionsFormatted);
@@ -275,7 +275,7 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
                                                     />
                                                 </InputAdornment>
                                             ),
-                                            style: { height: '38px', padding: '0 8px', fontSize: '12px' }   ,
+                                            style: { height: '38px', padding: '0 8px', fontSize: '12px' },
                                         }}
                                         placeholder="Select date range"
                                         value={formatDateRange()}
@@ -291,7 +291,7 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
 
 
                                 {/* Buttons */}
-                                <div className="button-container" style={{ marginTop: '10px'}}>
+                                <div className="button-container" style={{ marginTop: '10px' }}>
                                     <button type="button" onClick={performSearch} className="add-btn" disabled={isSearchDisabled}
                                         style={{
                                             backgroundColor: isSearchDisabled ? '#fffff' : '#00000',

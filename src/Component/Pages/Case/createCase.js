@@ -28,47 +28,7 @@ export const customStyles = {
   }),
 
 };
-// export const customStyles = {
-//   control: (base, state) => ({
-//     ...base,
-//     backgroundColor: 'white', // Black background
-//     color: 'black', // White text
-//     boxShadow: 'none',
-//     outline: 'none'
-//   }),
-//   menu: (base) => ({
-//     ...base,
-//     backgroundColor: 'white', // Black background
-//     color: 'black', // White text
-//   }),
-//   option: (base, state) => ({
-//     ...base,
-//     backgroundColor: state.isSelected ? 'black' : 'white', // Darker black for selected option
-//     color: 'black', // White text
-//     '&:hover': {
-//       backgroundColor: 'black', // Lighter black on hover
-//       color: 'white'
-//     }
-//   }),
-//   multiValue: (base) => ({
-//     ...base,
-//     backgroundColor: 'white', // Dark background for selected values
-//     color: 'black', // White text
-//   }),
-//   multiValueLabel: (base) => ({
-//     ...base,
-//     backgroundColor: 'black',
-//     color: 'white', // White text
-//   }),
-//   multiValueRemove: (base) => ({
-//     ...base,
-//     color: 'black', // White text
-//     '&:hover': {
-//       backgroundColor: 'black', // Lighter black on hover
-//       color: 'white' // White text
-//     }
-//   })
-// };
+
 const CreateCase = ({ togglePopup }) => {
   const [formData, setFormData] = useState({
     title: "",
@@ -83,8 +43,8 @@ const CreateCase = ({ togglePopup }) => {
     value: user.id,
     label: user.username
   }));
-      const [error, setError] = useState({});
-  
+  const [error, setError] = useState({});
+
 
   const validateForm = () => {
     const errors = {};
@@ -142,14 +102,14 @@ const CreateCase = ({ togglePopup }) => {
     );
     try {
       const caseQuery = {
-          title: payloadData.title,
+        title: payloadData.title,
         description: payloadData.description,
         assignee: payloadData.assignee,
- 
 
 
-        
-};
+
+
+      };
       if (payloadData.watchers) {
         const watcherList =
           typeof payloadData.watchers === "string"
@@ -162,16 +122,16 @@ const CreateCase = ({ togglePopup }) => {
           caseQuery.watchers = watcherList;
         }
       }
-    
-      console.log("caseQuery",caseQuery)
-      const response = await axios.post(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/case`, 
-      caseQuery
-      , {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+
+      console.log("caseQuery", caseQuery)
+      const response = await axios.post(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/case`,
+        caseQuery
+        , {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
         }
-      }
       ); window.dispatchEvent(new Event("databaseUpdated"));
       if (response.status === 200) {
         toast.success("Case created successfully");
@@ -208,7 +168,7 @@ const CreateCase = ({ togglePopup }) => {
       ...prevErrors,
       [name]: ""  // Remove the specific error message
     }));
-    
+
   };
 
   const handleWatchersChange = (selectedOptions) => {
@@ -297,18 +257,18 @@ const CreateCase = ({ togglePopup }) => {
               />
             </div>
             <div className="watcher-container">
-            <label htmlFor="watcher">Watcher </label>
-            <Select
-              options={options}
-              isMulti
-              styles={customStyles}
-              className="com"
-              name="watchers"
-              placeholder="Select watchers"
-              value={options && options.filter((option) => formData.watchers.split(", ").includes(option.label)
-              )}
-              onChange={handleWatchersChange}
-            />
+              <label htmlFor="watcher">Watcher </label>
+              <Select
+                options={options}
+                isMulti
+                styles={customStyles}
+                className="com"
+                name="watchers"
+                placeholder="Select watchers"
+                value={options && options.filter((option) => formData.watchers.split(", ").includes(option.label)
+                )}
+                onChange={handleWatchersChange}
+              />
             </div>
             <div className="button-container">
               <button type="submit" className="create-btn">

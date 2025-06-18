@@ -253,6 +253,7 @@ const GridView = () => {
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
+            height: "100vh"
           }}
         >
           <Pagination style={{ width: "200px" }}>

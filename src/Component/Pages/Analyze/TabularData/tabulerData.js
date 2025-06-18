@@ -84,6 +84,7 @@ const TabulerData = () => {
                 {headers.map((header) => (
                   <th key={header} className="fixed-th">
                     {header
+
                       .split("_") // Split by underscores
                       .map(word => {
                         return word === word.toUpperCase() //  Check if it's fully uppercase

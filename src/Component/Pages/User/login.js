@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Container, Row, Col, Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
@@ -7,12 +8,14 @@ import Cookies from 'js-cookie';
 import './login.css';
 import InputField from './inputField'; // reusable input field
 import { toast } from 'react-toastify';
+import { Eye, EyeSlash } from 'react-bootstrap-icons';
 import {jwtDecode} from "jwt-decode";
 
 const LoginPage = () => {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({ username: "", password: "" });
     const [error, setError] = useState({});
+    const [showPassword, setShowPassword] = useState(false);
 
     const validateForm = () => {
         const errors = {};
@@ -86,7 +89,7 @@ const LoginPage = () => {
 
             if (err.response) {
 
-                toast(err.response?.data?.detail || 'Something went wrong. Please try again');
+                toast.error(err.response?.data?.detail || 'Something went wrong. Please try again');
 
             } else if (err.request) {
                 // No response from the server
@@ -116,16 +119,40 @@ const LoginPage = () => {
                             name="username"
                         />
                         {error.username && <p style={{ color: "red", margin: '0px' }} >{error.username}</p>}
-                        <InputField
-                            label="Password *"
-                            type="password"
-                            value={formData.password}
-                            onChange={handleChange}
-                            placeholder="Enter your password"
-
-                            autoComplete="current-password"
-                            name="password"
-                        />
+                        <div style={{ position: 'relative', justifyContent: 'center' }}>
+                            <InputField
+                                label="Password *"
+                                type={showPassword ? "text" : "password"}
+                                value={formData.password}
+                                onChange={handleChange}
+                                placeholder="Enter your password"
+                                autoComplete="current-password"
+                                name="password"
+                            />
+                            <span
+                                onClick={() => setShowPassword(!showPassword)}
+                                style={{
+                                    position: 'absolute',
+                                    right: '10px',
+                                    top: '50%',
+                                    // transform: 'translateY(-50%)',
+                                    cursor: 'pointer',
+                                    userSelect: 'none',
+                                    color: 'black',
+                                }}
+                                aria-label={showPassword ? "Hide password" : "Show password"}
+                                role="button"
+                                tabIndex={0}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter' || e.key === ' ') {
+                                        e.preventDefault();
+                                        setShowPassword(!showPassword);
+                                    }
+                                }}
+                            >
+                                {showPassword ? <EyeSlash /> : <Eye />}
+                            </span>
+                        </div>
                         {error.password && <p style={{ color: "red", margin: '0px' }}>{error.password}</p>}
 
                         <div className="d-flex justify-content-end mt-2">

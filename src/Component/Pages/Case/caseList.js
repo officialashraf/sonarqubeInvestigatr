@@ -151,7 +151,7 @@ const DataTable = () => {
         }
       );
       window.dispatchEvent(new Event("databaseUpdated"));
-      toast.success(`Case ${title} Deleted Successfully`);
+      toast.success(`Case ${title} deleted successfully`);
       console.log("Case Deleted:", response.data);
     } catch (error) {
       toast.error(error.response?.data?.detail || "Error deleting case");
@@ -183,14 +183,14 @@ const DataTable = () => {
   }, []);
 
   const handleSearch = (event) => {
-    const searchValue = event.target.value.toLowerCase();
+    const searchValue = event.target.value;
     setSearchTerm(searchValue);
 
     const filtered = data.filter((item) => {
       return Object.values(item).some((value) => {
         return String(value ?? "") // convert null/undefined to empty string
           .toLowerCase()
-          .includes(searchValue);
+          .includes(searchValue.toLowerCase());
       });
     });
     setFilteredData(filtered);
@@ -467,24 +467,13 @@ const DataTable = () => {
               <tbody className="tb-1">
                 {filteredData &&
                   filteredData.map((item, index) => (
-                    <tr key={item.id}>
+                    <tr key={item.id}
+                      onClick={() => onFieldClick(item)}
+                      cursor="pointer"
+                    >
                       <td>
-                        <a
-                          title="Click here"
-                          href="#"
-                          onClick={(e) => {
-                            e.preventDefault(); // Prevents page navigation
-                            onFieldClick(item);
-                          }}
-                          style={{
-                            textDecoration: "underline",
-                            borderBottom: "1px solid blue",
-                            color: "blue",
-                            cursor: "pointer",
-                          }} // Link styling
-                        >
-                          {`CASE${String(item.id).padStart(4, "0")}`}
-                        </a>
+                        {`CASE${String(item.id).padStart(4, "0")}`}
+
                       </td>
 
                       <td>{item.title}</td>
@@ -497,14 +486,15 @@ const DataTable = () => {
                         {Array.isArray(item.watchers)
                           ? item.watchers.join(", ")
                           : typeof item.watchers === "string"
-                          ? item.watchers.split(",").map((w) => w.trim()).join(", ")
-                          : ""}
+                            ? item.watchers.split(",").map((w) => w.trim()).join(", ")
+                            : ""}
                       </td>
 
                       <td>{item.modified_on}</td>
                       <td
                         className="d-flex justify-content-between align-items-center"
                         disabled={true}
+                        onClick={(e) => e.stopPropagation()}
                       >
                         <Badge pill bg="dark" className="badge-custom">
                           <span>{item.status}</span>
@@ -557,9 +547,9 @@ const DataTable = () => {
       )}
       {showPopup && <CreateCase togglePopup={togglePopup} />}
       {showPopupB && <EditCase item={selectedData} togglePopup={togglePopupB} />}
-{showPopupA && (
-  <CaseDetails caseId={selectedData} users={users} togglePopupA={togglePopupA} />
-)}
+      {showPopupA && (
+        <CaseDetails caseId={selectedData} users={users} togglePopupA={togglePopupA} />
+      )}
     </>
   );
 };

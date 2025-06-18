@@ -100,7 +100,7 @@ const ProfileDetails = () => {
 
             <div className="detail-item">
               <div className="detail-label">
-                <Person fontSize="small" /> Aliases
+                <Person fontSize="small" /> Names
               </div>
 
               <div className="detail-value">{(profileData && profileData.aliases) || "--"}</div>
@@ -108,7 +108,7 @@ const ProfileDetails = () => {
 
             <div className="detail-item">
               <div className="detail-label">
-                <Cake fontSize="small" /> D.O.B/Age
+                <Cake fontSize="small" /> DOB/Age
               </div>
 
               <div className="detail-value">{(profileData && profileData.ages) || "--"}</div>
@@ -126,6 +126,6 @@ const ProfileDetails = () => {
       </Card>
     </Container>
   );
-}; 
+};
 
 export default ProfileDetails;

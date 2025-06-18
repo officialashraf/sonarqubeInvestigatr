@@ -53,15 +53,15 @@ const CaseDetails = ({ caseId, togglePopupA }) => {
     if (!item) {
         return (
             <div className="popup-overlay">
-            <div className="popup-containera">
-              <div className="popup-content">
-                <p>No case details found.</p>
-                <button type="button" className="cancel-btn" onClick={togglePopupA}>
-                  Cancel
-                </button>
-              </div>
+                <div className="popup-containera">
+                    <div className="popup-content">
+                        <p>No case details found.</p>
+                        <button type="button" className="cancel-btn" onClick={togglePopupA}>
+                            Cancel
+                        </button>
+                    </div>
+                </div>
             </div>
-          </div>
         );
     }
 

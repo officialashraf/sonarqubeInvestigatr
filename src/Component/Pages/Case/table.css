@@ -58,19 +58,18 @@ td {
   overflow-x: auto;
   overflow-y: auto;
 }
-@media screen and (max-width: 768){
-  .data-table{
+@media screen and (max-width: 768) {
+  .data-table {
     /* height: 100%; */
   }
 }
-@media screen and (max-width: 1920px) and (min-width: 1280px){
-  .data-table{
-/* height: 100%; */
-  overflow-x: auto;
-  overflow-y: auto;
+@media screen and (max-width: 1920px) and (min-width: 1280px) {
+  .data-table {
+    /* height: 100%; */
+    overflow-x: auto;
+    overflow-y: auto;
   }
 }
-
 
 .data-table th {
   vertical-align: middle;

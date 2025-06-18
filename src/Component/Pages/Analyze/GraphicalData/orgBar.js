@@ -63,7 +63,7 @@ const OrgBar = () => {
     }
     return (
         <>
-            <div style={{ width: '100%', height: 280,overflowY:'auto' }}>
+            <div style={{ width: '100%', height: 280, overflowY: 'auto' }}>
                 {barData.length > 0 ? (
                     <ResponsiveContainer width="100%" height={Math.max(barData.length * 30, 280)}>
                         <BarChart
@@ -73,7 +73,7 @@ const OrgBar = () => {
                         >
                             <CartesianGrid strokeDasharray="3 3" />
                             <XAxis type="number" /> {/* XAxis represents numerical values */}
-                            <YAxis dataKey="name" type="category" tick={{ fontSize: 8, width: 150 ,wordWrap: "break-word",color:'black'}}/> {/* YAxis represents categories */}
+                            <YAxis dataKey="name" type="category" tick={{ fontSize: 8, width: 150, wordWrap: "break-word", color: 'black' }} /> {/* YAxis represents categories */}
                             <Tooltip
                                 wrapperStyle={{
                                     backgroundColor: "#fff",

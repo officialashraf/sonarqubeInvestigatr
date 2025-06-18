@@ -15,11 +15,11 @@ const DetailsPermission = ({ roleId, toggleDetails }) => {
         const token = Cookies.get('accessToken');
         const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_USER_MAN}/api/user-man/v1/role/${roleId}`,
           {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        });
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+          });
         console.log('Role details response:', response);
         setDetails(response.data);
       } catch (err) {

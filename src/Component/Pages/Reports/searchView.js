@@ -58,7 +58,7 @@ const SearchView = () => {
   useEffect(() => {
     const fetchCaseData = async () => {
       try {
-        const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_CASE_MAN }/api/case-man/v1/case`, {
+        const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/case`, {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${Token}`
@@ -68,7 +68,7 @@ const SearchView = () => {
         // Format the response data for react-select
         const caseOptionsFormatted = response.data.data.map(caseItem => ({
           value: caseItem.id,
-          label: `${caseItem.id} - ${caseItem.title || 'Untitled'}`
+          label: `${`CASE${String(caseItem.id).padStart(4, "0")}`} - ${caseItem.title || 'Untitled'}`
         }));
 
         setCaseOptions(caseOptionsFormatted);
@@ -101,8 +101,8 @@ const SearchView = () => {
   const handleSearch = async (e) => {
     e.preventDefault();
     try {
-      if(formData.searchQuery===""){
-        toast.error("Please enter at least one keyword to search");
+      if (formData.searchQuery === "") {
+        toast.info("Please enter at least one keyword to search");
         return;
       }
       const payload = {

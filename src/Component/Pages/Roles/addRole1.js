@@ -14,7 +14,7 @@ const AddRole = ({ togglePopup }) => {
             console.log("Criteria Payload:", searchTitle); // Debug: Payload for API
 
             if (!searchTitle.trim()) {
-                toast.error("Please enter role before proceeding."); // Show toast error
+                toast.info("Please enter role before proceeding."); // Show toast error
                 return; // Stop function execution
             }
             const response = await axios.post(
@@ -33,7 +33,7 @@ const AddRole = ({ togglePopup }) => {
             console.log('Role created successfully:', response.data); // Debug: API response
             togglePopup(false)
         } catch (error) {
-            toast(error.response.data.detail || "Role name already exists. Kindly use a different role name",);
+            toast.info(error.response.data.detail || "Role name already exists. Kindly use a different role name",);
             console.error('Error saving criteria:', error); // Debug: Error log
         }
     };
@@ -52,15 +52,15 @@ const AddRole = ({ togglePopup }) => {
                 </button>
 
                 <div className="popup-content" style={{ width: '70%' }}>
- 
+
                     <form onSubmit={(e) => e.preventDefault()}> {/* Prevent form submission default */}
-                    <span style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
-        <label>Add Role *</label> 
-        <CloseButton onClick={togglePopup} />
-    </span>
+                        <span style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
+                            <label>Add Role *</label>
+                            <CloseButton onClick={togglePopup} />
+                        </span>
                         <input
                             type="text"
-                            placeholder="Enter Role"
+                            placeholder="Enter role"
                             className="com"
                             value={searchTitle} // Bind input value to state
                             onChange={(e) => setSearchTitle(e.target.value)} // Update state on input

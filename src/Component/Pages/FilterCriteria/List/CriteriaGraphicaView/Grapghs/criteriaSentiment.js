@@ -13,11 +13,11 @@ const CriteriaSentimentChart = () => {
   console.log("querUseselctor", queryPayload)
   const [loading, setLoading] = useState(true);
 
- const COLORS = {
-  positive: "#556B2F",  //  Green for Positive
-  negative: "#B22222",  //  Red for Negative
-  neutral: "#CC5500"    //  Orange for Neutral
-};
+  const COLORS = {
+    positive: "#556B2F",  //  Green for Positive
+    negative: "#B22222",  //  Red for Negative
+    neutral: "#CC5500"    //  Orange for Neutral
+  };
   useEffect(() => {
     const fetchSentimentData = async () => {
       try {
@@ -33,7 +33,7 @@ const CriteriaSentimentChart = () => {
             file_type: Array.isArray(queryPayload?.file_type) ? queryPayload.file_type : [],
             keyword: Array.isArray(queryPayload?.keyword) ? queryPayload.keyword : [],
           },
-          aggs_fields: ["unified_type", "unified_record_type", "sentiment", "unified_date_only", "socialmedia_hashtags","LOC","EVENT","ORG","DATE","LANGUAGE","PERSON"],
+          aggs_fields: ["unified_type", "unified_record_type", "sentiment", "unified_date_only", "socialmedia_hashtags", "LOC", "EVENT", "ORG", "DATE", "LANGUAGE", "PERSON"],
           start_time: queryPayload?.start_time || "",
           end_time: queryPayload?.end_time || ""
         };
@@ -77,7 +77,7 @@ const CriteriaSentimentChart = () => {
     return <Loader />
   }
   return (
-    <div style={{ width: '100%', height: 250,overflowX:'auto' }}>
+    <div style={{ width: '100%', height: 250, overflowX: 'auto' }}>
       <ResponsiveContainer width={350}>
         <PieChart height={250}>
           <Legend
@@ -97,7 +97,7 @@ const CriteriaSentimentChart = () => {
             label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
           >
             {data.map((entry, index) => (
-              <Cell  key={entry.name} fill={COLORS[entry.name] || "#000000"}  />
+              <Cell key={entry.name} fill={COLORS[entry.name] || "#000000"} />
             ))}
           </Pie>
           <Tooltip formatter={(value) => `Total: ${value}`} />

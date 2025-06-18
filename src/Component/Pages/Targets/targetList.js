@@ -26,7 +26,7 @@ const TargetList = () => {
   const [showPopupE, setShowPopupE] = useState(false);
   const [showPopupD, setShowPopupD] = useState(false);
   const [details, setDetails] = useState([])
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
 
   const fetchTargets = async () => {
@@ -70,7 +70,7 @@ const TargetList = () => {
 
 
   const handleSearch = (event) => {
-    const searchValue = event.target.value.trim().toLowerCase();
+    const searchValue = event.target.value;
     setSearchTerm(searchValue);
 
     const filtered = data.filter(item => {
@@ -80,7 +80,7 @@ const TargetList = () => {
           return value
             .toString()
             .toLowerCase()
-            .includes(searchValue);
+            .includes(searchValue.toLowerCase());
         }
         return false;
       });
@@ -174,7 +174,7 @@ const TargetList = () => {
           }
         });
       // window.dispatchEvent(new Event("databaseUpdated"));
-      toast(`Target ${name} deleted successfully`)
+      toast.success(`Target ${name} deleted successfully`)
       console.log("Target deleted:", response.data);
 
       // After successful deletion, fetch the updated data
@@ -186,14 +186,14 @@ const TargetList = () => {
 
       if (err.response) {
 
-        toast(err.response?.data?.detail || 'Something went wrong. Please try again');
+        toast.error(err.response?.data?.detail || 'Something went wrong. Please try again');
 
       } else if (err.request) {
         // No response from the server
-        toast('No response from the server. Please check your connection');
+        toast.error('No response from the server. Please check your connection');
       } else {
         // Unknown error occurred
-        toast('An unknown error occurred. Please try again');
+        toast.error('An unknown error occurred. Please try again');
       }
     }
   };
@@ -204,363 +204,363 @@ const TargetList = () => {
 
   return (
     <>{data &&
-              data.length>0?(
-    <div className="data-table-container">
-      <div className="top-header" style={{ marginTop: "10px" }}>
-        <Col
-          xs={1}
-          className="d-flex align-items-center justify-content-flex-start"
-          style={{ width: "350px", minWidth: '350px' }}
-        >
-          <FaArrowLeft
-            style={{
-              cursor: "pointer", margin: '0px 40px 0px 38px',
-              fontSize: '16px'
-            }}
-            onClick={() => navigate("/Cases")}
-          />
-          <div className="search-bar1" style={{ width: "100%" }}>
-            <div className="input-group">
-              <input
-                type="text"
-                className="form-control"
-                value={searchTerm}
-                onChange={handleSearch}
-                placeholder="Search"
-              />
-            </div>
-          </div>
-        </Col>
-        <div className="header-icons">
-          <button className="add-btn"
-            onClick={togglePopup}
+      data.length > 0 ? (
+      <div className="data-table-container">
+        <div className="top-header" style={{ marginTop: "10px" }}>
+          <Col
+            xs={1}
+            className="d-flex align-items-center justify-content-flex-start"
+            style={{ width: "350px", minWidth: '350px' }}
           >
+            <FaArrowLeft
+              style={{
+                cursor: "pointer", margin: '0px 40px 0px 38px',
+                fontSize: '16px'
+              }}
+              onClick={() => navigate("/Cases")}
+            />
+            <div className="search-bar1" style={{ width: "100%" }}>
+              <div className="input-group">
+                <input
+                  type="text"
+                  className="form-control"
+                  value={searchTerm}
+                  onChange={handleSearch}
+                  placeholder="Search"
+                />
+              </div>
+            </div>
+          </Col>
+          <div className="header-icons">
+            <button className="add-btn"
+              onClick={togglePopup}
+            >
 
-            <Plus size={14} style={{ marginRight: "5px" }} />
-            Add New Target
-          </button>
+              <Plus size={14} style={{ marginRight: "5px" }} />
+              Add New Target
+            </button>
+          </div>
         </div>
-      </div>
-      <div className="data-table" style={{ minHeight: isDropdownOpen ? "200px" : "auto" }}>
-        <Table striped bordered hover variant="light">
-          <thead>
-            <tr>
-              <th>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center"
-                  }}
-                >
-                  Target ID
-                  <span
-                    onClick={() => handleSort("id")}
-                    style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
-                  >
-                    {sortConfig.key === "id" ? (
-                      sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
-                    ) : (
-                      <ArrowDropDown />
-                    )}
-                  </span>
-                </div>
-              </th>
-              <th>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center"
-                  }}
-                >
-                  Target
-                  <span
-                    onClick={() => handleSort("name")}
-                    style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
-                  >
-                    {sortConfig.key === "name" ? (
-                      sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
-                    ) : (
-                      <ArrowDropDown />
-                    )}
-                  </span>
-                </div>
-              </th>
-              <th>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center"
-                  }}
-                >
-                  Type
-                  <span
-                    onClick={() => handleSort("type")}
-                    style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
-                  >
-                    {sortConfig.key === "name" ? (
-                      sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
-                    ) : (
-                      <ArrowDropDown />
-                    )}
-                  </span>
-                </div>
-              </th>
-
-
-              <th>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center"
-                  }}
-                >
-                  Synonyms
-                  <span
-                    onClick={() => handleSort("synonyms")}
-                    style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
-                  >
-                    {sortConfig.key === "synonyms" ? (
-                      sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
-                    ) : (
-                      <ArrowDropDown />
-                    )}
-                  </span>
-                </div>
-              </th>
-              <th>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center"
-                  }}
-                >
-                  Threat Score(1-10)
-                  <span
-                    onClick={() => handleSort("threat_weightage")}
-                    style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
-                  >
-                    {sortConfig.key === "threat_weightage" ? (
-                      sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
-                    ) : (
-                      <ArrowDropDown />
-                    )}
-                  </span>
-                </div>
-              </th>
-              <th>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center"
-                  }}
-                >
-                  Modified On
-                  <span
-                    onClick={() => handleSort("modified_on")}
-                    style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
-                  >
-                    {sortConfig.key === "modified_on" ? (
-                      sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
-                    ) : (
-                      <ArrowDropDown />
-                    )}
-                  </span>
-                </div>
-              </th>
-              <th>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center"
-                  }}
-                >
-                  Modified By
-                  <span
-                    onClick={() => handleSort("modified_by")}
-                    style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
-                  >
-                    {sortConfig.key === "modified_by" ? (
-                      sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
-                    ) : (
-                      <ArrowDropDown />
-                    )}
-                  </span>
-                </div>
-              </th>
-              <th>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center"
-                  }}
-                >
-                  Created On
-                  <span
-                    onClick={() => handleSort("created_on")}
-                    style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
-                  >
-                    {sortConfig.key === "created_on" ? (
-                      sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
-                    ) : (
-                      <ArrowDropDown />
-                    )}
-                  </span>
-                </div>
-              </th>
-              <th>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center"
-                  }}
-                >
-                  Created By
-                  <span
-                    onClick={() => handleSort("created_by")}
-                    style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
-                  >
-                    {sortConfig.key === "created_by" ? (
-                      sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
-                    ) : (
-                      <ArrowDropDown />
-                    )}
-                  </span>
-                </div>
-              </th>
-              <th>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center"
-                  }}
-                >
-                  Description
-                  <span
-                    style={{
-                      cursor: "pointer",
-                      display: "inline-flex",
-                      alignItems: "center"
-                    }}
-                  >
-                  </span>
-                </div>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredData &&
-              filteredData.map(item =>
-                <tr
-                  key={item.id || Math.random()}
-                  style={{ position: "relative" }}
-                >
-                  <td>
-                    {`TAR${String(item.id).padStart(4, '0')}`}
-                  </td>
-                  <td>
-                    {item.name}
-                  </td>
-                  <td>
-                    {item.type}
-                  </td>
-                  <td>
-                    {item.synonyms?.join(", ")}
-                  </td>
-                  <td>
-                    {item.threat_weightage}
-                  </td>
-                  <td>
-                    {(item.modified_on ? item.modified_on.slice(0, 10)
-                      : "-")}
-                  </td>
-                  <td>
-                    {(item.modified_by
-                      || "-")}
-                  </td>
-                  <td>
-                    {(item.created_on.slice(0, 10)
-                      || "-")}
-                  </td>
-                  <td>
-                    {(item.created_by
-                      || "-")}
-                  </td>
-                  <td
+        <div className="data-table" style={{ minHeight: isDropdownOpen ? "200px" : "auto" }}>
+          <Table striped bordered hover variant="light">
+            <thead>
+              <tr>
+                <th>
+                  <div
                     style={{
                       display: "flex",
                       justifyContent: "space-between",
-                      alignItems: "center",
-                      textAlign: "center"
+                      alignItems: "center"
                     }}
                   >
-                    <span>{item.description}</span>
-                    <Dropdown onToggle={(isOpen) => setIsDropdownOpen(isOpen)}>
-                      <Dropdown.Toggle
-                        className="menu-button"
-                        style={{
-                          background: "none",
-                          border: "none",
-                          justifyContent: "end",
-                          cursor: "pointer"
-                        }}
-                      >
+                    Target ID
+                    <span
+                      onClick={() => handleSort("id")}
+                      style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
+                    >
+                      {sortConfig.key === "id" ? (
+                        sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
+                      ) : (
+                        <ArrowDropDown />
+                      )}
+                    </span>
+                  </div>
+                </th>
+                <th>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center"
+                    }}
+                  >
+                    Target
+                    <span
+                      onClick={() => handleSort("name")}
+                      style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
+                    >
+                      {sortConfig.key === "name" ? (
+                        sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
+                      ) : (
+                        <ArrowDropDown />
+                      )}
+                    </span>
+                  </div>
+                </th>
+                <th>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center"
+                    }}
+                  >
+                    Type
+                    <span
+                      onClick={() => handleSort("type")}
+                      style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
+                    >
+                      {sortConfig.key === "name" ? (
+                        sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
+                      ) : (
+                        <ArrowDropDown />
+                      )}
+                    </span>
+                  </div>
+                </th>
 
-                        <FiMoreVertical size={16} />
 
-                      </Dropdown.Toggle>
-                      <Dropdown.Menu
-                        className="custom-dropdown-menu"
-                        style={{
-                          minWidth: "150px",
-                          textAlign: "left"
-                        }}
-                      >
-                        <Dropdown.Item
-                          onClick={() => togglePopupD(item)}
-                          style={{ cursor: "pointer" }}
+                <th>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center"
+                    }}
+                  >
+                    Synonyms
+                    <span
+                      onClick={() => handleSort("synonyms")}
+                      style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
+                    >
+                      {sortConfig.key === "synonyms" ? (
+                        sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
+                      ) : (
+                        <ArrowDropDown />
+                      )}
+                    </span>
+                  </div>
+                </th>
+                <th>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center"
+                    }}
+                  >
+                    Threat Score(1-10)
+                    <span
+                      onClick={() => handleSort("threat_weightage")}
+                      style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
+                    >
+                      {sortConfig.key === "threat_weightage" ? (
+                        sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
+                      ) : (
+                        <ArrowDropDown />
+                      )}
+                    </span>
+                  </div>
+                </th>
+                <th>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center"
+                    }}
+                  >
+                    Modified On
+                    <span
+                      onClick={() => handleSort("modified_on")}
+                      style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
+                    >
+                      {sortConfig.key === "modified_on" ? (
+                        sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
+                      ) : (
+                        <ArrowDropDown />
+                      )}
+                    </span>
+                  </div>
+                </th>
+                <th>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center"
+                    }}
+                  >
+                    Modified By
+                    <span
+                      onClick={() => handleSort("modified_by")}
+                      style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
+                    >
+                      {sortConfig.key === "modified_by" ? (
+                        sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
+                      ) : (
+                        <ArrowDropDown />
+                      )}
+                    </span>
+                  </div>
+                </th>
+                <th>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center"
+                    }}
+                  >
+                    Created On
+                    <span
+                      onClick={() => handleSort("created_on")}
+                      style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
+                    >
+                      {sortConfig.key === "created_on" ? (
+                        sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
+                      ) : (
+                        <ArrowDropDown />
+                      )}
+                    </span>
+                  </div>
+                </th>
+                <th>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center"
+                    }}
+                  >
+                    Created By
+                    <span
+                      onClick={() => handleSort("created_by")}
+                      style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
+                    >
+                      {sortConfig.key === "created_by" ? (
+                        sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
+                      ) : (
+                        <ArrowDropDown />
+                      )}
+                    </span>
+                  </div>
+                </th>
+                <th>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center"
+                    }}
+                  >
+                    Description
+                    <span
+                      style={{
+                        cursor: "pointer",
+                        display: "inline-flex",
+                        alignItems: "center"
+                      }}
+                    >
+                    </span>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredData &&
+                filteredData.map(item =>
+                  <tr
+                    key={item.id || Math.random()}
+                    style={{ position: "relative" }}
+                  >
+                    <td>
+                      {`TAR${String(item.id).padStart(4, '0')}`}
+                    </td>
+                    <td>
+                      {item.name}
+                    </td>
+                    <td>
+                      {item.type}
+                    </td>
+                    <td>
+                      {item.synonyms?.join(", ")}
+                    </td>
+                    <td>
+                      {item.threat_weightage}
+                    </td>
+                    <td>
+                      {(item.modified_on ? item.modified_on.slice(0, 10)
+                        : "-")}
+                    </td>
+                    <td>
+                      {(item.modified_by
+                        || "-")}
+                    </td>
+                    <td>
+                      {(item.created_on.slice(0, 10)
+                        || "-")}
+                    </td>
+                    <td>
+                      {(item.created_by
+                        || "-")}
+                    </td>
+                    <td
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        textAlign: "center"
+                      }}
+                    >
+                      <span>{item.description}</span>
+                      <Dropdown onToggle={(isOpen) => setIsDropdownOpen(isOpen)}>
+                        <Dropdown.Toggle
+                          className="menu-button"
+                          style={{
+                            background: "none",
+                            border: "none",
+                            justifyContent: "end",
+                            cursor: "pointer"
+                          }}
                         >
-                          Details
-                        </Dropdown.Item>
-                        <Dropdown.Item
-                          onClick={() => togglePopupE(item)}
+
+                          <FiMoreVertical size={16} />
+
+                        </Dropdown.Toggle>
+                        <Dropdown.Menu
+                          className="custom-dropdown-menu"
+                          style={{
+                            minWidth: "150px",
+                            textAlign: "left"
+                          }}
                         >
-                          Edit
-                        </Dropdown.Item>
-                        <Dropdown.Item
-                          onClick={() => confirmDelete(item.id, item.name)}
-                        >
-                          Delete
-                        </Dropdown.Item>
-                      </Dropdown.Menu>
-                    </Dropdown>
-                  </td>
-                </tr>
-              )}
-          </tbody>
-        </Table>
-      </div>
-         </div> ): (
-      <div className="resourcesContainer"style={{border:'none'}}>
+                          <Dropdown.Item
+                            onClick={() => togglePopupD(item)}
+                            style={{ cursor: "pointer" }}
+                          >
+                            Details
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            onClick={() => togglePopupE(item)}
+                          >
+                            Edit
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            onClick={() => confirmDelete(item.id, item.name)}
+                          >
+                            Delete
+                          </Dropdown.Item>
+                        </Dropdown.Menu>
+                      </Dropdown>
+                    </td>
+                  </tr>
+                )}
+            </tbody>
+          </Table>
+        </div>
+      </div>) : (
+      <div className="resourcesContainer" style={{ border: 'none' }}>
         <h3 className="title">Let's Get Started!</h3>
         <p className="content">Add targets to get started</p>
-      <button className='add-btn' title='Add New Case' onClick={togglePopup}><Plus size={20} />Add New Target</button>
+        <button className='add-btn' title='Add New Case' onClick={togglePopup}><Plus size={20} />Add New Target</button>
       </div>
     )
-}
-      {showPopup && <TargetCreate togglePopup={togglePopup}  existingTargets={filteredData}/>}
-      {showPopupE && <TargetUpdate togglePopup={togglePopupE} id={details.id} existingTargets={filteredData}/>}
+    }
+      {showPopup && <TargetCreate togglePopup={togglePopup} existingTargets={filteredData} />}
+      {showPopupE && <TargetUpdate togglePopup={togglePopupE} id={details.id} existingTargets={filteredData} />}
       {showPopupD && <TargetDetails togglePopup={togglePopupD} id={details.id} />}
-</>
+    </>
   );
 };
 

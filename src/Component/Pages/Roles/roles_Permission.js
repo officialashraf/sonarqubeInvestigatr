@@ -99,11 +99,11 @@ const RolesPermission = () => {
     }, []);
 
     const handleSearch = (e) => {
-        const value = e.target.value.toLowerCase();
+        const value = e.target.value;
         setSearchTerm(value);
         const filtered = data.filter(item =>
             Object.values(item).some(val =>
-                val?.toString().toLowerCase().includes(value)
+                val?.toString().toLowerCase().includes(value.toLowerCase())
             )
         );
         setFilteredData(filtered);
@@ -187,7 +187,7 @@ const RolesPermission = () => {
                     }
                 });
             window.dispatchEvent(new Event("databaseUpdated"));
-            toast(`Role ${role} deleted successfully`)
+            toast.success(`Role ${role} deleted successfully`)
             console.log("Role Deleted:", response.data);
 
             // After successful deletion, fetch the updated data
@@ -199,14 +199,14 @@ const RolesPermission = () => {
 
             if (err.response) {
 
-                toast(err.response?.data?.detail || 'Something went wrong. Please try again');
+                toast.error(err.response?.data?.detail || 'Something went wrong. Please try again');
 
             } else if (err.request) {
                 // No response from the server
-                toast('No response from the server. Please check your connection');
+                toast.error('No response from the server. Please check your connection');
             } else {
                 // Unknown error occurred
-                toast('An unknown error occurred. Please try again');
+                toast.error('An unknown error occurred. Please try again');
             }
         }
     };
@@ -226,6 +226,7 @@ const RolesPermission = () => {
                                     cursor: 'pointer', margin: '0px 40px 0px 38px',
                                     fontSize: '18px'
                                 }}
+
                                 onClick={() => navigate('/admin')}
                             />
                             <div className="search-bar1" style={{ width: '100%' }}>
