@@ -14,7 +14,7 @@ const CaseTableDataFilter = () => {
   return (
 
     <>
-      <CaseHeader onIconClick={handleButtonClick} activeView={view}/>
+      <CaseHeader onIconClick={handleButtonClick} activeView={view} />
       <div style={{ height: "auto", backgroundColor: "#D3D3D3", overflow: "auto" }}>
         {view === "caseData" && <TabulerData />}
         {view === "graphicalData" && <GraphicalData />}

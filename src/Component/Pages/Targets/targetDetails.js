@@ -6,8 +6,8 @@ import { toast } from 'react-toastify';
 
 
 const TargetDetails = ({ togglePopup, id }) => {
-// const id = details
-// console.log("id", id)
+  // const id = details
+  // console.log("id", id)
   const [loading, setLoading] = useState(true);
   const token = Cookies.get("accessToken");
   const [formData, setFormData] = useState({
@@ -36,7 +36,7 @@ const TargetDetails = ({ togglePopup, id }) => {
     }
 
     try {
-// setFormData(true)
+      // setFormData(true)
       const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/target/${id}`, {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -44,7 +44,7 @@ const TargetDetails = ({ togglePopup, id }) => {
       });
 
       console.log("response", response)
-    
+
       if (response.status === 200 && response.data) {
         const targetData = response.data;
 
@@ -53,7 +53,7 @@ const TargetDetails = ({ togglePopup, id }) => {
         const parentNames = targetData.parents && targetData.parents.length > 0
           ? targetData.parents.map(p => `${p.name} (${p.id})`).join(", ")
           : "None";
-   
+
         setFormData({
           name: targetData.name || "",
           description: targetData.description || "",
@@ -70,12 +70,12 @@ const TargetDetails = ({ togglePopup, id }) => {
           linked_to: parentNames
         });
       }
-  
+
     } catch (err) {
-            toast.error(err.response?.data?.detail||"Failed to fetch target details");
-           console.error("Error fetching target details:", err.response || err);
-          //  togglePopup();
-    } finally{
+      toast.error(err.response?.data?.detail || "Failed to fetch target details");
+      console.error("Error fetching target details:", err.response || err);
+      //  togglePopup();
+    } finally {
       setLoading(false)
     }
   };
@@ -118,24 +118,24 @@ const TargetDetails = ({ togglePopup, id }) => {
             <CloseButton onClick={togglePopup} />
           </div>
           <div className="case-details-container">
-           
-                <Table bordered hover className='custom-table custom-table-th' >
-                  <tr> <th>Name</th> <td>{formData.name}</td> </tr>
-                  <tbody>
-                    <tr> <th>ID</th> <td>{`TAR${String(id).padStart(4, '0')}`}</td> </tr>
-                    <tr> <th>Created On</th> <td>{formData?.created_on ? formData.created_on.slice(0, 18) : '-'}</td> </tr>
-                    <tr> <th>Created By</th> <td>{formData?.created_by ? formData.created_by : '-'}</td> </tr>
-                    <tr> <th>Modified On</th> <td>{formData?.modified_on ? formData.modified_on.slice(0, 18) : '-'}</td> </tr>
-                    <tr> <th>Modified By</th> <td>{formData?.modified_by ? formData.modified_by : '-'}</td> </tr>
-                    <tr> <th>Description</th> <td>{formData.description || '-'}</td> </tr>
-                    <tr> <th>Synonyms</th> <td>{formData.synonyms?formData.synonyms.join(', ') : '-'}</td> </tr>
-                    <tr> <th>Threat-Score</th> <td>{formData.threat_weightage}</td> </tr>
-                    <tr> <th>Type</th> <td>{formData.type || '-'}</td> </tr>
-                    <tr> <th>Active</th>  <td>{formData.is_active ? 'Active' : 'Deactive'}</td> </tr>
-                    <tr> <th>Linked To</th> <td>{formData.linked_to}</td> </tr>
-                  </tbody>
-                </Table>
-           </div>
+
+            <Table bordered hover className='custom-table custom-table-th' >
+              <tr> <th>Name</th> <td>{formData.name}</td> </tr>
+              <tbody>
+                <tr> <th>ID</th> <td>{`TAR${String(id).padStart(4, '0')}`}</td> </tr>
+                <tr> <th>Created On</th> <td>{formData?.created_on ? formData.created_on.slice(0, 18) : '-'}</td> </tr>
+                <tr> <th>Created By</th> <td>{formData?.created_by ? formData.created_by : '-'}</td> </tr>
+                <tr> <th>Modified On</th> <td>{formData?.modified_on ? formData.modified_on.slice(0, 18) : '-'}</td> </tr>
+                <tr> <th>Modified By</th> <td>{formData?.modified_by ? formData.modified_by : '-'}</td> </tr>
+                <tr> <th>Description</th> <td>{formData.description || '-'}</td> </tr>
+                <tr> <th>Synonyms</th> <td>{formData.synonyms ? formData.synonyms.join(', ') : '-'}</td> </tr>
+                <tr> <th>Threat-Score</th> <td>{formData.threat_weightage}</td> </tr>
+                <tr> <th>Type</th> <td>{formData.type || '-'}</td> </tr>
+                <tr> <th>Active</th>  <td>{formData.is_active ? 'Active' : 'Deactive'}</td> </tr>
+                <tr> <th>Linked To</th> <td>{formData.linked_to}</td> </tr>
+              </tbody>
+            </Table>
+          </div>
           <div className="button-container">
             <button type="button" className="cancel-btn" onClick={togglePopup}>
               Cancel

@@ -58,8 +58,9 @@ h1 {
   color: white;
   border-radius: 0.375rem;
 }
-.login-button:disabled {  /* gray when disabled */
-  color: #666;             /* dim the text */
+.login-button:disabled {
+  /* gray when disabled */
+  color: #666; /* dim the text */
   cursor: not-allowed;
   border: none;
   opacity: 0.7;
@@ -100,9 +101,9 @@ input:-webkit-autofill {
   box-shadow: 0 0 0 1000px white inset !important;
   -webkit-text-fill-color: #000 !important;
   transition: background-color 9999s ease-out 0s;
-   padding: 0px 0px;
+  padding: 0px 0px;
 
-/*   height:5px; */
+  /*   height:5px; */
 }
 .customfiled {
   background-color: rgb(255, 255, 255);

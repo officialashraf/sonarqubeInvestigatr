@@ -12,7 +12,7 @@ import SavedCriteria from '../FilterCriteria/savedCriteria';
 const RightSidebar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  
+
   const activePopup = useSelector((state) => state.popup?.activePopup || null);
   console.log("actvepopup", activePopup)
 

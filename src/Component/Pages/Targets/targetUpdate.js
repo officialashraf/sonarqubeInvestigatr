@@ -6,51 +6,7 @@ import { toast } from 'react-toastify';
 import Select from 'react-select';
 import "./target.css";
 import Loader from '../Layout/loader'
-
-export const customStyles = {
-  control: (base) => ({
-    ...base,
-    backgroundColor: 'white',
-    color: 'black',
-    boxShadow: 'none',
-    outline: 'none',
-    minHeight: '38px',
-    maxHeight: '100px',
-    overflowY: 'auto',
-  }),
-  menu: (base) => ({
-    ...base,
-    backgroundColor: 'white',
-    color: 'black',
-  }),
-  option: (base, state) => ({
-    ...base,
-    backgroundColor: state.isSelected ? 'black' : 'white',
-    color: state.isSelected ? 'white' : 'black',
-    '&:hover': {
-      backgroundColor: 'black',
-      color: 'white'
-    }
-  }),
-  multiValue: (base) => ({
-    ...base,
-    backgroundColor: 'white',
-    color: 'black',
-  }),
-  multiValueLabel: (base) => ({
-    ...base,
-    backgroundColor: 'black',
-    color: 'white',
-  }),
-  multiValueRemove: (base) => ({
-    ...base,
-    color: 'black',
-    '&:hover': {
-      backgroundColor: 'black',
-      color: 'white'
-    }
-  })
-};
+import { customStyles } from "../Case/createCase";
 
 const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
   const token = Cookies.get("accessToken");
@@ -116,11 +72,6 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
 
     if (!formData.description) {
       errors.description = "Description is required";
-    }
-    if (formData.synonyms.length === 0) {
-      errors.synonyms = "At least one synonym is required";
-    } else if (formData.synonyms.length > 5) {
-      errors.synonyms = "You can add a maximum of 5 synonyms only";
     }
     if (!formData.type) {
       errors.type = "Type is required";
@@ -382,7 +333,7 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
               placeholder="Enter description"
             ></textarea>
             {error.description && <p style={{ color: "red", margin: '0px' }} >{error.description}</p>}
-            <label htmlFor="synonyms">Alternative Keywords/Synonym (up to 5 keywords) *</label>
+            <label htmlFor="synonyms">Alternative Keywords/Synonym (up to 5 keywords)</label>
             <div className="synonym-input-container">
               <input
                 className="com"

@@ -4,7 +4,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
 import Select from "react-select";
-import { customStyles } from "./addUser";
+import { customStyles } from "../Case/createCase"; // Adjust the import path as needed
 
 const EditUser = ({ togglePopup, item }) => {
   const token = Cookies.get("accessToken");
@@ -43,7 +43,7 @@ const EditUser = ({ togglePopup, item }) => {
     return errors;
   };
 
-  
+
   const getUserData = async () => {
     try {
       const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_USER_MAN}/api/user-man/v1/user`, {
@@ -123,10 +123,9 @@ const EditUser = ({ togglePopup, item }) => {
       }
       if (payloadData.contactNumber && payloadData.contactNumber !== item.contact_no) {
         hasChanged.contact_no = payloadData.contactNumber;
-      } 
+      }
 
-      if (payloadData.role && payloadData.role !== item.role)
-         { hasChanged.role = payloadData.role; }
+      if (payloadData.role && payloadData.role !== item.role) { hasChanged.role = payloadData.role; }
 
       // If nothing has changed 
       if (Object.keys(hasChanged).length === 0) {
@@ -199,7 +198,7 @@ const EditUser = ({ togglePopup, item }) => {
 
     setIsBtnDisabled(isSame);
   }, [formData, initialFormData]);
-  
+
 
 
   return (

@@ -150,9 +150,9 @@ const RecentCriteria = () => {
         fetchData()
         toast.success("Criteria successfully deleted")
         console.log("Criteria successfully deleted!");
-      } 
+      }
     } catch (error) {
-toast.error(error.response?.data?.detail ||"Failed deleting criteria")
+      toast.error(error.response?.data?.detail || "Failed deleting criteria")
       console.error("Error deleting item:", error);
     }
   };

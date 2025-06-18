@@ -1,4 +1,4 @@
-import { Card, CardContent, Typography, Grid} from "@mui/material";
+import { Card, CardContent, Typography, Grid } from "@mui/material";
 import "../../../../Analyze/GraphicalData/graphical.css";
 import {
   ListAltOutlined,
@@ -59,8 +59,8 @@ const ComponentOne = () => (
   </Card>);
 
 
-const ComponentTwo = () => ( 
-<Card sx={{ height: "350px", backgroundColor: "lightgray"}}>
+const ComponentTwo = () => (
+  <Card sx={{ height: "350px", backgroundColor: "lightgray" }}>
 
     <Header title="Keywords" />
     <CardContent>
@@ -73,7 +73,7 @@ const ComponentThree = () => (
   <Card sx={{ height: "350px", backgroundColor: "lightgray" }}>
     <Header title="Location" />
     <CardContent>
-      <LocationGraph/>
+      <LocationGraph />
     </CardContent>
   </Card>);
 const ComponentFour = () => (
@@ -93,7 +93,7 @@ const ComponentFive = () => (
   >
     <Header title="Time" />
     <CardContent>
-      <DateGraph/>
+      <DateGraph />
     </CardContent>
   </Card>
 );
@@ -103,7 +103,7 @@ const ComponentSix = () => (
   >
     <Header title="Events" />
     <CardContent>
-      <EventGraph/>
+      <EventGraph />
     </CardContent>
   </Card>
 );
@@ -130,7 +130,7 @@ const ComponentEight = () => (
 
 const ComponentNine = () => (
   <Card
-    sx={{ height: "350px", backgroundColor: "lightgray",marginBottom:'5rem' }}
+    sx={{ height: "350px", backgroundColor: "lightgray", marginBottom: '5rem' }}
   >
     <Header title="Organisations" />
     <CardContent>
@@ -159,22 +159,22 @@ const GrapghicalCriteria = () => {
         <Grid item xs={6} p={1} pb={0}  >
           <ComponentFour />
         </Grid>
-       
-              <Grid item xs={6} p={1} pb={0} >
-                <ComponentFive />
-              </Grid>
-              <Grid item xs={6} p={1} pb={0} >
-                <ComponentSix />
-              </Grid>
-              <Grid item xs={6} p={1} pb={0} >
-                <ComponentSeven />
-              </Grid>
-              <Grid item xs={6} p={1} pb={0} mb={10} >
-                <ComponentEight />
-              </Grid>
-              <Grid item xs={6} p={1} pb={0} mb={10} >
-                <ComponentNine />
-              </Grid>
+
+        <Grid item xs={6} p={1} pb={0} >
+          <ComponentFive />
+        </Grid>
+        <Grid item xs={6} p={1} pb={0} >
+          <ComponentSix />
+        </Grid>
+        <Grid item xs={6} p={1} pb={0} >
+          <ComponentSeven />
+        </Grid>
+        <Grid item xs={6} p={1} pb={0} mb={10} >
+          <ComponentEight />
+        </Grid>
+        <Grid item xs={6} p={1} pb={0} mb={10} >
+          <ComponentNine />
+        </Grid>
       </Grid>
 
     </div>

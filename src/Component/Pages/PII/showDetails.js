@@ -10,6 +10,8 @@ import { toast } from 'react-toastify';
 import validator from "validator";
 import Cookies from 'js-cookie';
 import Loader from "../Layout/loader";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
 
 const ShowDetails = () => {
   const dispatch = useDispatch();
@@ -24,25 +26,24 @@ const ShowDetails = () => {
     console.log("Seartype", searchType)
 
     if (searchType === "email") {
-      if (!validator.isEmail(query) || !query.endsWith("@gmail.com")) {
-        toast.error("Please enter a valid email address");
+      if (!validator.isEmail(query)) {
+        toast.info("Please enter a valid email address");
         return;
       }
     } else if (searchType === "phone number") {
-      // Remove all non-digit characters
 
       // Check if the query contains any alphabet character
       const hasAlphabets = /[a-zA-Z]/.test(query);
       const hasInvalidSpecialChars = /[^0-9/\-+.]/.test(query);
       if (hasAlphabets || hasInvalidSpecialChars) {
-        toast.error("Phone number must contain only digits");
+        toast.info("Phone number must contain only digits");
         return;
       }
     }
     setLoading(true);
     let url = searchType === "email"
       ? `${window.runtimeConfig.REACT_APP_API_OSINT_MAN}/api/osint-man/v1/email/${query}`
-      : `${window.runtimeConfig.REACT_APP_API_OSINT_MAN}/api/osint-man/v1/phone-no/${query}`;
+      : `${window.runtimeConfig.REACT_APP_API_OSINT_MAN}/api/osint-man/v1/phone-no/${query.startsWith('+') ? query : '+' + query}`;
 
 
     url = encodeURI(url); // Encode URL to handle special characters
@@ -78,21 +79,36 @@ const ShowDetails = () => {
             <option value="phone number">Phone</option> {/* Default selected */}
             <option value="email">Email</option>
           </select>
-
-          <input
-            className="search-input"
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                handleSearch(); // Validate and execute search only when Enter is pressed
-              }
-            }}
-            placeholder={`Enter ${searchType} to search`}
-            disabled={!searchType}
-          />
-
+          {searchType === "phone number" ? (
+            <PhoneInput
+              country={"in"}
+              value={query}
+              onChange={(value) => setQuery(value)}
+              enableSearch={true}
+              inputClass="search-input"
+              dropdownStyle={{
+                maxHeight: "160px",
+                overflowY: "scroll",
+              }}
+              inputStyle={{
+                marginLeft: "30px", // 👈 fix for visibility
+              }}
+            />
+          ) : (
+            <input
+              className="search-input"
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleSearch(); // Validate and execute search only when Enter is pressed
+                }
+              }}
+              placeholder={`Enter ${searchType} to search`}
+              disabled={!searchType}
+            />
+          )}
           <Search
             onClick={handleSearch} // Triggers validation & search only when clicked
           />
@@ -101,17 +117,17 @@ const ShowDetails = () => {
         </div>
         <div className="search-results-container">
           <div className="searchresult"  >
-             <div className="wrapper">
-            {loading ? (
-              <Loader />
-            ) : (<>
+            <div className="wrapper">
+              {loading ? (
+                <Loader />
+              ) : (<>
                 <ProfileDetails />
                 <UserCards />
-                </>
-             
-            )
-            }
-             </div>
+              </>
+
+              )
+              }
+            </div>
           </div>
         </div>
 

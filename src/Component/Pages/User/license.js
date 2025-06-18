@@ -105,9 +105,9 @@ const LicensePage = () => {
                 }));
               }}
             />
-            {error.licenseKey&& <p style={{ color: "red", margin: '0px' }} >{error.licenseKey}</p>}
+            {error.licenseKey && <p style={{ color: "red", margin: '0px' }} >{error.licenseKey}</p>}
             <div className="d-flex justify-content-end mt-2">
-              <button type="submit" className="login-button" 
+              <button type="submit" className="login-button"
               // disabled={!licenseKey.trim()}
               >
                 Apply

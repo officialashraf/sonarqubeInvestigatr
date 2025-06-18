@@ -1,11 +1,11 @@
-import  { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Box, Typography } from '@mui/material';
 import WordCloud from 'react-d3-cloud';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import Cookies from "js-cookie";
 import Loader from '../../../../Layout/loader';
-import {  ResponsiveContainer } from 'recharts';
+import { ResponsiveContainer } from 'recharts';
 
 const CriteriaKeywordChart = () => {
 
@@ -51,13 +51,13 @@ const CriteriaKeywordChart = () => {
       } catch (error) {
         console.error('Error fetching data:', error);
         setData([]); // Set data to an empty array on error
-      }finally{
+      } finally {
         setLoading(false);
       }
     };
 
     fetchKeywordData();
-  }, [queryPayload,token]);
+  }, [queryPayload, token]);
 
   const dataa = data && data.map((item) => ({
     text: item.key, // ✅ WordCloud me "key" dikhega
@@ -66,31 +66,31 @@ const CriteriaKeywordChart = () => {
 
   const fontSizeMapper = (word) => Math.log2(word.value + 1) * 50; // Size adjust kiya
   const rotate = () => 0; //  Fixed rotation (seedha text dikhane ke liye)
-  
-  if(loading){
-    return <Loader/>
+
+  if (loading) {
+    return <Loader />
   }
 
   return (
     <div style={{ width: '100%', height: 250 }}>
-     <ResponsiveContainer>
-    <Box width='100%'  style={{ marginTop: 0, padding: 0 , alignContent: 'center' }}>
-      {data.length > 0 ? (
-        <WordCloud
-          data={dataa}
-          fontSizeMapper={fontSizeMapper}
-          rotate={rotate}
-          margin={0}
-          width={600}
-          height={250}
-        />
-      ) : (
-        <Typography variant="h6" color="textSecondary" align="center" height={250}>
-          No Data Available
-        </Typography>
-      )}
-    </Box>
-     </ResponsiveContainer>
+      <ResponsiveContainer>
+        <Box width='100%' style={{ marginTop: 0, padding: 0, alignContent: 'center' }}>
+          {data.length > 0 ? (
+            <WordCloud
+              data={dataa}
+              fontSizeMapper={fontSizeMapper}
+              rotate={rotate}
+              margin={0}
+              width={600}
+              height={250}
+            />
+          ) : (
+            <Typography variant="h6" color="textSecondary" align="center" height={250}>
+              No Data Available
+            </Typography>
+          )}
+        </Box>
+      </ResponsiveContainer>
     </div>
   );
 }

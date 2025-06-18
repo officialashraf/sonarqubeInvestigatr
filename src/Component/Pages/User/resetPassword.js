@@ -33,7 +33,7 @@ const ResetPassword = ({ onClose, item }) => {
             const response = await axios.post(`${window.runtimeConfig.REACT_APP_API_USER_MAN}/api/user-man/v1/user/resetpassword`,
                 {
                     new_password: newPassword,
-                    user_id:item.id,
+                    user_id: item.id,
                 },
                 {
                     headers: {
@@ -61,7 +61,7 @@ const ResetPassword = ({ onClose, item }) => {
                 </button>
                 <div className="popup-content">
                     <form onSubmit={handleReset}>
-<h5>{item.username}</h5>
+                        <h5>{item.username}</h5>
                         <label htmlFor="title">New Password *</label>
                         <div style={{ position: "relative", display: "inline-block", width: "100%" }}>
                             <input

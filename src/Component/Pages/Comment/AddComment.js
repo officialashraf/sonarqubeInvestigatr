@@ -38,9 +38,9 @@ const AddComment = ({ show, onClose, selectedResource }) => {
     const Errors = {};
     if (!newComment) {
       Errors.comment = "Please enter a comment before clicking the Add button.";
+    }
+    return Errors;
   }
-  return Errors;
-}
   const getCommentList = useCallback(async () => {
     if (!rowId) return;
 
@@ -138,23 +138,23 @@ const AddComment = ({ show, onClose, selectedResource }) => {
   return (
     <div className="popup-overlay" >
       <div className="popup-container">
-   <div className="popup-content">
-     <label htmlFor="title">Comments</label>
-           <button className="close-icon" onClick={onClose}>
-          &times;
-        </button>
-        
+        <div className="popup-content">
+          <label htmlFor="title">Comments</label>
+          <button className="close-icon" onClick={onClose}>
+            &times;
+          </button>
+
           {isLoading ? (
             <Box sx={{ display: 'flex', justifyContent: 'center', my: 3 }}>
               <CircularProgress size={30} />
             </Box>
           ) : commentsArray.length > 0 ? (
-            <List style={{minHeight:'auto',maxHeight:'400px',overflow:'auto'}}>
+            <List style={{ minHeight: 'auto', maxHeight: '400px', overflow: 'auto' }}>
               {commentsArray.map((comment, index) => (
                 <ListItem key={index}>
                   <ListItemText
                     primary={comment.comment}
-                  
+
                   />
                   <ListItemSecondaryAction>
                     <IconButton edge="end" size="small" onClick={() => handleEditClick(comment)}>
@@ -172,27 +172,27 @@ const AddComment = ({ show, onClose, selectedResource }) => {
               No comments found
             </Typography>
           )}
-   <form onSubmit={handleAddComment}>
-    <label htmlFor="title">Add Comment</label>
-          <input
-            className="com"
+          <form onSubmit={handleAddComment}>
+            <label htmlFor="title">Add Comment</label>
+            <input
+              className="com"
               type="text"
               id="title"
               name="title"
-            value={newComment}
+              value={newComment}
               onChange={(e) => {
                 setNewComment(e.target.value);
                 setError((prevErrors) => ({
                   ...prevErrors,
                   comment: "",
                 }));
-            }}
-            placeholder="Enter your comment"
-          
-          />
+              }}
+              placeholder="Enter your comment"
+
+            />
             {error.comment && <p style={{ color: "red", margin: '0px' }} >{error.comment}</p>}
 
-          {/* <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
+            {/* <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
             <Button
               variant="outlined"
               onClick={onClose}
@@ -209,15 +209,15 @@ const AddComment = ({ show, onClose, selectedResource }) => {
             </Button>
           </Box> */}
 
-          <div className="button-container">
+            <div className="button-container">
               <button type="submit" className="create-btn" disabled={isSubmitting || !newComment.trim()}> {isSubmitting ? 'Adding...' : 'Add'}</button>
               <button type="button" className="cancel-btn" onClick={onClose}>
                 Cancel
               </button>
-              </div>
-           </form>
+            </div>
+          </form>
+        </div>
       </div>
-</div>
       {showUpdatePopup && commentToEdit && (
         <UpdateComment
           show={showUpdatePopup}

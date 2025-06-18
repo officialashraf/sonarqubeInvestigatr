@@ -3,7 +3,7 @@ import { Table, Pagination } from "react-bootstrap";
 import "../Analyze/TabularData/caseTableData.css";
 import { useSelector, useDispatch } from "react-redux";
 import "../Layout/pagination.css";
-import {  fetchSummaryData} from "../../../Redux/Action/filterAction";
+import { fetchSummaryData } from "../../../Redux/Action/filterAction";
 import Loader from "../Layout/loader";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
@@ -163,7 +163,7 @@ const GridView = () => {
 
   return (
     <>
-      
+
       <div
         className="data-table"
         style={{ marginTop: '12px' }}
@@ -249,6 +249,7 @@ const GridView = () => {
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
+            height: "100vh"
           }}
         >
           <Pagination style={{ width: "200px" }}>

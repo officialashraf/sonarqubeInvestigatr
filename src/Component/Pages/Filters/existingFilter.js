@@ -113,9 +113,9 @@ const ExistingFilter = ({ selectedFilters, onFilterToggle, onFilterSelect, setSh
 
   return (
     <>
-      <div className="filters-wrapper" style={{margin: '1px'}}>
+      <div className="filters-wrapper" style={{ margin: '1px' }}>
         <div className='existingFil'>
-          <p  className='existing-title' style={{ margin: '0' }}>Existing Filters</p>
+          <p className='existing-title' style={{ margin: '0' }}>Existing Filters</p>
           {searchBarVisibility && (
             <input
               className="search_input"

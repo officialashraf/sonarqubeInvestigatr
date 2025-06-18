@@ -18,25 +18,21 @@
   padding: 10px;
   position: relative; /* For the close icon */
 }
-@media screen and (max-width: 768px){
-  .popup-container{
+@media screen and (max-width: 768px) {
+  .popup-container {
     width: 70%;
   }
-  
 }
-@media screen and (max-width: 820px){
-  .popup-container{
+@media screen and (max-width: 820px) {
+  .popup-container {
     width: 70%;
   }
-  
 }
-@media screen and (max-width: 912px){
-  .popup-container{
+@media screen and (max-width: 912px) {
+  .popup-container {
     width: 60%;
   }
-  
 }
-
 
 /* Close Icon */
 .close-icon {
@@ -83,7 +79,7 @@ label {
   color: #000;
   font-size: 12px;
   height: 38px;
- }
+}
 .com:focus {
   border-color: transparent; /* Focus border color ko remove karne ke liye */
   box-shadow: none; /* Focus box-shadow ko remove karne ke liye */
@@ -146,8 +142,8 @@ textarea {
   transition: 0.3s;
 }
 .create-btn:disabled {
-  background-color: #fffdfd;  /* gray when disabled */
-  color: #666;             /* dim the text */
+  background-color: #fffdfd; /* gray when disabled */
+  color: #666; /* dim the text */
   cursor: not-allowed;
   border: none;
   opacity: 0.7;

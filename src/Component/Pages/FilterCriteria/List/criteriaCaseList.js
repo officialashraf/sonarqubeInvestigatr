@@ -183,6 +183,7 @@ const CriteriaCaseTable = () => {
                   .map((key, index) => (
                     <th key={index} className="fixed-th">
                       {key
+                        .toLowerCase() // Convert whole string to lowercase first
                         .split("_") // Split by underscores
                         .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize first letter of each word
                         .join(" ") // Rejoin words with space

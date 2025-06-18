@@ -31,17 +31,6 @@ const CaseHeader = ({ onIconClick, activeView }) => {
             </h5>
             <p className="mb-0">{caseData.title}</p>
           </div>
-          {/* <div className="col d-flex flex-wrap justify-content-end align-items-center">
-
-            <button
-              className="add-new-filter-button"
-              style={{ marginLeft: "12px" }}
-              onClick={backToSnap}
-            >
-              {" "}
-              Back to Case Snapshot
-            </button>
-          </div> */}
         </div>
 
         <div
@@ -54,7 +43,7 @@ const CaseHeader = ({ onIconClick, activeView }) => {
               className={`icon-style ${activeView === 'graphicalData' ? 'active-icon' : ''}`}
               onClick={() => onIconClick("graphicalData")}
             />
-                        <FaPhotoVideo
+            <FaPhotoVideo
               className={`icon-style ${activeView === 'resources' ? 'active-icon' : ''}`}
               onClick={() => onIconClick("resources")}
             />

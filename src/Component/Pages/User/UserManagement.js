@@ -28,10 +28,10 @@ const UserManagement = () => {
   const [showAddForm, setShowAddForm] = useState(false);
   const [showDetail, setShowDetail] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
-   const [showResetForm, setShowResetForm] = useState(false);
+  const [showResetForm, setShowResetForm] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [loading, setLoading] = useState(true);
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
   console.log(selectedUser);
 
@@ -48,7 +48,7 @@ const UserManagement = () => {
     setShowEditForm((prev) => !prev);
   };
 
-    const toggleResetForm = (item) => {
+  const toggleResetForm = (item) => {
     setSelectedUser(item);
     setShowResetForm((prev) => !prev);
   };
@@ -118,7 +118,7 @@ const UserManagement = () => {
     }
     try {
 
-      const response = await axios.delete(`${window.runtimeConfig.REACT_APP_API_USER_MAN }/api/user-man/v1/user/${id}`,
+      const response = await axios.delete(`${window.runtimeConfig.REACT_APP_API_USER_MAN}/api/user-man/v1/user/${id}`,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -126,7 +126,7 @@ const UserManagement = () => {
           }
         });
       window.dispatchEvent(new Event("databaseUpdated"));
-      toast(`User ${username} deleted successfully`)
+      toast.success(`User ${username} deleted successfully`)
       console.log("User Deleted:", response.data);
 
     } catch (err) {
@@ -135,14 +135,14 @@ const UserManagement = () => {
 
       if (err.response) {
 
-        toast(err.response?.data?.detail || 'Something went wrong. Please try again');
+        toast.error(err.response?.data?.detail || 'Something went wrong. Please try again');
 
       } else if (err.request) {
         // No response from the server
-        toast('No response from the server. Please check your connection');
+        toast.error('No response from the server. Please check your connection');
       } else {
         // Unknown error occurred
-        toast('An unknown error occurred. Please try again');
+        toast.error('An unknown error occurred. Please try again');
       }
     }
   };
@@ -170,7 +170,7 @@ const UserManagement = () => {
 
 
   const handleSearch = (event) => {
-    const searchValue = event.target.value.trim().toLowerCase();
+    const searchValue = event.target.value;
     setSearchTerm(searchValue);
 
     const filtered = data.filter(item => {
@@ -180,7 +180,7 @@ const UserManagement = () => {
           return value
             .toString()
             .toLowerCase()
-            .includes(searchValue);
+            .includes(searchValue.toLowerCase());
         }
         return false;
       });
@@ -263,7 +263,7 @@ const UserManagement = () => {
               </div>
             </div>
 
-           <div className="data-table" style={{ minHeight: isDropdownOpen ? "200px" : "auto" }}>
+            <div className="data-table" style={{ minHeight: isDropdownOpen ? "200px" : "auto" }}>
               <Table striped bordered hover variant="light">
                 <thead>
                   <tr>
@@ -555,8 +555,8 @@ const UserManagement = () => {
                               <Dropdown.Item onClick={() => toggleEditForm(item)}>
                                 Edit
                               </Dropdown.Item>
-                               <Dropdown.Item onClick={() => toggleResetForm(item)}>
-                               Reset Password
+                              <Dropdown.Item onClick={() => toggleResetForm(item)}>
+                                Reset Password
                               </Dropdown.Item>
                               <Dropdown.Item
                                 onClick={() => confirmDelete(item.id, item.username)}
@@ -573,14 +573,14 @@ const UserManagement = () => {
             </div>
           </div>
         ) : (
-          <div className="resourcesContainer"style={{border:'none'}}>
+          <div className="resourcesContainer" style={{ border: 'none' }}>
             <h3 className="title">Let's Get Started!</h3>
             <p className="content">Add users to get started</p>
             <button className='add-btn' title='Add New Case' onClick={togglePopup}><Plus size={20} />Add New Users</button>
           </div>
         )
       }
-{showResetForm && <ResetPassword onClose={toggleResetForm} item={selectedUser}/>}
+      {showResetForm && <ResetPassword onClose={toggleResetForm} item={selectedUser} />}
       {showAddForm && <AddUser onClose={togglePopup} />}
       {showDetail && <UserDetails userId={selectedUser} toggleDetails={toggleDetails} />}
       {showEditForm &&

@@ -79,7 +79,7 @@ const ComponentThree = () => (
         align="center"
         height={250}
       >
-        <LocationBar/>
+        <LocationBar />
         {/* {" "}No Data{" "} */}
       </Typography>
     </CardContent>
@@ -90,7 +90,7 @@ const ComponentFour = () => (
   >
     <Header title="Sentiments" />
     <CardContent>
-      <SentimentPieChart  />
+      <SentimentPieChart />
     </CardContent>
   </Card>
 );
@@ -100,7 +100,7 @@ const ComponentFive = () => (
   >
     <Header title="Time" />
     <CardContent>
-      <DateBar/>
+      <DateBar />
     </CardContent>
   </Card>
 );
@@ -110,7 +110,7 @@ const ComponentSix = () => (
   >
     <Header title="Events" />
     <CardContent>
-      <EventBar/>
+      <EventBar />
     </CardContent>
   </Card>
 );
@@ -137,7 +137,7 @@ const ComponentEight = () => (
 
 const ComponentNine = () => (
   <Card
-    sx={{ height: "350px", backgroundColor: "lightgray",marginBottom:'5rem' }}
+    sx={{ height: "350px", backgroundColor: "lightgray", marginBottom: '5rem' }}
   >
     <Header title="Organisations" />
     <CardContent>

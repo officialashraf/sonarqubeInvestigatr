@@ -2,9 +2,9 @@ fixed-th {
   position: sticky;
   top: -2px;
   background: #fff;
-   text-align: center;
+  text-align: center;
   vertical-align: middle;
-     min-width: 40px; /* Fixed width */
+  min-width: 40px; /* Fixed width */
   max-width: 200px;
   color: white;
   overflow: hidden;
@@ -14,14 +14,13 @@ fixed-th {
 }
 
 .fixed-td {
-  min-width: 40px;  /*Fixed width */
-  max-width: 200px;/* Match header width */
-  height: 20px; /* Fix row height */ 
+  min-width: 40px; /*Fixed width */
+  max-width: 200px; /* Match header width */
+  height: 20px; /* Fix row height */
   padding: 5px;
   text-align: left;
   overflow: hidden;
 }
-
 
 /* .cell-content {
   overflow: hidden;

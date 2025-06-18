@@ -5,48 +5,9 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { toast } from 'react-toastify';
 import Select from "react-select";
+import { customStyles } from "../Case/createCase";
 
-export const customStyles = {
-  control: (base) => ({
-    ...base,
-    backgroundColor: 'white',
-    color: 'black',
-    boxShadow: 'none',
-    outline: 'none'
-  }),
-  menu: (base) => ({
-    ...base,
-    backgroundColor: 'white',
-    color: 'black',
-  }),
-  option: (base, state) => ({
-    ...base,
-    backgroundColor: state.isSelected ? 'black' : 'white',
-    color: state.isSelected ? 'white' : 'black',
-    '&:hover': {
-      backgroundColor: 'black',
-      color: 'white'
-    }
-  }),
-  multiValue: (base) => ({
-    ...base,
-    backgroundColor: 'white',
-    color: 'black',
-  }),
-  multiValueLabel: (base) => ({
-    ...base,
-    backgroundColor: 'black',
-    color: 'white',
-  }),
-  multiValueRemove: (base) => ({
-    ...base,
-    color: 'black',
-    '&:hover': {
-      backgroundColor: 'black',
-      color: 'white'
-    }
-  })
-};
+
 
 const AddUser = ({ onClose }) => {
   const token = Cookies.get("accessToken");
@@ -118,19 +79,22 @@ const AddUser = ({ onClose }) => {
 
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    let { name, value } = e.target;
 
     // Fields to apply capitalization
     const capitalizeFields = ['first_name', 'last_name', 'role'];
 
-    // Capitalize first letter of each word if the field is in the list
-    const formattedValue = capitalizeFields.includes(name)
-      ? value.replace(/\b\w/g, (char) => char.toUpperCase())
-      : value;
+    if (name === 'username') {
+      // Prevent capital letters and spaces in username
+      value = value.toLowerCase().replace(/\s/g, '');
+    } else if (capitalizeFields.includes(name)) {
+      // Capitalize first letter of each word if the field is in the list
+      value = value.replace(/\b\w/g, (char) => char.toUpperCase());
+    }
 
     setFormData((prevData) => ({
       ...prevData,
-      [name]: formattedValue
+      [name]: value
     }));
     setError((prevErrors) => ({
       ...prevErrors,
@@ -192,8 +156,8 @@ const AddUser = ({ onClose }) => {
         <div className="popup-content">
           <h5>Add User</h5>
           <form onSubmit={handleCreateUser}>
-            <label>User Name *</label>
-            <input className="com" name="username" value={formData.username} onChange={handleChange} placeholder="Enter user name" requiblack />
+            <label>UserName *</label>
+            <input className="com" name="username" value={formData.username} onChange={handleChange} placeholder="Enter username" requiblack />
             {error.username && <p style={{ color: "red" , margin: '0px' }} >{error.username}</p>}
             <label>First Name</label>
             <input className="com" name="first_name" value={formData.first_name} onChange={handleChange} placeholder="Enter first name" />

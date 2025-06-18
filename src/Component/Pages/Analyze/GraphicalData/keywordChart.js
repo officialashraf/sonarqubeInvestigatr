@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import Cookies from "js-cookie";
 import Loader from '../../Layout/loader';
-import {  ResponsiveContainer } from 'recharts';
+import { ResponsiveContainer } from 'recharts';
 
 const KeywordChart = () => {
   const token = Cookies.get("accessToken");
@@ -14,7 +14,7 @@ const KeywordChart = () => {
   const caseId = useSelector((state) => state.caseData.caseData.id);
 
   useEffect(() => {
-      const fetchKeywordData = async () => {
+    const fetchKeywordData = async () => {
       try {
         setLoading(true);
         const payload = {
@@ -47,9 +47,9 @@ const KeywordChart = () => {
         setLoading(false);
       }
     }
-      fetchKeywordData();
-    },
-      [caseId,token]);
+    fetchKeywordData();
+  },
+    [caseId, token]);
 
   if (loading) {
     return <Loader />;
@@ -67,25 +67,25 @@ const KeywordChart = () => {
 
   return (
     <div style={{ width: '100%', height: 280 }}>
-        <ResponsiveContainer>
-    <Box width='100%' style={{ marginTop: 0, padding: 0, alignContent: 'center' }}>
-      {data.length > 0
-        ? <WordCloud
-          data={dataa}
-          fontSizeMapper={fontSizeMapper}
-          rotate={rotate}
-          margin={0}
-          width={600}
-          height={280}
-        />
-        : 
-        <div className="h-[150px] flex items-center justify-center">
-          <p className="text-gray-500 text-xl">No Data Available</p>
-        </div>
-      }
-    </Box>
+      <ResponsiveContainer>
+        <Box width='100%' style={{ marginTop: 0, padding: 0, alignContent: 'center' }}>
+          {data.length > 0
+            ? <WordCloud
+              data={dataa}
+              fontSizeMapper={fontSizeMapper}
+              rotate={rotate}
+              margin={0}
+              width={600}
+              height={280}
+            />
+            :
+            <div className="h-[150px] flex items-center justify-center">
+              <p className="text-gray-500 text-xl">No Data Available</p>
+            </div>
+          }
+        </Box>
       </ResponsiveContainer>
-        </div>
+    </div>
   );
 };
 
