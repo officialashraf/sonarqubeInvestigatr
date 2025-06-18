@@ -1,7 +1,4 @@
-import React from 'react';
-import buildInfo from '../../../constants/build-info';
-
-
+import buildInfo from '../../../InfoApp/build-info';
 
 import { Table, CloseButton } from 'react-bootstrap'
 const AboutUs = ({ togglePopup }) => {

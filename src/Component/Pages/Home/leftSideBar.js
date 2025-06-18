@@ -10,8 +10,8 @@ const Sidebar = () => {
     { label: 'Cases', icon: <Folder size={15} />, path: '/cases' },
     { label: 'PII', icon: <ListTask size={15} />, path: '/pii' },
     { label: 'Targets', icon: <Bullseye size={15} />, path: '/targets' },
-    { label: 'Admin', icon: <People size={15} />, path: '/dashboard' },
     { label: 'Reports', icon: <BarChart size={15} />, path: '/reports' },
+    { label: 'Admin', icon: <People size={15} />, path: '/admin' },
   ];
 
   return (

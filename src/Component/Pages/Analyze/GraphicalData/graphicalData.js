@@ -1,11 +1,6 @@
 import { Card, CardContent, Typography, Grid } from "@mui/material";
 import "./graphicalData.css";
-import {
-  ListAltOutlined,
-  ArrowBack,
-  ArrowForward,
-  MoreVert
-} from "@mui/icons-material";
+// import { ListAltOutlined,ArrowBack, ArrowForward, MoreVert} from "@mui/icons-material";
 import LineGraph from "./lineChart";
 import KeywordChart from "./keywordChart";
 import SentimentPieChart from "./sentimentPiechart";
@@ -27,7 +22,7 @@ const Header = ({ title }) =>
     <p style={{ color: "black" }}>
       {title}
     </p>
-    <Grid item p={0} mt={-2}>
+    {/* <Grid item p={0} mt={-2}>
       <ArrowBack
         fontSize="inherit"
         sx={{ color: "black", "&:hover": { color: "gray" } }}
@@ -47,11 +42,11 @@ const Header = ({ title }) =>
         fontSize="inherit"
         sx={{ color: "black", "&:hover": { color: "gray" } }}
       />
-    </Grid>
+    </Grid> */}
   </Grid>;
 
 const ComponentOne = () => (
-  <Card sx={{ height: "235px", backgroundColor: "lightgray" }}>
+  <Card sx={{ height: "300px", backgroundColor: "lightgray" }}>
     <Header title="Timelines" />
     <CardContent>
       <LineGraph />

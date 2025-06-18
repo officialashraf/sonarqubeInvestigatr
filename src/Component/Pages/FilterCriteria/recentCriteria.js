@@ -24,26 +24,23 @@ const RecentCriteria = () => {
   const [showEditPopup, setShowEditPopup] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [enterInput, setEnterInput] = useState([]);
-
   const [keywords, setKeyword] = useState([]);
+
   const recentKeyword = useSelector(
-    (state) => state.criteriaKeywords?.queryPayload?.keyword
-  );
+    (state) => state.criteriaKeywords?.queryPayload?.keyword);
 
   const caseId = useSelector(
-    (state) => state.criteriaKeywords?.queryPayload?.case_id || ''
-  );
+    (state) => state.criteriaKeywords?.queryPayload?.case_id || '');
   console.log("caseId", caseId);
 
   const fileType = useSelector(
-    (state) => state.criteriaKeywords?.queryPayload?.file_type || ''
-  );
+    (state) => state.criteriaKeywords?.queryPayload?.file_type || '');
   console.log("fileType", fileType);
 
   const keyword = useSelector(
-    (state) => state.criteriaKeywords?.queryPayload?.keyword || ''
-  );
+    (state) => state.criteriaKeywords?.queryPayload?.keyword || '');
   console.log("keyword", keyword);
+
   const reduxPayload = useSelector((state) => state.criteriaKeywords?.queryPayload || '');
   console.log("Redux Payload:", reduxPayload);
 
@@ -137,14 +134,13 @@ const RecentCriteria = () => {
   const handleDelete = async (index, id) => {
     try {
       // Making the DELETE API call
-      const response = await fetch(`${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/criteria/${id}`, {
-        method: "DELETE",
+      const response = await axios.delete(`${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/criteria/${id}`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${Token}`
         },
       });
-
+      console.log("responseDelete", response)
       if (response.ok) {
         // Filter the list to remove the item locally
         fetchData()

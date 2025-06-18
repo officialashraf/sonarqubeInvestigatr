@@ -84,10 +84,15 @@ const TabulerData = () => {
                 {headers.map((header) => (
                   <th key={header} className="fixed-th">
                     {header
-                      .toLowerCase() // Convert whole string to lowercase first
-                      .split("_")    // Split by underscores
-                      .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize each word
-                      .join(" ")     // Join words with space
+
+                      .split("_") // Split by underscores
+                      .map(word => {
+                        return word === word.toUpperCase() //  Check if it's fully uppercase
+                          ? word.charAt(0).toUpperCase() + word.slice(1).toLowerCase() //  Convert all except first letter to lowercase
+                          : word.charAt(0).toUpperCase() + word.slice(1); //  Keep normal capitalization
+                      })
+                      .join(" ") // Rejoin words with space
+
                     }
                   </th>
                 ))}

@@ -226,7 +226,8 @@ const RolesPermission = () => {
                                     cursor: 'pointer', margin: '0px 40px 0px 38px',
                                     fontSize: '18px'
                                 }}
-                                onClick={() => navigate('/dashboard')}
+
+                                onClick={() => navigate('/admin')}
                             />
                             <div className="search-bar1" style={{ width: '100%' }}>
                                 <input

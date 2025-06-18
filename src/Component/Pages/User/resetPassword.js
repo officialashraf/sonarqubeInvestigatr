@@ -6,19 +6,17 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 
 const ResetPassword = ({ onClose, item }) => {
+    const token = Cookies.get("accessToken");
     console.log("item", item)
     const [newPassword, setNewPassword] = useState('')
     const [showPassword, setShowPassword] = useState(false);
     const [isPasswordTouched, setIsPasswordTouched] = useState(false);
 
 
-    const token = Cookies.get("accessToken");
-
     const validatePassword = (password) => {
         const regex = /^(?=.*[A-Z])(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{6,}$/;
         return regex.test(password);
     };
-
 
     const handleReset = async (e) => {
         e.preventDefault();
@@ -30,7 +28,7 @@ const ResetPassword = ({ onClose, item }) => {
         }
 
         try {
-            const response = await axios.post(`${window.runtimeConfig.REACT_APP_API_USER_MAN}/api/user-man/v1/user/resetpassword`,
+         await axios.post(`${window.runtimeConfig.REACT_APP_API_USER_MAN}/api/user-man/v1/user/resetpassword`,
                 {
                     new_password: newPassword,
                     user_id: item.id,
@@ -50,7 +48,6 @@ const ResetPassword = ({ onClose, item }) => {
             toast.error(error.response?.data?.detail || "Error while resetting password");
         }
     };
-
 
     return (
 
@@ -97,8 +94,6 @@ const ResetPassword = ({ onClose, item }) => {
                                 Password must be at least 6 characters, include 1 capital letter and 1 special character.
                             </p>
                         )}
-
-
 
                         <div className="button-container">
                             <button type="submit" className="create-btn">Reset</button>

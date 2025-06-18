@@ -17,8 +17,6 @@ const LicensePage = () => {
     if (!licenseKey.trim()) {
       errors.licenseKey = "Please enter the license key before proceeding";
     }
-
-
     return errors;
   };
 

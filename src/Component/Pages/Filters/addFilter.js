@@ -71,6 +71,13 @@ const AddFilter2 = ({ togglePopup }) => {
     setShowAddFilter(false);
     setFilterIdedit(null); // Reset filter ID when closing
   };
+  const [filtersToStart, setFiltersToStart] = useState([]);
+  const [filtersToStop, setFiltersToStop] = useState([]);
+
+  useEffect(() => {
+    setFiltersToStart(selectedFilters.filter(id => !initialSelectedFilters.includes(id)));
+    setFiltersToStop(initialSelectedFilters.filter(id => !selectedFilters.includes(id)));
+  }, [selectedFilters, initialSelectedFilters]); // Updates dynamically
 
   // Proceed handler
   const handleProceed = async () => {
@@ -78,12 +85,13 @@ const AddFilter2 = ({ togglePopup }) => {
     // console.log("filterToStop", filtersToStart)
     // const filtersToStop = initialSelectedFilters.filter(id => !initialSelectedFilters.includes(id));
     // console.log("filterToStop", filtersToStop)
-    const filtersToStart = selectedFilters.filter(id =>
-      !initialSelectedFilters.includes(id)
-    );
-    const filtersToStop = initialSelectedFilters.filter(id =>
-      !selectedFilters.includes(id)
-    );
+
+    // const filtersToStart = selectedFilters.filter(id => 
+    //   !initialSelectedFilters.includes(id)
+    // );
+    // const filtersToStop = initialSelectedFilters.filter(id => 
+    //   !selectedFilters.includes(id)
+    // );
     try {
       // Start new filters
 
@@ -181,9 +189,12 @@ const AddFilter2 = ({ togglePopup }) => {
                 )}
               </div>
               <div className="text-end mt-3">
-                <button className="add-new-filter-button" onClick={handleProceed}>
-                  Proceed
-                </button>
+                {(filtersToStart.length > 0 || filtersToStop.length > 0) && (
+                  <button className="add-new-filter-button" onClick={handleProceed}>
+                    Proceed
+                  </button>
+                )}
+
               </div>
             </div>
           </div>
@@ -192,4 +203,4 @@ const AddFilter2 = ({ togglePopup }) => {
     </>
   );
 };
-export default AddFilter2
+export default AddFilter2;

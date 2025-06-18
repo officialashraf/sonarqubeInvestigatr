@@ -2,8 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import { Form, InputGroup, Button, Badge } from 'react-bootstrap';
 import { toast } from 'react-toastify';
-import { useDispatch, useSelector } from 'react-redux';
-import { setTaskFilter } from '../../../Redux/Action/filterAction';
+import { useDispatch} from 'react-redux';
 import Cookies from 'js-cookie';
 import "./main.css"
 import { jwtDecode } from "jwt-decode";
@@ -81,8 +80,8 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
     if (token) {
       const decodedToken = jwtDecode(token);
       setLoggedInUserId(decodedToken.id);
-      console.log(decodedToken); // Pura payload dekho
-      console.log("User ID:", decodedToken.id); // Yahan se user ID mil jaayegi
+      console.log(decodedToken); 
+      console.log("User ID:", decodedToken.id); 
     }
   }, [token]);
 
@@ -167,7 +166,7 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
   };
 
   const handleKeywordKeyDown = (index, event) => {
-    if (event.key === 'Enter' && sources[index].keywordInput.trim()) {
+    if (event.key === "Enter"  && sources[index].urlInput.trim()) {
       const newSources = [...sources];
       newSources[index].keywords.push(sources[index].keywordInput.trim());
       newSources[index].keywordInput = '';
@@ -270,11 +269,13 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
       setSources(convertedSources);
 
       // Check edit permissions
-      const isEditable = (loggedInUserId == filterDetails.created_by);
+      const isEditable = (loggedInUserId === String(filterDetails.created_by));
       console.log(isEditable)
       setIsEditable(isEditable);
       if (!toastShown.current) {
-        toast.info(isEditable ? "You can edit this filter" : "You don't have permission to edit this filter");
+        if (!isEditable) {
+          toast.info("You don't have permission to edit this filter");
+        }
         toastShown.current = true;
       }
     }
@@ -385,7 +386,6 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
         if (!filterDetails?.id) {
           onNewFilterCreated(newFilterId);
         }
-        onClose(); // Close AddNewFilter only
 
         // Reset form after successful save/update
         resetForm();
@@ -540,7 +540,7 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
                       <Form.Label>{source.source === "social media profile" ? "User ID" : "Keywords"}</Form.Label>
                       <Form.Control
                         type="text"
-                        placeholder="Enter keyword and press Enter"
+                        placeholder={source.source === "social media profile" ? "Enter user id and press Enter" : "Enter keyword and press Enter"}
                         value={source.keywordInput}
                         onChange={(e) => handleKeywordChange(sourceIndex, e.target.value)}
                         onKeyDown={(e) => handleKeywordKeyDown(sourceIndex, e)}

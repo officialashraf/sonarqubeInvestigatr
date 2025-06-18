@@ -10,7 +10,7 @@ import { thunk } from "redux-thunk";
 import searchReducer1 from './Reducers/piiReducer';
 import reportReducer from './Reducers/reportReducer';
 import { userReducer } from './Reducers/userReducer';
-// ✅ Persist Config
+//  Persist Config
 const persistConfig = {
   key: "root",
   storage, // Local Storage

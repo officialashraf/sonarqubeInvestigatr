@@ -22,7 +22,6 @@ const UserManagement = () => {
 
   const navigate = useNavigate()
   const [data, setData] = useState([]);
-  const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredData, setFilteredData] = useState([]);
   const [showAddForm, setShowAddForm] = useState(false);
@@ -150,16 +149,14 @@ const UserManagement = () => {
   const getUserData = async () => {
     const token = Cookies.get("accessToken");
     try {
-      const response = await axios.get((`${window.runtimeConfig.REACT_APP_API_USER_MAN}/api/user-man/v1/user`)
+      await axios.get((`${window.runtimeConfig.REACT_APP_API_USER_MAN}/api/user-man/v1/user`)
         , {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
           }
         });
-      const user = response.data;
-      setUsers(user); // Update the state with usered data
-      console.log("users", user)
+
     } catch (error) {
       console.error('There was an error usering the data!', error);
     }
@@ -242,7 +239,7 @@ const UserManagement = () => {
                 <FaArrowLeft style={{
                   cursor: 'pointer', margin: '0px 40px 0px 38px',
                   fontSize: '16px'
-                }} onClick={() => navigate('/dashboard')} />
+                }} onClick={() => navigate('/admin')} />
                 <div className="search-bar1" style={{ width: '100%' }}>
                   <div className="input-group">
                     <input

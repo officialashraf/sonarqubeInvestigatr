@@ -11,41 +11,47 @@ import { Provider } from "react-redux"
 import store, { persistor } from "./Redux/store"; // Store aur Persistor import karo
 import { PersistGate } from "redux-persist/integration/react";
 
-
 const loadConfig = async () => {
-  const response = await fetch('/config.json');
+
+const timestamp = new Date().getTime();
+    const response = await fetch(`/config.json?t=${timestamp}`, {
+      cache: 'no-store',
+      headers: {
+        'Cache-Control': 'no-cache',
+        'Pragma': 'no-cache'
+      }
+    });
+
   const config = await response.json();
   window.runtimeConfig = config;
 };
 
 loadConfig().then(() => {
-const root = createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
+  const root = createRoot(document.getElementById('root'));
+  root.render(
+    <React.StrictMode>
 
-    <Provider store={store} >
-      <PersistGate loading={null} persistor={persistor}>
-
-        <App />
-        <ToastContainer
-          position="top-center" // Position of the toasts
-          autoClose={5000} // Auto close after 2000ms
-          closeOnClick={true} // Close when clicked
-          transition={Zoom} // Zoom effect for transitions
-          pauseOnHover // Pause timer when hovered
-          newestOnTop
-          hideProgressBar={true}
-
-        />
-
-
-      </PersistGate>
-    </Provider>
+      <Provider store={store} >
+        <PersistGate loading={null} persistor={persistor}>
+          <App />
+          <ToastContainer
+            position="top-center" // Position of the toasts
+            autoClose={5000} // Auto close after 2000ms
+            closeOnClick={true} // Close when clicked
+            transition={Zoom} // Zoom effect for transitions
+            pauseOnHover // Pause timer when hovered
+            newestOnTop
+            hideProgressBar={true}
+          />
+        </PersistGate>
+      </Provider>
 
 
-  </React.StrictMode>
-);
-originalWarn();
-reportWebVitals();
-
+    </React.StrictMode>
+  );
+  originalWarn();
+  reportWebVitals();
 });
+
+
+

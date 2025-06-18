@@ -12,5 +12,5 @@ const buildInfo = {
   maintainedBy: "Ashraf Shaikh", 
 };
 
-fs.writeFileSync('./src/constants/build-info.js', `export default ${JSON.stringify(buildInfo, null, 2)};`);
+fs.writeFileSync('./src/InfoApp/build-info.js', `export default ${JSON.stringify(buildInfo, null, 2)};`);
 console.log('✅ build-info.js created');
