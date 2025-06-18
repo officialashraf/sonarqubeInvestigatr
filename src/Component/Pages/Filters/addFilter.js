@@ -27,7 +27,7 @@ const AddFilter2 = ({ togglePopup }) => {
     setFilterIdedit(null); // Reset filter ID when adding new filter
     setShowAddFilter(true);
   };
-  
+
   // Fetch initial filters associated with the case
   useEffect(() => {
     const fetchInitialFilters = async () => {
@@ -61,7 +61,7 @@ const AddFilter2 = ({ togglePopup }) => {
   const handleNewFilterCreated = (newFilterId) => {
     setSelectedFilters(prev => [...prev, newFilterId]);
   };
-  
+
   const handleFilterid = (id) => {
     setFilterIdedit(id);
   };
@@ -71,6 +71,13 @@ const AddFilter2 = ({ togglePopup }) => {
     setShowAddFilter(false);
     setFilterIdedit(null); // Reset filter ID when closing
   };
+  const [filtersToStart, setFiltersToStart] = useState([]);
+  const [filtersToStop, setFiltersToStop] = useState([]);
+
+  useEffect(() => {
+    setFiltersToStart(selectedFilters.filter(id => !initialSelectedFilters.includes(id)));
+    setFiltersToStop(initialSelectedFilters.filter(id => !selectedFilters.includes(id)));
+  }, [selectedFilters, initialSelectedFilters]); // Updates dynamically
 
   // Proceed handler
   const handleProceed = async () => {
@@ -78,12 +85,12 @@ const AddFilter2 = ({ togglePopup }) => {
     // console.log("filterToStop", filtersToStart)
     // const filtersToStop = initialSelectedFilters.filter(id => !initialSelectedFilters.includes(id));
     // console.log("filterToStop", filtersToStop)
-    const filtersToStart = selectedFilters.filter(id => 
-      !initialSelectedFilters.includes(id)
-    );
-    const filtersToStop = initialSelectedFilters.filter(id => 
-      !selectedFilters.includes(id)
-    );
+    // const filtersToStart = selectedFilters.filter(id => 
+    //   !initialSelectedFilters.includes(id)
+    // );
+    // const filtersToStop = initialSelectedFilters.filter(id => 
+    //   !selectedFilters.includes(id)
+    // );
     try {
       // Start new filters
 
@@ -91,12 +98,14 @@ const AddFilter2 = ({ togglePopup }) => {
         const payload = {
           filter_id: filtersToStart,
           case_id: String(caseData1.id)
-      };
-      console.log('Payload being sent start:', payload);
-        await axios.post(`${window.runtimeConfig.REACT_APP_API_OSINT_MAN}/api/osint-man/v1/start`,payload, {   headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        }});
+        };
+        console.log('Payload being sent start:', payload);
+        await axios.post(`${window.runtimeConfig.REACT_APP_API_OSINT_MAN}/api/osint-man/v1/start`, payload, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          }
+        });
         window.dispatchEvent(new Event('databaseUpdated'));
       }
 
@@ -105,28 +114,28 @@ const AddFilter2 = ({ togglePopup }) => {
         const payload = {
           filter_id_list: filtersToStop,
           case_id: String(caseData1.id)
-      };
-      console.log('Payload being sent stop:', payload);
+        };
+        console.log('Payload being sent stop:', payload);
         await axios.post(`${window.runtimeConfig.REACT_APP_API_OSINT_MAN}/api/osint-man/v1/stop/batch`, payload, {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`,
           },
-        });window.dispatchEvent(new Event('databaseUpdated'));
+        }); window.dispatchEvent(new Event('databaseUpdated'));
       }
 
-     // Update case status
+      // Update case status
       const reponsecase = await axios.put(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/case/${caseData1.id}`,
-      { status: "in progress" },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+        { status: "in progress" },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
         }
-      }
-    );
-     dispatch(setCaseData(reponsecase.data.data))
-    // window.dispatchEvent(new Event('databaseUpdated'));
+      );
+      dispatch(setCaseData(reponsecase.data.data))
+      // window.dispatchEvent(new Event('databaseUpdated'));
 
 
       // Refresh data and close popup
@@ -148,7 +157,7 @@ const AddFilter2 = ({ togglePopup }) => {
   return (
     <>
       <div className="popup-overlay">
-        <div className="popup-container" style={{width:"50%"}}>
+        <div className="popup-container" style={{ width: "50%" }}>
           <button className="close-icon" onClick={togglePopup}>&times;</button>
           <div className="popup-content">
             <div className="container-fluid p-4 main-body-div">
@@ -168,10 +177,10 @@ const AddFilter2 = ({ togglePopup }) => {
                   <div className="col-md-8" style={{ marginTop: "15px" }}>
                     <button onClick={handleCloseAddFilter} className="btn close-add-filter-button">
                       <X />
-                    </button> 
-                    <AddNewFilter 
-                      filterIde={filterIdedit} 
-                      onNewFilterCreated={handleNewFilterCreated} 
+                    </button>
+                    <AddNewFilter
+                      filterIde={filterIdedit}
+                      onNewFilterCreated={handleNewFilterCreated}
                       key={filterIdedit} // Add key prop to force re-render when filterIdedit changes
                       onClose={handleCloseAddFilter}
                     />
@@ -179,9 +188,12 @@ const AddFilter2 = ({ togglePopup }) => {
                 )}
               </div>
               <div className="text-end mt-3">
-                <button className="add-new-filter-button" onClick={handleProceed}>
-                  Proceed
-                </button>
+                {(filtersToStart.length > 0 || filtersToStop.length > 0) && (
+                  <button className="add-new-filter-button" onClick={handleProceed}>
+                    Proceed
+                  </button>
+                )}
+
               </div>
             </div>
           </div>
@@ -292,7 +304,7 @@ export default AddFilter2
 //             'Content-Type': 'application/json',
 //             'Authorization': `Bearer ${token}`,
 //           },
-//         }); 
+//         });
 //         // window.dispatchEvent(new Event('databaseUpdated'));
 //       }
 

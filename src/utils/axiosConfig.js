@@ -9,11 +9,11 @@ export const setupAxiosInterceptors = () => {
       const errorMessage = error?.response?.data?.detail || "";
 
       if (errorMessage === ("Signature expired." || "Your license has been expired.")) {
-        Cookies.remove("accessToken"); // या localStorage.removeItem()
-        window.location.href = "/login"; // या history.push("/login") if router
+        Cookies.remove("accessToken"); //  localStorage.removeItem()
+        window.location.href = "/login"; // history.push("/login") if router
       }
 
       return Promise.reject(error);
     }
   );
-};
+ };

@@ -22,16 +22,15 @@ const UserManagement = () => {
 
   const navigate = useNavigate()
   const [data, setData] = useState([]);
-  const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredData, setFilteredData] = useState([]);
   const [showAddForm, setShowAddForm] = useState(false);
   const [showDetail, setShowDetail] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
-   const [showResetForm, setShowResetForm] = useState(false);
+  const [showResetForm, setShowResetForm] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [loading, setLoading] = useState(true);
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
   console.log(selectedUser);
 
@@ -48,7 +47,7 @@ const UserManagement = () => {
     setShowEditForm((prev) => !prev);
   };
 
-    const toggleResetForm = (item) => {
+  const toggleResetForm = (item) => {
     setSelectedUser(item);
     setShowResetForm((prev) => !prev);
   };
@@ -118,7 +117,7 @@ const UserManagement = () => {
     }
     try {
 
-      const response = await axios.delete(`${window.runtimeConfig.REACT_APP_API_USER_MAN }/api/user-man/v1/user/${id}`,
+      const response = await axios.delete(`${window.runtimeConfig.REACT_APP_API_USER_MAN}/api/user-man/v1/user/${id}`,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -150,16 +149,14 @@ const UserManagement = () => {
   const getUserData = async () => {
     const token = Cookies.get("accessToken");
     try {
-      const response = await axios.get((`${window.runtimeConfig.REACT_APP_API_USER_MAN}/api/user-man/v1/user`)
+      await axios.get((`${window.runtimeConfig.REACT_APP_API_USER_MAN}/api/user-man/v1/user`)
         , {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
           }
         });
-      const user = response.data;
-      setUsers(user); // Update the state with usered data
-      console.log("users", user)
+
     } catch (error) {
       console.error('There was an error usering the data!', error);
     }
@@ -242,7 +239,7 @@ const UserManagement = () => {
                 <FaArrowLeft style={{
                   cursor: 'pointer', margin: '0px 40px 0px 38px',
                   fontSize: '16px'
-                }} onClick={() => navigate('/dashboard')} />
+                }} onClick={() => navigate('/admin')} />
                 <div className="search-bar1" style={{ width: '100%' }}>
                   <div className="input-group">
                     <input
@@ -263,7 +260,7 @@ const UserManagement = () => {
               </div>
             </div>
 
-           <div className="data-table" style={{ minHeight: isDropdownOpen ? "200px" : "auto" }}>
+            <div className="data-table" style={{ minHeight: isDropdownOpen ? "200px" : "auto" }}>
               <Table striped bordered hover variant="light">
                 <thead>
                   <tr>
@@ -555,8 +552,8 @@ const UserManagement = () => {
                               <Dropdown.Item onClick={() => toggleEditForm(item)}>
                                 Edit
                               </Dropdown.Item>
-                               <Dropdown.Item onClick={() => toggleResetForm(item)}>
-                               Reset Password
+                              <Dropdown.Item onClick={() => toggleResetForm(item)}>
+                                Reset Password
                               </Dropdown.Item>
                               <Dropdown.Item
                                 onClick={() => confirmDelete(item.id, item.username)}
@@ -573,14 +570,14 @@ const UserManagement = () => {
             </div>
           </div>
         ) : (
-          <div className="resourcesContainer"style={{border:'none'}}>
+          <div className="resourcesContainer" style={{ border: 'none' }}>
             <h3 className="title">Let's Get Started!</h3>
             <p className="content">Add users to get started</p>
             <button className='add-btn' title='Add New Case' onClick={togglePopup}><Plus size={20} />Add New Users</button>
           </div>
         )
       }
-{showResetForm && <ResetPassword onClose={toggleResetForm} item={selectedUser}/>}
+      {showResetForm && <ResetPassword onClose={toggleResetForm} item={selectedUser} />}
       {showAddForm && <AddUser onClose={togglePopup} />}
       {showDetail && <UserDetails userId={selectedUser} toggleDetails={toggleDetails} />}
       {showEditForm &&

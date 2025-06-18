@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
-import { Box, Slider } from '@mui/material';
 import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, CartesianGrid, ResponsiveContainer, ReferenceLine } from 'recharts';
 import "../../../../Analyze/GraphicalData/lineChart.css";
 import Cookies from "js-cookie";
@@ -50,7 +49,7 @@ const CriteriaLineChart = () => {
 
         if (unified_record_type) {
           setRecordTypes(unified_record_type);
-
+console.log("CriteriaLineChart - recordTypes:", recordTypes);
 
         }
       } catch (error) {
@@ -70,12 +69,12 @@ const CriteriaLineChart = () => {
   }
 
   return (
-    <Box className="mt-1 h-[200px]">
+   <div style={{ width: "100%", height: 250, overflowX: "auto",}}>
       {data.length > 0 ? (
-        <ResponsiveContainer width="100%" height={150}>
+   <ResponsiveContainer minWidth={600} height={200}> 
           <LineChart
             data={data}
-            margin={{ right: 50 }}
+            margin={{ right: 80 }}
 
           >
             <CartesianGrid strokeDasharray="3 3" />
@@ -100,6 +99,7 @@ const CriteriaLineChart = () => {
 
             {/* Horizontal Reference Lines for each record type */}
             {recordTypes.length > 0 ? recordTypes.map((type, index) => (
+         
               <ReferenceLine
                 key={index}
                 y={type.doc_count}
@@ -113,7 +113,9 @@ const CriteriaLineChart = () => {
                   fontSize: 12,
                   fontWeight: 'bold'
                 }}
+                
               />
+              
             )) : console.log("No Record Types Found")}
 
             {/* Curved Line for date-wise doc_count */}
@@ -133,7 +135,7 @@ const CriteriaLineChart = () => {
         </div>
       )}
 
-      <div className="w-full mt-2">
+      {/* <div className="w-full mt-2">
         <Slider
           defaultValue={[50]}
           min={0}
@@ -145,8 +147,8 @@ const CriteriaLineChart = () => {
 
           }}
         />
-      </div>
-    </Box>
+      </div> */}
+    </div>
   );
 };
 

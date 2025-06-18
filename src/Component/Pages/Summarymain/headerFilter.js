@@ -39,9 +39,12 @@ const HeaderFilter = () => {
       </Row>
 
       </Container>
-      <button className='analyze-btn' onClick={handleClick} >
+     {caseData.status !== "New" && (
+    <button className='analyze-btn' onClick={handleClick}>
         Analyze
-      </button>
+    </button>
+)}
+
     </Navbar>
   );
 };

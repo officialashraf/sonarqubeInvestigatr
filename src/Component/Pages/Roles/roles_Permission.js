@@ -27,7 +27,7 @@ const RolesPermission = () => {
     const [showPopupB, setShowPopupB] = useState(false);
     const [showPopupC, setShowPopupC] = useState(false);
     const [showPopupD, setShowPopupD] = useState(false);
-     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [loading, setLoading] = useState(false);
 
 
@@ -217,106 +217,106 @@ const RolesPermission = () => {
 
     return (
         <>
-{data && data.length>0?
-       (<div className="data-table-container">
-            <div className="top-header" style={{ marginTop: "10px" }}>
-                <Col xs={1} className="d-flex align-items-center justify-content-flex-start" style={{ width: "300px", minWidth: "300px" }}>
-                    <FaArrowLeft
-                        style={{
-                            cursor: 'pointer', margin: '0px 40px 0px 38px',
-                            fontSize: '18px'
-                        }}
-                        onClick={() => navigate('/dashboard')}
-                    />
-                    <div className="search-bar1" style={{ width: '100%' }}>
-                        <input
-                            type="text"
-                            className="form-control"
-                            placeholder="Search"
-                            value={searchTerm}
-                            onChange={handleSearch}
-                        />
+            {data && data.length > 0 ?
+                (<div className="data-table-container">
+                    <div className="top-header" style={{ marginTop: "10px" }}>
+                        <Col xs={1} className="d-flex align-items-center justify-content-flex-start" style={{ width: "300px", minWidth: "300px" }}>
+                            <FaArrowLeft
+                                style={{
+                                    cursor: 'pointer', margin: '0px 40px 0px 38px',
+                                    fontSize: '18px'
+                                }}
+                                onClick={() => navigate('/admin')}
+                            />
+                            <div className="search-bar1" style={{ width: '100%' }}>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="Search"
+                                    value={searchTerm}
+                                    onChange={handleSearch}
+                                />
+                            </div>
+                        </Col>
+                        <div className="header-icons">
+                            <button className="add-btn" onClick={togglePopup}>
+                                <Plus size={14} style={{ marginRight: "5px" }} />
+                                Add New Role
+                            </button>
+                        </div>
                     </div>
-                </Col>
-                <div className="header-icons">
-                    <button className="add-btn" onClick={togglePopup}>
-                        <Plus size={14} style={{ marginRight: "5px" }} />
-                        Add New Role
-                    </button>
+
+                    <div className="data-table" style={{ minHeight: isDropdownOpen ? "200px" : "auto" }}>
+                        <Table striped bordered hover variant="light">
+                            <thead>
+                                <tr>
+                                    <th onClick={() => handleSort('role')} style={{ cursor: 'pointer', textAlign: 'center' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                            <span>Roles</span>
+                                            {getSortIcon('role')}
+                                        </div>
+                                    </th>
+                                    <th onClick={() => handleSort('created_by')} style={{ cursor: 'pointer', textAlign: 'center' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                            <span>Created By</span>
+                                            {getSortIcon('created_by')}
+                                        </div>
+                                    </th>
+                                    <th onClick={() => handleSort('created_on')} style={{ cursor: 'pointer', textAlign: 'center' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                            <span>Created On</span>
+                                            {getSortIcon('created_on')}
+                                        </div>
+                                    </th>
+                                    <th style={{ textAlign: 'center' }}>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {filteredData && filteredData.map((item, index) => (
+                                    <tr key={index}>
+                                        <td>{item.role}</td>
+                                        <td>{item.created_by}</td>
+                                        <td>{item.created_on}</td>
+                                        <td style={{ textAlign: 'right' }}>
+                                            <Dropdown onToggle={(isOpen) => setIsDropdownOpen(isOpen)}>
+                                                <Dropdown.Toggle
+                                                    className="menu-button"
+                                                    style={{
+                                                        background: "none",
+                                                        border: "none",
+                                                        cursor: "pointer"
+                                                    }}
+                                                >
+                                                    <FiMoreVertical size={16} />
+                                                </Dropdown.Toggle>
+                                                <Dropdown.Menu className="custom-dropdown-menu">
+                                                    <Dropdown.Item onClick={() => toggleDetailsPopup(item.id)}>Details</Dropdown.Item>
+
+                                                    <Dropdown.Item
+                                                        onClick={() => confirmDelete(item.role)}
+                                                    >Delete</Dropdown.Item>
+
+                                                    <Dropdown.Item onClick={() => togglePopupC(item.role)}>Edit</Dropdown.Item>
+
+
+                                                    <Dropdown.Item onClick={() => togglePopupD(item)}>Assign Permissions</Dropdown.Item>
+                                                </Dropdown.Menu>
+                                            </Dropdown>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </Table>
+                    </div>
                 </div>
-            </div>
-
-           <div className="data-table" style={{ minHeight: isDropdownOpen ? "200px" : "auto" }}>
-                <Table striped bordered hover variant="light">
-                    <thead>
-                        <tr>
-                            <th onClick={() => handleSort('role')} style={{ cursor: 'pointer', textAlign: 'center' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                    <span>Roles</span>
-                                    {getSortIcon('role')}
-                                </div>
-                            </th>
-                            <th onClick={() => handleSort('created_by')} style={{ cursor: 'pointer', textAlign: 'center' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                    <span>Created By</span>
-                                    {getSortIcon('created_by')}
-                                </div>
-                            </th>
-                            <th onClick={() => handleSort('created_on')} style={{ cursor: 'pointer', textAlign: 'center' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                    <span>Created On</span>
-                                    {getSortIcon('created_on')}
-                                </div>
-                            </th>
-                            <th style={{ textAlign: 'center' }}>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {filteredData && filteredData.map((item, index) => (
-                            <tr key={index}>
-                                <td>{item.role}</td>
-                                <td>{item.created_by}</td>
-                                <td>{item.created_on}</td>
-                                <td style={{ textAlign: 'right' }}>
-                                    <Dropdown onToggle={(isOpen) => setIsDropdownOpen(isOpen)}>
-                                        <Dropdown.Toggle
-                                            className="menu-button"
-                                            style={{
-                                                background: "none",
-                                                border: "none",
-                                                cursor: "pointer"
-                                            }}
-                                        >
-                                            <FiMoreVertical size={16} />
-                                        </Dropdown.Toggle>
-                                        <Dropdown.Menu className="custom-dropdown-menu">
-                                            <Dropdown.Item onClick={() => toggleDetailsPopup(item.id)}>Details</Dropdown.Item>
-
-                                            <Dropdown.Item
-                                                onClick={() => confirmDelete(item.role)}
-                                            >Delete</Dropdown.Item>
-
-                                            <Dropdown.Item onClick={() => togglePopupC(item.role)}>Edit</Dropdown.Item>
-
-
-                                            <Dropdown.Item onClick={() => togglePopupD(item)}>Assign Permissions</Dropdown.Item>
-                                        </Dropdown.Menu>
-                                    </Dropdown>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </Table>
-            </div>
-            </div>
-             ) : (
-                      <div className="resourcesContainer"style={{border:'none'}}>
+                ) : (
+                    <div className="resourcesContainer" style={{ border: 'none' }}>
                         <h3 className="title">Let's Get Started!</h3>
                         <p className="content">Add roles to get started</p>
                         <button className='add-btn' title='Add New Case' onClick={togglePopup}><Plus size={20} />Add New Roles</button>
-                      </div>
-                    )
-                 }
+                    </div>
+                )
+            }
             {showPopup && <AddRole togglePopup={togglePopup} />}
             {showPopupB && <DetailsPermission roleId={selectedRoleId} toggleDetails={toggleDetailsPopup} />}
             {showPopupC && <EditRole togglePopup={togglePopupC} details={popupDetails} />}

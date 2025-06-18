@@ -3,15 +3,13 @@ import { Table, Pagination } from "react-bootstrap";
 import "../Analyze/TabularData/caseTableData.css";
 import { useSelector, useDispatch } from "react-redux";
 import "../Layout/pagination.css";
-import {  fetchSummaryData} from "../../../Redux/Action/filterAction";
+import { fetchSummaryData } from "../../../Redux/Action/filterAction";
 import Loader from "../Layout/loader";
-import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
 const GridView = () => {
   const Token = Cookies.get('accessToken');
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const data1 = useSelector((state) => state.caseData.caseData);
   const {
@@ -163,7 +161,7 @@ const GridView = () => {
 
   return (
     <>
-      
+
       <div
         className="data-table"
         style={{ marginTop: '12px' }}
@@ -189,9 +187,15 @@ const GridView = () => {
                 {data.length > 0 && [...new Set(data.flatMap(item => Object.keys(item)))]
                   .map((key, index) => (
                     <th key={index} className="fixed-th">
-                      {key.split("_") // Split by underscores
-                        .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize first letter of each word
-                        .join(" ")
+                      {key
+                        .split("_") // Split by underscores
+                        .map(word => {
+                          return word === word.toUpperCase() //  Check if it's fully uppercase
+                            ? word.charAt(0).toUpperCase() + word.slice(1).toLowerCase() //  Convert all except first letter to lowercase
+                            : word.charAt(0).toUpperCase() + word.slice(1); //  Keep normal capitalization
+                        })
+                        .join(" ") // Rejoin words with space
+
                       }
                     </th>
                   ))}

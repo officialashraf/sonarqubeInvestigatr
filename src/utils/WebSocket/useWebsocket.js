@@ -12,7 +12,7 @@ const useWebSocket = () => {
   useEffect(() => {
     // Check if username has changed
     const usernameChanged = previousUsernameRef.current !== username;
-    
+   
     // If username is cleared (logout), disconnect
     if (!username && previousUsernameRef.current) {
       console.log("Username cleared, disconnecting WebSocket");
@@ -76,31 +76,3 @@ const useWebSocket = () => {
 export default useWebSocket;
 
 
-// import { useEffect, useState } from "react";
-// import { connectWebSocket, disconnectWebSocket } from "./websocket";
-// import { useSelector } from "react-redux";
-
-// const useWebSocket = () => {
-//   const username = useSelector((state) => state.user?.username);
-//   const [notificationCount, setNotificationCount] = useState(0);
-
-//   useEffect(() => {
-//     if (username) {
-//       connectWebSocket(username, (event) => {
-//         const data = event.data;
-//         console.log("Incoming WebSocket data:", data);
-//         if (data) {
-//           setNotificationCount((prev) => prev + 1);
-//         }
-//       });
-//     }
-
-//     return () => {
-//       disconnectWebSocket();
-//     };
-//   }, [username]);
-
-//   return { notificationCount, setNotificationCount };
-// };
-
-// export default useWebSocket;

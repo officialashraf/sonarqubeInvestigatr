@@ -1,11 +1,5 @@
-import { Card, CardContent, Typography, Grid} from "@mui/material";
+import { Card, CardContent, Grid } from "@mui/material";
 import "../../../../Analyze/GraphicalData/graphical.css";
-import {
-  ListAltOutlined,
-  ArrowBack,
-  ArrowForward,
-  MoreVert
-} from "@mui/icons-material";
 import LineGrapgh from "./criteriaLineChart";
 import KeywordChart from "./criteriaKeywordCloude";
 import SentimentPieChart from "./criteriaSentiment";
@@ -27,31 +21,11 @@ const Header = ({ title }) =>
     <p style={{ color: "black" }}>
       {title}
     </p>
-    <Grid item p={0} mt={-2}>
-      <ArrowBack
-        fontSize="inherit"
-        sx={{ color: "black", "&:hover": { color: "gray" } }}
-      />
 
-      <ArrowForward
-        fontSize="inherit"
-        sx={{ color: "black", "&:hover": { color: "gray" } }}
-      />
-
-      <ListAltOutlined
-        fontSize="inherit"
-        sx={{ color: "black", "&:hover": { color: "gray" } }}
-      />
-
-      <MoreVert
-        fontSize="inherit"
-        sx={{ color: "black", "&:hover": { color: "gray" } }}
-      />
-    </Grid>
   </Grid>;
 
 const ComponentOne = () => (
-  <Card sx={{ height: "235px", backgroundColor: "lightgray" }}>
+  <Card sx={{ height: "300px", backgroundColor: "lightgray" }}>
     <Header title="Timeline" />
     <CardContent>
       <LineGrapgh />
@@ -59,8 +33,8 @@ const ComponentOne = () => (
   </Card>);
 
 
-const ComponentTwo = () => ( 
-<Card sx={{ height: "350px", backgroundColor: "lightgray"}}>
+const ComponentTwo = () => (
+  <Card sx={{ height: "350px", backgroundColor: "lightgray" }}>
 
     <Header title="Keywords" />
     <CardContent>
@@ -73,7 +47,7 @@ const ComponentThree = () => (
   <Card sx={{ height: "350px", backgroundColor: "lightgray" }}>
     <Header title="Location" />
     <CardContent>
-      <LocationGraph/>
+      <LocationGraph />
     </CardContent>
   </Card>);
 const ComponentFour = () => (
@@ -93,7 +67,7 @@ const ComponentFive = () => (
   >
     <Header title="Time" />
     <CardContent>
-      <DateGraph/>
+      <DateGraph />
     </CardContent>
   </Card>
 );
@@ -103,7 +77,7 @@ const ComponentSix = () => (
   >
     <Header title="Events" />
     <CardContent>
-      <EventGraph/>
+      <EventGraph />
     </CardContent>
   </Card>
 );
@@ -130,7 +104,7 @@ const ComponentEight = () => (
 
 const ComponentNine = () => (
   <Card
-    sx={{ height: "350px", backgroundColor: "lightgray",marginBottom:'5rem' }}
+    sx={{ height: "350px", backgroundColor: "lightgray", marginBottom: '5rem' }}
   >
     <Header title="Organisations" />
     <CardContent>
@@ -159,22 +133,22 @@ const GrapghicalCriteria = () => {
         <Grid item xs={6} p={1} pb={0}  >
           <ComponentFour />
         </Grid>
-       
-              <Grid item xs={6} p={1} pb={0} >
-                <ComponentFive />
-              </Grid>
-              <Grid item xs={6} p={1} pb={0} >
-                <ComponentSix />
-              </Grid>
-              <Grid item xs={6} p={1} pb={0} >
-                <ComponentSeven />
-              </Grid>
-              <Grid item xs={6} p={1} pb={0} mb={10} >
-                <ComponentEight />
-              </Grid>
-              <Grid item xs={6} p={1} pb={0} mb={10} >
-                <ComponentNine />
-              </Grid>
+
+        <Grid item xs={6} p={1} pb={0} >
+          <ComponentFive />
+        </Grid>
+        <Grid item xs={6} p={1} pb={0} >
+          <ComponentSix />
+        </Grid>
+        <Grid item xs={6} p={1} pb={0} >
+          <ComponentSeven />
+        </Grid>
+        <Grid item xs={6} p={1} pb={0} mb={10} >
+          <ComponentEight />
+        </Grid>
+        <Grid item xs={6} p={1} pb={0} mb={10} >
+          <ComponentNine />
+        </Grid>
       </Grid>
 
     </div>
