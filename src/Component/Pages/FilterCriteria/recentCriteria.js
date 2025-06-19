@@ -15,10 +15,11 @@ import EditCriteria from './editCriteria';
 import { useDispatch, useSelector } from "react-redux";
 import { closePopup, openPopup, setPage, setSearchResults, setKeywords } from "../../../Redux/Action/criteriaAction";
 import axios from "axios";
+import { useAutoFocusWithManualAutofill } from "../../../utils/autoFocus";
 
 const RecentCriteria = () => {
   const Token = Cookies.get('accessToken');
-
+  const { inputRef, isReadOnly, handleFocus } = useAutoFocusWithManualAutofill();
   const [savedSearch, setSavedSearch] = useState([]);
   const [criteriaId, setCriteriaId] = useState()
   const [showEditPopup, setShowEditPopup] = useState(false);
@@ -141,10 +142,11 @@ const RecentCriteria = () => {
         },
       });
       console.log("responseDelete", response)
-      if (response.ok) {
+      if (response.status === 200) {
+        toast.success("Criteria successfully deleted")
         // Filter the list to remove the item locally
         fetchData()
-        toast.success("Criteria successfully deleted")
+
         console.log("Criteria successfully deleted!");
       }
     } catch (error) {
@@ -362,6 +364,9 @@ const RecentCriteria = () => {
                 }}
                 onKeyDown={handleKeyDown}
                 sx={sharedSxStyles}
+                readOnly={isReadOnly}
+                onFocus={handleFocus}
+                ref={inputRef}
               />
 
             </div>

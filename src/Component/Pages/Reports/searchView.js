@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setPage } from '../../../Redux/Action/criteriaAction';
 import { setReportResults } from '../../../Redux/Action/reportAction';
 import { toast } from 'react-toastify';
-
+import { useAutoFocusWithManualAutofill } from '../../../utils/autoFocus';
 
 export const sharedSxStyles = {
   '& .MuiOutlinedInput-root': {
@@ -33,6 +33,7 @@ export const sharedSxStyles = {
 const SearchView = () => {
   const Token = Cookies.get('accessToken');
   const dispatch = useDispatch();
+  const { inputRef, isReadOnly, handleFocus } = useAutoFocusWithManualAutofill();
 
   const activePopup = useSelector((state) => state.popup?.activePopup || null);
   console.log("create popup", activePopup)
@@ -206,6 +207,9 @@ const SearchView = () => {
             value={formData.searchQuery}
             onChange={handleInputChange}
             sx={sharedSxStyles}
+            readOnly={isReadOnly}
+            onFocus={handleFocus}
+            ref={inputRef}
           />
 
           {/* Case Selection Field */}

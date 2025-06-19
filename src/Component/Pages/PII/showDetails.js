@@ -91,7 +91,7 @@ const ShowDetails = () => {
                 overflowY: "scroll",
               }}
               inputStyle={{
-                marginLeft: "30px", // 👈 fix for visibility
+                marginLeft: "30px", //  fix for visibility
               }}
             />
           ) : (

@@ -34,7 +34,7 @@ const LicenseRenew = ({ togglePopup }) => {
           },
         }
       );
-      toast.success("License registered successfully");
+      toast.success("License renewed successfully");
       togglePopup();
       // navigate("/login");
     } catch (err) {
