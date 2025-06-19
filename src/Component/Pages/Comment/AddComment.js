@@ -18,11 +18,13 @@ import {
 import { Edit as EditIcon, Delete as DeleteIcon } from "@mui/icons-material";
 import Cookies from 'js-cookie';
 import UpdateComment from './updatecomment';
+import { useAutoFocusWithManualAutofill } from '../../../utils/autoFocus';
 
 //const API_BASE_URL = `${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1`;
 
 const AddComment = ({ show, onClose, selectedResource }) => {
   const token = Cookies.get("accessToken");
+  const { inputRef, isReadOnly, handleFocus } = useAutoFocusWithManualAutofill();
   const [showUpdatePopup, setShowUpdatePopup] = useState(false);
   const [commentToEdit, setCommentToEdit] = useState(null);
   const [commentsArray, setCommentsArray] = useState([]);
@@ -188,6 +190,9 @@ const AddComment = ({ show, onClose, selectedResource }) => {
                 }));
               }}
               placeholder="Enter your comment"
+              readOnly={isReadOnly}
+            onFocus={handleFocus}
+            ref={inputRef}
 
             />
             {error.comment && <p style={{ color: "red", margin: '0px' }} >{error.comment}</p>}

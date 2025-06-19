@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import Select from 'react-select';
 import '../User/addUser.css';
 import { CloseButton } from 'react-bootstrap';
-import { customStyles } from '../Case/createCase'; // Adjust the import path as needed
+//import { customStyles } from '../Case/createCase'; // Adjust the import path as needed
 
 const AssignRole = ({ togglePopup, details }) => {
     const token = Cookies.get('accessToken');
@@ -155,34 +155,34 @@ const AssignRole = ({ togglePopup, details }) => {
         }
     };
 
-    // const customStyles = {
-    //     control: base => ({
-    //         ...base,
-    //         backgroundColor: 'white',
-    //         color: 'black',
-    //         boxShadow: 'none',
-    //         outline: 'none'
-    //     }),
-    //      menuList: (provided) => ({
-    //         ...provided,
-    //         maxHeight: '150px',
-    //         overflowY: 'auto',
-    //     }),
-    //     menu: base => ({
-    //         ...base,
-    //         backgroundColor: 'white',
-    //         color: 'black',
-    //         maxHeight: 'unset'
-    //     }),
-    //     option: (base, state) => ({
-    //         ...base,
-    //         backgroundColor: state.isFocused ? '#f0f0f0' : 'white',
-    //         color: 'black',
-    //         display: 'flex',
-    //         alignItems: 'center',
-    //         padding: '8px'
-    //     })
-    // };
+    const customStyles = {
+        control: base => ({
+            ...base,
+            backgroundColor: 'white',
+            color: 'black',
+            boxShadow: 'none',
+            outline: 'none'
+        }),
+         menuList: (provided) => ({
+            ...provided,
+            maxHeight: '150px',
+            overflowY: 'auto',
+        }),
+        menu: base => ({
+            ...base,
+            backgroundColor: 'white',
+            color: 'black',
+            maxHeight: 'unset'
+        }),
+        option: (base, state) => ({
+            ...base,
+            backgroundColor: state.isFocused ? '#f0f0f0' : 'white',
+            color: 'black',
+            display: 'flex',
+            alignItems: 'center',
+            padding: '8px'
+        })
+    };
 
     // Custom checkbox option
     const CheckboxOption = props => {
@@ -232,7 +232,7 @@ const AssignRole = ({ togglePopup, details }) => {
                             />
                         </div>
 
-                        <div className="form-group" style={{ marginBottom: '15px', height: '50px' }}>
+                        <div className="form-group" style={{ marginBottom: '15px'}}>
                             <label>Select Permissions</label>
                             <Select
                                 options={[{ label: 'Select All', value: '_select_all_' }, ...endpoints]}

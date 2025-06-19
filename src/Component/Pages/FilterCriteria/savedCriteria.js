@@ -14,11 +14,12 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import Loader from '../Layout/loader';
 import { toast } from 'react-toastify';
+import { useAutoFocusWithManualAutofill } from '../../../utils/autoFocus';
 
 
 const SavedCriteria = () => {
   const Token = Cookies.get('accessToken');
-
+  const { inputRef, isReadOnly, handleFocus } = useAutoFocusWithManualAutofill();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const activePopup = useSelector((state) => state.popup.activePopup);
@@ -276,6 +277,9 @@ const SavedCriteria = () => {
                 placeholder="Search..."
                 sx={sharedSxStyles}
                 disabled={isLoading}
+                readOnly={isReadOnly}
+                onFocus={handleFocus}
+                ref={inputRef}
               />
             </div>
             <div>

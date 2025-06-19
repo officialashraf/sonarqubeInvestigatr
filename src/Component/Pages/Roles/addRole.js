@@ -5,10 +5,11 @@ import { toast } from 'react-toastify';
 import Select from 'react-select';
 import '../User/addUser.css';
 import { CloseButton } from 'react-bootstrap';
+import { useAutoFocusWithManualAutofill } from '../../../utils/autoFocus';
 
 const AddRole = ({ togglePopup }) => {
     const token = Cookies.get('accessToken');
-
+    const { inputRef, isReadOnly, handleFocus } = useAutoFocusWithManualAutofill();
     const [endpoints, setEndpoints] = useState([]);
     const [selectedRole, setSelectedRole] = useState(null);
     const [selectedEndpoints, setSelectedEndpoints] = useState([]);
@@ -190,6 +191,9 @@ const AddRole = ({ togglePopup }) => {
                                     setSelectedRole((prev) =>
                                         prev?.replace(/\b\w/g, (char) => char.toUpperCase()));
                                 }}
+                                readOnly={isReadOnly}
+                                onFocus={handleFocus}
+                                ref={inputRef}
                             />
                         </div>
 
@@ -222,7 +226,7 @@ const AddRole = ({ togglePopup }) => {
                                 closeMenuOnSelect={false}
                                 hideSelectedOptions={false}
                                 components={{ Option: CheckboxOption, MultiValue: () => null }}
-                                onMenuOpen={() => setIsDropdownOpen(true)} // ✅ Set dropdown open
+                                onMenuOpen={() => setIsDropdownOpen(true)} //  Set dropdown open
                             />
                             <small className="text-muted">
                                 Only newly selected permissions will be assigned

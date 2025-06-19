@@ -4,17 +4,23 @@ import { FaFileAlt, FaArrowLeft } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
 import './headerfilter.css';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect } from 'react';
 
 const HeaderFilter = () => {
   const { caseId } = useParams()
   const navigate = useNavigate()
   const caseData = useSelector((state) => state.caseData.caseData);
+  const storedCaseId = useSelector((state) => state.caseData.caseData.id);
   console.log("parms id", caseId)
   console.log("headeData", caseData)
-
+  useEffect(() => {
+    if (caseId !== String(storedCaseId)) {
+      navigate("/not-found"); //  Redirect if URL caseId doesn't match Redux caseId
+    }
+  }, [caseId, storedCaseId, navigate]);
   const handleClick = () => {
     const caseID = caseData.id
-    navigate(`/cases/${caseID}/analysis`)
+    navigate(`/cases/${caseData.id}/analysis`)
   }
 
   return (
@@ -27,7 +33,7 @@ const HeaderFilter = () => {
         <Col xs={11}>
           <Nav className="flex-column">
             <Nav.Item className="d-flex align-items-center">
-              <span>ID:{`CASE${String(caseId).padStart(4, '0')}`}</span>
+              <span>ID:{`CASE${String(caseData.id).padStart(4, '0')}`}</span>
             </Nav.Item>
             <Nav.Item>
               <span >{caseData.title} </span> <FaFileAlt className="ml-3" />  <Badge pill bg="dark">

@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { closePopup, openPopup, setKeywords, setPage, setSearchResults } from '../../../Redux/Action/criteriaAction';
 import Confirm from './confirmCriteria';
 import { toast } from 'react-toastify';
-
+import { useAutoFocusWithManualAutofill } from '../../../utils/autoFocus';
 
 export const sharedSxStyles = {
   '& .MuiOutlinedInput-root': {
@@ -31,6 +31,7 @@ export const sharedSxStyles = {
 };
 
 const CreateCriteria = ({ handleCreateCase }) => {
+  const { inputRef, isReadOnly, handleFocus } = useAutoFocusWithManualAutofill();
   const Token = Cookies.get('accessToken');
   const dispatch = useDispatch();
 
@@ -121,7 +122,12 @@ const CreateCriteria = ({ handleCreateCase }) => {
   }, [Token]);
   // Handle checkbox change for saving criteria
   const handleSaveCriteriaChange = (e) => {
-
+ e.preventDefault();
+    const validationErrors = validateForm();
+    if (Object.keys(validationErrors).length > 0) {
+      setError(validationErrors);
+      return;
+    }
     const isChecked = e.target.checked;
 
     if (isChecked) {
@@ -287,6 +293,9 @@ const CreateCriteria = ({ handleCreateCase }) => {
               value={formData.searchQuery}
               onChange={handleInputChange}
               sx={sharedSxStyles}
+              readOnly={isReadOnly}
+            onFocus={handleFocus}
+            ref={inputRef}
 
             />
             {error.searchQuery && <p style={{ color: "red", margin: '0px' }} >{error.searchQuery}</p>}

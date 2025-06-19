@@ -4,6 +4,7 @@ import axios from "axios";
 import Cookies from "js-cookie"; // Make sure you're using this for cookies
 import { toast } from 'react-toastify';
 import Select from 'react-select';
+import { useAutoFocusWithManualAutofill } from "../../../utils/autoFocus";
 
 export const customStyles = {
   control: (provided, state) => ({
@@ -30,6 +31,7 @@ export const customStyles = {
 };
 
 const CreateCase = ({ togglePopup }) => {
+  const { inputRef, isReadOnly, handleFocus } = useAutoFocusWithManualAutofill();
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -231,6 +233,10 @@ const CreateCase = ({ togglePopup }) => {
                 setFormData((prev) => ({ ...prev, title: e.target.value.replace(/\b\w/g, (char) => char.toUpperCase()) }))
               }
               placeholder="Enter title"
+              readOnly={isReadOnly}
+              onFocus={handleFocus}
+              ref={inputRef}
+
             />
             {error.title && <p style={{ color: "red", margin: '0px' }} >{error.title}</p>}
 
@@ -248,9 +254,7 @@ const CreateCase = ({ togglePopup }) => {
 
 
             <div>
-              <label htmlFor="assignee">Assignee</label>
-
-
+             <label htmlFor="assignee">Assignee</label>
               <Select
                 options={options}
                 styles={customStyles}
