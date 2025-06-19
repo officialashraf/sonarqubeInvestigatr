@@ -6,11 +6,11 @@ import { toast } from 'react-toastify';
 import Select from 'react-select';
 import "./subtarget.css";
 import { customStyles } from "../Case/createCase";
-
+import { useAutoFocusWithManualAutofill } from "../../../utils/autoFocus";
 
 const TargetCreate = ({ togglePopup, existingTargets = [] }) => {
   const token = Cookies.get("accessToken");
-
+   const { inputRef, isReadOnly, handleFocus } = useAutoFocusWithManualAutofill();
   const targetType = [
     { value: "watchword", label: "Watchword" },
     { value: "location", label: "Location" },
@@ -50,14 +50,14 @@ const TargetCreate = ({ togglePopup, existingTargets = [] }) => {
   const [subTypeRows, setSubTypeRows] = useState([]);
   const [availableSubTypes, setAvailableSubTypes] = useState([]);
   const [error, setError] = useState({});
-const [formData, setFormData] = useState({
-  name: "",
-  description: "",
-  synonyms: [],
-  type: "",
-  threat_weightage: 0,
-  target_id: []
-});
+  const [formData, setFormData] = useState({
+    name: "",
+    description: "",
+    synonyms: [],
+    type: "",
+    threat_weightage: 0,
+    target_id: []
+  });
 
   const validateForm = () => {
     const errors = {};
@@ -68,7 +68,7 @@ const [formData, setFormData] = useState({
 
     if (!formData.description) {
       errors.description = "Description is required";
-    } 
+    }
     if (!formData.type) {
       errors.type = "Type is required";
     }
@@ -91,7 +91,7 @@ const [formData, setFormData] = useState({
     }
 
     // Clear existing subtype rows when target type changes
-    if (formData.type === "target" ) {
+    if (formData.type === "target") {
       setSubTypeRows([{ sub_type: "", target_id: null, value: "" }]);
     } else {
       setSubTypeRows([]);
@@ -116,9 +116,9 @@ const [formData, setFormData] = useState({
         return true;
       })
     );
-   
+
     console.log("query payload", formData);
-    
+
     try {
       // First, create the target
       const targetResponse = await axios.post(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/target`, payloadData, {
@@ -127,28 +127,28 @@ const [formData, setFormData] = useState({
           'Authorization': `Bearer ${token}`
         }
       });
-      
-   console.log("targetzresponse", targetResponse)
-     // Ensure valid entries
 
-        // Check if there is data to send
-  //       if (updatedSubTypeRows.length === 0) {
-  //           console.warn("No valid subtypes to send.");
-  //           return;
-  //       }
-  //       if (updatedSubTypeRows.length > 0) {
-  // console.log("subtype",updatedSubTypeRows)
-        // Make API request
-        // const sub_type_response = await axios.post(
-        //     "http://5.180.148.40:9001/api/case-man/v1/target-sub-type",
-        //     { sub_type_rows: updatedSubTypeRows },
-        //     {
-        //         headers: {
-        //             "Content-Type": "application/json",
-        //             "Authorization": `Bearer ${token}`
-        //         }
-        //     }
-        // );console.log("sub_type_response",sub_type_response)
+      console.log("targetzresponse", targetResponse)
+      // Ensure valid entries
+
+      // Check if there is data to send
+      //       if (updatedSubTypeRows.length === 0) {
+      //           console.warn("No valid subtypes to send.");
+      //           return;
+      //       }
+      //       if (updatedSubTypeRows.length > 0) {
+      // console.log("subtype",updatedSubTypeRows)
+      // Make API request
+      // const sub_type_response = await axios.post(
+      //     "http://5.180.148.40:9001/api/case-man/v1/target-sub-type",
+      //     { sub_type_rows: updatedSubTypeRows },
+      //     {
+      //         headers: {
+      //             "Content-Type": "application/json",
+      //             "Authorization": `Bearer ${token}`
+      //         }
+      //     }
+      // );console.log("sub_type_response",sub_type_response)
       // }
       window.dispatchEvent(new Event("databaseUpdated"));
 
@@ -263,7 +263,7 @@ const [formData, setFormData] = useState({
               />
               {error.type && <p style={{ color: "red", margin: '0px' }} >{error.type}</p>}
             </div>
-            
+
             <label htmlFor="name">Target *</label>
             <input
               className="com"
@@ -273,6 +273,9 @@ const [formData, setFormData] = useState({
               value={formData.name}
               onChange={handleInputChange}
               placeholder="Enter target"
+              readOnly={isReadOnly}
+              onFocus={handleFocus}
+              ref={inputRef}
             />
             {error.name && <p style={{ color: "red", margin: '0px' }} >{error.name}</p>}
             <label htmlFor="description">Description *</label>
@@ -325,51 +328,51 @@ const [formData, setFormData] = useState({
                 onChange={handleThreatScoreChange}
               />
             </div>
-            
+
             {/* Dynamic SubType Section */}
-            {(formData.type === "target" ) && availableSubTypes.length > 0 && (
+            {(formData.type === "target") && availableSubTypes.length > 0 && (
               <div className="subtype-section">
-                              {subTypeRows.map((row, index) => (
+                {subTypeRows.map((row, index) => (
                   <div key={index} className="subtype-row">
-            
+
                     {existingTargets.length > 0 && (
-  <div className="subtype-fields">
-    <label>Targets:</label>
-    <Select
-      isMulti
-   options={existingTargets
-  .filter(target => target.type !== "target")
-  .map(target => ({ 
-    value: target.id, 
-    label: `${target.id} - ${target.name} - ${target.type}` 
-  }))
-}
+                      <div className="subtype-fields">
+                        <label>Targets:</label>
+                        <Select
+                          isMulti
+                          options={existingTargets
+                            .filter(target => target.type !== "target")
+                            .map(target => ({
+                              value: target.id,
+                              label: `${target.id} - ${target.name} - ${target.type}`
+                            }))
+                          }
 
-      styles={customStyles}
-      placeholder="Select targets"
-      value={
-        formData.target_id.map(id => {
-          const t = existingTargets.find(t => t.id === id);
-          return t ? { value: t.id, label: `${t.id} - ${t.name} - ${t.type}` } : null;
-        }).filter(Boolean)
-      }
-      onChange={(selectedOptions) => {
-        const selectedIds = selectedOptions.map(option => option.value);
-        setFormData(prev => ({
-          ...prev,
-          target_id: selectedIds
-        }));
-      }}
-      className="target-select"
-    />
-  </div>
-)}
+                          styles={customStyles}
+                          placeholder="Select targets"
+                          value={
+                            formData.target_id.map(id => {
+                              const t = existingTargets.find(t => t.id === id);
+                              return t ? { value: t.id, label: `${t.id} - ${t.name} - ${t.type}` } : null;
+                            }).filter(Boolean)
+                          }
+                          onChange={(selectedOptions) => {
+                            const selectedIds = selectedOptions.map(option => option.value);
+                            setFormData(prev => ({
+                              ...prev,
+                              target_id: selectedIds
+                            }));
+                          }}
+                          className="target-select"
+                        />
+                      </div>
+                    )}
 
-                     </div>
+                  </div>
                 ))}
-                 </div>
+              </div>
             )}
-            
+
             <div className="button-container">
               <button type="submit" className="create-btn">
                 Create

@@ -467,9 +467,11 @@ const DataTable = () => {
               <tbody className="tb-1">
                 {filteredData &&
                   filteredData.map((item, index) => (
-                    <tr key={item.id}
+                    <tr
+                   style={{ cursor: "pointer" }}
+                     key={item.id}
                       onClick={() => onFieldClick(item)}
-                      cursor="pointer"
+                    
                     >
                       <td>
                         {`CASE${String(item.id).padStart(4, "0")}`}
@@ -478,7 +480,7 @@ const DataTable = () => {
 
                       <td>{item.title}</td>
                       <td>{item.description}</td>
-                      <td>{item.created_on.slice(0, 10)}</td>
+                      <td>{item.created_on}</td>
                       <td>{item.created_by}</td>
                       <td>{item.assignee}</td>
 

@@ -115,8 +115,9 @@ const LoginPage = () => {
                             value={formData.username}
                             onChange={handleChange}
                             placeholder="Enter your username"
-                            autoComplete="username"
+                            autoComplete="user-name"
                             name="username"
+                            // autoFocus
                         />
                         {error.username && <p style={{ color: "red", margin: '0px' }} >{error.username}</p>}
                         <div style={{ position: 'relative', justifyContent: 'center' }}>

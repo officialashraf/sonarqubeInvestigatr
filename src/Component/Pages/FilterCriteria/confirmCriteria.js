@@ -6,11 +6,12 @@ import '../User/addUser.css'
 import { CloseButton } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { closePopup, openPopup } from '../../../Redux/Action/criteriaAction';
+import { useAutoFocusWithManualAutofill } from '../../../utils/autoFocus';
 
 const Confirm = ({ formData, selectedDates, searchChips }) => {
     const dispatch = useDispatch();
     const Token = Cookies.get('accessToken');
-
+    const { inputRef, isReadOnly, handleFocus } = useAutoFocusWithManualAutofill();
     const [isVisible, setIsVisible] = useState(true);
     const [searchTitle, setSearchTitle] = useState('');
     console.log("formData", searchChips);
@@ -68,7 +69,7 @@ const Confirm = ({ formData, selectedDates, searchChips }) => {
 
             console.log('Criteria saved successfully:', response.data); // Debug: API response
             setIsVisible(false)
-             dispatch(openPopup("recent"));
+            dispatch(openPopup("recent"));
         } catch (error) {
             toast.error(error.response.data.detail || "Error saving criteria");
             console.error('Error saving criteria:', error); // Debug: Error log
@@ -107,6 +108,9 @@ const Confirm = ({ formData, selectedDates, searchChips }) => {
                                     return formattedValue;
                                 });
                             }}
+                            readOnly={isReadOnly}
+                            onFocus={handleFocus}
+                            ref={inputRef}
                         />
                         <div className="button-container">
                             <button

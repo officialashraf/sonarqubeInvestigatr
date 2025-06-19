@@ -6,6 +6,7 @@ import { useDispatch} from 'react-redux';
 import Cookies from 'js-cookie';
 import "./main.css"
 import { jwtDecode } from "jwt-decode";
+import { useAutoFocusWithManualAutofill } from '../../../utils/autoFocus';
 
 const conversionFactors = {
   seconds: 1,
@@ -14,6 +15,8 @@ const conversionFactors = {
 };
 
 const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
+  const { inputRef, isReadOnly, handleFocus } = useAutoFocusWithManualAutofill();
+
   const [platform, setPlatform] = useState([]);
   const [filterName, setFilterName] = useState('');
   const [description, setDescription] = useState('');
@@ -166,7 +169,7 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
   };
 
   const handleKeywordKeyDown = (index, event) => {
-    if (event.key === "Enter"  && sources[index].urlInput.trim()) {
+    if (event.key === "Enter"  && sources[index].keywordInput.trim()) {
       const newSources = [...sources];
       newSources[index].keywords.push(sources[index].keywordInput.trim());
       newSources[index].keywordInput = '';
@@ -251,6 +254,9 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
           } else if (criteria.interval % 60 === 0) {
             intervalValue = criteria.interval / 60;
             intervalUnit = 'minutes';
+          } else {
+            intervalValue = criteria.interval;
+            intervalUnit = 'seconds';
           }
         }
 
@@ -335,7 +341,7 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
 
   const handleSaveFilter = async () => {
     if (filterDetails?.id && !isEditable) {
-      toast.info("You don't have permission to edit this filter");
+      toast.error("You don't have permission to edit this filter");
       return;
     }
     const validationErrors = validateForm();
@@ -368,7 +374,7 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
           'Authorization': `Bearer ${token}`,
         },
       });
-
+  
       window.dispatchEvent(new Event('databaseUpdated'));
       console.log("responseFilter", response)
 
@@ -407,9 +413,21 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
       toast.info("At least one source is required");
     }
   };
+
+  const handleEnterKey = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const form = e.target.form;
+      const index = Array.prototype.indexOf.call(form, e.target);
+      form.elements[index + 1]?.focus();
+    }
+  };
   return (
     <div className="p-1">
-      <Form>
+      <Form  onSubmit={(e) =>{
+       e.preventDefault();
+       handleSaveFilter() 
+      }}>
         <span onClick={onClose} style={{
           position: 'absolute',
           fontSize: '15px',
@@ -425,7 +443,11 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
               setFilterName(e.target.value.replace(/\b\w/g, (char) => char.toUpperCase()));
               setError(prev => ({ ...prev, name: '' }));
             }}
+             onKeyDown={handleEnterKey}
             disabled={filterDetails?.id && !isEditable}
+            readOnly={isReadOnly}
+            onFocus={handleFocus}
+            ref={inputRef}
           />
           {error.name && <p style={{ color: "red", margin: '0px' }} >{error.name}</p>}
         </Form.Group>
@@ -440,6 +462,7 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
               setDescription(e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1));
               setError(prev => ({ ...prev, description: '' }));
             }}
+             onKeyDown={handleEnterKey}
             disabled={filterDetails?.id && !isEditable}
           />
           {error.description && <p style={{ color: "red", margin: '0px' }} >{error.description}</p>}
@@ -519,7 +542,7 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
                           disabled={filterDetails?.id && !isEditable}
                           className='rss-monitoring-interval-select'
                         >
-                          <option value="" disabled>Units</option>
+                          <option value="" disabled>Select Unit</option>
                           <option value="minutes">Minutes</option>
                           <option value="hours">Hours</option>
                         </Form.Select>
@@ -674,3 +697,4 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
 };
 
 export default AddNewFilter;
+

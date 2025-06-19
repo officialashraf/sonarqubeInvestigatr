@@ -6,14 +6,16 @@ import Cookies from "js-cookie";
 import { toast } from 'react-toastify';
 import Select from "react-select";
 import { customStyles } from "../Case/createCase";
+import { useAutoFocusWithManualAutofill } from "../../../utils/autoFocus";
+
 
 
 
 const AddUser = ({ onClose }) => {
   const token = Cookies.get("accessToken");
-
-    const [roles, setRoles] = useState([]);
-  const [loading, setLoading] = useState(true)  ;
+  const { inputRef, isReadOnly, handleFocus } = useAutoFocusWithManualAutofill();
+  const [roles, setRoles] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState({});
 
   const [formData, setFormData] = useState({
@@ -114,21 +116,21 @@ const AddUser = ({ onClose }) => {
       setError(validationErrors);
       return;
     }
-     const payloadData = Object.fromEntries(
-       Object.entries(formData).filter(([_, value]) => {
-      if (value === null || value === undefined) return false;
-      if (typeof value === "string" && value.trim() === "") return false;
-      if (Array.isArray(value) && value.length === 0) return false;
-      return true;
-    })
-  );
+    const payloadData = Object.fromEntries(
+      Object.entries(formData).filter(([_, value]) => {
+        if (value === null || value === undefined) return false;
+        if (typeof value === "string" && value.trim() === "") return false;
+        if (Array.isArray(value) && value.length === 0) return false;
+        return true;
+      })
+    );
 
     console.log("queryPyload", formData)
     try {
       const response = await axios.post(
         `${window.runtimeConfig.REACT_APP_API_USER_MAN}/api/user-man/v1/user`,
         payloadData,
-              {
+        {
           headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`
@@ -157,8 +159,9 @@ const AddUser = ({ onClose }) => {
           <h5>Add User</h5>
           <form onSubmit={handleCreateUser}>
             <label>UserName *</label>
-            <input className="com" name="username" value={formData.username} onChange={handleChange} placeholder="Enter username" requiblack />
-            {error.username && <p style={{ color: "red" , margin: '0px' }} >{error.username}</p>}
+            <input className="com" ref={inputRef} name="username" autoComplete="username" value={formData.username} onChange={handleChange} placeholder="Enter username" readOnly={isReadOnly}
+              onFocus={handleFocus} requiblack />
+            {error.username && <p style={{ color: "red", margin: '0px' }} >{error.username}</p>}
             <label>First Name</label>
             <input className="com" name="first_name" value={formData.first_name} onChange={handleChange} placeholder="Enter first name" />
             <label>Last Name</label>
@@ -178,7 +181,7 @@ const AddUser = ({ onClose }) => {
             </div>
             <label>Email ID *</label>
             <input className="com" type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Enter email id" requiblack />
-            {error.email && <p style={{ color: "red",  margin: '0px' }}>{error.email}</p>}
+            {error.email && <p style={{ color: "red", margin: '0px' }}>{error.email}</p>}
             <label>Contact Number</label>
             <input className="com" name="contact_no" value={formData.contact_no} onChange={handleChange} placeholder="Enter contact number" />
             <label>Password *</label>
