@@ -16,6 +16,7 @@ const AddRole = ({ togglePopup }) => {
     const [loading, setLoading] = useState(false);
     const [endpointsLoading, setEndpointsLoading] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const fetchEndpoints = useCallback(async () => {
         setEndpointsLoading(true);
@@ -56,7 +57,7 @@ const AddRole = ({ togglePopup }) => {
     const assignRole = async () => {
         if (!selectedRole) return toast.warning('Please select a role');
         if (selectedEndpoints.length === 0) return toast.warning('Please select at least one permission');
-        setLoading(true);
+        setIsSubmitting(true);
 
         try {
             // Find newly added endpoints (endpoints that weren't initially assigned)
@@ -72,7 +73,7 @@ const AddRole = ({ togglePopup }) => {
             }
             if (newlySelectedEndpoints.length === 0) {
                 toast.info("No new permissions to assign");
-                setLoading(false);
+                setIsSubmitting(false);
                 return;
             }
             const payload = {
@@ -102,7 +103,7 @@ const AddRole = ({ togglePopup }) => {
             console.error("Error during role creation:", error.response || error);
             toast.error(error.response?.data?.detail || error.message || 'Failed to assign role');
         } finally {
-            setLoading(false);
+            setIsSubmitting(false);
         }
     };
 
@@ -237,22 +238,22 @@ const AddRole = ({ togglePopup }) => {
                             right: '10px'
                         }}
                         >
-                            <button
-                                type="submit"
-                                className="create-btn"
-                                onClick={assignRole}
-                                disabled={loading}
-                            >
-                                {loading ? 'Creating...' : 'Create'}
-                            </button>
-                            <button
-                                type="button"
-                                className="cancel-btn"
-                                onClick={() => togglePopup(false)}
-                                disabled={loading}
-                            >
-                                Cancel
-                            </button>
+                        <button
+                            type="submit"
+                            className="create-btn"
+                            onClick={assignRole}
+                            disabled={isSubmitting}
+                        >
+                            {isSubmitting ? 'Creating...' : 'Create'}
+                        </button>
+                        <button
+                            type="button"
+                            className="cancel-btn"
+                            onClick={() => togglePopup(false)}
+                            disabled={isSubmitting}
+                        >
+                            Cancel
+                        </button>
 
                         </div>
                     </form>

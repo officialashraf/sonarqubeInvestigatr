@@ -24,6 +24,7 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
   const [dataFetched, setDataFetched] = useState(false);
   const [initialFormData, setInitialFormData] = useState({});
   const [isBtnDisabled, setIsBtnDisabled] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [formData, setFormData] = useState({
     searchQuery: '',
@@ -253,7 +254,7 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
     //   setError(validationErrors);
     //   return;
     // }
-
+    setIsSubmitting(true);
     try {
       const keywordsArray = formatKeywordsForAPI(formData.searchQuery);
 
@@ -290,6 +291,9 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
     } catch (error) {
       console.error('Error updating criteria:', error);
       toast.error((error.response?.data?.detail || error.message) || 'Failed to update criteria');
+    }
+    finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -495,13 +499,13 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
 
             {/* Update Button */}
             <div className="button-container d-flex gap-2" style={{ textAlign: 'center' }}>
-              <button
-                type="submit"
-                className="create-btn"
-                disabled={isBtnDisabled}
-              >
-                Update
-              </button>
+            <button
+              type="submit"
+              className="create-btn"
+              disabled={isBtnDisabled || isSubmitting}
+            >
+              {isSubmitting ? 'Updating...' : 'Update'}
+            </button>
               <button
                 type="button"
                 className="create-btn"

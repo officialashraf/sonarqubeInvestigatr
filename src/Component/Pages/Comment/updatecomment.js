@@ -5,10 +5,12 @@ import axios from 'axios';
 
 const UpdateComment = ({ onClose, comment, resourceId, GetCommentList }) => {
   const [newComment, setNewComment] = useState(comment.comment || "");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const token = Cookies.get("accessToken");
 
   const handleUpdate = async (e) => {
     e.preventDefault();
+    isSubmitting(true);
     try {
       console.log("Updated", comment)
       const response = await axios.put(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/comment/${resourceId}`,
@@ -33,6 +35,8 @@ const UpdateComment = ({ onClose, comment, resourceId, GetCommentList }) => {
     } catch (error) {
       toast.error(error.response?.data?.detail || "Error while updating comment");
       console.error("Error:", error.response ? error.response.data : error.message);
+    } finally { 
+      setIsSubmitting(false);
     }
   };
 
@@ -59,7 +63,7 @@ const UpdateComment = ({ onClose, comment, resourceId, GetCommentList }) => {
             />
 
             <div className="button-container">
-              <button type="submit" className="create-btn">Update</button>
+              <button type="submit" className="create-btn" disabled={isSubmitting}>{isSubmitting ? 'Updating...' : 'Update'}</button>
               <button type="button" className="cancel-btn" onClick={onClose}>
                 Cancel
               </button>

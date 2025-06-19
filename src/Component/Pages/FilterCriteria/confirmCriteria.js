@@ -13,16 +13,19 @@ const Confirm = ({ formData, selectedDates, searchChips }) => {
 
     const [isVisible, setIsVisible] = useState(true);
     const [searchTitle, setSearchTitle] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
     console.log("formData", searchChips);
     console.log("selectedDates", selectedDates);
 
     const saveCriteria = async () => {
         let keywordSource = formData.searchQuery || searchChips;
         console.log("keys", keywordSource)
+        setIsSubmitting(true);
         try {
 
             if (searchTitle.trim() === "") {
                 toast.info("Please enter the title");
+                setIsSubmitting(false);
                 return;
             }
             const criteriaPaylod = {
@@ -72,6 +75,8 @@ const Confirm = ({ formData, selectedDates, searchChips }) => {
         } catch (error) {
             toast.error(error.response.data.detail || "Error saving criteria");
             console.error('Error saving criteria:', error); // Debug: Error log
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -120,9 +125,10 @@ const Confirm = ({ formData, selectedDates, searchChips }) => {
                                 type="submit"
                                 className="create-btn"
                                 onClick={saveCriteria}
+                                disabled={isSubmitting} // Disable button while submitting
 
                             >
-                                Save
+                                {isSubmitting ? 'Saving...' : 'Save'}
                             </button>
                         </div>
                     </form>

@@ -33,6 +33,7 @@ const EditCase = ({ togglePopup, item }) => {
   const [initialFormData, setInitialFormData] = useState({});
   const [isBtnDisabled, setIsBtnDisabled] = useState(true);
   const [error, setError] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
 
   const validateForm = () => {
@@ -107,7 +108,7 @@ const EditCase = ({ togglePopup, item }) => {
         return true;
       })
     );
-
+     setIsSubmitting(true); // Set submitting state to true
     try {
       const hasChanged = {};
 
@@ -163,6 +164,8 @@ const EditCase = ({ togglePopup, item }) => {
     } catch (err) {
       console.error("Error updating case:", err);
       toast.error(err.response?.data?.detail || "Failed to update case");
+    } finally {
+      setIsSubmitting(false); // Reset submitting state
     }
   };
 
@@ -410,7 +413,7 @@ const EditCase = ({ togglePopup, item }) => {
             />
 
             <div className="button-container">
-              <button type="submit" className="create-btn" disabled={isBtnDisabled}>Update</button>
+              <button type="submit" className="create-btn" disabled={isBtnDisabled || isSubmitting}> {isSubmitting ? 'Updating...' : 'Update'}</button>
               <button type="button" className="cancel-btn" onClick={togglePopup}>Cancel</button>
             </div>
           </form>

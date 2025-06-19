@@ -2,8 +2,7 @@ import { useState } from 'react'
 import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
 import axios from 'axios';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import VisibilityIcon from '@mui/icons-material/Visibility';
+import { Eye, EyeSlash } from 'react-bootstrap-icons';
 
 const ResetPassword = ({ onClose, item }) => {
     const token = Cookies.get("accessToken");
@@ -86,7 +85,7 @@ const ResetPassword = ({ onClose, item }) => {
                                     cursor: "pointer"
                                 }}
                             >
-                                {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />} {/* Changes icon based on visibility */}
+                                {showPassword ? <Eye /> : <EyeSlash />} {/* Changes icon based on visibility */}
                             </span>
                         </div>
                         {isPasswordTouched && !validatePassword(newPassword) && (

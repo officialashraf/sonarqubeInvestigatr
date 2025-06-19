@@ -50,6 +50,7 @@ const TargetCreate = ({ togglePopup, existingTargets = [] }) => {
   const [subTypeRows, setSubTypeRows] = useState([]);
   const [availableSubTypes, setAvailableSubTypes] = useState([]);
   const [error, setError] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 const [formData, setFormData] = useState({
   name: "",
   description: "",
@@ -116,6 +117,7 @@ const [formData, setFormData] = useState({
         return true;
       })
     );
+    setIsSubmitting(true);
    
     console.log("query payload", formData);
     
@@ -157,6 +159,8 @@ const [formData, setFormData] = useState({
     } catch (err) {
       console.error("Error:", err.response || err);
       toast.error((err.response?.data?.detail || err.message || "Error encountered during creation"));
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -294,7 +298,7 @@ const [formData, setFormData] = useState({
                 value={synonymInput}
                 onChange={handleSynonymInputChange}
                 onKeyDown={handleSynonymKeyDown}
-                placeholder="Type synonym and press enter to add..."
+                placeholder="Type synonym and press Enter to add..."
                 disabled={formData.synonyms.length >= 5}
               />
               <div className="synonym-chips">
@@ -371,8 +375,8 @@ const [formData, setFormData] = useState({
             )}
             
             <div className="button-container">
-              <button type="submit" className="create-btn">
-                Create
+              <button type="submit" className="create-btn" disabled={isSubmitting}>
+                {isSubmitting ? 'Creating...' : 'Create'}
               </button>
               <button type="button" className="cancel-btn" onClick={togglePopup}>
                 Cancel

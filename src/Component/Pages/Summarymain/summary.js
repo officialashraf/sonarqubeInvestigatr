@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import ProgressRow from "./progressBar.js";
 import { Box, Table, TableContainer, TableFooter, TableBody, TableCell, TableHead, TableRow, Paper } from '@mui/material';
@@ -7,76 +7,143 @@ import { PieChart, Pie, Tooltip, Legend, ResponsiveContainer, BarChart, Bar, XAx
 import AddFilter2 from '../Filters/addFilter.js';
 import './summary.css';
 import Cookies from "js-cookie";
-
+import { useNavigate, useParams } from 'react-router-dom';
+import { setCaseData } from '../../../Redux/Action/caseAction';
 
 const Summary = ({ filters }) => {
-
   const token = Cookies.get("accessToken");
   const [pieData, setPieData] = useState([]);
   const [barData, setBarData] = useState([]);
   const [tableData, setTableData] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
   const [showPopup, setShowPopup] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const caseId = useSelector((state) => state.caseData.caseData.id);
-  console.log("casiId", caseId)
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { caseId: urlCaseId } = useParams();
+
+  const caseData = useSelector((state) => state.caseData.caseData);
+  const caseId = caseData?.id;
+
+  useEffect(() => {
+    const fetchCaseDetails = async (id) => {
+      try {
+        const token = Cookies.get("accessToken");
+        const response = await axios.get(
+          `${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/case/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        if (response.data) {
+          dispatch(setCaseData(response.data.data || response.data));
+          setError(null);
+          return true;
+        }
+      } catch (error) {
+        console.error("Error fetching case details:", error);
+        setError("Case not found.");
+        return false;
+      }
+    };
+
+    const validateCase = async () => {
+      if (!urlCaseId) {
+        navigate("/404");
+        return;
+      }
+      if (!caseId || String(caseId) !== String(urlCaseId)) {
+        const exists = await fetchCaseDetails(urlCaseId);
+        if (!exists) {
+          navigate("/404");
+          return;
+        }
+      }
+    };
+
+    validateCase();
+  }, [urlCaseId, caseId, dispatch, navigate]);
+
   useEffect(() => {
     const fetchData = async () => {
+      if (!caseId) {
+        setLoading(false);
+        return;
+      }
       try {
-        const response = await axios.post(`${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/aggregate`, {
-          query: { unified_case_id: String(caseId) },
-
-          aggs_fields: ["unified_record_type", "unified_date_only", "unified_type"]
-        },
+        setLoading(true);
+        setError(null);
+        const response = await axios.post(
+          `${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/aggregate`,
+          {
+            query: { unified_case_id: String(caseId) },
+            aggs_fields: ["unified_record_type", "unified_date_only", "unified_type"],
+          },
           {
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
             },
           }
-
         );
 
-
-        console.log("summary data:", response.data);
-
         const { unified_record_type, unified_date_only, unified_type } = response.data;
-        const pieData = (unified_record_type || []).map(item => ({
+
+        if (
+          (!unified_record_type || unified_record_type.length === 0) &&
+          (!unified_date_only || unified_date_only.length === 0) &&
+          (!unified_type || unified_type.length === 0)
+        ) {
+          setError("No data found for this case ID.");
+          setPieData([]);
+          setBarData([]);
+          setTableData([]);
+          setTotalCount(0);
+          setLoading(false);
+          return;
+        }
+
+        const pieData = (unified_record_type || []).map((item) => ({
           name: item.key,
-          value: item.doc_count
+          value: item.doc_count,
         }));
 
         if (pieData.length === 0) {
-          pieData.push({ name: 'No Data', value: 0 });
+          pieData.push({ name: "No Data", value: 0 });
         }
-        const barData = (unified_date_only || []).map(item => ({
-          name: item.key.split('-').slice(0, 3).join(''),
-          value: item.doc_count
+
+        const barData = (unified_date_only || []).map((item) => ({
+          name: item.key.split("-").slice(0, 3).join(""),
+          value: item.doc_count,
         }));
 
         if (barData.length === 0) {
-          barData.push({ name: 'No Data', value: 0 });
+          barData.push({ name: "No Data", value: 0 });
         }
 
-        //Table Data (unified_type)
-        const tableData = (unified_type || []).map(item => ({
+        const tableData = (unified_type || []).map((item) => ({
           name: item.key,
-          value: item.doc_count
+          value: item.doc_count,
         }));
 
-        console.log("tabledtaa", tableData)
-        //  Set States
         setPieData(pieData);
         setBarData(barData);
         setTableData(tableData);
         setTotalCount(tableData.reduce((sum, item) => sum + item.value, 0));
-
+        setLoading(false);
       } catch (error) {
-        console.error('Error fetching data:', error);
-        setPieData([{ name: 'No Data', value: 0 }]);
-        setBarData([{ name: 'No Data', value: 0 }]);
+        console.error("Error fetching data:", error);
+        setError("Error fetching data.");
+        setPieData([{ name: "No Data", value: 0 }]);
+        setBarData([{ name: "No Data", value: 0 }]);
         setTableData([]);
         setTotalCount(0);
+        setLoading(false);
       }
     };
 
@@ -84,36 +151,60 @@ const Summary = ({ filters }) => {
   }, [caseId, token]);
 
   const togglePopup = (value) => {
-    if (typeof value === 'boolean') {
+    if (typeof value === "boolean") {
       setShowPopup(value); // set true or false explicitly
     } else {
       setShowPopup((prev) => !prev); // fallback toggle
     }
   };
-  const COLORS = ["#B22222", "#556B2F", "#CC5500"]
-  // const togglePopup = () => {
-  //   setShowPopup((prev) => !prev);
-  // };
+
+  const COLORS = ["#B22222", "#556B2F", "#CC5500"];
   const [activeIndex, setActiveIndex] = useState(null);
+
+  if (loading) {
+    return (
+      <div className="container-fluid">
+        <Box width="100%" textAlign="center" mt={5}>
+          <h5>Loading summary data...</h5>
+        </Box>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="container-fluid">
+        <Box width="100%" textAlign="center" mt={5}>
+          <h5 style={{ color: "red" }}>{error}</h5>
+        </Box>
+      </div>
+    );
+  }
+
   return (
     <>
-      <div className='container-fluid'>
+      <div className="container-fluid">
         <Box width="100%">
           <Box display="flex" justifyContent="space-between" alignItems="center" mb={1} mt={2}>
             <h5>Summary</h5>
           </Box>
           <Box display="flex" justifyContent="flex-end" alignItems="center" mb={1} mt={2}>
-            <button className="add-new-filter-button" onClick={togglePopup}>Add Resources</button>
+            <button className="add-new-filter-button" onClick={togglePopup}>
+              Add Resources
+            </button>
           </Box>
           <ProgressRow label="Overall Progress" />
           <h5 style={{ textAlign: "center" }}> FilterCount: {filters}</h5>
 
-          <div className='graphchats'>
+          <div className="graphchats">
             <Box className="box">
               <ResponsiveContainer width="100%" height={300}>
                 <PieChart>
-                  <Legend align="center" verticalAlign="top"
-                    formatter={(value, entry) => `${value} ${entry.payload.value}`} />
+                  <Legend
+                    align="center"
+                    verticalAlign="top"
+                    formatter={(value, entry) => `${value} ${entry.payload.value}`}
+                  />
                   <Pie
                     data={pieData}
                     cx="50%"
@@ -136,7 +227,7 @@ const Summary = ({ filters }) => {
             {/* Bar Chart */}
             <Box className="box">
               <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={barData} >
+                <BarChart data={barData}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="name" />
                   <YAxis />
@@ -144,10 +235,7 @@ const Summary = ({ filters }) => {
                     wrapperStyle={{ backgroundColor: "#fff", border: "1px solid #ccc", padding: "5px" }}
                   />
 
-                  <Bar dataKey="value" fill="#333" barSize={15}
-                    isAnimationActive={false}
-                  >
-
+                  <Bar dataKey="value" fill="#333" barSize={15} isAnimationActive={false}>
                     {barData.map((entry, index) => (
                       <Cell
                         key={`cell-${index}`}
@@ -157,7 +245,6 @@ const Summary = ({ filters }) => {
                       />
                     ))}
                   </Bar>
-
                 </BarChart>
               </ResponsiveContainer>
             </Box>
@@ -166,24 +253,28 @@ const Summary = ({ filters }) => {
             <Box className="box">
               <TableContainer component={Paper} width="100%" height={300}>
                 <Table width={300} height={300}>
-                  <TableHead >
+                  <TableHead>
                     <TableRow>
-                      <TableCell >Type</TableCell>
-                      <TableCell align="right" >No. of records</TableCell>
+                      <TableCell>Type</TableCell>
+                      <TableCell align="right">No. of records</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {tableData.map(item => (
+                    {tableData.map((item) => (
                       <TableRow key={item.key}>
-                        <TableCell style={{ height: '20px', padding: '0px 5px' }}>{item.name}</TableCell>
-                        <TableCell align="right" style={{ height: '20px', padding: '0px 5px' }}>{item.value}</TableCell>
+                        <TableCell style={{ height: "20px", padding: "0px 5px" }}>{item.name}</TableCell>
+                        <TableCell align="right" style={{ height: "20px", padding: "0px 5px" }}>
+                          {item.value}
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
                   <TableFooter>
                     <TableRow>
-                      <TableCell style={{ height: '20px', padding: '0px 5px' }}>Total</TableCell>
-                      <TableCell align="right" style={{ height: '20px', padding: '0px 5px' }}>{totalCount}</TableCell>
+                      <TableCell style={{ height: "20px", padding: "0px 5px" }}>Total</TableCell>
+                      <TableCell align="right" style={{ height: "20px", padding: "0px 5px" }}>
+                        {totalCount}
+                      </TableCell>
                     </TableRow>
                   </TableFooter>
                 </Table>

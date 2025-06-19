@@ -52,6 +52,7 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
   const [initialFormData, setInitialFormData] = useState({});
   const [isBtnDisabled, setIsBtnDisabled] = useState(true);
   const [error, setError] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
   
   const [formData, setFormData] = useState({
     name: "",
@@ -167,7 +168,7 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
         return true;
       })
     );
-
+    setIsSubmitting(true);
     console.log("Update payload", formData);
 
     try {
@@ -189,6 +190,8 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
     } catch (err) {
       console.error("Error during target update:", err.response || err);
       toast.error((err.response?.data?.detail || err.message || "Error encountered during target update"));
+    } finally {
+      setIsSubmitting(false);
     }
   };
   useEffect(() => {
@@ -342,7 +345,7 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
                 value={synonymInput}
                 onChange={handleSynonymInputChange}
                 onKeyDown={handleSynonymKeyDown}
-                placeholder="Type in keywords/synonym and press enter to add..."
+                placeholder="Type in keywords/synonym and press Enter to add..."
                 disabled={formData.synonyms.length >= 5}
                 // required
               />
@@ -419,9 +422,9 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
             )}
 
             <div className="button-container">
-              <button type="submit" className="create-btn" disabled={isBtnDisabled}
+              <button type="submit" className="create-btn" disabled={isBtnDisabled || isSubmitting}
               >
-                Update
+                {isSubmitting ? 'Updating...' : 'Update'}
               </button>
               <button type="button" className="cancel-btn" onClick={togglePopup}>
                 Cancel

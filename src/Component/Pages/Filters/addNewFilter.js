@@ -23,6 +23,7 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
   const [isEditable, setIsEditable] = useState(true);
   const [loggedInUserId, setLoggedInUserId] = useState(null);
   const [error, setError] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [sources, setSources] = useState([
     {
@@ -343,6 +344,7 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
       setError(validationErrors);
       return;
     }
+    setIsSubmitting(true);
     const postData = {
       name: filterName,
       description: description,
@@ -395,6 +397,8 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
     } catch (error) {
       console.error('Error posting data:', error);
       toast.error('Error during filter creation: ' + (error.response?.data?.detail || error.message));
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -662,9 +666,9 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
               className="add-new-filter-button"
               style={{ marginLeft: '5px' }}
               onClick={handleSaveFilter}
-              disabled={filterDetails?.id && !isEditable}
+              disabled={filterDetails?.id && !isEditable || isSubmitting}
             >
-              {filterDetails?.id ? 'Update Filter' : 'Save Filter'}
+              {isSubmitting ? (filterDetails?.id ? 'Updating...' : 'Saving...') : (filterDetails?.id ? 'Update Filter' : 'Save Filter')}
             </button>
           </div>
         </div>
