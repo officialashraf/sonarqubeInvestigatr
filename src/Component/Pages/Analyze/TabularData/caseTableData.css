@@ -22,25 +22,6 @@ fixed-th {
   overflow: hidden;
 }
 
-/* .cell-content {
-  overflow: hidden;
-  white-space: nowrap;
-  height: 20px;
-  text-overflow: ellipsis;
-  display: block;
-  width: 100%;
-} */
-
-/* .fixed-td:hover .cell-content {
-  white-space: normal;
-  word-wrap: break-word;
-  background: rgba(0, 0, 0, 0.1);
-  padding: 5px;
-
-  min-width: 80px;
-  max-width: 100%;
-  z-index: 100;
-} */
 
 .table-container {
   overflow-x: auto; /* Enable horizontal scroll if content exceeds table width */

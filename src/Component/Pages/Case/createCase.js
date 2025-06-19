@@ -46,6 +46,7 @@ const CreateCase = ({ togglePopup }) => {
     label: user.username
   }));
   const [error, setError] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
 
   const validateForm = () => {
@@ -102,6 +103,7 @@ const CreateCase = ({ togglePopup }) => {
         return true;
       })
     );
+    setIsSubmitting(true);
     try {
       const caseQuery = {
         title: payloadData.title,
@@ -145,6 +147,8 @@ const CreateCase = ({ togglePopup }) => {
     } catch (err) {
       console.error("Error during case creation:", err.response || err);
       toast.error((err.response?.data?.detail || err.message || "Error encountered during case creation: "));
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -275,8 +279,8 @@ const CreateCase = ({ togglePopup }) => {
               />
             </div>
             <div className="button-container">
-              <button type="submit" className="create-btn">
-                Create
+              <button type="submit" className="create-btn" disabled={isSubmitting}>
+                {isSubmitting ? 'Creating...' : 'Create'}
               </button>
               <button type="button" className="cancel-btn" onClick={togglePopup}>
                 Cancel

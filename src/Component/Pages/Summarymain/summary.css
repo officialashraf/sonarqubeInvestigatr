@@ -84,11 +84,11 @@ g.recharts-layer .recharts-bar :hover {
 /* Ensure each graph has proper width and stays centered */
 @media screen and (max-width: 1920px) {
   .graphchats{
-    justify-content: space-around;
+    justify-content: center;
     
   }
 }
-@media screen and (max-width: 1420px) {
+@media screen and (max-width: 1350px) {
   .graphchats {
     overflow-x: auto;
   }

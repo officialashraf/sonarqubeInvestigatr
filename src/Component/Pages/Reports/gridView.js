@@ -161,7 +161,11 @@ const GridView = () => {
 
   return (
     <>
-
+      <div className="grid-view-header" style={{
+        display: 'flex',
+        flexDirection: 'column',
+        minHeight: '100vh',
+}}>
       <div
         className="data-table"
         style={{ marginTop: '12px' }}
@@ -250,10 +254,19 @@ const GridView = () => {
       {dataAvailable && (
         <div className="paginationstabs"
           style={{
+            // display: "flex",
+            // alignItems: "self-end",
+            // justifyContent: "space-between",
+            // height: "80vh",
+            // marginTop: "auto", 
             display: "flex",
-            alignItems: "center",
             justifyContent: "space-between",
-            height: "100vh"
+            alignItems: "center",
+            marginTop: "auto", // push to bottom
+            padding: "10px 20px",
+            backgroundColor: "#fff",
+            marginBottom: "30px",
+            boxShadow: "0 -2px 5px rgba(0,0,0,0.05)"
           }}
         >
           <Pagination style={{ width: "200px" }}>
@@ -306,6 +319,7 @@ const GridView = () => {
           </button>
         </div>
       )}
+    </div>
     </>
   );
 };
