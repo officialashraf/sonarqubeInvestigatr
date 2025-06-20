@@ -20,6 +20,7 @@ const AddFilter2 = ({ togglePopup }) => {
   const [filterIdedit, setFilterIdedit] = useState(null) // Changed to null
 
   const [showAddFilter, setShowAddFilter] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
 
   // Toggle visibility of Add New Filter form
@@ -81,17 +82,7 @@ const AddFilter2 = ({ togglePopup }) => {
 
   // Proceed handler
   const handleProceed = async () => {
-    // const filtersToStart = selectedFilters.filter(id =>!selectedFilters .includes(id));
-    // console.log("filterToStop", filtersToStart)
-    // const filtersToStop = initialSelectedFilters.filter(id => !initialSelectedFilters.includes(id));
-    // console.log("filterToStop", filtersToStop)
-
-    // const filtersToStart = selectedFilters.filter(id => 
-    //   !initialSelectedFilters.includes(id)
-    // );
-    // const filtersToStop = initialSelectedFilters.filter(id => 
-    //   !selectedFilters.includes(id)
-    // );
+    setIsSubmitting(true);
     try {
       // Start new filters
 
@@ -152,6 +143,8 @@ const AddFilter2 = ({ togglePopup }) => {
       } else {
         console.error("Request Error:", error.message);
       }
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -189,11 +182,11 @@ const AddFilter2 = ({ togglePopup }) => {
                 )}
               </div>
               <div className="text-end mt-3">
-                {(filtersToStart.length > 0 || filtersToStop.length > 0) && (
-                  <button className="add-new-filter-button" onClick={handleProceed}>
-                    Proceed
-                  </button>
-                )}
+                  {(filtersToStart.length > 0 || filtersToStop.length > 0) && (
+                    <button className="add-new-filter-button" onClick={handleProceed} disabled={isSubmitting}>
+                      {isSubmitting ? 'Processing...' : 'Proceed'}
+                    </button>
+                  )}
 
               </div>
             </div>

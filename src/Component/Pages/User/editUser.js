@@ -15,6 +15,7 @@ const EditUser = ({ togglePopup, item }) => {
   const [initialFormData, setInitialFormData] = useState({});
   const [isBtnDisabled, setIsBtnDisabled] = useState(true);
   const [error, setError] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [formData, setFormData] = useState({
     firstName: item.first_name || "",

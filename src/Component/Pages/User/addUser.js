@@ -17,6 +17,7 @@ const AddUser = ({ onClose }) => {
   const [roles, setRoles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [formData, setFormData] = useState({
     username: "",
@@ -125,6 +126,7 @@ const AddUser = ({ onClose }) => {
       })
     );
 
+    setIsSubmitting(true);
     console.log("queryPyload", formData)
     try {
       const response = await axios.post(
@@ -148,6 +150,8 @@ const AddUser = ({ onClose }) => {
     } catch (err) {
       console.error("Error creating user:", err);
       toast.error(err.response?.data?.detail || "Something went wrong");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -158,6 +162,7 @@ const AddUser = ({ onClose }) => {
         <div className="popup-content">
           <h5>Add User</h5>
           <form onSubmit={handleCreateUser}>
+
             <label>Username *</label>
             <input className="com" ref={inputRef} name="username" autoComplete="username" value={formData.username} onChange={handleChange} placeholder="Enter username" readOnly={isReadOnly}
               onFocus={handleFocus} requiblack />
@@ -188,7 +193,9 @@ const AddUser = ({ onClose }) => {
             <input className="com" type="password" name="password" value={formData.password} onChange={handleChange} placeholder="Enter password" requiblack />
             {error.password && <p style={{ color: "red", margin: '0px' }}>{error.password}</p>}
             <div className="button-container">
-              <button type="submit" className="create-btn">Create</button>
+              <button type="submit" className="create-btn" disabled={isSubmitting}>
+                {isSubmitting ? 'Creating...' : 'Create'}
+              </button>
               <button type="button" onClick={onClose} className="cancel-btn">Cancel</button>
             </div>
           </form>

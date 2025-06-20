@@ -10,7 +10,9 @@ const UpdateComment = ({ onClose, comment, resourceId, GetCommentList }) => {
 
   const handleUpdate = async (e) => {
     e.preventDefault();
+
     setIsSubmitting(true);
+
     try {
       console.log("Updated", comment)
       const response = await axios.put(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/comment/${resourceId}`,
@@ -63,8 +65,12 @@ const UpdateComment = ({ onClose, comment, resourceId, GetCommentList }) => {
             />
 
             <div className="button-container">
+<<<<<<< HEAD
               <button type="submit" className="create-btn" disabled={isSubmitting}>
                 {isSubmitting ? 'Updating...' : 'Update'}</button>
+=======
+              <button type="submit" className="create-btn" disabled={isSubmitting}>{isSubmitting ? 'Updating...' : 'Update'}</button>
+>>>>>>> 12b2c7234468d3cdc7248b1e2e2b182f4105114a
               <button type="button" className="cancel-btn" onClick={onClose}>
                 Cancel
               </button>

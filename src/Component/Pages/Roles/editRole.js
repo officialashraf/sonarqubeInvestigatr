@@ -12,7 +12,9 @@ const EditRole = ({ togglePopup, details }) => {
 
     const [initialSearchTitle, setInitialSearchTitle] = useState('');
     const [isBtnDisabled, setIsBtnDisabled] = useState(true);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const editRole = async () => {
+        setIsSubmitting(true); // Set submitting state to true
         try {
             if (!searchTitle || searchTitle.trim() === "") {
                 toast.info("Please enter the role");
@@ -43,6 +45,8 @@ const EditRole = ({ togglePopup, details }) => {
         } catch (error) {
             toast.error(error.response?.data?.detail || "Error updating role")
             console.error('Error updating role:', error); // Debug: Error log
+        } finally {
+            setIsSubmitting(false); // Reset submitting state
         }
     };
     useEffect(
@@ -97,10 +101,10 @@ const EditRole = ({ togglePopup, details }) => {
                                 type="submit"
                                 className="create-btn"
                                 onClick={editRole}
-                                disabled={isBtnDisabled}
+                                disabled={isBtnDisabled || isSubmitting} // Disable button if no changes or submitting
 
                             >
-                                Update
+                                {isSubmitting ? 'Updating...' : 'Update'}
                             </button>
                             <button
                                 type="button"

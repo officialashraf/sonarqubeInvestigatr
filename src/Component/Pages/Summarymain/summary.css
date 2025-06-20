@@ -1,8 +1,7 @@
-/* Table Styling */
-
 .box.MuiBox-root.css-0{
   background-color: lightgrey;
-}
+}.
+/* Table Styling */
 .css-3ssuu9-MuiTableCell-root {
   padding: 0px 5px;
   font-size: 12px;
@@ -34,6 +33,7 @@
 /* Chart Hover Effects */
 g.recharts-layer .recharts-bar:hover {
   fill: red;
+  background-color: white;
 }
 
 /* Button Styling */
@@ -120,7 +120,7 @@ g.recharts-layer .recharts-bar:hover {
 /* Large Desktop (1920px and above) */
 @media screen and (min-width: 1920px) {
   .graphchats {
-    justify-content: flex-start;
+    justify-content: center;
     overflow-x: auto;
   }
   
