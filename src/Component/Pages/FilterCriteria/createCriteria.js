@@ -122,7 +122,7 @@ const CreateCriteria = ({ handleCreateCase }) => {
   }, [Token]);
   // Handle checkbox change for saving criteria
   const handleSaveCriteriaChange = (e) => {
- e.preventDefault();
+    e.preventDefault();
     const validationErrors = validateForm();
     if (Object.keys(validationErrors).length > 0) {
       setError(validationErrors);
@@ -268,8 +268,10 @@ const CreateCriteria = ({ handleCreateCase }) => {
               fullWidth
               className="com"
               name="searchQuery"
-
               InputProps={{
+                readOnly: isReadOnly,
+                onFocus: handleFocus,
+                inputRef: inputRef,
                 startAdornment: (
                   <InputAdornment position="start">
                     <Search />
@@ -285,19 +287,12 @@ const CreateCriteria = ({ handleCreateCase }) => {
                   height: '38px',
                   padding: '0 8px',
                 },
-
-
-
               }}
               placeholder="Search..."
               value={formData.searchQuery}
               onChange={handleInputChange}
               sx={sharedSxStyles}
-              readOnly={isReadOnly}
-            onFocus={handleFocus}
-            ref={inputRef}
-
-            />
+                         />
             {error.searchQuery && <p style={{ color: "red", margin: '0px' }} >{error.searchQuery}</p>}
 
 
@@ -360,7 +355,7 @@ const CreateCriteria = ({ handleCreateCase }) => {
             </div>
 
             {/* Location Fields */}
-            <label>Focus your search to a particular location or area</label>
+            <label>Focus your search on a particular location or area</label>
             <div className="d-flex">
               <TextField
                 name="latitude"

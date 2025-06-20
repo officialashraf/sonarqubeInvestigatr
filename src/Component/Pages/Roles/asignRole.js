@@ -266,7 +266,7 @@ const AssignRole = ({ togglePopup, details }) => {
                             />
 
                             <small className="text-muted">
-                                Check/uncheck permissions to add or remove them from the role
+                                Check/Uncheck permissions to add or remove them from the role
                             </small>
 
                         </div>

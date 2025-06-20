@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import { Form, InputGroup, Button, Badge } from 'react-bootstrap';
 import { toast } from 'react-toastify';
-import { useDispatch} from 'react-redux';
+import { useDispatch } from 'react-redux';
 import Cookies from 'js-cookie';
 import "./main.css"
 import { jwtDecode } from "jwt-decode";
@@ -84,8 +84,8 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
     if (token) {
       const decodedToken = jwtDecode(token);
       setLoggedInUserId(decodedToken.id);
-      console.log(decodedToken); 
-      console.log("User ID:", decodedToken.id); 
+      console.log(decodedToken);
+      console.log("User ID:", decodedToken.id);
     }
   }, [token]);
 
@@ -170,7 +170,7 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
   };
 
   const handleKeywordKeyDown = (index, event) => {
-    if (event.key === "Enter"  && sources[index].keywordInput.trim()) {
+    if (event.key === "Enter" && sources[index].keywordInput.trim()) {
       const newSources = [...sources];
       newSources[index].keywords.push(sources[index].keywordInput.trim());
       newSources[index].keywordInput = '';
@@ -358,7 +358,9 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
         source: source.source,
         platform: source.platform,
         keywords: source.keywords,
-        urls: source.source === 'rss feed' ? [source.urls.join(',')] : undefined,
+        urls: source.source === 'rss feed'
+          ? source.urls.filter(url => url.trim() !== "")
+          : undefined,
         interval: source.intervalValue * conversionFactors[source.intervalUnit],
       })),
     };
@@ -376,7 +378,7 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
           'Authorization': `Bearer ${token}`,
         },
       });
-  
+
       window.dispatchEvent(new Event('databaseUpdated'));
       console.log("responseFilter", response)
 
@@ -428,9 +430,9 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
   };
   return (
     <div className="p-1">
-      <Form  onSubmit={(e) =>{
-       e.preventDefault();
-       handleSaveFilter() 
+      <Form onSubmit={(e) => {
+        e.preventDefault();
+        handleSaveFilter()
       }}>
         <span onClick={onClose} style={{
           position: 'absolute',
@@ -447,7 +449,7 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
               setFilterName(e.target.value.replace(/\b\w/g, (char) => char.toUpperCase()));
               setError(prev => ({ ...prev, name: '' }));
             }}
-             onKeyDown={handleEnterKey}
+            onKeyDown={handleEnterKey}
             disabled={filterDetails?.id && !isEditable}
             readOnly={isReadOnly}
             onFocus={handleFocus}
@@ -466,7 +468,7 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
               setDescription(e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1));
               setError(prev => ({ ...prev, description: '' }));
             }}
-             onKeyDown={handleEnterKey}
+            onKeyDown={handleEnterKey}
             disabled={filterDetails?.id && !isEditable}
           />
           {error.description && <p style={{ color: "red", margin: '0px' }} >{error.description}</p>}
@@ -665,8 +667,8 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
                           </Badge>
                         ))}
                       </div>
-                      {error.sources?.[sourceIndex]?.urls && (
-                        <p style={{ color: 'red', margin: 0 }}>{error.sources[sourceIndex].urls}</p>
+                      {error.sources?.[sourceIndex]?.keywords && (
+                        <p style={{ color: 'red', margin: 0 }}>{error.sources[sourceIndex].keywords}</p>
                       )}
                     </div>
 

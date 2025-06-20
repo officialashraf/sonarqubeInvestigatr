@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { toast } from 'react-toastify';
+import Loader from '../Layout/loader';
 
 
 const TargetDetails = ({ togglePopup, id }) => {
@@ -88,7 +89,7 @@ const TargetDetails = ({ togglePopup, id }) => {
     return (
       <div className="popup-overlay">
         <div className="popup-containera">
-          <div className="popup-content">Loading role details...</div>
+          <div className="popup-content"><div style={{height:'300px'}}><Loader/></div></div>
         </div>
       </div>
     );

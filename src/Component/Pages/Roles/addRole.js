@@ -174,7 +174,7 @@ const AddRole = ({ togglePopup }) => {
                 <div className="popup-content" style={{ width: '80%', minHeight: isDropdownOpen ? "60vh" : "230px", position: "relative" }}>
                     <span style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
 
-                        <h5 >Assign role to permissions</h5>
+                        <h5 >Assign permissions to role </h5>
                         <CloseButton onClick={togglePopup} />
                     </span>
                     <form onSubmit={(e) => e.preventDefault()}>
@@ -229,7 +229,7 @@ const AddRole = ({ togglePopup }) => {
                                 onMenuOpen={() => setIsDropdownOpen(true)} //  Set dropdown open
                             />
                             <small className="text-muted">
-                                Only newly selected permissions will be assigned
+                               Check/Uncheck permissions to add or remove them from the role
                             </small>
                         </div>
 

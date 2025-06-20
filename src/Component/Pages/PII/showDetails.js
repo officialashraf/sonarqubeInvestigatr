@@ -93,6 +93,14 @@ const ShowDetails = () => {
               inputStyle={{
                 marginLeft: "30px", //  fix for visibility
               }}
+               inputProps={{
+    onKeyDown: (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        handleSearch(); //  Triggers on Enter
+      }
+    }
+  }}
             />
           ) : (
             <input

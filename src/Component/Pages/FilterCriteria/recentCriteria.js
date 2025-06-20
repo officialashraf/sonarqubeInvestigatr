@@ -339,6 +339,9 @@ const RecentCriteria = () => {
                 fullWidth
                 className="com mb-3"
                 InputProps={{
+                  readOnly: isReadOnly,
+                  onFocus: handleFocus,
+                  inputRef: inputRef,
                   startAdornment: (
                     <InputAdornment position="start">
                       <SearchIcon />
@@ -353,7 +356,6 @@ const RecentCriteria = () => {
                   ), style: {
                     height: '38px', // Use consistent height
                     padding: '0 0px', // Ensure uniform padding
-
                   },
                 }}
                 placeholder="Search..."
@@ -364,9 +366,6 @@ const RecentCriteria = () => {
                 }}
                 onKeyDown={handleKeyDown}
                 sx={sharedSxStyles}
-                readOnly={isReadOnly}
-                onFocus={handleFocus}
-                ref={inputRef}
               />
 
             </div>

@@ -104,7 +104,7 @@ const CaseDetails = ({ caseId, togglePopupA }) => {
                                     <th>Edited By</th>
                                     <td>{item.editedBy}</td>
                                 </tr>
-                                <tr>
+                                {/* <tr>
                                     <th>Last Data Uploaded On</th>
                                     <td>{item.lastDataUploadOn}</td>
                                 </tr>
@@ -119,7 +119,7 @@ const CaseDetails = ({ caseId, togglePopupA }) => {
                                 <tr>
                                     <th>Last Data Processed By</th>
                                     <td>{item.lastDataProceedBy}</td>
-                                </tr>
+                                </tr> */}
                                 <tr>
                                     <th>Assignee</th>
                                     <td>{item.assignee}</td>

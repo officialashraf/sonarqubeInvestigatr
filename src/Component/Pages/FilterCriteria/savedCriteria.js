@@ -248,6 +248,9 @@ const SavedCriteria = () => {
                 fullWidth
                 className="com mb-3"
                 InputProps={{
+                  readOnly: isReadOnly,
+                  onFocus: handleFocus,
+                  inputRef: inputRef,
                   startAdornment: (
                     <InputAdornment position="start">
                       <SearchIcon />
@@ -277,9 +280,6 @@ const SavedCriteria = () => {
                 placeholder="Search..."
                 sx={sharedSxStyles}
                 disabled={isLoading}
-                readOnly={isReadOnly}
-                onFocus={handleFocus}
-                ref={inputRef}
               />
             </div>
             <div>

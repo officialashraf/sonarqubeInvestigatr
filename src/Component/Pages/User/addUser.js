@@ -162,8 +162,8 @@ const AddUser = ({ onClose }) => {
         <div className="popup-content">
           <h5>Add User</h5>
           <form onSubmit={handleCreateUser}>
-            <label>UserName *</label>
 
+            <label>Username *</label>
             <input className="com" ref={inputRef} name="username" autoComplete="username" value={formData.username} onChange={handleChange} placeholder="Enter username" readOnly={isReadOnly}
               onFocus={handleFocus} requiblack />
             {error.username && <p style={{ color: "red", margin: '0px' }} >{error.username}</p>}
