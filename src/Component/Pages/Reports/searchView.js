@@ -187,6 +187,9 @@ const SearchView = () => {
             className="com"
             name="searchQuery"
             InputProps={{
+              readOnly: isReadOnly,
+              onFocus: handleFocus,
+              inputRef: inputRef,
               startAdornment: (
                 <InputAdornment position="start">
                   <Search />
@@ -203,13 +206,12 @@ const SearchView = () => {
                 whiteSpace: "pre-wrap"
               },
             }}
+
             placeholder="Search..."
             value={formData.searchQuery}
             onChange={handleInputChange}
             sx={sharedSxStyles}
-            readOnly={isReadOnly}
-            onFocus={handleFocus}
-            ref={inputRef}
+
           />
 
           {/* Case Selection Field */}

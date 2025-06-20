@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import '../User/addUser.css'
 import { CloseButton } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
-import { closePopup, openPopup } from '../../../Redux/Action/criteriaAction';
+import { openPopup } from '../../../Redux/Action/criteriaAction';
 import { useAutoFocusWithManualAutofill } from '../../../utils/autoFocus';
 
 const Confirm = ({ formData, selectedDates, searchChips }) => {
@@ -88,7 +88,7 @@ const Confirm = ({ formData, selectedDates, searchChips }) => {
 
                     <span style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
                         <h5>Save Criteria</h5>
-                        <CloseButton onClick={() => dispatch(closePopup())} />
+                        <CloseButton onClick={() => setIsVisible(false)} />
                     </span>
                     <form onSubmit={(e) => e.preventDefault()}> {/* Prevent form submission default */}
 

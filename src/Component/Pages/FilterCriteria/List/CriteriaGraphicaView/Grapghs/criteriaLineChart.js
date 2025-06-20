@@ -71,10 +71,10 @@ console.log("CriteriaLineChart - recordTypes:", recordTypes);
   return (
    <div style={{ width: "100%", height: 250, overflowX: "auto",}}>
       {data.length > 0 ? (
-   <ResponsiveContainer minWidth={600} height={200}> 
+   <ResponsiveContainer minWidth={600} height={210}> 
           <LineChart
             data={data}
-            margin={{ right: 80 }}
+            margin={{ right: 80,top: 20 }}
 
           >
             <CartesianGrid strokeDasharray="3 3" />

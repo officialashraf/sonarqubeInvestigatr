@@ -6,16 +6,18 @@ import axios from 'axios';
 // import {axiosInstance} from '../../../utils/axiosConfig';
 import Cookies from 'js-cookie';
 import './login.css';
-import InputField from './inputField'; // reusable input field
+import {InputField} from './inputField'; // reusable input field
 import { toast } from 'react-toastify';
 import { Eye, EyeSlash } from 'react-bootstrap-icons';
 import {jwtDecode} from "jwt-decode";
+import { useAutoFocusWithManualAutofill } from '../../../utils/autoFocus';
 
 const LoginPage = () => {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({ username: "", password: "" });
     const [error, setError] = useState({});
     const [showPassword, setShowPassword] = useState(false);
+ const { inputRef, isReadOnly, handleFocus } = useAutoFocusWithManualAutofill();
 
     const validateForm = () => {
         const errors = {};
@@ -112,12 +114,16 @@ const LoginPage = () => {
                         <InputField
                             label="Username *"
                             type="text"
+                            ref={inputRef}
                             value={formData.username}
                             onChange={handleChange}
                             placeholder="Enter your username"
                             autoComplete="user-name"
                             name="username"
-                            // autoFocus
+                            autoFocus
+                             readOnly={isReadOnly} // Changed prop name
+                             onFocus={handleFocus}
+                            
                         />
                         {error.username && <p style={{ color: "red", margin: '0px' }} >{error.username}</p>}
                         <div style={{ position: 'relative', justifyContent: 'center' }}>
@@ -151,7 +157,7 @@ const LoginPage = () => {
                                     }
                                 }}
                             >
-                                {showPassword ? <EyeSlash /> : <Eye />}
+                                {showPassword ? <Eye /> : <EyeSlash />}
                             </span>
                         </div>
                         {error.password && <p style={{ color: "red", margin: '0px' }}>{error.password}</p>}

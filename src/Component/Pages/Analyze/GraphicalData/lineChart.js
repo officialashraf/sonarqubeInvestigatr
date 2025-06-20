@@ -80,7 +80,7 @@ const LineGraph = () => {
 
           <LineChart
             data={data}
-            margin={{ right: 80 }}
+            margin={{ right: 80 ,top: 20}}
 
           >
             <CartesianGrid strokeDasharray="3 3" />

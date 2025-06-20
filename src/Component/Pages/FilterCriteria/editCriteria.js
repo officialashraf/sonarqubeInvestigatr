@@ -425,7 +425,7 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
 
             {/* DatePicker */}
             <div >
-              <label>DatePicker</label>
+              <label>Date</label>
               <TextField
                 fullWidth
                 className="com"
@@ -454,7 +454,7 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
 
             {/* Location Fields */}
             <div >
-              <label>Focus your search to a particular location or area</label>
+              <label>Focus your search on a particular location or area</label>
               <div className="d-flex gap-2">
                 <TextField
                   name="latitude"
@@ -469,8 +469,7 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
                     },
                   }}
                   sx={sharedSxStyles}
-                  type="number"
-                  step="any"
+                  
                 />
                 <TextField
                   name="longitude"
@@ -485,8 +484,7 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
                     },
                   }}
                   sx={sharedSxStyles}
-                  type="number"
-                  step="any"
+                 
                 />
               </div>
             </div>

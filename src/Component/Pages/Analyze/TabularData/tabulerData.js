@@ -75,7 +75,7 @@ const TabulerData = () => {
     <>
       <div
         className="data-table"
-        style={{ overflowY: "auto", height: "75vh" }}
+        style={{ overflowY: "auto", height: "73vh" }}
       >
         {data && data.length > 0 ? (
           <Table striped bordered hover variant="light">

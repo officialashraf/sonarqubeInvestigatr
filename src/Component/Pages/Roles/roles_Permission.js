@@ -247,7 +247,7 @@ const RolesPermission = () => {
                         </div>
                     </div>
 
-                    <div className="data-table" style={{ minHeight: isDropdownOpen ? "200px" : "auto" }}>
+                    <div className="data-table" style={{ minHeight: isDropdownOpen ? "250px" : "auto" }}>
                         <Table striped bordered hover variant="light">
                             <thead>
                                 <tr>
