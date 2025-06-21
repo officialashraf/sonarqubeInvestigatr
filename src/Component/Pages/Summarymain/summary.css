@@ -156,9 +156,9 @@ g.recharts-layer .recharts-bar:hover {
   }
   
   .box {
-    flex: 0 0 320px;
-    min-width: 320px;
-    max-width: 320px;
+    flex: 0 0 350px;
+    min-width: 350px;
+    max-width: 350px;
     height: 300px;
   }
   
@@ -175,11 +175,11 @@ g.recharts-layer .recharts-bar:hover {
     overflow-x: auto;
   }
   
-  .box {
-    flex: 0 0 300px;
-    min-width: 300px;
-    max-width: 300px;
-    height: 280px;
+   .box {
+    flex: 0 0 350px;
+    min-width: 350px;
+    max-width: 350px;
+    height: 300px;
   }
   
   .add-new-filter-button {
@@ -197,10 +197,10 @@ g.recharts-layer .recharts-bar:hover {
   }
   
   .box {
-    flex: 0 0 280px;
-    min-width: 280px;
-    max-width: 280px;
-    height: 260px;
+    flex: 0 0 350px;
+    min-width: 350px;
+    max-width: 350px;
+    height: 300px;
   }
   
   .add-new-filter-button {
