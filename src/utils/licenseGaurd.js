@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import axios from "axios";
-import Loader from "../Component/Pages/Layout/loader"; 
+import Loader from "../Component/Modules/Layout/loader"; 
 
 const LicenseGuard = () => {
     const [loading, setLoading] = useState(true);
@@ -26,7 +26,7 @@ const LicenseGuard = () => {
 
     if (loading) {
         return (
-            <div style={{ background: "black", color: "white" }}>
+            <div style={{  color: "white" }}>
                 <p>Checking license validity...</p>
                 <Loader />
             </div>
