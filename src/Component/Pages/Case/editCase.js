@@ -6,13 +6,11 @@ import Select from 'react-select';
 import { customStyles } from '../Case/createCase';
 
 const EditCase = ({ togglePopup, item }) => {
-  // Initialize formData with item values, ensuring proper format for each field
   const [formData, setFormData] = useState({
     title: item.title || "",
     description: item.description || "",
     status: item.status || "",
-    // If watchers is a string, split it; if it's already an array, use it; otherwise empty array
-    watchers: typeof item.watchers === 'string'
+    watchers: typeof item.watchers === "string"
       ? item.watchers.split(",").map((w) => w.trim()).filter((w) => w)
       : Array.isArray(item.watchers) ? item.watchers : [],
     assignee: item.assignee || "",
@@ -20,6 +18,7 @@ const EditCase = ({ togglePopup, item }) => {
   });
 
   const [users, setUsers] = useState({ data: [] });
+  const [loading, setLoading] = useState(true); // Added loading state
 
   const options = users.data?.map(user => ({
     value: user.id,
@@ -35,7 +34,6 @@ const EditCase = ({ togglePopup, item }) => {
   const [error, setError] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-
   const validateForm = () => {
     const errors = {};
 
@@ -49,10 +47,10 @@ const EditCase = ({ togglePopup, item }) => {
     return errors;
   };
 
-
   const getUserData = async () => {
     const token = Cookies.get("accessToken");
     try {
+      setLoading(true); // Set loading true before fetching
       const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_USER_MAN}/api/user-man/v1/user`, {
         headers: {
           'Content-Type': 'application/json',
@@ -63,6 +61,8 @@ const EditCase = ({ togglePopup, item }) => {
     } catch (error) {
       console.error('Error fetching user data:', error);
       toast.error("Failed to fetch users");
+    } finally {
+      setLoading(false); // Set loading false after fetch attempt
     }
   };
 
@@ -70,10 +70,8 @@ const EditCase = ({ togglePopup, item }) => {
     getUserData();
   }, []);
 
-  // Update formData when item or users change
   useEffect(() => {
     if (users.data?.length > 0) {
-      // const assigneeUser = users.data.find(user => user.id === item.assignee);
       setFormData(prev => ({
         ...prev,
         assignee: item.assignee,
@@ -84,7 +82,7 @@ const EditCase = ({ togglePopup, item }) => {
             ? item.watchers
             : [],
       }));
-    } console.log("item.watchers", item.watchers)
+    }
   }, [item, users.data]);
 
   const handleEditCase = async (formData) => {
@@ -108,18 +106,16 @@ const EditCase = ({ togglePopup, item }) => {
         return true;
       })
     );
-     setIsSubmitting(true); // Set submitting state to true
+    setIsSubmitting(true);
     try {
       const hasChanged = {};
 
-      // Compare simple fields
       ["title", "description", "status", "assignee", "comment"].forEach((key) => {
         if (payloadData[key] !== item[key]) {
           hasChanged[key] = payloadData[key];
         }
       });
 
-      // Compare watchers carefully (normalize both before comparing)
       const originalWatchers = Array.isArray(item.watchers)
         ? item.watchers.map(w => w.trim()).filter(Boolean)
         : typeof item.watchers === "string"
@@ -134,17 +130,15 @@ const EditCase = ({ togglePopup, item }) => {
         originalWatchers.sort().join(",") !== currentWatchers.sort().join(",");
 
       if (areWatchersDifferent && currentWatchers.length > 0) {
-        hasChanged.watchers = [...currentWatchers]; // ✅ Ensures it stays an array of strings
-
+        hasChanged.watchers = [...currentWatchers];
       } else if (currentWatchers.length === 0) {
-        hasChanged.watchers = []; // Explicitly set to an empty array if no watchers exist
+        hasChanged.watchers = [];
       }
 
       if (Object.keys(hasChanged).length === 0) {
         togglePopup();
         return;
       }
-      console.log("handlechange", hasChanged)
       const response = await axios.put(
         `${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/case/${item.id}`,
         hasChanged,
@@ -165,7 +159,7 @@ const EditCase = ({ togglePopup, item }) => {
       console.error("Error updating case:", err);
       toast.error(err.response?.data?.detail || "Failed to update case");
     } finally {
-      setIsSubmitting(false); // Reset submitting state
+      setIsSubmitting(false);
     }
   };
 
@@ -175,13 +169,10 @@ const EditCase = ({ togglePopup, item }) => {
     let formattedValue;
 
     if (name === 'title') {
-      // Capitalize first letter of each word
       formattedValue = value.replace(/\b\w/g, (char) => char.toUpperCase());
     } else if (name === 'description') {
-      // Capitalize only the first letter of the whole input
       formattedValue = value.charAt(0).toUpperCase() + value.slice(1);
     } else {
-      // For other fields, keep as is
       formattedValue = value;
     }
 
@@ -191,7 +182,7 @@ const EditCase = ({ togglePopup, item }) => {
     }));
     setError((prevErrors) => ({
       ...prevErrors,
-      [name]: ""  // Remove the specific error message
+      [name]: ""
     }));
   };
   const handleWatchersChange = (selectedOptions) => {
@@ -215,54 +206,6 @@ const EditCase = ({ togglePopup, item }) => {
     }));
   };
 
-  // const customStyles = {
-  //   control: (base) => ({
-  //     ...base,
-  //     backgroundColor: 'white',
-  //     color: 'black',
-  //     boxShadow: 'none',
-  //     outline: 'none'
-  //   }),
-  //   menu: (base) => ({
-  //     ...base,
-  //     backgroundColor: 'white',
-  //     color: 'black',
-  //   }),
-  //   option: (base, state) => ({
-  //     ...base,
-  //     backgroundColor: state.isSelected ? 'black' : 'white',
-  //     color: state.isSelected ? 'white' : 'black',
-  //     '&:hover': {
-  //       backgroundColor: 'black',
-  //       color: 'white'
-  //     }
-  //   }),
-  //   multiValue: (base) => ({
-  //     ...base,
-  //     backgroundColor: 'white',
-  //   }),
-  //   multiValueLabel: (base) => ({
-  //     ...base,
-  //     backgroundColor: 'black',
-  //     color: 'white',
-  //   }),
-  //   multiValueRemove: (base) => ({
-  //     ...base,
-  //     color: 'black',
-  //     '&:hover': {
-  //       backgroundColor: 'black',
-  //       color: 'white'
-  //     }
-  //   })
-  // };
-
-  // Prepare values for Select components
-  // const watcherValues = formData.watchers.map(watcher => ({
-  //   value: watcher,
-  //   label: watcher
-  // }));
-
-  // Find the current assignee option from the users list
   const getCurrentAssignee = () => {
     const matchedAssignee = options.find(option => option.value === formData.assignee);
     if (matchedAssignee) {
@@ -276,7 +219,6 @@ const EditCase = ({ togglePopup, item }) => {
     } : null;
   };
 
-  // Find the current status option
   const getCurrentStatus = () => {
     const matchedStatus = statusOptions.find(option => option.value === formData.status);
     if (matchedStatus) {
@@ -322,6 +264,15 @@ const EditCase = ({ togglePopup, item }) => {
     setIsBtnDisabled(isSame);
   }, [formData, initialFormData]);
 
+  if (loading) {
+    return (
+      <div className="popup-overlay">
+        <div className="popup-container">
+          <div className="popup-content">Loading case details...</div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="popup-overlay">
@@ -363,14 +314,11 @@ const EditCase = ({ togglePopup, item }) => {
               styles={customStyles}
               className="com"
               placeholder="Select Assignee"
-              // defaultInputValue={formData.assignee}
               value={getCurrentAssignee()}
               onChange={handleAssigneeChange}
               defaultMenuIsOpen={false}
               openMenuOnClick={true}
             />
-
-
 
             <label htmlFor="watchers">Watchers</label>
             <Select
@@ -383,11 +331,9 @@ const EditCase = ({ togglePopup, item }) => {
               value={formData.watchers.map((watcher) => {
                 const existingWatcher = options.find((opt) => opt.label === watcher);
                 return existingWatcher || { value: watcher, label: watcher };
-              })
-              }
+              })}
               onChange={handleWatchersChange}
             />
-
 
             <label htmlFor="status">Status:</label>
             <Select
@@ -398,7 +344,7 @@ const EditCase = ({ togglePopup, item }) => {
               placeholder="Select status"
               value={getCurrentStatus()}
               onChange={handleStatusChange}
-              defaultMenuIsOpen={false}  // Ensures menu starts closed
+              defaultMenuIsOpen={false}
               openMenuOnClick={true}
             />
 
@@ -413,7 +359,7 @@ const EditCase = ({ togglePopup, item }) => {
             />
 
             <div className="button-container">
-              <button type="submit" className="create-btn" disabled={isBtnDisabled || isSubmitting}> {isSubmitting ? 'Updating...' : 'Update'}</button>
+              <button type="submit" className="create-btn" disabled={isBtnDisabled || isSubmitting}> {isSubmitting ? 'Editing...' : 'Edit'}</button>
               <button type="button" className="cancel-btn" onClick={togglePopup}>Cancel</button>
             </div>
           </form>

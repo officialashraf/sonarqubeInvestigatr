@@ -419,7 +419,49 @@ const UserManagement = () => {
                           alignItems: "center"
                         }}
                       >
-                        Last Modified
+                        Created On
+                        <span
+                          onClick={() => handleSort("created_on")}
+                          style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
+                        >
+                          {sortConfig.key === "created_on" ? (
+                            sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
+                          ) : (
+                            <ArrowDropDown />
+                          )}
+                        </span>
+                      </div>
+                    </th>
+                    <th>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center"
+                        }}
+                      >
+                        Edited On
+                        <span
+                          onClick={() => handleSort("created_on")}
+                          style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
+                        >
+                          {sortConfig.key === "created_on" ? (
+                            sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
+                          ) : (
+                            <ArrowDropDown />
+                          )}
+                        </span>
+                      </div>
+                    </th>
+                    <th>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center"
+                        }}
+                      >
+                        Edited By
                         <span
                           onClick={() => handleSort("created_on")}
                           style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
@@ -501,6 +543,16 @@ const UserManagement = () => {
                         <td>
                           {
                             (item.updatedOn ? item.updatedOn.slice(0, 10) : "-")
+                          }
+                        </td>
+                        <td>
+                          {
+                            (item.updatedBy || "-")
+                          }
+                        </td>
+                        <td>
+                          {
+                            (item.createdOn || "-")
                           }
                         </td>
                         <td>

@@ -1,21 +1,36 @@
-import { useEffect, useState } from "react";
-import "../Case/table.css";
-import { useNavigate } from "react-router-dom";
+import React from 'react'
+import "../Case/table.css"
+import { Col } from 'react-bootstrap'
+import { FaArrowLeft } from 'react-icons/fa'
 import { Plus } from "react-bootstrap-icons";
-import { Col, Table } from "react-bootstrap";
-import { FaArrowLeft } from "react-icons/fa";
-import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
-import Dropdown from "react-bootstrap/Dropdown";
-import { FiMoreVertical } from "react-icons/fi";
-import { toast } from 'react-toastify';
-import axios from "axios";
+import { useNavigate } from 'react-router-dom'
+import styles from './Connections.module.css';
 import Cookies from 'js-cookie';
-import TargetCreate from "./targetCreate";
-import TargetUpdate from "./targetUpdate";
-import TargetDetails from "./targetDetails";
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 import Loader from "../Layout/loader.js"
+import { toast } from 'react-toastify';
+import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
+import { Table } from 'react-bootstrap';
+import {
+  InputGroup,
+  FormControl,
+  Badge,
+  Button,
+} from "react-bootstrap";
+// import TargetCreate from './TargetCreate.js';
+// // import TargetUpdate from './TargetUpdate.js'; 
+// import TargetDetails from './TargetDetails.js';
+import { FiMoreVertical } from 'react-icons/fi';
+import { AiOutlineEdit } from 'react-icons/ai';
+import Dropdown from 'react-bootstrap/Dropdown';
+import CreateConnection from './CreateConnection.js';
+import EditConnection from './EditConnection.js';
+import ConnectionDetails from './ConnectionDetails.js';
 
-const TargetList = () => {
+
+
+const ConnectionManagement = () => {
   const token = Cookies.get("accessToken");
   const navigate = useNavigate();
   const [filteredData, setFilteredData] = useState([]);
@@ -29,10 +44,10 @@ const TargetList = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
 
-  const fetchTargets = async () => {
+  const fetchConnection = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/target`, {
+      const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/connection`, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": 'application/json'
@@ -56,10 +71,10 @@ const TargetList = () => {
   };
   console.log("serrr", filteredData)
   useEffect(() => {
-    const tri = fetchTargets();
+    const tri = fetchConnection();
     console.log("okk", tri)
     const handleDatabaseUpdated = () => {
-      fetchTargets();
+      fetchConnection();
     };
 
     window.addEventListener("databaseUpdated", handleDatabaseUpdated);
@@ -178,7 +193,7 @@ const TargetList = () => {
       console.log("Target deleted:", response.data);
 
       // After successful deletion, fetch the updated data
-      fetchTargets(); // Optionally refresh data after deletion
+      fetchConnection(); // Optionally refresh data after deletion
 
     } catch (err) {
       // Error handling based on the type of error
@@ -201,7 +216,6 @@ const TargetList = () => {
   if (loading) {
     return <Loader />
   }
-
   return (
     <>{data &&
       data.length > 0 ? (
@@ -237,7 +251,7 @@ const TargetList = () => {
             >
 
               <Plus size={14} style={{ marginRight: "5px" }} />
-              Add New Target
+              Add New Connection
             </button>
           </div>
         </div>
@@ -245,7 +259,7 @@ const TargetList = () => {
           <Table striped bordered hover variant="light">
             <thead>
               <tr>
-                <th>
+                {/* <th>
                   <div
                     style={{
                       display: "flex",
@@ -253,7 +267,7 @@ const TargetList = () => {
                       alignItems: "center"
                     }}
                   >
-                    Target ID
+                    Connection Name
                     <span
                       onClick={() => handleSort("id")}
                       style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
@@ -265,7 +279,7 @@ const TargetList = () => {
                       )}
                     </span>
                   </div>
-                </th>
+                </th> */}
                 <th>
                   <div
                     style={{
@@ -274,7 +288,7 @@ const TargetList = () => {
                       alignItems: "center"
                     }}
                   >
-                    Target
+                    Connection Name
                     <span
                       onClick={() => handleSort("name")}
                       style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
@@ -295,7 +309,7 @@ const TargetList = () => {
                       alignItems: "center"
                     }}
                   >
-                    Type
+                    Connection Type
                     <span
                       onClick={() => handleSort("type")}
                       style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
@@ -310,7 +324,7 @@ const TargetList = () => {
                 </th>
 
 
-                <th>
+                {/* <th>
                   <div
                     style={{
                       display: "flex",
@@ -330,8 +344,8 @@ const TargetList = () => {
                       )}
                     </span>
                   </div>
-                </th>
-                <th>
+                </th> */}
+                {/* <th>
                   <div
                     style={{
                       display: "flex",
@@ -345,6 +359,50 @@ const TargetList = () => {
                       style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
                     >
                       {sortConfig.key === "threat_weightage" ? (
+                        sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
+                      ) : (
+                        <ArrowDropDown />
+                      )}
+                    </span>
+                  </div>
+                </th> */}
+
+
+                <th>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center"
+                    }}
+                  >
+                    Created By
+                    <span
+                      onClick={() => handleSort("created_by")}
+                      style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
+                    >
+                      {sortConfig.key === "created_by" ? (
+                        sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
+                      ) : (
+                        <ArrowDropDown />
+                      )}
+                    </span>
+                  </div>
+                </th>
+                <th>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center"
+                    }}
+                  >
+                    Created On
+                    <span
+                      onClick={() => handleSort("created_on")}
+                      style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
+                    >
+                      {sortConfig.key === "created_on" ? (
                         sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
                       ) : (
                         <ArrowDropDown />
@@ -394,64 +452,24 @@ const TargetList = () => {
                     </span>
                   </div>
                 </th>
-                <th>
+                <th className="sticky-column">
                   <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center"
-                    }}
+                    style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
                   >
-                    Created On
+                    Status
                     <span
-                      onClick={() => handleSort("created_on")}
+                      onClick={() => handleSort("status")}
                       style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
                     >
-                      {sortConfig.key === "created_on" ? (
-                        sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
+                      {sortConfig.key === "status" ? (
+                        sortConfig.direction === "asc" ? (
+                          <ArrowDropUp />
+                        ) : (
+                          <ArrowDropDown />
+                        )
                       ) : (
                         <ArrowDropDown />
                       )}
-                    </span>
-                  </div>
-                </th>
-                <th>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center"
-                    }}
-                  >
-                    Created By
-                    <span
-                      onClick={() => handleSort("created_by")}
-                      style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
-                    >
-                      {sortConfig.key === "created_by" ? (
-                        sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
-                      ) : (
-                        <ArrowDropDown />
-                      )}
-                    </span>
-                  </div>
-                </th>
-                <th>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center"
-                    }}
-                  >
-                    Description
-                    <span
-                      style={{
-                        cursor: "pointer",
-                        display: "inline-flex",
-                        alignItems: "center"
-                      }}
-                    >
                     </span>
                   </div>
                 </th>
@@ -464,85 +482,72 @@ const TargetList = () => {
                     key={item.id || Math.random()}
                     style={{ position: "relative" }}
                   >
-                    <td>
+                    {/* <td>
                       {`TAR${String(item.id).padStart(4, '0')}`}
-                    </td>
+                    </td> */}
                     <td>
                       {item.name}
                     </td>
                     <td>
-                      {item.type}
+                      {item.connection_type}
                     </td>
                     <td>
-                      {item.synonyms?.join(", ")}
+                      {(item.created_by
+                        || "-")}
                     </td>
+                   
                     <td>
-                      {item.threat_weightage}
-                    </td>
-                    <td>
-                      {(item.modified_on ? item.modified_on.slice(0, 10)
-                        : "-")}
+                      {(item.created_on.slice(0, 10)
+                        || "-")}
                     </td>
                     <td>
                       {(item.modified_by
                         || "-")}
                     </td>
                     <td>
-                      {(item.created_on.slice(0, 10)
-                        || "-")}
+                      {(item.modified_on ? item.modified_on.slice(0, 10)
+                        : "-")}
                     </td>
-                    <td>
-                      {(item.created_by
-                        || "-")}
-                    </td>
+                  
                     <td
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        textAlign: "center"
-                      }}
+                      className="d-flex justify-content-between align-items-center"
+                      disabled={true}
+                      onClick={(e) => e.stopPropagation()}
                     >
-                      <span>{item.description}</span>
-                      <Dropdown onToggle={(isOpen) => setIsDropdownOpen(isOpen)}>
-                        <Dropdown.Toggle
-                          className="menu-button"
-                          style={{
-                            background: "none",
-                            border: "none",
-                            justifyContent: "end",
-                            cursor: "pointer"
-                          }}
-                        >
-
-                          <FiMoreVertical size={16} />
-
-                        </Dropdown.Toggle>
-                        <Dropdown.Menu
-                          className="custom-dropdown-menu"
-                          style={{
-                            minWidth: "150px",
-                            textAlign: "left"
-                          }}
-                        >
-                          <Dropdown.Item
-                            onClick={() => togglePopupD(item)}
-                            style={{ cursor: "pointer" }}
+                      <Badge pill bg="dark" className="badge-custom">
+                        <span>{item.status}</span>
+                      </Badge>
+                      <span>
+                        {" "}
+                        <Dropdown onToggle={(isOpen) => setIsDropdownOpen(isOpen)}>
+                          <Dropdown.Toggle
+                            className="custom-dropdown-toggle custom-btn"
                           >
-                            Details
-                          </Dropdown.Item>
-                          <Dropdown.Item
-                            onClick={() => togglePopupE(item)}
-                          >
-                            Edit
-                          </Dropdown.Item>
-                          <Dropdown.Item
-                            onClick={() => confirmDelete(item.id, item.name)}
-                          >
-                            Delete
-                          </Dropdown.Item>
-                        </Dropdown.Menu>
-                      </Dropdown>
+                            {" "}
+                            ⋮{" "}
+                          </Dropdown.Toggle>
+                          <Dropdown.Menu className="custom-dropdown-menu">
+                            <Dropdown.Item
+                              onClick={() => {
+                                 togglePopupD(item);
+                              }}
+                              style={{ cursor: "pointer" }}
+                            >
+                              Details
+                            </Dropdown.Item>
+                            <Dropdown.Item 
+                              onClick={() => togglePopupE(item)}
+                              >
+                              Edit
+                            </Dropdown.Item>
+                            <Dropdown.Item
+                              onClick={() => confirmDelete(item.id, item.title)}
+                            >
+                              Delete
+                            </Dropdown.Item>
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      </span>
                     </td>
                   </tr>
                 )}
@@ -557,11 +562,12 @@ const TargetList = () => {
       </div>
     )
     }
-      {showPopup && <TargetCreate togglePopup={togglePopup} existingTargets={filteredData} />}
-      {showPopupE && <TargetUpdate togglePopup={togglePopupE} id={details.id} existingTargets={filteredData} />}
-      {showPopupD && <TargetDetails togglePopup={togglePopupD} id={details.id} />}
+       {showPopup && <CreateConnection togglePopup={togglePopup} />} 
+       {showPopupE && <EditConnection togglePopup={togglePopupE} id={details.id} />}
+     {showPopupD && <ConnectionDetails togglePopup={togglePopupD} id={details.id} />} 
     </>
   );
 };
 
-export default TargetList;
+
+export default ConnectionManagement;

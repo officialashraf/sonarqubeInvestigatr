@@ -108,6 +108,7 @@ const EditUser = ({ togglePopup, item }) => {
         return true;
       })
     );
+    setLoading(true);
     try {
       const hasChanged = {};
       if (payloadData.firstName && payloadData.firstName !== item.first_name) {
@@ -131,6 +132,7 @@ const EditUser = ({ togglePopup, item }) => {
       // If nothing has changed 
       if (Object.keys(hasChanged).length === 0) {
         toast.info("No changes detected.");
+        setLoading(false);
         return;
       }
 
@@ -154,6 +156,8 @@ const EditUser = ({ togglePopup, item }) => {
     } catch (err) {
       console.error("Update error:", err);
       toast.error(err.response?.data?.detail || "Something went wrong while updating. Please try again");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -276,7 +280,7 @@ const EditUser = ({ togglePopup, item }) => {
 
             <div className="button-container">
               <button type="submit" className="create-btn" disabled={isBtnDisabled || loading}>
-                {loading ? "Updating..." : "Update"}
+                {loading ? "Editing..." : "Edit"}
               </button>
               <button type="button" onClick={togglePopup} className="cancel-btn">Cancel</button>
             </div>

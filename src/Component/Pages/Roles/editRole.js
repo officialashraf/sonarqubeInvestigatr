@@ -81,7 +81,7 @@ const EditRole = ({ togglePopup, details }) => {
                     <form onSubmit={(e) => e.preventDefault()}> {/* Prevent form submission default */}
 
                         <span style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
-                            <label>Update Role *</label>
+                            <label>Edit Role *</label>
                             <CloseButton onClick={togglePopup} />
                         </span>
                         <input
@@ -104,7 +104,7 @@ const EditRole = ({ togglePopup, details }) => {
                                 disabled={isBtnDisabled || isSubmitting} // Disable button if no changes or submitting
 
                             >
-                                {isSubmitting ? 'Updating...' : 'Update'}
+                                {isSubmitting ? 'Editing...' : 'Edit'}
                             </button>
                             <button
                                 type="button"

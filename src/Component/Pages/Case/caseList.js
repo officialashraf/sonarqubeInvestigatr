@@ -424,9 +424,30 @@ const DataTable = () => {
                     <div
                       style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
                     >
-                      Modified On
+                     Edited On
                       <span
                         onClick={() => handleSort("modified_on")}
+                        style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
+                      >
+                        {sortConfig.key === "modified_on" ? (
+                          sortConfig.direction === "asc" ? (
+                            <ArrowDropUp />
+                          ) : (
+                            <ArrowDropDown />
+                          )
+                        ) : (
+                          <ArrowDropDown />
+                        )}
+                      </span>
+                    </div>
+                  </th>
+                  <th>
+                    <div
+                      style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
+                    >
+                      Edited By
+                      <span
+                        onClick={() => handleSort("modified_by")}
                         style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
                       >
                         {sortConfig.key === "modified_on" ? (
@@ -493,6 +514,7 @@ const DataTable = () => {
                       </td>
 
                       <td>{item.modified_on}</td>
+                      <td>{item.modified_by}</td>
                       <td
                         className="d-flex justify-content-between align-items-center"
                         disabled={true}

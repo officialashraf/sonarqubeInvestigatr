@@ -1,5 +1,6 @@
 import { Card, CardContent, Typography, IconButton } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import HttpsIcon from '@mui/icons-material/Https';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useNavigate } from 'react-router-dom';
 import { MdAdminPanelSettings } from "react-icons/md";
@@ -10,6 +11,7 @@ const UserDashboard = () => {
   const cardData = [
     { title: 'User Management' },
     { title: 'Roles and Permissions' },
+    { title: 'Connection Management'}
   ];
 
   const handleCheckboxChange = (title) => {
@@ -17,6 +19,8 @@ const UserDashboard = () => {
       navigate("/users");
     } else if (title === "Roles and Permissions") {
       navigate("/roles");
+    } else if (title === "Connection Management"){
+      navigate("/connections")
     }
   };
   return <div className="container-fluid  py-4">
@@ -41,6 +45,7 @@ const UserDashboard = () => {
                 <IconButton size="small" sx={{ color: "white" }}>
                   {index === 0 && <FaUsersBetweenLines />}
                   {index === 1 && <MdAdminPanelSettings />}
+                  {index === 2 && <HttpsIcon/>}
                 </IconButton>
               </div>
               <Typography variant="subtitle1">
