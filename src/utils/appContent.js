@@ -1,35 +1,36 @@
-import Header from '../Component/Pages/Home/header.js';
-import Home from '../Component/Pages/Home/home';
-import LoginPage from '../Component/Pages/User/login';
+import Header from '../Component/Modules/Home/header.js';
+import Home from '../Component/Modules/Home/home';
+import LoginPage from '../Component/Modules/User/login';
 import { Routes, Route, useLocation } from 'react-router-dom';
-import MainFilter from '../Component/Pages/Summarymain/mainFilterPage.js';
-import AddFilter2 from '../Component/Pages/Filters/addFilter.js';
-import CaseTableDataFilter from '../Component/Pages/Analyze/caseTableDataFilter.js';
-import CaseAddFilter from '../Component/Pages/Summarymain/unusable/caseAddFilter.js';
-import RightSidebar from '../Component/Pages/Home/rightSideBar.js';
-import Sidebar from '../Component/Pages/Home/leftSideBar.js';
-import '../Component/Pages/Home/dashboard.css';
-import Summary from '../Component/Pages/Summarymain/summary.js';
-import LineChart1 from '../Component/Pages/Analyze/GraphicalData/lineChart.js';
-import KeywordChart from '../Component/Pages/Analyze/GraphicalData/keywordChart.js';
-import GraphicalData from '../Component/Pages/Analyze/GraphicalData/graphicalData.js';
+import MainFilter from '../Component/Modules/Summarymain/mainFilterPage.js';
+import AddFilter2 from '../Component/Modules/Filters/addFilter.js';
+import CaseTableDataFilter from '../Component/Modules/Analyze/caseTableDataFilter.js';
+import CaseAddFilter from '../Component/Modules/Summarymain/unusable/caseAddFilter.js';
+import RightSidebar from '../Component/Modules/Home/rightSideBar.js';
+import Sidebar from '../Component/Modules/Home/leftSideBar.js';
+import '../Component/Modules/Home/dashboard.css';
+import Summary from '../Component/Modules/Summarymain/summary.js';
+import LineChart1 from '../Component/Modules/Analyze/GraphicalData/lineChart.js';
+import KeywordChart from '../Component/Modules/Analyze/GraphicalData/keywordChart.js';
+import GraphicalData from '../Component/Modules/Analyze/GraphicalData/graphicalData.js';
 import '../App.css'
 import ProtectedRoute from './protectRoute.js';
-import Loader from '../Component/Pages/Layout/loader.js';
-import SearchResults from '../Component/Pages/FilterCriteria/List/fullscreen.js';
-import Confirm from '../Component/Pages/FilterCriteria/confirmCriteria.js';
-import LogoutUser from '../Component/Pages/User/logout.js';
-import ShowDetails from '../Component/Pages/PII/showDetails.js';
-import LicensePage from '../Component/Pages/User/license.js';
+import Loader from '../Component/Modules/Layout/loader.js';
+import SearchResults from '../Component/Modules/FilterCriteria/List/fullscreen.js';
+import Confirm from '../Component/Modules/FilterCriteria/confirmCriteria.js';
+import LogoutUser from '../Component/Modules/User/logout.js';
+import ShowDetails from '../Component/Modules/PII/showDetails.js';
+import LicensePage from '../Component/Modules/User/license.js';
 import LicenseValidator from './licenseValidator.js';
-import UserDashboard from '../Component/Pages/User/userDashboard.js';
-import UserManagement from '../Component/Pages/User/UserManagement.js';
-import RolesPermission from '../Component/Pages/Roles/roles_Permission.js';
-import ReportPage from '../Component/Pages/Reports/reportPage.js';
-import TargetDashboard from '../Component/Pages/Targets/targetDashboard.js';
+import UserDashboard from '../Component/Modules/User/userDashboard.js';
+import UserManagement from '../Component/Modules/User/UserManagement.js';
+import RolesPermission from '../Component/Modules/Roles/roles_Permission.js';
+import ReportPage from '../Component/Modules/Reports/reportPage.js';
+import TargetDashboard from '../Component/Modules/Targets/targetDashboard.js';
 import { setupAxiosInterceptors } from './axiosConfig.js';
 import LicenseGuard from './licenseGaurd.js';
-import AboutUs from '../Component/Pages/Home/aboutUs.js';
+import AboutUs from '../Component/Modules/Home/aboutUs.js';
+import DAButton from '../Component/Common/Buttton/button.js';
 
 
 const AppContent = () => {
@@ -77,6 +78,7 @@ const AppContent = () => {
                 <div className="cont-b">
                     <Routes>
                         <Route path='/' element={<LicenseValidator />} />
+                           <Route path='/btn' element={<DAButton />} />
                         <Route path="/license" element={<LicensePage />} />
                         {/* <Route path="/login" element={<LoginPage />} /> */}
                         <Route element={<LicenseGuard />}>

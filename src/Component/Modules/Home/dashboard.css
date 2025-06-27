@@ -1,0 +1,51 @@
+/* ✅ Main Container */
+.ContainerDashboard {
+  width: 100vw;
+  /* min-height: 100vh; */
+  min-height: 100vh;
+height: auto;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ✅ Dashboard Grid Layout */
+.dashboard-container {
+  display: grid;
+  grid-template-columns: 50px 1fr 50px;
+  /* grid-template-rows: 36px 100%; */
+  grid-template-rows: 36px auto;
+
+  width: 100%;
+  min-height: 100%;
+}
+
+/* ✅ Sidebar & Main Content */
+.cont-a,
+.cont-c {
+  background-color: #080E17;
+  color: white;
+  padding: 10px;
+}
+
+.cont-b {
+  background-color: #080E17;
+  color: white;
+  overflow: hidden;
+  padding: 5px;
+}
+
+.cont-d {
+  grid-column: 1 / 4;
+  background-color: #080E17;
+  color: white;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+
+  .ContainerDashboard {
+    /* height: auto; */
+    min-height: 100vh;
+  }
+}

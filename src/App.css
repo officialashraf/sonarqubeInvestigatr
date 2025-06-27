@@ -1,3 +1,7 @@
+:root {
+  --font-family-main: 'Roboto';
+  --font-size-main: 12px;
+}
 .App {
   text-align: center;
   background-color: #282c34;
@@ -34,7 +38,6 @@
 p,
 label,
 input,
-h5,
 th,
 td,
 button,
@@ -44,19 +47,19 @@ div,
 a,
 link,
 span {
-  font-family: sans-serif;
-  font-size: 12px;
+ font-family: var(--font-family-main);
+  font-size: var(--font-size-main);
 }
 .App-link {
   color: #61dafb;
 }
 
 input:-webkit-autofill {
-  background-color: #fff !important;
-  color: #000 !important;
-  -webkit-text-fill-color: #000 !important;
-  box-shadow: 0 0 0 1000px white inset !important;
+ background-color: #0A192F  !important;
+  -webkit-text-fill-color: #FFFF !important;
+  box-shadow: 0 0 0 1000px #080E17 inset !important;
 }
+
 
 /* .css-qve9l1-MuiInputBase-input-MuiOutlinedInput-input:-webkit-autofill {
   height:5px;
@@ -90,3 +93,4 @@ input:-webkit-autofill {
 }
 .cont-b {
 }
+
