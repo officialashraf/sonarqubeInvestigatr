@@ -424,7 +424,7 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
             <div className="button-container">
               <button type="submit" className="create-btn" disabled={isBtnDisabled || isSubmitting}
               >
-                {isSubmitting ? 'Updating...' : 'Update'}
+                {isSubmitting ? 'Editing...' : 'Edit'}
               </button>
               <button type="button" className="cancel-btn" onClick={togglePopup}>
                 Cancel

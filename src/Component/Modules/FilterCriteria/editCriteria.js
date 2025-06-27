@@ -502,7 +502,7 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
               className="create-btn"
               disabled={isBtnDisabled || isSubmitting}
             >
-              {isSubmitting ? 'Updating...' : 'Update'}
+              {isSubmitting ? 'Editing...' : 'Edit'}
             </button>
               <button
                 type="button"

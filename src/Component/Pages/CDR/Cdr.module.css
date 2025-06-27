@@ -1,0 +1,275 @@
+/* File: Cdr.module.css */
+
+.popupOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: right;
+  z-index: 1050;
+}
+
+.popupContainerCdr {
+  background-color: #0A192F;
+  border-radius: 8px;
+  width: 600px;
+  max-width: 90%;
+  padding: 20px 0px 20px 0px;
+  color: #ffffff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  font-size: 12px;
+  max-height: 95vh;
+  overflow: visible;
+}
+
+.popupHeaderCdr {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #2c3e50;
+  padding: 0px 15px;
+  margin-bottom: 15px;
+}
+
+.closeIconCdr {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #ccc;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.closeIconCdr:hover {
+  color: #fff;
+}
+
+.popupBodyCdr {
+  flex: 1;
+  /* display: flex; */
+  flex-direction: column;
+  /* justify-content: space-between; */
+  position: relative;
+  padding: 0px 15px;
+}
+
+.optionsListCdr {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 40px;
+}
+
+.optionItemCdr {
+  background-color: #080E17;
+  border-radius: 6px;
+  padding: 6px 15px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+.selected {
+  border-color: #4a90e2;
+  background-color: #080E17;
+}
+
+.optionItemCdr input[type="radio"] {
+  margin-right: 15px;
+  cursor: pointer;
+}
+
+.optionContentCdr {
+  display: flex;
+  flex-direction: column;
+}
+
+.optionLabelCdr {
+  color: #fff;
+}
+
+.optionDescriptionCdr {
+  font-size: 0.85rem;
+  color: #bbb;
+}
+
+.batchSelectionCdr {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+  color: #fff;
+}
+
+.batchSelectionCdr label {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #fff;
+}
+
+.batchSelectionCdr input[type="radio"] {
+  cursor: pointer;
+}
+
+.targetDataTypeCdr {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+  color: #fff;
+}
+
+.selectTargetCdr,
+.selectDataTypeCdr {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.customOutlinedWrapper {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.customBadgeLabel {
+  position: absolute;
+  top: -10px;
+  left: 15px;
+  background-color: #0073CF;
+  color: #ffffff;
+  padding: 0 8px;
+  z-index: 1;
+  border-radius: 5px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.customSelectField {
+  width: 100%;
+  padding: 10px;
+  background-color: #0A192F;
+  color: #ffffff;
+  border: 1.5px solid #4A90E2;
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  appearance: none;
+  background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns="http://www.w3.org/2000/svg" fill="%234A90E2" viewBox="0 0 24 24"%3E%3Cpath d="M7 10l5 5 5-5z"/%3E%3C/svg%3E');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 20px;
+}
+
+.customSelectField:hover,
+.customSelectField:focus {
+  border-color: #4A90E2;
+}
+
+.selectTargetCdr small,
+.selectDataTypeCdr small {
+  font-size: 0.75rem;
+  color: #bbb;
+}
+
+.popupFooterCdr {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 15px 15px 0px 0px;
+  border-top: 1px solid #2c3e50;
+}
+
+.cancelBtnCdr,
+.proceedBtnCdr {
+  /* padding: 8px 16px;
+  border-radius: 4px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.2s ease; */
+  color: var(--M3-sys-light-on-primary, var(--Schemes-On-Primary, #FFF));
+
+/* M3/label/large */
+font-family: var(--Static-Label-Large-Font, Roboto);
+font-size: var(--Static-Label-Large-Size, 0.875rem);
+font-style: normal;
+font-weight: 500;
+line-height: var(--Static-Label-Large-Line-Height, 1.25rem); /* 142.857% */
+letter-spacing: var(--Static-Label-Large-Tracking, 0.00625rem);
+border-radius: 0.75rem;
+border: 1px solid var(--Primary-Accent, #0073CF);
+background: var(--Primary-Accent, #0073CF);
+}
+
+.cancelBtnCdr {
+  background-color: #3a4f6b;
+  color: #fff;
+}
+
+.cancelBtnCdr:hover {
+  background-color: #4a5f7b;
+}
+
+.proceedBtnCdr {
+  background-color: #0073cf;
+  color: #fff;
+}
+
+
+.uploadContent {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+  background-color: #080E17;
+}
+
+.uploadIcon {
+  font-size: 50px;
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+.orText {
+  color: #ccc;
+  margin: 8px 0;
+}
+
+.chooseFileBtn {
+  background-color: #1e6cc7;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.chooseFileBtn:hover {
+  background-color: #2e84e0;
+}
+
+.maxSizeNote {
+  font-size: 0.75rem;
+  color: #ccc;
+  align-self: flex-end;
+  margin: 10px 10px 0 0;
+}
+.fileName {
+  margin-top: 10px;
+  font-size: 0.85rem;
+  color: #4A90E2;
+  word-break: break-all;
+}

@@ -65,9 +65,7 @@ const UpdateComment = ({ onClose, comment, resourceId, GetCommentList }) => {
             />
 
             <div className="button-container">
-
-              <button type="submit" className="create-btn" disabled={isSubmitting}>{isSubmitting ? 'Updating...' : 'Update'}</button>
-
+              <button type="submit" className="create-btn" disabled={isSubmitting}>{isSubmitting ? 'Editing...' : 'Edit'}</button>
               <button type="button" className="cancel-btn" onClick={onClose}>
                 Cancel
               </button>

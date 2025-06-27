@@ -9,6 +9,7 @@ import './mainContainer.css';
 import AddFilter2 from '../Filters/addFilter.js';
 import Loader from '../Layout/loader.js';
 import { toast } from 'react-toastify';
+import Cdr from '../CDR/cdr.js';
 
 const MainContainer = () => {
   const token = Cookies.get('accessToken');
@@ -95,7 +96,7 @@ const MainContainer = () => {
       <div className="containerM" style={{ background: "lightgray", margin: '0px' }}>
         {renderContent()}
       </div>
-      {showPopup && <AddFilter2 togglePopup={togglePopup} />}
+      {showPopup && <Cdr togglePopup={togglePopup} />}
     </>
   );
 };

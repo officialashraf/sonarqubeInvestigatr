@@ -7,6 +7,7 @@ import { PieChart, Pie, Tooltip, Legend, ResponsiveContainer, BarChart, Bar, XAx
 import AddFilter2 from '../Filters/addFilter.js';
 import './summary.css';
 import Cookies from "js-cookie";
+import Cdr from '../CDR/cdr.js';
 
 
 const Summary = ({ filters }) => {
@@ -23,6 +24,7 @@ const Summary = ({ filters }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+
         const response = await axios.post(`${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/aggregate`, {
           query: { unified_case_id: String(caseId) },
 
@@ -36,8 +38,6 @@ const Summary = ({ filters }) => {
           }
 
         );
-
-
         console.log("summary data:", response.data);
 
         const { unified_record_type, unified_date_only, unified_type } = response.data;
@@ -82,7 +82,6 @@ const Summary = ({ filters }) => {
 
     fetchData();
   }, [caseId, token]);
-
   const togglePopup = (value) => {
     if (typeof value === 'boolean') {
       setShowPopup(value); // set true or false explicitly
@@ -150,7 +149,7 @@ const Summary = ({ filters }) => {
 
                     {barData.map((entry, index) => (
                       <Cell
-                        key={`cell-${index}`}
+                        key={`cell - ${index}`}
                         fill={index === activeIndex ? "#333" : "#333"} // Hover pe color change
                         onMouseEnter={() => setActiveIndex(index)}
                         onMouseLeave={() => setActiveIndex(null)}
@@ -189,12 +188,13 @@ const Summary = ({ filters }) => {
                 </Table>
               </TableContainer>
             </Box>
-          </div>
-        </Box>
-      </div>
-      {showPopup && <AddFilter2 togglePopup={togglePopup} />}
+          </div >
+        </Box >
+      </div >
+      {showPopup && <Cdr togglePopup={togglePopup} />}
     </>
   );
+
 };
 
 export default Summary;

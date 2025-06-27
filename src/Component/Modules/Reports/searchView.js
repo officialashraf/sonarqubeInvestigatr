@@ -102,10 +102,10 @@ const SearchView = () => {
   const handleSearch = async (e) => {
     e.preventDefault();
     try {
-      if (formData.searchQuery === "") {
-        toast.info("Please enter at least one keyword to search");
-        return;
-      }
+      // if (formData.searchQuery === "") {
+      //   toast.info("Please enter at least one keyword to search");
+      //   return;
+      // }
       const payload = {
         keyword: Array.isArray(formData.searchQuery) ? formData.searchQuery : [formData.searchQuery],
         report_generation: true,
@@ -181,7 +181,7 @@ const SearchView = () => {
         <h5>Search Report</h5>
         <form onSubmit={handleSearch}>
           {/* Search Bar with Icons */}
-          <label>Search <span style={{ color: 'black' }}>*</span></label>
+          <label>Search </label>
           <TextField
             fullWidth
             className="com"
