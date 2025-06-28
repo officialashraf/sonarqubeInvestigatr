@@ -7,7 +7,7 @@ import { PieChart, Pie, Tooltip, Legend, ResponsiveContainer, BarChart, Bar, XAx
 import AddFilter2 from '../Filters/addFilter.js';
 import './summary.css';
 import Cookies from "js-cookie";
-import Cdr from '../CDR/cdr.js';
+import Cdr from '../User/CDR/cdr.js';
 
 
 const Summary = ({ filters }) => {
