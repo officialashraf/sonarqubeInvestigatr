@@ -9,13 +9,14 @@ import './mainContainer.css';
 import AddFilter2 from '../Filters/addFilter.js';
 import Loader from '../Layout/loader.js';
 import { toast } from 'react-toastify';
-import Cdr from '../CDR/cdr.js';
+import Cdr from '../User/CDR/cdr.js';
 
 const MainContainer = () => {
   const token = Cookies.get('accessToken');
 
   const [filterdata, setfilterdata] = useState([]);
   const caseData = useSelector((state) => state.caseData.caseData);
+  console.log("Received Case ID:",caseData.id);
   const [showPopup, setShowPopup] = useState(false);
   const [isLoading, setIsLoading] = useState(true); // Track loading state
 
@@ -96,7 +97,8 @@ const MainContainer = () => {
       <div className="containerM" style={{ background: "lightgray", margin: '0px' }}>
         {renderContent()}
       </div>
-      {showPopup && <Cdr togglePopup={togglePopup} />}
+      {/* {showPopup && <Cdr togglePopup={togglePopup} />} */}
+            {showPopup && <AddFilter2 togglePopup={togglePopup} />}
     </>
   );
 };

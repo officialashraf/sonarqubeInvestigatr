@@ -235,7 +235,7 @@ const EditConnection = ({ togglePopup, id }) => {
 
                         <div className="button-container">
                             <button type="submit" className="create-btn" disabled={isSubmitting}>
-                                {isSubmitting ? "Updating..." : "Update"}
+                                {isSubmitting ? "Editing..." : "Edit"}
                             </button>
                             <button type="button" onClick={togglePopup} className="cancel-btn">Cancel</button>
                         </div>

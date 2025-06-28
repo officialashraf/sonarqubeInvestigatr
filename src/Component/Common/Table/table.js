@@ -1,13 +1,15 @@
-// A full screen reusable styled component for a data table screen with dark theme
-// Sort icons included, modular, responsive, and customizable
-
 import React, { useState } from "react";
 import styles from "./table.module.css";
-import { Table, InputGroup, FormControl } from "react-bootstrap";
-import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
+import { Table} from "react-bootstrap";
 import AppButton from "../Buttton/button";
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
-const TableModal = ({ columns = [], data = [],  searchPlaceholder = "Search...",idPrefix = "",btnTitle='' }) => {
+
+const TableModal = ({ columns = [], data = [], searchPlaceholder = "Search...", idPrefix = "", btnTitle = '', onRowClick, onRowAction = {}, enableRowClick = false,
+
+}) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortConfig, setSortConfig] = useState({ key: "", direction: "asc" });
 
@@ -19,9 +21,9 @@ const TableModal = ({ columns = [], data = [],  searchPlaceholder = "Search...",
   const renderSortIcon = (key) => {
     if (sortConfig.key === key) {
       return sortConfig.direction === "asc" ? ' ↑' : ' ↓';
-      
+
     }
-   return '↓↑';
+    return '↓↑';
   };
 
   const filteredData = data
@@ -39,48 +41,86 @@ const TableModal = ({ columns = [], data = [],  searchPlaceholder = "Search...",
 
   return (
     <>
-          <div className={styles.header}>
-             
-          <input
+      <div className={styles.header}>
+
+        <input
           className={styles.searchBar}
-            placeholder={searchPlaceholder}
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-    
-        <AppButton children={btnTitle}/>
+          placeholder={searchPlaceholder}
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+
+        <AppButton children={btnTitle} />
       </div>
       <div className={styles.tableWrapper}>
-        <Table  hover responsive size="sm" className={styles.table}>
+        <Table hover responsive size="sm" className={styles.table}>
           <thead>
             <tr>
               {columns.map((col) => (
                 <th key={col.key} onClick={() => handleSort(col.key)} className={styles.th}>
-  <div className={styles.thContent}>
-<span>{col.label}</span>
-  <span>{renderSortIcon(col.key)}</span>
-  </div>
-</th>
+                  <div className={styles.thContent}>
+                    <span>{col.label}</span>
+                    <span>{renderSortIcon(col.key)}</span>
+                  </div>
+                </th>
 
               ))}
+               {onRowAction && <th className={styles.th}>Actions</th>}
             </tr>
           </thead>
           <tbody>
             {filteredData.map((row, idx) => (
-              <tr key={idx}>
+              <tr key={idx}
+                style={{ cursor: enableRowClick ? 'pointer' : 'default' }}
+                onClick={() => enableRowClick && onRowClick && onRowClick(row)}
+              >
                 {columns.map((col) => (
-                  <td key={col.key}> {col.key === "id" && idPrefix
-                      ? `${idPrefix}${String(row[col.key]).padStart(4, "0")}`
-                      : row[col.key]}
-                      </td>
+                  <td key={col.key}> {col.key === "id"
+                    && idPrefix
+                    ? `${idPrefix}${String(row[col.key]).padStart(4, "0")}`
+                    :
+                    row[col.key]
+                  }
+                  </td>
+                  
                 ))}
+                  {onRowAction && (
+  <td className={styles.actionCol}>
+  <EditIcon
+    className={styles.icon}
+    onClick={(e) => {
+      e.stopPropagation();
+      onRowAction.edit && onRowAction.edit(row);
+    }}
+  />
+  <DeleteIcon
+    className={styles.icon}
+    onClick={(e) => {
+      e.stopPropagation();
+      onRowAction.delete && onRowAction.delete(row);
+    }}
+  />
+  <VisibilityIcon
+    className={styles.icon}
+    onClick={(e) => {
+      e.stopPropagation();
+      onRowAction.details && onRowAction.details(row);
+    }}
+  />
+</td>
+
+  )}
+
               </tr>
             ))}
           </tbody>
         </Table>
       </div>
-   </>
+    </>
   );
 };
 
 export default TableModal;
+
+
+

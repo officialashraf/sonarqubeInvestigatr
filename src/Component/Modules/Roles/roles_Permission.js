@@ -216,21 +216,58 @@ const RolesPermission = () => {
         return <Loader />
     }
 const roleColumns = [
-    { key: "id", label: "Case ID", render: (val) => `CASE${String(val).padStart(4, "0")}` },
-    { key: "title", label: "Title" },
-    { key: "description", label: "Description" },
-    { key: "created_on", label: "Created On" },
+      { key: "role", label: "Role ID" },
+        { key: "role", label: "Roles" },
+        { key: "created_on", label: "Created On" },
     { key: "created_by", label: "Created By" },
-    { key: "assignee", label: "Assignee" },
-    { key: "watchers", label: "Watchers" },
-    { key: "modified_on", label: "Modified On" },
-    { key: "status", label: "Status", render: (val) => <span className="badge bg-dark">{val}</span> }
+      { key: "modified_on", label: "Edited On" },
+       { key: "modified_by", label: "Edited By" },
+
   ];
 
     return (
         <>
-            {data && data.length > 0 ?
-                (<div className="data-table-container">
+            {data && data.length > 0 ?(     
+                <div>
+                     {/* <FaArrowLeft
+                                style={{
+                                    cursor: 'pointer', margin: '0px 40px 0px 38px',
+                                    fontSize: '18px'
+                                }}
+
+                                onClick={() => navigate('/admin')}
+                            /> */}
+          <TableModal
+           title="Roles Dasboard"
+        data={data}
+        columns={roleColumns}
+        onRowAction={{
+          view: (row) => alert("View row: " + JSON.stringify(row))
+        }}
+         idPrefix="Roles"
+         btnTitle=" + Add New Role"
+      />
+</div>
+               
+          
+                ) : (
+                    <div className="resourcesContainer" style={{ border: 'none' }}>
+                        <h3 className="title">Let's Get Started!</h3>
+                        <p className="content">Add roles to get started</p>
+                        <button className='add-btn' title='Add New Case' onClick={togglePopup}><Plus size={20} />Add New Roles</button>
+                    </div>
+                )
+}
+            {showPopup && <AddRole togglePopup={togglePopup} />}
+            {showPopupB && <DetailsPermission roleId={selectedRoleId} toggleDetails={toggleDetailsPopup} />}
+            {showPopupC && <EditRole togglePopup={togglePopupC} details={popupDetails} />}
+            {showPopupD && <AssignRole togglePopup={togglePopupD} details={popupDetails} />}
+        </>
+    );
+};
+
+export default RolesPermission;
+ {/*<div className="data-table-container">
                     <div className="top-header" style={{ marginTop: "10px" }}>
                         <Col xs={1} className="d-flex align-items-center justify-content-flex-start" style={{ width: "300px", minWidth: "300px" }}>
                             <FaArrowLeft
@@ -241,7 +278,7 @@ const roleColumns = [
 
                                 onClick={() => navigate('/admin')}
                             />
-                            {/* <div className="search-bar1" style={{ width: '100%' }}>
+                            <div className="search-bar1" style={{ width: '100%' }}>
                                 <input
                                     type="text"
                                     className="form-control"
@@ -249,17 +286,17 @@ const roleColumns = [
                                     value={searchTerm}
                                     onChange={handleSearch}
                                 />
-                            </div> */}
+                            </div> 
                         </Col>
-                        {/* <div className="header-icons">
+                        <div className="header-icons">
                             <button className="add-btn" onClick={togglePopup}>
                                 <Plus size={14} style={{ marginRight: "5px" }} />
                                 Add New Role
                             </button>
-                        </div> */}
+                        </div> 
                     </div>
 
-                    {/* <div className="data-table" style={{ minHeight: isDropdownOpen ? "250px" : "auto" }}>
+                    <div className="data-table" style={{ minHeight: isDropdownOpen ? "250px" : "auto" }}>
                         <Table striped bordered hover variant="light">
                             <thead>
                                 <tr>
@@ -320,35 +357,5 @@ const roleColumns = [
                                 ))}
                             </tbody>
                         </Table>
-                    </div> */}
-
-                     <div>
-          <TableModal
-           title="Roles Dasboard"
-        data={data}
-        columns={roleColumns}
-        onRowAction={{
-          view: (row) => alert("View row: " + JSON.stringify(row))
-        }}
-         idPrefix="Roles"
-         btnTitle=" + Add New Role"
-      />
-</div>
-               </div>
-                ) : (
-                    <div className="resourcesContainer" style={{ border: 'none' }}>
-                        <h3 className="title">Let's Get Started!</h3>
-                        <p className="content">Add roles to get started</p>
-                        <button className='add-btn' title='Add New Case' onClick={togglePopup}><Plus size={20} />Add New Roles</button>
-                    </div>
-                )
-            }
-            {showPopup && <AddRole togglePopup={togglePopup} />}
-            {showPopupB && <DetailsPermission roleId={selectedRoleId} toggleDetails={toggleDetailsPopup} />}
-            {showPopupC && <EditRole togglePopup={togglePopupC} details={popupDetails} />}
-            {showPopupD && <AssignRole togglePopup={togglePopupD} details={popupDetails} />}
-        </>
-    );
-};
-
-export default RolesPermission;
+                    </div> 
+                      </div>*/}
