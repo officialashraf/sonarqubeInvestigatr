@@ -4,7 +4,6 @@ import { Col } from 'react-bootstrap'
 import { FaArrowLeft } from 'react-icons/fa'
 import { Plus } from "react-bootstrap-icons";
 import { useNavigate } from 'react-router-dom'
-import styles from './Connections.module.css';
 import Cookies from 'js-cookie';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
@@ -18,17 +17,13 @@ import {
   Badge,
   Button,
 } from "react-bootstrap";
-// import TargetCreate from './TargetCreate.js';
-// // import TargetUpdate from './TargetUpdate.js'; 
-// import TargetDetails from './TargetDetails.js';
 import { FiMoreVertical } from 'react-icons/fi';
 import { AiOutlineEdit } from 'react-icons/ai';
 import Dropdown from 'react-bootstrap/Dropdown';
 import CreateConnection from './CreateConnection.js';
 import EditConnection from './EditConnection.js';
 import ConnectionDetails from './ConnectionDetails.js';
-
-
+import styles from "../../Common/Table/table.module.css"
 
 const ConnectionManagement = () => {
   const token = Cookies.get("accessToken");
@@ -158,8 +153,8 @@ const ConnectionManagement = () => {
   const confirmDelete = (id, name) => {
     toast((t) => (
       <div>
-        <p>Are you sure you want to delete {name} target?</p>
-        <button className='custom-confirm-button' onClick={() => { deleteTarget(id, name); toast.dismiss(t.id); }} style={{ padding: "4px 1px", fontSize: "12px", width: "20%" }}>Yes</button>
+        <p>Are you sure you want to delete {name} connection?</p>
+        <button className='custom-confirm-button' onClick={() => { deleteConnection(id, name); toast.dismiss(t.id); }} style={{ padding: "4px 1px", fontSize: "12px", width: "20%" }}>Yes</button>
         <button className='custom-confirm-button' onClick={() => toast.dismiss(t.id)} style={{ padding: "4px 1px", fontSize: "12px", width: "20%" }} >No</button> </div>),
       {
         autoClose: false, closeOnClick: false, draggable: false, style: {
@@ -173,7 +168,7 @@ const ConnectionManagement = () => {
       },)
   };
 
-  const deleteTarget = async (id, name) => {
+  const deleteConnection = async (id, name) => {
     const token = Cookies.get("accessToken");
     if (!token) {
       console.error("No token found in cookies.");
@@ -181,7 +176,7 @@ const ConnectionManagement = () => {
     }
     try {
 
-      const response = await axios.delete(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/target/${id}`,
+      const response = await axios.delete(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/connection/${id}`,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -189,20 +184,18 @@ const ConnectionManagement = () => {
           }
         });
       // window.dispatchEvent(new Event("databaseUpdated"));
-      toast.success(`Target ${name} deleted successfully`)
-      console.log("Target deleted:", response.data);
+      toast.success(`Connection ${name} deleted successfully`)
+      console.log("Connection deleted:", response.data);
 
       // After successful deletion, fetch the updated data
       fetchConnection(); // Optionally refresh data after deletion
 
     } catch (err) {
       // Error handling based on the type of error
-      console.error('Error during login:', err);
-
+      console.error('Error during deleteConnection:', err);
       if (err.response) {
-
+        console.error('Error response data:', err.response.data);
         toast.error(err.response?.data?.detail || 'Something went wrong. Please try again');
-
       } else if (err.request) {
         // No response from the server
         toast.error('No response from the server. Please check your connection');
@@ -219,8 +212,8 @@ const ConnectionManagement = () => {
   return (
     <>{data &&
       data.length > 0 ? (
-      <div className="data-table-container">
-        <div className="top-header" style={{ marginTop: "10px" }}>
+      <div className={styles.container}>
+          <div className={styles.header} style={{ marginTop: "10px" }}>
           <Col
             xs={1}
             className="d-flex align-items-center justify-content-flex-start"
@@ -233,11 +226,11 @@ const ConnectionManagement = () => {
               }}
               onClick={() => navigate("/Cases")}
             />
-            <div className="search-bar1" style={{ width: "100%" }}>
+            <div className={styles.searchBar} style={{ width: "100%" }}>
               <div className="input-group">
                 <input
                   type="text"
-                  className="form-control"
+                  // className="form-control"
                   value={searchTerm}
                   onChange={handleSearch}
                   placeholder="Search"
@@ -255,8 +248,8 @@ const ConnectionManagement = () => {
             </button>
           </div>
         </div>
-        <div className="data-table" style={{ minHeight: isDropdownOpen ? "200px" : "auto" }}>
-          <Table striped bordered hover variant="light">
+        <div className={styles.tableWrapper} style={{ minHeight: isDropdownOpen ? "200px" : "auto" }}>
+          <Table striped bordered hover variant="light" className={styles.table}>
             <thead>
               <tr>
                 {/* <th>
@@ -322,50 +315,8 @@ const ConnectionManagement = () => {
                     </span>
                   </div>
                 </th>
+                
 
-
-                {/* <th>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center"
-                    }}
-                  >
-                    Synonyms
-                    <span
-                      onClick={() => handleSort("synonyms")}
-                      style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
-                    >
-                      {sortConfig.key === "synonyms" ? (
-                        sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
-                      ) : (
-                        <ArrowDropDown />
-                      )}
-                    </span>
-                  </div>
-                </th> */}
-                {/* <th>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center"
-                    }}
-                  >
-                    Threat Score(1-10)
-                    <span
-                      onClick={() => handleSort("threat_weightage")}
-                      style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
-                    >
-                      {sortConfig.key === "threat_weightage" ? (
-                        sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
-                      ) : (
-                        <ArrowDropDown />
-                      )}
-                    </span>
-                  </div>
-                </th> */}
 
 
                 <th>
@@ -482,9 +433,6 @@ const ConnectionManagement = () => {
                     key={item.id || Math.random()}
                     style={{ position: "relative" }}
                   >
-                    {/* <td>
-                      {`TAR${String(item.id).padStart(4, '0')}`}
-                    </td> */}
                     <td>
                       {item.name}
                     </td>
@@ -541,7 +489,7 @@ const ConnectionManagement = () => {
                               Edit
                             </Dropdown.Item>
                             <Dropdown.Item
-                              onClick={() => confirmDelete(item.id, item.title)}
+                              onClick={() => confirmDelete(item.id, item.name)}
                             >
                               Delete
                             </Dropdown.Item>
@@ -555,10 +503,10 @@ const ConnectionManagement = () => {
           </Table>
         </div>
       </div>) : (
-      <div className="resourcesContainer" style={{ border: 'none' }}>
+      <div className={styles.container} style={{ border: 'none' }}>
         <h3 className="title">Let's Get Started!</h3>
         <p className="content">Add targets to get started</p>
-        <button className='add-btn' title='Add New Case' onClick={togglePopup}><Plus size={20} />Add New Target</button>
+        <button className='add-btn' title='Add New Connection' onClick={togglePopup}><Plus size={20} />Add New Target</button>
       </div>
     )
     }

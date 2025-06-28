@@ -29,7 +29,7 @@ import ReportPage from '../Component/Modules/Reports/reportPage.js';
 import TargetDashboard from '../Component/Modules/Targets/targetDashboard.js';
 import { setupAxiosInterceptors } from './axiosConfig.js';
 import LicenseGuard from './licenseGaurd.js';
-import ConnectionManagement from '../Component/Pages/Connections/connectionManagement.js';
+import ConnectionManagement from '../Component/Modules/Connections/connectionManagement.js';
 import AboutUs from '../Component/Modules/Home/aboutUs.js';
 import DAButton from '../Component/Common/Buttton/button.js';
 

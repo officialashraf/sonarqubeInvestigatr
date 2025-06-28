@@ -24,16 +24,23 @@ const EditConnection = ({ togglePopup, id }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        axios
-            .get(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/connection-types`)
-            .then(res => {
-                setConnectionTypes(res.data || []);
-            })
-            .catch(err => {
+        const fetchConnectionTypes = async () => {
+            try {
+                const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/connection-type`);
+                const formattedConnectionTypes = (response.data || []).map(type => ({
+                    value: type.name,
+                    label: type.name
+                }));
+                setConnectionTypes(formattedConnectionTypes);
+            } catch (err) {
                 console.error("Error fetching connection types:", err);
                 toast.error("Could not fetch connection types");
-            });
+            }
+        };
+
+        fetchConnectionTypes();
     }, [token]);
+    
 
     useEffect(() => {
         if (!id) return;
@@ -179,7 +186,7 @@ const EditConnection = ({ togglePopup, id }) => {
                         >
                             <option value="">-- Select --</option>
                             {connectionTypes.map((ct) => (
-                                <option key={ct} value={ct}>{ct}</option>
+                                <option key={ct.value} value={ct.value}>{ct.label}</option>
                             ))}
                         </select>
                         {error.connection_type && <p className="error">{error.connection_type}</p>}
