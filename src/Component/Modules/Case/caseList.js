@@ -248,7 +248,8 @@ const DataTable = () => {
     { key: "created_by", label: "Created By" },
     { key: "assignee", label: "Assignee" },
     { key: "watchers", label: "Watchers" },
-    { key: "modified_on", label: "Modified On" },
+    { key: "modified_on", label: "Edited On" },
+       { key: "modified_by", label: "Edited By" },
     { key: "status", label: "Status", render: (val) => <span className="badge bg-dark">{val}</span> }
   ];
 
@@ -266,6 +267,7 @@ const DataTable = () => {
     },
     // more rows
   ];
+
   return (
     <>
       {data && data.length > 0 ? (
@@ -571,9 +573,22 @@ const DataTable = () => {
              title="Case Details"
         data={data}
         columns={caseColumns}
+      
+  onRowClick={(row) => {
+     dispatch(setCaseData(row));
+  console.log('Row clicked:', row);
+  const caseId = row.id // 👀 Check this!
+  navigate(`/cases/${caseId}`);
+}}
+          enableRowClick={true}
+        // onRowAction={{
+        //   view: (row) => alert("View row: " + JSON.stringify(row))
+        // }}
         onRowAction={{
-          view: (row) => alert("View row: " + JSON.stringify(row))
-        }}
+    edit: (row) => console.log("Edit", row),
+    delete: (row) => console.log("Delete", row),
+    details: (row) => console.log("Details", row)
+  }}
          idPrefix="CASE"
          btnTitle=" + Add New Case" 
       />

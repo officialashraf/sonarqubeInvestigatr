@@ -12,12 +12,13 @@ const HeaderFilter = () => {
   const caseData = useSelector((state) => state.caseData.caseData);
   const storedCaseId = useSelector((state) => state.caseData.caseData.id);
   console.log("parms id", caseId)
-  console.log("headeData", caseData)
+  console.log("headeData", caseData.id)
   useEffect(() => {
     if (caseId !== String(storedCaseId)) {
       navigate("/not-found"); //  Redirect if URL caseId doesn't match Redux caseId
     }
   }, [caseId, storedCaseId, navigate]);
+
   const handleClick = () => {
     const caseID = caseData.id
     navigate(`/cases/${caseData.id}/analysis`)
