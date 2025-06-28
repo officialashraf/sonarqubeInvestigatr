@@ -9,7 +9,7 @@ import './mainContainer.css';
 import AddFilter2 from '../Filters/addFilter.js';
 import Loader from '../Layout/loader.js';
 import { toast } from 'react-toastify';
-import Cdr from '..User/CDR/cdr.js';
+import Cdr from '../User/CDR/cdr.js';
 
 const MainContainer = () => {
   const token = Cookies.get('accessToken');
