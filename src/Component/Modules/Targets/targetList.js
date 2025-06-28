@@ -204,15 +204,18 @@ const TargetList = () => {
     return <Loader />
   }
 const targetColumns = [
-    { key: "id", label: "Case ID", render: (val) => `CASE${String(val).padStart(4, "0")}` },
-    { key: "title", label: "Title" },
-    { key: "description", label: "Description" },
+    { key: "id", label: "Target ID" },
+    { key: "name", label: "Target" },
+    { key: "type", label: "Type" },
+    { key: "synonyms", label: "Synonyms" },
+        { key: "threat_weightage", label: "Threat Score(1-10)" },
+  
     { key: "created_on", label: "Created On" },
     { key: "created_by", label: "Created By" },
-    { key: "assignee", label: "Assignee" },
-    { key: "watchers", label: "Watchers" },
-    { key: "modified_on", label: "Modified On" },
-    { key: "status", label: "Status", render: (val) => <span className="badge bg-dark">{val}</span> }
+
+    { key: "modified_on", label: "Edited On" },
+       { key: "modified_by", label: "Edited By" },
+     { key: "description", label: "Description" },
   ];
 
  
