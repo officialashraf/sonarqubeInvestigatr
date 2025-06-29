@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styles from "./Cdr.module.css"
-import AddFilter2 from '../Filters/addFilter';
+import AddFilter2 from '../../Filters/addFilter';
 import FileUpload from './FileUpload';
 import FtpPopup from './FtpPopup';
 

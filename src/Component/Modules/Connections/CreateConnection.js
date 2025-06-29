@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import { useAutoFocusWithManualAutofill } from "../../../utils/autoFocus";
 
-const CreateConnection = ({ togglePopup }) => {
+const CreateConnection = ({ togglePopup, id }) => {
     const token = Cookies.get("accessToken");
     const { inputRef } = useAutoFocusWithManualAutofill();
 
@@ -25,9 +25,9 @@ const CreateConnection = ({ togglePopup }) => {
     useEffect(() => {
         const fetchConnectionTypes = async () => {
             try {
-                const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/connection-type`);
+                const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_CONNECTION}/api/case-man/v1/connection-type`);
                 const formattedConnectionTypes = (response.data || []).map(type => ({
-                    value: type.id,
+                    value: type.name, 
                     label: type.name
                 }));
                 setConnectionTypes(formattedConnectionTypes);
@@ -85,7 +85,7 @@ const CreateConnection = ({ togglePopup }) => {
 
         try {
             const res = await axios.post(
-                `${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/connection`,
+                `${window.runtimeConfig.REACT_APP_API_CONNECTION}/api/case-man/v1/connection`,
                 formData,
                 { headers: { Authorization: `Bearer ${token}` } }
             );
@@ -120,8 +120,14 @@ const CreateConnection = ({ togglePopup }) => {
                             className="com"
                         />
                         {error.name && <p className="error">{error.name}</p>}
-
-                        <select>
+                        <label>Connection Type *</label>
+                        <select
+                            name="connection_type"
+                            value={formData.connection_type}
+                            onChange={handleChange}
+                            className="com"
+                        >
+                            <option value="">Select connection type</option>
                             {connectionTypes.map(type => (
                                 <option key={type.value} value={type.value}>
                                     {type.label}
@@ -129,7 +135,6 @@ const CreateConnection = ({ togglePopup }) => {
                             ))}
                         </select>
                         {error.connection_type && <p className="error">{error.connection_type}</p>}
-
                         <label>Host *</label>
                         <input
                             name="host"
