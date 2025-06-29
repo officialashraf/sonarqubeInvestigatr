@@ -44,7 +44,7 @@ const ConnectionDetails = ({ togglePopup, id }) => {
         return (
             <div className="popup-overlay">
                 <div className="popup-containera">
-                    <div className="popup-content">Loading case details...</div>
+                    <div className="popup-content">Loading connection details...</div>
                 </div>
             </div>
         );
@@ -104,22 +104,7 @@ const ConnectionDetails = ({ togglePopup, id }) => {
                                     <th>Edited By</th>
                                     <td>{item.modified_by}</td>
                                 </tr>
-                                <tr>
-                                    <th>Last Data Uploaded On</th>
-                                    <td>{item.lastDataUploadOn}</td>
-                                </tr>
-                                <tr>
-                                    <th>Last Data Uploaded By</th>
-                                    <td>{item.lastDataUploadBy}</td>
-                                </tr>
-                                <tr>
-                                    <th>Last Data Processed On</th>
-                                    <td>{item.lastDataProceedOn}</td>
-                                </tr>
-                                <tr>
-                                    <th>Last Data Processed By</th>
-                                    <td>{item.lastDataProceedBy}</td>
-                                </tr>
+                              
                                 
                                 
                                 

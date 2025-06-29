@@ -24,7 +24,6 @@ import CreateConnection from './CreateConnection.js';
 import EditConnection from './EditConnection.js';
 import ConnectionDetails from './ConnectionDetails.js';
 import styles from "../../Common/Table/table.module.css"
-import TableModal from '../../Common/Table/table.js';
 
 const ConnectionManagement = () => {
   const token = Cookies.get("accessToken");
@@ -43,7 +42,7 @@ const ConnectionManagement = () => {
   const fetchConnection = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_CONNECTION}/api/case-man/v1/connection`, {
+      const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/connection`, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": 'application/json'
@@ -177,7 +176,7 @@ const ConnectionManagement = () => {
     }
     try {
 
-      const response = await axios.delete(`${window.runtimeConfig.REACT_APP_API_CONNECTION}/api/case-man/v1/connection/${id}`,
+      const response = await axios.delete(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/connection/${id}`,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -210,80 +209,313 @@ const ConnectionManagement = () => {
   if (loading) {
     return <Loader />
   }
-
-  const connectionColumns = [
-    { key: "name", label: "Connection Name" },
-    { key: "connection_type", label: "Connection Type" },
-    { key: "created_by", label: "Created By" },
-    { key: "created_on", label: "Created On" },
-    { key: "modified_on", label: "Edited On" },
-    { key: "modified_by", label: "Edited By" },
-    { key: "status", label: "Status" },
-  ];
-
   return (
-    <>
-      {data && data.length > 0 ? (
-        <div className={styles.container}>
+    <>{data &&
+      data.length > 0 ? (
+      <div className={styles.container}>
           <div className={styles.header} style={{ marginTop: "10px" }}>
-            <Col
-              xs={1}
-              className="d-flex align-items-center justify-content-flex-start"
-              style={{ width: "350px", minWidth: '350px' }}
-            >
-              <FaArrowLeft
-                style={{
-                  cursor: "pointer", margin: '0px 40px 0px 38px',
-                  fontSize: '16px'
-                }}
-                onClick={() => navigate("/Cases")}
-              />
-              <div className={styles.searchBar} style={{ width: "100%" }}>
-                <div className="input-group">
-                  <input
-                    type="text"
-                    value={searchTerm}
-                    onChange={handleSearch}
-                    placeholder="Search"
-                  />
-                </div>
-              </div>
-            </Col>
-            <div className="header-icons">
-              <button className="add-btn" onClick={togglePopup}>
-                <Plus size={14} style={{ marginRight: "5px" }} />
-                Add New Connection
-              </button>
-            </div>
-          </div>
-          <div className={styles.tableWrapper} style={{ minHeight: isDropdownOpen ? "200px" : "auto" }}>
-            <TableModal
-              columns={connectionColumns}
-              data={filteredData}
-              idPrefix="CON"
-              btnTitle="+ Add New Connection"
-              // onAdd={togglePopup}
-              onRowAction={{
-                edit: (row) => togglePopupE(row),
-                delete: (row) => confirmDelete(row.id, row.name),
-                details: (row) => togglePopupD(row),
+          <Col
+            xs={1}
+            className="d-flex align-items-center justify-content-flex-start"
+            style={{ width: "350px", minWidth: '350px' }}
+          >
+            <FaArrowLeft
+              style={{
+                cursor: "pointer", margin: '0px 40px 0px 38px',
+                fontSize: '16px'
               }}
-              enableRowClick={false}
+              onClick={() => navigate("/Cases")}
             />
+            <div className={styles.searchBar} style={{ width: "100%" }}>
+              <div className="input-group">
+                <input
+                  type="text"
+                  // className="form-control"
+                  value={searchTerm}
+                  onChange={handleSearch}
+                  placeholder="Search"
+                />
+              </div>
+            </div>
+          </Col>
+          <div className="header-icons">
+            <button className="add-btn"
+              onClick={togglePopup}
+            >
+
+              <Plus size={14} style={{ marginRight: "5px" }} />
+              Add New Connection
+            </button>
           </div>
         </div>
-      ) : (
-        <div className={styles.container} style={{ border: 'none' }}>
-          <h3 className="title">Let's Get Started!</h3>
-          <p className="content">Add connections to get started</p>
-          <button className='add-btn' title='Add New Connection' onClick={togglePopup}><Plus size={20} />Add New Connection</button>
+        <div className={styles.tableWrapper} style={{ minHeight: isDropdownOpen ? "200px" : "auto" }}>
+          <Table striped bordered hover variant="light" className={styles.table}>
+            <thead>
+              <tr>
+                {/* <th>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center"
+                    }}
+                  >
+                    Connection Name
+                    <span
+                      onClick={() => handleSort("id")}
+                      style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
+                    >
+                      {sortConfig.key === "id" ? (
+                        sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
+                      ) : (
+                        <ArrowDropDown />
+                      )}
+                    </span>
+                  </div>
+                </th> */}
+                <th>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center"
+                    }}
+                  >
+                    Connection Name
+                    <span
+                      onClick={() => handleSort("name")}
+                      style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
+                    >
+                      {sortConfig.key === "name" ? (
+                        sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
+                      ) : (
+                        <ArrowDropDown />
+                      )}
+                    </span>
+                  </div>
+                </th>
+                <th>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center"
+                    }}
+                  >
+                    Connection Type
+                    <span
+                      onClick={() => handleSort("type")}
+                      style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
+                    >
+                      {sortConfig.key === "name" ? (
+                        sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
+                      ) : (
+                        <ArrowDropDown />
+                      )}
+                    </span>
+                  </div>
+                </th>
+                
+
+
+
+                <th>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center"
+                    }}
+                  >
+                    Created By
+                    <span
+                      onClick={() => handleSort("created_by")}
+                      style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
+                    >
+                      {sortConfig.key === "created_by" ? (
+                        sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
+                      ) : (
+                        <ArrowDropDown />
+                      )}
+                    </span>
+                  </div>
+                </th>
+                <th>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center"
+                    }}
+                  >
+                    Created On
+                    <span
+                      onClick={() => handleSort("created_on")}
+                      style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
+                    >
+                      {sortConfig.key === "created_on" ? (
+                        sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
+                      ) : (
+                        <ArrowDropDown />
+                      )}
+                    </span>
+                  </div>
+                </th>
+                <th>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center"
+                    }}
+                  >
+                    Edited On
+                    <span
+                      onClick={() => handleSort("modified_on")}
+                      style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
+                    >
+                      {sortConfig.key === "modified_on" ? (
+                        sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
+                      ) : (
+                        <ArrowDropDown />
+                      )}
+                    </span>
+                  </div>
+                </th>
+                <th>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center"
+                    }}
+                  >
+                    Edited By
+                    <span
+                      onClick={() => handleSort("modified_by")}
+                      style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
+                    >
+                      {sortConfig.key === "modified_by" ? (
+                        sortConfig.direction === "asc" ? <ArrowDropUp /> : <ArrowDropDown />
+                      ) : (
+                        <ArrowDropDown />
+                      )}
+                    </span>
+                  </div>
+                </th>
+                <th className="sticky-column">
+                  <div
+                    style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
+                  >
+                    Status
+                    <span
+                      onClick={() => handleSort("status")}
+                      style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
+                    >
+                      {sortConfig.key === "status" ? (
+                        sortConfig.direction === "asc" ? (
+                          <ArrowDropUp />
+                        ) : (
+                          <ArrowDropDown />
+                        )
+                      ) : (
+                        <ArrowDropDown />
+                      )}
+                    </span>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredData &&
+                filteredData.map(item =>
+                  <tr
+                    key={item.id || Math.random()}
+                    style={{ position: "relative" }}
+                  >
+                    <td>
+                      {item.name}
+                    </td>
+                    <td>
+                      {item.connection_type}
+                    </td>
+                    <td>
+                      {(item.created_by
+                        || "-")}
+                    </td>
+                   
+                    <td>
+                      {(item.created_on.slice(0, 10)
+                        || "-")}
+                    </td>
+                    <td>
+                      {(item.modified_by
+                        || "-")}
+                    </td>
+                    <td>
+                      {(item.modified_on ? item.modified_on.slice(0, 10)
+                        : "-")}
+                    </td>
+                  
+                    <td
+                      className="d-flex justify-content-between align-items-center"
+                      disabled={true}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <Badge pill bg="dark" className="badge-custom">
+                        <span>{item.status}</span>
+                      </Badge>
+                      <span>
+                        {" "}
+                        <Dropdown onToggle={(isOpen) => setIsDropdownOpen(isOpen)}>
+                          <Dropdown.Toggle
+                            className="custom-dropdown-toggle custom-btn"
+                          >
+                            {" "}
+                            ⋮{" "}
+                          </Dropdown.Toggle>
+                          <Dropdown.Menu className="custom-dropdown-menu">
+                            <Dropdown.Item
+                              onClick={() => {
+                                 togglePopupD(item);
+                              }}
+                              style={{ cursor: "pointer" }}
+                            >
+                              Details
+                            </Dropdown.Item>
+                            <Dropdown.Item 
+                              onClick={() => togglePopupE(item)}
+                              >
+                              Edit
+                            </Dropdown.Item>
+                            <Dropdown.Item
+                              onClick={() => confirmDelete(item.id, item.name)}
+                            >
+                              Delete
+                            </Dropdown.Item>
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      </span>
+                    </td>
+                  </tr>
+                )}
+            </tbody>
+          </Table>
         </div>
-      )}
-      {showPopup && <CreateConnection togglePopup={togglePopup} />}
-      {showPopupE && <EditConnection togglePopup={togglePopupE} id={details.id} />}
-      {showPopupD && <ConnectionDetails togglePopup={togglePopupD} id={details.id} />}
+      </div>) : (
+      <div className={styles.container} style={{ border: 'none' }}>
+        <h3 className="title">Let's Get Started!</h3>
+        <p className="content">Add targets to get started</p>
+        <button className='add-btn' title='Add New Connection' onClick={togglePopup}><Plus size={20} />Add New Target</button>
+      </div>
+    )
+    }
+       {showPopup && <CreateConnection togglePopup={togglePopup} />} 
+       {showPopupE && <EditConnection togglePopup={togglePopupE} id={details.id} />}
+     {showPopupD && <ConnectionDetails togglePopup={togglePopupD} id={details.id} />} 
     </>
   );
 };
+
 
 export default ConnectionManagement;
