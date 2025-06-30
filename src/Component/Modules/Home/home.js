@@ -1,5 +1,5 @@
 import CardList from './cards.js'
-import './dashboard.css'
+import styles  from './dashboard.module.css'
 import DataTable from '../Case/caseList.js'
 
 const Home = () => {
@@ -7,10 +7,10 @@ const Home = () => {
   return (
     <div style={{ height: "100%", width: "100%", flexDirection: "column", overflow: "hidden", margin: "2.5px" }}>
 
-      <div className="row-1">
+      <div className={styles.row-1}>
         <CardList />
       </div>
-      <div className="row-2" >
+      <div className={styles.row-2} >
         <DataTable />
       </div>
     </div>

@@ -1,0 +1,48 @@
+/* ✅ Main Container */
+.ContainerDashboard {
+  width: 100%;
+  min-height: 100vh;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: var(--color-colors-backgroundColor);
+  color: var(--color-colors-neutralText);
+  font-family: var(--font-fontFamily);
+}
+
+/* ✅ Dashboard Grid Layout */
+.dashboardContainer {
+  display: grid;
+  grid-template-columns: 70px 1fr;
+  grid-template-rows: 36px auto;
+  width: 100%;
+  min-height: 100%;
+}
+
+/* ✅ Sidebar & Main Content */
+.contA {
+  background-color: var(--color-colors-backgroundColor);
+  color: var(--color-colors-neutralText);
+  padding-top: 20px;
+}
+
+.contB {
+  background-color: var(--color-colors-backgroundColor);
+  color: var(--color-colors-neutralText);
+  overflow: hidden;
+  padding: 20px;
+}
+
+.contD {
+  grid-column: 1 / 4;
+  background-color: var(--color-colors-backgroundColor);
+  color: var(--color-colors-neutralText);
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .ContainerDashboard {
+    min-height: 100vh;
+  }
+}

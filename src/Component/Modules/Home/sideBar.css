@@ -1,4 +1,4 @@
-.nav {
+/* .nav {
   --bs-nav-link-padding-x: 0rem !important;
   --bs-nav-link-padding-y: 0rem !important;
 }
@@ -16,4 +16,129 @@
 }
 #spanid {
   margin-right: 3px;
+} */
+.sideB {
+  background-color: #0A1623;
+  height: 90vh;
+  padding: 10px 0;
+  display: flex;
+  flex-direction: column;
+   justify-content: space-between;
+  align-items: center;
+  border-radius: 0px 20px 20px 0px;
+}
+
+.sideTop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sideBottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.sideBottom .navSideLink {
+background-color: transparent;
+height: 40px;
+width: 40px;
+border: 1px solid #3498db;
+border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.sideBottom .navSideLink svg{
+  color: #3498db;
+}
+
+.sideBottom .navSideLink.active {
+ background-color:#3498db;
+ color: white;
+}
+.sideBottom .navSideLink:hover {
+ opacity: 4%;
+}
+.navSideLink {
+  color: #D6D6D6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 11px;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.navSideLink svg {
+  height: 20px;
+  width: 30px;
+  background-color: transparent;
+  padding: 2px;
+  border-radius: 20%;
+
+  color: #D6D6D6;
+  transition: all 0.3s ease;
+}
+
+.navSideLink:hover svg {
+  background-color: #101D2B;
+  color: #3498db;
+}
+
+.navSideLink.active svg {
+  background-color: #3498db;
+  color: #0A1623;
+}
+
+.navSideLink span {
+  margin-top: 5px;
+}
+
+@media (max-width: 767px) {
+  .sideB {
+    flex-direction: row;
+    height: auto;
+    padding: 15px 0;
+    justify-content: space-around;
+  }
+
+  .navSideLink {
+    margin-bottom: 0;
+    font-size: 10px;
+  }
+
+  .navSideLink svg {
+    width: 15px;
+    height: 15px;
+    padding: 2px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sideB {
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 5px;
+  }
+
+  .navSideLink {
+    font-size: 9px;
+    margin: 8px;
+  }
+
+  .navSideLink svg {
+    width: 28px;
+    height: 28px;
+    padding: 4px;
+  }
 }

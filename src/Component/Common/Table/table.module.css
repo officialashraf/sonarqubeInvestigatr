@@ -109,6 +109,12 @@ gap: -1rem;
     padding: 0.5rem;
   }
 } */
+
+.tableContainer{
+  padding: 20px;
+  border-radius: 15px;
+  background-color: var(--color-colors-primary);
+}
 .container {
   padding: 1rem;
   background-color: var(--color-colors-blackShade);
@@ -122,7 +128,7 @@ gap: -1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 20px;
 }
 
 .searchBar {
@@ -150,9 +156,14 @@ gap: -1rem;
 
 .tableWrapper {
   overflow-x: auto;
-  max-height: 70vh;
+  overflow-y: auto;
+ max-height: 46vh;
   border-radius: var(--shape-borderRadius);
+    scrollbar-color: #1e7df8 #0a192f;
+   scrollbar-width: thin;
+
 }
+
 
 .table {
   width: 100%;
@@ -166,7 +177,7 @@ gap: -1rem;
   background-color: var(--color-colors-primaryAccent) !important;
   color: var(--color-colors-neutralText);
   text-align: left;
-  padding: 0.5rem;
+  padding: 12px 8px;
   font-weight: var(--font-h6-fontWeight);
   white-space: nowrap;
   border-style: none !important;
@@ -183,9 +194,10 @@ gap: -1rem;
 }
 
 .table tbody td {
+  padding: 12px 8px ;
   white-space: nowrap;
   background-color:  var(--color-colors-primary) !important;
-  border-bottom: 0.5px solid var(--color-colors-neutralText) !important;
+ border-bottom: 0.3px solid var(--color-colors-gray20);
   color: var(--color-colors-neutralText) !important;
 }
 
@@ -211,22 +223,36 @@ gap: -1rem;
 }
 
 /* .actionCol {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-  align-items: center;
-} */
+  display: block;
+  gap: 14px;
+}  */
 
-.icon {
+.iconEdit {
   cursor: pointer;
   font-size: 18px !important;
-  color: #1976d2;
+  background-color: #4b451a;
+  color:var(--color-colors-warning);
   transition: transform 0.2s ease;
+  margin: 0px 5px;
+    border-radius: 5px
+}
+.iconDelete{
+  cursor: pointer;
+  font-size: 18px !important;
+ background-color: #4d1f27;
+  color:var(--color-colors-danger);
+  transition: transform 0.2s ease;
+  margin: 0px 5px;
+    border-radius: 5px
 }
 
-.icon:hover {
+.iconEdit:hover {
   transform: scale(1.2);
-  color: #0d47a1;
+   opacity: 0.7
+}
+.iconDelete:hover {
+  transform: scale(1.2);
+  opacity: 0.7
 }
 
 @media screen and (max-width: 768px) {
@@ -238,5 +264,32 @@ gap: -1rem;
   .table td {
     font-size: var(--font-caption-fontSize);
     padding: 0.5rem;
+  }
+}
+.tableWrapper {
+  overflow-x: auto;
+  overflow-y: auto;
+  max-height: 70vh; /* Default for large height screens */
+  border-radius: var(--shape-borderRadius);
+  scrollbar-color: #1e7df8 #0a192f;
+  scrollbar-width: thin;
+  padding-bottom: 0.5rem;
+}
+
+/* 📱 For short screens: height ≤ 1024px */
+@media screen and (max-height: 1024px) {
+  .tableWrapper {
+    max-height: 67vh;
+  }
+}
+@media screen and (max-height: 940px) {
+  .tableWrapper {
+    max-height: 54vh;
+  }
+}
+/* 📱 For very short screens: height ≤ 540px */
+@media screen and (max-height: 768px) {
+  .tableWrapper {
+    max-height: 47.5vh;
   }
 }
