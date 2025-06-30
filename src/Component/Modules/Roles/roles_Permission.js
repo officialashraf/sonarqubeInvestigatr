@@ -16,6 +16,7 @@ import AssignRole from "./asignRole";
 import EditRole from "./editRole";
 import Loader from "../Layout/loader";
 import TableModal from "../../Common/Table/table";
+import { assign } from "lodash";
 
 const RolesPermission = () => {
     const navigate = useNavigate();
@@ -241,9 +242,13 @@ const roleColumns = [
            title="Roles Dasboard"
         data={data}
         columns={roleColumns}
-        onRowAction={{
-          view: (row) => alert("View row: " + JSON.stringify(row))
-        }}
+         onRowAction={{
+    details: (row) => toggleDetailsPopup(row.id),
+    delete: (row) => confirmDelete(row.id, row.name),
+    edit: (row) => togglePopupC(row.id),
+  assign: (row) => togglePopupD(row.id)
+  }}
+                  onAddClick={() => togglePopup()}
          idPrefix="Roles"
          btnTitle=" + Add New Role"
       />

@@ -98,7 +98,6 @@ const MainContainer = () => {
         {renderContent()}
       </div>
       {showPopup && <Cdr togglePopup={togglePopup} />}
-            {/* {showPopup && <AddFilter2 togglePopup={togglePopup} />} */}
     </>
   );
 };

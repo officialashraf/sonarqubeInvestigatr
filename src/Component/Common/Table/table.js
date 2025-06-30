@@ -5,9 +5,11 @@ import AppButton from "../Buttton/button";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 
 
-const TableModal = ({ columns = [], data = [], searchPlaceholder = "Search...", idPrefix = "", btnTitle = '', onRowClick, onRowAction = {}, enableRowClick = false,
+
+const TableModal = ({ columns = [], data = [], onAddClick, searchPlaceholder = "Search...", idPrefix = "", btnTitle = '', onRowClick, onRowAction = {}, enableRowClick = false,
 
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -50,7 +52,7 @@ const TableModal = ({ columns = [], data = [], searchPlaceholder = "Search...", 
           onChange={(e) => setSearchTerm(e.target.value)}
         />
 
-        <AppButton children={btnTitle} />
+        <AppButton onClick={() => onAddClick && onAddClick()} children={btnTitle} />
       </div>
       <div className={styles.tableWrapper}>
         <Table hover responsive size="sm" className={styles.table}>
@@ -75,40 +77,51 @@ const TableModal = ({ columns = [], data = [], searchPlaceholder = "Search...", 
                 onClick={() => enableRowClick && onRowClick && onRowClick(row)}
               >
                 {columns.map((col) => (
-                  <td key={col.key}> {col.key === "id"
-                    && idPrefix
-                    ? `${idPrefix}${String(row[col.key]).padStart(4, "0")}`
-                    :
-                    row[col.key]
-                  }
+                  <td key={col.key}>
+                    {col.key === "id" && idPrefix
+                      ? `${idPrefix}${String(row[col.key]).padStart(4, "0")}`
+                      : col.key === ("watchers" || "synonyms")
+                        ? Array.isArray(row[col.key])
+                          ? row[col.key].join(", ")
+                          : row[col.key]
+                        : row[col.key]}
                   </td>
-
                 ))}
                 {onRowAction && (
                   <td className={styles.actionCol}>
                     <EditIcon
                       className={styles.icon}
                       onClick={(e) => {
-                        // e.stopPropagation();
+                        e.stopPropagation();
                         onRowAction.edit && onRowAction.edit(row);
                       }}
                     />
                     <DeleteIcon
                       className={styles.icon}
                       onClick={(e) => {
-                        // e.stopPropagation();
+                        e.stopPropagation();
                         onRowAction.delete && onRowAction.delete(row);
                       }}
                     />
                     <VisibilityIcon
                       className={styles.icon}
                       onClick={(e) => {
-                        // e.stopPropagation();
+                        e.stopPropagation();
                         onRowAction.details && onRowAction.details(row);
                       }}
                     />
+                    {onRowAction.assign && (
+                      <AssignmentIndIcon
+                        className={styles.icon}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onRowAction.assign(row);
+                        }}
+                        titleAccess="Assign"
+                        style={{ cursor: "pointer" }}
+                      />
+                    )}
                   </td>
-
                 )}
 
               </tr>
