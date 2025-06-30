@@ -31,6 +31,8 @@ import { setupAxiosInterceptors } from './axiosConfig.js';
 import LicenseGuard from './licenseGaurd.js';
 import AboutUs from '../Component/Modules/Home/aboutUs.js';
 import DAButton from '../Component/Common/Buttton/button.js';
+import ConnectionManagement from '../Component/Modules/Connections/connectionManagement.js';
+
 
 
 const AppContent = () => {
@@ -58,6 +60,7 @@ const AppContent = () => {
         if (path === "/admin") return "Admin";
         if (path === "/roles") return "Roles";
         if (path === "/targets") return "Target";
+        if (path === "/connections") return "Connections";
 
         return "Cases";
     };
@@ -104,6 +107,7 @@ const AppContent = () => {
                             <Route path="/reports" element={< ReportPage />} />
                             <Route path="/targets" element={< TargetDashboard />} />
                             <Route path="/about" element={< AboutUs />} />
+                            <Route path="/connections" element={< ConnectionManagement />} />
                             <Route path="*" element={<div className='notfound'> <h4>Work in progress........</h4></div>} />
                         </Route>
                         <Route path='loader' element={<Loader />} />
