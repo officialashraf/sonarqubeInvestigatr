@@ -200,7 +200,13 @@ const AddRole = ({ togglePopup }) => {
                         <div className="form-group" style={{ marginBottom: '15px' }}>
                             <label>Select Permissions</label>
                             <Select
-                                options={[{ label: 'Select All', value: '_select_all_' }, ...endpoints]}
+                                options={[
+                                    { label: 'Select All', value: '_select_all_' },
+                                    ...endpoints.map(ep => ({
+                                        ...ep,
+                                        label: ep.label.charAt(0).toUpperCase() + ep.label.slice(1)
+                                    }))
+                                ]}
                                 styles={customStyles}
                                 placeholder="Select permissions"
                                 isLoading={endpointsLoading}
@@ -229,7 +235,7 @@ const AddRole = ({ togglePopup }) => {
                                 onMenuOpen={() => setIsDropdownOpen(true)} //  Set dropdown open
                             />
                             <small className="text-muted">
-                               Check/Uncheck permissions to add or remove them from the role
+                                Check/Uncheck permissions to add or remove them from the role
                             </small>
                         </div>
 
@@ -242,22 +248,22 @@ const AddRole = ({ togglePopup }) => {
                             right: '10px'
                         }}
                         >
-                        <button
-                            type="submit"
-                            className="create-btn"
-                            onClick={assignRole}
-                            disabled={isSubmitting}
-                        >
-                            {isSubmitting ? 'Creating...' : 'Create'}
-                        </button>
-                        <button
-                            type="button"
-                            className="cancel-btn"
-                            onClick={() => togglePopup(false)}
-                            disabled={isSubmitting}
-                        >
-                            Cancel
-                        </button>
+                            <button
+                                type="submit"
+                                className="create-btn"
+                                onClick={assignRole}
+                                disabled={isSubmitting}
+                            >
+                                {isSubmitting ? 'Creating...' : 'Create'}
+                            </button>
+                            <button
+                                type="button"
+                                className="cancel-btn"
+                                onClick={() => togglePopup(false)}
+                                disabled={isSubmitting}
+                            >
+                                Cancel
+                            </button>
 
                         </div>
                     </form>

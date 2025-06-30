@@ -254,9 +254,13 @@ const userColumns = [
            title="User Dasboard"
         data={data}
         columns={userColumns}
-        onRowAction={{
-          view: (row) => alert("View row: " + JSON.stringify(row))
-        }}
+       onRowAction={{
+                edit: (row) => toggleEditForm(row),
+                delete: (row) => confirmDelete(row.id, row.name),
+                details: (row) => toggleDetails(row),
+              }}
+   
+          onAddClick={() => togglePopup()}
          idPrefix="User"
          btnTitle=" + Add New User"
       />

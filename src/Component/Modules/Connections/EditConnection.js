@@ -26,7 +26,9 @@ const EditConnection = ({ togglePopup, id }) => {
     useEffect(() => {
         const fetchConnectionTypes = async () => {
             try {
+
                 const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/connection-type`);
+
                 const formattedConnectionTypes = (response.data || []).map(type => ({
                     value: type.name,
                     label: type.name

@@ -97,8 +97,8 @@ const MainContainer = () => {
       <div className="containerM" style={{ background: "lightgray", margin: '0px' }}>
         {renderContent()}
       </div>
-      {/* {showPopup && <Cdr togglePopup={togglePopup} />} */}
-            {showPopup && <AddFilter2 togglePopup={togglePopup} />}
+      {showPopup && <Cdr togglePopup={togglePopup} />}
+            {/* {showPopup && <AddFillter2 togglePopup={togglePopup} />} */}
     </>
   );
 };
