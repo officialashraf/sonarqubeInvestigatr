@@ -15,6 +15,7 @@ import { disconnectWebSocket } from '../../../utils/WebSocket/websocket';
 import { CLEAR_SEARCH } from '../../../Redux/Constants/piiConstant';
 import LicenseRenew from '../User/licenseRenew';
 import AboutUs from './aboutUs';
+import ProfileImage from '.././../Assets/Images/prifileImage.jpg'
 
 const Header = ({ title }) => {
   const dispatch = useDispatch();
@@ -134,12 +135,21 @@ const Header = ({ title }) => {
 
           <Nav className="custom-nav">
             <div style={{ position: "relative", marginRight: "15px" }}>
-              <Bell
-                size={20}
-                fill="white"
-                style={{ cursor: "pointer" }}
+              <div
+                style={{
+                  backgroundColor: "#0C1622",
+                  borderRadius: "50%",
+                  width: "34px",
+                  height: "34px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  cursor: "pointer",
+                }}
                 onClick={handleNotificationClick}
-              />
+              >
+                <Bell size={20} color="#3498db" />
+              </div>
               {notificationCount > 0 && (
                 <span
                   style={{
@@ -160,9 +170,27 @@ const Header = ({ title }) => {
               )}
 
             </div>
+            <div style={{ marginTop: '5px', display: "flex", flexDirection: "column", alignItems: 'flex-start' }}>
+              <p style={{ margin: 0, fontSize: "12px", color: "#FFFFFF" }}>
+                {username}
+              </p>
+              <p style={{ margin: 0,paddingBottom:'5px', fontSize: "10px", color: "#C0C0C0" }}>
+                ACCOUNT HOLDER
+              </p>
+            </div>
 
             <NavDropdown
-              title={<PersonCircle size={20} color="white" />}
+              title={<img
+                src={ProfileImage}  // replace with your actual image URL
+                alt="User"
+                style={{
+                  width: "26px",
+                  height: "26px",
+                  borderRadius: "50%",
+                  objectFit: "cover",
+                  cursor: "pointer"
+                }}
+              />}
               id="profile-dropdown"
               align="end"
             >

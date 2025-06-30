@@ -273,3 +273,4 @@ const EditCase = ({ togglePopup, item }) => {
 };
 
 export default EditCase;
+

@@ -1,9 +1,10 @@
 import axios from 'axios';
 import { Card, Container } from 'react-bootstrap';
 import { Folder, FileEarmarkPlus, PieChart, Check2Circle, PauseCircle, Archive, Trash } from 'react-bootstrap-icons';
-import './card.css';
+import  styles from './card.module.css';
 import { useCallback, useEffect, useState } from 'react';
 import Cookies from "js-cookie";
+import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward';
 import { toast } from 'react-toastify';
 
 const cardTemplate = [
@@ -18,20 +19,27 @@ const cardTemplate = [
 
 const StatusCard = ({ name, number, icon }) => {
   return (
-    <Card className="card-container">
-      <Card.Body className="card-body">
-        {/* Icon Section */}
-        <div className="logo-icon">
-          {icon}
-        </div>
+<Card className={styles.customCard}>
+  <Card.Body className={styles.customCardBody}>
+    
+    {/* Top Row */}
+    <div className={styles.customTopRow}>
+      <div className={styles.customIconCircle}>{icon}</div>
+      <div className={styles.customCardLabel}>{name}</div>
+    </div>
 
-        {/* Text Section */}
-        <div className="text-section">
-          <div className="card-name">{name}</div>
-          <div className="card-number">{number}</div>
-        </div>
-      </Card.Body>
-    </Card>
+    {/* Bottom Row */}
+    <div className={styles.customBottomRow}>
+      <div className={styles.customCardNumber}>{number}</div>
+      <div className={styles.customIconCircle}>
+        <ArrowOutwardIcon size={14} color="#3498db" />
+      </div>
+    </div>
+
+  </Card.Body>
+</Card>
+
+
   );
 }
 
@@ -41,7 +49,7 @@ const CardList = () => {
 
   const getCardData = useCallback(async () => {
     try {
-      const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/case/states-count`, {
+      const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/case/states/count`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${Token}`
@@ -87,7 +95,7 @@ const CardList = () => {
   //   }
   // }, [refresh]);
   return (
-    <Container fluid className="card-list-container">
+    <Container fluid className={styles.cardListContainer}>
       {cardData.map((item, index) => (
         <StatusCard key={index} name={item.name} number={item.number || 0} icon={item.icon} />
       ))}

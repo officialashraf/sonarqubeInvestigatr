@@ -43,6 +43,7 @@ const TableModal = ({ columns = [], data = [], onAddClick, searchPlaceholder = "
 
   return (
     <>
+
       <div className={styles.header}>
 
         <input
@@ -54,80 +55,82 @@ const TableModal = ({ columns = [], data = [], onAddClick, searchPlaceholder = "
 
         <AppButton onClick={() => onAddClick && onAddClick()} children={btnTitle} />
       </div>
-      <div className={styles.tableWrapper}>
-        <Table hover responsive size="sm" className={styles.table}>
-          <thead>
-            <tr>
-              {columns.map((col) => (
-                <th key={col.key} onClick={() => handleSort(col.key)} className={styles.th}>
-                  <div className={styles.thContent}>
-                    <span>{col.label}</span>
-                    <span>{renderSortIcon(col.key)}</span>
-                  </div>
-                </th>
-
-              ))}
-              {onRowAction && <th className={styles.th}>Actions</th>}
-            </tr>
-          </thead>
-          <tbody>
-            {filteredData.map((row, idx) => (
-              <tr key={idx}
-                style={{ cursor: enableRowClick ? 'pointer' : 'default' }}
-                onClick={() => enableRowClick && onRowClick && onRowClick(row)}
-              >
+      <div className={styles.tableContainer}>
+        <div className={styles.tableWrapper}>
+          <Table hover responsive size="sm" className={styles.table}>
+            <thead>
+              <tr>
                 {columns.map((col) => (
-                  <td key={col.key}>
-                    {col.key === "id" && idPrefix
-                      ? `${idPrefix}${String(row[col.key]).padStart(4, "0")}`
-                      : col.key === ("watchers" || "synonyms")
-                        ? Array.isArray(row[col.key])
-                          ? row[col.key].join(", ")
-                          : row[col.key]
-                        : row[col.key]}
-                  </td>
+                  <th key={col.key} onClick={() => handleSort(col.key)} className={styles.th}>
+                    <div className={styles.thContent}>
+                      <span>{col.label}</span>
+                      <span>{renderSortIcon(col.key)}</span>
+                    </div>
+                  </th>
+
                 ))}
-                {onRowAction && (
-                  <td className={styles.actionCol}>
-                    <EditIcon
-                      className={styles.icon}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onRowAction.edit && onRowAction.edit(row);
-                      }}
-                    />
-                    <DeleteIcon
-                      className={styles.icon}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onRowAction.delete && onRowAction.delete(row);
-                      }}
-                    />
-                    <VisibilityIcon
-                      className={styles.icon}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onRowAction.details && onRowAction.details(row);
-                      }}
-                    />
-                    {onRowAction.assign && (
-                      <AssignmentIndIcon
-                        className={styles.icon}
+                {onRowAction && <th className={styles.th}>Actions</th>}
+              </tr>
+            </thead>
+            <tbody>
+              {filteredData.map((row, idx) => (
+                <tr key={idx}
+                  style={{ cursor: enableRowClick ? 'pointer' : 'default' }}
+                  onClick={() => enableRowClick && onRowClick && onRowClick(row)}
+                >
+                  {columns.map((col) => (
+                    <td key={col.key}>
+                      {col.key === "id" && idPrefix
+                        ? `${idPrefix}${String(row[col.key]).padStart(4, "0")}`
+                        : col.key === ("watchers" || "synonyms")
+                          ? Array.isArray(row[col.key])
+                            ? row[col.key].join(", ")
+                            : row[col.key]
+                          : row[col.key]}
+                    </td>
+                  ))}
+                  {onRowAction && (
+                    <td className={styles.actionCol}>
+                      <EditIcon
+                        className={styles.iconEdit}
                         onClick={(e) => {
                           e.stopPropagation();
-                          onRowAction.assign(row);
+                          onRowAction.edit && onRowAction.edit(row);
                         }}
-                        titleAccess="Assign"
-                        style={{ cursor: "pointer" }}
                       />
-                    )}
-                  </td>
-                )}
+                      <DeleteIcon
+                        className={styles.iconDelete}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onRowAction.delete && onRowAction.delete(row);
+                        }}
+                      />
+                      <VisibilityIcon
+                        className={styles.iconEdit}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onRowAction.details && onRowAction.details(row);
+                        }}
+                      />
+                      {onRowAction.assign && (
+                        <AssignmentIndIcon
+                          className={styles.iconEdit}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onRowAction.assign(row);
+                          }}
+                          titleAccess="Assign"
+                          style={{ cursor: "pointer" }}
+                        />
+                      )}
+                    </td>
+                  )}
 
-              </tr>
-            ))}
-          </tbody>
-        </Table>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </div>
       </div>
     </>
   );

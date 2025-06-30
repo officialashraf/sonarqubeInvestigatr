@@ -13,8 +13,6 @@ const Cdr = ({ togglePopup }) => {
   const [showFtpPopup, setShowFtpPopup] = useState(false);
 
 
-
-
   const options = [
     { value: 'localStorage', label: 'Upload from Local Storage', description: 'Add a file from local drive' },
     { value: 'ftpServer', label: 'Upload from FTP Server', description: 'Add Documents, Images, Videos, Recordings and more from local drive.' },
