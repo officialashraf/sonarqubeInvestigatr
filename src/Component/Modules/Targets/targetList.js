@@ -572,11 +572,15 @@ const targetColumns = [
           title="Target Details"
         data={data}
         columns={targetColumns}
-        onRowAction={{
-          view: (row) => alert("View row: " + JSON.stringify(row))
-        }}
-         idPrefix="TAR"
+               idPrefix="TAR"
          btnTitle=" + Add New Target"
+           onRowAction={{
+                edit: (row) => togglePopupE(row),
+                delete: (row) => confirmDelete(row.id, row.name),
+                details: (row) => togglePopupD(row),
+              }}
+         i
+          onAddClick={() => togglePopup()}
       />
 </div>
       ) : (

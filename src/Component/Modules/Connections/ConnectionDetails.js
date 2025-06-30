@@ -15,7 +15,7 @@ const ConnectionDetails = ({ togglePopup, id }) => {
                 setLoading(true);
                 const token = Cookies.get("accessToken");
                 const response = await axios.get(
-                    `${window.runtimeConfig.REACT_APP_API_CONNECTION}/api/case-man/v1/connection/${id}`,
+                    `${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/connection/${id}`,
                     {
                         headers: {
                             Authorization: `Bearer ${token}`,

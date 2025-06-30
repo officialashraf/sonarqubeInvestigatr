@@ -59,7 +59,7 @@ const EditRole = ({ togglePopup, details }) => {
         [details]
     );
     useEffect(() => {
-        const isSame = searchTitle.trim() === initialSearchTitle.trim();
+        const isSame = searchTitle === initialSearchTitle;
         setIsBtnDisabled(isSame);
     }, [searchTitle, initialSearchTitle]);
 

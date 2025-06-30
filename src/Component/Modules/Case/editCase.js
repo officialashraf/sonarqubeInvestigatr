@@ -10,15 +10,17 @@ const EditCase = ({ togglePopup, item }) => {
     title: item.title || "",
     description: item.description || "",
     status: item.status || "",
-    watchers: typeof item.watchers === "string"
-      ? item.watchers.split(",").map((w) => w.trim()).filter((w) => w)
-      : Array.isArray(item.watchers) ? item.watchers : [],
+    watchers: [],
     assignee: item.assignee || "",
     comment: item.comment || "",
   });
 
   const [users, setUsers] = useState({ data: [] });
-  const [loading, setLoading] = useState(true); // Added loading state
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [initialFormData, setInitialFormData] = useState({});
+  const [isBtnDisabled, setIsBtnDisabled] = useState(true);
 
   const options = users.data?.map(user => ({
     value: user.id,
@@ -29,28 +31,11 @@ const EditCase = ({ togglePopup, item }) => {
     { value: "on hold", label: "On Hold" },
     { value: "closed", label: "Closed" }
   ];
-  const [initialFormData, setInitialFormData] = useState({});
-  const [isBtnDisabled, setIsBtnDisabled] = useState(true);
-  const [error, setError] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const validateForm = () => {
-    const errors = {};
-
-    if (!formData.title || formData.title.trim() === "") {
-      errors.title = "Title is required";
-    }
-
-    if (!formData.description) {
-      errors.description = "Description is required";
-    }
-    return errors;
-  };
 
   const getUserData = async () => {
     const token = Cookies.get("accessToken");
     try {
-      setLoading(true); // Set loading true before fetching
+      setLoading(true);
       const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_USER_MAN}/api/user-man/v1/user`, {
         headers: {
           'Content-Type': 'application/json',
@@ -62,7 +47,7 @@ const EditCase = ({ togglePopup, item }) => {
       console.error('Error fetching user data:', error);
       toast.error("Failed to fetch users");
     } finally {
-      setLoading(false); // Set loading false after fetch attempt
+      setLoading(false);
     }
   };
 
@@ -70,22 +55,45 @@ const EditCase = ({ togglePopup, item }) => {
     getUserData();
   }, []);
 
+  // Convert watchers (IDs/usernames) to IDs after users list fetched
   useEffect(() => {
     if (users.data?.length > 0) {
+      const convertToIds = (watchers) => {
+        return Array.isArray(watchers)
+          ? watchers.map(watcher => {
+              if (users.data.find(u => u.id === watcher)) return watcher;
+              const match = users.data.find(u => u.username === watcher);
+              return match ? match.id : watcher;
+            })
+          : [];
+      };
+
+      const convertedWatchers = convertToIds(item.watchers);
+
       setFormData(prev => ({
         ...prev,
-        assignee: item.assignee,
-        status: item.status,
-        watchers: typeof item.watchers === 'string' ?
-          item.watchers.split(",").map((w) => w.trim()).filter((w) => w)
-          : Array.isArray(item.watchers)
-            ? item.watchers
-            : [],
+        watchers: convertedWatchers
       }));
-    }
-  }, [item, users.data]);
 
-  const handleEditCase = async (formData) => {
+      setInitialFormData({
+        title: item.title || "",
+        description: item.description || "",
+        status: item.status || "",
+        watchers: convertedWatchers,
+        assignee: item.assignee || "",
+        comment: item.comment || "",
+      });
+    }
+  }, [users.data, item]);
+
+  const validateForm = () => {
+    const errors = {};
+    if (!formData.title.trim()) errors.title = "Title is required";
+    if (!formData.description.trim()) errors.description = "Description is required";
+    return errors;
+  };
+
+  const handleEditCase = async () => {
     const token = Cookies.get("accessToken");
     if (!token) {
       toast.error("Authentication error: No token found");
@@ -98,47 +106,27 @@ const EditCase = ({ togglePopup, item }) => {
       return;
     }
 
-    const payloadData = Object.fromEntries(
-      Object.entries(formData).filter(([_, value]) => {
-        if (value === null || value === undefined) return false;
-        if (typeof value === "string" && value.trim() === "") return false;
-        if (Array.isArray(value) && value.length === 0) return false;
-        return true;
-      })
-    );
+    const hasChanged = {};
+    ["title", "description", "status", "assignee", "comment"].forEach(key => {
+      if (formData[key] !== item[key]) {
+        hasChanged[key] = formData[key];
+      }
+    });
+
+    const originalWatchers = Array.isArray(item.watchers) ? item.watchers : [];
+    const areWatchersDifferent = JSON.stringify([...formData.watchers].sort()) !== JSON.stringify([...originalWatchers].sort());
+
+    if (areWatchersDifferent) {
+      hasChanged.watchers = [...formData.watchers];
+    }
+
+    if (Object.keys(hasChanged).length === 0) {
+      togglePopup();
+      return;
+    }
+
     setIsSubmitting(true);
     try {
-      const hasChanged = {};
-
-      ["title", "description", "status", "assignee", "comment"].forEach((key) => {
-        if (payloadData[key] !== item[key]) {
-          hasChanged[key] = payloadData[key];
-        }
-      });
-
-      const originalWatchers = Array.isArray(item.watchers)
-        ? item.watchers.map(w => w.trim()).filter(Boolean)
-        : typeof item.watchers === "string"
-          ? item.watchers.split(",").map(w => w.trim()).filter(Boolean)
-          : [];
-
-      const currentWatchers = Array.isArray(formData.watchers)
-        ? formData.watchers.map(w => w.trim()).filter(Boolean)
-        : [];
-
-      const areWatchersDifferent = originalWatchers.length !== currentWatchers.length ||
-        originalWatchers.sort().join(",") !== currentWatchers.sort().join(",");
-
-      if (areWatchersDifferent && currentWatchers.length > 0) {
-        hasChanged.watchers = [...currentWatchers];
-      } else if (currentWatchers.length === 0) {
-        hasChanged.watchers = [];
-      }
-
-      if (Object.keys(hasChanged).length === 0) {
-        togglePopup();
-        return;
-      }
       const response = await axios.put(
         `${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/case/${item.id}`,
         hasChanged,
@@ -165,93 +153,35 @@ const EditCase = ({ togglePopup, item }) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    let formattedValue = value;
+    if (name === 'title') formattedValue = value.replace(/\b\w/g, char => char.toUpperCase());
+    if (name === 'description') formattedValue = value.charAt(0).toUpperCase() + value.slice(1);
 
-    let formattedValue;
-
-    if (name === 'title') {
-      formattedValue = value.replace(/\b\w/g, (char) => char.toUpperCase());
-    } else if (name === 'description') {
-      formattedValue = value.charAt(0).toUpperCase() + value.slice(1);
-    } else {
-      formattedValue = value;
-    }
-
-    setFormData((prev) => ({
-      ...prev,
-      [name]: formattedValue,
-    }));
-    setError((prevErrors) => ({
-      ...prevErrors,
-      [name]: ""
-    }));
+    setFormData(prev => ({ ...prev, [name]: formattedValue }));
+    setError(prevErrors => ({ ...prevErrors, [name]: "" }));
   };
+
   const handleWatchersChange = (selectedOptions) => {
     setFormData(prev => ({
       ...prev,
-      watchers: selectedOptions ? selectedOptions.map((option) => option.label) : [],
+      watchers: selectedOptions ? selectedOptions.map(opt => opt.value) : [],
     }));
   };
 
   const handleAssigneeChange = (selectedOption) => {
     setFormData(prev => ({
       ...prev,
-      assignee: selectedOption ? selectedOption.value : item.assignee
+      assignee: selectedOption ? selectedOption.value : "",
     }));
   };
 
   const handleStatusChange = (selectedOption) => {
     setFormData(prev => ({
       ...prev,
-      status: selectedOption ? selectedOption.value : item.status
+      status: selectedOption ? selectedOption.value : "",
     }));
   };
 
-  const getCurrentAssignee = () => {
-    const matchedAssignee = options.find(option => option.value === formData.assignee);
-    if (matchedAssignee) {
-      return matchedAssignee;
-    }
-    return formData.assignee ? {
-      value: formData.assignee,
-      label: typeof formData.assignee === 'string' ?
-        formData.assignee :
-        `User ${formData.assignee}`
-    } : null;
-  };
-
-  const getCurrentStatus = () => {
-    const matchedStatus = statusOptions.find(option => option.value === formData.status);
-    if (matchedStatus) {
-      return matchedStatus;
-    }
-    return formData.status ? { value: formData.status, label: formData.status.charAt(0).toUpperCase() + formData.status.slice(1) } : null;
-  };
-
-  useEffect(() => {
-    if (users.data?.length > 0) {
-      const formattedWatchers = typeof item.watchers === 'string'
-        ? item.watchers.split(",").map(w => w.trim()).filter(Boolean)
-        : Array.isArray(item.watchers) ? item.watchers : [];
-
-      setInitialFormData({
-        title: item.title || "",
-        description: item.description || "",
-        status: item.status || "",
-        watchers: formattedWatchers,
-        assignee: item.assignee || "",
-        comment: item.comment || "",
-      });
-
-      setFormData({
-        title: item.title || "",
-        description: item.description || "",
-        status: item.status || "",
-        watchers: formattedWatchers,
-        assignee: item.assignee || "",
-        comment: item.comment || "",
-      });
-    }
-  }, [item, users.data]);
   useEffect(() => {
     const isSame =
       formData.title === initialFormData.title &&
@@ -282,84 +212,57 @@ const EditCase = ({ togglePopup, item }) => {
           <h5>Edit Case</h5>
           <form onSubmit={(e) => {
             e.preventDefault();
-            handleEditCase(formData);
+            handleEditCase();
           }}>
-            <label htmlFor="title">Title *</label>
-            <input
-              className="com"
-              type="text"
-              id="title"
-              name="title"
-              value={formData.title}
-              onChange={handleInputChange}
-              placeholder="Enter title"
-            />
-            {error.title && <p style={{ color: "red", margin: '0px' }} >{error.title}</p>}
+            <label>Title *</label>
+            <input className="com" name="title" value={formData.title} onChange={handleInputChange} placeholder="Title" />
+            {error.title && <p style={{ color: "red" }}>{error.title}</p>}
 
-            <label htmlFor="description">Description *</label>
-            <input
-              className="com"
-              id="description"
-              name="description"
-              value={formData.description}
-              onChange={handleInputChange}
-              placeholder="Enter description"
-            />
-            {error.description && <p style={{ color: "red", margin: '0px' }} >{error.description}</p>}
+            <label>Description *</label>
+            <input className="com" name="description" value={formData.description} onChange={handleInputChange} placeholder="Description" />
+            {error.description && <p style={{ color: "red" }}>{error.description}</p>}
 
-            <label htmlFor="assignee">Assignee </label>
+            <label>Assignee</label>
             <Select
               options={options}
-              name="assignee"
+              value={options.find(opt => opt.value === formData.assignee) || null}
+              onChange={handleAssigneeChange}
               styles={customStyles}
               className="com"
               placeholder="Select Assignee"
-              value={getCurrentAssignee()}
-              onChange={handleAssigneeChange}
-              defaultMenuIsOpen={false}
-              openMenuOnClick={true}
             />
 
-            <label htmlFor="watchers">Watchers</label>
+            <label>Watchers</label>
             <Select
               options={options}
               isMulti
-              styles={customStyles}
-              className="com"
-              name="watchers"
-              placeholder="Select watchers"
-              value={formData.watchers.map((watcher) => {
-                const existingWatcher = options.find((opt) => opt.label === watcher);
-                return existingWatcher || { value: watcher, label: watcher };
+              value={formData.watchers.map(wId => {
+                const match = options.find(opt => opt.value === wId);
+                return match || { value: wId, label: `User ${wId}` };
               })}
               onChange={handleWatchersChange}
-            />
-
-            <label htmlFor="status">Status:</label>
-            <Select
-              options={statusOptions}
-              name="status"
               styles={customStyles}
               className="com"
-              placeholder="Select status"
-              value={getCurrentStatus()}
-              onChange={handleStatusChange}
-              defaultMenuIsOpen={false}
-              openMenuOnClick={true}
+              placeholder="Select Watchers"
             />
 
-            <label htmlFor="comment">Comment:</label>
-            <input
+            <label>Status</label>
+            <Select
+              options={statusOptions}
+              value={statusOptions.find(opt => opt.value === formData.status) || null}
+              onChange={handleStatusChange}
+              styles={customStyles}
               className="com"
-              id="comment"
-              name="comment"
-              value={formData.comment}
-              onChange={handleInputChange}
-              placeholder="Add a comment"
+              placeholder="Select Status"
             />
+
+            <label>Comment</label>
+            <input className="com" name="comment" value={formData.comment} onChange={handleInputChange} placeholder="Comment" />
 
             <div className="button-container">
-              <button type="submit" className="create-btn" disabled={isBtnDisabled || isSubmitting}> {isSubmitting ? 'Editing...' : 'Edit'}</button>
+              <button type="submit" className="create-btn" disabled={isBtnDisabled || isSubmitting}>
+                {isSubmitting ? 'Editing...' : 'Edit'}
+              </button>
               <button type="button" className="cancel-btn" onClick={togglePopup}>Cancel</button>
             </div>
           </form>

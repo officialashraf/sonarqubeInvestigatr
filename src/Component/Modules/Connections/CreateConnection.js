@@ -25,7 +25,7 @@ const CreateConnection = ({ togglePopup, id }) => {
     useEffect(() => {
         const fetchConnectionTypes = async () => {
             try {
-                const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_CONNECTION}/api/case-man/v1/connection-type`);
+                const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/connection-type`);
                 const formattedConnectionTypes = (response.data || []).map(type => ({
                     value: type.name, 
                     label: type.name
@@ -85,7 +85,7 @@ const CreateConnection = ({ togglePopup, id }) => {
 
         try {
             const res = await axios.post(
-                `${window.runtimeConfig.REACT_APP_API_CONNECTION}/api/case-man/v1/connection`,
+                `${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/connection`,
                 formData,
                 { headers: { Authorization: `Bearer ${token}` } }
             );

@@ -27,7 +27,7 @@ const EditConnection = ({ togglePopup, id }) => {
         const fetchConnectionTypes = async () => {
             try {
 
-                const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_CONNECTION}/api/case-man/v1/connection-type`);
+                const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/connection-type`);
 
                 const formattedConnectionTypes = (response.data || []).map(type => ({
                     value: type.name,
@@ -47,7 +47,7 @@ const EditConnection = ({ togglePopup, id }) => {
     useEffect(() => {
         if (!id) return;
         setLoading(true);
-        axios.get(`${window.runtimeConfig.REACT_APP_API_CONNECTION}/api/case-man/v1/connection/${id}`, {
+        axios.get(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/connection/${id}`, {
             headers: { Authorization: `Bearer ${token}` }
         })
         .then(res => {
@@ -129,7 +129,7 @@ const EditConnection = ({ togglePopup, id }) => {
 
         try {
             const res = await axios.put(
-                `${window.runtimeConfig.REACT_APP_API_CONNECTION}/api/case-man/v1/connection/${id}`,
+                `${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/connection/${id}`,
                 payload,
                 { headers: { Authorization: `Bearer ${token}` } }
             );
