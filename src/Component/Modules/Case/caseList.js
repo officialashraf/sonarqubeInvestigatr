@@ -585,9 +585,9 @@ const DataTable = () => {
         //   view: (row) => alert("View row: " + JSON.stringify(row))
         // }}
         onRowAction={{
-    edit: (row) => console.log("Edit", row),
-    delete: (row) => console.log("Delete", row),
-    details: (row) => console.log("Details", row)
+    edit: (row) => alert("Edit", row),
+    delete: (row) => alert("Delete", row),
+          details: (row) => togglePopupA("Details", row)
   }}
          idPrefix="CASE"
          btnTitle=" + Add New Case" 

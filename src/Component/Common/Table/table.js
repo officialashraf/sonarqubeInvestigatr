@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styles from "./table.module.css";
-import { Table} from "react-bootstrap";
+import { Table } from "react-bootstrap";
 import AppButton from "../Buttton/button";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -65,7 +65,7 @@ const TableModal = ({ columns = [], data = [], searchPlaceholder = "Search...", 
                 </th>
 
               ))}
-               {onRowAction && <th className={styles.th}>Actions</th>}
+              {onRowAction && <th className={styles.th}>Actions</th>}
             </tr>
           </thead>
           <tbody>
@@ -82,34 +82,34 @@ const TableModal = ({ columns = [], data = [], searchPlaceholder = "Search...", 
                     row[col.key]
                   }
                   </td>
-                  
-                ))}
-                  {onRowAction && (
-  <td className={styles.actionCol}>
-  <EditIcon
-    className={styles.icon}
-    onClick={(e) => {
-      e.stopPropagation();
-      onRowAction.edit && onRowAction.edit(row);
-    }}
-  />
-  <DeleteIcon
-    className={styles.icon}
-    onClick={(e) => {
-      e.stopPropagation();
-      onRowAction.delete && onRowAction.delete(row);
-    }}
-  />
-  <VisibilityIcon
-    className={styles.icon}
-    onClick={(e) => {
-      e.stopPropagation();
-      onRowAction.details && onRowAction.details(row);
-    }}
-  />
-</td>
 
-  )}
+                ))}
+                {onRowAction && (
+                  <td className={styles.actionCol}>
+                    <EditIcon
+                      className={styles.icon}
+                      onClick={(e) => {
+                        // e.stopPropagation();
+                        onRowAction.edit && onRowAction.edit(row);
+                      }}
+                    />
+                    <DeleteIcon
+                      className={styles.icon}
+                      onClick={(e) => {
+                        // e.stopPropagation();
+                        onRowAction.delete && onRowAction.delete(row);
+                      }}
+                    />
+                    <VisibilityIcon
+                      className={styles.icon}
+                      onClick={(e) => {
+                        // e.stopPropagation();
+                        onRowAction.details && onRowAction.details(row);
+                      }}
+                    />
+                  </td>
+
+                )}
 
               </tr>
             ))}
