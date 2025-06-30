@@ -1,21 +1,24 @@
 .container-r {
   width: 100%;
   height: auto;
-  background-color: #f9f9f9;
+  background-color: #080e17;
 }
 
 .top-header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
   padding: 2px;
+  background-color: #080e17;
+  font-size: 18px;
+  border-radius: 5px;
+  font: Poppins;
+  font-weight: 600;
 }
 
 .title h5 {
   margin: 0;
   font-size: 12px;
   font-weight: bold;
-  color: #333;
+  color: #ffffff;
 }
 
 .jobs {
@@ -66,12 +69,15 @@
 /* Left Sidebar */
 .left-sidebar {
   width: 20%;
-  background-color: lightgray;
+  background-color: #101D2B;
   color: white;
   padding: 16px;
   overflow: auto;
   margin-bottom: 45px;
   /* height: 78vh; */
+  border-radius: 18px;
+  scrollbar-color: #1e7df8 #0a192f;
+   scrollbar-width: thin;
 }
 @media screen and (max-width: 1920px) and (min-width: 1280px) {
   .left-sidebar {
@@ -107,12 +113,12 @@
 .resourceItem {
   display: flex;
   align-items: center;
-  background-color: #ffffff;
+  background-color: #101D2B;
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease;
   margin-bottom: 5px;
-  color: black;
+  color: rgb(255, 255, 255);
 }
 
 .resourceItem:hover {
@@ -129,6 +135,7 @@
   width: 50px;
   height: 50px;
   margin-right: 10px;
+  border-radius: 10px;
 }
 
 .resourceDetails {
@@ -137,8 +144,12 @@
 }
 
 .resourceType {
-  font-weight: bold;
   margin: 0;
+  font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    letter-spacing: 0.5px;
+    font-family: "Poppins", sans-serif
 }
 
 .resourceContent {

@@ -5,6 +5,7 @@ import { Col } from 'react-bootstrap';
 import { FaArrowLeft } from 'react-icons/fa';
 import "./tabulerHeader.css";
 import { useNavigate } from "react-router-dom";
+import styles from "./caseHeader.module.css";
 
 const CaseHeader = ({ onIconClick, activeView }) => {
 
@@ -17,27 +18,26 @@ const CaseHeader = ({ onIconClick, activeView }) => {
 
   return (
     <>
-      <div className="container-fluid">
+      <div className={styles.caseHeader}>
         <div
-          className="row header-row p-2 text-dark align-items-center"
-          style={{ background: "lightgray" }}
+          className={styles.headerRow}
+          // style={{ background: "lightgray" }}
         >
-          <Col xs={1} className="d-flex align-items-center justify-content-center">
-            <FaArrowLeft style={{ cursor: 'pointer', margin: '0px' }} onClick={backToSnap} />
-          </Col>
-          <div className="col">
-            <h5 className="mb-1">
+           <div className={styles.backIcon} onClick={backToSnap}>
+          <FaArrowLeft />
+        </div>
+          <div className={styles.headerTitle}>
+            <h5 >
               Case ID: {`CASE${String(caseData.id).padStart(4, "0")}`}
             </h5>
-            <p className="mb-0">{caseData.title}</p>
+            <p >{caseData.title}</p>
           </div>
         </div>
 
-        <div
+        {/* <div
           className="row py-0 px-2  align-items-start"
-          style={{ backgroundColor: "lightgrey" }}
+
         >
-          {/* <div className="col-auto ms-auto ml-3 d-flex justify-content-center align-items-center"  style={{ marginRight:"5px", height:"28px"}}> */}
           <div className="col-auto ms-auto d-flex align-items-center gap-3" style={{ margin: "5px", marginBottom: "15px" }}>
             <PieChart
               className={`icon-style ${activeView === 'graphicalData' ? 'active-icon' : ''}`}
@@ -52,7 +52,27 @@ const CaseHeader = ({ onIconClick, activeView }) => {
               onClick={() => onIconClick("caseData")}
             />
           </div>
-        </div>
+        </div> */}
+         <div className={styles.actionIconsContainer}>
+        <PieChart sx={{ fontSize: 40 }}
+          className={`${styles.icon} ${
+            activeView === "graphicalData" ? styles.activeIcon : ""
+          }`}
+          onClick={() => onIconClick("graphicalData")}
+        />
+        <FaPhotoVideo
+          className={`${styles.icon} ${
+            activeView === "resources" ? styles.activeIcon : ""
+          }`}
+          onClick={() => onIconClick("resources")}
+        />
+        <ListAltOutlined sx={{ fontSize: 40 }}
+          className={`${styles.icon} ${
+            activeView === "caseData" ? styles.activeIcon : ""
+          }`}
+          onClick={() => onIconClick("caseData")}
+        />
+      </div>
 
       </div>
     </>

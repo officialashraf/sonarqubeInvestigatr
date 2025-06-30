@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import "./pagination.css";
 import { fetchSummaryData } from "../../../../Redux/Action/filterAction";
 import Loader from "../../Layout/loader";
+import styles from "../../../Common/Table/table.module.css";
 
 const TabulerData = () => {
   const dispatch = useDispatch();
@@ -74,11 +75,12 @@ const TabulerData = () => {
   return (
     <>
       <div
-        className="data-table"
-        style={{ overflowY: "auto", height: "73vh" }}
+        className={styles.tableWrapper}
+        style={{ overflowY: "auto", height: "65vh" }}
       >
         {data && data.length > 0 ? (
-          <Table striped bordered hover variant="light">
+          // <Table striped bordered hover variant="light">
+          <Table hover responsive size="sm" className={styles.table}>
             <thead >
               <tr>
                 {headers.map((header) => (
@@ -134,19 +136,23 @@ const TabulerData = () => {
       </div>
 
 
-      <div className="paginationstabs"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
+      <div className={styles.paginationContainer}
+      // style={{
+      //   display: "flex",
+      //   alignItems: "center",
+      //   justifyContent: "center",
+      // }}
       >
 
         <>
           <Pagination style={{ width: "200px" }}>
             <Pagination.First onClick={() => handlePageChange(1)} disabled={currentPage === 1} />
-            <Pagination.Prev onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
-
+            <Pagination.Prev
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+            >
+              Previous
+            </Pagination.Prev>
             {pages.map((number, index) => {
               if (
                 number === 1 ||
@@ -160,28 +166,31 @@ const TabulerData = () => {
                     key={index}
                     active={number === currentPage}
                     onClick={() => number !== "..." && handlePageChange(number)}
+                    className={`${styles.pageItem} ${number === currentPage ? styles.activePage : ""
+                      }`}
                   >
                     {number}
                   </Pagination.Item>
                 );
               } else if (number === "...") {
-                return <Pagination.Item key={index} disabled>{number}</Pagination.Item>;
+                return <Pagination.Item key={index} disabled>{number} className={styles.pageItem}</Pagination.Item>;
               }
               return null;
             })}
             <Pagination.Next
               onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-            />
+              disabled={currentPage === totalPages}>
+              Next
+            </Pagination.Next>
             <Pagination.Last
               onClick={() => handlePageChange(totalPages)}
               disabled={currentPage === totalPages}
             />
           </Pagination>
         </>
-        <div style={{ fontSize: "12px", marginRight: "10px" }}>
+        {/* <div style={{ fontSize: "12px", marginRight: "10px" }}>
           Page {currentPage} of {totalPages} / Total Results: {totalResults}
-        </div>
+        </div> */}
 
       </div>
 

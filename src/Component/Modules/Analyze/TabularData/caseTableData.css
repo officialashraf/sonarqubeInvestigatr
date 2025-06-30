@@ -27,10 +27,10 @@ fixed-th {
   overflow-x: auto; /* Enable horizontal scroll if content exceeds table width */
 }
 .pagination {
-  --bs-pagination-active-bg: black !important;
-  --bs-pagination-bg: gray !important;
+  --bs-pagination-active-bg: #0073CF !important;
+  --bs-pagination-bg: #080E17 !important;
   --bs-pagination-hover-color: white !important;
-  --bs-pagination-hover-bg: black !important;
+  --bs-pagination-hover-bg: #0073CF !important;
 }
 
 @media (min-width: 400px) and (max-width: 600px) {

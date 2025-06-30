@@ -5,6 +5,7 @@ import { setPage, setSearchResults } from '../../../../Redux/Action/criteriaActi
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import Loader from '../../Layout/loader';
+import styles from "../../../Common/Table/table.module.css";
 
 const CriteriaCaseTable = () => {
   const token = Cookies.get("accessToken");
@@ -137,14 +138,15 @@ const CriteriaCaseTable = () => {
         <Pagination.Prev
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1 || loading}
-        />
+        >Previous</Pagination.Prev>
 
         {pageItems}
 
         <Pagination.Next
           onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages || loading}
-        />
+          disabled={currentPage === totalPages || loading}>
+          Next
+        </Pagination.Next>
         <Pagination.Last
           onClick={() => handlePageChange(totalPages)}
           disabled={currentPage === totalPages || loading}
@@ -168,30 +170,31 @@ const CriteriaCaseTable = () => {
         </div>
 
       </div>
-      <div className="data-table" style={{ maxHeight: '63vh', marginTop: '0px' }}>
+      <div className={styles.tableWrapper} style={{ maxHeight: '63vh', marginTop: '0px' }}>
 
         {loading ? (
           <div>
             <Loader />
           </div>
         ) : (
-          <Table striped bordered hover variant='light'>
+          // <Table striped bordered hover variant='light'>
+          <Table hover responsive size="sm" className={styles.table}>
             <thead >
               <tr>
                 {/* Dynamically generate headers from all unique keys */}
                 {searchResults.length > 0 && [...new Set(searchResults.flatMap(item => Object.keys(item)))]
                   .map((key, index) => (
                     <th key={index} className="fixed-th">
-                       {key
-                      .split("_") // Split by underscores
-                      .map(word => {
-                        return word === word.toUpperCase() //  Check if it's fully uppercase
-                          ? word.charAt(0).toUpperCase() + word.slice(1).toLowerCase() //  Convert all except first letter to lowercase
-                          : word.charAt(0).toUpperCase() + word.slice(1); //  Keep normal capitalization
-                      })
-                      .join(" ") // Rejoin words with space
+                      {key
+                        .split("_") // Split by underscores
+                        .map(word => {
+                          return word === word.toUpperCase() //  Check if it's fully uppercase
+                            ? word.charAt(0).toUpperCase() + word.slice(1).toLowerCase() //  Convert all except first letter to lowercase
+                            : word.charAt(0).toUpperCase() + word.slice(1); //  Keep normal capitalization
+                        })
+                        .join(" ") // Rejoin words with space
 
-                    }
+                      }
                     </th>
                   ))}
               </tr>
@@ -244,13 +247,9 @@ const CriteriaCaseTable = () => {
         )}
       </div>
 
-      <div className='d-flex justify-content-between mt-1'>
-        <div style={{ width: '300px', overflow: 'auto' }}>
+      <div className={styles.paginationContainer}>
+        <div >
           {renderPagination()}
-        </div>
-
-        <div style={{ fontSize: "12px", marginRight: '5px' }}>
-          {loading ? 'Loading...' : `Page ${currentPage} of ${totalPages} / Total Results: ${totalResults}`}
         </div>
       </div>
     </>

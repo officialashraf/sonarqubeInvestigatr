@@ -7,6 +7,7 @@ import { fetchSummaryData } from "../../../Redux/Action/filterAction";
 import Loader from "../Layout/loader";
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import styles from "../../Common/Table/table.module.css";
 
 const GridView = () => {
   const Token = Cookies.get('accessToken');
@@ -165,161 +166,159 @@ const GridView = () => {
         display: 'flex',
         flexDirection: 'column',
         minHeight: '100vh',
-}}>
-      <div
-        className="data-table"
-        style={{ marginTop: '12px' }}
-      >
-        {!dataAvailable ? (
-          <Table striped bordered hover variant='light'>
-            <thead></thead>
-            <tbody>
-              <tr>
-                <td className="text-center">
-                  No data available
-
-                </td>
-              </tr>
-            </tbody>
-          </Table>
-        ) : (
-          <Table striped bordered hover variant='light'>
-
-            <thead>
-
-              <tr>
-                {data.length > 0 && [...new Set(data.flatMap(item => Object.keys(item)))]
-                  .map((key, index) => (
-                    <th key={index} className="fixed-th">
-                      {key
-                        .split("_") // Split by underscores
-                        .map(word => {
-                          return word === word.toUpperCase() //  Check if it's fully uppercase
-                            ? word.charAt(0).toUpperCase() + word.slice(1).toLowerCase() //  Convert all except first letter to lowercase
-                            : word.charAt(0).toUpperCase() + word.slice(1); //  Keep normal capitalization
-                        })
-                        .join(" ") // Rejoin words with space
-
-                      }
-                    </th>
-                  ))}
-              </tr>
-            </thead>
-            <tbody>
-              {data.length > 0 ? (
-                data.map((item, rowIndex) => (
-                  <tr key={rowIndex}>
-                    {[...new Set(data.flatMap(item => Object.keys(item)))].map((key, colIndex) => (
-                      <td key={colIndex} className="fixed-td">
-                        <div
-                          className="cell-content"
-                          style={{
-                            cursor: 'pointer',
-                            // padding: "0px 0px 0px 5px",
-                            // height: '37px',
-                            // fontFamily: 'sans-serif',
-                            fontWeight: 'normal',
-                            overflow: 'hidden',
-                            //  textOverflow: 'ellipsis',
-                            whiteSpace: 'nowrap',
-                            //  vertical- align: middle;
-                            padding: '0px 5px 0px 5px',
-                            fontSize: '12px',
-                            fontFamily: 'Helvetica'
-                          }}
-                          title={typeof item[key] === 'object' ? JSON.stringify(item[key]) : item[key]}
-                        >
-                          {typeof item[key] === 'object' && item[key] !== null
-                            ? JSON.stringify(item[key])
-                            : item[key] || '-'}
-                        </div>
-                      </td>
-                    ))}
-                  </tr>
-                ))
-              ) : (
+      }}>
+        <div
+          className={styles.tableWrapper}
+          style={{ marginTop: '12px' }}
+        >
+          {!dataAvailable ? (
+            <Table hover responsive size="sm" className={styles.table}>            <thead></thead>
+              <tbody>
                 <tr>
-                  <td colSpan={data.length > 0 ?
-                    [...new Set(data.flatMap(item => Object.keys(item)))].length : 1}
-                    className="text-center">
-                    No Data Available
+                  <td className="text-center">
+                    No data available
+
                   </td>
                 </tr>
-              )}
-            </tbody>
-          </Table>
+              </tbody>
+            </Table>
+          ) : (
+            <Table hover responsive size="sm" className={styles.table}>
+              <thead>
+
+                <tr>
+                  {data.length > 0 && [...new Set(data.flatMap(item => Object.keys(item)))]
+                    .map((key, index) => (
+                      <th key={index} className="fixed-th">
+                        {key
+                          .split("_") // Split by underscores
+                          .map(word => {
+                            return word === word.toUpperCase() //  Check if it's fully uppercase
+                              ? word.charAt(0).toUpperCase() + word.slice(1).toLowerCase() //  Convert all except first letter to lowercase
+                              : word.charAt(0).toUpperCase() + word.slice(1); //  Keep normal capitalization
+                          })
+                          .join(" ") // Rejoin words with space
+
+                        }
+                      </th>
+                    ))}
+                </tr>
+              </thead>
+              <tbody>
+                {data.length > 0 ? (
+                  data.map((item, rowIndex) => (
+                    <tr key={rowIndex}>
+                      {[...new Set(data.flatMap(item => Object.keys(item)))].map((key, colIndex) => (
+                        <td key={colIndex} className="fixed-td">
+                          <div
+                            className="cell-content"
+                            style={{
+                              cursor: 'pointer',
+                              // padding: "0px 0px 0px 5px",
+                              // height: '37px',
+                              // fontFamily: 'sans-serif',
+                              fontWeight: 'normal',
+                              overflow: 'hidden',
+                              //  textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap',
+                              //  vertical- align: middle;
+                              padding: '0px 5px 0px 5px',
+                              fontSize: '12px',
+                              fontFamily: 'Helvetica'
+                            }}
+                            title={typeof item[key] === 'object' ? JSON.stringify(item[key]) : item[key]}
+                          >
+                            {typeof item[key] === 'object' && item[key] !== null
+                              ? JSON.stringify(item[key])
+                              : item[key] || '-'}
+                          </div>
+                        </td>
+                      ))}
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={data.length > 0 ?
+                      [...new Set(data.flatMap(item => Object.keys(item)))].length : 1}
+                      className="text-center">
+                      No Data Available
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </Table>
+          )}
+        </div>
+
+        {dataAvailable && (
+          <div className="paginationstabs"
+            style={{
+              // display: "flex",
+              // alignItems: "self-end",
+              // justifyContent: "space-between",
+              // height: "80vh",
+              // marginTop: "auto", 
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginTop: "auto", // push to bottom
+              padding: "10px 20px",
+              
+              marginBottom: "30px",
+              boxShadow: "0 -2px 5px rgba(0,0,0,0.05)"
+            }}
+          >
+            <Pagination style={{ width: "200px" }}>
+              <Pagination.First onClick={() => handlePageChange(1)} disabled={currentPage === 1} />
+              <Pagination.Prev onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
+
+              {pages.map((number, index) => {
+                if (
+                  number === 1 ||
+                  number === totalPages ||
+                  number === currentPage ||
+                  number === currentPage - 1 ||
+                  number === currentPage + 1
+                ) {
+                  return (
+                    <Pagination.Item
+                      key={index}
+                      active={number === currentPage}
+                      onClick={() => number !== "..." && handlePageChange(number)}
+                    >
+                      {number}
+                    </Pagination.Item>
+                  );
+                } else if (number === "...") {
+                  return <Pagination.Item key={index} disabled>{number}</Pagination.Item>;
+                }
+                return null;
+              })}
+
+              <Pagination.Next
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+              />
+              <Pagination.Last
+                onClick={() => handlePageChange(totalPages)}
+                disabled={currentPage === totalPages}
+              />
+            </Pagination>
+
+            <div style={{ fontSize: "12px", marginRight: "10px" }}>
+              Page {currentPage} - {itemsPerPage} / {totalResults}
+            </div>
+
+            <button
+              style={{ backgroundColor: "black", color: 'white', borderRadius: '5px' }}
+              onClick={fetchReportData}
+              disabled={loading}
+            >
+              {loading ? "Processing..." : "Print Records"}
+            </button>
+          </div>
         )}
       </div>
-
-      {dataAvailable && (
-        <div className="paginationstabs"
-          style={{
-            // display: "flex",
-            // alignItems: "self-end",
-            // justifyContent: "space-between",
-            // height: "80vh",
-            // marginTop: "auto", 
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginTop: "auto", // push to bottom
-            padding: "10px 20px",
-            backgroundColor: "#fff",
-            marginBottom: "30px",
-            boxShadow: "0 -2px 5px rgba(0,0,0,0.05)"
-          }}
-        >
-          <Pagination style={{ width: "200px" }}>
-            <Pagination.First onClick={() => handlePageChange(1)} disabled={currentPage === 1} />
-            <Pagination.Prev onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
-
-            {pages.map((number, index) => {
-              if (
-                number === 1 ||
-                number === totalPages ||
-                number === currentPage ||
-                number === currentPage - 1 ||
-                number === currentPage + 1
-              ) {
-                return (
-                  <Pagination.Item
-                    key={index}
-                    active={number === currentPage}
-                    onClick={() => number !== "..." && handlePageChange(number)}
-                  >
-                    {number}
-                  </Pagination.Item>
-                );
-              } else if (number === "...") {
-                return <Pagination.Item key={index} disabled>{number}</Pagination.Item>;
-              }
-              return null;
-            })}
-
-            <Pagination.Next
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-            />
-            <Pagination.Last
-              onClick={() => handlePageChange(totalPages)}
-              disabled={currentPage === totalPages}
-            />
-          </Pagination>
-
-          <div style={{ fontSize: "12px", marginRight: "10px" }}>
-            Page {currentPage} - {itemsPerPage} / {totalResults}
-          </div>
-
-          <button
-            style={{ backgroundColor: "black", color: 'white', borderRadius: '5px' }}
-            onClick={fetchReportData}
-            disabled={loading}
-          >
-            {loading ? "Processing..." : "Print Records"}
-          </button>
-        </div>
-      )}
-    </div>
     </>
   );
 };
