@@ -12,6 +12,10 @@
   pointer-events: none;
 }
 
+.tableWrapper{
+  scrollbar-color: #1e7df8 #0a192f;
+   scrollbar-width: thin;
+}
 .notfound {
   display: flex;
   height: 100%;
