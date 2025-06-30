@@ -1,11 +1,13 @@
 .page-link {
-  color: black;
+  color: rgb(254, 254, 254);
   text-decoration: underline;
   border: none;
   font-size: 12px;
+  border-radius: 5px;
+  margin-right: 5px;
 }
 .pagination .page-item:hover .page-link {
-  background-color: black !important; /* Active background color */
+  background-color: #0073CF !important; /* Active background color */
   color: white !important; /* Active text color */
   border: none !important; /* Remove border */
   box-shadow: white !important; /* Remove box-shadow */

@@ -38,7 +38,7 @@ const DataTable = () => {
   const [selectedData, setSelectedData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
- 
+
   const onFieldClick = (item) => {
     dispatch(setCaseData(item));
     const caseId = item.id; // Set the case data in Redux store
@@ -249,7 +249,7 @@ const DataTable = () => {
     { key: "assignee", label: "Assignee" },
     { key: "watchers", label: "Watchers" },
     { key: "modified_on", label: "Edited On" },
-       { key: "modified_by", label: "Edited By" },
+    { key: "modified_by", label: "Edited By" },
     { key: "status", label: "Status", render: (val) => <span className="badge bg-dark">{val}</span> }
   ];
 
@@ -499,7 +499,7 @@ const DataTable = () => {
         //            style={{ cursor: "pointer" }}
         //              key={item.id}
         //               onClick={() => onFieldClick(item)}
-                    
+
         //             >
         //               <td>
         //                 {`CASE${String(item.id).padStart(4, "0")}`}
@@ -568,33 +568,34 @@ const DataTable = () => {
 
 
 
-<div>
-           <TableModal
-             title="Case Details"
-        data={data}
-        columns={caseColumns}
-      
-  onRowClick={(row) => {
-     dispatch(setCaseData(row));
-  console.log('Row clicked:', row);
-  const caseId = row.id // 👀 Check this!
-  navigate(`/cases/${caseId}`);
-}}
-          enableRowClick={true}
-        // onRowAction={{
-        //   view: (row) => alert("View row: " + JSON.stringify(row))
-        // }}
-  onRowAction={{
-                edit: (row) => togglePopupB(row),
-                delete: (row) => confirmDelete(row.id, row.name),
-                details: (row) => togglePopupA(row),
-              }}
-         idPrefix="CASE"
-         btnTitle=" + Add New Case" 
-          onAddClick={() => togglePopup()}
-      />
-      
-</div>
+        <div>
+          <TableModal
+            title="Case Details"
+            data={data}
+            columns={caseColumns}
+
+            onRowClick={(row) => {
+              dispatch(setCaseData(row));
+              console.log('Row clicked:', row);
+              const caseId = row.id // 👀 Check this!
+              navigate(`/cases/${caseId}`);
+            }}
+            enableRowClick={true}
+            // onRowAction={{
+            //   view: (row) => alert("View row: " + JSON.stringify(row))
+            // }}
+
+            onRowAction={{
+              edit: (row) => togglePopupB(row),
+              delete: (row) => confirmDelete(row.id, row.name),
+              details: (row) => togglePopupA(row),
+            }}
+            idPrefix="CASE"
+            btnTitle=" + Add New Case"
+            onAddClick={() => togglePopup()}
+          />
+
+        </div>
 
       ) : (
         <div className="resourcesContainer" style={{ border: "none" }}>

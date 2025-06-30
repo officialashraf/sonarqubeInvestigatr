@@ -209,19 +209,19 @@ const Resources = () => {
       {/* Header Section */}
       <div className="top-header">
         <div className="title">
-          <h5>All Resources</h5>
+          <h5>Resources Insights</h5>
         </div>
       </div>
 
       {/* Content Section */}
       <div className="contents">
         <div className="left-sidebar" ref={sidebarRef}>
-          <div className="inner-content" style={{ paddingBottom: '60px', paddingTop: '60px' }}>
+          <div className="inner-content" style={{ paddingBottom: '60px'}}>
             <div className="sidebar-header">
               <span className="search-icon">
                 <i className="fa fa-search"></i> {/* Font Awesome Search Icon */}
               </span>
-              <h5>Resources Insights</h5>
+              
               <div style={{ marginBottom: '10px', color: '#000' }}>
               </div>
               {loading && (
