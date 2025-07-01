@@ -29,12 +29,11 @@ import ReportPage from '../Component/Modules/Reports/reportPage.js';
 import TargetDashboard from '../Component/Modules/Targets/targetDashboard.js';
 import { setupAxiosInterceptors } from './axiosConfig.js';
 import LicenseGuard from './licenseGaurd.js';
+import ConnectionManagement from '../Component/Modules/Connections/connectionManagement.js';
 import AboutUs from '../Component/Modules/Home/aboutUs.js';
 import DAButton from '../Component/Common/Buttton/button.js';
-import ConnectionManagement from '../Component/Modules/Connections/connectionManagement.js';
 
-
-
+const styels ={}
 const AppContent = () => {
     const location = useLocation();
     setupAxiosInterceptors();
@@ -66,60 +65,61 @@ const AppContent = () => {
     };
     const excludedPaths = ["/login", "/", "/license"];
     return (
-        <div className={styles.ContainerDashboard}>
-            {/* Render Header for all pages except the LoginPage */}
+<div className={styles.ContainerDashboard}>
+  <div className={styles.dashboardContainer}>
 
-            <div className={styles.dashboardContainer}>
-                <div className={styles.contD}>
-                    {!excludedPaths.includes(location.pathname) && <Header title={getHeaderTitle()} />}
+    {/* Sidebar */}
+    <div className={styles.contA}>
+      {!excludedPaths.includes(location.pathname) && <Sidebar />}
+    </div>
 
-                </div>
-                <div className={styles.contA}>
-                    {!excludedPaths.includes(location.pathname) && <Sidebar />}
-                </div>
+    {/* Right Panel: Header + Main Content */}
+    <div className={styles.rightPanel}>
+      
+      {/* Header */}
+      <div className={styles.contD}>
+        {!excludedPaths.includes(location.pathname) && <Header title={getHeaderTitle()} />}
+      </div>
 
-                <div className={styles.contB}>
-                    <Routes>
-                        <Route path='/' element={<LicenseValidator />} />
-                           <Route path='/btn' element={<DAButton />} />
-                        <Route path="/license" element={<LicensePage />} />
-                        {/* <Route path="/login" element={<LoginPage />} /> */}
-                        <Route element={<LicenseGuard />}>
-                            <Route path="/login" element={<LoginPage />} />
-                        </Route>
-                        <Route element={<ProtectedRoute />}>
-                            <Route path="/pii" element={<ShowDetails />} />
-                            <Route path="/cases" element={<Home />} />
-                            <Route path="/cases/:caseId" element={<MainFilter />} />
-                            <Route path="/add-filter" element={<AddFilter2 />} />
-                            <Route path='/case-detail' element={<CaseAddFilter />} />
-                            <Route path='/cases/:caseID/analysis' element={<CaseTableDataFilter />} />
-                            <Route path="/cases/:caseID/case-summary" element={<Summary />} />
-                            <Route path="/key" element={< KeywordChart />} />
-                            <Route path="/line" element={<LineChart1 />} />
-                            <Route path="/grapg" element={< GraphicalData />} />
-                            <Route path="/search" element={< SearchResults />} />
-                            <Route path="/confirm" element={< Confirm />} />
-                            <Route path="logout" element={< LogoutUser />} />
-                            <Route path="/users" element={< UserManagement />} />
-                            <Route path="/admin" element={< UserDashboard />} />
-                            <Route path="/roles" element={< RolesPermission />} />
-                            <Route path="/reports" element={< ReportPage />} />
-                            <Route path="/targets" element={< TargetDashboard />} />
-                            <Route path="/about" element={< AboutUs />} />
-                            <Route path="/connections" element={< ConnectionManagement />} />
-                            <Route path="*" element={<div className='notfound'> <h4>Work in progress........</h4></div>} />
-                        </Route>
-                        <Route path='loader' element={<Loader />} />
+      {/* Main Content */}
+      <div className={styles.contB}>
+        <Routes>
+          <Route path='/' element={<LicenseValidator />} />
+          <Route path='/btn' element={<DAButton />} />
+          <Route path="/license" element={<LicensePage />} />
+          <Route element={<LicenseGuard />}>
+            <Route path="/login" element={<LoginPage />} />
+          </Route>
+          <Route element={<ProtectedRoute />}>
+            <Route path="/pii" element={<ShowDetails />} />
+            <Route path="/cases" element={<Home />} />
+            <Route path="/cases/:caseId" element={<MainFilter />} />
+            <Route path="/add-filter" element={<AddFilter2 />} />
+            <Route path='/case-detail' element={<CaseAddFilter />} />
+            <Route path='/cases/:caseID/analysis' element={<CaseTableDataFilter />} />
+            <Route path="/cases/:caseID/case-summary" element={<Summary />} />
+            <Route path="/key" element={<KeywordChart />} />
+            <Route path="/line" element={<LineChart1 />} />
+            <Route path="/grapg" element={<GraphicalData />} />
+            <Route path="/search" element={<SearchResults />} />
+            <Route path="/confirm" element={<Confirm />} />
+            <Route path="logout" element={<LogoutUser />} />
+            <Route path="/users" element={<UserManagement />} />
+            <Route path="/admin" element={<UserDashboard />} />
+            <Route path="/roles" element={<RolesPermission />} />
+            <Route path="/reports" element={<ReportPage />} />
+            <Route path="/targets" element={<TargetDashboard />} />
+            <Route path="/about" element={<AboutUs />} />
+            <Route path="/connections" element={<ConnectionManagement />} />
+            <Route path="*" element={<div className='notfound'><h4>Work in progress........</h4></div>} />
+          </Route>
+          <Route path='loader' element={<Loader />} />
+        </Routes>
+      </div>
+    </div>
+  </div>
+</div>
 
-                    </Routes>
-                </div>
-
-                {/* <div className="cont-c">
-                    {!excludedPaths.includes(location.pathname) && <RightSidebar />}
-                </div> */}
-            </div>
-        </div>
     );
 };
 export default AppContent;

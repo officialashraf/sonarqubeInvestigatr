@@ -9,7 +9,8 @@ import './mainContainer.css';
 import AddFilter2 from '../Filters/addFilter.js';
 import Loader from '../Layout/loader.js';
 import { toast } from 'react-toastify';
-import Cdr from '../User/CDR/cdr.js';
+import Cdr from '../CDR/cdr.js';
+import AppButton from '../../Common/Buttton/button.js';
 
 const MainContainer = () => {
   const token = Cookies.get('accessToken');
@@ -74,7 +75,7 @@ const MainContainer = () => {
     if (isLoading) {
 
       return <>
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', marginTop: '30rem', width: '100%' }}> <Loader />; </div> </>// Show loading state
+        <div style={{ display: 'flex', justifyContent: 'center',  height: '100vh',width: '100%' }}> <Loader />; </div> </>// Show loading state
     }
 
     if (shouldProceed) {
@@ -85,16 +86,17 @@ const MainContainer = () => {
       <div className="resourcesContainer">
         <h3 className="title">Let's Get Started!</h3>
         <p className="content">Add resources to get started</p>
-        <Button variant="primary" className="add-resource-button" onClick={togglePopup}>
+        {/* <Button variant="primary" className="add-resource-button" onClick={togglePopup}>
           <FaPlus /> Add Resources
-        </Button>
+        </Button> */}
+        <AppButton children={"+ Add Resources"} onClick={togglePopup} />
       </div>
     );
   };
 
   return (
     <>
-      <div className="containerM" style={{ background: "lightgray", margin: '0px' }}>
+      <div className="containerM" >
         {renderContent()}
       </div>
       {showPopup && <Cdr togglePopup={togglePopup} />}

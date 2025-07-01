@@ -31,8 +31,8 @@ const Sidebar = () => {
     { label: 'Reports', icon: <BarChart size={20} />, path: '/reports' },
     { label: 'Admin', icon: <People size={20} />, path: '/admin' },
     {  icon: <Search size={20} />, isPopup: true },
-        {  icon: <Cpu size={20} />, path: '/gemini' },
-        { icon: <FileEarmarkText size={20} />, path: '/documents' },
+        // {  icon: <Cpu size={20} />, path: '/gemini' },
+        // { icon: <FileEarmarkText size={20} />, path: '/documents' },
   ];
 
   return (
