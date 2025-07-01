@@ -1,5 +1,5 @@
 .search-bar-container {
-  background-color: white;
+  background-color: #080E17;
   color: black;
   display: flex;
   flex-direction: column;
@@ -74,9 +74,9 @@
 
 .searchresult {
   width: 100%;
-  max-height: 75vh;
+  max-height: 80vh;
   box-sizing: border-box;
-  overflow-x: auto;
+  /* overflow-x: auto; */
 }
 .wrapper {
   display: flex;
