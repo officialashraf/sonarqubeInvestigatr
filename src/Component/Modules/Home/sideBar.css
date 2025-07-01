@@ -19,16 +19,17 @@
 } */
 .sideB {
   background-color: #0A1623;
-  height: 90vh;
-  padding: 10px 0;
+  height: 99vh;
+  /* padding: 10px 0; */
   display: flex;
   flex-direction: column;
    justify-content: space-between;
   align-items: center;
-  border-radius: 0px 20px 20px 0px;
+  /* border-radius: 0px 20px 20px 0px; */
 }
 
 .sideTop {
+  padding-top: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -38,7 +39,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 10px;
+  /* padding-bottom:10px; */
 }
 
 .sideBottom .navSideLink {
@@ -74,7 +75,7 @@ border-radius: 50%;
   justify-content: center;
   text-align: center;
   font-size: 11px;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
   cursor: pointer;
   transition: all 0.3s ease;
 }
@@ -84,8 +85,7 @@ border-radius: 50%;
   width: 30px;
   background-color: transparent;
   padding: 2px;
-  border-radius: 20%;
-
+  border-radius: 15px;
   color: #D6D6D6;
   transition: all 0.3s ease;
 }
@@ -101,7 +101,7 @@ border-radius: 50%;
 }
 
 .navSideLink span {
-  margin-top: 5px;
+  margin-top: 2px;
 }
 
 @media (max-width: 767px) {

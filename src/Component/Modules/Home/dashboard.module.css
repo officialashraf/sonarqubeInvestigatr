@@ -4,45 +4,47 @@
   min-height: 100vh;
   height: auto;
   display: flex;
-  flex-direction: column;
-  overflow: hidden;
   background-color: var(--color-colors-backgroundColor);
   color: var(--color-colors-neutralText);
   font-family: var(--font-fontFamily);
 }
 
-/* ✅ Dashboard Grid Layout */
+/* ✅ Two Column Layout */
 .dashboardContainer {
   display: grid;
-  grid-template-columns: 70px 1fr;
-  grid-template-rows: 36px auto;
+  grid-template-columns: 96px auto;
   width: 100%;
   min-height: 100%;
 }
 
-/* ✅ Sidebar & Main Content */
+/* ✅ Sidebar */
 .contA {
   background-color: var(--color-colors-backgroundColor);
   color: var(--color-colors-neutralText);
-  padding-top: 20px;
+  padding-top: 5px;
 }
 
-.contB {
-  background-color: var(--color-colors-backgroundColor);
-  color: var(--color-colors-neutralText);
+/* ✅ Right Side (Header + Main Content) */
+.rightPanel {
+  display: grid;
+  grid-template-rows: 50px auto; /* adjust header height as needed */
+  height: 100vh;
   overflow: hidden;
-  padding: 20px;
 }
 
+/* ✅ Header */
 .contD {
-  grid-column: 1 / 4;
   background-color: var(--color-colors-backgroundColor);
   color: var(--color-colors-neutralText);
   text-align: center;
+  padding: 10px 20px;
 }
 
-@media (max-width: 768px) {
-  .ContainerDashboard {
-    min-height: 100vh;
-  }
+/* ✅ Main Content */
+.contB {
+  background-color: var(--color-colors-backgroundColor);
+  color: var(--color-colors-neutralText);
+  overflow: auto;
+  padding: 20px;
+ height: 100%
 }

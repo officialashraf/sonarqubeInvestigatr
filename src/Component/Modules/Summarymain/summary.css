@@ -1,5 +1,6 @@
 .box.MuiBox-root.css-0{
-  background-color: lightgrey;
+  background-color: var(--color-colors-secondary) !important;
+  border-radius:25px;
 }
 /* Table Styling */
 .css-3ssuu9-MuiTableCell-root {

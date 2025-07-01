@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import styles from "./Cdr.module.css"
-import AddFilter2 from '../../Filters/addFilter';
+import AddFilter2 from '../Filters/addFilter';
 import FileUpload from './FileUpload';
 import FtpPopup from './FtpPopup';
+import AppButton from '../../Common/Buttton/button';
 
 
 const Cdr = ({ togglePopup }) => {
@@ -23,13 +24,14 @@ const Cdr = ({ togglePopup }) => {
   const dataTypes = ['CDR', 'IPDR', 'Other'];
   const handleProceed = () => {
     if (selectedOption === 'osintData') {
-      setShowPopup(true); // 🔹 show AddFilter2
+      setShowPopup(true); // 🔹 show AddFilter2+
     } else if (selectedOption === 'ftpServer') {
       setShowFtpPopup(true);
     }
     else if (selectedOption === 'localStorage') {
       setShowFileUpload(true); // 🔹 open upload popup
     }
+ 
   };
 
   return (
@@ -37,7 +39,7 @@ const Cdr = ({ togglePopup }) => {
       <div className={styles.popupOverlay}>
         <div className={styles.popupContainerCdr}>
           <div className={styles.popupHeaderCdr}>
-            <h3>Add Resources</h3>
+            <h5>Add Resources</h5>
             <button className={styles.closeIconCdr} onClick={togglePopup}>&times;</button>
           </div>
           <div className={styles.popupBodyCdr}>
@@ -130,8 +132,8 @@ const Cdr = ({ togglePopup }) => {
           </div>
 
           <div className={styles.popupFooterCdr}>
-            <button className={styles.cancelBtnCdr} onClick={togglePopup}>CANCEL</button>
-            <button className={styles.proceedBtnCdr} onClick={handleProceed}>PROCEED</button>
+            <AppButton children={"x Cancel"} onClick={togglePopup}/>
+             <AppButton children={"✓ Proceed"} onClick={handleProceed}/>
           </div>
         </div>
       </div>

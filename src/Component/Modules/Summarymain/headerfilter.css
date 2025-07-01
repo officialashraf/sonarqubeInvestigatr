@@ -1,78 +1,51 @@
-.analyze-btn {
-  border: none;
-  border-radius: 5px;
-  background-color: gray;
-  color: white;
-  margin-top: 0px !important;
-  margin-right: 40px;
-  font-size: 12px;
-  padding: opx !important;
+.custom-navbarH {
+  padding: 0.5rem 1rem;
 }
-.analyze-btn:hover {
-  background-color: black;
-  border-color: black;
-}
-.caseName {
-  font-size: 20px;
-  font-weight: bold;
-}
-/* ok */
+
 .custom-containerH {
-  margin-left: -10px !important;
-  padding-right: 0 !important;
+  padding: 0;
 }
-.nav-tabs .nav-link {
-  --bs-nav-tabs-border-width: none !important ;
+.caseIcon{
+  font-size: 20px
 }
-
-@media (max-width: 1024px) {
-  .analyze-btn {
-    font-size: 12px;
-    padding: 4px 8px;
-    margin-right: 20px; /* Reduce spacing */
-  }
-  .caseName {
-    font-size: 18px; /* Adjust for smaller screens */
-  }
-  .nav-tabs .nav-link {
-    font-size: 14px;
-  }
+.case-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
-@media (max-width: 768px) {
-  .analyze-btn {
-    font-size: 10px;
-    padding: 3px 6px;
-    margin-right: 10px;
-  }
-  .caseName {
-    font-size: 16px;
-  }
-  .nav-tabs .nav-link {
-    font-size: 12px;
-  }
+.case-id {
+  font-size: 20px;
+  color: white;
 }
 
-@media (max-width: 480px) {
-  .analyze-btn {
-    font-size: 10px;
-    padding: 3px 6px;
-    width: 100%; /* ✅ Full width on small screens */
-    text-align: center;
-    margin-right: 0px;
-  }
-  .caseName {
-    font-size: 14px;
-    text-align: center; /* ✅ Center text */
-  }
-  .custom-containerH {
-    margin-left: 0px !important; /* Remove negative margin */
-  }
-  .nav-tabs {
-    flex-wrap: wrap; /* ✅ Wrap tabs for smaller screens */
-  }
-  .nav-tabs .nav-link {
-    font-size: 12px;
-    padding: 5px 10px;
-  }
+.case-title-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.case-title {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 500;
+  font-family: sans-serif;
+}
+
+.badge-warning {
+  background-color: #A67C00 !important;
+  color: #fff;
+}
+
+.ml-2 {
+  margin-left: 0.5rem;
+}
+
+.ms-2 {
+  margin-left: 0.5rem;
+}
+
+.d-flex.gap-2 {
+  display: flex;
+  gap: 8px;
 }

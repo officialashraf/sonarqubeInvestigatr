@@ -2,15 +2,16 @@
 .cardListContainer {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 23px;
   justify-content: center;
-  padding: 10px;
+  padding: 0px !important;
+  /* padding: 10px; */
   margin-bottom: 20px;
 }
 
 /* ✅ Single Card */
 .customCard {
-  background-color: var(--color-colors-primary);
+  background-color: var(--color-colors-secondary);
   color: var(--color-colors-neutralText);
   border-radius: var(--shape-borderRadius);
   padding: 10px;
@@ -76,6 +77,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  color:var(--color-colors-primaryAccent);
 }
 
 /* ✅ Responsive Layouts */
