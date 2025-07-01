@@ -31,8 +31,8 @@ const StatusCard = ({ name, number, icon }) => {
     {/* Bottom Row */}
     <div className={styles.customBottomRow}>
       <div className={styles.customCardNumber}>{number}</div>
-      <div className={styles.customIconCircle}>
-        <ArrowOutwardIcon size={14} color="#3498db" />
+      <div className={styles.customArrowCircle}>
+        <ArrowOutwardIcon size={14}  />
       </div>
     </div>
 
@@ -49,7 +49,7 @@ const CardList = () => {
 
   const getCardData = useCallback(async () => {
     try {
-      const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/case/states/count`, {
+      const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/case/states-count`,{
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${Token}`

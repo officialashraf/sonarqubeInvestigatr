@@ -51,7 +51,7 @@ div,
 a,
 link,
 span {
- font-family: var(--font-family-main);
+ font-family: var(--font-fontFamily);
   font-size: var(--font-size-main);
 }
 .App-link {
