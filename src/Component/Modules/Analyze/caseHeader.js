@@ -54,7 +54,7 @@ const CaseHeader = ({ onIconClick, activeView }) => {
           </div>
         </div> */}
          <div className={styles.actionIconsContainer}>
-        <PieChart sx={{ fontSize: 40 }}
+          <PieChart sx={{ fontSize: 40,  height: 58, width: 58, }}
           className={`${styles.icon} ${
             activeView === "graphicalData" ? styles.activeIcon : ""
           }`}
@@ -66,7 +66,10 @@ const CaseHeader = ({ onIconClick, activeView }) => {
           }`}
           onClick={() => onIconClick("resources")}
         />
-        <ListAltOutlined sx={{ fontSize: 40 }}
+          <ListAltOutlined sx={{
+            fontSize: 40,  width: 58,
+            height: 58
+}}
           className={`${styles.icon} ${
             activeView === "caseData" ? styles.activeIcon : ""
           }`}

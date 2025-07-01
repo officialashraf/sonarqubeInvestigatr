@@ -59,16 +59,19 @@ const ProfileDetails = () => {
                     <img src={userImg} alt={`Profile Pic`} width={100} height={100} />
                   )}
                 </div>
-                <div className="profile-id"><ul className="email-list">
+                {/* <div className="profile-id"><ul className="email-list">
                   {profileData && Array.isArray(profileData.names) && profileData.names.length > 0 ? (
                     profileData.names.slice(0, 3).map((name, index) => <li key={index}>{name}</li>)
                   ) : (
                     <li></li>
                   )}
-                </ul></div>
+                </ul></div> */}
               </div>
             </div>
             <div className="detail-item">
+               <div className="profile-name-above-phone">
+                {profileData?.names?.[0] || "Unknown Name"}
+              </div>
               <div className="detail-label">
                 <Phone fontSize="small" /> Phone Number
               </div>
