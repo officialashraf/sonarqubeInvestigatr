@@ -34,7 +34,7 @@ const Cdr = ({ togglePopupCdr }) => {
     else if (selectedOption === 'localStorage') {
       setShowFileUpload(true); // 🔹 open upload popup
     }
-  togglePopupCdr(false);
+
   };
 
   return (
