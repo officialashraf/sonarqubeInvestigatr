@@ -6,7 +6,7 @@ import FtpPopup from './FtpPopup';
 import AppButton from '../../Common/Buttton/button';
 
 
-const Cdr = ({ togglePopup }) => {
+const Cdr = ({ togglePopupCdr }) => {
   const [selectedOption, setSelectedOption] = useState('localStorage');
   const [selectDataType, setSelectDataType] = useState('CDR');
   const [showPopup, setShowPopup] = useState(false);
@@ -23,15 +23,18 @@ const Cdr = ({ togglePopup }) => {
   // const batchNames = ['New Batch 1', 'New Batch 2', 'New Batch 3'];
   const dataTypes = ['CDR', 'IPDR', 'Other'];
   const handleProceed = () => {
+   
     if (selectedOption === 'osintData') {
+  
       setShowPopup(true); // 🔹 show AddFilter2+
+
     } else if (selectedOption === 'ftpServer') {
       setShowFtpPopup(true);
     }
     else if (selectedOption === 'localStorage') {
       setShowFileUpload(true); // 🔹 open upload popup
     }
- 
+
   };
 
   return (
@@ -40,7 +43,7 @@ const Cdr = ({ togglePopup }) => {
         <div className={styles.popupContainerCdr}>
           <div className={styles.popupHeaderCdr}>
             <h5>Add Resources</h5>
-            <button className={styles.closeIconCdr} onClick={togglePopup}>&times;</button>
+            <button className={styles.closeIconCdr} onClick={togglePopupCdr}>&times;</button>
           </div>
           <div className={styles.popupBodyCdr}>
             <p>Choose an option to continue</p>
@@ -132,7 +135,7 @@ const Cdr = ({ togglePopup }) => {
           </div>
 
           <div className={styles.popupFooterCdr}>
-            <AppButton children={"x Cancel"} onClick={togglePopup}/>
+            <AppButton children={"x Cancel"} onClick={togglePopupCdr}/>
              <AppButton children={"✓ Proceed"} onClick={handleProceed}/>
           </div>
         </div>

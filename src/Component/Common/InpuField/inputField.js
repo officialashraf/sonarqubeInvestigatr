@@ -8,6 +8,7 @@ export const InputField = React.forwardRef(
       type = 'text',
       value,
       onChange,
+      onKeyDown,
       placeholder,
       name,
       autoComplete,
@@ -15,6 +16,7 @@ export const InputField = React.forwardRef(
       readOnly,
       onFocus,
       error = false,  // ✅ new prop (true/false)
+      disabled
     },
     ref
   ) => {
@@ -31,12 +33,14 @@ export const InputField = React.forwardRef(
             name={name}
             value={value}
             onChange={onChange}
+              onKeyDown={onKeyDown}
             placeholder={placeholder}
             autoComplete={autoComplete}
             autoFocus={autoFocus}
             readOnly={readOnly}
             onFocus={onFocus}
             required
+            disabled={disabled}
           />
         </div>
       </div>

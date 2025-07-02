@@ -10,6 +10,7 @@ import { setCaseData } from '../../../Redux/Action/caseAction';
 
 import { toast } from 'react-toastify';
 import Cookies from 'js-cookie';
+import AppButton from '../../Common/Buttton/button';
 
 const AddFilter2 = ({ togglePopup }) => {
   const dispatch = useDispatch();
@@ -151,15 +152,16 @@ const AddFilter2 = ({ togglePopup }) => {
   return (
     <>
       <div className="popup-overlay">
-        <div className="popup-container" style={{ width: "50%" }}>
+        <div className="popup-container" style={{ width: "75%" }}>
           <button className="close-icon" onClick={togglePopup}>&times;</button>
           <div className="popup-content">
             <div className="container-fluid p-4 main-body-div">
               <div className="row main-body-div-1st-row">
                 <div className="col-md-4">
-                  <button className='add-new-filter-button' onClick={toggleAddFilter}>
+                  <AppButton onClick={toggleAddFilter} children={"+ Add New Filter"}/>
+                  {/* <button className='add-new-filter-button' onClick={toggleAddFilter}>
                     <Plus /> Add New Filter
-                  </button>
+                  </button> */}
                   <ExistingFilters
                     setShowAddFilter={setShowAddFilter}
                     selectedFilters={selectedFilters}
@@ -168,9 +170,9 @@ const AddFilter2 = ({ togglePopup }) => {
                   />
                 </div>
                 {showAddFilter && (
-                  <div className="col-md-8" style={{ marginTop: "15px" }}>
+                  <div className="col-md-8">
                     <button onClick={handleCloseAddFilter} className="btn close-add-filter-button">
-                      <X />
+                      <X fill='whitr' size={20}/>
                     </button>
                     <AddNewFilter
                       filterIde={filterIdedit}
@@ -181,11 +183,10 @@ const AddFilter2 = ({ togglePopup }) => {
                   </div>
                 )}
               </div>
-              <div className="text-end mt-3">
+              <div style={{display:'flex', justifyContent:'center'}} >
                   {(filtersToStart.length > 0 || filtersToStop.length > 0) && (
-                    <button className="add-new-filter-button" onClick={handleProceed} disabled={isSubmitting}>
-                      {isSubmitting ? 'Processing...' : 'Proceed'}
-                    </button>
+                    <AppButton children={isSubmitting ? 'Processing...' : '✔ Proceed'} onClick={handleProceed} disabled={isSubmitting} 
+                    />
                   )}
 
               </div>

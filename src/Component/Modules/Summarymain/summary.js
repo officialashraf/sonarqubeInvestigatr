@@ -112,9 +112,9 @@ const iconMap = {
   const [activeIndex, setActiveIndex] = useState(null);
   return (
     <>
+<h6 style={{ textAlign: "center" }}> FilterCount: {filters}</h6>
       <div className='container-fluid'>
         <Box width="100%">
-          {/* <h5 style={{ textAlign: "center" }}> FilterCount: {filters}</h5> */}
           <div className='graphchats'>
             <Box className="box">
               <ResponsiveContainer width="100%" height={300}>
