@@ -6,7 +6,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
-
+import LockResetIcon from '@mui/icons-material/LockReset';
 
 
 const TableModal = ({ columns = [], data = [], onAddClick, searchPlaceholder = "Search...", idPrefix = "", btnTitle = '', onRowClick, onRowAction = {}, enableRowClick = false,
@@ -97,6 +97,7 @@ const TableModal = ({ columns = [], data = [], onAddClick, searchPlaceholder = "
                           e.stopPropagation();
                           onRowAction.edit && onRowAction.edit(row);
                         }}
+                        titleAccess="Edit"
                       />
                       <DeleteIcon
                         className={styles.iconDelete}
@@ -104,6 +105,7 @@ const TableModal = ({ columns = [], data = [], onAddClick, searchPlaceholder = "
                           e.stopPropagation();
                           onRowAction.delete && onRowAction.delete(row);
                         }}
+                        titleAccess="Delete"
                       />
                       <VisibilityIcon
                         className={styles.iconEdit}
@@ -111,6 +113,7 @@ const TableModal = ({ columns = [], data = [], onAddClick, searchPlaceholder = "
                           e.stopPropagation();
                           onRowAction.details && onRowAction.details(row);
                         }}
+                        titleAccess="Details"
                       />
                       {onRowAction.assign && (
                         <AssignmentIndIcon
@@ -119,7 +122,18 @@ const TableModal = ({ columns = [], data = [], onAddClick, searchPlaceholder = "
                             e.stopPropagation();
                             onRowAction.assign(row);
                           }}
-                          titleAccess="Assign"
+                          titleAccess="Assign Permission"
+                          style={{ cursor: "pointer" }}
+                        />
+                      )}
+                      {onRowAction.reset && (
+                        <LockResetIcon
+                          className={styles.iconEdit}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onRowAction.reset(row);
+                          }}
+                          titleAccess="Reset Password"
                           style={{ cursor: "pointer" }}
                         />
                       )}

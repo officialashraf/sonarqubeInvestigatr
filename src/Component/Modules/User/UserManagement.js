@@ -258,6 +258,7 @@ const userColumns = [
                 edit: (row) => toggleEditForm(row),
                 delete: (row) => confirmDelete(row.id, row.name),
                 details: (row) => toggleDetails(row),
+                reset :(row) => toggleResetForm(row)
               }}
    
           onAddClick={() => togglePopup()}

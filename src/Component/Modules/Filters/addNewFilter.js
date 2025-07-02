@@ -7,6 +7,11 @@ import Cookies from 'js-cookie';
 import "./main.css"
 import { jwtDecode } from "jwt-decode";
 import { useAutoFocusWithManualAutofill } from '../../../utils/autoFocus';
+import { InputField } from '../../Common/InpuField/inputField';
+import TextareaField from '../../Common/TextField/textField';
+import DropdownField from '../../Common/SelectDropDown/selectDropDown';
+import { IntervalField } from '../../Common/IntervalField/intervalField';
+import AppButton from '../../Common/Buttton/button';
 
 const conversionFactors = {
   seconds: 1,
@@ -83,7 +88,7 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
   useEffect(() => {
     if (token) {
       const decodedToken = jwtDecode(token);
-      setLoggedInUserId(decodedToken.id);
+      setLoggedInUserId(decodedToken.sub);
       console.log(decodedToken);
       console.log("User ID:", decodedToken.id);
     }
@@ -239,7 +244,7 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
 
   useEffect(() => {
     if (filterDetails && filterDetails.id) {
-      console.log('useEffect triggered');
+      console.log('useEffect triggered', filterDetails);
       setFilterName(filterDetails.name);
       setDescription(filterDetails.description);
 
@@ -276,7 +281,7 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
       setSources(convertedSources);
 
       // Check edit permissions
-      const isEditable = (loggedInUserId === String(filterDetails.created_by));
+      const isEditable = (loggedInUserId === filterDetails.created_by);
       console.log(isEditable)
       setIsEditable(isEditable);
       if (!toastShown.current) {
@@ -430,37 +435,47 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
   };
   return (
     <div className="p-1">
-      <Form onSubmit={(e) => {
-        e.preventDefault();
-        handleSaveFilter()
-      }}>
+      <Form style={{ marginTop: '10px' }}
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSaveFilter()
+        }}>
         <span onClick={onClose} style={{
-          position: 'absolute',
-          fontSize: '15px',
-          right: ' 2px',
-          cursor: 'pointer'
+          fontSize: '20px',
+          cursor: 'pointer',
+          color: 'white',
+          display: 'flex',
+          justifyContent: 'end',
         }}>&times;</span>
         <Form.Group className="mb-3">
-          <Form.Label>Filter Name *</Form.Label>
-          <Form.Control
+          <InputField
+            label="Filter Name *"
             type="text"
+
             value={filterName}
             onChange={(e) => {
               setFilterName(e.target.value.replace(/\b\w/g, (char) => char.toUpperCase()));
               setError(prev => ({ ...prev, name: '' }));
             }}
+            placeholder="Enter your filtername"
+            autoComplete="filter-name"
+            name="filtername"
             onKeyDown={handleEnterKey}
             disabled={filterDetails?.id && !isEditable}
             readOnly={isReadOnly}
             onFocus={handleFocus}
             ref={inputRef}
+            error={!!error.name}
+
           />
+
           {error.name && <p style={{ color: "red", margin: '0px' }} >{error.name}</p>}
         </Form.Group>
-
         <Form.Group className="mb-3">
-          <Form.Label>Description *</Form.Label>
-          <Form.Control
+          <InputField
+            label="Description *"
+            placeholder="Please enter a description here"
+            error={!!error.description}
             as="textarea"
             rows={3}
             value={description}
@@ -469,6 +484,7 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
               setError(prev => ({ ...prev, description: '' }));
             }}
             onKeyDown={handleEnterKey}
+            style={{ backgroundColor: "white", color: "black" }}
             disabled={filterDetails?.id && !isEditable}
           />
           {error.description && <p style={{ color: "red", margin: '0px' }} >{error.description}</p>}
@@ -480,10 +496,12 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
               <div key={sourceIndex} className="mb-3 border rounded">
                 {sources.length > 1 && (
                   <span style={{
-                    position: 'absolute',
+                    display: 'flex',
+                    justifyContent: 'end',
                     fontSize: '15px',
                     right: ' 6px',
                     cursor: 'pointer',
+                    color: 'white'
                   }} onClick={() => handleRemoveSource(sourceIndex)}
                     disabled={!isEditable}>&times;</span>
 
@@ -491,17 +509,19 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
                 <div className="row g-3">
 
                   <div className="col-md-6">
-                    <Form.Label>Source *</Form.Label>
-                    <Form.Select
+                    <DropdownField
+                      label="Source *"
                       value={source.source}
                       onChange={(e) => handleSourceChange(sourceIndex, e)}
                       disabled={filterDetails?.id && !isEditable}
-                    >
-                      <option value="" disabled>Select Source</option>
-                      <option value="social media">Social Media</option>
-                      <option value="social media profile">Social Media Profile</option>
-                      <option value="rss feed">RSS Feed</option>
-                    </Form.Select>
+                      required={true}
+                      error={!!error.sources?.[sourceIndex]?.source}
+                      options={[
+                        { label: 'Social Media', value: 'social media' },
+                        { label: 'Social Media Profile', value: 'social media profile' },
+                        { label: 'RSS Feed', value: 'rss feed' },
+                      ]}
+                    />
                     {error.sources?.[sourceIndex]?.source && (
                       <p style={{ color: 'red', margin: 0 }}>{error.sources[sourceIndex].source}</p>
                     )}
@@ -509,20 +529,20 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
 
                   {source.source && source.source !== 'rss feed' && (
                     <div className="col-md-6">
-                      <Form.Label>Platform</Form.Label>
-                      <Form.Select
-                        // multiple
+                      <DropdownField
+                        label="Select Platform *"
                         value={source.platform}
                         onChange={(e) => handlePlatformChange(sourceIndex, e)}
                         style={{ width: '96%' }}
-                        disabled={filterDetails?.id && !isEditable}
-                      >
-                        <option value="" disabled>Select Platform</option>
-                        {platform.map((plat) => (
 
-                          <option key={plat} value={plat}>{plat}</option>
-                        ))}
-                      </Form.Select>
+                        disabled={filterDetails?.id && !isEditable}
+                        required={true}
+                        error={!!error.sources?.[sourceIndex]?.platform}
+                        options={platform.map((plat) => ({
+                          label: plat,
+                          value: plat
+                        }))}
+                      />
                       {error.sources?.[sourceIndex]?.platform && (
                         <p style={{ color: 'red', margin: 0 }}>{error.sources[sourceIndex].platform}</p>
                       )}
@@ -530,52 +550,34 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
                   )}
                   {source.source && (
                     <div className="col-md-6">
-                      <Form.Label>Monitoring Interval</Form.Label>
-                      <InputGroup>
-                        <Form.Control
-                          type="number"
-                          min="1"
-                          value={source.intervalValue}
-                          onChange={(e) => handleIntervalValueChange(sourceIndex, e.target.value)}
-                          // style={{ maxWidth: '100px' }}
-                          disabled={filterDetails?.id && !isEditable}
-                          className='rss-monitoring-interval-input'
-                        />
-                        <Form.Select
-                          value={source.intervalUnit}
-                          onChange={(e) => handleIntervalUnitChange(sourceIndex, e.target.value)}
-                          // style={{ maxWidth: '150px' }}
-                          disabled={filterDetails?.id && !isEditable}
-                          className='rss-monitoring-interval-select'
-                        >
-                          <option value="" disabled>Select Unit</option>
-                          <option value="minutes">Minutes</option>
-                          <option value="hours">Hours</option>
-                        </Form.Select>
-                        {error.sources?.[sourceIndex]?.intervalValue && (
-                          <p style={{ color: 'red', margin: 0 }}>{error.sources[sourceIndex].intervalValue}</p>
-                        )}
-                        {error.sources?.[sourceIndex]?.intervalUnit && (
-                          <p style={{ color: 'red', margin: 0 }}>{error.sources[sourceIndex].intervalUnit}</p>
-                        )}
-                        {/* <InputGroup.Text>
-                    ({source.intervalValue * conversionFactors[source.intervalUnit]} seconds)
-                  </InputGroup.Text> */}
-                      </InputGroup>
+                      <IntervalField
+                        label="Monitoring Interval"
+                        value={source.intervalValue}
+                        unit={source.intervalUnit}
+                        onValueChange={(val) => handleIntervalValueChange(sourceIndex, val)}
+                        onUnitChange={(unit) => handleIntervalUnitChange(sourceIndex, unit)}
+                        disabled={filterDetails?.id && !isEditable}
+                      />
+                      {error.sources?.[sourceIndex]?.intervalValue && (
+                        <p style={{ color: 'red', margin: 0 }}>{error.sources[sourceIndex].intervalValue}</p>
+                      )}
+                      {error.sources?.[sourceIndex]?.intervalUnit && (
+                        <p style={{ color: 'red', margin: 0 }}>{error.sources[sourceIndex].intervalUnit}</p>
+                      )}
                     </div>
                   )}
                   {source.source && (
-                    <div className="col-md-6">
-                      <Form.Label>{source.source === "social media profile" ? "User ID" : "Keywords"}</Form.Label>
-                      <Form.Control
+                    <div className="col-md-6" style={{ marginRight: '5px', width: '45%' }}>
+                      <InputField
+                        label={source.source === "social media profile" ? "User ID *" : "Keyword *"}
                         type="text"
-                        placeholder={source.source === "social media profile" ? "Enter user id and press Enter" : "Enter keyword and press Enter"}
+                        placeholder={source.source === "social media profile" ? "Please press Enter to add userID" : "Please press Enter to add keyword"}
                         value={source.keywordInput}
                         onChange={(e) => handleKeywordChange(sourceIndex, e.target.value)}
                         onKeyDown={(e) => handleKeywordKeyDown(sourceIndex, e)}
                         disabled={filterDetails?.id && !isEditable}
                         style={{ maxWidth: '96%' }}
-
+                        error={!!error.sources?.[sourceIndex]?.keywords}
                       />
                       <div className="mt-2" style={{ display: "flex", flexWrap: "wrap", gap: "5px" }}>
                         {source.keywords.map((keyword, keyIndex) => (
@@ -671,30 +673,23 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
                         <p style={{ color: 'red', margin: 0 }}>{error.sources[sourceIndex].keywords}</p>
                       )}
                     </div>
-
                   )}
-
                 </div>
 
               </div>
 
-
-
             ))}
             {(!filterDetails?.id || isEditable) && (
-              <button type="button" className="add-new-filter-button" onClick={handleAddSource}>
-                Add Sources
-              </button>
+              // <button type="button" className="add-new-filter-button" onClick={handleAddSource}>
+              //   Add Sources
+              // </button>
+              <AppButton children={"+ Add Source"} onClick={handleAddSource} />
             )}
-            <button
-              type="button"
-              className="add-new-filter-button"
-              style={{ marginLeft: '5px' }}
-              onClick={handleSaveFilter}
-              disabled={filterDetails?.id && !isEditable || isSubmitting}
-            >
-              {isSubmitting ? (filterDetails?.id ? 'Updating...' : 'Saving...') : (filterDetails?.id ? 'Update Filter' : 'Save Filter')}
-            </button>
+            <span style={{ marginLeft: '5px' }}>
+              <AppButton onClick={handleSaveFilter}
+                disabled={filterDetails?.id && !isEditable || isSubmitting}
+                children={isSubmitting ? (filterDetails?.id ? 'Updating...' : 'Saving...') : (filterDetails?.id ? 'Update Filter' : 'Save Filter')} />
+            </span>
           </div>
         </div>
       </Form>
