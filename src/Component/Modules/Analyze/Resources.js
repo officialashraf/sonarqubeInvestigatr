@@ -215,65 +215,65 @@ const Resources = () => {
 
       {/* Content Section */}
       <div className="contents">
-        <div className="left-sidebar" ref={sidebarRef}>
-          <div className="inner-content" style={{ paddingBottom: '60px'}}>
-            <div className="sidebar-header">
-              <span className="search-icon">
-                <i className="fa fa-search"></i> {/* Font Awesome Search Icon */}
-              </span>
-              
-              <div style={{ marginBottom: '10px', color: '#000' }}>
-              </div>
-              {loading && (
-                <div style={{ textAlign: 'center', padding: '10px', color: 'black' }}>
-                  Loading...
-                </div>
-              )}
-            </div>
-
-            {allResources && allResources.length > 0 ? (
-              allResources.map((resource) => (
-                <div
-                  key={resource.row_id}
-                  className={`resourceItem ${selectedResource?.row_id === resource.row_id ? "active" : ""
-                    }`}
-                  onClick={() => handleResourceClick(resource)}
-                >
-                  <img
-                    src={resource.socialmedia_from_imageurl ?? resource.socialmedia_media_url}
-                    onError={(e) => {
-                      e.target.onerror = null; // prevents infinite loop
-                      e.target.src = 'https://www.kurin.com/wp-content/uploads/placeholder-square.jpg';
-                    }}
-                    alt="pic_not_found"
-                    className="resourceImage"
-                  />
-                  <div className="resourceDetails">
-                    <p className="resourceType">{resource.unified_type}</p>
-                    <p className="resourceContent">{resource.socialmedia_activity}</p>
+        <div className="left-content">
+          <div class="overflow-wrapper">
+            <div className="left-sidebar" ref={sidebarRef}>
+              <div className="inner-content" style={{ paddingBottom: '60px' }}>
+                <div className="sidebar-header">
+                  <div style={{ marginBottom: '10px', color: '#000' }}>
                   </div>
+                  {loading && (
+                    <div style={{ textAlign: 'center', padding: '10px', color: 'white' }}>
+                      Loading...
+                    </div>
+                  )}
                 </div>
-              ))
-            ) : (
-              <p style={{ textAlign: "center", marginTop: "2rem", color: "gray" }}>
-                No Data Load for this case,<br />
-                "Try again after some time."
-              </p>
-            )}
-            {/* No More Data Message */}
-            {!hasMore && allResources.length > 0 && (
-              <p style={{ textAlign: "center", marginTop: "2rem", color: "gray" }}>
-                No more data available.
-              </p>
-            )}
-            <div style={{ marginBottom: '10px', color: '#000' }}>
-              {/* <strong>Current Page:</strong> {currentPage} */}
-            </div>
-            {loading && (
-              <div style={{ textAlign: 'center', padding: '10px', color: 'black' }}>
-                Loading...
+
+                {allResources && allResources.length > 0 ? (
+                  allResources.map((resource) => (
+                    <div
+                      key={resource.row_id}
+                      className={`resourceItem ${selectedResource?.row_id === resource.row_id ? "active" : ""
+                        }`}
+                      onClick={() => handleResourceClick(resource)}
+                    >
+                      <img
+                        src={resource.socialmedia_from_imageurl ?? resource.socialmedia_media_url}
+                        onError={(e) => {
+                          e.target.onerror = null; // prevents infinite loop
+                          e.target.src = 'https://www.kurin.com/wp-content/uploads/placeholder-square.jpg';
+                        }}
+                        alt="pic_not_found"
+                        className="resourceImage"
+                      />
+                      <div className="resourceDetails">
+                        <p className="resourceType">{resource.unified_type}</p>
+                        <p className="resourceContent">{resource.socialmedia_activity}</p>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p style={{ textAlign: "center", marginTop: "2rem", color: "gray" }}>
+                    No Data Load for this case,<br />
+                    "Try again after some time."
+                  </p>
+                )}
+                {/* No More Data Message */}
+                {!hasMore && allResources.length > 0 && (
+                  <p style={{ textAlign: "center", marginTop: "2rem" }}>
+                    No more data available.
+                  </p>
+                )}
+                <div style={{ marginBottom: '10px', color: '#000' }}>
+                  {/* <strong>Current Page:</strong> {currentPage} */}
+                </div>
+                {loading && (
+                  <div style={{ textAlign: 'center', padding: '10px', color: 'white' }}>
+                    Loading...
+                  </div>
+                )}
               </div>
-            )}
+            </div>
           </div>
         </div>
 
@@ -352,14 +352,14 @@ const Resources = () => {
                   <div className="insta-icon " style={{ justifyContent: "initial" }}>
                     <div className="like-commment-share">
                       <div className="like">
-                        <FaRegHeart />
+                        <FaRegHeart style={{ marginRight: '5px' }} />
                         <span>{selectedResource.socialmedia_activity_like_count}</span>
                       </div>
                       <div className="comment">
-                        <FaRegComment />
+                        <FaRegComment style={{ marginRight: '5px' }} />
                         <span>{selectedResource.socialmedia_activity_comment_count}</span>
                       </div>
-                      <PiShareFatBold />
+                      <PiShareFatBold style={{ marginRight: '5px' }} />
                     </div>
                   </div>
                 </div>
@@ -432,15 +432,15 @@ const Resources = () => {
                   <div className="insta-icon">
                     <div className="like-commment-share">
                       <div className="like">
-                        <LiaThumbsUpSolid />
+                        <LiaThumbsUpSolid style={{ marginRight: '5px' }} />
                         <span>{selectedResource.socialmedia_activity_like_count} Like</span>
                       </div>
                       <div className="comment">
-                        <FaRegCommentDots />
+                        <FaRegCommentDots style={{ marginRight: '5px' }} />
                         <span>{selectedResource.socialmedia_activity_comment_count} Comment</span>
                       </div>
-                      <div className="comment"><span><MdRepeat />Repost</span></div>
-                      <div className="comment"><span><PiShareFatBold />Share</span></div>
+                      <div className="comment"><span><MdRepeat style={{ marginRight: '5px' }} />Repost</span></div>
+                      <div className="comment"><span><PiShareFatBold style={{ marginRight: '5px' }} />Share</span></div>
                     </div>
                   </div>
                 </div>
@@ -533,19 +533,19 @@ const Resources = () => {
                   <div className="insta-icon">
                     <div className="like-commment-share">
                       <div className="comment">
-                        <FaRegComment />
+                        <FaRegComment style={{ marginRight: '5px' }} />
                         <span>{selectedResource.socialmedia_activity_reply_count}</span>
                       </div>
                       <div className="repost">
-                        <LuRepeat2 />
+                        <LuRepeat2 style={{ marginRight: '5px' }} />
                         <span>{selectedResource.socialmedia_activity_retweet_count}</span>
                       </div>
                       <div className="like">
-                        <FaRegHeart />
+                        <FaRegHeart style={{ marginRight: '5px' }} />
                         <span>{selectedResource.socialmedia_activity_like_count}</span>
                       </div>
-                      <FaRegBookmark />
-                      <MdOutlineFileUpload />
+                      <FaRegBookmark style={{ marginRight: '5px' }} />
+                      <MdOutlineFileUpload style={{ marginRight: '5px' }} />
                     </div>
                   </div>
                 </div>
@@ -631,7 +631,7 @@ const Resources = () => {
                   <div className="insta-icon">
                     <div className="like-commment-share">
                       <div className="like">
-                        <LiaThumbsUpSolid />
+                        <LiaThumbsUpSolid style={{ marginRight: '5px' }} />
                         <span>{selectedResource.socialmedia_activity_like_count}</span>
                       </div>
                       <div className="comment">
@@ -709,11 +709,11 @@ const Resources = () => {
                     <div className="unified-date">
                       <div className="like-commment-share vk">
                         <div className="like">
-                          <FaRegHeart />
+                          <FaRegHeart style={{ marginRight: '5px' }} />
                           <span>Like</span>
                         </div>
                         <div className="comment">
-                          <PiShareFatBold />
+                          <PiShareFatBold style={{ marginRight: '5px' }} />
                           <span>{selectedResource.socialmedia_activity_share_count}</span>
                         </div>
                       </div>
@@ -800,26 +800,17 @@ const Resources = () => {
                 </div>
               )}
 
-              <div className="sentimentSection">
+              <div className="sentimentSection" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
                 <span
                   className="sentiment"
-                  style={{
-                    color: "white",
-                    backgroundColor: 'black',
-                    padding: "5px 10px",
-                    borderRadius: "5px",
-                    display: "inline-block",
-                    marginBottom: "10px",
-                    marginRight: '10px'
-                  }}
                 >
                   {selectedResource.sentiment.charAt(0).toUpperCase() + selectedResource.sentiment.slice(1)}
                 </span>
                 {selectedResource && (
-                  <div className="commentBar" style={{ width: '60px' }}>
-                    <PinAngle size={15} className="me-2" onClick={() => setShowPopup(true)} />
-                    <ChatLeftText size={15} onClick={() => setShowPopup(true)} />
-                  </div>
+                  <span className="sentiment" style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', marginTop: '5px' }} onClick={() => setShowPopup(true)}>
+                    <ChatLeftText size={15} style={{ marginRight: '5px' }} />
+                    Comment
+                  </span>
                 )}
               </div>
 
