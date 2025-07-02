@@ -45,7 +45,7 @@ input,
 th,
 td,
 button,
-li,
+li, 
 ul,
 div,
 a,
@@ -59,7 +59,9 @@ span {
 }
 
 input:-webkit-autofill {
+
  background-color: #101D2B  !important;
+
   -webkit-text-fill-color: #FFFF !important;
   box-shadow: 0 0 0 1000px #101D2B inset !important;
 }

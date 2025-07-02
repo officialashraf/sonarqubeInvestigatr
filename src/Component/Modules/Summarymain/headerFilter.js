@@ -13,7 +13,7 @@ const HeaderFilter = () => {
   const navigate = useNavigate()
   const caseData = useSelector((state) => state.caseData.caseData);
   const storedCaseId = useSelector((state) => state.caseData.caseData.id);
-  const [showPopup, setShowPopup] = useState(false);
+  const [showPopupCdr, setShowPopupCdr] = useState(false);
   console.log("parms id", caseId)
   console.log("headeData", caseData.id)
 
@@ -28,11 +28,11 @@ const HeaderFilter = () => {
     navigate(`/cases/${caseData.id}/analysis`)
   }
 
-  const togglePopup = (value) => {
+  const togglePopupCdr = (value) => {
     if (typeof value === 'boolean') {
-      setShowPopup(value); // set true or false explicitly
+      setShowPopupCdr(value); // set true or false explicitly
     } else {
-      setShowPopup((prev) => !prev); // fallback toggle
+      setShowPopupCdr((prev) => !prev); // fallback toggle
     }
   };
   return (
@@ -97,7 +97,7 @@ const HeaderFilter = () => {
              {caseData.status !== "New" && (
   <>
     <AppButton onClick={handleClick}>Analyze</AppButton>
-    <AppButton onClick={togglePopup}>+ Add Resource</AppButton>
+    <AppButton onClick={togglePopupCdr}>+ Add Resource</AppButton>
   </>
 )}
             </Col>
@@ -106,7 +106,7 @@ const HeaderFilter = () => {
         </Container>
       </Navbar>
 
-      {showPopup && <Cdr togglePopup={togglePopup} />}
+      {showPopupCdr && <Cdr togglePopupCdr={togglePopupCdr} />}
     </>
   );
 };

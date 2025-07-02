@@ -151,21 +151,23 @@ const ExistingFilter = ({ selectedFilters, onFilterToggle, onFilterSelect, setSh
                     <li key={filter.id} className="list-group-item existing-filters-li">
                       <input
                         type="checkbox"
-                        className="form-check-input me-2"
-                        defaultChecked={isFilterInCurrentCase(filter)}
+                        className="form-check-input"
                         checked={selectedFilters.includes(filter.id)}
                         onChange={(e) => onFilterToggle(filter.id, e.target.checked)}
                       />
-                      <span onClick={() => {
+
+                      <div className="filter-content" onClick={() => {
                         onFilterSelect(filter.id);
                         setShowAddFilter(true);
-                      }}
-                        style={{ cursor: 'pointer' }}>
-                        {filter.name}
-
-                        <p className="existing-filters-li-p">Created By: {filter.created_by}</p>
-                        <p className="existing-filters-li-p">Created On: {filter.created_on.slice(0, 10)}</p>
-                      </span>
+                      }}>
+                        <div className="filter-text">
+                          <span className="filter-name">{filter.name}</span>
+                          <p className="filter-meta">Created by: {filter.created_by}</p>
+                        </div>
+                        <div className="filter-date">
+                          {filter.created_on.slice(0, 10)}
+                        </div>
+                      </div>
                     </li>
 
                   ))
