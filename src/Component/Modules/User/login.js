@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Container, Row, Col, Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
@@ -106,10 +105,35 @@ const LoginPage = () => {
 
     return (
         <Container fluid className={style.loginContainer}>
+            <Row className="justify-content-center pt-4">
+                {/* Logo (Centered) */}
+                <img
+                    src="/images/investigatr.jpg"
+                    alt="Invetigatr"
+                    style={{ width: '300px', objectFit: 'contain' }}
+                />
+            </Row>
+
+            <Row className="justify-content-center">
+                <h1 style={{ fontSize: '64px', textAlign: 'center', marginTop: '1rem' }}>
+                    Your Gateway to Actionable Intelligence
+                </h1>
+            </Row>
+
             <Row className={style.loginRow}>
+                {/* Left Column */}
                 <Col md={6} className={style.leftColumn}>
-                    <h1>DataSearch</h1>
+                    <p style={{ fontSize: '18px', lineHeight: '1.8', marginTop: '50px' }}>
+                        A unified platform for OSINT, telecom data, IPDR, and social media insights — built to help you solve cases faster.<br /><br />
+                        • Connect data.<br />
+                        • Uncover patterns.<br />
+                        • Gain real-time intelligence.<br />
+                        • Close cases with confidence.<br /><br />
+                        <strong>Secure. Scalable. Built for law enforcement.</strong>
+                    </p>
                 </Col>
+
+                {/* Right Column (Login Form) */}
                 <Col md={6} className={style.rightColumn}>
                     <Form className={style.loginForm} onSubmit={handleLogin} noValidate>
                         <InputField
@@ -122,12 +146,12 @@ const LoginPage = () => {
                             autoComplete="user-name"
                             name="username"
                             autoFocus
-                             readOnly={isReadOnly} // Changed prop name
-                             onFocus={handleFocus}
-                              error={!!error.username}
-                            
+                            readOnly={isReadOnly}
+                            onFocus={handleFocus}
+                            error={!!error.username}
                         />
-                        {error.username && <p style={{ color: "red"}} >{error.username}</p>}
+                        {error.username && <p style={{ color: "red" }}>{error.username}</p>}
+
                         <div style={{ position: 'relative', justifyContent: 'center' }}>
                             <InputField
                                 label="Password *"
@@ -137,7 +161,7 @@ const LoginPage = () => {
                                 placeholder="Enter your password"
                                 autoComplete="current-password"
                                 name="password"
-                                 error={!!error.password}
+                                error={!!error.password}
                             />
                             <span
                                 onClick={() => setShowPassword(!showPassword)}
@@ -145,7 +169,6 @@ const LoginPage = () => {
                                     position: 'absolute',
                                     right: '10px',
                                     top: '40%',
-                                    // transform: 'translateY(-50%)',
                                     cursor: 'pointer',
                                     userSelect: 'none',
                                     color: 'white',
@@ -160,20 +183,18 @@ const LoginPage = () => {
                                     }
                                 }}
                             >
-                                {showPassword ? <Eye size={20} /> : <EyeSlash size={20}/>}
+                                {showPassword ? <Eye size={20} /> : <EyeSlash size={20} />}
                             </span>
                         </div>
-                        {error.password && <p style={{ color: "red", margin: '0px' }}>{error.password}</p>}
+                        {error.password && <p style={{ color: "red" }}>{error.password}</p>}
 
                         <div className="d-flex justify-content-end mt-2">
-                           
-                            <AppButton children={"Login"}/>
-                            </div>
+                            <AppButton children={"Login to Begin Your Investigation"} />
+                        </div>
                     </Form>
                 </Col>
             </Row>
         </Container>
     );
-};
-
-export default LoginPage;
+}
+export default LoginPage;      

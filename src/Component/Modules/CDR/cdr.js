@@ -46,7 +46,7 @@ const Cdr = ({ togglePopup }) => {
             <p>Choose an option to continue</p>
             <div className={styles.optionsListCdr}>
               {options.map((option) => (
-                <label key={option.value} className={${styles.optionItemCdr} ${selectedOption === option.value ? styles.selected : ''}}>
+                <label key={option.value} className={`${styles.optionItemCdr} ${selectedOption === option.value ? styles.selected : ''}`}>
                   <input
                     type="radio"
                     name="resourceOption"

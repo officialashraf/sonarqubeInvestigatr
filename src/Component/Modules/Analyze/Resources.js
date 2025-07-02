@@ -16,6 +16,7 @@ import throttle from 'lodash.throttle';
 import { PinAngle, ChatLeftText } from 'react-bootstrap-icons';
 import AddComment from '../Comment/AddComment';
 import { fetchSummaryData } from "../../../Redux/Action/filterAction";
+import AppButton from "../../Common/Buttton/button"
 
 const Resources = () => {
 
@@ -800,17 +801,20 @@ const Resources = () => {
                 </div>
               )}
 
-              <div className="sentimentSection" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-                <span
-                  className="sentiment"
+              <div className="sentimentSection" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '5px'}}>
+                <AppButton
+                  style={{ cursor: 'default', marginBottom: '5px' }}
                 >
                   {selectedResource.sentiment.charAt(0).toUpperCase() + selectedResource.sentiment.slice(1)}
-                </span>
+                </AppButton>
                 {selectedResource && (
-                  <span className="sentiment" style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', marginTop: '5px' }} onClick={() => setShowPopup(true)}>
+                  <AppButton
+                    onClick={() => setShowPopup(true)}
+                    style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', padding: 0, background: 'transparent', boxShadow: 'none' }}
+                  >
                     <ChatLeftText size={15} style={{ marginRight: '5px' }} />
                     Comment
-                  </span>
+                  </AppButton>
                 )}
               </div>
 

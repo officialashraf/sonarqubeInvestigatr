@@ -23,7 +23,8 @@
   height: 100%;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
   transition: transform 0.2s, box-shadow 0.2s;
-  background-color: #101D2B;
+  background-color: #101D2B !important;
+  border-radius: 15px !important;
 }
 
 .user-card:hover {
@@ -39,6 +40,7 @@
   align-items: center;
    word-break: break-word;
    flex-wrap: wrap; 
+   margin-bottom: 10px;
 }
 .user-details {
   flex: 1;
@@ -51,15 +53,60 @@
   padding-bottom: 0px !important;
 }
 .user-info {
-  margin-bottom: 8px !important;
-  color: white !important;
+  /* margin-bottom: 8px !important; */
+  color: #D9D9D9 !important;
    word-break: break-word;
    flex-wrap: wrap; 
+   font-size: 14px !important;
+   font-weight: 400 !important;
+   
 }
 
 .info-icon {
-  margin-right: 5px !important;
+  /* margin-right: 5px !important; */
   width: 15px !important;
    word-break: break-word;
    flex-wrap: wrap; 
+}
+.info-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.info-icon-wrapper {
+  width: 35px;
+  height: 35px;
+  background-color: #080E17;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.info-icon {
+  color: #0073CF;
+  font-size: 20px !important;
+  word-break: break-word;
+   flex-wrap: wrap; 
+}
+
+.info-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-label {
+  font-size: 12px;
+  color: #0073CF;
+  font-weight: 500;
+  /* margin-bottom: 3px; */
+}
+
+.info-value {
+  font-size: 10px;
+  color: #D9D9D9;
+  word-break: break-word;
+  font-weight: 400;
 }

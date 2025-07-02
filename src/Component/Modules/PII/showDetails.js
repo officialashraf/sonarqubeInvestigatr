@@ -12,6 +12,7 @@ import Cookies from 'js-cookie';
 import Loader from "../Layout/loader";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
+import Select from 'react-select';
 
 const ShowDetails = () => {
   const dispatch = useDispatch();
@@ -67,18 +68,54 @@ const ShowDetails = () => {
       setLoading(false);
     }
   };
+  const options = [
+    { value: 'phone number', label: <span style={{ color: '#d2d2d2' }}>Phone</span> },
+    { value: 'email', label: <span style={{ color: '#d2d2d2' }}>Email</span> }
+  ];
 
   return (
     <>
       <div className="search-bar-container">
         <div className="search-bar">
-          <select className="search-dropdown" value={searchType} onChange={(e) => {
+          {/* <select className="search-dropdown" value={searchType} onChange={(e) => {
             setSearchType(e.target.value);
             setQuery('');
-          }}>
-            <option value="phone number">Phone</option> {/* Default selected */}
+          }}
+          >
+            <option value="phone number">Phone</option> 
             <option value="email">Email</option>
-          </select>
+          </select> */}
+          <Select
+            className="search-dropdown"
+            options={options}
+            value={options.find(o => o.value === searchType)}
+            onChange={(selected) => {
+              setSearchType(selected.value);
+              setQuery('');
+            }}
+            styles={{
+              control: (provided) => ({
+                ...provided,
+                backgroundColor: '#080E17',
+                color: '#D9D9D9',
+                borderRadius: '15px',
+                border: 'none'
+              }),
+              menu: (provided) => ({
+                ...provided,
+                backgroundColor: '#080E17',
+                borderRadius: '15px',
+                overflow: 'hidden',
+                 border: "1px solid #0073CF"
+              }),
+              option: (provided, state) => ({
+                ...provided,
+                backgroundColor: state.isFocused ? '#101D2B' : '#080E17',
+                color: '#D9D9D9',
+                cursor: 'pointer'
+              })
+            }}
+          />
           {searchType === "phone number" ? (
             <PhoneInput
               country={"in"}
@@ -89,6 +126,10 @@ const ShowDetails = () => {
               dropdownStyle={{
                 maxHeight: "160px",
                 overflowY: "scroll",
+                backgroundColor: "#080E17",
+                borderRadius: "15px",
+                color: "#D9D9D9",
+                border: "1px solid #0073CF !important"
               }}
               inputStyle={{
                 marginLeft: "30px", //  fix for visibility
@@ -118,6 +159,7 @@ const ShowDetails = () => {
             />
           )}
           <Search
+            style={{ color: '#0073CF', cursor: 'pointer', width: '35px', height: '35px' }}
             onClick={handleSearch} // Triggers validation & search only when clicked
           />
 

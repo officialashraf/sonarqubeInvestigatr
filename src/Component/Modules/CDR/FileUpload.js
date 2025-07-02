@@ -14,28 +14,28 @@ const FileUpload = ({ togglePopup }) => {
         }
     };
 
-    const handleUpload = async () => {
-        if (!uploadedFile) {
-            alert("Please choose a file first.");
-            return;
-        }
+    // const handleUpload = async () => {
+    //     if (!uploadedFile) {
+    //         alert("Please choose a file first.");
+    //         return;
+    //     }
 
-        const formData = new FormData();
-        formData.append("file", uploadedFile); // bas file bhej rahe ho
+    //     const formData = new FormData();
+    //     formData.append("file", uploadedFile); // bas file bhej rahe ho
 
-        try {
-            const response = await fetch("http://your-server-url.com/upload", {
-                method: "POST",
-                body: formData,
-            });
+    //     try {
+    //         const response = await fetch("http://your-server-url.com/upload", {
+    //             method: "POST",
+    //             body: formData,
+    //         });
 
-            const result = await response.json(); // or text
-            alert("✅ Upload Success: " + result.message);
-        } catch (err) {
-            console.error("Upload error:", err);
-            alert("❌ Failed to upload file.");
-        }
-    };
+    //         const result = await response.json(); // or text
+    //         alert("✅ Upload Success: " + result.message);
+    //     } catch (err) {
+    //         console.error("Upload error:", err);
+    //         alert("❌ Failed to upload file.");
+    //     }
+    // };
     // const handleUpload = async () => {
     //     const formData = new FormData();
 

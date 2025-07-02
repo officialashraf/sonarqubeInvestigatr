@@ -102,16 +102,16 @@ const UserCards = () => {
   }
 
   return (
-    <Container maxWidth="lg" className="cards-container">
+    <Container maxWidth="lg" className="cards-container" style={{ marginBottom: '20px' }}>
 
       <Grid container spacing={3}>
         {users && users.filter((user) => user.has_account) // Only users with has_account: true
           .map((user) => (
             <Grid item xs={12} sm={6} md={4} key={user.id || Math.random().toString()}>
               <Card className="user-card">
-                <CardContent>
+                {/* <CardContent>
                   <div className="user-header">
-                    {/* Platform Icon */}
+                    Platform Icon
                     {user.pii_source ? (
                       <div style={{ marginRight: '15px' }}>
                         {getPlatformIcon(user.pii_source)}
@@ -120,7 +120,7 @@ const UserCards = () => {
                       <Avatar />
                     )}
 
-                    {/* User Info */}
+                    User Info
                     <div className="user-info">
                       {user && Array.isArray(user.names) && user.names.length > 0 ? (
                         user.names.slice(0, 1).map((name, index) => (
@@ -183,7 +183,89 @@ const UserCards = () => {
                       ? user.addresses.slice(0, 1).map((address, index) => <div key={index}>{address}</div>)
                       : "--"}
                   </Typography>
+                </CardContent> */}
+                <CardContent>
+                  <div className="user-header">
+                    {user.pii_source ? (
+                      <div style={{ marginRight: '15px' }}>
+                        {getPlatformIcon(user.pii_source)}
+                      </div>
+                    ) : (
+                      <Avatar />
+                    )}
+                    <div className="user-info">
+                      {Array.isArray(user.names) && user.names.length > 0 ? (
+                        <Typography>{user.names[0]}</Typography>
+                      ) : (
+                        <Typography>Unknown User</Typography>
+                      )}
+                      {Array.isArray(user.user_ids) && user.user_ids.length > 0 && (
+                        <Typography>{user.user_ids[0]}</Typography>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Phone */}
+                  <div className="info-row">
+                    <div className="info-icon-wrapper">
+                      <PhoneIcon className="info-icon" />
+                    </div>
+                    <div className="info-text">
+                      <div className="info-label">Phone Number</div>
+                      <div className="info-value">
+                        {Array.isArray(user.phones) && user.phones.length > 0
+                          ? user.phones[0]
+                          : "--"}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Email */}
+                  <div className="info-row">
+                    <div className="info-icon-wrapper">
+                      <EmailIcon className="info-icon" />
+                    </div>
+                    <div className="info-text">
+                      <div className="info-label">Email</div>
+                      <div className="info-value">
+                        {Array.isArray(user.emails) && user.emails.length > 0
+                          ? user.emails[0]
+                          : "--"}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Link */}
+                  <div className="info-row">
+                    <div className="info-icon-wrapper">
+                      <LinkIcon className="info-icon" />
+                    </div>
+                    <div className="info-text">
+                      <div className="info-label">Link :</div>
+                      <div className="info-value">
+                        {Array.isArray(user.urls) && user.urls.length > 0
+                          ? user.urls[0]
+                          : "--"}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Location */}
+                  <div className="info-row">
+                    <div className="info-icon-wrapper">
+                      <LocationOnIcon className="info-icon" />
+                    </div>
+                    <div className="info-text">
+                      <div className="info-label">Location</div>
+                      <div className="info-value">
+                        {Array.isArray(user.addresses) && user.addresses.length > 0
+                          ? user.addresses[0]
+                          : "--"}
+                      </div>
+                    </div>
+                  </div>
                 </CardContent>
+
               </Card>
 
             </Grid>
