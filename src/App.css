@@ -59,9 +59,11 @@ span {
 }
 
 input:-webkit-autofill {
- background-color:var(--color-colors-primary)  !important;
+
+ background-color: #101D2B  !important;
+
   -webkit-text-fill-color: #FFFF !important;
-  box-shadow: 0 0 0 1000px #080E17 inset !important;
+  box-shadow: 0 0 0 1000px #101D2B inset !important;
 }
 
 

@@ -69,10 +69,12 @@ const ProfileDetails = () => {
               </div>
             </div>
             <div className="detail-item">
-               <div className="profile-name-above-phone">
+              <div className="profile-name-above-phone">
                 {profileData?.names?.[0] || "Unknown Name"}
               </div>
-              <div className="detail-label">
+            </div>
+            {/* <div className="detail-item"> */}
+            {/* <div className="detail-label">
                 <Phone fontSize="small" /> Phone Number
               </div>
               <div className="detail-value">
@@ -83,46 +85,98 @@ const ProfileDetails = () => {
                     <li>--</li>
                   )}
                 </ul>
-              </div>
-            </div>
-
-            <div className="detail-item">
-              <div className="detail-label">
-                <Email fontSize="small" /> E-mail ID
+              </div> */}
+            {/* <div className="detail-header">
+                <div className="detail-label">Phone Number</div>
+                <Phone fontSize="small" className="detail-icon" />
               </div>
               <div className="detail-value">
                 <ul className="email-list">
-                  {profileData && Array.isArray(profileData.emails) && profileData.emails.length > 0 ? (
-                    profileData.emails.map((email, index) => <li key={index}>{email}</li>)
+                  {profileData && Array.isArray(profileData.phones) && profileData.phones.length > 0 ? (
+                    profileData.phones.map((phone, index) => <li key={index}>{phone}</li>)
                   ) : (
                     <li>--</li>
                   )}
                 </ul>
               </div>
+            </div> */}
+            <div className="detail-item">
+              <div className="detail-row">
+                <div className="detail-text">
+                  <div className="detail-label">Phone Number</div>
+                  <div className="detail-value">
+                    <ul className="email-list">
+                      {profileData && Array.isArray(profileData.phones) && profileData.phones.length > 0 ? (
+                        profileData.phones.map((phone, index) => <li key={index}>{phone}</li>)
+                      ) : (
+                        <li>--</li>
+                      )}
+                    </ul>
+                  </div>
+                </div>
+                <div className="detail-icon-wrapper">
+                  <Phone fontSize="medium" className="detail-icon" />
+                </div>
+              </div>
             </div>
 
             <div className="detail-item">
-              <div className="detail-label">
-                <Person fontSize="small" /> Names
+              <div className="detail-row">
+                <div className="detail-text">
+                  <div className="detail-label">E-mail ID</div>
+                  <div className="detail-value">
+                    <ul className="email-list">
+                      {profileData && Array.isArray(profileData.emails) && profileData.emails.length > 0 ? (
+                        profileData.emails.map((email, index) => <li key={index}>{email}</li>)
+                      ) : (
+                        <li>--</li>
+                      )}
+                    </ul>
+                  </div>
+                </div>
+                <div className="detail-icon-wrapper">
+                  <Email fontSize="medium" className="detail-icon" />
+                </div>
               </div>
-
-              <div className="detail-value">{(profileData && profileData.aliases) || "--"}</div>
             </div>
 
             <div className="detail-item">
-              <div className="detail-label">
-                <Cake fontSize="small" /> DOB/Age
+              <div className="detail-row">
+                <div className="detail-text">
+                  <div className="detail-label">Names</div>
+                  <div className="detail-value">{profileData?.aliases || "--"}</div>
+                </div>
+                <div className="detail-icon-wrapper">
+                  <Person fontSize="medium" className="detail-icon" />
+                </div>
               </div>
-
-              <div className="detail-value">{(profileData && profileData.ages) || "--"}</div>
             </div>
 
             <div className="detail-item">
-              <div className="detail-label">
-                <Wc fontSize="small" /> Gender
+              <div className="detail-row">
+                <div className="detail-text">
+                  <div className="detail-label">DOB/Age</div>
+                  <div className="detail-value">{profileData?.ages || "--"}</div>
+                </div>
+                <div className="detail-icon-wrapper">
+                  <Cake fontSize="medium" className="detail-icon" />
+                </div>
               </div>
-              <div className="detail-value" style={{ color: "white" }}>{(profileData && profileData.gender) || "--"}</div>
             </div>
+
+            <div className="detail-item">
+              <div className="detail-row">
+                <div className="detail-text">
+                  <div className="detail-label">Gender</div>
+                  <div className="detail-value">{profileData?.gender || "--"}</div>
+                </div>
+                <div className="detail-icon-wrapper">
+                  <Wc fontSize="medium" className="detail-icon" />
+                </div>
+              </div>
+            </div>
+
+
           </div>
 
         </Card.Body>

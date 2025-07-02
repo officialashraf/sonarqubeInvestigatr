@@ -177,7 +177,7 @@ const SearchView = () => {
 
   return (
     <div>
-      <div className="popup-content" style={{ height: '100vh' }}>
+      <div className="popup-content" >
         <h5>Search Report</h5>
         <form onSubmit={handleSearch}>
           {/* Search Bar with Icons */}
