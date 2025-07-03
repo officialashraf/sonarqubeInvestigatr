@@ -1,18 +1,14 @@
 import React, { useState } from 'react';
 import styles from "./Cdr.module.css"
-import AddFilter2 from '../Filters/addFilter';
-import FileUpload from './FileUpload';
-import FtpPopup from './FtpPopup';
 import AppButton from '../../Common/Buttton/button';
 
 
-const Cdr = ({ togglePopupCdr }) => {
+const Cdr = ({ togglePopup,handleProceed }) => {
   const [selectedOption, setSelectedOption] = useState('localStorage');
   const [selectDataType, setSelectDataType] = useState('CDR');
-  const [showPopup, setShowPopup] = useState(false);
-  const [showFileUpload, setShowFileUpload] = useState(false); // 🔹 for upload screen
-  const [showFtpPopup, setShowFtpPopup] = useState(false);
-
+  // const [showPopup, setShowPopup] = useState(false);
+  // const [showFileUpload, setShowFileUpload] = useState(false);
+  // const [showFtpPopup, setShowFtpPopup] = useState(false);
 
   const options = [
     { value: 'localStorage', label: 'Upload from Local Storage', description: 'Add a file from local drive' },
@@ -22,28 +18,31 @@ const Cdr = ({ togglePopupCdr }) => {
 
   // const batchNames = ['New Batch 1', 'New Batch 2', 'New Batch 3'];
   const dataTypes = ['CDR', 'IPDR', 'Other'];
-  const handleProceed = () => {
+  // const handleProceed = () => {
    
-    if (selectedOption === 'osintData') {
-  
-      setShowPopup(true); // 🔹 show AddFilter2+
+  //   if (selectedOption === 'osintData') {
+  //  togglePopupCdr(false);
+  //     setShowPopup(true); // 🔹 show AddFilter2+
 
-    } else if (selectedOption === 'ftpServer') {
-      setShowFtpPopup(true);
-    }
-    else if (selectedOption === 'localStorage') {
-      setShowFileUpload(true); // 🔹 open upload popup
-    }
+  //   } else if (selectedOption === 'ftpServer') {
+  //     setShowFtpPopup(true);
+  //   }
+  //   else if (selectedOption === 'localStorage') {
+  //     setShowFileUpload(true); // 🔹 open upload popup
+  //   }
 
+  // };
+   const onProceedClick = () => {
+    handleProceed(selectedOption);  // tabhi chalega jab prop se mila hoga
   };
-
   return (
     <>
+
       <div className={styles.popupOverlay}>
         <div className={styles.popupContainerCdr}>
           <div className={styles.popupHeaderCdr}>
-            <h5>Add Resources</h5>
-            <button className={styles.closeIconCdr} onClick={togglePopupCdr}>&times;</button>
+            <h6>Add Resources</h6>
+            <button className={styles.closeIconCdr} onClick={togglePopup}>&times;</button>
           </div>
           <div className={styles.popupBodyCdr}>
             <p>Choose an option to continue</p>
@@ -65,56 +64,7 @@ const Cdr = ({ togglePopupCdr }) => {
               ))}
             </div>
 
-            {/* <div className={styles.batchSelectionCdr}>
-            <label>
-              <input
-                type="radio"
-                name="batchType"
-                value="newBatch"
-                checked={batchType === 'newBatch'}
-                onChange={() => setBatchType('newBatch')}
-              />
-              Create New Batch
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="batchType"
-                value="existingBatch"
-                checked={batchType === 'existingBatch'}
-                onChange={() => setBatchType('existingBatch')}
-              />
-              Add to Existing Batch
-            </label>
-          </div> */}
-
-            {/* <div className={styles.customOutlinedWrapper}>
-            <label className={styles.customBadgeLabel}>Batch Name*</label>
-            <select
-              className={styles.customSelectField}
-              value={batchName}
-              onChange={(e) => setBatchName(e.target.value)}
-            >
-              {batchNames.map((name) => (
-                <option key={name} value={name}>{name}</option>
-              ))}
-            </select>
-          </div> */}
-
             <div className={styles.targetDataTypeCdr}>
-              {/* <div className={styles.selectTargetCdr}>
-              <div className={styles.customOutlinedWrapper}>
-                <label className={styles.customBadgeLabel}>Select Target</label>
-                <input
-                  type="text"
-                  className={styles.customSelectField}
-                  placeholder="Enter Target"
-                  value={selectTarget}
-                  onChange={(e) => setSelectTarget(e.target.value)}
-                />
-                <small>Selected Target would be applied to the entire batch. You can add the targets to individual files later.</small>
-              </div>
-            </div> */}
 
               <div className={styles.selectDataTypeCdr}>
                 <div className={styles.customOutlinedWrapper}>
@@ -135,16 +85,14 @@ const Cdr = ({ togglePopupCdr }) => {
           </div>
 
           <div className={styles.popupFooterCdr}>
-            <AppButton children={"x Cancel"} onClick={togglePopupCdr}/>
-             <AppButton children={"✓ Proceed"} onClick={handleProceed}/>
+            <AppButton children={"x Cancel"} onClick={togglePopup}/>
+             <AppButton children={"✓ Proceed"} onClick={onProceedClick}/>
           </div>
         </div>
       </div>
-      {showPopup && <AddFilter2 togglePopup={() => setShowPopup(false)} />}
-      {showFileUpload && <FileUpload togglePopup={() => setShowFileUpload(false)} />}
-      {showFtpPopup && <FtpPopup togglePopup={() => setShowFtpPopup(false)} />}
+     
     </>
   );
 };
 
-export default Cdr;
+export default Cdr;

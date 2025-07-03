@@ -31,7 +31,7 @@
   flex-direction: column; /* Align items in a column */
   justify-content: center; /* Center items vertically */
   align-items: center; /* Center items horizontally */
-  height: 75%;
+  height: 75vh;
   /* margin-top: 20px; */
 }
 .title {
