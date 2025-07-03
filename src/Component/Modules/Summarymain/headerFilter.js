@@ -6,6 +6,9 @@ import './headerfilter.css';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import Cdr from '../CDR/cdr.js';
+import AddFilter2 from '../Filters/addFilter';
+import FileUpload from '../CDR/FileUpload.js';
+import FtpPopup from '../CDR/FtpPopup';
 import AppButton from '../../Common/Buttton/button.js';
 
 const HeaderFilter = () => {
@@ -13,7 +16,23 @@ const HeaderFilter = () => {
   const navigate = useNavigate()
   const caseData = useSelector((state) => state.caseData.caseData);
   const storedCaseId = useSelector((state) => state.caseData.caseData.id);
-  const [showPopupCdr, setShowPopupCdr] = useState(false);
+  
+  const [showCdr, setShowCdr] = useState(false);
+const [showAddFilter, setShowAddFilter] = useState(false);
+const [showFileUpload, setShowFileUpload] = useState(false);
+const [showFtpPopup, setShowFtpPopup] = useState(false);
+
+const handleProceed = (selectedOption) => {
+  setShowCdr(false);
+  if (selectedOption === 'osintData') {
+    setShowAddFilter(true);
+  } else if (selectedOption === 'ftpServer') {
+    setShowFtpPopup(true);
+  } else if (selectedOption === 'localStorage') {
+    setShowFileUpload(true);
+  }
+};
+
   console.log("parms id", caseId)
   console.log("headeData", caseData.id)
 
@@ -27,42 +46,11 @@ const HeaderFilter = () => {
     const caseID = caseData.id
     navigate(`/cases/${caseData.id}/analysis`)
   }
-
-  const togglePopupCdr = (value) => {
-    if (typeof value === 'boolean') {
-      setShowPopupCdr(value); // set true or false explicitly
-    } else {
-      setShowPopupCdr((prev) => !prev); // fallback toggle
-    }
+   const togglePopupCdr = (value) => {
+    setShowCdr(value); // Directly set true/false
   };
   return (
     <>
-      {/* <Navbar expand="sm" className="justify-content-between" >
-
-      <Container className='custom-containerH'>  <Row className="w-100">
-        <Col xs={1} className="d-flex align-items-center justify-content-center">
-          <FaArrowLeft style={{ cursor: 'pointer', margin: '0px' }} onClick={() => navigate('/cases')} />
-        </Col>
-        <Col xs={11}>
-          <Nav className="flex-column">
-            <Nav.Item className="d-flex align-items-center">
-              <span>ID:{`CASE${String(caseData.id).padStart(4, '0')}`}</span>
-            </Nav.Item>
-            <Nav.Item>
-              <span >{caseData.title} </span> <FaFileAlt className="ml-3" />  <Badge pill bg="dark">
-                <span>{caseData.status}</span>
-              </Badge>
-            </Nav.Item>
-          </Nav>
-        </Col>
-      </Row>
-
-      </Container>
-     {caseData.status !== "New" && (
-      <AppButton children={"Analyze"} onClick={handleClick}/>
-)}
-      <AppButton children={"+ Add Resource"} onClick={togglePopup}/>
-    </Navbar> */}
       <Navbar expand="sm" className="justify-content-between custom-navbarH">
         <Container fluid className="custom-containerH">
           <Row className="w-100">
@@ -97,7 +85,7 @@ const HeaderFilter = () => {
              {caseData.status !== "New" && (
   <>
     <AppButton onClick={handleClick}>Analyze</AppButton>
-    <AppButton onClick={togglePopupCdr}>+ Add Resource</AppButton>
+    <AppButton  onClick={togglePopupCdr}>+ Add Resource</AppButton>
   </>
 )}
             </Col>
@@ -106,7 +94,11 @@ const HeaderFilter = () => {
         </Container>
       </Navbar>
 
-      {showPopupCdr && <Cdr togglePopupCdr={togglePopupCdr} />}
+      {showCdr && <Cdr togglePopup={() => setShowCdr(false)}  handleProceed={handleProceed}/>}
+     {/* {showCdr && <Cdr togglePopup={setShowCdr} handleProceed={handleProceed} />} */}
+{showAddFilter && <AddFilter2 togglePopup={() => setShowAddFilter(false)} />}
+{showFileUpload && <FileUpload togglePopup={() => setShowFileUpload(false)} />}
+{showFtpPopup && <FtpPopup togglePopup={() => setShowFtpPopup(false)} />}
     </>
   );
 };

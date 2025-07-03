@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './Cdr.module.css';
+import AppButton from '../../Common/Buttton/button';
 
 const FtpPopup = ({ togglePopup }) => {
     return (
@@ -19,8 +20,8 @@ const FtpPopup = ({ togglePopup }) => {
                 </div>
 
                 <div className={styles.popupFooterCdr}>
-                    <button className={styles.cancelBtnCdr} onClick={togglePopup}>CANCEL</button>
-                    <button className={styles.proceedBtnCdr} disabled>ADD</button>
+                    <AppButton children={'x Cancel'} onClick={togglePopup}/>
+                   <AppButton children={'+ Add'} disabled/>
                 </div>
             </div>
         </div>

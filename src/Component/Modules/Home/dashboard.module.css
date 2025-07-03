@@ -21,7 +21,7 @@
 .contA {
   background-color: var(--color-colors-backgroundColor);
   color: var(--color-colors-neutralText);
-  padding-top: 5px;
+  /* padding-top: 5px; */
 }
 
 /* ✅ Right Side (Header + Main Content) */

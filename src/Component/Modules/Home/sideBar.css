@@ -18,8 +18,8 @@
   margin-right: 3px;
 } */
 .sideB {
-  background-color: #0A1623;
-  height: 99vh;
+  background-color: var(--color-colors-secondary);
+  height: 100vh;
   /* padding: 10px 0; */
   display: flex;
   flex-direction: column;
