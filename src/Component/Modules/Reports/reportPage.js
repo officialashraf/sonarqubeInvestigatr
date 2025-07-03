@@ -1,10 +1,9 @@
 import React from "react";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Select from 'react-select';
 import DatePickera from '../FilterCriteria/datepicker';
 import { Search, CalendarToday } from '@mui/icons-material';
 import { InputAdornment, TextField } from '@mui/material';
-import { Table, Pagination } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import Cookies from 'js-cookie';
 import { setPage } from '../../../Redux/Action/criteriaAction';
@@ -13,6 +12,10 @@ import { fetchSummaryData } from '../../../Redux/Action/filterAction';
 import '../FilterCriteria/createCriteria.css';
 import styles from '../../Common/Table/table.module.css';
 import Loader from '../Layout/loader';
+import AddButton from '../../Common/Buttton/button';
+import axios from 'axios';
+import GridView from './gridView';
+import SearchBarDateSelect from '../../Common/SearchBar/SearchBarDateSelect';
 
 const ReportPage = () => {
   const Token = Cookies.get('accessToken');
@@ -32,34 +35,26 @@ const ReportPage = () => {
     endTime: { hours: 16, minutes: 30 }
   });
 
-  const results = useSelector((state) => state.report?.results || []);
-  const page = useSelector((state) => state.report?.page || 1);
-  const total_pages = useSelector((state) => state.report?.total_pages || 0);
-  const total_results = useSelector((state) => state.report?.total_results || 0);
-  const error = useSelector((state) => state.report?.error || null);
-  const reportLoading = useSelector((state) => state.report?.loading || false);
-
-  const [loading, setLoading] = useState(false);
-  const [currentPage, setCurrentPage] = useState(page);
-
   // Case options state
   const [caseOptions, setCaseOptions] = useState([]);
 
   // Fetch case options on mount
-  React.useEffect(() => {
+  useEffect(() => {
     const fetchCaseData = async () => {
       try {
-        const response = await fetch(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/case`, {
+        const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/case`, {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${Token}`
           },
         });
-        const data = await response.json();
-        const caseOptionsFormatted = data.data.map(caseItem => ({
+
+        // Format the response data for react-select
+        const caseOptionsFormatted = response.data.data.map(caseItem => ({
           value: caseItem.id,
-          label: `CASE${String(caseItem.id).padStart(4, "0")} - ${caseItem.title || 'Untitled'}`
+          label: `${`CASE${String(caseItem.id).padStart(4, "0")}`} - ${caseItem.title || 'Untitled'}`
         }));
+
         setCaseOptions(caseOptionsFormatted);
       } catch (error) {
         console.error('Error fetching case data:', error);
@@ -71,8 +66,19 @@ const ReportPage = () => {
   // Handle input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    if (name === 'searchQuery') {
-      setFormData(prev => ({ ...prev, [name]: value }));
+
+    // If updating `searchQuery`, split input into an array of keywords
+    if (name === "searchQuery") {
+      setFormData(prev => ({
+        ...prev,
+        [name]: value.split(",").map(keyword => keyword) // Split by commas and trim extra spaces
+      }));
+    } else {
+      // For other inputs, handle normally
+      setFormData(prev => ({
+        ...prev,
+        [name]: value
+      }));
     }
   };
 
@@ -103,125 +109,73 @@ const ReportPage = () => {
     e.preventDefault();
     try {
       const payload = {
-        keyword: formData.searchQuery ? [formData.searchQuery] : [],
+        keyword: Array.isArray(formData.searchQuery) ? formData.searchQuery : [formData.searchQuery],
         report_generation: true,
-        case_id: formData.caseIds.length > 0 ? formData.caseIds.map(c => c.value.toString()) : [],
-        page: 1,
+
+        case_id: formData.caseIds?.length > 0
+          ? formData.caseIds.map(caseId => caseId.value.toString())
+          : [], // Ensuring it's an empty array, not "[]"
+        page: 1 // Start at page 1
       };
+
       if (selectedDates.startDate && selectedDates.startTime) {
         payload.start_time = `${selectedDates.startDate.toISOString().split('T')[0]}T${String(selectedDates.startTime.hours).padStart(2, '0')}:${String(selectedDates.startTime.minutes).padStart(2, '0')}:00`;
       }
+
       if (selectedDates.endDate && selectedDates.endTime) {
         payload.end_time = `${selectedDates.endDate.toISOString().split('T')[0]}T${String(selectedDates.endTime.hours).padStart(2, '0')}:${String(selectedDates.endTime.minutes).padStart(2, '0')}:00`;
       }
 
-      const response = await fetch(`${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/search`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${Token}`
-        },
-        body: JSON.stringify(payload)
-      });
-      const data = await response.json();
+      console.log("search payload", payload);
 
-      dispatch(setReportResults({
-        results: data.results,
-        total_pages: data.total_pages,
-        total_results: data.total_results,
+      const response = await axios.post(
+        `${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/search`,
+        payload,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${Token}`
+          }
+        }
+      );
+      await dispatch(setReportResults({
+        results: response.data.results,
+        total_pages: response.data.total_pages,
+        total_results: response.data.total_results,
       }));
+
+      console.log("dispatchresponse", response.data.results);
+      // Dispatch initial page number
       dispatch(setPage(1));
-      setCurrentPage(1);
-      setFormData({ searchQuery: '', caseIds: [] });
+
+      // Reset form data
+      setFormData({
+        searchQuery: '',
+        datatype: [],
+        caseIds: [],
+      });
+
     } catch (error) {
       console.error('Error performing search:', error);
     }
   };
 
-  // Handle page change for pagination
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-    setLoading(true);
-    dispatch(fetchSummaryData({
-      queryPayload: {},
-      page: page,
-      itemsPerPage: 50
-    }));
-  };
-
-  // Fetch report data for print
-  const fetchReportData = async () => {
-    try {
-      setLoading(true);
-      const response2 = await fetch(`${window.runtimeConfig.REACT_APP_API_OSINT_MAN}/api/osint-man/v1/report`, {
-        method: 'POST',
-        headers: {
-          Accept: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-          Authorization: `Bearer ${Token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ rows: results }),
-      });
-      const blob = await response2.blob();
-      const url = window.URL.createObjectURL(blob);
-      if ('showSaveFilePicker' in window && window.isSecureContext) {
-        const fileHandle = await window.showSaveFilePicker({
-          suggestedName: 'social_media_report.docx',
-          types: [{
-            description: 'Word Document',
-            accept: { 'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'] }
-          }]
-        });
-        const writable = await fileHandle.createWritable();
-        await writable.write(blob);
-        await writable.close();
-      } else {
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'social_media_report.docx';
-        a.click();
-        a.remove();
-      }
-    } catch (error) {
-      console.error("Error downloading or saving .docx file:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Pagination pages calculation
-  const pages = [];
-  for (let i = 1; i <= total_pages; i++) {
-    if (i === 1 || i === total_pages || Math.abs(currentPage - i) <= 1) {
-      pages.push(i);
-    } else if (
-      (i === 2 && currentPage > 4) ||
-      (i === total_pages - 1 && currentPage < total_pages - 3)
-    ) {
-      pages.push("...");
-    }
-  }
-
   return (
-    <div style={{ backgroundColor: '#080E17', color: 'white', padding: '20px', minHeight: '100vh' }}>
+    <div style={{ backgroundColor: '#080E17', color: 'white', padding: '20px' }}>
       <h5 style={{ marginBottom: '20px' }}>Search Report</h5>
-      <form onSubmit={handleSearch} style={{ display: 'flex', gap: '10px', marginBottom: '20px', flexWrap: 'wrap' }}>
-        <TextField
-          name="searchQuery"
-          placeholder="Search..."
-          value={formData.searchQuery}
-          onChange={handleInputChange}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <Search style={{ color: 'white' }} />
-              </InputAdornment>
-            ),
-            style: { height: '38px', color: 'white', backgroundColor: '#1a1f3a', borderRadius: '5px' }
-          }}
-          sx={{ minWidth: '200px', flexGrow: 1 }}
-        />
-        <div style={{ minWidth: '200px', flexGrow: 1 }}>
+      <form onSubmit={handleSearch} style={{ display: 'flex', gap: '10px', marginBottom: '20px'}}>
+        {/* <div className={styles.searchBarContainer}>
+          <input
+            className={styles.searchBar}
+            name="searchQuery"
+            placeholder="Search..."
+            value={formData.searchQuery}
+            onChange={handleInputChange}
+            sx={{ minWidth: '200px', flexGrow: 1 }}
+          />
+          <Search style={{ color: '#0073CF', cursor: 'pointer' }} />
+        </div>
+        <div style={{ display: 'flex', flexWrap: 'nowrap', alignItems: 'center', gap: '10px', minWidth: '250px' }}>
           <Select
             isMulti
             options={caseOptions}
@@ -229,30 +183,72 @@ const ReportPage = () => {
             onChange={handleCaseChange}
             placeholder="Select Cases"
             styles={{
-              control: (base) => ({
-                ...base,
-                backgroundColor: '#1a1f3a',
+              control: (provided, state) => ({
+                ...provided,
+                backgroundColor: state.isFocused
+                  ? 'var(--color-colors-secondary)'   // focus color
+                  : 'var(--color-colors-secondary)',      // default color
                 border: 'none',
-                color: 'white',
+                color: 'var(--color-colors-neutralText)',
                 minHeight: '38px',
-                borderRadius: '5px',
+                borderRadius: '15px',
+                boxShadow: 'none',
+                minWidth: '250px',
               }),
-              multiValueLabel: (base) => ({
-                ...base,
-                color: 'white',
+              multiValue: (provided) => ({
+                ...provided,
+                backgroundColor: 'var(--color-colors-primaryAccent)',
+                color: 'var(--color-colors-neutralText)',
+                borderRadius: '8px',
               }),
-              placeholder: (base) => ({
-                ...base,
-                color: 'white',
+              multiValueLabel: (provided) => ({
+                ...provided,
+                color: 'var(--color-colors-neutralText)',
+                fontWeight: '500',
               }),
-              singleValue: (base) => ({
-                ...base,
+              multiValueRemove: (provided) => ({
+                ...provided,
                 color: 'white',
+                ':hover': {
+                  backgroundColor: 'var(--color-colors-danger)',
+                  color: 'white',
+                },
               }),
-              menu: (base) => ({
-                ...base,
-                backgroundColor: '#1a1f3a',
+              placeholder: (provided) => ({
+                ...provided,
+                color: 'var(--color-colors-neutralText)',
+              }),
+              singleValue: (provided) => ({
+                ...provided,
+                color: 'var(--color-colors-neutralText)',
+              }),
+              menu: (provided) => ({
+                ...provided,
+                backgroundColor: 'var(--color-colors-secondary)',
+                color: 'var(--color-colors-neutralText)',
+                borderRadius: '10px',
+                zIndex: 9999,
+              }),
+              option: (provided, state) => ({
+                ...provided,
+                backgroundColor: state.isFocused
+                  ? 'var(--color-colors-primaryAccent)'
+                  : 'var(--color-colors-secondary)',
                 color: 'white',
+                cursor: 'pointer',
+              }),
+              dropdownIndicator: (provided) => ({
+                ...provided,
+                color: 'var(--color-colors-neutralText)',
+                padding: '8px',
+              }),
+              indicatorSeparator: () => ({
+                display: 'none',
+              }),
+              valueContainer: (provided) => ({
+                ...provided,
+                flexWrap: 'nowrap',   // 👈 prevent wrapping to next line
+                overflow: 'hidden',   // 👈 hide any overflow
               }),
             }}
           />
@@ -272,24 +268,29 @@ const ReportPage = () => {
               </InputAdornment>
             ),
             readOnly: true,
-            style: { height: '38px', color: 'white', backgroundColor: '#1a1f3a', borderRadius: '5px' }
+            style: { height: '38px', color: 'white', backgroundColor: '#101d2b', borderRadius: '15px' }
           }}
           sx={{ minWidth: '200px', flexGrow: 1 }}
+        /> */}
+        <SearchBarDateSelect
+          searchValue={formData.searchQuery}
+          onSearchChange={handleInputChange}
+          onSearchIconClick={() => console.log('Search icon clicked')}
+          selectValue={formData.caseIds}
+          selectOptions={caseOptions}
+          onSelectChange={handleCaseChange}
+          dateValue={
+            selectedDates.startDate && selectedDates.endDate
+              ? `${formatDate(selectedDates.startDate)} to ${formatDate(selectedDates.endDate)}`
+              : formatDate(selectedDates.startDate || selectedDates.endDate)
+          }
+          onDateClick={togglePopupD}
         />
-        <button
+        <AddButton
           type="submit"
-          style={{
-            backgroundColor: '#007bff',
-            color: 'white',
-            border: 'none',
-            borderRadius: '5px',
-            minWidth: '100px',
-            height: '38px',
-            cursor: 'pointer',
-          }}
         >
           Search
-        </button>
+        </AddButton>
       </form>
 
       {showPopupD && (
@@ -300,103 +301,7 @@ const ReportPage = () => {
         />
       )}
 
-      <div style={{ backgroundColor: '#0b1229', borderRadius: '10px', padding: '10px' }}>
-        {reportLoading && <Loader />}
-        {!reportLoading && results.length === 0 && (
-          <div style={{ color: 'white', textAlign: 'center', padding: '20px' }}>
-            No data available
-          </div>
-        )}
-        {!reportLoading && results.length > 0 && (
-          <>
-            <Table hover responsive size="sm" className={styles.table} style={{ color: 'white' }}>
-              <thead>
-                <tr>
-                  {Object.keys(results[0]).map((key, index) => (
-                    <th key={index} className="fixed-th" style={{ backgroundColor: '#007bff' }}>
-                      {key
-                        .split('_')
-                        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-                        .join(' ')}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {results.map((item, rowIndex) => (
-                  <tr key={rowIndex}>
-                    {Object.keys(item).map((key, colIndex) => (
-                      <td key={colIndex} className="fixed-td" style={{ fontSize: '12px' }} title={typeof item[key] === 'object' ? JSON.stringify(item[key]) : item[key]}>
-                        {typeof item[key] === 'object' && item[key] !== null ? JSON.stringify(item[key]) : item[key] || '-'}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
-
-            <div style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              marginTop: '20px',
-              padding: '10px 20px',
-              marginBottom: '30px',
-              boxShadow: '0 -2px 5px rgba(0,0,0,0.05)',
-              borderRadius: '0 0 10px 10px',
-              backgroundColor: '#0b1229'
-            }}>
-              <Pagination>
-                <Pagination.First onClick={() => handlePageChange(1)} disabled={currentPage === 1} />
-                <Pagination.Prev onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
-                {pages.map((number, index) => {
-                  if (
-                    number === 1 ||
-                    number === total_pages ||
-                    number === currentPage ||
-                    number === currentPage - 1 ||
-                    number === currentPage + 1
-                  ) {
-                    return (
-                      <Pagination.Item
-                        key={index}
-                        active={number === currentPage}
-                        onClick={() => number !== "..." && handlePageChange(number)}
-                      >
-                        {number}
-                      </Pagination.Item>
-                    );
-                  } else if (number === "...") {
-                    return <Pagination.Item key={index} disabled>{number}</Pagination.Item>;
-                  }
-                  return null;
-                })}
-                <Pagination.Next onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === total_pages} />
-                <Pagination.Last onClick={() => handlePageChange(total_pages)} disabled={currentPage === total_pages} />
-              </Pagination>
-
-              <div style={{ fontSize: '12px', marginRight: '10px', color: 'white' }}>
-                Page {currentPage} - 50 / {total_results}
-              </div>
-
-              <button
-                style={{
-                  backgroundColor: '#007bff',
-                  color: 'white',
-                  borderRadius: '5px',
-                  border: 'none',
-                  padding: '5px 15px',
-                  cursor: 'pointer'
-                }}
-                onClick={fetchReportData}
-                disabled={loading}
-              >
-                {loading ? 'Processing...' : 'Print'}
-              </button>
-            </div>
-          </>
-        )}
-      </div>
+      <GridView />
     </div>
   );
 };
