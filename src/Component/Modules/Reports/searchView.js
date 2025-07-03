@@ -163,13 +163,13 @@ const SearchView = () => {
     setShowPopupD(!showPopupD);
   };
 
-  // Handle data from DatePicker
+  // Handle data from DatePicker POPNAME
   const handleDateSelection = (dateData) => {
     setSelectedDates(dateData);
     togglePopupA(); // Close popup after selection
   };
 
-  // Format date for display
+  // Format date for display  hogya
   const formatDate = (date) => {
     if (!date) return 'No date selected';
     return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
