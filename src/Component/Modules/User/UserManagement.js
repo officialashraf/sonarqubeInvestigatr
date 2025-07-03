@@ -18,6 +18,7 @@ import { FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import ResetPassword from "./resetPassword";
 import TableModal from "../../Common/Table/table";
+import AppButton from "../../Common/Buttton/button";
 
 const UserManagement = () => {
 
@@ -270,7 +271,8 @@ const userColumns = [
           <div className="resourcesContainer" style={{ border: 'none' }}>
             <h3 className="title">Let's Get Started!</h3>
             <p className="content">Add users to get started</p>
-            <button className='add-btn' title='Add New Case' onClick={togglePopup}><Plus size={20} />Add New Users</button>
+            {/* <button className='add-btn' title='Add New Case' onClick={togglePopup}><Plus size={20} />Add New Users</button> */}
+           <AppButton onClick={togglePopup} children={" + Add New User"}/>
           </div>
         )
       }

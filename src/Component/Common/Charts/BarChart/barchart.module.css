@@ -1,0 +1,22 @@
+/* src/components/common/BarChart/ReusableBarChart.module.css */
+.chartWrapper {
+  width: 100%;
+    overflow-y: auto;
+  background-color: #101D2B;
+  padding: 10px;
+  border-radius: 12px;
+}
+.chartWrappers {
+  width: 100%;
+  background-color: #101D2B;
+  padding: 10px;
+  border-radius: 12px;
+}
+.noData {
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  font-size: 16px;
+}

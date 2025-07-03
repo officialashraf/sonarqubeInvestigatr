@@ -15,6 +15,7 @@ import TargetUpdate from "./targetUpdate";
 import TargetDetails from "./targetDetails";
 import Loader from "../Layout/loader.js"
 import TableModal from "../../Common/Table/table.js";
+import AppButton from "../../Common/Buttton/button.js";
 
 const TargetList = () => {
   const token = Cookies.get("accessToken");
@@ -587,7 +588,8 @@ const targetColumns = [
       <div className="resourcesContainer" style={{ border: 'none' }}>
         <h3 className="title">Let's Get Started!</h3>
         <p className="content">Add targets to get started</p>
-        <button className='add-btn' title='Add New Case' onClick={togglePopup}><Plus size={20} />Add New Target</button>
+        {/* <button className='add-btn' title='Add New Case' onClick={togglePopup}><Plus size={20} />Add New Target</button> */}
+      <AppButton onClick={togglePopup} children={" + Add New Target"}/>
       </div>
     )
     }

@@ -3,6 +3,7 @@ import React from 'react';
 import styles from './Cdr.module.css';
 import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
 import { useState, useRef } from 'react';
+import AppButton from '../../Common/Buttton/button';
 
 const FileUpload = ({ togglePopup }) => {
     const fileInputRef = useRef(null);
@@ -99,15 +100,15 @@ const FileUpload = ({ togglePopup }) => {
                         {uploadedFile && (
                             <p className={styles.fileName}>Selected File: {uploadedFile.name}</p>
                         )}
-
-                        <button className={styles.chooseFileBtn} onClick={handleChooseFile} >CHOOSE FILE</button>
+                         <AppButton children={'^ Choose File'} onClick={handleChooseFile}/>
                         <p className={styles.maxSizeNote}>Maximum upload size: 1 GB.</p>
-
                     </div>
                 </div>
                 <div className={styles.popupFooterCdr}>
-                    <button className={styles.cancelBtnCdr} onClick={togglePopup}>CANCEL</button>
-                    <button className={styles.proceedBtnCdr} disabled>UPLOAD</button>
+                    <AppButton children={'x Cancel'} onClick={togglePopup}/>
+                   <AppButton children={'^ Upload'} disabled/>
+                    {/* <button className={styles.cancelBtnCdr} onClick={togglePopup}>CANCEL</button>
+                    <button className={styles.proceedBtnCdr} disabled>UPLOAD</button> */}
                 </div>
             </div>
         </div>

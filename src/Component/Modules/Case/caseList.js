@@ -22,6 +22,7 @@ import { setCaseData } from "../../../Redux/Action/caseAction";
 import Loader from "../Layout/loader";
 import { SET_PAGINATION } from "../../../Redux/Constants/filterConstant";
 import TableModal from "../../Common/Table/table";
+import AppButton from "../../Common/Buttton/button";
 
 const DataTable = () => {
   const dispatch = useDispatch();
@@ -601,10 +602,12 @@ const DataTable = () => {
         <div className="resourcesContainer" style={{ border: "none" }}>
           <h3 className="title">Let's Get Started!</h3>
           <p className="content">Add cases to get started</p>
-          <button className="add-btn" title="Add New Case" onClick={togglePopup}>
+          {/* <button className="add-btn" title="Add New Case" onClick={togglePopup} >
             <Plus size={20} />
             Add New Case
-          </button>
+          </button> */}
+          <AppButton onClick={togglePopup} children={" + Add New Case"}/>
+          
         </div>
       )}
       {showPopup && <CreateCase togglePopup={togglePopup} />}

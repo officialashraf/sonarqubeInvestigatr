@@ -10,6 +10,8 @@ import AddFilter2 from '../Filters/addFilter.js';
 import Loader from '../Layout/loader.js';
 import { toast } from 'react-toastify';
 import Cdr from '../CDR/cdr.js';
+import FileUpload from '../CDR/FileUpload.js';
+import FtpPopup from '../CDR/FtpPopup';
 import AppButton from '../../Common/Buttton/button.js';
 
 const MainContainer = () => {
@@ -21,10 +23,24 @@ const MainContainer = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [isLoading, setIsLoading] = useState(true); // Track loading state
 
-  const togglePopup = () => {
-    setShowPopup((prev) => !prev);
+ 
+  const [showCdr, setShowCdr] = useState(false);
+const [showAddFilter, setShowAddFilter] = useState(false);
+const [showFileUpload, setShowFileUpload] = useState(false);
+const [showFtpPopup, setShowFtpPopup] = useState(false);
+ const togglePopup = () => {
+    setShowCdr(true);
   };
-
+const handleProceed = (selectedOption) => {
+  setShowCdr(false);
+  if (selectedOption === 'osintData') {
+    setShowAddFilter(true);
+  } else if (selectedOption === 'ftpServer') {
+    setShowFtpPopup(true);
+  } else if (selectedOption === 'localStorage') {
+    setShowFileUpload(true);
+  }
+};
   const filterData = useCallback(async () => {
     setIsLoading(true); // Start loading
     try {
@@ -99,7 +115,15 @@ const MainContainer = () => {
       <div className="containerM" >
         {renderContent()}
       </div>
-      {showPopup && <Cdr togglePopup={togglePopup} />}
+     {showCdr && (
+  <Cdr 
+    togglePopup={() => setShowCdr(false)} 
+    handleProceed={handleProceed} 
+  />
+)}
+{showAddFilter && <AddFilter2 togglePopup={() => setShowAddFilter(false)} />}
+{showFileUpload && <FileUpload togglePopup={() => setShowFileUpload(false)} />}
+{showFtpPopup && <FtpPopup togglePopup={() => setShowFtpPopup(false)} />}
     </>
   );
 };

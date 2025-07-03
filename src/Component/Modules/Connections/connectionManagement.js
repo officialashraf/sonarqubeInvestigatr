@@ -25,6 +25,7 @@ import EditConnection from './EditConnection.js';
 import ConnectionDetails from './ConnectionDetails.js';
 import styles from "../../Common/Table/table.module.css"
 import TableModal from '../../Common/Table/table.js';
+import AppButton from '../../Common/Buttton/button.js';
 
 const ConnectionManagement = () => {
   const token = Cookies.get("accessToken");
@@ -247,10 +248,11 @@ const ConnectionManagement = () => {
  
 
       ) : (
-        <div className={styles.container} style={{ border: 'none' }}>
+        <div className="resourcesContainer"  style={{ border: 'none' }}>
           <h3 className="title">Let's Get Started!</h3>
           <p className="content">Add connections to get started</p>
-          <button className='add-btn' title='Add New Connection' onClick={togglePopup}><Plus size={20} />Add New Connection</button>
+           <AppButton onClick={togglePopup} children={" + Add New Connection"}/>
+          {/* <button className='add-btn' title='Add New Connection' onClick={togglePopup}><Plus size={20} />Add New Connection</button> */}
         </div>
       )}
       {showPopup && <CreateConnection togglePopup={togglePopup} />}

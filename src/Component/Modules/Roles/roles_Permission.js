@@ -17,6 +17,7 @@ import EditRole from "./editRole";
 import Loader from "../Layout/loader";
 import TableModal from "../../Common/Table/table";
 import { assign } from "lodash";
+import AppButton from "../../Common/Buttton/button";
 
 const RolesPermission = () => {
     const navigate = useNavigate();
@@ -217,7 +218,7 @@ const RolesPermission = () => {
         return <Loader />
     }
 const roleColumns = [
-      { key: "role", label: "Role ID" },
+      { key: "id", label: "Role ID" },
         { key: "role", label: "Roles" },
         { key: "created_on", label: "Created On" },
     { key: "created_by", label: "Created By" },
@@ -245,11 +246,11 @@ const roleColumns = [
          onRowAction={{
     details: (row) => toggleDetailsPopup(row.id),
     delete: (row) => confirmDelete(row.id, row.name),
-    edit: (row) => togglePopupC(row.id),
-  assign: (row) => togglePopupD(row.id)
+    edit: (row) => togglePopupC(row.role),
+  assign: (row) => togglePopupD(row.role)
   }}
                   onAddClick={() => togglePopup()}
-         idPrefix="Roles"
+         idPrefix="ROLE"
          btnTitle=" + Add New Role"
       />
 </div>
@@ -259,7 +260,8 @@ const roleColumns = [
                     <div className="resourcesContainer" style={{ border: 'none' }}>
                         <h3 className="title">Let's Get Started!</h3>
                         <p className="content">Add roles to get started</p>
-                        <button className='add-btn' title='Add New Case' onClick={togglePopup}><Plus size={20} />Add New Roles</button>
+                        {/* <button className='add-btn' title='Add New Case' onClick={togglePopup}><Plus size={20} />Add New Roles</button> */}
+                     <AppButton onClick={togglePopup} children={" + Add New Role"}/>
                     </div>
                 )
 }
