@@ -12,6 +12,7 @@ import TextareaField from '../../Common/TextField/textField';
 import DropdownField from '../../Common/SelectDropDown/selectDropDown';
 import { IntervalField } from '../../Common/IntervalField/intervalField';
 import AppButton from '../../Common/Buttton/button';
+import { Select } from '@mui/material';
 
 const conversionFactors = {
   seconds: 1,
@@ -511,6 +512,7 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
                   <div className="col-md-6">
                     <DropdownField
                       label="Source *"
+                      source={"Select Source"}
                       value={source.source}
                       onChange={(e) => handleSourceChange(sourceIndex, e)}
                       disabled={filterDetails?.id && !isEditable}
@@ -531,6 +533,7 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
                     <div className="col-md-6">
                       <DropdownField
                         label="Select Platform *"
+                        source={"Select Platform"}
                         value={source.platform}
                         onChange={(e) => handlePlatformChange(sourceIndex, e)}
                         style={{ width: '96%' }}
@@ -587,7 +590,6 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
                             bg="dark"
                             className="me-2 mb-1 d-inline-flex align-items-center"
                             style={{
-
                               display: "inline-flex",
                               alignItems: "center",
                               minWidth: "auto", /*  Removes hard minWidth */

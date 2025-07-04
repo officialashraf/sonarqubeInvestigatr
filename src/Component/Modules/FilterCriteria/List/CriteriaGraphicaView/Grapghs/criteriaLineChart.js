@@ -5,6 +5,7 @@ import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, CartesianGrid, Responsi
 import "../../../../Analyze/GraphicalData/lineChart.css";
 import Cookies from "js-cookie";
 import Loader from '../../../../Layout/loader';
+import ReusableLineGraph from '../../../../../Common/Charts/LineGraph/lineGraph';
 
 const CriteriaLineChart = () => {
 
@@ -69,86 +70,12 @@ console.log("CriteriaLineChart - recordTypes:", recordTypes);
   }
 
   return (
-   <div style={{ width: "100%", height: 250, overflowX: "auto",}}>
-      {data.length > 0 ? (
-   <ResponsiveContainer minWidth={600} height={210}> 
-          <LineChart
-            data={data}
-            margin={{ right: 80,top: 20 }}
+ <ReusableLineGraph 
+  queryPayload={queryPayload}
+  aggsFields={["unified_date_only", "unified_record_type"]}
+  recordLineField="unified_record_type"
+/>
 
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis
-              dataKey="key"
-              tick={{ fontSize: 12 }}
-            />
-            <YAxis
-              tick={{ fontSize: 12 }}
-            />
-            <Tooltip
-              content={({ payload }) =>
-                payload?.length ? (
-                  <div className="bg-white p-2 border rounded shadow">
-                    <p>{payload[0].payload.key}</p>
-                    <p>doc_count: {payload[0].value}</p>
-                  </div>
-                ) : null
-              }
-            />
-            <Legend />
-
-            {/* Horizontal Reference Lines for each record type */}
-            {recordTypes.length > 0 ? recordTypes.map((type, index) => (
-         
-              <ReferenceLine
-                key={index}
-                y={type.doc_count}
-                stroke="black"
-                strokeWidth={2}
-                // strokeDasharray="5 5"
-                label={{
-                  value: `${type.key} (${type.doc_count})`,
-                  position: 'right',
-                  fill: 'black',
-                  fontSize: 12,
-                  fontWeight: 'bold'
-                }}
-                
-              />
-              
-            )) : console.log("No Record Types Found")}
-
-            {/* Curved Line for date-wise doc_count */}
-            <Line
-              type="monotone"
-              dataKey="doc_count"
-              stroke="black"
-              fill="black"
-              strokeWidth={2}
-              dot={{ r: 3 }} // Small dots on points
-            />
-          </LineChart>
-        </ResponsiveContainer>
-      ) : (
-        <div className="h-[150px] flex items-center justify-center">
-          <p className="text-gray-500 text-xl">No Data Available</p>
-        </div>
-      )}
-
-      {/* <div className="w-full mt-2">
-        <Slider
-          defaultValue={[50]}
-          min={0}
-          max={100}
-          step={1}
-          className="w-full"
-          stroke="gray"
-          style={{
-
-          }}
-        />
-      </div> */}
-    </div>
   );
 };
 

@@ -67,7 +67,7 @@ const LocationBar = () => {
         <>
             <ReusableBarChart
       caseId={caseId}
-      aggsFields={["LOC"]}
+      aggsFields={["loc"]}
       query={{}} // if extra filters needed
       chartHeight={280}
       transformData={(rawData) =>

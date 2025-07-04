@@ -67,7 +67,7 @@ const OrgBar = () => {
                  
              <ReusableBarChart
       caseId={caseId}
-      aggsFields={["ORG"]}
+      aggsFields={["org"]}
       query={{}} // if extra filters needed
       chartHeight={280}
       transformData={(rawData) =>
