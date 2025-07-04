@@ -159,7 +159,7 @@ const ShowDetails = () => {
             />
           )}
           <Search
-            style={{ color: '#0073CF', cursor: 'pointer', width: '35px', height: '35px' }}
+            style={{ color: '#0073CF', cursor: 'pointer', width: '25px', height: '25px' }}
             onClick={handleSearch} // Triggers validation & search only when clicked
           />
 

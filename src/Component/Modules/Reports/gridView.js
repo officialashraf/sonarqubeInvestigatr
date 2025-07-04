@@ -8,6 +8,7 @@ import Loader from "../Layout/loader";
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import styles from "../../Common/Table/table.module.css";
+import AddButton from "../../Common/Buttton/button";
 
 const GridView = () => {
   const Token = Cookies.get('accessToken');
@@ -163,13 +164,13 @@ const GridView = () => {
   return (
     <>
       <div className="grid-view-header" style={{
-        display: 'flex',
-        flexDirection: 'column',
-        minHeight: '100vh',
+        // display: 'flex',
+        // flexDirection: 'column',
+        // minHeight: '100vh',
       }}>
         <div
           className={styles.tableWrapper}
-          style={{ marginTop: '12px' }}
+          style={{ marginTop: '12px', padding: '10px', backgroundColor: '#101D2B' }}
         >
           {!dataAvailable ? (
             <Table hover responsive size="sm" className={styles.table}>            <thead></thead>
@@ -263,14 +264,16 @@ const GridView = () => {
               alignItems: "center",
               marginTop: "auto", // push to bottom
               padding: "10px 20px",
-              
+
               marginBottom: "30px",
               boxShadow: "0 -2px 5px rgba(0,0,0,0.05)"
             }}
           >
             <Pagination style={{ width: "200px" }}>
               <Pagination.First onClick={() => handlePageChange(1)} disabled={currentPage === 1} />
-              <Pagination.Prev onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
+              <Pagination.Prev onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} >
+                Previous
+              </Pagination.Prev>
 
               {pages.map((number, index) => {
                 if (
@@ -298,24 +301,22 @@ const GridView = () => {
               <Pagination.Next
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
-              />
+              >Next
+              </Pagination.Next>
               <Pagination.Last
                 onClick={() => handlePageChange(totalPages)}
                 disabled={currentPage === totalPages}
               />
             </Pagination>
 
-            <div style={{ fontSize: "12px", marginRight: "10px" }}>
-              Page {currentPage} - {itemsPerPage} / {totalResults}
-            </div>
 
-            <button
-              style={{ backgroundColor: "black", color: 'white', borderRadius: '5px' }}
+            <AddButton
+              // style={{ backgroundColor: "black", color: 'white', borderRadius: '5px' }}
               onClick={fetchReportData}
               disabled={loading}
             >
               {loading ? "Processing..." : "Print Records"}
-            </button>
+            </AddButton>
           </div>
         )}
       </div>

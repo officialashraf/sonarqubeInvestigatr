@@ -1,4 +1,4 @@
-.loginContainer {
+/* .loginContainer {
   height: 100%;
   flex-direction: column;
   display: flex;
@@ -15,7 +15,6 @@
 
 h1 {
   margin-top: 5rem;
-  margin-left: 5rem;
   font-size: var(--font-h1-fontSize);
   font-weight: var(--font-h1-fontWeight);
 }
@@ -24,9 +23,10 @@ h1 {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  background-color: var(--color-colors-backgroundColor);
+  /* justify-content: center; */
+/* background-color: var(--color-colors-backgroundColor);
   color: var(--color-colors-neutralText);
+  margin-top: 50px;
 }
 
 .renewPopup {
@@ -102,10 +102,10 @@ h1 {
   border-radius: 0%;
   outline: none;
   box-shadow: 0 0 0 1px var(--color-colors-hoverState) !important;
-}
+} */
 
 /* Responsive Adjustments */
-@media (max-width: 768px) {
+/* @media (max-width: 768px) {
   .loginRow {
     width: 100%;
     height: auto;
@@ -132,4 +132,82 @@ h1 {
 img {
   display: block;
   margin: 0 auto;
+}
+  */
+.pt-4 {
+  padding-top: 0rem !important;
+}
+
+.loginContainer {
+  min-height: 100vh;
+  display: flex;
+  color: white;
+  padding: 0;
+  margin: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  background-color: #080e17;
+  flex-wrap: wrap;
+  align-content: stretch;
+}
+
+.leftColumn {
+  /* padding: 60px 40px; */
+  /* display: flex;0 */
+  flex: 1;
+  /* flex-direction: column; */
+  justify-content: center;
+  width: 50%;
+}
+
+.leftColumn h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.leftColumn p {
+  font-size: 1rem;
+  color: #99aabb;
+  line-height: 1.8;
+  max-width: 550px;
+  padding: 40px;
+}
+
+.rightColumn {
+  width: 50%;
+  /* display: flex; */
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  padding: 0px 20px 0px 0px;
+}
+
+.loginForm {
+  background-color: #101d2b;
+  padding: 40px;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+}
+
+.resetLink {
+  color: #ccc;
+  font-size: 0.875rem;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.resetLink a {
+  color: #60a5fa;
+  text-decoration: underline;
+}
+.logoCenter {
+  width: 400px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto; /* Centers the logo horizontally */
+ 
 }
