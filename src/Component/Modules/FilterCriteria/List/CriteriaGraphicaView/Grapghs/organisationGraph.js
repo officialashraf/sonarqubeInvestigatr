@@ -74,7 +74,7 @@ const OrgGraph = () => {
         <>
              <ReusableBarChart
   caseId={queryPayload?.case_id || []}
-  aggsFields={["ORG"]}
+  aggsFields={["org"]}
   query={{
     file_type: queryPayload?.file_type || [],
     keyword: queryPayload?.keyword || [],

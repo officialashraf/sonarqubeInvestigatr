@@ -377,6 +377,25 @@
   border-radius: 10px;
   display: block;
 }
+@media  (max-width: 1920px) {
+  .postImage {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    border-radius: 10px;
+    display: block;
+  }
+  
+}
+.noDataWrapper {
+  text-align: center;
+  padding: 20px;
+  font-weight: bold;
+  font-size: 18px;
+  color: #D9D9D9;
+  background-color: #101D2B;
+  border-radius: 15px;
+}
 .imageFlexWrapper {
   display: flex;
   flex-wrap: wrap;

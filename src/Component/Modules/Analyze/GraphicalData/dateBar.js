@@ -68,7 +68,7 @@ const DateBar = () => {
         <>
              <ReusableBarChart
       caseId={caseId}
-      aggsFields={["DATE"]}
+      aggsFields={["date"]}
       query={{}} // if extra filters needed
       chartHeight={280}
       transformData={(rawData) =>

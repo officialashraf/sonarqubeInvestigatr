@@ -16,6 +16,7 @@ import AddButton from '../../Common/Buttton/button';
 import axios from 'axios';
 import GridView from './gridView';
 import SearchBarDateSelect from '../../Common/SearchBar/SearchBarDateSelect';
+import customSelectStyles from "../../Common/CustomStyleSelect/customSelectStyles";
 
 const ReportPage = () => {
   const Token = Cookies.get('accessToken');
@@ -164,93 +165,25 @@ const ReportPage = () => {
     <div style={{ backgroundColor: '#080E17', color: 'white', padding: '20px' }}>
       <h5 style={{ marginBottom: '20px' }}>Search Report</h5>
       <form onSubmit={handleSearch} style={{ display: 'flex', gap: '10px', marginBottom: '20px'}}>
-        {/* <div className={styles.searchBarContainer}>
+        <div className={styles.searchBarContainer}>
           <input
             className={styles.searchBar}
             name="searchQuery"
             placeholder="Search..."
             value={formData.searchQuery}
             onChange={handleInputChange}
-            sx={{ minWidth: '200px', flexGrow: 1 }}
           />
           <Search style={{ color: '#0073CF', cursor: 'pointer' }} />
         </div>
-        <div style={{ display: 'flex', flexWrap: 'nowrap', alignItems: 'center', gap: '10px', minWidth: '250px' }}>
+        <div style={{ display: 'flex', flexWrap: 'nowrap', alignItems: 'center', gap: '10px' , minWidth: '200ox'}}>
           <Select
+          className="react-select-container"
             isMulti
             options={caseOptions}
             value={formData.caseIds}
             onChange={handleCaseChange}
             placeholder="Select Cases"
-            styles={{
-              control: (provided, state) => ({
-                ...provided,
-                backgroundColor: state.isFocused
-                  ? 'var(--color-colors-secondary)'   // focus color
-                  : 'var(--color-colors-secondary)',      // default color
-                border: 'none',
-                color: 'var(--color-colors-neutralText)',
-                minHeight: '38px',
-                borderRadius: '15px',
-                boxShadow: 'none',
-                minWidth: '250px',
-              }),
-              multiValue: (provided) => ({
-                ...provided,
-                backgroundColor: 'var(--color-colors-primaryAccent)',
-                color: 'var(--color-colors-neutralText)',
-                borderRadius: '8px',
-              }),
-              multiValueLabel: (provided) => ({
-                ...provided,
-                color: 'var(--color-colors-neutralText)',
-                fontWeight: '500',
-              }),
-              multiValueRemove: (provided) => ({
-                ...provided,
-                color: 'white',
-                ':hover': {
-                  backgroundColor: 'var(--color-colors-danger)',
-                  color: 'white',
-                },
-              }),
-              placeholder: (provided) => ({
-                ...provided,
-                color: 'var(--color-colors-neutralText)',
-              }),
-              singleValue: (provided) => ({
-                ...provided,
-                color: 'var(--color-colors-neutralText)',
-              }),
-              menu: (provided) => ({
-                ...provided,
-                backgroundColor: 'var(--color-colors-secondary)',
-                color: 'var(--color-colors-neutralText)',
-                borderRadius: '10px',
-                zIndex: 9999,
-              }),
-              option: (provided, state) => ({
-                ...provided,
-                backgroundColor: state.isFocused
-                  ? 'var(--color-colors-primaryAccent)'
-                  : 'var(--color-colors-secondary)',
-                color: 'white',
-                cursor: 'pointer',
-              }),
-              dropdownIndicator: (provided) => ({
-                ...provided,
-                color: 'var(--color-colors-neutralText)',
-                padding: '8px',
-              }),
-              indicatorSeparator: () => ({
-                display: 'none',
-              }),
-              valueContainer: (provided) => ({
-                ...provided,
-                flexWrap: 'nowrap',   // 👈 prevent wrapping to next line
-                overflow: 'hidden',   // 👈 hide any overflow
-              }),
-            }}
+            styles={customSelectStyles}
           />
         </div>
         <TextField
@@ -264,15 +197,14 @@ const ReportPage = () => {
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <CalendarToday style={{ cursor: 'pointer', color: 'white' }} />
+                <CalendarToday style={{ cursor: 'pointer', color: '#0073CF' }} />
               </InputAdornment>
             ),
             readOnly: true,
             style: { height: '38px', color: 'white', backgroundColor: '#101d2b', borderRadius: '15px' }
           }}
-          sx={{ minWidth: '200px', flexGrow: 1 }}
-        /> */}
-        <SearchBarDateSelect
+        />
+        {/* <SearchBarDateSelect
           searchValue={formData.searchQuery}
           onSearchChange={handleInputChange}
           onSearchIconClick={() => console.log('Search icon clicked')}
@@ -285,7 +217,7 @@ const ReportPage = () => {
               : formatDate(selectedDates.startDate || selectedDates.endDate)
           }
           onDateClick={togglePopupD}
-        />
+        /> */}
         <AddButton
           type="submit"
         >

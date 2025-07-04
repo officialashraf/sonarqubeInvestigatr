@@ -71,7 +71,7 @@ const PersonGraph = () => {
         <>
             <ReusableBarChart
   caseId={queryPayload?.case_id || []}
-  aggsFields={["PERSON"]}
+  aggsFields={["person"]}
   query={{
     file_type: queryPayload?.file_type || [],
     keyword: queryPayload?.keyword || [],

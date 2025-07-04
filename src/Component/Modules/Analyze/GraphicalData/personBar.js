@@ -66,7 +66,7 @@ const PersonBar = () => {
         <>
              <ReusableBarChart
       caseId={caseId}
-      aggsFields={["PERSON"]}
+      aggsFields={["person"]}
       query={{}} // if extra filters needed
       chartHeight={280}
       transformData={(rawData) =>

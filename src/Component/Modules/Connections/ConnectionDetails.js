@@ -15,7 +15,7 @@ const ConnectionDetails = ({ togglePopup, id }) => {
                 setLoading(true);
                 const token = Cookies.get("accessToken");
                 const response = await axios.get(
-                    `${ window.runtimeConfig.REACT_APP_API_CASE_MAN } / api /case -man / v1 / connection / ${ id }`,
+                    `${window.runtimeConfig.REACT_APP_API_CASE_MAN }/api/case-man/v1/connection/${id}`,
                     {
                         headers: {
                             Authorization: `Bearer ${ token }`,
@@ -23,13 +23,13 @@ const ConnectionDetails = ({ togglePopup, id }) => {
                         },
         }
                 );
-    console.log("Case details response:", response);
+    console.log("Connection details response:", response);
     setItem(response.data.data || response.data);
 } catch (err) {
     toast.error(
-        err.response?.data?.detail || "Failed to fetch case details"
+        err.response?.data?.detail || "Failed to fetch connection details"
     );
-    console.error("Error fetching case details:", err.response || err);
+    console.error("Error fetching connection details:", err.response || err);
 } finally {
     setLoading(false);
 }
@@ -55,7 +55,7 @@ if (!item) {
         <div className="popup-overlay">
             <div className="popup-containera">
                 <div className="popup-content">
-                    <p>No case details found.</p>
+                    <p>No connection details found.</p>
                     <button type="button" className="cancel-btn" onClick={togglePopup}>
                         Cancel
                     </button>

@@ -67,7 +67,7 @@ const EventBar = () => {
           
              <ReusableBarChart
       caseId={caseId}
-      aggsFields={["EVENT"]}
+      aggsFields={["event"]}
       query={{}} // if extra filters needed
       chartHeight={280}
       transformData={(rawData) =>

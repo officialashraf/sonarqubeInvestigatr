@@ -57,7 +57,7 @@ max-height: 90%;
 .popup-content {
   background-color: #0A192F;
   padding: 20px;
-  border-radius: 5px;
+  border-radius: 20px;
 }
 
 .popup-content h5 {
@@ -67,8 +67,7 @@ max-height: 90%;
 /* Form Fields */
 label {
   display: block;
-  font-weight: bold;
-  color: #333;
+  color: #d2d2d2;
   font-size: 12px;
 }
 

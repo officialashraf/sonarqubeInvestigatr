@@ -64,9 +64,17 @@ input:-webkit-autofill {
 
   -webkit-text-fill-color: #FFFF !important;
   box-shadow: 0 0 0 1000px #101D2B inset !important;
+  line-height: normal !important;   
+  border: none !important;
 }
 
-
+input.MuiInputBase-input:-webkit-autofill,
+input.MuiInputBase-input:-webkit-autofill:focus,
+input.MuiInputBase-input:-webkit-autofill:hover {
+  /* line-height: normal !important; */
+  height: 5px !important;
+  border: none !important;
+}
 /* .css-qve9l1-MuiInputBase-input-MuiOutlinedInput-input:-webkit-autofill {
   height:5px;
 } */
