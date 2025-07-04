@@ -17,7 +17,7 @@ export const IntervalField = ({
           <input
             type="number"
             min="1"
-            className={styles.input}
+            className={styles.inputse}
             value={value}
             onChange={(e) => onValueChange(e.target.value)}
             disabled={disabled}

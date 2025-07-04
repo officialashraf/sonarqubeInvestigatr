@@ -65,7 +65,18 @@ input:-webkit-autofill {
   -webkit-text-fill-color: #FFFF !important;
   box-shadow: 0 0 0 1000px #101D2B inset !important;
 }
-
+input:disabled {
+  background-color: #f0f0f0;
+  color: #888888;    
+  cursor: not-allowed;     
+  border: 1px solid #ccc;   
+}
+select:disabled{
+  background-color: #f0f0f0 !important;
+  color: #888888 !important;    
+  cursor: not-allowed;     
+  border: 1px solid #ccc;   
+}
 
 /* .css-qve9l1-MuiInputBase-input-MuiOutlinedInput-input:-webkit-autofill {
   height:5px;

@@ -19,3 +19,9 @@
   background-color: var(--color-colors-hoverState);
   box-shadow: var(--shadow-mediumShadow);
 }
+.buttonDisabled{
+   background-color: #1D1B20;
+  color: #ADA8A8;    
+  cursor: not-allowed;     
+  border: 1px solid #ccc;
+}

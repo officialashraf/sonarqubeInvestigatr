@@ -3,14 +3,12 @@
   width: 100%;
     overflow-y: auto;
   background-color: #101D2B;
-  padding: 10px;
-  border-radius: 12px;
+
 }
 .chartWrappers {
   width: 100%;
   background-color: #101D2B;
-  padding: 10px;
-  border-radius: 12px;
+     border-radius: 25px !important;
 }
 .noData {
   height: 150px;

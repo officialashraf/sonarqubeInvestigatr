@@ -4,6 +4,8 @@ import { useSelector } from 'react-redux';
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import Cookies from "js-cookie";
 import Loader from '../../../../Layout/loader';
+import ReusablePieChart from '../../../../../Common/Charts/PieChrat/pieChart';
+
 
 const CriteriaSentimentChart = () => {
 
@@ -77,34 +79,19 @@ const CriteriaSentimentChart = () => {
     return <Loader />
   }
   return (
-    <div style={{ width: '100%', height: 250, overflowX: 'auto' }}>
-      <ResponsiveContainer width={350}>
-        <PieChart height={250}>
-          <Legend
-            align="center"
-            verticalAlign="top"
-            formatter={(value, entry) => `${value}: ${entry.payload.value}`}
-          />
-          <Pie
+    <ReusablePieChart
+  caseId={queryPayload.case_id}
+  aggsFields={["sentiment"]}
+  query={{
+    file_type: queryPayload.file_type,
+    keyword: queryPayload.keyword
+  }}
+  extraPayload={{
+    start_time: queryPayload.start_time,
+    end_time: queryPayload.end_time
+  }}
+/>
 
-            data={data}
-            cx="50%"
-            cy="50%"
-            innerRadius={60}
-            outerRadius={80}
-            fill='#000000'
-            dataKey="value"
-            label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-          >
-            {data.map((entry, index) => (
-              <Cell key={entry.name} fill={COLORS[entry.name] || "#000000"} />
-            ))}
-          </Pie>
-          <Tooltip formatter={(value) => `Total: ${value}`} />
-        </PieChart>
-
-      </ResponsiveContainer>
-    </div>
   );
 };
 

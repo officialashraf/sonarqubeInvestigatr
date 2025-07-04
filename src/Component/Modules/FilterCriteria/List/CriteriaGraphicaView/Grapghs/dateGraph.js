@@ -72,7 +72,7 @@ const DateGraph = () => {
         <>
             <ReusableBarChart
   caseId={queryPayload?.case_id || []}
-  aggsFields={["DATE"]}
+  aggsFields={["date"]}
   query={{
     file_type: queryPayload?.file_type || [],
     keyword: queryPayload?.keyword || [],

@@ -66,7 +66,7 @@ const LanguageBar = () => {
         <>
                           <ReusableBarChart
       caseId={caseId}
-      aggsFields={["LANGUAGE"]}
+      aggsFields={["language"]}
       query={{}} // if extra filters needed
       chartHeight={280}
       transformData={(rawData) =>

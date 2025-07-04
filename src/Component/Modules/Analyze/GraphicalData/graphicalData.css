@@ -11,7 +11,9 @@
 .css-12oizz8-MuiPaper-root-MuiCard-root {
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
-
+.grapghCards{
+   background-color: var(--color-colors-backgroundColor);
+}
 .responsiveContainer {
   width: 100%;
   /* overflow-x: auto; */

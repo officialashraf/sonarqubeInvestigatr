@@ -71,7 +71,7 @@ const EventGraph = () => {
         <>
            <ReusableBarChart
   caseId={queryPayload?.case_id || []}
-  aggsFields={["EVENT"]}
+  aggsFields={["event"]}
   query={{
     file_type: queryPayload?.file_type || [],
     keyword: queryPayload?.keyword || [],

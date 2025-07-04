@@ -71,7 +71,7 @@ const LanguageGraph = () => {
         <>
              <ReusableBarChart
   caseId={queryPayload?.case_id || []}
-  aggsFields={["LANGUAGE"]}
+  aggsFields={["language"]}
   query={{
     file_type: queryPayload?.file_type || [],
     keyword: queryPayload?.keyword || [],

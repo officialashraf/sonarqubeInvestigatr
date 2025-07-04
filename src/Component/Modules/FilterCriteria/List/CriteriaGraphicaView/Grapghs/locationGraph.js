@@ -73,7 +73,7 @@ const LocationGraph = () => {
         <>
          <ReusableBarChart
           caseId={queryPayload?.case_id || []}
-          aggsFields={["LOC"]}
+          aggsFields={["loc"]}
           query={{
             file_type: queryPayload?.file_type || [],
             keyword: queryPayload?.keyword || [],
