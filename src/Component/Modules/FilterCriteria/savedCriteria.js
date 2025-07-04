@@ -15,6 +15,8 @@ import Cookies from 'js-cookie';
 import Loader from '../Layout/loader';
 import { toast } from 'react-toastify';
 import { useAutoFocusWithManualAutofill } from '../../../utils/autoFocus';
+import AddButton from '../../Common/Buttton/button';
+import SearchBar from '../../Common/SearchBarCriteria/Searchbar';
 
 
 const SavedCriteria = () => {
@@ -237,13 +239,15 @@ const SavedCriteria = () => {
   return (
     <div className="popup-overlay">
       <div className="popup-container">
-        <button className="close-icon" onClick={() => dispatch(closePopup())}>
+        {/* <button className="close-icon" onClick={() => dispatch(closePopup())}>
           &times;
-        </button>
+        </button> */}
         <div className="popup-content">
-          <h5>Search Result</h5>
+          <h5>Search Result <span> <button className="close-icon" onClick={() => dispatch(closePopup())}>
+            &times;
+          </button></span></h5>
           <div className="search-container">
-            <div className="search-header">
+            {/* <div className="search-header">
               <TextField
                 fullWidth
                 className="com mb-3"
@@ -281,7 +285,19 @@ const SavedCriteria = () => {
                 sx={sharedSxStyles}
                 disabled={isLoading}
               />
-            </div>
+            </div> */}
+
+            <SearchBar
+              inputValue={inputValue}
+              onChange={handleInputChange}
+              onKeyPress={handleKeyPress}
+              onSearchClick={handleSearch}
+              onTuneClick={() => dispatch(openPopup('create'))}
+              isLoading={isLoading}
+              isReadOnly={false}
+              inputRef={inputRef}
+              onFocus={handleFocus}
+            />
             <div>
               <div className="search-term-indicator">
                 <div className="chips-container">
@@ -295,7 +311,7 @@ const SavedCriteria = () => {
                   ))}
                 </div>
                 <div className="action-buttons">
-                  <button className="action-button" onClick={resetSearch}>RESET</button>
+                  <button className="action-button" onClick={resetSearch}>Reset</button>
                 </div>
               </div>
 
@@ -314,11 +330,12 @@ const SavedCriteria = () => {
                 ) : resultsToDisplay.length > 0 ? (
                   resultsToDisplay.slice(-5).map((item, index) => (
                     <div key={index} className="result-card">
-                      <div className="card-header">
+                     
                         <div className="card-id">{item.unified_case_id?.join(", ") || "N/A"}</div>
+                      <div className="card-header">
+                        <div className="card-text">{item.site_keywordsmatched || "N/A"}</div>
                         <div className="status-badge">{item.status || 'NEW'}</div>
                       </div>
-                      <div className="card-text">{item.site_keywordsmatched || "N/A"}</div>
                       <div className="card-subtext">{item.unified_type || "N/A"}</div>
                       {/* <div className="card-subtext">{item.unified_type || "N/A"}</div> */}
                     </div>
@@ -326,9 +343,9 @@ const SavedCriteria = () => {
                 ) : (
                   <div className="card-subtext">❌ No Matched Data</div>
                 )}
-                <button className="add-btn" style={{ marginLeft: '0px' }} onClick={ViewScreen}>
+                <AddButton style={{ marginLeft: '0px' }} onClick={ViewScreen}>
                   View All Results In Full Screen
-                </button>
+                </AddButton>
               </div>
             </div>
           </div>

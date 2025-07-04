@@ -333,7 +333,7 @@ const RecentCriteria = () => {
         </button>
         <div className="popup-content">
           <h5>Saved Criteria</h5>
-          <div className="container p-4  text-white  shadow-lg" style={{ background: 'grey' }}>
+          <div className="container p-4  text-white " >
             <div className="d-flex align-items-center mb-3">
               <TextField
                 fullWidth
@@ -372,7 +372,7 @@ const RecentCriteria = () => {
             <div>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                 <div style={{ display: "flex", alignItems: "center" }}>
-                  <AccessTimeIcon color="action" />
+                  <AccessTimeIcon style={{ color: 'var(--color-colors-primaryAccent)' }} />
                   <label style={{ marginLeft: '5px' }}>Recent</label>
                 </div>
                 <label style={{ marginLeft: 'auto', cursor: 'pointer' }} onClick={handleReset}>Clear Recent</label>
@@ -393,7 +393,7 @@ const RecentCriteria = () => {
             <hr />
             <div style={{ height: '300px', overflow: 'auto' }}>
               <div style={{ display: "flex", alignItems: "center" }}>
-                <SaveIcon color="action" />
+                <SaveIcon style={{ color: 'var(--color-colors-primaryAccent)' }} />
                 <label style={{ marginLeft: '5px' }}>Saved Search</label>
               </div>
 

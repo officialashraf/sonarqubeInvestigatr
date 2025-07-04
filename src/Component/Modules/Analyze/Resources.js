@@ -800,12 +800,12 @@ const Resources = () => {
 
                 </div>
               )}
-
-              <div className="sentimentSection" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '5px'}}>
+              {selectedResource?.unified_type ? (
+              <div className="sentimentSection" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '5px' }}>
                 <AppButton
                   style={{ cursor: 'default', marginBottom: '5px' }}
                 >
-                  {selectedResource.sentiment.charAt(0).toUpperCase() + selectedResource.sentiment.slice(1)}
+                  {selectedResource.sentiment ? selectedResource.sentiment?.charAt(0)?.toUpperCase() + selectedResource.sentiment?.slice(1) : 'No Data'}
                 </AppButton>
                 {selectedResource && (
                   <AppButton
@@ -817,11 +817,17 @@ const Resources = () => {
                   </AppButton>
                 )}
               </div>
+              ) : (
+                <div className="noDataWrapper">
+                  <p>No Data Available</p>
+                </div>
+              )}
 
             </div>
 
           ) : (
-            <div className="placeholder">
+              <div className="noDataWrapper">
+                <p>No Data Available</p>
             </div>
 
           )}

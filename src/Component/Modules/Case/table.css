@@ -226,13 +226,13 @@ td {
   font-size: 12px;
   margin-left: 5px;
   margin-top: 0px;
-  background-color: #ccc;
+  background-color: #2196F3;
   color: #000;
   height: "22px";
 }
 
 .add-btn:hover {
-  background-color: black;
+  background-color: #2196F3;
   color: white;
 }
 .badge-custom {

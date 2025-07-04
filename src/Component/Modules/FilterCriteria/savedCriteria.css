@@ -64,7 +64,7 @@
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  background: darkgray;
+  background: #0A192F;
 }
 
 .chips-container {
@@ -77,12 +77,13 @@
 
 .search-chip {
   height: 20px;
-  background: black;
+  background: #101d2b;
   padding: 2px 4px 2px 4px;
   border-radius: 16px;
   display: flex;
   align-items: center;
-  color: white;
+  color: #0073cf;
+  border: 1px solid #0073cf;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
@@ -94,7 +95,7 @@
   border: none;
   cursor: pointer;
   margin-left: 4px;
-  color: white;
+  color: var(--color-colors-primaryAccent);
   padding: 4px;
   border-radius: 50%;
 }
@@ -109,48 +110,53 @@
 }
 
 .action-button {
-  background: gray;
+  background: #FF3B3F;
   border: none;
   cursor: pointer;
   padding: 6px 10px;
   margin-right: 5px;
-  border-radius: 4px;
+  border-radius: 10px;
   letter-spacing: 0.5px;
+  font-weight: 500;
+  color: white;
 }
 
 .action-button:hover {
-  background: black;
+  background: #ff5557;
   color: white;
 }
 
 .tabs {
   display: flex;
-  border-bottom: 1px solid #e0e0e0;
-  background: darkgray;
+  background: #0A192F;
 }
 
 .tab {
-  padding: 2px 16px;
+  padding: 2px 0px 2px 0px;
   cursor: pointer;
-  color: #757575;
+  color: white;
   transition: color 0.2s;
   text-align: center;
+  font-weight: 500;
+  font-size: 16px;
 }
 
 .tab.active {
-  border-bottom: 2px solid white;
   color: white;
 }
 
 .search-results {
   /* padding: 0.75rem; */
-  background: darkgray;
+  background: #0A192F;
   height: 350px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
 }
 
 .result-card {
   color: white;
-  background-color: darkgray;
+  background-color: #080E17;
   border-radius: 4px;
   padding: 0px 8px;
   margin-bottom: 8px;
@@ -168,8 +174,8 @@
 }
 
 .status-badge {
-  background: black;
-  color: white;
+  background: #2196F3;
+  color: #0A192F;
   padding: 2px 8px;
   border-radius: 12px;
   text-transform: uppercase;

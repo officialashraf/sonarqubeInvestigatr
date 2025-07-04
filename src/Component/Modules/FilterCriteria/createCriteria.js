@@ -12,6 +12,9 @@ import { closePopup, openPopup, setKeywords, setPage, setSearchResults } from '.
 import Confirm from './confirmCriteria';
 import { toast } from 'react-toastify';
 import { useAutoFocusWithManualAutofill } from '../../../utils/autoFocus';
+import SearchBar from '../../Common/SearchBarCriteria/Searchbar';
+import styles from '../../Common/Table/table.module.css';
+import customSelectStyles from '../../Common/CustomStyleSelect/customSelectStyles';
 
 export const sharedSxStyles = {
   '& .MuiOutlinedInput-root': {
@@ -263,10 +266,10 @@ const CreateCriteria = ({ handleCreateCase }) => {
           <h5>Create Criteria</h5>
           <form onSubmit={handleSearch}>
             {/* Search Bar with Icons */}
-            <label>Search *</label>
+            <label>Search</label>
             <TextField
               fullWidth
-              className="com"
+              className={styles.searchBar}
               name="searchQuery"
               InputProps={{
                 readOnly: isReadOnly,
@@ -274,18 +277,19 @@ const CreateCriteria = ({ handleCreateCase }) => {
                 inputRef: inputRef,
                 startAdornment: (
                   <InputAdornment position="start">
-                    <Search />
+                    <Search style={{ color: "#0073CF"}}/>
                   </InputAdornment>
                 ),
                 endAdornment: (
                   <InputAdornment position="end">
-                    <Send onClick={() => dispatch(openPopup("recent"))} style={{ cursor: 'pointer' }} />
-                    <Tune onClick={() => dispatch(openPopup("saved"))} style={{ cursor: 'pointer' }} />
+                    <Send onClick={() => dispatch(openPopup("recent"))} style={{ cursor: 'pointer', color: "#0073cf" }} />
+                    <Tune onClick={() => dispatch(openPopup("saved"))} style={{ cursor: 'pointer', color: "#0073cf" }} />
                   </InputAdornment>
                 ),
                 style: {
                   height: '38px',
                   padding: '0 8px',
+                  color: 'white',
                 },
               }}
               placeholder="Search..."
@@ -293,7 +297,16 @@ const CreateCriteria = ({ handleCreateCase }) => {
               onChange={handleInputChange}
               sx={sharedSxStyles}
                          />
-            {error.searchQuery && <p style={{ color: "red", margin: '0px' }} >{error.searchQuery}</p>}
+            {/* <SearchBar
+              inputValue={formData.searchQuery}
+              onChange={handleInputChange}
+              onFocus={handleFocus}
+              inputRef={inputRef}
+              isReadOnly={isReadOnly}
+              sharedSxStyles={sharedSxStyles}
+              onSearchClick={() => dispatch(openPopup("recent"))}
+              onTuneClick={() => dispatch(openPopup("saved"))}
+            /> */}
 
 
             {/* Filetype Dropdown (Multi Select) */}
@@ -302,11 +315,12 @@ const CreateCriteria = ({ handleCreateCase }) => {
               <Select
                 isMulti
                 options={fileTypeOptions}
-                styles={customStyles}
-                className="com"
+                className={styles.searchBar}
                 value={formData.filetype}
                 onChange={(selected) => setFormData(prev => ({ ...prev, filetype: selected }))}
                 placeholder="Select file types"
+                styles={customSelectStyles}
+               
               />
             </div>
 
@@ -315,6 +329,7 @@ const CreateCriteria = ({ handleCreateCase }) => {
               <label>Case</label>
               <Select
                 isMulti
+                classname="react-select-container"
                 options={caseOptions}
                 styles={customStyles}
                 className="com"
@@ -330,18 +345,18 @@ const CreateCriteria = ({ handleCreateCase }) => {
               <label>Date</label>
               <TextField
                 fullWidth
-                className="com"
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
-                      <CalendarToday style={{ cursor: 'pointer' }} onClick={togglePopupA} />
+                      <CalendarToday style={{ cursor: 'pointer' , color: '#0073CF' }} onClick={togglePopupA} />
                     </InputAdornment>
                   ),
-                  style: {
-                    height: '38px',
-                    padding: '0 8px',
-                    fontSize: '12px',
-                  },
+                  // style: {
+                  //   height: '38px',
+                  //   padding: '0 8px',
+                  //   fontSize: '12px',
+                  // },
+                  style: { height: '38px', color: 'white', backgroundColor: '#101d2b', borderRadius: '15px' }
                 }}
                 placeholder="Select date..."
                 value={
@@ -350,7 +365,9 @@ const CreateCriteria = ({ handleCreateCase }) => {
                     : formatDate(selectedDates.startDate || selectedDates.endDate)
                 }
                 readOnly
+                
                 sx={sharedSxStyles}
+                // style = {{ height: '38px', color: 'white', backgroundColor: '#101d2b', borderRadius: '15px' }}
               />
             </div>
 
