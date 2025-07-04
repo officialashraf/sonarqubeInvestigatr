@@ -65,7 +65,6 @@ input:-webkit-autofill {
   -webkit-text-fill-color: #FFFF !important;
   box-shadow: 0 0 0 1000px #101D2B inset !important;
   line-height: normal !important;   
-  border: none !important;
 }
 
 input.MuiInputBase-input:-webkit-autofill,
