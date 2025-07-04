@@ -348,7 +348,11 @@
   box-shadow: none;
   border: 1px solid #000000;
 }
-
+.monitoring-interval-input:disabled {
+  background-color: #e41919;
+  box-shadow: none;
+  border: 1px solid #25b170;
+}
 .monitoring-interval-options {
   position: relative;
   right: 165px;

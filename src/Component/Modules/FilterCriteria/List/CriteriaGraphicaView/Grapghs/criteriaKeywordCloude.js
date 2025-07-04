@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import Cookies from "js-cookie";
 import Loader from '../../../../Layout/loader';
 import { ResponsiveContainer } from 'recharts';
+import KeywordTagList from '../../../../../Common/Charts/KeywordCloud/keywordCloud';
 
 const CriteriaKeywordChart = () => {
 
@@ -72,26 +73,8 @@ const CriteriaKeywordChart = () => {
   }
 
   return (
-    <div style={{ width: '100%', height: 250 }}>
-      <ResponsiveContainer>
-        <Box width='100%' style={{ marginTop: 0, padding: 0, alignContent: 'center' }}>
-          {data.length > 0 ? (
-            <WordCloud
-              data={dataa}
-              fontSizeMapper={fontSizeMapper}
-              rotate={rotate}
-              margin={0}
-              width={600}
-              height={250}
-            />
-          ) : (
-            <Typography variant="h6" color="textSecondary" align="center" height={250}>
-              No Data Available
-            </Typography>
-          )}
-        </Box>
-      </ResponsiveContainer>
-    </div>
+   <KeywordTagList queryPayload={queryPayload} />
+
   );
 }
 

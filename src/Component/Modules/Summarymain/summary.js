@@ -7,6 +7,7 @@ import { FaRss, FaFacebookF, FaTwitter, FaInstagram, FaVk, FaTiktok, FaYoutube, 
 import './summary.css';
 import styles from "./record.module.css";
 import Cookies from "js-cookie";
+import ReusablePieChart from '../../Common/Charts/PieChrat/pieChart';
 
 
 const Summary = ({ filters }) => {
@@ -117,78 +118,12 @@ const iconMap = {
         <Box width="100%">
           <div className='graphchats'>
             <Box className="box">
-              <ResponsiveContainer width="100%" height={300}>
-                <PieChart>
-                  <Pie
-                    data={pieData}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={60}
-                    outerRadius={80}
-                    dataKey="value"
-                    stroke="#fff"             //  Pie section borders white
-                    strokeWidth={2}           //  Partition thickness
-                  >
-                    {pieData.map((entry, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={COLORS[index % COLORS.length]}
-                        // stroke="#000"        //  Outer boundary black
-                        strokeWidth={1}
-                      />
-                    ))}
-                  </Pie>
-                  <Tooltip
-                    wrapperStyle={{
-                      backgroundColor: "#0E2C46",
-                      border: "1px solid #3498db",
-                      borderRadius: "8px",
-                      padding: "8px",
-                    }}
-                    contentStyle={{
-                      backgroundColor: "#0E2C46",
-                      border: "none",
-                      color: "#fff",     //  yeh add karo
-                    }}
-                    labelStyle={{ color: "#fff" }}  //  label ka text bhi white
-                    cursor={{ fill: "#fff" }}
-                  />
+              
+            <ReusablePieChart
+  caseId={caseId}
+  aggsFields={["unified_record_type"]}
+/>
 
-                  <Legend
-                    align="center"
-                    verticalAlign="bottom"
-                    layout="horizontal"
-                    iconType="circle"
-                    content={({ payload }) => (
-                      <ul style={{ display: 'flex', justifyContent: 'center', padding: 0, listStyle: 'none' }}>
-                        {payload.map((entry, index) => (
-                          <li
-                            key={`item-${index}`}
-                            style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              marginRight: 15,
-                              color: entry.color,
-                              fontSize: 12,
-                            }}
-                          >
-                            <div
-                              style={{
-                                width: 10,
-                                height: 10,
-                                borderRadius: '50%',
-                                backgroundColor: entry.color,
-                                marginRight: 5,
-                              }}
-                            />
-                            {entry.value}({entry.payload.value})
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  />
-                </PieChart>
-              </ResponsiveContainer>
             </Box>
 
             {/* Bar Chart */}

@@ -75,6 +75,20 @@ input.MuiInputBase-input:-webkit-autofill:hover {
   height: 5px !important;
   border: none !important;
 }
+
+input:disabled {
+  background-color: #f0f0f0;
+  color: #888888;    
+  cursor: not-allowed;     
+  border: 1px solid #ccc;   
+}
+select:disabled{
+  background-color: #f0f0f0 !important;
+  color: #888888 !important;    
+  cursor: not-allowed;     
+  border: 1px solid #ccc;   
+}
+
 /* .css-qve9l1-MuiInputBase-input-MuiOutlinedInput-input:-webkit-autofill {
   height:5px;
 } */

@@ -21,6 +21,8 @@
   border-radius: 0.75rem;
 }
 
+
+
 .inputSelectContainer {
   display: flex;
   align-items: center;
@@ -36,14 +38,15 @@
   box-shadow: 0 0 0 3px rgba(100, 181, 246, 0.25);
 }
 
-.input {
+.inputse {
    width: 45px;
-   padding-left: 5px;
-  /* padding: 1rem 0.75rem 0.75rem 0.75rem; */
+   /* padding-left: 5px; */
+  padding: 0.9rem 0.75rem 0.75rem 0.75rem;
   border: none;
   background-color: var(--color-colors-primary);
   color: var(--color-colors-neutralText);
 }
+
 
 .select {
   flex: 1;
@@ -58,9 +61,10 @@
   outline: none;
 }
 
-.input:disabled,
+
+/* .input:disabled,
 .select:disabled {
   background-color: transparent;
   color: #888;
   cursor: not-allowed;
-}
+} */
