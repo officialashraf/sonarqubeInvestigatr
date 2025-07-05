@@ -24,7 +24,7 @@ const ReportPage = () => {
 
   // Search form state
   const [formData, setFormData] = useState({
-    searchQuery: '',
+    searchQuery: [],
     caseIds: [],
   });
 
@@ -110,7 +110,7 @@ const ReportPage = () => {
     e.preventDefault();
     try {
       const payload = {
-        keyword: Array.isArray(formData.searchQuery) ? formData.searchQuery : [formData.searchQuery],
+        keyword: Array.isArray(formData.searchQuery) ? formData.searchQuery : [],
         report_generation: true,
 
         case_id: formData.caseIds?.length > 0

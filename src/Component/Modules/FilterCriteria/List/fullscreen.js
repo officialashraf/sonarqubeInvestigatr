@@ -16,6 +16,8 @@ import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { ListAltOutlined, PieChart } from "@mui/icons-material";
 import GrapghicalCriteria from './CriteriaGraphicaView/Grapghs/grapghicalCriteria';
+import AppButton from '../../../Common/Buttton/button';
+import styles from "../../Analyze/caseHeader.module.css";
 // import Loader from '../../Layout/loader';
 
 const SearchResults = () => {
@@ -201,32 +203,37 @@ const SearchResults = () => {
 
   return (
 
-    <div className="search-container" style={{ backgroundColor: 'darkgray', height: '100%', zIndex: '1050' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', aligntems: 'center', marginTop: '5px' }}>
+    <div className="search-container" style={{ backgroundColor: '#080E17', height: '100%', zIndex: '1050' }}>
+      {/* <div style={{ display: 'flex', justifyContent: 'space-between', aligntems: 'center', marginTop: '5px' }}> */}
+        <div className={styles.actionIconsContainer} style={{ display: 'flex', justifyContent: 'space-between', aligntems: 'center', marginTop: '5px' }}>
         {/* 
   <h6 >Search Results</h6 > */}
-        <div className="search-header" style={{ width: '50%' }}>
+        <div className={styles.searchHeader} style={{ width: '60%',backgroundColor: '#080E17' }}>
 
           <TextField
             fullWidth
-            className="com mb-3"
+            // className="com mb-3"
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <SearchIcon />
+                  <SearchIcon style={{color:'#0073CF'}} />
                 </InputAdornment>
               ),
               endAdornment: (
                 <InputAdornment position="end">
 
-                  <SendIcon style={{ cursor: 'pointer' }} onClick={handleSearch} />
-                  <TuneIcon onClick={openPopup} style={{ cursor: 'pointer' }} /> {/* New Card List Filter Icon */}
+                  <SendIcon style={{ cursor: 'pointer', color:'#0073CF' }} onClick={handleSearch} />
+                  <TuneIcon onClick={openPopup} style={{ cursor: 'pointer', backgroundColor:"#0073CF",color:'#0A192F'  }} /> {/* New Card List Filter Icon */}
 
                 </InputAdornment>
               ), style: {
                 height: '38px', // Use consistent height
                 padding: '0 8px', // Ensure uniform padding
-
+                backgroundColor:"#101D2B",
+                borderRadius:"15px",
+                color:'white',
+                fontSize:"12px",
+                 marginBottom:"5px",
               },
             }}
             type="text"
@@ -236,15 +243,28 @@ const SearchResults = () => {
             placeholder="Search..."
             sx={sharedSxStyles}
           />
-
-
+           <div style={{ padding: '0px 0px', height: '20px', marginLeft: "5px"}}>
+          <AppButton children={"Reset"} onClick={resetSearch}/>
+         </div>
         </div>
-        <button className="action-button" style={{ padding: '0px 5px', height: '30px', marginTop: "5px" }} onClick={resetSearch}>RESET</button>
-
-        <button className="action-button" style={{ padding: '0px 5px', height: '30px', marginTop: "5px" }} onClick={exitClick}>Exit FullScreen</button>
-      </div>
-
-      <div className="search-term-indicator">
+        <div>
+                <PieChart sx={{ fontSize: 40 }}
+                className={`${styles.icon} ${
+                  activeComponent === "graph" ? styles.activeIcon : ""
+                }`}
+                onClick={() => handleComponentToggle("graph")}
+              />
+                <ListAltOutlined sx={{
+                  fontSize: 40
+      }}
+                className={`${styles.icon} ${
+                  activeComponent === "list" ? styles.activeIcon : ""
+                }`}
+                onClick={() => handleComponentToggle("list")}
+              />
+              </div>
+            </div>
+                  <div className="search-term-indicator" style={{backgroundColor:'#080E17',marginBottom:"10px"}}>
         <div className="chips-container">
           {filteredChips && filteredChips.map((chip, index) => (
             <div key={index} className="search-chip">
@@ -256,8 +276,8 @@ const SearchResults = () => {
           ))}
         </div>
 
-      </div>
-      <div className="col-auto  d-flex align-items-center gap-1 justify-content-end  me-2" style={{ margin: "5px", marginBottom: "15px" }}>
+ </div>
+      {/* <div className="col-auto  d-flex align-items-center gap-1 justify-content-end  me-2" style={{ margin: "5px", marginBottom: "15px" }}>
         <PieChart
           className={`icon-style ${activeComponent === "graph" ? "active-icon" : ""}`}
           onClick={() => handleComponentToggle("graph")}
@@ -267,8 +287,8 @@ const SearchResults = () => {
           onClick={() => handleComponentToggle("list")}
         />
 
-      </div>
-      <div className="search-results" style={{ height: 'auto' }}>
+      </div> */}
+      <div className="search-results" style={{backgroundColor:"#101D2B"}}>
 
         {activeComponent === "graph" && (
           <GrapghicalCriteria searchChips={searchChips} />

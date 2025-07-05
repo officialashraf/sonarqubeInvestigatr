@@ -57,7 +57,7 @@ const TableModal = ({ columns = [], data = [], onAddClick, searchPlaceholder = "
       </div>
       <div className={styles.tableContainer}>
         <div className={styles.tableWrapper}>
-          <Table hover responsive size="sm" className={styles.table}>
+          <Table hover   className={styles.table}>
             <thead>
               <tr>
                 {columns.map((col) => (

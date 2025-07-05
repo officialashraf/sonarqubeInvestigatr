@@ -84,10 +84,10 @@ const LicensePage = () => {
 
   return (
 
-    <Container fluid className={style.loginContainer}>
+    <Container fluid className={style.loginContainer} style={{ minHeight: '100%', display: 'flex', flexDirection: 'column', flexWrap: 'wrap', alignItems: 'stretch', justifyContent: 'center' }}>
       <Row className={style.loginRow}>
         <Col md={6} className={style.leftColumn}>
-          <h1>DataSearch</h1>
+          <h1>INVESTIGATR</h1>
         </Col>
         <Col md={6} className={style.rightColumn}>
         <Form className={style.loginForm} onSubmit={handleSubmit}>

@@ -43,7 +43,12 @@
   height: 40px;
   margin-bottom: 5px;
 }
-
+.searchHeader{
+      display: flex;
+    /* align-items: center; */
+    padding: 5px;;
+    /* background-color: darkgray; */
+}
 /* Icon styles */
 .icon {
   font-size: 40px;
