@@ -10,6 +10,9 @@ import Cookies from 'js-cookie';
 import { sharedSxStyles } from './createCriteria';
 import { toast } from 'react-toastify';
 import Loader from '../Layout/loader'
+import customSelectStyles from '../../Common/CustomStyleSelect/customSelectStyles';
+import styles from '../../Common/Table/table.module.css';
+
 
 // const API_BASE_URL = 'http://5.180.148.40';
 
@@ -380,12 +383,13 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
               <label>Search Keywords </label>
               <TextField
                 fullWidth
-                className="com"
+                className={styles.searchBar}
                 name="searchQuery"
                 InputProps={{
                   style: {
                     height: '38px',
                     padding: '0 8px',
+                    color: 'white'
                   },
                 }}
                 placeholder="Enter keywords separated by commas (e.g., keyword1, keyword2, keyword3)"
@@ -403,8 +407,8 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
               <Select
                 isMulti
                 options={fileTypeOptions}
-                styles={customStyles}
-                className="com"
+                styles={customSelectStyles}
+               
                 value={formData.filetype}
                 onChange={(selected) => setFormData(prev => ({ ...prev, filetype: selected || [] }))}
                 placeholder="Select file types"
@@ -418,8 +422,8 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
               <Select
                 isMulti
                 options={caseOptions}
-                styles={customStyles}
-                className="com"
+                styles={customSelectStyles}
+                
                 value={formData.caseIds}
                 onChange={(selected) => setFormData(prev => ({ ...prev, caseIds: selected || [] }))}
                 placeholder="Select cases"
@@ -432,17 +436,18 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
               <label>Date</label>
               <TextField
                 fullWidth
-                className="com"
+                className={styles.searchBar}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
-                      <CalendarToday style={{ cursor: 'pointer' }} onClick={togglePopupA} />
+                      <CalendarToday style={{ cursor: 'pointer' , color: '#0073cf' }} onClick={togglePopupA} />
                     </InputAdornment>
                   ),
                   style: {
                     height: '38px',
                     padding: '0 8px',
                     fontSize: '12px',
+                    color: 'white',
                   },
                 }}
                 placeholder="Select date..."
@@ -463,13 +468,17 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
                 <TextField
                   name="latitude"
                   placeholder="Latitude"
-                  className="com"
+                  className={styles.searchBar}
                   value={formData.latitude}
                   onChange={handleInputChange}
                   InputProps={{
                     style: {
                       height: '38px',
                       padding: '0 8px',
+                      color: 'white',
+                      width: '245px',
+                      color: 'white',
+                      borderRadius: '15px',
                     },
                   }}
                   sx={sharedSxStyles}
@@ -478,13 +487,16 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
                 <TextField
                   name="longitude"
                   placeholder="Longitude"
-                  className="com"
+                  className={styles.searchBar}
                   value={formData.longitude}
                   onChange={handleInputChange}
                   InputProps={{
                     style: {
                       height: '38px',
                       padding: '0 8px',
+                      width: '245px',
+                      color: 'white',
+                      borderRadius: '15px',
                     },
                   }}
                   sx={sharedSxStyles}

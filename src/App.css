@@ -65,7 +65,6 @@ input:-webkit-autofill {
   -webkit-text-fill-color: #FFFF !important;
   box-shadow: 0 0 0 1000px #101D2B inset !important;
   line-height: normal !important;   
-  border: none !important;
 }
 
 input.MuiInputBase-input:-webkit-autofill,
@@ -77,7 +76,7 @@ input.MuiInputBase-input:-webkit-autofill:hover {
 }
 
 input:disabled {
-  background-color: #f0f0f0;
+  background-color: #101D2B;
   color: #888888;    
   cursor: not-allowed;     
   border: 1px solid #ccc;   

@@ -89,7 +89,6 @@ const EditConnection = ({ togglePopup, id }) => {
 
     const validateForm = () => {
         const errors = {};
-        const pwRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*]).{6,}$/;
         const ci = formData.connection_info;
 
         if (!formData.name.trim()) errors.name = "Required";
@@ -97,10 +96,6 @@ const EditConnection = ({ togglePopup, id }) => {
         if (!ci.host.trim()) errors.host = "Required";
         if (!ci.port) errors.port = "Required";
         if (!ci.username.trim()) errors.username = "Required";
-        // Password is optional on edit, validate only if entered
-        if (ci.password && !pwRegex.test(ci.password))
-            errors.password = "6+ chars, 1 uppercase & 1 special char";
-
         return errors;
     };
 
@@ -233,7 +228,7 @@ const EditConnection = ({ togglePopup, id }) => {
                             placeholder="Enter new password"
                             className="com"
                         />
-                        {error.password && <p className="error">{error.password}</p>}
+                       
 
                         <div className="button-container">
                             <button type="submit" className="create-btn" disabled={isSubmitting}>

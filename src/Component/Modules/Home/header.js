@@ -195,9 +195,7 @@ const Header = ({ title }) => {
               align="end"
             >
 
-              <NavDropdown.Item disabled>
-                {username}
-              </NavDropdown.Item>
+             
               <NavDropdown.Item onClick={togglePopup}>
                 {"License Renew"}
               </NavDropdown.Item>

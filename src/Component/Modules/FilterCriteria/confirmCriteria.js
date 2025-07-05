@@ -7,6 +7,7 @@ import { CloseButton } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { openPopup } from '../../../Redux/Action/criteriaAction';
 import { useAutoFocusWithManualAutofill } from '../../../utils/autoFocus';
+import AppButton, { AddButton } from '../../Common/Buttton/button'
 
 const Confirm = ({ formData, selectedDates, searchChips }) => {
     const dispatch = useDispatch();
@@ -91,9 +92,9 @@ const Confirm = ({ formData, selectedDates, searchChips }) => {
 
                 <div className="popup-content" style={{ width: '70%' }}>
 
-                    <span style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
+                    <span style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%", color: 'white' }}>
                         <h5>Save Criteria</h5>
-                        <CloseButton onClick={() => setIsVisible(false)} />
+                        <CloseButton  onClick={() => setIsVisible(false)} />
                     </span>
                     <form onSubmit={(e) => e.preventDefault()}> {/* Prevent form submission default */}
 
@@ -118,14 +119,14 @@ const Confirm = ({ formData, selectedDates, searchChips }) => {
                             ref={inputRef}
                         />
                         <div className="button-container">
-                            <button
+                            <AppButton
                                 type="button"
                                 className="cancel-btn"
                                 onClick={() => setIsVisible(false)}
                             >
                                 Cancel
-                            </button>
-                            <button
+                            </AppButton>
+                            <AppButton
                                 type="submit"
                                 className="create-btn"
                                 onClick={saveCriteria}
@@ -133,7 +134,7 @@ const Confirm = ({ formData, selectedDates, searchChips }) => {
 
                             >
                                 {isSubmitting ? 'Saving...' : 'Save'}
-                            </button>
+                            </AppButton>
                         </div>
                     </form>
                 </div>
