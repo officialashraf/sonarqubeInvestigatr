@@ -16,6 +16,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { closePopup, openPopup, setPage, setSearchResults, setKeywords } from "../../../Redux/Action/criteriaAction";
 import axios from "axios";
 import { useAutoFocusWithManualAutofill } from "../../../utils/autoFocus";
+import customSelectStyles from "../../Common/CustomStyleSelect/customSelectStyles";
+import styles from '../../Common/Table/table.module.css';
+
 
 const RecentCriteria = () => {
   const Token = Cookies.get('accessToken');
@@ -337,26 +340,30 @@ const RecentCriteria = () => {
             <div className="d-flex align-items-center mb-3">
               <TextField
                 fullWidth
-                className="com mb-3"
+                className={styles.searchBar}
                 InputProps={{
                   readOnly: isReadOnly,
                   onFocus: handleFocus,
                   inputRef: inputRef,
                   startAdornment: (
                     <InputAdornment position="start">
-                      <SearchIcon />
+                      <SearchIcon style={{color: "#0073cf" }}/>
                     </InputAdornment>
                   ),
                   endAdornment: (
                     <InputAdornment position="end">
 
-                      <Send style={{ cursor: 'pointer' }} onClick={handleSearch} />
-                      <TuneIcon style={{ cursor: 'pointer' }} onClick={handelCreate} /> {/* New Card List Filter Icon */}
+                      <Send style={{ cursor: 'pointer',  color: "#0073cf" }} onClick={handleSearch} />
+                      <TuneIcon style={{ cursor: 'pointer', color: "#0073cf" }} onClick={handelCreate} /> {/* New Card List Filter Icon */}
                     </InputAdornment>
                   ), style: {
                     height: '38px', // Use consistent height
                     padding: '0 0px', // Ensure uniform padding
+                    backgroundColor: '#080E17', // Background color
+                    borderRadius: '15px', // Rounded corners
+                    color: 'white', // Text color
                   },
+                  autoComplete: 'off',
                 }}
                 placeholder="Search..."
                 value={searchQuery}
@@ -366,6 +373,7 @@ const RecentCriteria = () => {
                 }}
                 onKeyDown={handleKeyDown}
                 sx={sharedSxStyles}
+                style={customSelectStyles}
               />
 
             </div>
@@ -403,17 +411,17 @@ const RecentCriteria = () => {
                     <ListItem key={index} className="text-white">
                       <ListItemText style={{ cursor: 'pointer' }} primary={item.title} onClick={() => ReuseCriteria(item)} />
                       <ListItemSecondaryAction>
-                        <IconButton edge="end" color="dark">
-                          <Edit
+                        <IconButton edge="end" color="#0073cf">
+                          <Edit style={{ cursor: 'pointer', color: '#0073cf' }}
                             onClick={() => {
                               toggleEditPopup();
                               setCriteriaId(item.id); // Set the selected item's ID
                             }}
-                            style={{ cursor: 'pointer' }}
+                            
                           />
                         </IconButton>
                         <IconButton edge="end" color="dark" onClick={() => handleDelete(index, item.id)}>
-                          <Delete />
+                          <Delete style={{ color: '#0073cf'}} />
                         </IconButton>
                       </ListItemSecondaryAction>
                     </ListItem>

@@ -264,7 +264,7 @@ const CreateCriteria = ({ handleCreateCase }) => {
         </button>
         <div className="popup-content">
           <h5>Create Criteria</h5>
-          <form onSubmit={handleSearch}>
+          <form onSubmit={handleSearch} style={{ gap: '1rem' }}>
             {/* Search Bar with Icons */}
             <label>Search</label>
             <TextField
@@ -276,12 +276,12 @@ const CreateCriteria = ({ handleCreateCase }) => {
                 onFocus: handleFocus,
                 inputRef: inputRef,
                 startAdornment: (
-                  <InputAdornment position="start">
+                  <InputAdornment position="start" >
                     <Search style={{ color: "#0073CF"}}/>
                   </InputAdornment>
                 ),
                 endAdornment: (
-                  <InputAdornment position="end">
+                  <InputAdornment position="end" >
                     <Send onClick={() => dispatch(openPopup("recent"))} style={{ cursor: 'pointer', color: "#0073cf" }} />
                     <Tune onClick={() => dispatch(openPopup("saved"))} style={{ cursor: 'pointer', color: "#0073cf" }} />
                   </InputAdornment>
@@ -290,7 +290,11 @@ const CreateCriteria = ({ handleCreateCase }) => {
                   height: '38px',
                   padding: '0 8px',
                   color: 'white',
+                  borderRadius: '15px',
+                  border: '1px solid #0073CF',
+
                 },
+                autoComplete: 'off',
               }}
               placeholder="Search..."
               value={formData.searchQuery}
@@ -315,11 +319,13 @@ const CreateCriteria = ({ handleCreateCase }) => {
               <Select
                 isMulti
                 options={fileTypeOptions}
-                className={styles.searchBar}
                 value={formData.filetype}
                 onChange={(selected) => setFormData(prev => ({ ...prev, filetype: selected }))}
                 placeholder="Select file types"
                 styles={customSelectStyles}
+                style= {{
+                  border: '1px solid #0073CF',
+                }}
                
               />
             </div>
@@ -329,10 +335,10 @@ const CreateCriteria = ({ handleCreateCase }) => {
               <label>Case</label>
               <Select
                 isMulti
-                classname="react-select-container"
+                className={styles.searchBar}
                 options={caseOptions}
-                styles={customStyles}
-                className="com"
+                styles={customSelectStyles}
+                // className="com"
                 value={formData.caseIds}
                 onChange={(selected) => { setFormData(prev => ({ ...prev, caseIds: selected })); }}
                 placeholder="Select cases"
@@ -343,7 +349,7 @@ const CreateCriteria = ({ handleCreateCase }) => {
             <div >
 
               <label>Date</label>
-              <TextField
+              <TextField 
                 fullWidth
                 InputProps={{
                   endAdornment: (
@@ -356,7 +362,7 @@ const CreateCriteria = ({ handleCreateCase }) => {
                   //   padding: '0 8px',
                   //   fontSize: '12px',
                   // },
-                  style: { height: '38px', color: 'white', backgroundColor: '#101d2b', borderRadius: '15px' }
+                  style: { height: '38px', color: 'white', borderRadius: '15px' }
                 }}
                 placeholder="Select date..."
                 value={
@@ -367,40 +373,52 @@ const CreateCriteria = ({ handleCreateCase }) => {
                 readOnly
                 
                 sx={sharedSxStyles}
-                // style = {{ height: '38px', color: 'white', backgroundColor: '#101d2b', borderRadius: '15px' }}
               />
             </div>
 
             {/* Location Fields */}
             <label>Focus your search on a particular location or area</label>
-            <div className="d-flex">
+            <div style={{ display: 'flex', justifyContent: 'space-evenly', color: 'white' }}>
               <TextField
                 name="latitude"
                 placeholder="Latitude"
-                className="com me-2"
+                // className="com me-2"
+                className={styles.searchBar}
                 value={formData.latitude}
                 onChange={handleInputChange}
                 InputProps={{
                   style: {
                     height: '38px',
                     padding: '0 8px',
+                    width: '245px',
+                    color: 'white',
+                    borderRadius: '15px',
                   },
                 }}
                 sx={sharedSxStyles}
+                style=  {{ height: '38px', color: 'white', borderRadius: '15px' }}
+                autoComplete='off'
               />
               <TextField
                 name="longitude"
                 placeholder="Longitude"
-                className="com "
+                // className="com "
+                className={styles.searchBar}
                 value={formData.longitude}
                 onChange={handleInputChange}
                 InputProps={{
                   style: {
                     height: '38px',
                     padding: '0 8px',
+                    width: '245px',
+                    flex: 1,
+                    color: 'white',
+                    borderRadius: '15px'
                   },
                 }}
+                
                 sx={sharedSxStyles}
+                autoComplete='off'
               />
             </div>
 

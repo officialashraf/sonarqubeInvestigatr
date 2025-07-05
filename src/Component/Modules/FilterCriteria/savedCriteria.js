@@ -17,6 +17,7 @@ import { toast } from 'react-toastify';
 import { useAutoFocusWithManualAutofill } from '../../../utils/autoFocus';
 import AddButton from '../../Common/Buttton/button';
 import SearchBar from '../../Common/SearchBarCriteria/Searchbar';
+import styles from '../../Common/Table/table.module.css'
 
 
 const SavedCriteria = () => {
@@ -246,37 +247,41 @@ const SavedCriteria = () => {
           <h5>Search Result <span> <button className="close-icon" onClick={() => dispatch(closePopup())}>
             &times;
           </button></span></h5>
-          <div className="search-container">
-            {/* <div className="search-header">
+          <div>
+            <div style={{marginBottom: '10px'}}>
               <TextField
                 fullWidth
-                className="com mb-3"
                 InputProps={{
-                  readOnly: isReadOnly,
-                  onFocus: handleFocus,
-                  inputRef: inputRef,
+
                   startAdornment: (
                     <InputAdornment position="start">
-                      <SearchIcon />
+                      <SearchIcon style={{ color: '#0073cf'}}/>
                     </InputAdornment>
                   ),
                   endAdornment: (
                     <InputAdornment position="end">
                       <SendIcon
-                        style={{ cursor: isLoading ? 'default' : 'pointer' }}
+                        style={{ cursor: isLoading ? 'default' : 'pointer', color: '#0073cf' }}
                         onClick={isLoading ? null : handleSearch}
                       />
                       <TuneIcon
-                        style={{ cursor: 'pointer' }}
+                        style={{ cursor: 'pointer', color: '#0073cf' }}
                         onClick={() => dispatch(openPopup("create"))}
                       />
                     </InputAdornment>
                   ),
                   style: {
                     height: '38px',
-                    padding: '0 8px',
+                    padding: '0px',
+                    color: 'white',
                   },
                 }}
+                inputProps={{
+                  style: {
+                    padding: '0px',            
+                  },
+                }}
+                className={styles.searchBar}
                 type="text"
                 value={inputValue}
                 onChange={handleInputChange}
@@ -285,9 +290,9 @@ const SavedCriteria = () => {
                 sx={sharedSxStyles}
                 disabled={isLoading}
               />
-            </div> */}
+            </div>
 
-            <SearchBar
+            {/* <SearchBar
               inputValue={inputValue}
               onChange={handleInputChange}
               onKeyPress={handleKeyPress}
@@ -297,7 +302,8 @@ const SavedCriteria = () => {
               isReadOnly={false}
               inputRef={inputRef}
               onFocus={handleFocus}
-            />
+              autoComplete="off"
+            /> */}
             <div>
               <div className="search-term-indicator">
                 <div className="chips-container">

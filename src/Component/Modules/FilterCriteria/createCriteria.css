@@ -10,3 +10,9 @@
   padding: 0px !important;
   height: 38px !important;
 }
+.flex {
+  display: flex;
+  width: 100%;
+  gap: 0.5rem; /* Optional spacing between fields */
+  color: white;
+}

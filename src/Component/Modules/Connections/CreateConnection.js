@@ -25,11 +25,19 @@ const CreateConnection = ({ togglePopup, id }) => {
     useEffect(() => {
         const fetchConnectionTypes = async () => {
             try {
-                const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/connection-type`);
+                const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/connection-type`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                  }
+                );
+                console.log("Fetched connection types:", response.data);
                 const formattedConnectionTypes = (response.data || []).map(type => ({
                     value: type.name, 
                     label: type.name
                 }));
+                console.log("Formatted:", formattedConnectionTypes);
                 setConnectionTypes(formattedConnectionTypes);
             } catch (err) {
                 console.error("Error fetching connection types:", err);
@@ -59,7 +67,6 @@ const CreateConnection = ({ togglePopup, id }) => {
 
     const validateForm = () => {
         const errors = {};
-        const pwRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*]).{6,}$/;
         const ci = formData.connection_info;
 
         if (!formData.name.trim()) errors.name = "Required";
@@ -67,10 +74,8 @@ const CreateConnection = ({ togglePopup, id }) => {
         if (!ci.host.trim()) errors.host = "Required";
         if (!ci.port) errors.port = "Required";
         if (!ci.username.trim()) errors.username = "Required";
-        if (!ci.password.trim()) errors.password = "Required";
-        else if (!pwRegex.test(ci.password))
-            errors.password = "6+ chars, 1 uppercase & 1 special char";
-
+       
+      
         return errors;
     };
 
@@ -166,7 +171,7 @@ const CreateConnection = ({ togglePopup, id }) => {
                         />
                         {error.username && <p className="error">{error.username}</p>}
 
-                        <label>Password *</label>
+                        <label>Password </label>
                         <input
                             name="password"
                             value={formData.connection_info.password}
@@ -175,7 +180,6 @@ const CreateConnection = ({ togglePopup, id }) => {
                             placeholder="Enter password"
                             className="com"
                         />
-                        {error.password && <p className="error">{error.password}</p>}
 
                         <div className="button-container">
                             <button type="submit" className="create-btn" disabled={isSubmitting}>
