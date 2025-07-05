@@ -55,25 +55,28 @@ const ExistingFilter = ({ selectedFilters, onFilterToggle, onFilterSelect, setSh
       filter["case id"].includes(String(caseId));
   }, [caseId]);
 
-  const sortFiltersHelper = useCallback((filters) => {
-    return filters.sort((a, b) => {
-      // First priority: Checked status
-      const aInCurrentCase = isFilterInCurrentCase(a);
-      const bInCurrentCase = isFilterInCurrentCase(b);
-      if (aInCurrentCase && !bInCurrentCase) return -1;
-      if (!aInCurrentCase && bInCurrentCase) return 1;
+  
+const sortFiltersHelper = useCallback((filters) => {
+  return filters.sort((a, b) => {
+    // First priority: Filters associated with current case (checked ones)
+    const aInCurrentCase = isFilterInCurrentCase(a);
+    const bInCurrentCase = isFilterInCurrentCase(b);
+    
+    // Show case-associated filters first
+    if (aInCurrentCase && !bInCurrentCase) return -1;
+    if (!aInCurrentCase && bInCurrentCase) return 1;
 
-      // Second priority: Latest modified/created date
-      const dateA = new Date(a.modified_on || a.created_on);
-      const dateB = new Date(b.modified_on || b.created_on);
-      if (dateA !== dateB) {
-        return sortDirection === 'asc' ? dateB - dateA : dateA - dateB;
-      }
+    // Second priority: Latest modified/created date
+    const dateA = new Date(a.modified_on || a.created_on);
+    const dateB = new Date(b.modified_on || b.created_on);
+    if (dateA !== dateB) {
+      return sortDirection === 'asc' ? dateB - dateA : dateA - dateB;
+    }
 
-      // Third priority: Name
-      return a.name.localeCompare(b.name);
-    });
-  }, [isFilterInCurrentCase, sortDirection]);
+    // Third priority: Name
+    return a.name.localeCompare(b.name);
+  });
+}, [isFilterInCurrentCase, sortDirection]);
 
 
   useEffect(() => {
@@ -149,12 +152,13 @@ const ExistingFilter = ({ selectedFilters, onFilterToggle, onFilterSelect, setSh
                   .filter(filter => filter.name.toLowerCase().includes(searchQuery))
                   .map((filter) => (
                     <li key={filter.id} className="list-group-item existing-filters-li">
-                      <input
-                        type="checkbox"
-                        className="form-check-input"
-                        checked={selectedFilters.includes(filter.id)}
-                        onChange={(e) => onFilterToggle(filter.id, e.target.checked)}
-                      />
+                    <input
+  type="checkbox"
+  className="form-check-input"
+  checked={selectedFilters.includes(filter.id)}
+  onChange={(e) => onFilterToggle(filter.id, e.target.checked)}
+  // Don't disable - allow users to select any filter for the case
+/>
 
                       <div className="filter-content" onClick={() => {
                         onFilterSelect(filter.id);

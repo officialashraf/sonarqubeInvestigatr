@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-//import AddNewFilter from "./components/addNewFilter";
 import ExistingFilters from "./existingFilter";
 import axios from 'axios';
 import AddNewFilter from './addNewFilter';
@@ -7,7 +6,6 @@ import "./main.css"
 import { Plus, X } from 'react-bootstrap-icons'
 import { useSelector, useDispatch } from 'react-redux';
 import { setCaseData } from '../../../Redux/Action/caseAction';
-
 import { toast } from 'react-toastify';
 import Cookies from 'js-cookie';
 import AppButton from '../../Common/Buttton/button';
@@ -18,15 +16,14 @@ const AddFilter2 = ({ togglePopup }) => {
   const [initialSelectedFilters, setInitialSelectedFilters] = useState([]);
   const caseData1 = useSelector((state) => state.caseData.caseData);
   const token = Cookies.get('accessToken');
-  const [filterIdedit, setFilterIdedit] = useState(null) // Changed to null
+  const [filterIdedit, setFilterIdedit] = useState(null)
 
   const [showAddFilter, setShowAddFilter] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-
   // Toggle visibility of Add New Filter form
   const toggleAddFilter = () => {
-    setFilterIdedit(null); // Reset filter ID when adding new filter
+    setFilterIdedit(null);
     setShowAddFilter(true);
   };
 
@@ -53,15 +50,16 @@ const AddFilter2 = ({ togglePopup }) => {
 
   // Handler for filter toggle
   const handleFilterToggle = (filterId, isChecked) => {
-
     setSelectedFilters(prev =>
       isChecked ? [...prev, filterId] : prev.filter(id => id !== filterId)
     );
   };
 
-  // Handler for new filter creation
-  const handleNewFilterCreated = (newFilterId) => {
-    setSelectedFilters(prev => [...prev, newFilterId]);
+  // Handler for new filter creation - don't auto-select
+  const handleNewFilterCreated = (newFilterId, shouldAutoSelect = false) => {
+    // Don't auto-select new filters
+    // User will manually select them if needed
+    console.log(`New filter created with ID: ${newFilterId}`);
   };
 
   const handleFilterid = (id) => {
@@ -71,22 +69,22 @@ const AddFilter2 = ({ togglePopup }) => {
   // Handle closing the AddNewFilter component
   const handleCloseAddFilter = () => {
     setShowAddFilter(false);
-    setFilterIdedit(null); // Reset filter ID when closing
+    setFilterIdedit(null);
   };
+
   const [filtersToStart, setFiltersToStart] = useState([]);
   const [filtersToStop, setFiltersToStop] = useState([]);
 
   useEffect(() => {
     setFiltersToStart(selectedFilters.filter(id => !initialSelectedFilters.includes(id)));
     setFiltersToStop(initialSelectedFilters.filter(id => !selectedFilters.includes(id)));
-  }, [selectedFilters, initialSelectedFilters]); // Updates dynamically
+  }, [selectedFilters, initialSelectedFilters]);
 
   // Proceed handler
   const handleProceed = async () => {
     setIsSubmitting(true);
     try {
       // Start new filters
-
       if (filtersToStart.length > 0) {
         const payload = {
           filter_id: filtersToStart,
@@ -114,7 +112,8 @@ const AddFilter2 = ({ togglePopup }) => {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`,
           },
-        }); window.dispatchEvent(new Event('databaseUpdated'));
+        });
+        window.dispatchEvent(new Event('databaseUpdated'));
       }
 
       // Update case status
@@ -128,10 +127,6 @@ const AddFilter2 = ({ togglePopup }) => {
         }
       );
       dispatch(setCaseData(reponsecase.data.data))
-      // window.dispatchEvent(new Event('databaseUpdated'));
-
-
-      // Refresh data and close popup
 
       togglePopup();
     } catch (error) {
@@ -159,9 +154,6 @@ const AddFilter2 = ({ togglePopup }) => {
               <div className="row main-body-div-1st-row">
                 <div className="col-md-4">
                   <AppButton onClick={toggleAddFilter} children={"+ Add New Filter"}/>
-                  {/* <button className='add-new-filter-button' onClick={toggleAddFilter}>
-                    <Plus /> Add New Filter
-                  </button> */}
                   <ExistingFilters
                     setShowAddFilter={setShowAddFilter}
                     selectedFilters={selectedFilters}
@@ -172,23 +164,25 @@ const AddFilter2 = ({ togglePopup }) => {
                 {showAddFilter && (
                   <div className="col-md-8">
                     <button onClick={handleCloseAddFilter} className="btn close-add-filter-button">
-                      <X fill='whitr' size={20}/>
+                      <X fill='white' size={20}/>
                     </button>
                     <AddNewFilter
                       filterIde={filterIdedit}
                       onNewFilterCreated={handleNewFilterCreated}
-                      key={filterIdedit} // Add key prop to force re-render when filterIdedit changes
+                      key={filterIdedit}
                       onClose={handleCloseAddFilter}
                     />
                   </div>
                 )}
               </div>
               <div style={{display:'flex', justifyContent:'center'}} >
-                  {(filtersToStart.length > 0 || filtersToStop.length > 0) && (
-                    <AppButton children={isSubmitting ? 'Processing...' : '✔ Proceed'} onClick={handleProceed} disabled={isSubmitting} 
-                    />
-                  )}
-
+                {(filtersToStart.length > 0 || filtersToStop.length > 0) && (
+                  <AppButton 
+                    children={isSubmitting ? 'Processing...' : '✔ Proceed'} 
+                    onClick={handleProceed} 
+                    disabled={isSubmitting} 
+                  />
+                )}
               </div>
             </div>
           </div>
@@ -197,4 +191,5 @@ const AddFilter2 = ({ togglePopup }) => {
     </>
   );
 };
+
 export default AddFilter2;

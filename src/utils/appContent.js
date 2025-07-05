@@ -71,6 +71,7 @@ const AppContent = () => {
       <Routes>
         <Route path='/' element={<LicenseValidator />} />
         <Route path="/login" element={<LoginPage />} />
+
       </Routes>
     ) : (
       <div className={styles.ContainerDashboard}>

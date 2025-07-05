@@ -325,8 +325,10 @@ const SavedCriteria = () => {
                 <div
                   className={`tab active`}
                 // onClick={() => setActiveTab('Cases')}
+                      style={{backgroundColor:"#101D2B"}}
                 >
                   Cases ({totalResults || 0})
+            
                 </div>
               </div>
 
