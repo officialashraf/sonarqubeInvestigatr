@@ -64,24 +64,26 @@ const Cdr = ({ togglePopup,handleProceed }) => {
               ))}
             </div>
 
-            <div className={styles.targetDataTypeCdr}>
-
-              <div className={styles.selectDataTypeCdr}>
-                <div className={styles.customOutlinedWrapper}>
-                  <label className={styles.customBadgeLabel}>Select Data Type*</label>
-                  <select
-                    className={styles.customSelectField}
-                    value={selectDataType}
-                    onChange={(e) => setSelectDataType(e.target.value)}
-                  >
-                    {dataTypes.map((type) => (
-                      <option key={type} value={type}>{type}</option>
-                    ))}
-                  </select>
-                  <small>Selected Data Type would be applied to all resources in this batch</small>
-                </div>
-              </div>
-            </div>
+             {/* Data Type Field — only show when option is NOT 'osintData' */}
+  {selectedOption !== 'osintData' && (
+    <div className={styles.targetDataTypeCdr}>
+      <div className={styles.selectDataTypeCdr}>
+        <div className={styles.customOutlinedWrapper}>
+          <label className={styles.customBadgeLabel}>Select Data Type*</label>
+          <select
+            className={styles.customSelectField}
+            value={selectDataType}
+            onChange={(e) => setSelectDataType(e.target.value)}
+          >
+            {dataTypes.map((type) => (
+              <option key={type} value={type}>{type}</option>
+            ))}
+          </select>
+          <small>Selected Data Type would be applied to all resources in this batch</small>
+        </div>
+      </div>
+    </div>
+  )}
           </div>
 
           <div className={styles.popupFooterCdr}>

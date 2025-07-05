@@ -28,11 +28,15 @@ const Header = ({ title }) => {
   const [abouUsOpen, setAbouUsOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [username, setusername] = useState('');
+  const [role, setRole] = useState('');
+  const [firstname,setfirstName] = useState('');
+  const [lastname,setLastName] = useState('');
   const [showPopup, setShowPopup] = useState(false);
 
   const togglePopup = () => {
     setShowPopup(prev => !prev);
   };
+
   useEffect(() => {
     if (token) {
       try {
@@ -43,8 +47,11 @@ const Header = ({ title }) => {
           dispatch(setUsername(decodedToken.sub));
           setusername(decodedToken.sub)
         }
+          setRole(decodedToken.role);
+          setfirstName(decodedToken.first_name);
+          setLastName(decodedToken.last_name);
 
-        console.log("Token decoded successfully for user:", decodedToken.sub);
+        console.log("Token decoded successfully for user:", decodedToken);
       } catch (error) {
         console.error("Error decoding token:", error.message);
         // If token is invalid, logout
@@ -172,10 +179,15 @@ const Header = ({ title }) => {
             </div>
             <div style={{ marginTop: '5px', display: "flex", flexDirection: "column", alignItems: 'flex-start' }}>
               <p style={{ margin: 0, fontSize: "12px", color: "#FFFFFF" }}>
-                {username}
+              <span>
+  {(firstname || lastname)
+    ? `${firstname || ''}${firstname && lastname ? ' ' : ''}${lastname || ''}`
+    : 'Name not available'}
+</span>
+
               </p>
               <p style={{ margin: 0,paddingBottom:'5px', fontSize: "10px", color: "#C0C0C0" }}>
-                ACCOUNT HOLDER
+                {role}
               </p>
             </div>
 

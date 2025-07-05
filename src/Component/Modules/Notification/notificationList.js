@@ -47,8 +47,8 @@ const NotificationList = ({ isOpen, setIsOpen }) => {
             setNotifications(response.data);
 
         } catch (error) {
-            toast.error(error.response?.data?.details || "Error fetching Notifications")
-            console.error("❌ Error fetching Notifications:", error);
+            // toast.error(error.response?.data?.details || "Error fetching Notifications")
+            console.error(" Error fetching Notifications:", error);
             console.error("Error details:", error.response?.data);
         } finally {
             setLoading(false);

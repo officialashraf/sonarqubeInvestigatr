@@ -168,8 +168,7 @@ gap: -1rem;
 }
 
 .tableWrapper {
-  overflow-x: auto;
-  overflow-y: auto;
+  overflow: auto;
   max-height: 46vh;
   border-radius: var(--shape-borderRadius);
   scrollbar-color: #1e7df8 var(--color-colors-secondary);

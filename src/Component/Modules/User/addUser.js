@@ -38,6 +38,12 @@ const AddUser = ({ onClose }) => {
       errors.username = "Username is required";
     }
 
+     if (!formData.first_name.trim()) {
+      errors.first_name = "Firstname is required";
+    }
+      if (!formData.role.trim()) {
+      errors.role = "Role is required";
+    }
     if (!formData.email.trim()) {
       errors.email = "Email is required";
     } else if (!emailRegex.test(formData.email)) {
@@ -167,12 +173,13 @@ const AddUser = ({ onClose }) => {
             <input className="com" ref={inputRef} name="username" autoComplete="username" value={formData.username} onChange={handleChange} placeholder="Enter username" readOnly={isReadOnly}
               onFocus={handleFocus} requiblack />
             {error.username && <p style={{ color: "red", margin: '0px' }} >{error.username}</p>}
-            <label>First Name</label>
+            <label>First Name *</label>
             <input className="com" name="first_name" value={formData.first_name} onChange={handleChange} placeholder="Enter first name" />
+             {error.first_name && <p style={{ color: "red", margin: '0px' }} >{error.first_name}</p>}
             <label>Last Name</label>
             <input className="com" name="last_name" value={formData.last_name} onChange={handleChange} placeholder="Enter last name" />
             <div>
-              <label>Role</label>
+              <label>Role *</label>
               <Select
                 options={roles}
                 placeholder="Select a role"
@@ -183,6 +190,7 @@ const AddUser = ({ onClose }) => {
                 // classNamePrefix="select"
                 className="com"
               />
+              {error.role && <p style={{ color: "red", margin: '0px' }} >{error.role}</p>}
             </div>
             <label>Email ID *</label>
             <input className="com" type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Enter email id" requiblack />

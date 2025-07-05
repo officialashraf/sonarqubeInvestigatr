@@ -161,16 +161,18 @@ const CriteriaCaseTable = () => {
 
   return (
     <>
-      <div className="tabs">
+    <div  style={{backgroundColor:"#101D2B", borderRadius:'15px', padding:"15px",height:"73vh"}}>
+      <div className="tabs" >
         <div
           className={`tab active`} // "Cases" will always be active
         // onClick={() => setActiveTab('Cases')}
+        
         >
           Cases ({totalResults || "no results"})
         </div>
 
       </div>
-      <div className={styles.tableWrapper} style={{ maxHeight: '63vh', marginTop: '0px' }}>
+      <div className={styles.tableWrapper} >
 
         {loading ? (
           <div>
@@ -246,12 +248,13 @@ const CriteriaCaseTable = () => {
           </Table>
         )}
       </div>
-
+ 
       <div className={styles.paginationContainer}>
         <div >
           {renderPagination()}
         </div>
       </div>
+     </div>
     </>
   );
 };

@@ -347,74 +347,76 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
   }, []);
 
   const handleSaveFilter = async () => {
-    if (filterDetails?.id && !isEditable) {
-      toast.error("You don't have permission to edit this filter");
-      return;
-    }
-    const validationErrors = validateForm();
-    if (Object.keys(validationErrors).length > 0) {
-      setError(validationErrors);
-      return;
-    }
-    setIsSubmitting(true);
-    const postData = {
-      name: filterName,
-      description: description,
-      filter_criteria: sources.map((source) => ({
-        source: source.source,
-        platform: source.platform,
-        keywords: source.keywords,
-        urls: source.source === 'rss feed'
-          ? source.urls.filter(url => url.trim() !== "")
-          : undefined,
-        interval: source.intervalValue * conversionFactors[source.intervalUnit],
-      })),
-    };
-    console.log("postdata save filter", postData);
-    try {
-      const url = filterDetails?.id
-        ? `${window.runtimeConfig.REACT_APP_API_OSINT_MAN}/api/osint-man/v1/filter/${filterDetails.id}`
-        : `${window.runtimeConfig.REACT_APP_API_OSINT_MAN}/api/osint-man/v1/filter`;
-
-      const method = filterDetails?.id ? 'put' : 'post';
-
-      const response = await axios[method](url, postData, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-
-      window.dispatchEvent(new Event('databaseUpdated'));
-      console.log("responseFilter", response)
-
-      if (response.status === 200) {
-        if (filterDetails?.id) {
-          toast.success(`Filter updated successfully: ${response.data.data.name}`);
-        } else {
-          toast.success(`Filter created successfully: ${response.data.data.name}`);
-        }
-
-        const newFilterId = Number(response.data.data.id);
-        setFilterId((prevFilterIds) => [...prevFilterIds, newFilterId]);
-
-        // Only call onNewFilterCreated for new filters (not edits)
-        if (!filterDetails?.id) {
-          onNewFilterCreated(newFilterId);
-        }
-
-        // Reset form after successful save/update
-        resetForm();
-      } else {
-        toast.error('Unexpected response from server.');
-      }
-    } catch (error) {
-      console.error('Error posting data:', error);
-      toast.error('Error during filter creation: ' + (error.response?.data?.detail || error.message));
-    } finally {
-      setIsSubmitting(false);
-    }
+  if (filterDetails?.id && !isEditable) {
+    toast.error("You don't have permission to edit this filter");
+    return;
+  }
+  const validationErrors = validateForm();
+  if (Object.keys(validationErrors).length > 0) {
+    setError(validationErrors);
+    return;
+  }
+  setIsSubmitting(true);
+  const postData = {
+    name: filterName,
+    description: description,
+    filter_criteria: sources.map((source) => ({
+      source: source.source,
+      platform: source.platform,
+      keywords: source.keywords,
+      urls: source.source === 'rss feed'
+        ? source.urls.filter(url => url.trim() !== "")
+        : undefined,
+      interval: source.intervalValue * conversionFactors[source.intervalUnit],
+    })),
   };
+  console.log("postdata save filter", postData);
+  try {
+    const url = filterDetails?.id
+      ? `${window.runtimeConfig.REACT_APP_API_OSINT_MAN}/api/osint-man/v1/filter/${filterDetails.id}`
+      : `${window.runtimeConfig.REACT_APP_API_OSINT_MAN}/api/osint-man/v1/filter`;
+
+    const method = filterDetails?.id ? 'put' : 'post';
+
+    const response = await axios[method](url, postData, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    window.dispatchEvent(new Event('databaseUpdated'));
+    console.log("responseFilter", response)
+
+    if (response.status === 200) {
+      if (filterDetails?.id) {
+        toast.success(`Filter updated successfully: ${response.data.data.name}`);
+      } else {
+        toast.success(`Filter created successfully: ${response.data.data.name}`);
+      }
+
+      const newFilterId = Number(response.data.data.id);
+      setFilterId((prevFilterIds) => [...prevFilterIds, newFilterId]);
+
+      // REMOVED: Automatic selection of new filter
+      // Only call onNewFilterCreated for new filters (not edits) - but don't auto-select
+      if (!filterDetails?.id) {
+        // Pass the new filter ID but don't auto-select it
+        onNewFilterCreated(newFilterId, false); // Added second parameter to indicate not to auto-select
+      }
+
+      // Reset form after successful save/update
+      resetForm();
+    } else {
+      toast.error('Unexpected response from server.');
+    }
+  } catch (error) {
+    console.error('Error posting data:', error);
+    toast.error('Error during filter creation: ' + (error.response?.data?.detail || error.message));
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   console.log("filetraddnew", filterId)
 
@@ -625,7 +627,22 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
 
                   {source.source === 'rss feed' && (
                     <div className="col-md-6">
-                      <Form.Label>RSS URL</Form.Label>
+                       <InputField
+                        label={"RSS URL"}
+                        type="text"
+                        placeholder={"Enter RSS URL and press Enter"}
+                        value={source.urlInput}
+                        onChange={(e) => {
+                          const newSources = [...sources];
+                          newSources[sourceIndex].urlInput = e.target.value;
+                          setSources(newSources);
+
+                        }}
+                        onKeyDown={(e) => handleUrlKeyDown(sourceIndex, e)}
+                        disabled={filterDetails?.id && !isEditable}
+                        style={{ width: '96%' }}
+                      />
+                      {/* <Form.Label>RSS URL</Form.Label>
                       <Form.Control
                         type="url"
                         placeholder="Enter RSS URL and press Enter"
@@ -639,7 +656,7 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
                         onKeyDown={(e) => handleUrlKeyDown(sourceIndex, e)}
                         disabled={filterDetails?.id && !isEditable}
                         style={{ width: '96%' }}
-                      />
+                      /> */}
                       <div className="mt-2" style={{ display: "flex", flexWrap: "wrap", gap: "5px" }}>
                         {source.urls.filter((url) => url.trim() !== "").map((url, urlIndex) => (
                           <Badge
