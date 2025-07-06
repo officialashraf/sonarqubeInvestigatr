@@ -3,7 +3,8 @@
     justify-content: space-between;
     align-items: center;
     padding: 8px 12px;
-    background-color: white;
+    background-color: #101D2B !important; /* ✅ Use !important to override default styles */
+    color: #d2d2d2 !important; /* ✅ Use !important to
    
 }
 .nav-dropdown-item:hover {
