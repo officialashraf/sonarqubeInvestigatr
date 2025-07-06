@@ -246,10 +246,10 @@ const roleColumns = [
         data={data}
         columns={roleColumns}
          onRowAction={{
-    details: (row) => toggleDetailsPopup(row.id),
+    details: (row) => toggleDetailsPopup(row.role),
     delete: (row) => confirmDelete(row.id, row.name),
     edit: (row) => togglePopupC(row.role),
-  assign: (row) => togglePopupD(row.role)
+  assign: (row) => togglePopupD(row)
   }}
                   onAddClick={() => togglePopup()}
          idPrefix="ROLE"

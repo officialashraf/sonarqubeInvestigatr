@@ -9,6 +9,8 @@ import { CloseButton } from 'react-bootstrap';
 import CommonTextInput from '../../Common/MultiSelect/CommonTextInput';
 import SelectFieldOutlined from '../../Common/MultiSelect/SelectFieldOutlined';
 import AppButton from '../../Common/Buttton/button'
+import { customStyles } from '../Case/createCase'; // Adjust the import path as needed
+
 
 const AssignRole = ({ togglePopup, details }) => {
     const token = Cookies.get('accessToken');
@@ -96,67 +98,48 @@ const AssignRole = ({ togglePopup, details }) => {
         fetchRoles();
     }, [fetchEndpoints, fetchRoles]);
 
-    const assignRole = async () => {
-        if (!selectedRole) return toast.warning('Please select a role');
-
-        setLoading(true);
-
-        try {
-            const currentSelectedValues = selectedEndpoints.map(endpoint => endpoint.value);
-
-            // Find newly added permissions (permissions that weren't initially assigned)
-            const permissionsToAdd = currentSelectedValues.filter(
-                endpointValue => !initialEndpoints.includes(endpointValue)
-            );
-
-            // Find permissions to remove (permissions that were initially assigned but now unchecked)
-            const permissionsToRemove = initialEndpoints.filter(
-                endpointValue => !currentSelectedValues.includes(endpointValue)
-            );
-
-            console.log("Permissions to add:", permissionsToAdd);
-            console.log("Permissions to remove:", permissionsToRemove);
-
-            // Check if there are any changes
-            if (permissionsToAdd.length === 0 && permissionsToRemove.length === 0) {
-                toast.info("No changes to apply");
-                setLoading(false);
-                return;
-            }
-
-            // Prepare the request payload
-            const payload = {
-                role_id: selectedRole.value, // Assuming role value is the ID
-                permissions: permissionsToAdd.map(permission => String(permission).toLowerCase()),
-                permissions_to_remove: permissionsToRemove.map(permission => String(permission).toLowerCase())
-            };
-
-            console.warn("API Payload:", payload);
-
-            // Make API call with the new structure
-            await axios.post(
-                `${window.runtimeConfig.REACT_APP_API_USER_MAN}/api/user-man/v1/assign-role`,
-                payload,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        "Content-Type": "application/json"
-                    }
-                }
-            );
-            window.dispatchEvent(new Event("databaseUpdated"));
-            toast.success("Role permissions updated successfully");
-            togglePopup(false);
 
 
-        } catch (error) {
-            console.error("API Error:", error);
-            toast.error(error.response?.data?.detail || 'Failed to update role permissions');
-        } finally {
-            setLoading(false);
-        }
+const assignRole = async () => {
+  setLoading(true);
+
+  try {
+    const currentSelectedValues = selectedEndpoints.map(endpoint => endpoint.value);
+
+    const permissionsToAdd = currentSelectedValues.filter(
+      endpointValue => !initialEndpoints.includes(endpointValue)
+    );
+
+    const permissionsToRemove = initialEndpoints.filter(
+      endpointValue => !currentSelectedValues.includes(endpointValue)
+    );
+
+    if (permissionsToAdd.length === 0 && permissionsToRemove.length === 0) {
+      toast.info("No changes to apply");
+      setLoading(false);
+      return;
+    }
+
+    const payload = {
+      role_id: details.id,  // id nahi, role name hi bhej rahe ho text input me dikhate time
+      permissions: permissionsToAdd.map(permission => String(permission).toLowerCase()),
+      permissions_to_remove: permissionsToRemove.map(permission => String(permission).toLowerCase())
     };
 
+    console.warn("API Payload:", payload);
+
+    await axios.post(
+      `${window.runtimeConfig.REACT_APP_API_USER_MAN}/api/user-man/v1/assign-role`,
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
+        }
+      }
+    );
+
+<<<<<<< HEAD
     const customStyles = {
         control: base => ({
             ...base,
@@ -185,7 +168,19 @@ const AssignRole = ({ togglePopup, details }) => {
             padding: '8px'
         })
     };
+=======
+    window.dispatchEvent(new Event("databaseUpdated"));
+    toast.success("Role permissions updated successfully");
+    togglePopup(false);
+>>>>>>> 077a487217d5ec12fc1082327905a1ee3a4e5937
 
+  } catch (error) {
+    console.error("API Error:", error);
+    toast.error(error.response?.data?.detail || 'Failed to update role permissions');
+  } finally {
+    setLoading(false);
+  }
+};
     // Custom checkbox option
     const CheckboxOption = props => {
         const { data, isSelected, innerRef, innerProps } = props;
@@ -234,6 +229,7 @@ const AssignRole = ({ togglePopup, details }) => {
                         </div>
 
                         <div className="form-group" style={{ marginBottom: '15px'}}>
+<<<<<<< HEAD
                             <SelectFieldOutlined
                                 label="Select Permission"
                                 options={[{ label: 'Select All', value: '_select_all_' }, ...endpoints]}
@@ -264,8 +260,37 @@ const AssignRole = ({ togglePopup, details }) => {
                                 components={{ Option: CheckboxOption, MultiValue: () => null }}
                                 onMenuOpen={() => setIsDropdownOpen(true)} //
                                 smallNote="Check/Uncheck permissions to add or remove them from the role"
+=======
+                            <label>Select Permissions</label>
+                           <Select
+  options={[{ label: 'Select All', value: '_select_all_' }, ...endpoints]}
+  styles={customStyles}
+  placeholder="Select permissions"
+  isLoading={endpointsLoading}
+  value={selectedEndpoints}
+  onChange={(selected) => {
+    if (!selected) return setSelectedEndpoints([]);
 
-                            />
+    const isSelectAllClicked = selected.find(opt => opt.value === '_select_all_');
+>>>>>>> 077a487217d5ec12fc1082327905a1ee3a4e5937
+
+    if (isSelectAllClicked) {
+      const isAllChecked = selectedEndpoints.length === endpoints.length;
+      if (isAllChecked) {
+        setSelectedEndpoints([]);
+      } else {
+        setSelectedEndpoints(endpoints);
+      }
+    } else {
+      setSelectedEndpoints(selected.filter(opt => opt.value !== '_select_all_'));
+    }
+  }}
+  isMulti
+  closeMenuOnSelect={false}
+  hideSelectedOptions={false}
+  components={{ Option: CheckboxOption, MultiValue: () => null }}
+  onMenuOpen={() => setIsDropdownOpen(true)}
+/>
 
                           
 

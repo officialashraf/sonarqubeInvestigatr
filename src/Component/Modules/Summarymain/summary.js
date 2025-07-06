@@ -178,7 +178,7 @@ const iconMap = {
             </Box>
 
             {/* Table */}
-            <Box className="box">
+            <Box className="box" style={{ overflow: 'auto' , paddingTop:'40px'}}>
               <div className={styles.card}>
       {tableData.map((item, index) => (
         <div className={styles.row} key={index}>
