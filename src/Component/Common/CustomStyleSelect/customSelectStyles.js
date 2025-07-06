@@ -8,6 +8,7 @@ const customSelectStyles = {
         borderRadius: '15px',
         boxShadow: 'none',
         width: '100%',
+       
     }),
 
     multiValue: (provided) => ({
@@ -47,6 +48,7 @@ const customSelectStyles = {
         backgroundColor: 'var(--color-colors-secondary)',
         color: 'var(--color-colors-neutralText)',
         borderRadius: '10px',
+       
     }),
 
     option: (provided, state) => ({
@@ -73,8 +75,12 @@ const customSelectStyles = {
         flexWrap: 'wrap',
         maxHeight: '36px',
         overflowY: 'auto',
-        overflowX: 'hidden',
+        // overflowX: 'hidden',
         scrollbarWidth: 'thin',
+    }),
+    menuPortal: (base) => ({
+        ...base,
+        zIndex: 9999,
     }),
 };
 

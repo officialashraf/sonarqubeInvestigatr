@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import './date.css';
+import AppButton from '../../Common/Buttton/button';
 
 const DatePicker = ({ onSubmit, initialDates, onClose }) => {
   const [currentMonth, setCurrentMonth] = useState(new Date(2025, 1)); // February 2025
@@ -290,9 +291,9 @@ const DatePicker = ({ onSubmit, initialDates, onClose }) => {
                     );
                   })}
                 </div>
-                <div className="button-group">
-                  <button className="btn-clear" onClick={handleClear}>Clear</button>
-                  <button className="btn-done" onClick={handleSubmit}>Done</button>
+                <div className="button-group" style={{ gap: '10px'}}>
+                  <AppButton className="btn-clear" onClick={handleClear}>Clear</AppButton>
+                  <AppButton className="btn-done" onClick={handleSubmit}>Done</AppButton>
                 </div>
               </div>
             </div>

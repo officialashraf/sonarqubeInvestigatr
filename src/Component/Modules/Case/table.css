@@ -108,22 +108,27 @@ td {
 
 .dropdown-menu {
   --bs-dropdown-min-width: 0rem !important;
-  --bs-dropdown-link-active-bg: black;
+  --bs-dropdown-link-active-bg: #101D2B;
   padding: 0px;
+}
+.dropdown-item{
+  background-color: #101D2B;
+  color: #d2d2d2;
+  
 }
 
 .dropdown-item:hover {
-  background-color: black;
+  background-color: #101D2B;
   border-color: white;
-  color: gray;
+  color: white;
 }
 .custom-dropdown1 .dropdown-toggle::after {
   display: none;
 }
 .custom-dropdown-toggle {
-  background: none;
+  background: #101D2B;
   border: none;
-  color: black;
+  color: #d2d2d2;
   /* Only black color for the dots */
   padding: 0;
   font-size: 1.5rem;
@@ -192,17 +197,13 @@ td {
   cursor: pointer;
   font-size: 14px;
   margin-left: 5px;
-  background-color: #ccc;
-  color: #000;
+  background-color: #0073cf;
+  color: white;
   width: 30%;
   height: 10%;
 }
 
-.custom-confirm-button:hover,
-.custom-confirm-button:hover {
-  background-color: black;
-  color: white;
-}
+
 .search-bar1 .form-control:focus {
   border-color: transparent; /* Focus border color ko remove karne ke liye */
   box-shadow: none; /* Focus box-shadow ko remove karne ke liye */

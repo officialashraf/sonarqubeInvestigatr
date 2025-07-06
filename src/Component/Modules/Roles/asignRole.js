@@ -6,10 +6,12 @@ import Select from 'react-select';
 import '../User/addUser.css';
 import { CloseButton } from 'react-bootstrap';
 //import { customStyles } from '../Case/createCase'; // Adjust the import path as needed
+import CommonTextInput from '../../Common/MultiSelect/CommonTextInput';
+import SelectFieldOutlined from '../../Common/MultiSelect/SelectFieldOutlined';
+import AppButton from '../../Common/Buttton/button'
 
 const AssignRole = ({ togglePopup, details }) => {
     const token = Cookies.get('accessToken');
-
     const [endpoints, setEndpoints] = useState([]);
     const [roles, setRoles] = useState([]);
     const [selectedRole, setSelectedRole] = useState(null);
@@ -158,8 +160,8 @@ const AssignRole = ({ togglePopup, details }) => {
     const customStyles = {
         control: base => ({
             ...base,
-            backgroundColor: 'white',
-            color: 'black',
+            backgroundColor: '#101d2b',
+            color: 'white',
             boxShadow: 'none',
             outline: 'none'
         }),
@@ -170,8 +172,8 @@ const AssignRole = ({ togglePopup, details }) => {
         }),
         menu: base => ({
             ...base,
-            backgroundColor: 'white',
-            color: 'black',
+            backgroundColor: '#101d2b',
+            color: 'white',
             maxHeight: 'unset'
         }),
         option: (base, state) => ({
@@ -222,19 +224,18 @@ const AssignRole = ({ togglePopup, details }) => {
                     </span>
                     <form onSubmit={(e) => e.preventDefault()}>
                         <div className="form-group" style={{ marginBottom: '15px' }}>
-                            <label>Role</label>
-                            <input
-                                className="com"
-                                style={{ backgroundColor: 'lightgray' }}
-                                type='text'
+                            {/* <label>Role</label> */}
+                            <CommonTextInput
+                                label="Role"
+                                // style={{ backgroundColor: 'lightgray' }}
                                 value={details.role}
                                 disabled
                             />
                         </div>
 
                         <div className="form-group" style={{ marginBottom: '15px'}}>
-                            <label>Select Permissions</label>
-                            <Select
+                            <SelectFieldOutlined
+                                label="Select Permission"
                                 options={[{ label: 'Select All', value: '_select_all_' }, ...endpoints]}
                                 // options={endpoints}
                                 styles={customStyles}
@@ -262,12 +263,11 @@ const AssignRole = ({ togglePopup, details }) => {
                                 hideSelectedOptions={false}
                                 components={{ Option: CheckboxOption, MultiValue: () => null }}
                                 onMenuOpen={() => setIsDropdownOpen(true)} //
+                                smallNote="Check/Uncheck permissions to add or remove them from the role"
 
                             />
 
-                            <small className="text-muted">
-                                Check/Uncheck permissions to add or remove them from the role
-                            </small>
+                          
 
                         </div>
 
@@ -277,24 +277,25 @@ const AssignRole = ({ togglePopup, details }) => {
                             width: "100%",
                             display: "flex",
                             justifyContent: "flex-end",
-                            right: '10px'
+                            right: '10px',
+                            gap: '10px'
                         }}>
-                            <button
+                            <AppButton
                                 type="submit"
                                 className="create-btn"
                                 onClick={assignRole}
                                 disabled={loading}
                             >
                                 {loading ? 'Assigning...' : 'Assign'}
-                            </button>
-                            <button
+                            </AppButton>
+                            <AppButton
                                 type="button"
                                 className="cancel-btn"
                                 onClick={() => togglePopup(false)}
                                 disabled={loading}
                             >
                                 Cancel
-                            </button>
+                            </AppButton>
                         </div>
                     </form>
                 </div>

@@ -4,6 +4,13 @@ import Cookies from "js-cookie";
 import { toast } from 'react-toastify';
 import Select from 'react-select';
 import { customStyles } from './createCase';
+import CommonTextInput from "../../Common/MultiSelect/CommonTextInput";
+import CommonTextArea from "../../Common/MultiSelect/CommonText";
+import CommonMultiSelect from "../../Common/MultiSelect/CommonMultiSelect";
+import CommonSingleSelect from "../../Common/MultiSelect/CommonSingleSelect";
+import customSelectStyles from '../../Common/CustomStyleSelect/customSelectStyles';
+import AppButton from "../../Common/Buttton/button";
+
 
 const EditCase = ({ togglePopup, item }) => {
   const [formData, setFormData] = useState({
@@ -214,26 +221,29 @@ const EditCase = ({ togglePopup, item }) => {
             e.preventDefault();
             handleEditCase();
           }}>
-            <label>Title *</label>
-            <input className="com" name="title" value={formData.title} onChange={handleInputChange} placeholder="Title" />
+            {/* <label>Title *</label> */}
+            <CommonTextInput label="Title *" name="title" value={formData.title} onChange={handleInputChange} placeholder="Title" />
             {error.title && <p style={{ color: "red" }}>{error.title}</p>}
 
-            <label>Description *</label>
-            <input className="com" name="description" value={formData.description} onChange={handleInputChange} placeholder="Description" />
+            {/* <label>Description *</label> */}
+            <CommonTextArea label="Description *" name="description" value={formData.description} onChange={handleInputChange} placeholder="Description" />
             {error.description && <p style={{ color: "red" }}>{error.description}</p>}
 
-            <label>Assignee</label>
-            <Select
+            {/* <label>Assignee</label> */}
+            <CommonSingleSelect
+            label="Assignee"
               options={options}
               value={options.find(opt => opt.value === formData.assignee) || null}
               onChange={handleAssigneeChange}
-              styles={customStyles}
-              className="com"
+              customStyles={customSelectStyles}
+              
               placeholder="Select Assignee"
             />
 
-            <label>Watchers</label>
-            <Select
+            {/* <label>Watchers</label> */}
+            <CommonMultiSelect
+            label="Watchers"
+
               options={options}
               isMulti
               value={formData.watchers.map(wId => {
@@ -241,29 +251,30 @@ const EditCase = ({ togglePopup, item }) => {
                 return match || { value: wId, label: `User ${wId}` };
               })}
               onChange={handleWatchersChange}
-              styles={customStyles}
-              className="com"
+              customStyles={customSelectStyles}
+              
               placeholder="Select Watchers"
             />
 
-            <label>Status</label>
-            <Select
+            {/* <label>Status</label> */}
+            <CommonSingleSelect
+              label="Status"
               options={statusOptions}
               value={statusOptions.find(opt => opt.value === formData.status) || null}
               onChange={handleStatusChange}
-              styles={customStyles}
+              customStyles={customSelectStyles}
               className="com"
               placeholder="Select Status"
             />
 
-            <label>Comment</label>
-            <input className="com" name="comment" value={formData.comment} onChange={handleInputChange} placeholder="Comment" />
+            {/* <label>Comment</label> */}
+            <CommonTextInput  name="comment" value={formData.comment} onChange={handleInputChange} placeholder="Comment" />
 
             <div className="button-container">
-              <button type="submit" className="create-btn" disabled={isBtnDisabled || isSubmitting}>
+              <AppButton type="submit" className="create-btn" disabled={isBtnDisabled || isSubmitting}>
                 {isSubmitting ? 'Editing...' : 'Edit'}
-              </button>
-              <button type="button" className="cancel-btn" onClick={togglePopup}>Cancel</button>
+              </AppButton>
+              <AppButton type="button" className="cancel-btn" onClick={togglePopup}>Cancel</AppButton>
             </div>
           </form>
         </div>

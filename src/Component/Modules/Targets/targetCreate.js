@@ -5,8 +5,16 @@ import Cookies from "js-cookie";
 import { toast } from 'react-toastify';
 import Select from 'react-select';
 import "./subtarget.css";
-import { customStyles } from "../Case/createCase";
+// import { customStyles } from "../Case/createCase";
 import { useAutoFocusWithManualAutofill } from "../../../utils/autoFocus";
+import CommonSingleSelect from "../../Common/MultiSelect/CommonSingleSelect";
+import customSelectStyles from '../../Common/CustomStyleSelect/customSelectStyles';
+import CommonChipsInput from "../../Common/MultiSelect/CommonChipsInput";
+import CommonTextArea from "../../Common/MultiSelect/CommonText";
+import CommonTextInput from "../../Common/MultiSelect/CommonTextInput";
+import AppButton from "../../Common/Buttton/button";
+
+
 
 const TargetCreate = ({ togglePopup, existingTargets = [] }) => {
   const token = Cookies.get("accessToken");
@@ -250,10 +258,11 @@ const TargetCreate = ({ togglePopup, existingTargets = [] }) => {
           >
 
             <div>
-              <label htmlFor="type">Type *</label>
-              <Select
+              {/* <label htmlFor="type">Type *</label> */}
+              <CommonSingleSelect
+                label="Type * "
                 options={targetType}
-                styles={customStyles}
+               customStyles={customSelectStyles}
                 placeholder="Select type"
                 value={targetType.find(option => option.value === formData.type)}
                 onChange={(selectedOption) =>
@@ -262,13 +271,13 @@ const TargetCreate = ({ togglePopup, existingTargets = [] }) => {
                     type: selectedOption.value
                   }))
                 }
-                className="basic-single-select"
-                classNamePrefix="select"
+                // className="basic-single-select"
+                // classNamePrefix="select"
               />
               {error.type && <p style={{ color: "red", margin: '0px' }} >{error.type}</p>}
             </div>
 
-            <label htmlFor="name">Target *</label>
+            {/* <label htmlFor="name">Target *</label>
             <input
               className="com"
               type="text"
@@ -280,9 +289,19 @@ const TargetCreate = ({ togglePopup, existingTargets = [] }) => {
               readOnly={isReadOnly}
               onFocus={handleFocus}
               ref={inputRef}
+            /> */}
+            <CommonTextInput
+              label="Target *"
+              name="name"
+              value={formData.name}
+              onChange={handleInputChange}
+              placeholder="Enter target"
+              readOnly={isReadOnly}
+              onFocus={handleFocus}
+              inputRef={inputRef}
             />
             {error.name && <p style={{ color: "red", margin: '0px' }} >{error.name}</p>}
-            <label htmlFor="description">Description *</label>
+            {/* <label htmlFor="description">Description *</label>
             <textarea
               className="com"
               id="description"
@@ -290,9 +309,16 @@ const TargetCreate = ({ togglePopup, existingTargets = [] }) => {
               value={formData.description}
               onChange={handleInputChange}
               placeholder="Enter description"
-            ></textarea>
+            ></textarea> */}
+            <CommonTextArea
+              label="Description *"
+              name="description"
+              value={formData.description}
+              onChange={handleInputChange}
+              placeholder="Enter description"
+            />
             {error.description && <p style={{ color: "red", margin: '0px' }} >{error.description}</p>}
-            <label htmlFor="synonyms">Alternative Keywords/Synonym (up to 5 keywords) </label>
+            {/* <label htmlFor="synonyms">Alternative Keywords/Synonym (up to 5 keywords) </label>
             <div className="synonym-input-container">
               <input
                 className="com"
@@ -319,14 +345,39 @@ const TargetCreate = ({ togglePopup, existingTargets = [] }) => {
                 ))}
               </div>
               {error.synonyms && <p style={{ color: "red", margin: '0px' }} >{error.synonyms}</p>}
+            </div> */}
+            <div>
+            <CommonChipsInput
+              label="Alternative Keywords/Synonym (up to 5 keywords)"
+              value={synonymInput}
+              onChange={handleSynonymInputChange}
+              onKeyDown={handleSynonymKeyDown}
+                placeholder="Type in keywords/synonym and press Enter to add..."
+            />
+              <div className="synonym-chips">
+                {formData.synonyms.map((synonym, index) => (
+                  <div key={index} className="synonym-chip">
+                    {synonym}
+                    <button
+                      type="button"
+                      className="synonym-remove"
+                      onClick={() => removeSynonym(index)}
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+              </div>
+              {error.synonyms && <p style={{ color: "red", margin: '0px' }} >{error.synonyms}</p>}
             </div>
 
             <div>
-              <label htmlFor="threat_weightage">Threat Score</label>
-              <Select
+              {/* <label htmlFor="threat_weightage">Threat Score</label> */}
+              <CommonSingleSelect
+                label="Threat Score"
                 options={threatScoreOptions}
-                styles={customStyles}
-                className="com"
+                customStyles={customSelectStyles}
+                
                 placeholder="Select threat score"
                 value={threatScoreOptions.find((option) => option.value === formData.threat_weightage) || null}
                 onChange={handleThreatScoreChange}
@@ -352,7 +403,7 @@ const TargetCreate = ({ togglePopup, existingTargets = [] }) => {
                             }))
                           }
 
-                          styles={customStyles}
+                          // styles={customStyles}
                           placeholder="Select targets"
                           value={
                             formData.target_id.map(id => {
@@ -378,12 +429,12 @@ const TargetCreate = ({ togglePopup, existingTargets = [] }) => {
             )}
 
             <div className="button-container">
-              <button type="submit" className="create-btn" disabled={isSubmitting}>
+              <AppButton type="submit" disabled={isSubmitting}>
                 {isSubmitting ? 'Creating...' : 'Create'}
-              </button>
-              <button type="button" className="cancel-btn" onClick={togglePopup}>
+              </AppButton>
+              <AppButton type="button"  onClick={togglePopup}>
                 Cancel
-              </button>
+              </AppButton>
             </div>
           </form>
         </div>

@@ -11,6 +11,9 @@ import '../FilterCriteria/createCriteria.css';
 import { customStyles } from '../Case/createCase';
 import { setKeywords, setPage, setSearchResults } from '../../../Redux/Action/criteriaAction';
 import Confirm from './confirmCriteria';
+import CommonMultiSelect from '../../Common/MultiSelect/CommonMultiSelect';
+import customSelectStyles from '../../Common/CustomStyleSelect/customSelectStyles';
+import CommonDateInput from '../../Common/DateField/DateField'
 
 const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPopupVisible, }) => {
 
@@ -219,9 +222,9 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
                     <div className="popup-container" style={{ width: '40%' }}>
                         <div className="popup-content" style={{ marginTop: '4rem' }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <h5 style={{ margin: 0 }}>Filter Criteria</h5>
+                                <h5 style={{ margin: 0, color: 'white'}}>Filter Criteria</h5>
                                 <span
-                                    style={{ cursor: 'pointer', fontSize: '20px' }}
+                                    style={{ cursor: 'pointer', fontSize: '20px', color: 'white' }}
                                     onClick={() => setIsPopupVisible(false)}
                                 >
                                     &times;
@@ -234,11 +237,12 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
 
                                 {/* Case Selection */}
                                 <div >
-                                    <label>Case</label>
-                                    <Select
+                                    
+                                    <CommonMultiSelect
+                                        label="Cases"
                                         isMulti
                                         options={caseOptions}
-                                        styles={customStyles}
+                                        customStyles={customSelectStyles}
                                         className="com"
                                         value={formData.caseIds}
                                         onChange={(selected) => setFormData(prev => ({ ...prev, caseIds: selected }))}
@@ -248,11 +252,12 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
 
                                 {/* Platform Selection */}
                                 <div >
-                                    <label>Platform</label>
-                                    <Select
+                                    {/* <label>Platform</label> */}
+                                    <CommonMultiSelect
+                                        label="Platform"
                                         isMulti
                                         options={fileTypeOptions}
-                                        styles={customStyles}
+                                        customStyles={customSelectStyles}
                                         className="com"
                                         value={formData.platform}
                                         onChange={(selected) => setFormData(prev => ({ ...prev, platform: selected }))}
@@ -262,30 +267,14 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
 
                                 {/* Date Range */}
                                 <div >
-                                    <label>Date Range</label>
-                                    <TextField
-                                        fullWidth
-                                        className="com "
-                                        InputProps={{
-                                            endAdornment: (
-                                                <InputAdornment position="end">
-                                                    <CalendarTodayIcon
-                                                        style={{ cursor: 'pointer' }}
-                                                        onClick={toggleDatePickerPopup}
-                                                    />
-                                                </InputAdornment>
-                                            ),
-                                            style: { height: '38px', padding: '0 8px', fontSize: '12px' },
-                                        }}
+                                    {/* <label>Date Range</label> */}
+                                    <CommonDateInput
+                                    label="Date Range"
+
                                         placeholder="Select date range"
                                         value={formatDateRange()}
-                                        sx={{
-                                            '& .MuiOutlinedInput-root': {
-                                                '& fieldset': { border: 'none' },
-                                                '&:hover fieldset': { border: 'none' },
-                                                '&.Mui-focused fieldset': { border: 'none' },
-                                            }
-                                        }}
+                                        onClickIcon={toggleDatePickerPopup}
+                                        
                                     />
                                 </div>
 

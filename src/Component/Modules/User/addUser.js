@@ -7,6 +7,11 @@ import { toast } from 'react-toastify';
 import Select from "react-select";
 import { customStyles } from "../Case/createCase";
 import { useAutoFocusWithManualAutofill } from "../../../utils/autoFocus";
+import CommonTextInput from "../../Common/MultiSelect/CommonTextInput";
+import CommonSingleSelect from "../../Common/MultiSelect/CommonSingleSelect";
+import customSelectStyles from '../../Common/CustomStyleSelect/customSelectStyles';
+import AppButton from "../../Common/Buttton/button";
+
 
 
 
@@ -169,42 +174,43 @@ const AddUser = ({ onClose }) => {
           <h5>Add User</h5>
           <form onSubmit={handleCreateUser}>
 
-            <label>Username *</label>
-            <input className="com" ref={inputRef} name="username" autoComplete="username" value={formData.username} onChange={handleChange} placeholder="Enter username" readOnly={isReadOnly}
+            {/* <label>Username *</label> */}
+            <CommonTextInput  label='Username *' ref={inputRef} name="username" autoComplete="username" value={formData.username} onChange={handleChange} placeholder="Enter username" readOnly={isReadOnly}
               onFocus={handleFocus} requiblack />
             {error.username && <p style={{ color: "red", margin: '0px' }} >{error.username}</p>}
-            <label>First Name *</label>
-            <input className="com" name="first_name" value={formData.first_name} onChange={handleChange} placeholder="Enter first name" />
+            {/* <label>First Name *</label> */}
+            <CommonTextInput label='First Name *'  name="first_name" value={formData.first_name} onChange={handleChange} placeholder="Enter first name" />
              {error.first_name && <p style={{ color: "red", margin: '0px' }} >{error.first_name}</p>}
-            <label>Last Name</label>
-            <input className="com" name="last_name" value={formData.last_name} onChange={handleChange} placeholder="Enter last name" />
+            {/* <label>Last Name</label> */}
+            <CommonTextInput label='Last Name' name="last_name" value={formData.last_name} onChange={handleChange} placeholder="Enter last name" />
             <div>
-              <label>Role *</label>
-              <Select
+              {/* <label>Role *</label> */}
+              <CommonSingleSelect
+                label="Role *"
                 options={roles}
                 placeholder="Select a role"
                 isLoading={loading}
                 value={roles.find(role => role.value === formData.role)}
                 onChange={(selectedOption) => setFormData({ ...formData, role: selectedOption.value })}
-                styles={customStyles}
+                customStyles={customSelectStyles}
                 // classNamePrefix="select"
-                className="com"
+                
               />
               {error.role && <p style={{ color: "red", margin: '0px' }} >{error.role}</p>}
             </div>
-            <label>Email ID *</label>
-            <input className="com" type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Enter email id" requiblack />
+            {/* <label>Email ID *</label> */}
+            <CommonTextInput label='Email ID *' type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Enter email id" requiblack />
             {error.email && <p style={{ color: "red", margin: '0px' }}>{error.email}</p>}
-            <label>Contact Number</label>
-            <input className="com" name="contact_no" value={formData.contact_no} onChange={handleChange} placeholder="Enter contact number" />
-            <label>Password *</label>
-            <input className="com" type="password" name="password" value={formData.password} onChange={handleChange} placeholder="Enter password" requiblack />
+            {/* <label>Contact Number</label> */}
+            <CommonTextInput label='Contact Number' className="com" name="contact_no" value={formData.contact_no} onChange={handleChange} placeholder="Enter contact number" />
+            {/* <label>Password *</label> */}
+            <CommonTextInput label='Password*' type="password" name="password" value={formData.password} onChange={handleChange} placeholder="Enter password" requiblack />
             {error.password && <p style={{ color: "red", margin: '0px' }}>{error.password}</p>}
             <div className="button-container">
-              <button type="submit" className="create-btn" disabled={isSubmitting}>
+              <AppButton type="submit"  disabled={isSubmitting}>
                 {isSubmitting ? 'Creating...' : 'Create'}
-              </button>
-              <button type="button" onClick={onClose} className="cancel-btn">Cancel</button>
+              </AppButton>
+              <AppButton type="button" onClick={onClose} >Cancel</AppButton>
             </div>
           </form>
         </div>

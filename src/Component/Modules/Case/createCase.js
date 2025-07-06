@@ -300,6 +300,12 @@ import Cookies from "js-cookie";
 import { toast } from 'react-toastify';
 import Select from 'react-select';
 import { useAutoFocusWithManualAutofill } from "../../../utils/autoFocus";
+import CommonTextInput from "../../Common/MultiSelect/CommonTextInput";
+import CommonTextArea from "../../Common/MultiSelect/CommonText";
+import CommonMultiSelect from "../../Common/MultiSelect/CommonMultiSelect";
+import CommonSingleSelect from "../../Common/MultiSelect/CommonSingleSelect";
+import customSelectStyles from '../../Common/CustomStyleSelect/customSelectStyles';
+import AppButton from "../../Common/Buttton/button";
 
 export const customStyles = {
   control: (provided) => ({
@@ -477,9 +483,9 @@ const CreateCase = ({ togglePopup }) => {
             e.preventDefault();
             handleCreateCase();
           }}>
-            <label htmlFor="title">Title *</label>
-            <input
-              className="com"
+            {/* <label htmlFor="title">Title *</label> */}
+            <CommonTextInput
+              label="Title *"
               type="text"
               id="title"
               name="title"
@@ -492,9 +498,10 @@ const CreateCase = ({ togglePopup }) => {
             />
             {error.title && <p style={{ color: "red", margin: '0px' }}>{error.title}</p>}
 
-            <label htmlFor="description">Description *</label>
-            <textarea
-              className="com"
+            {/* <label htmlFor="description">Description *</label> */}
+            <CommonTextArea
+              // className="com"
+              label="Description *"
               id="description"
               name="description"
               value={formData.description}
@@ -504,10 +511,11 @@ const CreateCase = ({ togglePopup }) => {
             {error.description && <p style={{ color: "red", margin: '0px' }}>{error.description}</p>}
 
             <div>
-              <label htmlFor="assignee">Assignee</label>
-              <Select
+              {/* <label htmlFor="assignee">Assignee</label> */}
+              <CommonSingleSelect
+              label='Assignee'
                 options={options}
-                styles={customStyles}
+                customStyles={customSelectStyles}
                 className="com"
                 placeholder="Select assignee"
                 value={options && options.find(option => option.value === formData.assignee) || null}
@@ -516,12 +524,13 @@ const CreateCase = ({ togglePopup }) => {
             </div>
 
             <div className="watcher-container">
-              <label htmlFor="watchers">Watchers</label>
-              <Select
+              {/* <label htmlFor="watchers">Watchers</label> */}
+              <CommonMultiSelect
+              label='Watchers'
                 options={options}
                 isMulti
-                styles={customStyles}
-                className="com"
+                
+                customStyles={customSelectStyles}
                 name="watchers"
                 placeholder="Select watchers"
                 value={options && options.filter(option => formData.watchers.includes(option.value))}
@@ -530,12 +539,12 @@ const CreateCase = ({ togglePopup }) => {
             </div>
 
             <div className="button-container">
-              <button type="submit" className="create-btn" disabled={isSubmitting}>
+              <AppButton type="submit" className="create-btn" disabled={isSubmitting}>
                 {isSubmitting ? 'Creating...' : 'Create'}
-              </button>
-              <button type="button" className="cancel-btn" onClick={togglePopup}>
+              </AppButton>
+              <AppButton type="button" className="cancel-btn" onClick={togglePopup}>
                 Cancel
-              </button>
+              </AppButton>
             </div>
           </form>
         </div>

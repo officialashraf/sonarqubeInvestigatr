@@ -3,6 +3,8 @@ import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import { Eye, EyeSlash } from 'react-bootstrap-icons';
+import CommonTextInput from '../../Common/MultiSelect/CommonTextInput';
+import AppButton from '../../Common/Buttton/button';
 
 const ResetPassword = ({ onClose, item }) => {
     const token = Cookies.get("accessToken");
@@ -58,10 +60,11 @@ const ResetPassword = ({ onClose, item }) => {
                 <div className="popup-content">
                     <form onSubmit={handleReset}>
                         <h5>{item.username}</h5>
-                        <label htmlFor="title">New Password *</label>
+                        {/* <label htmlFor="title">New Password *</label> */}
                         <div style={{ position: "relative", display: "inline-block", width: "100%" }}>
-                            <input
-                                className="com"
+                            <CommonTextInput
+                                label="New Password *"
+                                
                                 type={showPassword ? "text" : "password"}
                                 id="title"
                                 name="title"
@@ -95,10 +98,10 @@ const ResetPassword = ({ onClose, item }) => {
                         )}
 
                         <div className="button-container">
-                            <button type="submit" className="create-btn">Reset</button>
-                            <button type="button" className="cancel-btn" onClick={onClose}>
+                            <AppButton type="submit" className="create-btn">Reset</AppButton>
+                            <AppButton type="button" className="cancel-btn" onClick={onClose}>
                                 Cancel
-                            </button>
+                            </AppButton>
                         </div>
                     </form>
                 </div>
