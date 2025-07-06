@@ -100,87 +100,85 @@ const AssignRole = ({ togglePopup, details }) => {
 
 
 
-const assignRole = async () => {
-  setLoading(true);
+    const assignRole = async () => {
+        setLoading(true);
 
-  try {
-    const currentSelectedValues = selectedEndpoints.map(endpoint => endpoint.value);
+        try {
+            const currentSelectedValues = selectedEndpoints.map(endpoint => endpoint.value);
 
-    const permissionsToAdd = currentSelectedValues.filter(
-      endpointValue => !initialEndpoints.includes(endpointValue)
-    );
+            const permissionsToAdd = currentSelectedValues.filter(
+                endpointValue => !initialEndpoints.includes(endpointValue)
+            );
 
-    const permissionsToRemove = initialEndpoints.filter(
-      endpointValue => !currentSelectedValues.includes(endpointValue)
-    );
+            const permissionsToRemove = initialEndpoints.filter(
+                endpointValue => !currentSelectedValues.includes(endpointValue)
+            );
 
-    if (permissionsToAdd.length === 0 && permissionsToRemove.length === 0) {
-      toast.info("No changes to apply");
-      setLoading(false);
-      return;
-    }
+            if (permissionsToAdd.length === 0 && permissionsToRemove.length === 0) {
+                toast.info("No changes to apply");
+                setLoading(false);
+                return;
+            }
 
-    const payload = {
-      role_id: details.id,  // id nahi, role name hi bhej rahe ho text input me dikhate time
-      permissions: permissionsToAdd.map(permission => String(permission).toLowerCase()),
-      permissions_to_remove: permissionsToRemove.map(permission => String(permission).toLowerCase())
-    };
+            const payload = {
+                role_id: details.id,  // id nahi, role name hi bhej rahe ho text input me dikhate time
+                permissions: permissionsToAdd.map(permission => String(permission).toLowerCase()),
+                permissions_to_remove: permissionsToRemove.map(permission => String(permission).toLowerCase())
+            };
 
-    console.warn("API Payload:", payload);
+            console.warn("API Payload:", payload);
 
-    await axios.post(
-      `${window.runtimeConfig.REACT_APP_API_USER_MAN}/api/user-man/v1/assign-role`,
-      payload,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json"
+            await axios.post(
+                `${window.runtimeConfig.REACT_APP_API_USER_MAN}/api/user-man/v1/assign-role`,
+                payload,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    }
+                }
+            );
+
+            const customStyles = {
+                control: base => ({
+                    ...base,
+                    backgroundColor: '#101d2b',
+                    color: 'white',
+                    boxShadow: 'none',
+                    outline: 'none'
+                }),
+                menuList: (provided) => ({
+                    ...provided,
+                    maxHeight: '150px',
+                    overflowY: 'auto',
+                }),
+                menu: base => ({
+                    ...base,
+                    backgroundColor: '#101d2b',
+                    color: 'white',
+                    maxHeight: 'unset'
+                }),
+                option: (base, state) => ({
+                    ...base,
+                    backgroundColor: state.isFocused ? '#f0f0f0' : 'white',
+                    color: 'black',
+                    display: 'flex',
+                    alignItems: 'center',
+                    padding: '8px'
+                })
+            };
+
+            window.dispatchEvent(new Event("databaseUpdated"));
+            toast.success("Role permissions updated successfully");
+            togglePopup(false);
+
+        } catch (error) {
+            console.error("API Error:", error);
+            toast.error(error.response?.data?.detail || 'Failed to update role permissions');
+        } finally {
+            setLoading(false);
         }
-      }
-    );
-
-<<<<<<< HEAD
-    const customStyles = {
-        control: base => ({
-            ...base,
-            backgroundColor: '#101d2b',
-            color: 'white',
-            boxShadow: 'none',
-            outline: 'none'
-        }),
-         menuList: (provided) => ({
-            ...provided,
-            maxHeight: '150px',
-            overflowY: 'auto',
-        }),
-        menu: base => ({
-            ...base,
-            backgroundColor: '#101d2b',
-            color: 'white',
-            maxHeight: 'unset'
-        }),
-        option: (base, state) => ({
-            ...base,
-            backgroundColor: state.isFocused ? '#f0f0f0' : 'white',
-            color: 'black',
-            display: 'flex',
-            alignItems: 'center',
-            padding: '8px'
-        })
     };
-=======
-    window.dispatchEvent(new Event("databaseUpdated"));
-    toast.success("Role permissions updated successfully");
-    togglePopup(false);
->>>>>>> 077a487217d5ec12fc1082327905a1ee3a4e5937
-
-  } catch (error) {
-    console.error("API Error:", error);
-    toast.error(error.response?.data?.detail || 'Failed to update role permissions');
-  } finally {
-    setLoading(false);
-  }
-};
     // Custom checkbox option
     const CheckboxOption = props => {
         const { data, isSelected, innerRef, innerProps } = props;
@@ -228,8 +226,7 @@ const assignRole = async () => {
                             />
                         </div>
 
-                        <div className="form-group" style={{ marginBottom: '15px'}}>
-<<<<<<< HEAD
+                        <div className="form-group" style={{ marginBottom: '15px' }}>
                             <SelectFieldOutlined
                                 label="Select Permission"
                                 options={[{ label: 'Select All', value: '_select_all_' }, ...endpoints]}
@@ -260,38 +257,8 @@ const assignRole = async () => {
                                 components={{ Option: CheckboxOption, MultiValue: () => null }}
                                 onMenuOpen={() => setIsDropdownOpen(true)} //
                                 smallNote="Check/Uncheck permissions to add or remove them from the role"
-=======
-                            <label>Select Permissions</label>
-                           <Select
-  options={[{ label: 'Select All', value: '_select_all_' }, ...endpoints]}
-  styles={customStyles}
-  placeholder="Select permissions"
-  isLoading={endpointsLoading}
-  value={selectedEndpoints}
-  onChange={(selected) => {
-    if (!selected) return setSelectedEndpoints([]);
-
-    const isSelectAllClicked = selected.find(opt => opt.value === '_select_all_');
->>>>>>> 077a487217d5ec12fc1082327905a1ee3a4e5937
-
-    if (isSelectAllClicked) {
-      const isAllChecked = selectedEndpoints.length === endpoints.length;
-      if (isAllChecked) {
-        setSelectedEndpoints([]);
-      } else {
-        setSelectedEndpoints(endpoints);
-      }
-    } else {
-      setSelectedEndpoints(selected.filter(opt => opt.value !== '_select_all_'));
-    }
-  }}
-  isMulti
-  closeMenuOnSelect={false}
-  hideSelectedOptions={false}
-  components={{ Option: CheckboxOption, MultiValue: () => null }}
-  onMenuOpen={() => setIsDropdownOpen(true)}
-/>
-
+></SelectFieldOutlined>
+   
                           
 
                         </div>
