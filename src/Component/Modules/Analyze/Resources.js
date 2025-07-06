@@ -738,7 +738,7 @@ const Resources = () => {
                         <iframe
                           width="100%"
                           height="400"
-                          src={`https://www.youtube.com/embed/${getYouTubeVideoId(selectedResource.socialmedia_activity_url)}`}
+                          src={`https://www.youtube.com/embed/${selectedResource.socialmedia_activity_url ? getYouTubeVideoId(selectedResource.socialmedia_activity_url) : ''}`}
                           title="YouTube video player"
                           frameBorder="0"
                           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"

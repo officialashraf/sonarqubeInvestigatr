@@ -152,44 +152,17 @@ img {
   align-content: stretch;
 }
 
-.leftColumn {
-  /* padding: 60px 40px; */
-  /* display: flex;0 */
-  flex: 1;
-  /* flex-direction: column; */
-  justify-content: center;
-  width: 50%;
-}
 
-.leftColumn h1 {
-  font-size: 2.5rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
-}
 
-.leftColumn p {
-  font-size: 1rem;
-  color: #99aabb;
-  line-height: 1.8;
-  max-width: 550px;
-  padding: 40px;
-}
 
-.rightColumn {
-  width: 50%;
-  /* display: flex; */
-  align-items: center;
-  justify-content: center;
-  flex: 1;
-  padding: 0px 20px 0px 0px;
-}
+
 
 .loginForm {
   background-color: #101d2b;
   padding: 40px;
   border-radius: 16px;
-  width: 100%;
-  max-width: 400px;
+  width: 400px;
+  /* max-width: 400px; */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
 }
 

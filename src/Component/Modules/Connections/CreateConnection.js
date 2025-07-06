@@ -3,6 +3,11 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import { useAutoFocusWithManualAutofill } from "../../../utils/autoFocus";
+import CommonTextInput from "../../Common/MultiSelect/CommonTextInput";
+import CommonSingleSelect from "../../Common/MultiSelect/CommonSingleSelect";
+import AppButton from "../../Common/Buttton/button";
+import customSelectStyles from '../../Common/CustomStyleSelect/customSelectStyles';
+
 
 const CreateConnection = ({ togglePopup, id }) => {
     const token = Cookies.get("accessToken");
@@ -74,6 +79,7 @@ const CreateConnection = ({ togglePopup, id }) => {
         if (!ci.host.trim()) errors.host = "Required";
         if (!ci.port) errors.port = "Required";
         if (!ci.username.trim()) errors.username = "Required";
+        if (!ci.password.trim()) errors.password = "Required";
        
       
         return errors;
@@ -116,42 +122,44 @@ const CreateConnection = ({ togglePopup, id }) => {
                 <div className="popup-content">
                     <h5>Create Connection</h5>
                     <form onSubmit={handleSubmit}>
-                        <label>Connection Name *</label>
-                        <input
+                        {/* <label>Connection Name *</label> */}
+                        <CommonTextInput
+                        label="Connection Name *"
                             name="name"
                             value={formData.name}
                             onChange={handleChange}
                             placeholder="Enter connection name"
-                            className="com"
+                            
                         />
-                        {error.name && <p className="error">{error.name}</p>}
-                        <label>Connection Type *</label>
-                        <select
+                        {error.name && <p style={{ color: 'red' }}>{error.name}</p>}
+                        {/* <label>Connection Type *</label> */}
+                        <CommonSingleSelect
+                            label="Connection Type *"
                             name="connection_type"
-                            value={formData.connection_type}
-                            onChange={handleChange}
-                            className="com"
-                        >
-                            <option value="">Select connection type</option>
-                            {connectionTypes.map(type => (
-                                <option key={type.value} value={type.value}>
-                                    {type.label}
-                                </option>
-                            ))}
-                        </select>
-                        {error.connection_type && <p className="error">{error.connection_type}</p>}
-                        <label>Host *</label>
-                        <input
+                            value={connectionTypes.find(type => type.value === formData.connection_type) || null}
+                            onChange={(selectedOption) => {
+                                setFormData(prev => ({ ...prev, connection_type: selectedOption ? selectedOption.value : "" }));
+                                setError(prev => ({ ...prev, connection_type: "" }));
+                            }}
+                            options={connectionTypes}
+                            customStyles={customSelectStyles}
+                            placeholder="Select connection type"
+                        />
+                        {error.connection_type && <p style={{ color: 'red' }}>{error.connection_type}</p>}
+                        {/* <label>Host *</label> */}
+                        <CommonTextInput
+                            label="Host *"
                             name="host"
                             value={formData.connection_info.host}
                             onChange={handleChange}
                             placeholder="Enter host"
                             className="com"
                         />
-                        {error.host && <p className="error">{error.host}</p>}
+                        {error.host && <p style={{ color: 'red'}}>{error.host}</p>}
 
-                        <label>Port *</label>
-                        <input
+                        {/* <label>Port *</label> */}
+                        <CommonTextInput
+                            label="Port *"
                             name="port"
                             value={formData.connection_info.port}
                             type="number"
@@ -159,20 +167,23 @@ const CreateConnection = ({ togglePopup, id }) => {
                             placeholder="Enter port"
                             className="com"
                         />
-                        {error.port && <p className="error">{error.port}</p>}
+                        {error.port && <p style={{ color: 'red' }}>{error.port}</p>}
 
-                        <label>Username *</label>
-                        <input
+                        {/* <label>Username *</label> */}
+                        <CommonTextInput
+                            label="Username *"
                             name="username"
                             value={formData.connection_info.username}
                             onChange={handleChange}
                             placeholder="Enter username"
                             className="com"
                         />
-                        {error.username && <p className="error">{error.username}</p>}
+                        {error.username && <p style={{ color: 'red' }}>{error.username}</p>}
 
-                        <label>Password </label>
-                        <input
+                        {/* <label>Password </label> */}
+                        <CommonTextInput
+                            label="Password"
+
                             name="password"
                             value={formData.connection_info.password}
                             type="password"
@@ -180,12 +191,13 @@ const CreateConnection = ({ togglePopup, id }) => {
                             placeholder="Enter password"
                             className="com"
                         />
+                        {error.password && <p style={{ color: 'red' }}>{error.password}</p>}
 
                         <div className="button-container">
-                            <button type="submit" className="create-btn" disabled={isSubmitting}>
+                            <AppButton type="submit" className="create-btn" disabled={isSubmitting}>
                                 {isSubmitting ? "Creating..." : "Create"}
-                            </button>
-                            <button type="button" onClick={togglePopup} className="cancel-btn">Cancel</button>
+                            </AppButton>
+                            <AppButton type="button" onClick={togglePopup} className="cancel-btn">Cancel</AppButton>
                         </div>
                     </form>
                 </div>

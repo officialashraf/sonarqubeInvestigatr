@@ -4,7 +4,11 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
 import Select from "react-select";
-import { customStyles } from "../Case/createCase"; // Adjust the import path as needed
+import { customStyles } from "../Case/createCase"; 
+import CommonTextInput from "../../Common/MultiSelect/CommonTextInput";
+import CommonSingleSelect from "../../Common/MultiSelect/CommonSingleSelect";
+import customSelectStyles from '../../Common/CustomStyleSelect/customSelectStyles';
+import AppButton from "../../Common/Buttton/button";
 
 const EditUser = ({ togglePopup, item }) => {
   const token = Cookies.get("accessToken");
@@ -215,9 +219,8 @@ const EditUser = ({ togglePopup, item }) => {
         <div className="popup-content">
           <h5>Edit User</h5>
           <form onSubmit={(e) => { e.preventDefault(); handleEditUser(formData); }}>
-            <label htmlFor="username">Username <span style={{ color: 'black' }}>*</span></label>
-            <input
-              className="com"
+            {/* <label htmlFor="username">Username <span style={{ color: 'black' }}>*</span></label> */}
+            <CommonTextInput label='Username *'
               type="text"
               id="username"
               name="username"
@@ -225,9 +228,8 @@ const EditUser = ({ togglePopup, item }) => {
               onChange={handleChange}
             />
             {error.username && <p style={{ color: "red", margin: '0px' }} >{error.username}</p>}
-            <label htmlFor="firstName">First Name </label>
-            <input
-              className="com"
+            {/* <label htmlFor="firstName">First Name </label> */}
+            <CommonTextInput label='First Name *' 
               type="text"
               id="firstName"
               name="firstName"
@@ -235,9 +237,8 @@ const EditUser = ({ togglePopup, item }) => {
               onChange={handleChange}
             />
 
-            <label htmlFor="lastName">Last Name</label>
-            <input
-              className="com"
+            {/* <label htmlFor="lastName">Last Name</label> */}
+            <CommonTextInput label='Last Name' 
               type="text"
               id="lastName"
               name="lastName"
@@ -245,20 +246,20 @@ const EditUser = ({ togglePopup, item }) => {
               onChange={handleChange}
             />
             <div>
-              <label>Role </label>
-              <Select
+              {/* <label>Role </label> */}
+              <CommonSingleSelect
+                label="Role *"
                 options={roles}
                 placeholder="Select a role"
                 isLoading={loading}
                 value={roles.find(role => role.value === formData.role)}
                 onChange={(selectedOption) => setFormData({ ...formData, role: selectedOption.value })}
-                styles={customStyles}
-                classNamePrefix="select"
+                customStyles={customSelectStyles}
+                // classNamePrefix="select"
               />
             </div>
-            <label htmlFor="email">Email ID *</label>
-            <input
-              className="com"
+            {/* <label htmlFor="email">Email ID *</label> */}
+            <CommonTextInput label='Email ID *'
               type="email"
               id="email"
               name="email"
@@ -268,9 +269,8 @@ const EditUser = ({ togglePopup, item }) => {
             {error.email && <p style={{ color: "red", margin: '0px' }}>{error.email}</p>}
 
 
-            <label htmlFor="contactNumber">Contact Number</label>
-            <input
-              className="com"
+            {/* <label htmlFor="contactNumber">Contact Number</label> */}
+            <CommonTextInput label='Contact Number'
               type="text"
               id="contactNumber"
               name="contactNumber"
@@ -279,10 +279,10 @@ const EditUser = ({ togglePopup, item }) => {
             />
 
             <div className="button-container">
-              <button type="submit" className="create-btn" disabled={isBtnDisabled || loading}>
+              <AppButton type="submit" className="create-btn" disabled={isBtnDisabled || loading}>
                 {loading ? "Editing..." : "Edit"}
-              </button>
-              <button type="button" onClick={togglePopup} className="cancel-btn">Cancel</button>
+              </AppButton>
+              <AppButton type="button" onClick={togglePopup} className="cancel-btn">Cancel</AppButton>
             </div>
           </form>
         </div>

@@ -15,6 +15,8 @@ import { useAutoFocusWithManualAutofill } from '../../../utils/autoFocus';
 import SearchBar from '../../Common/SearchBarCriteria/Searchbar';
 import styles from '../../Common/Table/table.module.css';
 import customSelectStyles from '../../Common/CustomStyleSelect/customSelectStyles';
+import CommonMultiSelect from '../../Common/MultiSelect/CommonMultiSelect';
+import CommonDateInput from '../../Common/DateField/DateField';
 
 export const sharedSxStyles = {
   '& .MuiOutlinedInput-root': {
@@ -264,7 +266,7 @@ const CreateCriteria = ({ handleCreateCase }) => {
         </button>
         <div className="popup-content">
           <h5>Create Criteria</h5>
-          <form onSubmit={handleSearch} style={{ gap: '1rem' }}>
+          <form onSubmit={handleSearch} >
             {/* Search Bar with Icons */}
             <label>Search</label>
             <TextField
@@ -314,28 +316,22 @@ const CreateCriteria = ({ handleCreateCase }) => {
 
 
             {/* Filetype Dropdown (Multi Select) */}
-            <div >
-              <label>File Type</label>
-              <Select
-                isMulti
-                options={fileTypeOptions}
-                value={formData.filetype}
-                onChange={(selected) => setFormData(prev => ({ ...prev, filetype: selected }))}
-                placeholder="Select file types"
-                styles={customSelectStyles}
-                style= {{
-                  border: '1px solid #0073CF',
-                }}
-               
-              />
-            </div>
+           <CommonMultiSelect
+  label="File Type"
+  value={formData.filetype}
+  onChange={(selected) =>
+    setFormData((prev) => ({ ...prev, filetype: selected }))
+  }
+  options={fileTypeOptions}
+  customStyles={customSelectStyles}
+  
+/>
 
-            {/* Case Selection Field */}
-            <div >
-              <label>Case</label>
-              <Select
+          
+              <CommonMultiSelect
+                label="Case"
                 isMulti
-                className={styles.searchBar}
+              customStyles={customSelectStyles}
                 options={caseOptions}
                 styles={customSelectStyles}
                 // className="com"
@@ -343,10 +339,10 @@ const CreateCriteria = ({ handleCreateCase }) => {
                 onChange={(selected) => { setFormData(prev => ({ ...prev, caseIds: selected })); }}
                 placeholder="Select cases"
               />
-            </div>
+            {/* </div> */}
 
             {/* DatePicker */}
-            <div >
+            {/* <div >
 
               <label>Date</label>
               <TextField 
@@ -374,50 +370,38 @@ const CreateCriteria = ({ handleCreateCase }) => {
                 
                 sx={sharedSxStyles}
               />
-            </div>
+            </div> */}
+            <CommonDateInput
+              label="Date"
+              value={
+                selectedDates.startDate && selectedDates.endDate
+                  ? `${formatDate(selectedDates.startDate)} to ${formatDate(selectedDates.endDate)}`
+                  : formatDate(selectedDates.startDate || selectedDates.endDate)
+              }
+              onClickIcon={togglePopupA}
+              sx={sharedSxStyles}
+            />
 
             {/* Location Fields */}
             <label>Focus your search on a particular location or area</label>
             <div style={{ display: 'flex', justifyContent: 'space-evenly', color: 'white' }}>
-              <TextField
+              <CommonDateInput
                 name="latitude"
                 placeholder="Latitude"
                 // className="com me-2"
-                className={styles.searchBar}
                 value={formData.latitude}
                 onChange={handleInputChange}
-                InputProps={{
-                  style: {
-                    height: '38px',
-                    padding: '0 8px',
-                    width: '245px',
-                    color: 'white',
-                    borderRadius: '15px',
-                  },
-                }}
-                sx={sharedSxStyles}
-                style=  {{ height: '38px', color: 'white', borderRadius: '15px' }}
+                showIcon={false}
                 autoComplete='off'
               />
-              <TextField
+              <CommonDateInput
                 name="longitude"
                 placeholder="Longitude"
-                // className="com "
-                className={styles.searchBar}
+                showIcon={false}
                 value={formData.longitude}
                 onChange={handleInputChange}
-                InputProps={{
-                  style: {
-                    height: '38px',
-                    padding: '0 8px',
-                    width: '245px',
-                    flex: 1,
-                    color: 'white',
-                    borderRadius: '15px'
-                  },
-                }}
+               
                 
-                sx={sharedSxStyles}
                 autoComplete='off'
               />
             </div>
@@ -428,6 +412,7 @@ const CreateCriteria = ({ handleCreateCase }) => {
                 <Checkbox
                   checked={formData.includeArchived}
                   onChange={handleSaveCriteriaChange}
+                  style={{ color: '#0073CF' }} // Custom color for checkbox
 
 
                 />

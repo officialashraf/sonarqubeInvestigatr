@@ -129,6 +129,8 @@ const DataTable = () => {
           transform: "translate(-50%, -50%)",
           width: "100%",
           zIndex: 9999,
+          background: '#101D2B',
+          color: '#d2d2d2'
         },
       }
     );

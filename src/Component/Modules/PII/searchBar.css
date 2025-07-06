@@ -259,6 +259,10 @@
   color: #D9D9D9 !important;
   border: none !important;
 }
+.react-tel-input .flag-dropdown{
+     background-color: #101D2B !important; 
+     border: none !important;
+}
 .react-tel-input .country-list .search{
   background-color: #101D2B !important;
   color: #D9D9D9 !important;

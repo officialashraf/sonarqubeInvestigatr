@@ -4,6 +4,8 @@ import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
 import '../User/addUser.css'
 import { CloseButton } from 'react-bootstrap';
+import CommonTextInput from '../../Common/MultiSelect/CommonTextInput';
+import AppButton from '../../Common/Buttton/button';
 
 const EditRole = ({ togglePopup, details }) => {
     const Token = Cookies.get('accessToken');
@@ -80,11 +82,12 @@ const EditRole = ({ togglePopup, details }) => {
 
                     <form onSubmit={(e) => e.preventDefault()}> {/* Prevent form submission default */}
 
-                        <span style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
+                        {/* <span style={{ display: "flex", justifyContent: "e", alignItems: "center", width: "100%" }}>
                             <label>Edit Role *</label>
                             <CloseButton onClick={togglePopup} />
-                        </span>
-                        <input
+                        </span> */}
+                        <CommonTextInput
+                            label="Edit Role *"
                             type="text"
                             placeholder="Enter role"
                             className="com"
@@ -97,7 +100,7 @@ const EditRole = ({ togglePopup, details }) => {
                             }}
                         />
                         <div className="button-container">
-                            <button
+                            <AppButton
                                 type="submit"
                                 className="create-btn"
                                 onClick={editRole}
@@ -105,14 +108,14 @@ const EditRole = ({ togglePopup, details }) => {
 
                             >
                                 {isSubmitting ? 'Editing...' : 'Edit'}
-                            </button>
-                            <button
+                            </AppButton>
+                            <AppButton
                                 type="button"
                                 className="cancel-btn"
                                 onClick={togglePopup}
                             >
                                 Cancel
-                            </button>
+                            </AppButton>
 
                         </div>
                     </form>

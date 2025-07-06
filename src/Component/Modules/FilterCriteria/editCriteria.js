@@ -12,6 +12,9 @@ import { toast } from 'react-toastify';
 import Loader from '../Layout/loader'
 import customSelectStyles from '../../Common/CustomStyleSelect/customSelectStyles';
 import styles from '../../Common/Table/table.module.css';
+import CommonMultiSelect from '../../Common/MultiSelect/CommonMultiSelect';
+import CommonDateInput from '../../Common/DateField/DateField';
+import AppButton from '../../Common/Buttton/button';
 
 
 // const API_BASE_URL = 'http://5.180.148.40';
@@ -389,7 +392,9 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
                   style: {
                     height: '38px',
                     padding: '0 8px',
-                    color: 'white'
+                    color: 'white',
+                    border: '1px solid #0073CF',
+                    borderRadius: '15px',
                   },
                 }}
                 placeholder="Enter keywords separated by commas (e.g., keyword1, keyword2, keyword3)"
@@ -402,54 +407,37 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
             </div>
 
             {/* Filetype Dropdown (Multi Select) */}
-            <div >
-              <label>Filetype</label>
-              <Select
+            
+              {/* <label>Filetype</label> */}
+              <CommonMultiSelect
+                label="Filetype"
                 isMulti
                 options={fileTypeOptions}
-                styles={customSelectStyles}
+                customStyles={customSelectStyles}
                
                 value={formData.filetype}
                 onChange={(selected) => setFormData(prev => ({ ...prev, filetype: selected || [] }))}
                 placeholder="Select file types"
                 isLoading={fileTypeOptions.length === 0}
               />
-            </div>
-
-            {/* Case Selection Field */}
-            <div >
-              <label>Case</label>
-              <Select
+           
+              <CommonMultiSelect
+               label="Case"
                 isMulti
                 options={caseOptions}
-                styles={customSelectStyles}
+                customStyles={customSelectStyles}
                 
                 value={formData.caseIds}
                 onChange={(selected) => setFormData(prev => ({ ...prev, caseIds: selected || [] }))}
                 placeholder="Select cases"
                 isLoading={caseOptions.length === 0}
               />
-            </div>
+         
 
             {/* DatePicker */}
-            <div >
-              <label>Date</label>
-              <TextField
-                fullWidth
-                className={styles.searchBar}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <CalendarToday style={{ cursor: 'pointer' , color: '#0073cf' }} onClick={togglePopupA} />
-                    </InputAdornment>
-                  ),
-                  style: {
-                    height: '38px',
-                    padding: '0 8px',
-                    fontSize: '12px',
-                    color: 'white',
-                  },
-                }}
+            
+              <CommonDateInput
+                fullWidth     
                 placeholder="Select date..."
                 value={
                   selectedDates.startDate && selectedDates.endDate
@@ -459,47 +447,33 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
                 readOnly
                 sx={sharedSxStyles}
               />
-            </div>
+           
 
             {/* Location Fields */}
             <div >
               <label>Focus your search on a particular location or area</label>
-              <div className="d-flex gap-2">
-                <TextField
+              <div style={{ display: 'flex', justifyContent: 'space-evenly', color: 'white' }}>
+                <CommonDateInput
                   name="latitude"
                   placeholder="Latitude"
                   className={styles.searchBar}
                   value={formData.latitude}
                   onChange={handleInputChange}
-                  InputProps={{
-                    style: {
-                      height: '38px',
-                      padding: '0 8px',
-                      color: 'white',
-                      width: '245px',
-                      color: 'white',
-                      borderRadius: '15px',
-                    },
-                  }}
-                  sx={sharedSxStyles}
+                  autoComplete='off'
+                  showIcon={false}
+                 
+                  
+                
                   
                 />
-                <TextField
+                <CommonDateInput
                   name="longitude"
                   placeholder="Longitude"
-                  className={styles.searchBar}
                   value={formData.longitude}
                   onChange={handleInputChange}
-                  InputProps={{
-                    style: {
-                      height: '38px',
-                      padding: '0 8px',
-                      width: '245px',
-                      color: 'white',
-                      borderRadius: '15px',
-                    },
-                  }}
                   sx={sharedSxStyles}
+                  autoComplete='off'
+                  showIcon={false}
                  
                 />
               </div>
@@ -509,20 +483,20 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
 
             {/* Update Button */}
             <div className="button-container d-flex gap-2" style={{ textAlign: 'center' }}>
-            <button
+            <AppButton
               type="submit"
-              className="create-btn"
+              
               disabled={isBtnDisabled || isSubmitting}
             >
               {isSubmitting ? 'Editing...' : 'Edit'}
-            </button>
-              <button
+            </AppButton>
+              <AppButton
                 type="button"
-                className="create-btn"
+                
                 onClick={togglePopup}
               >
                 Cancel
-              </button>
+              </AppButton>
             </div>
           </form>
         </div>

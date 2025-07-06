@@ -46,7 +46,7 @@
   color: var(--color-colors-neutralText);
   overflow: auto;
   padding: 20px;
- height: 100%;
+ height: 100vh;
   scrollbar-color: #1e7df8 #0a192f;
    scrollbar-width: thin;
 }

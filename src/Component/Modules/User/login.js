@@ -212,19 +212,7 @@ const LoginPage = () => {
             <h1>Your Gateway to Actionable Intelligence</h1>
             {/* Main Content Section (Left and Right Content) */}
             <Row className="justify-content-center">
-                {/* Left Column (Content) */}
-                <div className={style.leftColumn}>
-                    <p>
-                        A unified platform for OSINT, telecom data, IPDR, and social media insights — built to help you solve cases faster.<br /><br />
-                        • Connect data.<br />
-                        • Uncover patterns.<br />
-                        • Gain real-time intelligence.<br />
-                        • Close cases with confidence.
-                    </p>
-                </div>
-
-                {/* Right Column (Login Form) */}
-                <div className={style.rightColumn}>
+                <Col >
                     <Form className={style.loginForm} onSubmit={handleLogin} noValidate>
                         <h2 style={{ color: 'white', marginBottom: '24px' }}>Login</h2>
 
@@ -286,7 +274,7 @@ const LoginPage = () => {
 
                       
                     </Form>
-                </div>
+                </Col>
             </Row>
             <h1>Secure. Scalable. Built for law enforcement.</h1>
         </Container>

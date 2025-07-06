@@ -7,6 +7,12 @@ import Select from 'react-select';
 import "./target.css";
 import Loader from '../Layout/loader'
 import { customStyles } from "../Case/createCase";
+import CommonSingleSelect from "../../Common/MultiSelect/CommonSingleSelect";
+import customSelectStyles from '../../Common/CustomStyleSelect/customSelectStyles';
+import CommonChipsInput from "../../Common/MultiSelect/CommonChipsInput";
+import CommonTextArea from "../../Common/MultiSelect/CommonText";
+import CommonTextInput from "../../Common/MultiSelect/CommonTextInput";
+import AppButton from "../../Common/Buttton/button";
 
 const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
   const token = Cookies.get("accessToken");
@@ -296,10 +302,11 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
             }}
           >
             <div>
-              <label htmlFor="type">Type *</label>
-              <Select
+              {/* <label htmlFor="type">Type *</label> */}
+              <CommonSingleSelect
+                label="Type * "
                 options={targetType}
-                styles={customStyles}
+                customStyles={customSelectStyles}
                 placeholder="Select type"
                 value={targetType.find(option => option.value === formData.type)}
                 onChange={(selectedOption) =>
@@ -308,15 +315,14 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
                     type: selectedOption.value
                   }))
                 }
-                className="basic-single-select"
-                classNamePrefix="select"
+              
               />
               {error.type && <p style={{ color: "red", margin: '0px' }} >{error.type}</p>}
             </div>
 
-            <label htmlFor="name">Target *</label>
-            <input
-              className="com"
+            {/* <label htmlFor="name">Target *</label> */}
+            <CommonTextInput
+              label="Target *"    
               type="text"
               id="name"
               name="name"
@@ -326,21 +332,21 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
             />
             {error.name && <p style={{ color: "red", margin: '0px' }} >{error.name}</p>}
 
-            <label htmlFor="description">Description *</label>
-            <textarea
-              className="com"
+            {/* <label htmlFor="description">Description *</label> */}
+            <CommonTextArea
+              label="Description *"
               id="description"
               name="description"
               value={formData.description}
               onChange={handleInputChange}
               placeholder="Enter description"
-            ></textarea>
+            />
             {error.description && <p style={{ color: "red", margin: '0px' }} >{error.description}</p>}
-            <label htmlFor="synonyms">Alternative Keywords/Synonym (up to 5 keywords)</label>
+            {/* <label htmlFor="synonyms">Alternative Keywords/Synonym (up to 5 keywords)</label> */}
             <div className="synonym-input-container">
-              <input
-                className="com"
-                type="text"
+              <CommonChipsInput
+                label="Alternative Keywords/Synonym (up to 5 keywords)"
+              type="text"
                 id="synonyms"
                 value={synonymInput}
                 onChange={handleSynonymInputChange}
@@ -367,11 +373,11 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
             </div>
 
             <div>
-              <label htmlFor="threat_weightage">Threat Score</label>
-              <Select
+              <CommonSingleSelect
+                label="Threat Score"
                 options={threatScoreOptions}
-                styles={customStyles}
-                className="com"
+                customStyles={customSelectStyles}
+               
                 placeholder="Select threat score"
                 value={threatScoreOptions.find((option) => option.value === formData.threat_weightage) || null}
                 onChange={handleThreatScoreChange}
@@ -422,13 +428,13 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
             )}
 
             <div className="button-container">
-              <button type="submit" className="create-btn" disabled={isBtnDisabled || isSubmitting}
+              <AppButton type="submit" className="create-btn" disabled={isBtnDisabled || isSubmitting}
               >
                 {isSubmitting ? 'Editing...' : 'Edit'}
-              </button>
-              <button type="button" className="cancel-btn" onClick={togglePopup}>
+              </AppButton>
+              <AppButton type="button" className="cancel-btn" onClick={togglePopup}>
                 Cancel
-              </button>
+              </AppButton>
             </div>
           </form>
         </div>

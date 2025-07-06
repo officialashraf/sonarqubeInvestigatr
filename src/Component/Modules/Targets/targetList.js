@@ -157,6 +157,8 @@ const TargetList = () => {
           transform: 'translate(-50%, -50%)',
           width: '100%',
           zIndex: 9999,
+          color: '#d2d2d2',
+          background: '#101D2B'
         }
       },)
   };

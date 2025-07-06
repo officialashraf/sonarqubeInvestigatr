@@ -1,9 +1,11 @@
-import { Table, CloseButton } from "react-bootstrap";
-import "../Case/caseDetails.css"
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
+import PopupModal from "../../Common/Popup/popup";
+import DetailBox from "../../Common/DetailBox/DetailBox";
+import styles from '../../Common/DetailBox/detailBox.module.css';
+import AppButton from "../../Common/Buttton/button";
 
 const UserDetails = ({ userId, toggleDetails }) => {
   const [item, setItem] = useState(null);
@@ -20,12 +22,10 @@ const UserDetails = ({ userId, toggleDetails }) => {
             "Content-Type": "application/json"
           }
         });
-        console.log("response", response);
         setItem(response.data.data || response.data);
       } catch (err) {
-        toast.error(err.response?.data?.detail || "Failed to fetch target details");
-        console.error("Error fetching target details:", err.response || err);
-        //  togglePopup();
+        toast.error(err.response?.data?.detail || "Failed to fetch user details");
+        console.error("Error fetching user details:", err.response || err);
       } finally {
         setLoading(false);
       }
@@ -37,71 +37,46 @@ const UserDetails = ({ userId, toggleDetails }) => {
   }, [userId]);
 
   if (loading) {
-    return <div className="popup-overlay"><div className="popup-containera"><div className="popup-content">Loading user details...</div></div></div>;
+    return (
+      <div className="popup-overlay">
+        <div className="popup-containera">
+          <div className="popup-content">Loading user details...</div>
+        </div>
+      </div>
+    );
   }
 
   if (!item) {
-    return <div className="popup-overlay"><div className="popup-containera"><div className="popup-content">No user details found.</div>
-      <button type="button" className="cancel-btn" onClick={toggleDetails}>
-        Cancel
-      </button></div></div>;
-  }
-
-  return <div className="popup-overlay">
-    <div className="popup-containera">
-      <div className="popup-content">
-        <div className="header">
-          <h5>
-            {item.username}
-          </h5>
-          <CloseButton onClick={toggleDetails} />
-        </div>
-        <div className="case-details-container">
-          <Table bordered hover className="custom-table custom-table-th">
-            <tbody>
-              <tr>
-                <th>Username</th>
-                <td>
-                  {item.username}
-                </td>
-              </tr>
-              <tr>
-                <th>User ID</th>
-                <td>
-                  {`USER${String(item.id).padStart(4, '0')}`}
-                </td>
-              </tr>
-              <tr>
-                <th>Email</th>
-                <td>
-                  {item.email}
-                </td>
-              </tr>
-              <tr>
-                <th>Last Active</th>
-                <td>
-                  {item.last_logout}
-                </td>
-              </tr>
-              <tr>
-                <th>Status</th>
-                <td>
-                  <span className={item.status === "Active" ? "status-active-1" : "status-inactive"}>
-                    {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
-                  </span>
-                </td>
-              </tr>
-            </tbody>
-          </Table>
-        </div>
-        <div className="button-container">
-          <button type="button" className="cancel-btn" onClick={toggleDetails}>
-            Cancel
-          </button>
+    return (
+      <div className="popup-overlay">
+        <div className="popup-containera">
+          <div className="popup-content">
+            <p>No user details found.</p>
+            <button type="button" className="cancel-btn" onClick={toggleDetails}>
+              Cancel
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-  </div>;
+    );
+  }
+
+  return (
+    <PopupModal title={'User Details'} onClose={toggleDetails}>
+      <div className={styles.container}>
+        <div className={styles.grid}>
+          <DetailBox label="Username" value={item.username} />
+          <DetailBox label="User ID" value={`USER${String(item.id).padStart(4, '0')}`} />
+          <DetailBox label="Email" value={item.email} />
+          <DetailBox label="Last Active" value={item.last_logout} />
+          <DetailBox label="Status" value={item.status.charAt(0).toUpperCase() + item.status.slice(1)} isStatus />
+        </div>
+      </div>
+      <div className="d-flex justify-content-center mt-3">
+        <AppButton onClick={toggleDetails}>OK</AppButton>
+      </div>
+    </PopupModal>
+  );
 };
 
 export default UserDetails;

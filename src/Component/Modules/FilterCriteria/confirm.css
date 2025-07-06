@@ -1,7 +1,7 @@
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  color: #dcdcdc;
   display: flex;
   align-items: center;
   justify-content: flex-start; /* Aligns to the left side */
@@ -18,6 +18,7 @@
   padding: 16px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   margin: 0 auto; /* Ensures it is vertically centered */
+  color: #d2d2d2;
 }
 
 /* Dialog header */
@@ -26,10 +27,11 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
+  color: #d2d2d2;
 }
 
 .dialog-title {
-  color: black;
+  color: #d2d2d2;
   font-size: 15px;
   font-weight: 500;
 }
@@ -37,7 +39,7 @@
 .close-button {
   background: none;
   border: none;
-  color: black;
+  color: white;
   cursor: pointer;
   padding: 4px;
 }

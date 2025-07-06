@@ -164,7 +164,7 @@ const GraphicalData = () => {
     <div className="responsiveContainer" >
 
       <Grid container spacing={1} p={1} className="responsiveGrid" style={{
-        background: "#080E17", marginLeft: "0 px !important", height: '100vh',
+        background: "#080E17", marginLeft: "0 px !important", height: '100%',
         overflowY: 'auto'
       }}>
         <Grid item xs={12} sx={{ paddingLeft: '0px !important', paddingTop: "0px !important" }}className="grapghCards">

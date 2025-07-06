@@ -272,8 +272,10 @@ const SavedCriteria = () => {
                   ),
                   style: {
                     height: '38px',
-                    padding: '0px',
+                    padding: '10px',
                     color: 'white',
+                    border: '1px solid #0073CF',
+                    borderRadius: '15px',
                   },
                 }}
                 inputProps={{

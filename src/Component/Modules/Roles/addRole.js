@@ -6,6 +6,9 @@ import Select from 'react-select';
 import '../User/addUser.css';
 import { CloseButton } from 'react-bootstrap';
 import { useAutoFocusWithManualAutofill } from '../../../utils/autoFocus';
+import CommonTextInput from '../../Common/MultiSelect/CommonTextInput';
+import SelectFieldOutlined from '../../Common/MultiSelect/SelectFieldOutlined';
+import AppButton from '../../Common/Buttton/button'
 
 const AddRole = ({ togglePopup }) => {
     const token = Cookies.get('accessToken');
@@ -147,7 +150,7 @@ const AddRole = ({ togglePopup }) => {
                 display: 'flex',
                 alignItems: 'center',
                 padding: 5,
-                backgroundColor: data.isAssigned ? '#f5f5f5' : 'white'
+                backgroundColor: '#101d2b'
             }}>
                 <input
                     type="checkbox"
@@ -175,12 +178,13 @@ const AddRole = ({ togglePopup }) => {
                     <span style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
 
                         <h5 >Assign permissions to role </h5>
-                        <CloseButton onClick={togglePopup} />
+                        <CloseButton onClick={togglePopup} style={{ color: 'white'}} />
                     </span>
                     <form onSubmit={(e) => e.preventDefault()}>
                         <div className="form-group" style={{ marginBottom: '15px' }}>
-                            <label>Add Role</label>
-                            <input
+                            {/* <label>Add Role</label> */}
+                            <CommonTextInput
+                            label="Add Role"
                                 type="text"
                                 placeholder="Enter role"
                                 className="com"
@@ -198,8 +202,9 @@ const AddRole = ({ togglePopup }) => {
                         </div>
 
                         <div className="form-group" style={{ marginBottom: '15px' }}>
-                            <label>Select Permissions</label>
-                            <Select
+                            {/* <label>Select Permissions</label> */}
+                            <SelectFieldOutlined
+                            label="Select Permission"
                                 options={[
                                     { label: 'Select All', value: '_select_all_' },
                                     ...endpoints.map(ep => ({
@@ -207,7 +212,7 @@ const AddRole = ({ togglePopup }) => {
                                         label: ep.label.charAt(0).toUpperCase() + ep.label.slice(1)
                                     }))
                                 ]}
-                                styles={customStyles}
+                                // styles={customStyles}
                                 placeholder="Select permissions"
                                 isLoading={endpointsLoading}
                                 value={selectedEndpoints}
@@ -233,10 +238,11 @@ const AddRole = ({ togglePopup }) => {
                                 hideSelectedOptions={false}
                                 components={{ Option: CheckboxOption, MultiValue: () => null }}
                                 onMenuOpen={() => setIsDropdownOpen(true)} //  Set dropdown open
+                                smallNote="Check/Uncheck permissions to add or remove them from the role"
                             />
-                            <small className="text-muted">
+                            {/* <small className="text-muted">
                                 Check/Uncheck permissions to add or remove them from the role
-                            </small>
+                            </small> */}
                         </div>
 
                         <div style={{
@@ -245,25 +251,24 @@ const AddRole = ({ togglePopup }) => {
                             width: "100%",
                             display: "flex",
                             justifyContent: "flex-end",
-                            right: '10px'
+                            right: '10px',
+                            gap: '10px'
                         }}
                         >
-                            <button
+                            <AppButton
                                 type="submit"
-                                className="create-btn"
                                 onClick={assignRole}
                                 disabled={isSubmitting}
                             >
                                 {isSubmitting ? 'Creating...' : 'Create'}
-                            </button>
-                            <button
+                            </AppButton>
+                            <AppButton
                                 type="button"
-                                className="cancel-btn"
                                 onClick={() => togglePopup(false)}
                                 disabled={isSubmitting}
                             >
                                 Cancel
-                            </button>
+                            </AppButton>
 
                         </div>
                     </form>

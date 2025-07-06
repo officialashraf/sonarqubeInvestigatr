@@ -354,14 +354,15 @@ const RecentCriteria = () => {
                     <InputAdornment position="end">
 
                       <Send style={{ cursor: 'pointer',  color: "#0073cf" }} onClick={handleSearch} />
-                      <TuneIcon style={{ cursor: 'pointer', color: "#0073cf" }} onClick={handelCreate} /> {/* New Card List Filter Icon */}
+                      <TuneIcon style={{ cursor: 'pointer' , backgroundColor: "#0073CF", color: '#0A192F' }} onClick={handelCreate} /> {/* New Card List Filter Icon */}
                     </InputAdornment>
                   ), style: {
                     height: '38px', // Use consistent height
-                    padding: '0 0px', // Ensure uniform padding
+                    padding: '10px', // Ensure uniform padding
                     backgroundColor: '#080E17', // Background color
                     borderRadius: '15px', // Rounded corners
-                    color: 'white', // Text color
+                    color: 'white', // Text 
+                    border: '1px solid #0073CF',
                   },
                   autoComplete: 'off',
                 }}

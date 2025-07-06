@@ -3,6 +3,11 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import { useAutoFocusWithManualAutofill } from "../../../utils/autoFocus";
+import CommonTextInput from "../../Common/MultiSelect/CommonTextInput";
+import CommonMultiSelect from "../../Common/MultiSelect/CommonSingleSelect";
+import AppButton from "../../Common/Buttton/button";
+import customSelectStyles from '../../Common/CustomStyleSelect/customSelectStyles';
+
 
 const EditConnection = ({ togglePopup, id }) => {
     const token = Cookies.get("accessToken");
@@ -96,6 +101,7 @@ const EditConnection = ({ togglePopup, id }) => {
         if (!ci.host.trim()) errors.host = "Required";
         if (!ci.port) errors.port = "Required";
         if (!ci.username.trim()) errors.username = "Required";
+        if (!ci.password.trim()) errors.password = "Required";
         return errors;
     };
 
@@ -163,33 +169,40 @@ const EditConnection = ({ togglePopup, id }) => {
                 <div className="popup-content">
                     <h5>Edit Connection</h5>
                     <form onSubmit={handleSubmit}>
-                        <label>Connection Name *</label>
-                        <input
+                        <CommonTextInput
+                            label="Connection Name *"
                             name="name"
                             value={formData.name}
                             onChange={handleChange}
                             placeholder="Enter connection name"
-                            className="com"
                         />
                         {error.name && <p className="error">{error.name}</p>}
 
-                        <label>Connection Type *</label>
-                        <select
-                            name="connection_type"
-                            value={formData.connection_type}
-                            onChange={handleChange}
+                       
+                        <CommonMultiSelect
+                            label="Connection Type *"
+                            value={connectionTypes.find(opt => opt.value === formData.connection_type)}
+                            onChange={(selectedOption) =>
+                                setFormData(prev => ({
+                                    ...prev,
+                                    connection_type: selectedOption?.value || ""
+                                }))
+                            }
+                            
                             ref={inputRef}
-                            className="com"
+                            customStyles={customSelectStyles}
+                            options={connectionTypes}
                         >
-                            <option value="">-- Select --</option>
+                            {/* <option value="">-- Select --</option>
                             {connectionTypes.map((ct) => (
                                 <option key={ct.value} value={ct.value}>{ct.label}</option>
-                            ))}
-                        </select>
+                            ))} */}
+                        </CommonMultiSelect>
                         {error.connection_type && <p className="error">{error.connection_type}</p>}
 
-                        <label>Host *</label>
-                        <input
+                        {/* <label>Host *</label> */}
+                        <CommonTextInput
+                            label="Host *"
                             name="host"
                             value={formData.connection_info.host}
                             onChange={handleChange}
@@ -198,8 +211,8 @@ const EditConnection = ({ togglePopup, id }) => {
                         />
                         {error.host && <p className="error">{error.host}</p>}
 
-                        <label>Port *</label>
-                        <input
+                        <CommonTextInput
+                            label="Port *"
                             name="port"
                             value={formData.connection_info.port}
                             type="number"
@@ -209,8 +222,8 @@ const EditConnection = ({ togglePopup, id }) => {
                         />
                         {error.port && <p className="error">{error.port}</p>}
 
-                        <label>Username *</label>
-                        <input
+                        <CommonTextInput
+                            label="Username *"
                             name="username"
                             value={formData.connection_info.username}
                             onChange={handleChange}
@@ -219,8 +232,8 @@ const EditConnection = ({ togglePopup, id }) => {
                         />
                         {error.username && <p className="error">{error.username}</p>}
 
-                        <label>Password (leave blank to keep current)</label>
-                        <input
+                        <CommonTextInput
+                            label="Password *"
                             name="password"
                             value={formData.connection_info.password}
                             type="password"
@@ -228,13 +241,13 @@ const EditConnection = ({ togglePopup, id }) => {
                             placeholder="Enter new password"
                             className="com"
                         />
-                       
+                        {error.password && <p className="error">{error.password}</p>}
 
                         <div className="button-container">
-                            <button type="submit" className="create-btn" disabled={isSubmitting}>
+                            <AppButton type="submit" className="create-btn" disabled={isSubmitting}>
                                 {isSubmitting ? "Editing..." : "Edit"}
-                            </button>
-                            <button type="button" onClick={togglePopup} className="cancel-btn">Cancel</button>
+                            </AppButton>
+                            <AppButton type="button" onClick={togglePopup} className="cancel-btn">Cancel</AppButton>
                         </div>
                     </form>
                 </div>
