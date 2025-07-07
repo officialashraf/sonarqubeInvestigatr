@@ -17,6 +17,7 @@ import styles from '../../Common/Table/table.module.css';
 import customSelectStyles from '../../Common/CustomStyleSelect/customSelectStyles';
 import CommonMultiSelect from '../../Common/MultiSelect/CommonMultiSelect';
 import CommonDateInput from '../../Common/DateField/DateField';
+import CommonTextInput from '../../Common/MultiSelect/CommonTextInput';
 
 export const sharedSxStyles = {
   '& .MuiOutlinedInput-root': {
@@ -385,7 +386,7 @@ const CreateCriteria = ({ handleCreateCase }) => {
             {/* Location Fields */}
             <label>Focus your search on a particular location or area</label>
             <div style={{ display: 'flex', justifyContent: 'space-evenly', color: 'white' }}>
-              <CommonDateInput
+              <CommonTextInput
                 name="latitude"
                 placeholder="Latitude"
                 // className="com me-2"
@@ -394,7 +395,7 @@ const CreateCriteria = ({ handleCreateCase }) => {
                 showIcon={false}
                 autoComplete='off'
               />
-              <CommonDateInput
+              <CommonTextInput
                 name="longitude"
                 placeholder="Longitude"
                 showIcon={false}
