@@ -13,6 +13,7 @@ import CommonChipsInput from "../../Common/MultiSelect/CommonChipsInput";
 import CommonTextArea from "../../Common/MultiSelect/CommonText";
 import CommonTextInput from "../../Common/MultiSelect/CommonTextInput";
 import AppButton from "../../Common/Buttton/button";
+import CommonMultiSelect from "../../Common/MultiSelect/CommonMultiSelect";
 
 
 
@@ -386,14 +387,15 @@ const TargetCreate = ({ togglePopup, existingTargets = [] }) => {
 
             {/* Dynamic SubType Section */}
             {(formData.type === "target") && availableSubTypes.length > 0 && (
-              <div className="subtype-section">
+              <div >
                 {subTypeRows.map((row, index) => (
-                  <div key={index} className="subtype-row">
+                  <div key={index} >
 
                     {existingTargets.length > 0 && (
                       <div className="subtype-fields">
-                        <label>Targets:</label>
-                        <Select
+                        {/* <label>Targets:</label> */}
+                        <CommonMultiSelect
+                          label="Targets:"
                           isMulti
                           options={existingTargets
                             .filter(target => target.type !== "target")
@@ -402,6 +404,7 @@ const TargetCreate = ({ togglePopup, existingTargets = [] }) => {
                               label: `${target.id} - ${target.name} - ${target.type}`
                             }))
                           }
+                          customStyles={customSelectStyles}
 
                           // styles={customStyles}
                           placeholder="Select targets"
@@ -411,13 +414,13 @@ const TargetCreate = ({ togglePopup, existingTargets = [] }) => {
                               return t ? { value: t.id, label: `${t.id} - ${t.name} - ${t.type}` } : null;
                             }).filter(Boolean)
                           }
-                          onChange={(selectedOptions) => {
-                            const selectedIds = selectedOptions.map(option => option.value);
-                            setFormData(prev => ({
-                              ...prev,
-                              target_id: selectedIds
-                            }));
-                          }}
+onChange={(selectedOptions) => {
+  const selectedIds = Array.isArray(selectedOptions) ? selectedOptions.map(option => option.value) : [];
+  setFormData(prev => ({
+    ...prev,
+    target_id: selectedIds
+  }));
+}}
                           className="target-select"
                         />
                       </div>

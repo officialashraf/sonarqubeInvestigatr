@@ -9,12 +9,13 @@
   width: 5vmax;
   height: 5vmax;
   border-radius: 50%;
-  border-bottom: 5px solid rgba(29, 27, 27, 0.719);
+  border: 4px solid #1a1a1a;
+  border-bottom-color: #0073cf;
   animation: loadingRotate 800ms linear infinite;
 }
 
 @keyframes loadingRotate {
-  to {
-    transform: rotateZ(-360deg);
+  100% {
+    transform: rotate(360deg);
   }
 }
