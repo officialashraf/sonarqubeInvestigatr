@@ -188,7 +188,7 @@ const AssignRole = ({ togglePopup, details }) => {
                 display: 'flex',
                 alignItems: 'center',
                 padding: 5,
-                backgroundColor: data.isAssigned ? '#f5f5f5' : 'white'
+                backgroundColor: '#101d2b'
             }}>
                 <input
                     type="checkbox"
@@ -216,7 +216,7 @@ const AssignRole = ({ togglePopup, details }) => {
                         <CloseButton onClick={togglePopup} />
                     </span>
                     <form onSubmit={(e) => e.preventDefault()}>
-                        <div className="form-group" style={{ marginBottom: '15px' }}>
+                        <div className="form-group" style={{ marginBottom: '15px', color: 'white'}}>
                             {/* <label>Role</label> */}
                             <CommonTextInput
                                 label="Role"
@@ -231,7 +231,7 @@ const AssignRole = ({ togglePopup, details }) => {
                                 label="Select Permission"
                                 options={[{ label: 'Select All', value: '_select_all_' }, ...endpoints]}
                                 // options={endpoints}
-                                styles={customStyles}
+                                // styles={customStyles}
                                 placeholder="Select permissions"
                                 isLoading={endpointsLoading}
                                 value={selectedEndpoints}

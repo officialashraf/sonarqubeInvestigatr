@@ -1,42 +1,26 @@
 import buildInfo from '../../../InfoApp/build-info';
 
-import { Table, CloseButton } from 'react-bootstrap'
+import PopupModal from "../../Common/Popup/popup";
+import DetailBox from "../../Common/DetailBox/DetailBox";
+import styles from '../../Common/DetailBox/detailBox.module.css';
+import AppButton from "../../Common/Buttton/button";
+
 const AboutUs = ({ togglePopup }) => {
-
     return (
-
-        <div className="popup-overlay">
-            <div className="popup-containera">
-                <div className="popup-content">
-
-                    <div className="header">
-                        <span> <h5>About Us</h5></span>
-                        <CloseButton onClick={togglePopup} />
-                    </div>
-                    <div className="case-details-container">
-                        <Table bordered hover className='custom-table custom-table-th' >
-                            <tbody style={{ textAlign: 'left' }}> <tr> <th>Product Name</th> <td>{buildInfo.productName}</td> </tr>
-                                <tr> <th> Version </th> <td>{buildInfo.version}</td> </tr>
-                                {/* <tr> <th>LastModified On</th> <td>{buildInfo.lastModifiedOn}</td> </tr>*/}
-                                <tr> <th>Updated By:</th> <td>{buildInfo.updatedBy}</td> </tr>
-                                <tr> <th>Maintained By</th> <td>{buildInfo.maintainedBy}</td> </tr> 
-
-                            </tbody>
-                        </Table>
-                    </div>
-                    <div className="button-container">
-                        <button type="button" className="cancel-btn" onClick={togglePopup}>
-                            Cancel
-                        </button>
-
-                    </div>
+        <PopupModal title="About Us" onClose={togglePopup}>
+            <div className={styles.container}>
+                <div className={styles.grid}>
+                    <DetailBox label="Product Name" value={buildInfo.productName} />
+                    <DetailBox label="Version" value={buildInfo.version} />
+                    <DetailBox label="Updated By" value={buildInfo.updatedBy} />
+                    <DetailBox label="Maintained By" value={buildInfo.maintainedBy} />
                 </div>
             </div>
-        </div>
+            <div className="d-flex justify-content-center mt-3">
+                <AppButton onClick={togglePopup}>Cancel</AppButton>
+            </div>
+        </PopupModal>
+    );
+};
 
-    )
-}
-
-export default AboutUs
-
-
+export default AboutUs;
