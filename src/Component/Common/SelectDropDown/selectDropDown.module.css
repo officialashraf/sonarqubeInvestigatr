@@ -31,7 +31,10 @@
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-
+.disabledLabel{
+  background-color:  #ADA8A8 !important;
+  color: #1D1B2061 38% !important;  
+}
 .select:disabled {
   background-color: var(--color-colors-primary);
   color: #888;

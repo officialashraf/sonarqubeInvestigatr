@@ -12,7 +12,9 @@ html, body {
   height: 100%;
 }
 
-
+#root{
+  background-color: #080e17;
+}
 code {
   font-family:  "Roboto";
 }

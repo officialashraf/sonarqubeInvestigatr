@@ -1,4 +1,4 @@
-fixed-th {
+.fixed-th {
   position: sticky;
   top: -2px;
   background: #fff;
@@ -20,6 +20,7 @@ fixed-th {
   padding: 5px;
   text-align: left;
   overflow: hidden;
+  
 }
 
 

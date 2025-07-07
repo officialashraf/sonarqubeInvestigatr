@@ -163,9 +163,9 @@ const AddFilter2 = ({ togglePopup }) => {
                 </div>
                 {showAddFilter && (
                   <div className="col-md-8">
-                    <button onClick={handleCloseAddFilter} className="btn close-add-filter-button">
+                    {/* <button onClick={handleCloseAddFilter} className="btn close-add-filter-button">
                       <X fill='white' size={20}/>
-                    </button>
+                    </button> */}
                     <AddNewFilter
                       filterIde={filterIdedit}
                       onNewFilterCreated={handleNewFilterCreated}

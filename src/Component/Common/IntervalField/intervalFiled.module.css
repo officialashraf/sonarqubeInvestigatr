@@ -21,7 +21,10 @@
   border-radius: 0.75rem;
 }
 
-
+.disabledLabel{
+  background-color:  #ADA8A8 !important;
+  color: #1D1B2061 38% !important;  
+}
 
 .inputSelectContainer {
   display: flex;

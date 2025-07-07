@@ -504,7 +504,8 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
                     fontSize: '15px',
                     right: ' 6px',
                     cursor: 'pointer',
-                    color: 'white'
+                    color: 'white',
+                    marginTop : '25px'
                   }} onClick={() => handleRemoveSource(sourceIndex)}
                     disabled={!isEditable}>&times;</span>
 
@@ -589,8 +590,8 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
                           <Badge
                             key={keyIndex}
                             pill
-                            bg="dark"
-                            className="me-2 mb-1 d-inline-flex align-items-center"
+                            bg="rgba(0, 115, 207, 0.3)"
+                            className="me-2 mb-1 d-inline-flex align-items-center custom-badge"
                             style={{
                               display: "inline-flex",
                               alignItems: "center",
@@ -600,7 +601,9 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
                               wordBreak: "break-word", /*  Breaks long words */
                               overflowWrap: "break-word", /*  Ensures smooth wrapping */
                               // padding: "5px 10px" /*  Adds better spacing */
-                            }}
+                              border: "1px solid rgb(0, 115, 207)",
+                                  color: "rgb(0, 115, 207)",
+                                                          }}
                           >
                             {keyword}
                             {(!filterDetails?.id || isEditable) && (
@@ -608,6 +611,7 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
                                 variant="link"
                                 className="text-light p-0 ms-1"
                                 onClick={() => handleDeleteKeyword(sourceIndex, keyIndex)}
+                                style={{color:"rgb(0, 115, 207)"}}
                               >
                                 ×
                               </Button>
@@ -662,8 +666,9 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
                           <Badge
                             key={urlIndex}
                             pill
-                            bg="dark"
-                            className="me-2 mb-2 d-inline-flex align-items-center"
+                            bg="rgba(0, 115, 207, 0.3)"
+                            radius={30}
+                            className="me-2 mb-2 d-inline-flex align-items-center custom-badge"
                             style={{
                               display: "inline-flex",
                               alignItems: "center",
@@ -673,7 +678,9 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
                               wordBreak: "break-word", /*  Breaks long words */
                               overflowWrap: "break-word", /*  Ensures smooth wrapping */
                               // padding: "5px 10px" /*  Adds better spacing */
-                            }}
+                              border: "1px solid rgb(0, 115, 207)",
+                                  color: "rgb(0, 115, 207)",
+                                                          }}
                           >
                             {url}
                             {(!filterDetails?.id || isEditable) && (
@@ -681,6 +688,7 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
                                 variant="link"
                                 className="text-light p-0 ms-2"
                                 onClick={() => handleDeleteUrl(sourceIndex, urlIndex)}
+                                style={{color:"rgb(0, 115, 207)"}}
                               >
                                 ×
                               </Button>

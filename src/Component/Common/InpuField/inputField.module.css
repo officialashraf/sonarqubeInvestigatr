@@ -21,6 +21,10 @@
   border-radius: 0.75rem;
   transition: background-color 0.3s ease;
 }
+.disabledLabel{
+  background-color:  #ADA8A8 !important;
+  color: #1D1B2061 38% !important;  
+}
 
 .input {
   padding: 1rem 0.75rem 0.75rem 0.75rem;
