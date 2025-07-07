@@ -129,15 +129,18 @@ const NotificationList = ({ isOpen, setIsOpen }) => {
     };
 
     return (
-        <div style={{ height: '500px' }}>
+        <div style={{ height: '500px', border: '1px solid #0073cf'}}>
             <NavDropdown
                 id="profile-dropdown"
                 align="end"
                 show={isOpen}
                 onToggle={(isOpen) => setIsOpen(isOpen)}
-                style={{ display: isOpen ? "block" : "none", height: "500px", overflowY: "auto" }}
+                style={{
+                    display: isOpen ? "block" : "none", height: "500px", overflowY: "auto", position: 'relative', scrollbarColor: '#1e7df8 #0a192f',    
+                    scrollbarWidth: 'thin',
+                    zIndex: 9999}}
             >
-                <div style={{ padding: '10px', borderBottom: '1px solid #eee', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div style={{ padding: '10px', borderBottom: '1px solid #0073cf', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#101D2B' }}>
                     <button
                         className='add-btn'
                         onClick={markAllAsRead}
@@ -193,7 +196,7 @@ const NotificationList = ({ isOpen, setIsOpen }) => {
                             <span style={{
                                 flex: 1,
                                 marginRight: '10px',
-                                color: item.is_read ? '#6c757d' : '#333'
+                                color: '#d2d2d2'
                             }}>
                                 {item.message}
                             </span>

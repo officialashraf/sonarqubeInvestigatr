@@ -15,6 +15,7 @@ import styles from '../../Common/Table/table.module.css';
 import CommonMultiSelect from '../../Common/MultiSelect/CommonMultiSelect';
 import CommonDateInput from '../../Common/DateField/DateField';
 import AppButton from '../../Common/Buttton/button';
+import CommonTextInput from '../../Common/MultiSelect/CommonTextInput';
 
 
 // const API_BASE_URL = 'http://5.180.148.40';
@@ -453,7 +454,7 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
             <div >
               <label>Focus your search on a particular location or area</label>
               <div style={{ display: 'flex', justifyContent: 'space-evenly', color: 'white' }}>
-                <CommonDateInput
+                <CommonTextInput
                   name="latitude"
                   placeholder="Latitude"
                   className={styles.searchBar}
@@ -466,7 +467,7 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
                 
                   
                 />
-                <CommonDateInput
+                <CommonTextInput
                   name="longitude"
                   placeholder="Longitude"
                   value={formData.longitude}
