@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Table, Pagination } from "react-bootstrap";
 import "./caseTableData.css";
-import "../../Case/table.css"
+// import "../../Case/table.css"
 import { useSelector, useDispatch } from "react-redux";
 import "./pagination.css";
 import { fetchSummaryData } from "../../../../Redux/Action/filterAction";
@@ -77,11 +77,11 @@ const TabulerData = () => {
       {/* Table Wrapper */}
       <div className={styles.tableWrapper} style={{ overflowY: "auto", height:"60vh"}}>
         {data && data.length > 0 ? (
-          <Table hover responsive size="sm" className={styles.table}>
+          <Table hover  className={styles.table}>
             <thead>
               <tr>
                 {headers.map((header) => (
-                  <th key={header} className="fixed-th">
+                  <th key={header} className="fixed-th" >
                     {header
                       .split("_")
                       .map((word) =>

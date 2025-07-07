@@ -211,6 +211,7 @@
   background-color: #ffffff;
   border: 1px solid #000000;
 }
+ 
 
 .filter-name-input:focus {
   background-color: #ffffff;
@@ -246,7 +247,19 @@
 .source-label {
   margin: 8px 16px;
 }
+.custom-badge {
+  border-radius: 30px !important;
+}
+.rounded-pill {
+  border-radius: 30px !important;
+}
 
+.text-light{
+ 
+  
+  color: rgb(0, 115, 207) !important;
+
+}
 .source-select {
   max-width: 100%;
   background-color: #ffffff;

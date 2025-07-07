@@ -14,9 +14,12 @@ import styles from './selectDropDown.module.css';
   return (
     <div className={styles.dropdownWrapper}>
       <div className={`${styles.dropdownGroup} ${error ? styles.error : ''}`}>
-        <label className={`${styles.label} ${error ? styles.errorLabel : ''}`}>
-          {label}
-        </label>
+         <label className={`${styles.label} 
+                  ${error ? styles.errorLabel : ''}
+                   ${disabled ? styles.disabledLabel : ''}
+                  `}>
+                    {label}
+                  </label>
            <div className={styles.selectWrapper}>
         <select
           className={`${styles.select} ${error ? styles.errorSelect : ''}`}

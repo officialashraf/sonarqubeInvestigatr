@@ -20,8 +20,13 @@
   box-shadow: var(--shadow-mediumShadow);
 }
 .buttonDisabled{
-   background-color: #1D1B20;
-  color: #ADA8A8;    
+ background-color: #ADA8A8;
+  color: #1D1B20;;    
   cursor: not-allowed;     
-  border: 1px solid #ccc;
+  border: 1px solid #ADA8A8 !important;
+}
+.buttonDisabled:hover {
+  background-color: #ADA8A8;
+  color: #1D1B20;
+  border: 1px solid #ADA8A8 !important;
 }

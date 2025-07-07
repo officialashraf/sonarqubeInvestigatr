@@ -183,6 +183,14 @@ gap: -1rem;
   font-size: var(--font-body2-fontSize);
 }
 
+.table thead{
+   background-color: var(--color-colors-primaryAccent) !important;
+  position: sticky;
+  top: -2px;
+  z-index: 2;
+  height: 42px;
+  transform: translateX(0);
+}
 .table thead th {
   background-color: var(--color-colors-primaryAccent) !important;
   color: var(--color-colors-neutralText);
@@ -191,6 +199,8 @@ gap: -1rem;
   font-weight: var(--font-h6-fontWeight);
   white-space: nowrap;
   border-style: none !important;
+  min-width: 40px;
+  max-width: 200px;
 }
 
 .table thead th:first-child {

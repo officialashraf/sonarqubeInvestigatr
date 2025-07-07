@@ -12,7 +12,12 @@ export const IntervalField = ({
   return (
     <div className={styles.wrapper}>
       <div className={styles.group}>
-        <label className={styles.label}>{label} *</label>
+        {/* <label className={styles.label}>{label} *</label> */}
+        <label className={`${styles.label} 
+                                    ${disabled ? styles.disabledLabel : ''}
+                  `}>
+          {label}
+        </label>
         <div className={styles.inputSelectContainer}>
           <input
             type="number"

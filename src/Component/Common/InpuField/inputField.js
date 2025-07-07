@@ -23,7 +23,10 @@ export const InputField = React.forwardRef(
     return (
       <div className={styles.inputWrapper}>
         <div className={`${styles.inputGroup} ${error ? styles.error : ''}`}>
-          <label className={`${styles.label} ${error ? styles.errorLabel : ''}`}>
+          <label className={`${styles.label} 
+          ${error ? styles.errorLabel : ''}
+           ${disabled ? styles.disabledLabel : ''}
+          `}>
             {label}
           </label>
           <input

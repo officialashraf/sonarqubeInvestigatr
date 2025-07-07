@@ -70,7 +70,9 @@ const AppContent = () => {
     <> {isAuthPage ? (
       <Routes>
         <Route path='/' element={<LicenseValidator />} />
-        <Route path="/login" element={<LoginPage />} />
+          <Route element={<LicenseGuard />}>
+                  <Route path="/login" element={<LoginPage />} />
+                </Route>
 
       </Routes>
     ) : (

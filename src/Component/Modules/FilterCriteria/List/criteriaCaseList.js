@@ -180,7 +180,7 @@ const CriteriaCaseTable = () => {
           </div>
         ) : (
           // <Table striped bordered hover variant='light'>
-          <Table hover responsive size="sm" className={styles.table}>
+          <Table hover className={styles.table}>
             <thead >
               <tr>
                 {/* Dynamically generate headers from all unique keys */}
