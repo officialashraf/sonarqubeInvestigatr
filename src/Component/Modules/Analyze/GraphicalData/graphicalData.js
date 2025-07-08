@@ -21,7 +21,7 @@ const Header = ({ title }) =>
     className="grapghCards"
 
   >
-    <p style={{ color: "white" }}>
+    <p style={{ color: "white",paddingLeft:"5px" }}>
       {title}
     </p>
     {/* <Grid item p={0} mt={-2}>
@@ -49,7 +49,7 @@ const Header = ({ title }) =>
 
 const ComponentOne = () => (
   <>
-     <Header title="Timelines" />
+     <Header title="Timelines"  />
   <Card sx={{ height: "300px", backgroundColor: "#101D2B" , borderRadius:'25px' }}>
     <CardContent>
       <LineGraph />

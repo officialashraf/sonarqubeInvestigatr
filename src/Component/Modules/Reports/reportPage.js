@@ -184,6 +184,8 @@ const ReportPage = () => {
             onChange={handleCaseChange}
             placeholder="Select Cases"
             styles={customSelectStyles}
+            menuPortalTarget={document.body}
+            menuShouldBlockScroll={true}
           />
         </div>
         <TextField

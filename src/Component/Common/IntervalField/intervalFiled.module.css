@@ -25,6 +25,10 @@
   background-color:  #ADA8A8 !important;
   color: #1D1B2061 38% !important;  
 }
+.inputSelectContainer:focus-within {
+  border-color: #64b5f6;
+  box-shadow: 0 0 0 3px rgba(100, 181, 246, 0.25);
+} 
 
 .inputSelectContainer {
   display: flex;
@@ -34,35 +38,65 @@
   background-color: var(--color-colors-primary);
   overflow: hidden;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.inputSelectContainer:focus-within {
-  border-color: #64b5f6;
-  box-shadow: 0 0 0 3px rgba(100, 181, 246, 0.25);
+  flex-wrap: wrap;
+  gap: 5px;
 }
 
 .inputse {
-   width: 45px;
-   /* padding-left: 5px; */
+  width: 70px;
   padding: 0.9rem 0.75rem 0.75rem 0.75rem;
   border: none;
   background-color: var(--color-colors-primary);
   color: var(--color-colors-neutralText);
 }
 
-
 .select {
   flex: 1;
   padding: 1rem 0.75rem 0.75rem 0.75rem;
   border: none;
-  background-color:var(--color-colors-primary) ;
+  background-color: var(--color-colors-primary);
   color: var(--color-colors-neutralText);
 }
 
-.input:focus,
+/* Hide default focus outlines */
+.inputse:focus,
 .select:focus {
   outline: none;
 }
+
+/* Number input spinner custom style */
+.inputse::-webkit-inner-spin-button,
+.inputse::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: var(--color-colors-primaryAccent);
+  color: var(--color-colors-primary);
+  border-radius: 4px;
+  width: 16px;
+  height: 100%;
+  cursor: pointer;
+}
+
+.inputse[type=number] {
+  -moz-appearance: textfield;
+}
+
+/* Responsive: stack on small screens */
+@media (max-width: 500px) {
+  .inputSelectContainer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .inputse {
+    width: 100%;
+  }
+
+  .select {
+    width: 100%;
+  }
+}
+
 
 
 /* .input:disabled,

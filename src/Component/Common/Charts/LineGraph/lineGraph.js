@@ -87,7 +87,7 @@ const ReusableLineGraph = ({
                 ) : null
               }
             />
-            <Legend />
+            {/* <Legend /> */}
             
             {/* Conditional Reference Lines */}
             {recordTypes.length > 0 && recordLineField && recordTypes.map((type, index) => (

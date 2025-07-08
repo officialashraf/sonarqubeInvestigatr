@@ -182,12 +182,15 @@ gap: -1rem;
   color: var(--color-colors-neutralText);
   font-size: var(--font-body2-fontSize);
 }
-
+.dropdown-menu {
+  z-index: 1000; /* ensures it appears above thead */
+  position: absolute;
+}
 .table thead{
    background-color: var(--color-colors-primaryAccent) !important;
   position: sticky;
   top: -2px;
-  z-index: 2;
+  z-index: 1;
   height: 42px;
   transform: translateX(0);
 }
