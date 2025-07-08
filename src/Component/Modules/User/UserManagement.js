@@ -93,11 +93,11 @@ const UserManagement = () => {
     };
   }, []);
 
-  const confirmDelete = (id, username) => {
+  const confirmDelete = (id, name) => {
     toast((t) => (
       <div>
-        <p>Are you sure you want to delete {username} user?</p>
-        <button className='custom-confirm-button' onClick={() => { deleteUser(id, username); toast.dismiss(t.id); }} style={{ padding: "4px 1px", fontSize: "12px", width: "20%" }}>Yes</button>
+        <p>Are you sure you want to delete {name} user?</p>
+        <button className='custom-confirm-button' onClick={() => { deleteUser(id, name); toast.dismiss(t.id); }} style={{ padding: "4px 1px", fontSize: "12px", width: "20%" }}>Yes</button>
         <button className='custom-confirm-button' onClick={() => toast.dismiss(t.id)} style={{ padding: "4px 1px", fontSize: "12px", width: "20%" }} >No</button> </div>),
       {
         autoClose: false, closeOnClick: false, draggable: false, style: {
@@ -113,7 +113,7 @@ const UserManagement = () => {
       },)
   };
 
-  const deleteUser = async (id, username) => {
+  const deleteUser = async (id, name) => {
     const token = Cookies.get("accessToken");
     if (!token) {
       console.error("No token found in cookies.");
@@ -129,7 +129,7 @@ const UserManagement = () => {
           }
         });
       window.dispatchEvent(new Event("databaseUpdated"));
-      toast.success(`User ${username} deleted successfully`)
+      toast.success(`User ${name} deleted successfully`)
       console.log("User Deleted:", response.data);
 
     } catch (err) {
@@ -259,7 +259,7 @@ const userColumns = [
         columns={userColumns}
        onRowAction={{
                 edit: (row) => toggleEditForm(row),
-                delete: (row) => confirmDelete(row.id, row.name),
+                delete: (row) => confirmDelete(row.id, row.username),
                 details: (row) => toggleDetails(row),
                 reset :(row) => toggleResetForm(row)
               }}

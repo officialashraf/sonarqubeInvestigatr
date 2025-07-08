@@ -19,7 +19,7 @@ import CommonMultiSelect from "../../Common/MultiSelect/CommonMultiSelect";
 
 const TargetCreate = ({ togglePopup, existingTargets = [] }) => {
   const token = Cookies.get("accessToken");
-   const { inputRef, isReadOnly, handleFocus } = useAutoFocusWithManualAutofill();
+  const { inputRef, isReadOnly, handleFocus } = useAutoFocusWithManualAutofill();
   const targetType = [
     { value: "watchword", label: "Watchword" },
     { value: "location", label: "Location" },
@@ -27,32 +27,32 @@ const TargetCreate = ({ togglePopup, existingTargets = [] }) => {
     { value: "domain", label: "Domain" },
     { value: "protocol", label: "Protocol" },
     { value: "port", label: "Port" },
-    { value: "ip address", label: "IP Address" },
-    { value: "social media id", label: "Social Media ID" },
+    { value: "ipaddress", label: "IP Address" },
+    { value: "socialmedia id", label: "Social Media ID" },
     { value: "target", label: "Target" },
-    { value: "mobile_number", label: "Mobile Number" },
-    { value: "email_id", label: "Email ID" },
+    { value: "mobilenumber", label: "Mobile Number" },
+    { value: "emaiid", label: "Email ID" },
     { value: "address", label: "Address" },
     { value: "landline", label: "Landline" },
-    { value: "fax_number", label: "Fax Number" },
+    { value: "faxnumber", label: "Fax Number" },
     { value: "IMEI", label: "IMEI" },
     { value: "IMSI", label: "IMSI" },
-    { value: "organization_name", label: "Organization Name" },
-    { value: "university_name", label: "University Name" },
-    { value: "device_model_number", label: "Device Model Number" },
-    { value: "bank_account_number", label: "Bank Account Number" },
-    { value: "bank_account_holder_name", label: "Bank Account Holder Name" },
-    { value: "bank_customer_id", label: "Bank Customer ID" },
-    { value: "bank_holder_address", label: "Bank Holder Address" },
-    { value: "property_owner_name", label: "Property Owner Name" },
-    { value: "national_id", label: "National ID" },
-    { value: "vehicle_number", label: "Vehicle Number" },
-    { value: "vehicle_owner_name", label: "Vehicle Owner Name" },
-    { value: "passport_number", label: "Passport Number" },
-    { value: "criminal_history_offense", label: "Criminal History Offense" },
-    { value: "criminal_history_prisoner_number", label: "Criminal History Prisoner Number" },
-    { value: "arm_type", label: "Arm Type" },
-    { value: "arm_model_number", label: "Arm Model Number" }
+    { value: "organizationname", label: "Organization Name" },
+    { value: "universityname", label: "University Name" },
+    { value: "devicemodelnumber", label: "Device Model Number" },
+    { value: "bankaccountnumber", label: "Bank Account Number" },
+    { value: "bankaccountholdername", label: "Bank Account Holder Name" },
+    { value: "bankcustomerid", label: "Bank Customer ID" },
+    { value: "bankholderaddress", label: "Bank Holder Address" },
+    { value: "propertyownername", label: "Property Owner Name" },
+    { value: "nationalid", label: "National ID" },
+    { value: "vehiclenumber", label: "Vehicle Number" },
+    { value: "vehicleownename", label: "Vehicle Owner Name" },
+    { value: "passportnumber", label: "Passport Number" },
+    { value: "criminalhistoryoffense", label: "Criminal History Offense" },
+    { value: "criminalhistoryprisonernumber", label: "Criminal History Prisoner Number" },
+    { value: "armtype", label: "Arm Type" },
+    { value: "armmodelnumber", label: "Arm Model Number" }
   ];
 
   const [synonymInput, setSynonymInput] = useState("");
@@ -127,7 +127,7 @@ const TargetCreate = ({ togglePopup, existingTargets = [] }) => {
       })
     );
     setIsSubmitting(true);
-   
+
     console.log("query payload", formData);
 
     try {
@@ -263,7 +263,7 @@ const TargetCreate = ({ togglePopup, existingTargets = [] }) => {
               <CommonSingleSelect
                 label="Type * "
                 options={targetType}
-               customStyles={customSelectStyles}
+                customStyles={customSelectStyles}
                 placeholder="Select type"
                 value={targetType.find(option => option.value === formData.type)}
                 onChange={(selectedOption) =>
@@ -272,8 +272,8 @@ const TargetCreate = ({ togglePopup, existingTargets = [] }) => {
                     type: selectedOption.value
                   }))
                 }
-                // className="basic-single-select"
-                // classNamePrefix="select"
+              // className="basic-single-select"
+              // classNamePrefix="select"
               />
               {error.type && <p style={{ color: "red", margin: '0px' }} >{error.type}</p>}
             </div>
@@ -348,13 +348,13 @@ const TargetCreate = ({ togglePopup, existingTargets = [] }) => {
               {error.synonyms && <p style={{ color: "red", margin: '0px' }} >{error.synonyms}</p>}
             </div> */}
             <div>
-            <CommonChipsInput
-              label="Alternative Keywords/Synonym (up to 5 keywords)"
-              value={synonymInput}
-              onChange={handleSynonymInputChange}
-              onKeyDown={handleSynonymKeyDown}
+              <CommonChipsInput
+                label="Alternative Keywords/Synonym (up to 5 keywords)"
+                value={synonymInput}
+                onChange={handleSynonymInputChange}
+                onKeyDown={handleSynonymKeyDown}
                 placeholder="Type in keywords/synonym and press Enter to add..."
-            />
+              />
               <div className="synonym-chips">
                 {formData.synonyms.map((synonym, index) => (
                   <div key={index} className="synonym-chip">
@@ -378,7 +378,7 @@ const TargetCreate = ({ togglePopup, existingTargets = [] }) => {
                 label="Threat Score"
                 options={threatScoreOptions}
                 customStyles={customSelectStyles}
-                
+
                 placeholder="Select threat score"
                 value={threatScoreOptions.find((option) => option.value === formData.threat_weightage) || null}
                 onChange={handleThreatScoreChange}
@@ -414,13 +414,13 @@ const TargetCreate = ({ togglePopup, existingTargets = [] }) => {
                               return t ? { value: t.id, label: `${t.id} - ${t.name} - ${t.type}` } : null;
                             }).filter(Boolean)
                           }
-onChange={(selectedOptions) => {
-  const selectedIds = Array.isArray(selectedOptions) ? selectedOptions.map(option => option.value) : [];
-  setFormData(prev => ({
-    ...prev,
-    target_id: selectedIds
-  }));
-}}
+                          onChange={(selectedOptions) => {
+                            const selectedIds = Array.isArray(selectedOptions) ? selectedOptions.map(option => option.value) : [];
+                            setFormData(prev => ({
+                              ...prev,
+                              target_id: selectedIds
+                            }));
+                          }}
                           className="target-select"
                         />
                       </div>
@@ -435,7 +435,7 @@ onChange={(selectedOptions) => {
               <AppButton type="submit" disabled={isSubmitting}>
                 {isSubmitting ? 'Creating...' : 'Create'}
               </AppButton>
-              <AppButton type="button"  onClick={togglePopup}>
+              <AppButton type="button" onClick={togglePopup}>
                 Cancel
               </AppButton>
             </div>

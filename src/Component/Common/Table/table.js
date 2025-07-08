@@ -57,7 +57,7 @@ const TableModal = ({ columns = [], data = [], onAddClick, searchPlaceholder = "
       </div>
       <div className={styles.tableContainer}>
         <div className={styles.tableWrapper}>
-          <Table hover   className={styles.table}>
+          <Table hover className={styles.table}>
             <thead>
               <tr>
                 {columns.map((col) => (
@@ -82,13 +82,14 @@ const TableModal = ({ columns = [], data = [], onAddClick, searchPlaceholder = "
                     <td key={col.key}>
                       {col.key === "id" && idPrefix
                         ? `${idPrefix}${String(row[col.key]).padStart(4, "0")}`
-                        : col.key === ("watchers" || "synonyms")
+                        : (col.key === "watchers" || col.key === "synonyms")
                           ? Array.isArray(row[col.key])
                             ? row[col.key].join(", ")
                             : row[col.key]
                           : row[col.key]}
                     </td>
                   ))}
+
                   {onRowAction && (
                     <td className={styles.actionCol}>
                       <EditIcon
