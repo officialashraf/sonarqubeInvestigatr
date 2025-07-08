@@ -408,47 +408,45 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
             </div>
 
             {/* Filetype Dropdown (Multi Select) */}
-            
-              {/* <label>Filetype</label> */}
-              <CommonMultiSelect
-                label="Filetype"
-                isMulti
-                options={fileTypeOptions}
-                customStyles={customSelectStyles}
-               
-                value={formData.filetype}
-                onChange={(selected) => setFormData(prev => ({ ...prev, filetype: selected || [] }))}
-                placeholder="Select file types"
-                isLoading={fileTypeOptions.length === 0}
-              />
-           
-              <CommonMultiSelect
-               label="Case"
-                isMulti
-                options={caseOptions}
-                customStyles={customSelectStyles}
-                
-                value={formData.caseIds}
-                onChange={(selected) => setFormData(prev => ({ ...prev, caseIds: selected || [] }))}
-                placeholder="Select cases"
-                isLoading={caseOptions.length === 0}
-              />
-         
+
+            {/* <label>Filetype</label> */}
+            <CommonMultiSelect
+              label="Source Type"
+              isMulti
+              options={fileTypeOptions}
+              customStyles={customSelectStyles}
+              value={formData.filetype}
+              onChange={(selected) => setFormData(prev => ({ ...prev, filetype: selected || [] }))}
+              placeholder="Select file types"
+              isLoading={fileTypeOptions.length === 0}
+            />
+
+            <CommonMultiSelect
+              label="Case"
+              isMulti
+              options={caseOptions}
+              customStyles={customSelectStyles}
+              value={formData.caseIds}
+              onChange={(selected) => setFormData(prev => ({ ...prev, caseIds: selected || [] }))}
+              placeholder="Select cases"
+              isLoading={caseOptions.length === 0}
+            />
+
 
             {/* DatePicker */}
-            
-              <CommonDateInput
-                fullWidth     
-                placeholder="Select date..."
-                value={
-                  selectedDates.startDate && selectedDates.endDate
-                    ? `${formatDate(selectedDates.startDate)} to ${formatDate(selectedDates.endDate)}`
-                    : formatDate(selectedDates.startDate || selectedDates.endDate)
-                }
-                readOnly
-                sx={sharedSxStyles}
-              />
-           
+
+            <CommonDateInput
+              fullWidth
+              placeholder="Select date..."
+              value={
+                selectedDates.startDate && selectedDates.endDate
+                  ? `${formatDate(selectedDates.startDate)} to ${formatDate(selectedDates.endDate)}`
+                  : formatDate(selectedDates.startDate || selectedDates.endDate)
+              }
+              readOnly
+              sx={sharedSxStyles}
+            />
+
 
             {/* Location Fields */}
             <div >
@@ -462,10 +460,10 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
                   onChange={handleInputChange}
                   autoComplete='off'
                   showIcon={false}
-                 
-                  
-                
-                  
+
+
+
+
                 />
                 <CommonTextInput
                   name="longitude"
@@ -475,7 +473,7 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
                   sx={sharedSxStyles}
                   autoComplete='off'
                   showIcon={false}
-                 
+
                 />
               </div>
             </div>
@@ -484,16 +482,16 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
 
             {/* Update Button */}
             <div className="button-container d-flex gap-2" style={{ textAlign: 'center' }}>
-            <AppButton
-              type="submit"
-              
-              disabled={isBtnDisabled || isSubmitting}
-            >
-              {isSubmitting ? 'Editing...' : 'Edit'}
-            </AppButton>
+              <AppButton
+                type="submit"
+
+                disabled={isBtnDisabled || isSubmitting}
+              >
+                {isSubmitting ? 'Editing...' : 'Edit'}
+              </AppButton>
               <AppButton
                 type="button"
-                
+
                 onClick={togglePopup}
               >
                 Cancel

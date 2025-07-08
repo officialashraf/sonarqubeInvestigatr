@@ -269,7 +269,7 @@ const CreateCriteria = ({ handleCreateCase }) => {
           <h5>Create Criteria</h5>
           <form onSubmit={handleSearch} >
             {/* Search Bar with Icons */}
-            <label>Search</label>
+            <label>Search Keywords</label>
             <TextField
               fullWidth
               className={styles.searchBar}
@@ -280,7 +280,7 @@ const CreateCriteria = ({ handleCreateCase }) => {
                 inputRef: inputRef,
                 startAdornment: (
                   <InputAdornment position="start" >
-                    <Search style={{ color: "#0073CF"}}/>
+                    <Search style={{ color: "#0073CF" }} />
                   </InputAdornment>
                 ),
                 endAdornment: (
@@ -303,7 +303,7 @@ const CreateCriteria = ({ handleCreateCase }) => {
               value={formData.searchQuery}
               onChange={handleInputChange}
               sx={sharedSxStyles}
-                         />
+            />
             {/* <SearchBar
               inputValue={formData.searchQuery}
               onChange={handleInputChange}
@@ -317,29 +317,29 @@ const CreateCriteria = ({ handleCreateCase }) => {
 
 
             {/* Filetype Dropdown (Multi Select) */}
-           <CommonMultiSelect
-  label="File Type"
-  value={formData.filetype}
-  onChange={(selected) =>
-    setFormData((prev) => ({ ...prev, filetype: selected }))
-  }
-  options={fileTypeOptions}
-  customStyles={customSelectStyles}
-  
-/>
-
-          
-              <CommonMultiSelect
-                label="Case"
-                isMulti
+            <CommonMultiSelect
+              label="Source Type"
+              value={formData.filetype}
+              onChange={(selected) =>
+                setFormData((prev) => ({ ...prev, filetype: selected }))
+              }
+              options={fileTypeOptions}
               customStyles={customSelectStyles}
-                options={caseOptions}
-                styles={customSelectStyles}
-                // className="com"
-                value={formData.caseIds}
-                onChange={(selected) => { setFormData(prev => ({ ...prev, caseIds: selected })); }}
-                placeholder="Select cases"
-              />
+
+            />
+
+
+            <CommonMultiSelect
+              label="Case"
+              isMulti
+              customStyles={customSelectStyles}
+              options={caseOptions}
+              styles={customSelectStyles}
+              // className="com"
+              value={formData.caseIds}
+              onChange={(selected) => { setFormData(prev => ({ ...prev, caseIds: selected })); }}
+              placeholder="Select cases"
+            />
             {/* </div> */}
 
             {/* DatePicker */}
@@ -401,8 +401,8 @@ const CreateCriteria = ({ handleCreateCase }) => {
                 showIcon={false}
                 value={formData.longitude}
                 onChange={handleInputChange}
-               
-                
+
+
                 autoComplete='off'
               />
             </div>

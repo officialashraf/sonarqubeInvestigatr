@@ -590,7 +590,7 @@ const DataTable = () => {
 
             onRowAction={{
               edit: (row) => togglePopupB(row),
-              delete: (row) => confirmDelete(row.id, row.name),
+              delete: (row) => confirmDelete(row.id, row.title),
               details: (row) => togglePopupA(row),
             }}
             idPrefix="CASE"

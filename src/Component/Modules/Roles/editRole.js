@@ -11,7 +11,7 @@ const EditRole = ({ togglePopup, details }) => {
     const Token = Cookies.get('accessToken');
     console.log("editdetials", details)
     const [searchTitle, setSearchTitle] = useState('');
-
+console.warn("detials",details)
     const [initialSearchTitle, setInitialSearchTitle] = useState('');
     const [isBtnDisabled, setIsBtnDisabled] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -78,7 +78,7 @@ const EditRole = ({ togglePopup, details }) => {
                     &times;
                 </button>
 
-                <div className="popup-content" style={{ width: '70%' }}>
+                <div className="popup-content" style={{ width: '100%' }}>
 
                     <form onSubmit={(e) => e.preventDefault()}> {/* Prevent form submission default */}
 

@@ -94,7 +94,7 @@ const CaseDetails = ({ caseId, togglePopupA }) => {
       </div>
     </div>
     <div className="d-flex justify-content-center mt-3">
-          <AppButton children="OK" />
+          <AppButton children={"OK"}  onClick={togglePopupA} />
         </div>
            </PopupModal> 
     );

@@ -7,7 +7,7 @@
 .top-header {
   display: flex;
   padding: 2px;
-  background-color: #080e17;
+  background-color: #080e17 !important;
   font-size: 18px;
   border-radius: 5px;
   font: Poppins;
