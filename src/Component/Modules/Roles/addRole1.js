@@ -56,7 +56,7 @@ const AddRole = ({ togglePopup }) => {
                     <form onSubmit={(e) => e.preventDefault()}> {/* Prevent form submission default */}
                         <span style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
                             <label>Add Role *</label>
-                            <CloseButton onClick={togglePopup} />
+                            <CloseButton variant="white" onClick={togglePopup} />
                         </span>
                         <input
                             type="text"

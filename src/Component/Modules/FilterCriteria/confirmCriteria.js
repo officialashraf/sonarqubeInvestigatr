@@ -94,7 +94,7 @@ const Confirm = ({ formData, selectedDates, searchChips }) => {
 
                     <span style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%", color: 'white' }}>
                         <h5>Save Criteria</h5>
-                        <CloseButton  onClick={() => setIsVisible(false)} />
+                        <CloseButton variant="white"  onClick={() => setIsVisible(false)} />
                     </span>
                     <form onSubmit={(e) => e.preventDefault()}> {/* Prevent form submission default */}
 

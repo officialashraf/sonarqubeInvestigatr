@@ -178,7 +178,7 @@ const AddRole = ({ togglePopup }) => {
                     <span style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
 
                         <h5 >Assign permissions to role </h5>
-                        <CloseButton onClick={togglePopup} style={{ color: 'white'}} />
+                        <CloseButton variant="white" style={{ color: 'white'}} />
                     </span>
                     <form onSubmit={(e) => e.preventDefault()}>
                         <div className="form-group" style={{ marginBottom: '15px' }}>

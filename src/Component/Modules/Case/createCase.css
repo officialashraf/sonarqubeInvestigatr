@@ -79,6 +79,7 @@ label {
   color: #d2d2d2;
   font-size: 12px;
   height: 38px;
+  padding-left: 4px;
 }
 .com:focus {
   border-color: transparent; /* Focus border color ko remove karne ke liye */

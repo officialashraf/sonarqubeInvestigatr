@@ -48,7 +48,8 @@ const customSelectStyles = {
         backgroundColor: 'var(--color-colors-secondary)',
         color: 'var(--color-colors-neutralText)',
         borderRadius: '10px',
-       
+          scrollbarColor: '#1e7df8 var(--color-colors-secondary)',
+        scrollbarWidth: 'thin',
     }),
 
     option: (provided, state) => ({
@@ -76,7 +77,7 @@ const customSelectStyles = {
         maxHeight: '36px',
         overflowY: 'auto',
         // overflowX: 'hidden',
-        scrollbarWidth: 'thin',
+     
     }),
     menuPortal: (base) => ({
         ...base,

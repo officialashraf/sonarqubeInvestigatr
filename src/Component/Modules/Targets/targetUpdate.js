@@ -13,6 +13,7 @@ import CommonChipsInput from "../../Common/MultiSelect/CommonChipsInput";
 import CommonTextArea from "../../Common/MultiSelect/CommonText";
 import CommonTextInput from "../../Common/MultiSelect/CommonTextInput";
 import AppButton from "../../Common/Buttton/button";
+import CommonMultiSelect from "../../Common/MultiSelect/CommonMultiSelect";
 
 const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
   const token = Cookies.get("accessToken");
@@ -45,7 +46,7 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
     { value: "vehiclnumber", label: "Vehicle Number" },
     { value: "vehicleownername", label: "Vehicle Owner Name" },
     { value: "passportnumber", label: "Passport Number" },
-    { value: "criminalhistoryoffense", label: "Criminal History Offense" },
+    { value: "criminalhistoryoffence", label: "Criminal History Offence" },
     { value: "criminalhistoryprisonernumber", label: "Criminal History Prisoner Number" },
     { value: "armtype", label: "Arm Type" },
     { value: "armmodelnumber", label: "Arm Model Number" }
@@ -166,11 +167,13 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
       setError(validationErrors);
       return;
     }
+    // Modify payloadData construction to always include synonyms even if empty array
     const payloadData = Object.fromEntries(
-      Object.entries(formData).filter(([_, value]) => {
+      Object.entries(formData).filter(([key, value]) => {
         if (value === null || value === undefined) return false;
         if (typeof value === "string" && value.trim() === "") return false;
-        if (Array.isArray(value) && value.length === 0) return false;
+        // Allow empty array for synonyms to be sent to backend to remove synonyms
+        if (Array.isArray(value) && value.length === 0 && key !== "synonyms") return false;
         return true;
       })
     );
@@ -386,13 +389,14 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
 
             {/* Dynamic SubType Section */}
             {(formData.type === "target") && availableSubTypes.length > 0 && (
-              <div className="subtype-section">
+              <div >
                 {subTypeRows.map((row, index) => (
-                  <div key={index} className="subtype-row">
+                  <div key={index} >
                     {existingTargets.length > 0 && (
                       <div className="subtype-fields">
-                        <label>Targets:</label>
-                        <Select
+                        {/* <label>Targets:</label> */}
+                         <CommonMultiSelect
+                          label="Targets:"
                           isMulti
                           options={existingTargets
                             .filter(target => (target.type !== "target") && (target.id !== parseInt(id)))
@@ -401,7 +405,7 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
                               label: `${target.id} - ${target.name} - ${target.type}`
                             }))
                           }
-                          styles={customStyles}
+                           customStyles={customSelectStyles}
                           placeholder="Select targets"
                           value={
                             formData.target_id.map(targetId => {
