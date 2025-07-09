@@ -232,6 +232,7 @@ const ConnectionManagement = () => {
           <div>
        
             <TableModal
+            title="Connection Dashboard"
               columns={connectionColumns}
               data={filteredData}
               idPrefix="CON"
