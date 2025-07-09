@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, Tooltip } from '@mui/material';
 import axios from 'axios';
 import Cookies from "js-cookie";
 import Loader from '../../../Modules/Layout/loader';
@@ -52,6 +52,10 @@ const KeywordTagList = ({ queryPayload = null, caseId = null, aggsFields = ["soc
     fetchKeywordData();
   }, [caseId, queryPayload, token]);
 
+
+
+
+
   if (loading) return <Loader />;
 
   return (
@@ -59,35 +63,103 @@ const KeywordTagList = ({ queryPayload = null, caseId = null, aggsFields = ["soc
       sx={{
         display: 'flex',
         flexWrap: 'wrap',
-        gap: '8px',
+        gap: '6px',
         backgroundColor: '#101d2b',
         borderRadius: '20px',
         p: 2,
-        maxHeight: 280,
-        overflowY: 'auto'
+        width: '600px',
+        height: '280px',
+        overflowY: 'auto',
+        overflowX: 'hidden',
+        '&::-webkit-scrollbar': {
+          width: '6px',
+        },
+        '&::-webkit-scrollbar-track': {
+          background: '#1a2332',
+          borderRadius: '10px',
+        },
+        '&::-webkit-scrollbar-thumb': {
+          background: '#0073CF',
+          borderRadius: '10px',
+        },
+        '&::-webkit-scrollbar-thumb:hover': {
+          background: '#005aa3',
+        },
       }}
     >
       {data.length > 0 ? (
-        data.map((item, index) => (
-          <Box
-            key={index}
-            sx={{
-              backgroundColor: 'rgba(0, 115, 207, 0.3)',
-              color: '#0073CF',
-              px: 1,
-              borderRadius: '30px',
-              fontSize: '12px',
-              display: 'inline-flex',
-              alignItems: 'center',
-              whiteSpace: 'nowrap',
-              border: '1px solid #0073CF'
-            }}
-          >
-            #{item.key}
-          </Box>
-        ))
+        data.map((item, index) => {
+          const docCount = item.doc_count || 0;
+        
+        const fontSize = `${Math.min(18, Math.max(11, Math.log2(docCount + 1) * 2))}px`;
+
+          return (
+            <Tooltip
+              key={index}
+              title={
+                <Box>
+                  <p  sx={{  color: '#fff' }}>
+                    Hashtag: {item.key}
+                  </p>
+                  <p  sx={{ color: '#fff' }}>
+                    Hashtag Count: {docCount}
+                  </p>
+                </Box>
+              }
+              arrow
+              placement="top"
+              sx={{
+                '& .MuiTooltip-tooltip': {
+                  backgroundColor: '#1a2332',
+                  border: '1px solid #0073CF',
+                  fontSize: '12px',
+                  maxWidth: '200px',
+                },
+                '& .MuiTooltip-arrow': {
+                  color: '#1a2332',
+                },
+              }}
+            >
+              <Box
+                sx={{
+                  backgroundColor: 'rgba(0, 115, 207,0.1)',
+                  color: '#0073CF',
+                  padding: "4px 8px",
+                  borderRadius: "30px",
+                  fontSize: fontSize,
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  whiteSpace: 'nowrap',
+                  border: '1px solid #0073CF',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  // fontWeight: docCount > 100 ? 'bold' : 'normal',
+                  '&:hover': {
+                    backgroundColor: 'rgba(0, 115, 207, 0.5)',
+                    transform: 'scale(1.05)',
+                    boxShadow: '0 2px 8px rgba(0, 115, 207, 0.3)',
+                  },
+                }}
+              >
+                #{item.key}
+              </Box>
+            </Tooltip>
+          );
+        })
       ) : (
-        <Typography color="#ccc">No Hashtags Found</Typography>
+        <Typography 
+          color="#ccc" 
+          sx={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center',
+            width: '100%',
+            height: '100%',
+            fontSize: '14px'
+          }}
+        >
+          No Hashtags Found
+        </Typography>
       )}
     </Box>
   );

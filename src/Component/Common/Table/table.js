@@ -7,11 +7,14 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import LockResetIcon from '@mui/icons-material/LockReset';
+import { FaArrowLeft } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 
-const TableModal = ({ columns = [], data = [], onAddClick, searchPlaceholder = "Search...", idPrefix = "", btnTitle = '', onRowClick, onRowAction = {}, enableRowClick = false,
+const TableModal = ({ columns = [],title, data = [], onAddClick, searchPlaceholder = "Search...", idPrefix = "", btnTitle = '', onRowClick, onRowAction = {}, enableRowClick = false,
 
 }) => {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [sortConfig, setSortConfig] = useState({ key: "", direction: "asc" });
 
@@ -45,13 +48,22 @@ const TableModal = ({ columns = [], data = [], onAddClick, searchPlaceholder = "
     <>
 
       <div className={styles.header}>
-
-        <input
+       <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}> 
+        {["User Dashboard", "Role Dashboard", "Connection Dashboard"].includes(title) && (
+          <FaArrowLeft
+            style={{ cursor: 'pointer', marginRight: '10px' }}
+            onClick={() => navigate('/admin')}
+            size={20}
+          />
+        )}
+         <input
           className={styles.searchBar}
           placeholder={searchPlaceholder}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
+        </div>
+       
 
         <AppButton onClick={() => onAddClick && onAddClick()} children={btnTitle} />
       </div>

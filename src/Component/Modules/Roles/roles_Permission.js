@@ -242,7 +242,7 @@ const RolesPermission = () => {
                                 onClick={() => navigate('/admin')}
                             /> */}
                     <TableModal
-                        title="Roles Dasboard"
+                        title="Role Dashboard"
                         data={data}
                         columns={roleColumns}
                         onRowAction={{
