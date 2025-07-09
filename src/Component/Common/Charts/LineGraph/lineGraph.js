@@ -49,7 +49,8 @@ const ReusableLineGraph = ({
         const { unified_date_only } = response.data;
         const recordData = recordLineField ? response.data[recordLineField] : [];
 
-        setData(unified_date_only || []);
+        const sortedDateData = (unified_date_only || []).sort((a, b) => new Date(a.key) - new Date(b.key));
+        setData(sortedDateData);
         setRecordTypes(recordData || []);
 
       } catch (error) {
@@ -72,50 +73,51 @@ const ReusableLineGraph = ({
   return (
     <div style={{ width: "100%", height: 250, overflowX: "auto", whiteSpace: "nowrap" }}>
       {data.length > 0 ? (
-        <ResponsiveContainer minWidth={500} height={200}>
-          <LineChart data={data} margin={{ right: 180, top: 20 }}>
-            <CartesianGrid horizontal={false} vertical={true} stroke="#F3F3F51A" />
-            <XAxis dataKey="key" tick={{ fill: '#fff', fontSize: 12 }} />
-            <YAxis tick={{ fill: '#fff', fontSize: 12 }} />
-            <Tooltip
-              content={({ payload }) =>
-                payload?.length ? (
-                  <div className="bg-white p-2 border rounded shadow">
-                    <p>{payload[0].payload.key}</p>
-                    <p>doc_count: {payload[0].value}</p>
-                  </div>
-                ) : null
-              }
-            />
-            {/* <Legend /> */}
-            
-            {/* Conditional Reference Lines */}
-            {recordTypes.length > 0 && recordLineField && recordTypes.map((type, index) => (
-              <ReferenceLine
-                key={index}
-                y={type.doc_count}
-                stroke="white"
-                strokeWidth={2}
-                label={{
-                  value: `${type.key} (${type.doc_count})`,
-                  position: 'right',
-                  fill: 'white',
-                  fontSize: 12,
-                }}
-              />
-            ))}
+       <ResponsiveContainer minWidth={500} height={200}>
+  <LineChart data={data} margin={{ right:20, top: 20 }}>
+    <CartesianGrid horizontal={true} vertical={false} stroke="#38444d" strokeDasharray="3 3" />
+    
+    <XAxis dataKey="key" tick={{ fill: '#E0E0E0', fontSize: 12 }} />
+    <YAxis tick={{ fill: '#E0E0E0', fontSize: 12 }} />
+    
+    <Tooltip
+      content={({ payload }) =>
+        payload?.length ? (
+          <div style={{ background: "#fff", padding: "6px 10px", borderRadius: "6px", boxShadow: "0 0 4px rgba(0,0,0,0.2)" }}>
+            <p style={{ margin: 0, color: "#333", fontWeight: "500" }}>{payload[0].payload.key}</p>
+            <p style={{ margin: 0, color: "#555" }}>doc_count: {payload[0].value}</p>
+          </div>
+        ) : null
+      }
+    />
 
-            {/* Date-wise Line */}
-            <Line
-              type="monotone"
-              dataKey="doc_count"
-              stroke="black"
-              fill="white"
-              strokeWidth={2}
-              dot={{ r: 3 }}
-            />
-          </LineChart>
-        </ResponsiveContainer>
+    {/* {recordTypes.length > 0 && recordLineField && recordTypes.map((type, index) => (
+      <ReferenceLine
+        key={index}
+        y={type.doc_count}
+        stroke="#8884d8"
+        strokeWidth={1.5}
+        strokeDasharray="4 4"
+        label={{
+          value: `${type.key} (${type.doc_count})`,
+          position: 'right',
+          fill: '#E0E0E0',
+          fontSize: 11,
+        }}
+      />
+    ))} */}
+
+    <Line
+      type="monotone"
+      dataKey="doc_count"
+      stroke="#0073CF"
+      strokeWidth={2.5}
+      dot={{ r: 4, stroke: '#fff', strokeWidth: 2, fill: '#0073CF' }}
+      activeDot={{ r: 6 }}
+    />
+  </LineChart>
+</ResponsiveContainer>
+
       ) : (
         <div className="h-[150px] flex items-center justify-center">
           <p className="text-gray-500 text-xl">No Data Available</p>

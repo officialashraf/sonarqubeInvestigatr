@@ -253,8 +253,9 @@ const userColumns = [
         (
          
             <div>
+                
           <TableModal
-           title="User Dasboard"
+           title="User Dashboard"
         data={data}
         columns={userColumns}
        onRowAction={{
