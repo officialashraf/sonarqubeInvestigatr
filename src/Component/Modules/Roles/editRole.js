@@ -84,7 +84,7 @@ console.warn("detials",details)
 
                         {/* <span style={{ display: "flex", justifyContent: "e", alignItems: "center", width: "100%" }}>
                             <label>Edit Role *</label>
-                            <CloseButton onClick={togglePopup} />
+                            <CloseButton variant="white" onClick={togglePopup} />
                         </span> */}
                         <CommonTextInput
                             label="Edit Role *"

@@ -123,8 +123,10 @@ const EditCase = ({ togglePopup, item }) => {
     const originalWatchers = Array.isArray(item.watchers) ? item.watchers : [];
     const areWatchersDifferent = JSON.stringify([...formData.watchers].sort()) !== JSON.stringify([...originalWatchers].sort());
 
+    // Always send watchers if changed, even if empty array to remove watchers
     if (areWatchersDifferent) {
-      hasChanged.watchers = [...formData.watchers];
+      hasChanged.watchers = formData.watchers.length > 0 ? [...formData.watchers] : [];
+      // hasChanged.watchers = [...formData.watchers];
     }
 
     if (Object.keys(hasChanged).length === 0) {

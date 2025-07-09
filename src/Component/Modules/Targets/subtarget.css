@@ -3,6 +3,8 @@
   border-top: 1px solid #ddd;
    height: 150px;
   /* overflow: auto; */
+    scrollbar-color: #1e7df8 var(--color-colors-secondary);
+  scrollbar-width: thin;
 }
 
 .subtype-row {
