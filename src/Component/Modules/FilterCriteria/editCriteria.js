@@ -3,7 +3,7 @@ import Select from 'react-select';
 import DatePickera from './datepicker';
 import { CalendarToday } from '@mui/icons-material';
 import { InputAdornment, TextField } from '@mui/material';
-import './createCriteria.css';
+import './createCriteria.module.css';
 import { customStyles } from '../Case/createCase';
 import axios from 'axios';
 import Cookies from 'js-cookie';

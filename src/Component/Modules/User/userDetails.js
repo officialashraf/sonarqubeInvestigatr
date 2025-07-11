@@ -70,6 +70,10 @@ const UserDetails = ({ userId, toggleDetails }) => {
           <DetailBox label="Email" value={item.email} />
           <DetailBox label="Last Active" value={item.last_logout} />
           <DetailBox label="Status" value={item.status.charAt(0).toUpperCase() + item.status.slice(1)} isStatus />
+           <DetailBox label="Created On" value={item.createdOn} />
+            <DetailBox label="Created By" value={item.created_by} />
+             <DetailBox label="Edited On" value={item.updatedOn} />
+              <DetailBox label="Edited By" value={item.updatedBy} />
         </div>
       </div>
       <div className="d-flex justify-content-center mt-3">

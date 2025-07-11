@@ -1,5 +1,5 @@
 import React from 'react'
-import "../Case/table.css"
+import "../Case/tableGlobal.css"
 import { Col } from 'react-bootstrap'
 import { FaArrowLeft } from 'react-icons/fa'
 import { Plus } from "react-bootstrap-icons";

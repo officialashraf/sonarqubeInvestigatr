@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import "./addUser.css"; // You can rename if you want
+import "./addUser.module.css"; // You can rename if you want
 import axios from "axios";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";

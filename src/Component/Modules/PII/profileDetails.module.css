@@ -1,63 +1,62 @@
 /* ProfileCard.css */
-.profile-container {
+.profileContainer {
   flex: 20%;
   padding: 0;
   left: 0;
   top: 0;
   bottom: 0;
-  /* background-color: black; */
-  color: white;
+  /* backgroundColor: black; */
+  color: var(--color-colors-neutralText);
    height: 459px;
    width: 307px;
 }
 
-.profile-card {
+.profileCard {
   height: 459px;
   border-radius: 15px;
-  background-color: #101D2B;;
-  color: white;
+  background-color: var( --color-colors-secondary);
+  color: var(--color-colors-neutralText);
   width: 307px;
 }
 
 /* Laptop screens (max width 1440px) */
 @media (max-width: 1440px) {
-  .profile-card {
+  .profileCard {
     width: 280px;
   }
-  .profile-container {
+  .profileContainer {
     width: 280px;
   }
 }
 
 /* Tablet screens (max width 1024px) */
 @media (max-width: 1024px) {
-  .profile-card {
+  .profileCard {
     width: 200px;
   }
-  .profile-container {
+  .profileContainer {
     width: 200px;
   }
 }
 
 /* Mobile screens (max width 768px) */
 @media (max-width: 768px) {
-  .profile-card {
+  .profileCard {
     margin: 0 auto;
   }
-  
 }
-.profile-header {
+.profileHeader {
   display: flex;
   flex-direction: column;
 }
 
-.profile-avatar-section {
+.profileAvatarSection {
   display: flex;
   align-items: center;
   margin-bottom: 10px;
 }
 
-.profile-avatar {
+.profileAvatar {
   width: 275px;
   height: 138.8px;
   background-color: #6f7172;
@@ -66,7 +65,7 @@
   overflow: hidden;
 }
 
-.profile-avatar img {
+.profileAvatar img {
   width: 275px;
   height: 138.8px;
   object-fit: contain;
@@ -74,77 +73,52 @@
   border-radius: 15px;
 }
 
-.profile-id {
+.profileId {
   font-size: 14px;
   margin-right: 10px;
 }
 
-.active-badge {
-  background-color: #28a745;
-  color: white;
+.activeBadge {
+  background-color:var( --color-colors-success);
+  color: var(--color-colors-neutralText);
   font-size: 12px;
   padding: 4px 8px;
 }
 
-.threat-score-section {
+.threatScoreSection {
   margin-top: 10px;
 }
 
-.threat-label {
+.threatLabel {
   font-size: 12px;
   color: #aaa;
   margin-bottom: 4px;
 }
 
-.threat-score {
-  background-color: #ffc107;
+.threatScore {
+  background-color: var(--color-colors-warning);
   color: #333;
   font-size: 14px;
   padding: 3px 8px;
   border-radius: 4px;
 }
-/* 
-.profile-details {
-  padding: 15px;
-  height: 100%;
-}
 
-.detail-item {
-  margin-bottom: 15px;
-}
-
-.detail-label {
-  display: flex;
-  align-items: center;
-  font-size: 12px;
-  color: #0073CF;
-  margin-bottom: 4px;
-}
-
-.detail-label svg {
-  margin-right: 5px;
-}
-
-.detail-value {
-  font-size: 14px;
-} */
-
-.loading-container {
+.loadingContainer {
   width: 30%;
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: #1c2b3a;
-  color: white;
+  color: var(--color-colors-neutralText);
 }
-.carousel-control-prev-icon,
-.carousel-control-next-icon {
+:global(.carousel-control-prev-icon),
+:global(.carousel-control-next-icon) {
   display: none !important;
 }
 
 /* Indicators ko circle banana */
-.carousel-indicators [data-bs-target] {
+:global(.carousel-indicators) [data-bs-target] {
   width: 5px;
   height: 5px;
   border-radius: 50%;
@@ -153,108 +127,68 @@
 }
 
 /* Active indicator thoda dark kar do */
-.carousel-indicators .active {
-  background-color: white;
+:global(.carousel-indicators) .active {
+  background-color: var(--color-colors-neutralText);
 }
- .profile-details {
+ .profileDetails {
   padding: 15px;
   height: 100%;
 }
-/*
 
-
-.detail-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.detail-label {
-  font-size: 12px;
-  color: #0073CF;
-  font-weight: 500;
-}
-
-.detail-icon {
-  color: #0073CF;
-  background-color: #080E17;
-  border-radius: 50%;
-      padding: 5px;
-    height: 30px;
-    width: 30px;
-}
-
-.detail-value {
-  font-size: 10px;
-  color: #D9D9D9;
-  font-weight: 500;
-  margin-top: 6px;
-}
-
-.email-list {
-  list-style: none;
-  padding-left: 0;
-  margin: 0;
-}
-
-.email-list li {
-  color: #D9D9D9;
-  font-size: 10px;
-} */
-.profile-name-above-phone{
+.profileNameAbovePhone{
   font-size: 14px;
-  color: #D9D9D9;
+  color: var(--color-colors-neutralText);
   margin-top: 6px;
 }
 
-
-.detail-row {
+.detailRow {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 8px;  
 }
 
-.detail-text {
+.detailText {
   display: flex;
   flex-direction: column;
 }
 
-.detail-label {
+.detailLabel {
    font-size: 12px;
-  color: #0073CF;
+  color: var(--color-colors-primaryAccent);
   font-weight: 500;
 }
 
-.detail-value {
+.detailValue {
    font-size: 10px;
-  color: #D9D9D9;
+  color: var(--color-colors-neutralText);
   font-weight: 500;
   margin-top: 6px;
 }
 
-.email-list {
+.emailList {
   list-style: none;
   padding-left: 0;
   margin: 0;
 }
 
-.email-list li {
-  color: #D9D9D9;
+.emailList li {
+  color: var(--color-colors-neutralText);
   font-size: 10px;
 }
 
-.detail-icon-wrapper {
+.detailIconWrapper {
   width: 35px;
   height: 35px;
-  background-color: #080E17;
+  background-color: var(--color-colors-backgroundColor);
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.detail-icon {
-  color: #0073CF;
+.detailIcon {
+  color: var(--color-colors-primaryAccent);
   font-size: 20px;
 }
+

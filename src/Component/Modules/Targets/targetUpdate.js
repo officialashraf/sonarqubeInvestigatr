@@ -1,12 +1,10 @@
 import { useState, useEffect } from "react";
-import "../Case/createCase.css";
+import "../Case/createCaseGlobal.css";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { toast } from 'react-toastify';
-import Select from 'react-select';
-import "./target.css";
+import styles from "./target.module.css";
 import Loader from '../Layout/loader'
-import { customStyles } from "../Case/createCase";
 import CommonSingleSelect from "../../Common/MultiSelect/CommonSingleSelect";
 import customSelectStyles from '../../Common/CustomStyleSelect/customSelectStyles';
 import CommonChipsInput from "../../Common/MultiSelect/CommonChipsInput";
@@ -25,7 +23,7 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
     { value: "protocol", label: "Protocol" },
     { value: "port", label: "Port" },
     { value: "ipaddress", label: "IP Address" },
-    { value: "socialmedia id", label: "Social Media ID" },
+    { value: "socialmediaid", label: "Social Media ID" },
     { value: "target", label: "Target" },
     { value: "mobilenumber", label: "Mobile Number" },
     { value: "emailid", label: "Email ID" },
@@ -38,15 +36,15 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
     { value: "universityname", label: "University Name" },
     { value: "devicemodelnumber", label: "Device Model Number" },
     { value: "bankaccountnumber", label: "Bank Account Number" },
-    { value: "bankaccountholdename", label: "Bank Account Holder Name" },
-    { value: "bancustomerid", label: "Bank Customer ID" },
+    { value: "bankaccountholdername", label: "Bank Account Holder Name" },
+    { value: "bankcustomerid", label: "Bank Customer ID" },
     { value: "bankholderaddress", label: "Bank Holder Address" },
     { value: "propertyownername", label: "Property Owner Name" },
     { value: "nationalid", label: "National ID" },
-    { value: "vehiclnumber", label: "Vehicle Number" },
+    { value: "vehiclenumber", label: "Vehicle Number" },
     { value: "vehicleownername", label: "Vehicle Owner Name" },
     { value: "passportnumber", label: "Passport Number" },
-    { value: "criminalhistoryoffence", label: "Criminal History Offence" },
+    { value: "criminalhistoryoffense", label: "Criminal History Offense" },
     { value: "criminalhistoryprisonernumber", label: "Criminal History Prisoner Number" },
     { value: "armtype", label: "Arm Type" },
     { value: "armmodelnumber", label: "Arm Model Number" }
@@ -60,7 +58,7 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
   const [isBtnDisabled, setIsBtnDisabled] = useState(true);
   const [error, setError] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -70,7 +68,7 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
     target_id: [],
     remove_target: []
   });
-  
+
   const validateForm = () => {
     const errors = {};
 
@@ -88,7 +86,7 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
     return errors;
   };
 
-  
+
   // Threat score options from 0 to 10
   const threatScoreOptions = Array.from({ length: 11 }, (_, i) => ({
     value: i,
@@ -278,10 +276,10 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
     return (
       <div className="popup-overlay">
         <div className="popup-container">
-           <button className="close-icon" onClick={togglePopup}>
-          &times;
-        </button>
-          <div className="popup-content"style={{height:'300px'}}>
+          <button className="close-icon" onClick={togglePopup}>
+            &times;
+          </button>
+          <div className="popup-content" style={{ height: '300px' }}>
             <div>   <Loader /></div>
           </div>
 
@@ -318,14 +316,14 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
                     type: selectedOption.value
                   }))
                 }
-              
+
               />
               {error.type && <p style={{ color: "red", margin: '0px' }} >{error.type}</p>}
             </div>
 
             {/* <label htmlFor="name">Target *</label> */}
             <CommonTextInput
-              label="Target *"    
+              label="Target *"
               type="text"
               id="name"
               name="name"
@@ -346,25 +344,25 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
             />
             {error.description && <p style={{ color: "red", margin: '0px' }} >{error.description}</p>}
             {/* <label htmlFor="synonyms">Alternative Keywords/Synonym (up to 5 keywords)</label> */}
-            <div className="synonym-input-container">
+            <div className={styles.synonymInputContainer}>
               <CommonChipsInput
                 label="Alternative Keywords/Synonym (up to 5 keywords)"
-              type="text"
+                type="text"
                 id="synonyms"
                 value={synonymInput}
                 onChange={handleSynonymInputChange}
                 onKeyDown={handleSynonymKeyDown}
                 placeholder="Type in keywords/synonym and press Enter to add..."
                 disabled={formData.synonyms.length >= 5}
-                // required
+              // required
               />
-              <div className="synonym-chips">
+              <div className={styles.synonymChips}>
                 {formData.synonyms.map((synonym, index) => (
-                  <div key={index} className="synonym-chip">
+                  <div key={index} className={styles.synonymChip}>
                     {synonym}
                     <button
                       type="button"
-                      className="synonym-remove"
+                      className={styles.synonymRemove}
                       onClick={() => removeSynonym(index)}
                     >
                       ×
@@ -380,7 +378,7 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
                 label="Threat Score"
                 options={threatScoreOptions}
                 customStyles={customSelectStyles}
-               
+
                 placeholder="Select threat score"
                 value={threatScoreOptions.find((option) => option.value === formData.threat_weightage) || null}
                 onChange={handleThreatScoreChange}
@@ -393,9 +391,9 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
                 {subTypeRows.map((row, index) => (
                   <div key={index} >
                     {existingTargets.length > 0 && (
-                      <div className="subtype-fields">
+                      <div className={styles.subtypeFields}>
                         {/* <label>Targets:</label> */}
-                         <CommonMultiSelect
+                        <CommonMultiSelect
                           label="Targets:"
                           isMulti
                           options={existingTargets
@@ -405,7 +403,7 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
                               label: `${target.id} - ${target.name} - ${target.type}`
                             }))
                           }
-                           customStyles={customSelectStyles}
+                          customStyles={customSelectStyles}
                           placeholder="Select targets"
                           value={
                             formData.target_id.map(targetId => {
@@ -432,11 +430,11 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
             )}
 
             <div className="button-container">
-              <AppButton type="submit" className="create-btn" disabled={isBtnDisabled || isSubmitting}
+              <AppButton type="submit"  disabled={isBtnDisabled || isSubmitting}
               >
                 {isSubmitting ? 'Editing...' : 'Edit'}
               </AppButton>
-              <AppButton type="button" className="cancel-btn" onClick={togglePopup}>
+              <AppButton type="button"  onClick={togglePopup}>
                 Cancel
               </AppButton>
             </div>

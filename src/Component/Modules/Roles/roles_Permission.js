@@ -1,26 +1,18 @@
-import { Plus } from "react-bootstrap-icons";
-import { Col, Table } from "react-bootstrap";
-import { FiMoreVertical } from "react-icons/fi";
-import "../Case/table.css";
+import "../Case/tableGlobal.css";
 import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
-import Dropdown from "react-bootstrap/Dropdown";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
-import { FaArrowLeft } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
 import AddRole from "./addRole";
 import DetailsPermission from "./details_Permission";
 import AssignRole from "./asignRole";
 import EditRole from "./editRole";
 import Loader from "../Layout/loader";
 import TableModal from "../../Common/Table/table";
-import { assign } from "lodash";
 import AppButton from "../../Common/Buttton/button";
 
 const RolesPermission = () => {
-    const navigate = useNavigate();
 
     const [data, setData] = useState([]);
     const [filteredData, setFilteredData] = useState([]);
@@ -30,10 +22,7 @@ const RolesPermission = () => {
     const [showPopupB, setShowPopupB] = useState(false);
     const [showPopupC, setShowPopupC] = useState(false);
     const [showPopupD, setShowPopupD] = useState(false);
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [loading, setLoading] = useState(false);
-
-
     const [popupDetails, setPopupDetails] = useState(null);
 
     // const togglePopup = () => {
@@ -101,61 +90,61 @@ const RolesPermission = () => {
         };
     }, []);
 
-    const handleSearch = (e) => {
-        const value = e.target.value;
-        setSearchTerm(value);
-        const filtered = data.filter(item =>
-            Object.values(item).some(val =>
-                val?.toString().toLowerCase().includes(value.toLowerCase())
-            )
-        );
-        setFilteredData(filtered);
-    };
-    console.log("filterdata", filteredData)
-    const handleSort = (key) => {
-        let direction = 'asc';
-        if (sortConfig.key === key && sortConfig.direction === 'asc') {
-            direction = 'desc';
-        }
-        setSortConfig({ key, direction });
-        console.log("sort", sortConfig)
-        const sorted = [...filteredData].sort((a, b) => {
-            const aVal = a[key];
-            const bVal = b[key];
+    // const handleSearch = (e) => {
+    //     const value = e.target.value;
+    //     setSearchTerm(value);
+    //     const filtered = data.filter(item =>
+    //         Object.values(item).some(val =>
+    //             val?.toString().toLowerCase().includes(value.toLowerCase())
+    //         )
+    //     );
+    //     setFilteredData(filtered);
+    // };
+    // console.log("filterdata", filteredData)
+    // const handleSort = (key) => {
+    //     let direction = 'asc';
+    //     if (sortConfig.key === key && sortConfig.direction === 'asc') {
+    //         direction = 'desc';
+    //     }
+    //     setSortConfig({ key, direction });
+    //     console.log("sort", sortConfig)
+    //     const sorted = [...filteredData].sort((a, b) => {
+    //         const aVal = a[key];
+    //         const bVal = b[key];
 
-            // Handle null or undefined
-            if (aVal === undefined || aVal === null) return 1;
-            if (bVal === undefined || bVal === null) return -1;
+    //         // Handle null or undefined
+    //         if (aVal === undefined || aVal === null) return 1;
+    //         if (bVal === undefined || bVal === null) return -1;
 
-            // Special case for created_on (date sorting)
-            if (key === 'created_on') {
-                const dateA = new Date(aVal);
-                const dateB = new Date(bVal);
-                return direction === 'asc' ? dateA - dateB : dateB - dateA;
-            }
+    //         // Special case for created_on (date sorting)
+    //         if (key === 'created_on') {
+    //             const dateA = new Date(aVal);
+    //             const dateB = new Date(bVal);
+    //             return direction === 'asc' ? dateA - dateB : dateB - dateA;
+    //         }
 
-            // If both values are numbers
-            if (typeof aVal === 'number' && typeof bVal === 'number') {
-                return direction === 'asc' ? aVal - bVal : bVal - aVal;
-            }
+    //         // If both values are numbers
+    //         if (typeof aVal === 'number' && typeof bVal === 'number') {
+    //             return direction === 'asc' ? aVal - bVal : bVal - aVal;
+    //         }
 
-            // Default string comparison
-            const aStr = String(aVal).toLowerCase();
-            const bStr = String(bVal).toLowerCase();
-            if (aStr < bStr) return direction === 'asc' ? -1 : 1;
-            if (aStr > bStr) return direction === 'asc' ? 1 : -1;
-            return 0;
-        });
+    //         // Default string comparison
+    //         const aStr = String(aVal).toLowerCase();
+    //         const bStr = String(bVal).toLowerCase();
+    //         if (aStr < bStr) return direction === 'asc' ? -1 : 1;
+    //         if (aStr > bStr) return direction === 'asc' ? 1 : -1;
+    //         return 0;
+    //     });
 
-        setFilteredData(sorted);
-    };
+    //     setFilteredData(sorted);
+    // };
 
-    const getSortIcon = (key) => {
-        if (sortConfig.key === key) {
-            return sortConfig.direction === 'asc' ? <ArrowDropUp /> : <ArrowDropDown />;
-        }
-        return <ArrowDropDown />;
-    };
+    // const getSortIcon = (key) => {
+    //     if (sortConfig.key === key) {
+    //         return sortConfig.direction === 'asc' ? <ArrowDropUp /> : <ArrowDropDown />;
+    //     }
+    //     return <ArrowDropDown />;
+    // };
 
     const confirmDelete = (role) => {
         toast((t) => (

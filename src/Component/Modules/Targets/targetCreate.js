@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
-import "../Case/createCase.css";
+import "../Case/createCaseGlobal.css";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { toast } from 'react-toastify';
-import Select from 'react-select';
-import "./subtarget.css";
+import styles from "./target.module.css";
 // import { customStyles } from "../Case/createCase";
 import { useAutoFocusWithManualAutofill } from "../../../utils/autoFocus";
 import CommonSingleSelect from "../../Common/MultiSelect/CommonSingleSelect";
@@ -21,7 +20,7 @@ const TargetCreate = ({ togglePopup, existingTargets = [] }) => {
   const token = Cookies.get("accessToken");
   const { inputRef, isReadOnly, handleFocus } = useAutoFocusWithManualAutofill();
   const targetType = [
-      { value: "watchword", label: "Watchword" },
+    { value: "watchword", label: "Watchword" },
     { value: "location", label: "Location" },
     { value: "application", label: "Application" },
     { value: "domain", label: "Domain" },
@@ -355,13 +354,13 @@ const TargetCreate = ({ togglePopup, existingTargets = [] }) => {
                 onKeyDown={handleSynonymKeyDown}
                 placeholder="Type in keywords/synonym and press Enter to add..."
               />
-              <div className="synonym-chips">
+              <div className={styles.synonymChips}>
                 {formData.synonyms.map((synonym, index) => (
-                  <div key={index} className="synonym-chip">
+                  <div key={index} className={styles.synonymChip}>
                     {synonym}
                     <button
                       type="button"
-                      className="synonym-remove"
+                      className={styles.synonymRemove}
                       onClick={() => removeSynonym(index)}
                     >
                       ×
@@ -392,7 +391,7 @@ const TargetCreate = ({ togglePopup, existingTargets = [] }) => {
                   <div key={index} >
 
                     {existingTargets.length > 0 && (
-                      <div className="subtype-fields">
+                      <div className={styles.subtypeFields}>
                         {/* <label>Targets:</label> */}
                         <CommonMultiSelect
                           label="Targets:"

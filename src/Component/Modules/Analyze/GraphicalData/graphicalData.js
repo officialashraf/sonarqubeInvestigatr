@@ -1,5 +1,5 @@
 import { Card, CardContent, Typography, Grid } from "@mui/material";
-import "./graphicalData.css";
+import styles from  './graphicalData.module.css'
 // import { ListAltOutlined,ArrowBack, ArrowForward, MoreVert} from "@mui/icons-material";
 import LineGraph from "./lineChart";
 import KeywordChart from "./keywordChart";
@@ -17,11 +17,11 @@ const Header = ({ title }) =>
     alignItems="center"
     justifyContent="space-between"
     p={0}
-    sx={{ mt: 0, mb: 0, height: "20px"}}
-    className="grapghCards"
+    sx={{ mt: 0, mb: 0, height: "20px" }}
+    className={styles.grapghCards}
 
   >
-    <p style={{ color: "white",paddingLeft:"5px" }}>
+    <p style={{ color: "white", paddingLeft: "5px" }}>
       {title}
     </p>
     {/* <Grid item p={0} mt={-2}>
@@ -49,146 +49,146 @@ const Header = ({ title }) =>
 
 const ComponentOne = () => (
   <>
-     <Header title="Timelines"  />
-  <Card sx={{ height: "300px", backgroundColor: "#101D2B" , borderRadius:'25px' }}>
-    <CardContent>
-      <LineGraph />
-    </CardContent>
+    <Header title="Timelines" />
+    <Card sx={{ height: "300px", backgroundColor: "#101D2B", borderRadius: '25px' }}>
+      <CardContent>
+        <LineGraph />
+      </CardContent>
     </Card>
- </>);
+  </>);
 
 
 const ComponentTwo = () => (
   <>
     <Header title="Keywords" />
-  <Card sx={{ height: "350px", backgroundColor: "#101D2B" , borderRadius:'25px' }}>
-    <CardContent>
-      <KeywordChart />
-    </CardContent>
+    <Card sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius: '25px' }}>
+      <CardContent>
+        <KeywordChart />
+      </CardContent>
     </Card>
- </>);
+  </>);
 
 
 const ComponentThree = () => (
   <>
-      <Header title="Locations" />
-  <Card sx={{ height: "350px", backgroundColor: "#101D2B" , borderRadius:'25px' }}>
-    <CardContent>
-      <Typography
-        variant="h6"
-        color="textSecondary"
-        align="center"
-        height={250} 
-      >
-        <LocationBar />
-        {/* {" "}No Data{" "} */}
-      </Typography>
-    </CardContent>
+    <Header title="Locations" />
+    <Card sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius: '25px' }}>
+      <CardContent>
+        <Typography
+          variant="h6"
+          color="textSecondary"
+          align="center"
+          height={250}
+        >
+          <LocationBar />
+          {/* {" "}No Data{" "} */}
+        </Typography>
+      </CardContent>
     </Card>
- </>);
+  </>);
 const ComponentFour = () => (
   <>
-      <Header title="Sentiments" />
-  <Card
-    sx={{ height: "350px", backgroundColor: "#101D2B" , borderRadius:'25px'  }}
-  >
-    <CardContent>
-      <SentimentPieChart />
-    </CardContent>
+    <Header title="Sentiments" />
+    <Card
+      sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius: '25px' }}
+    >
+      <CardContent>
+        <SentimentPieChart />
+      </CardContent>
     </Card>
- </>
+  </>
 );
 const ComponentFive = () => (
   <>
     <Header title="Time" />
-  <Card
-    sx={{ height: "350px", backgroundColor: "#101D2B" , borderRadius:'25px' }}
-  >
-    <CardContent sx={{backgroundColor: "#101D2B" , borderRadius:'25px' }}>
-      <DateBar />
-    </CardContent>
+    <Card
+      sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius: '25px' }}
+    >
+      <CardContent sx={{ backgroundColor: "#101D2B", borderRadius: '25px' }}>
+        <DateBar />
+      </CardContent>
     </Card>
- </>
+  </>
 );
 const ComponentSix = () => (
   <>
-      <Header title="Events" />
-  <Card
-    sx={{ height: "350px", backgroundColor: "#101D2B" , borderRadius:'25px' }}
-  >
-    <CardContent>
-      <EventBar />
-    </CardContent>
+    <Header title="Events" />
+    <Card
+      sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius: '25px' }}
+    >
+      <CardContent>
+        <EventBar />
+      </CardContent>
     </Card>
- </>
+  </>
 );
 const ComponentSeven = () => (
   <>
-   <Header title="Persons" />
-  <Card
-    sx={{ height: "350px", backgroundColor: "#101D2B" , borderRadius:'25px' }}
-  >
-    <CardContent>
-      <PersonBar />
-    </CardContent>
+    <Header title="Persons" />
+    <Card
+      sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius: '25px' }}
+    >
+      <CardContent>
+        <PersonBar />
+      </CardContent>
     </Card>
- </>
+  </>
 );
 const ComponentEight = () => (
   <>
-   <Header title="Languages" />
-  <Card
-    sx={{ height: "350px" ,backgroundColor: "#101D2B" , borderRadius:'25px'}}   
-  >
-    <CardContent>
-      <LanguageBar />
-    </CardContent>
+    <Header title="Languages" />
+    <Card
+      sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius: '25px' }}
+    >
+      <CardContent>
+        <LanguageBar />
+      </CardContent>
     </Card>
- </>
+  </>
 );
 
 const ComponentNine = () => (
-<>
-   <Header title="Organisations" />
-  <Card
-    sx={{ height: "350px", backgroundColor: "#101D2B" , borderRadius:'25px', marginBottom: '5rem', borderRadius:'25px' }}
-  >
-    <CardContent >
-      <OrgBar   />
-    </CardContent>
+  <>
+    <Header title="Organisations" />
+    <Card
+      sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius: '25px', marginBottom: '5rem', borderRadius: '25px' }}
+    >
+      <CardContent >
+        <OrgBar />
+      </CardContent>
     </Card>
- </>
+  </>
 );
 const GraphicalData = () => {
   return (
-    <div className="responsiveContainer" >
+    <div className={styles.responsiveContainer} >
 
-      <Grid container spacing={1} p={1} className="responsiveGrid" style={{
+      <Grid container spacing={1} p={1} className={styles.responsiveGrid} style={{
         background: "#080E17", marginLeft: "0 px !important", height: '100%',
         overflowY: 'auto'
       }}>
-        <Grid item xs={12} sx={{ paddingLeft: '0px !important', paddingTop: "0px !important" }}className="grapghCards">
+        <Grid item xs={12} sx={{ paddingLeft: '0px !important', paddingTop: "0px !important" }}  className={styles.grapghCards}>
           <ComponentOne />
         </Grid>
-        <Grid item xs={6} p={1} pb={0} sx={{ paddingLeft: '0 !important'}}className="grapghCards">
+        <Grid item xs={6} p={1} pb={0} sx={{ paddingLeft: '0 !important' }}  className={styles.grapghCards}>
           <ComponentTwo />
         </Grid>
-        <Grid item xs={6} p={1} pb={0} className="grapghCards" >
+        <Grid item xs={6} p={1} pb={0}  className={styles.grapghCards} >
           <ComponentThree />
         </Grid>
-        <Grid item xs={6} p={1} pb={0} className="grapghCards"  >
+        <Grid item xs={6} p={1} pb={0}  className={styles.grapghCards}  >
           <ComponentFour />
         </Grid>
         <Grid item xs={6} p={1} pb={0} >
           <ComponentFive />
         </Grid>
-        <Grid item xs={6} p={1} pb={0} className="grapghCards">
+        <Grid item xs={6} p={1} pb={0}  className={styles.grapghCards}>
           <ComponentSix />
         </Grid>
-        <Grid item xs={6} p={1} pb={0} className="grapghCards">
+        <Grid item xs={6} p={1} pb={0}  className={styles.grapghCards}>
           <ComponentSeven />
         </Grid>
-        <Grid item xs={6} p={1} pb={0} mb={10} className="grapghCards" >
+        <Grid item xs={6} p={1} pb={0} mb={10}  className={styles.grapghCards} >
           <ComponentEight />
         </Grid>
         <Grid item xs={6} p={1} pb={0} mb={10} >

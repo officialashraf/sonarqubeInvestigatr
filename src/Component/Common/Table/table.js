@@ -49,13 +49,13 @@ const TableModal = ({ columns = [],title, data = [], onAddClick, searchPlacehold
 
       <div className={styles.header}>
        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}> 
-        {["User Dashboard", "Role Dashboard", "Connection Dashboard"].includes(title) && (
+        {/* {["User Dashboard", "Role Dashboard", "Connection Dashboard"].includes(title) && (
           <FaArrowLeft
             style={{ cursor: 'pointer', marginRight: '10px' }}
             onClick={() => navigate('/admin')}
             size={20}
           />
-        )}
+        )} */}
          <input
           className={styles.searchBar}
           placeholder={searchPlaceholder}

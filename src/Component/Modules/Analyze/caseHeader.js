@@ -1,9 +1,8 @@
 import { useSelector } from "react-redux";
 import { ListAltOutlined, PieChart } from "@mui/icons-material";
 import { FaPhotoVideo } from "react-icons/fa";
-import { Col } from 'react-bootstrap';
-import { FaArrowLeft } from 'react-icons/fa';
-import "./tabulerHeader.css";
+// import { FaArrowLeft } from 'react-icons/fa';
+import "./tabulerHeader.module.css";
 import { useNavigate } from "react-router-dom";
 import styles from "./caseHeader.module.css";
 
@@ -12,9 +11,9 @@ const CaseHeader = ({ onIconClick, activeView }) => {
   const caseData = useSelector((state) => state.caseData.caseData);
   const navigate = useNavigate();
 
-  const backToSnap = () => {
-    navigate(`/cases/${caseData.id}`);
-  };
+  // const backToSnap = () => {
+  //   navigate(`/cases/${caseData.id}`);
+  // };
 
   return (
     <>
@@ -23,9 +22,9 @@ const CaseHeader = ({ onIconClick, activeView }) => {
           className={styles.headerRow}
           // style={{ background: "lightgray" }}
         >
-           <div className={styles.backIcon} onClick={backToSnap}>
+           {/* <div className={styles.backIcon} onClick={backToSnap}>
           <FaArrowLeft />
-        </div>
+        </div> */}
           <div className={styles.headerTitle}>
             <h5 >
               Case ID: {`CASE${String(caseData.id).padStart(4, "0")}`}

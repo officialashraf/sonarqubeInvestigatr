@@ -20,12 +20,10 @@
 .sideB {
   background-color: var(--color-colors-secondary);
   height: 100vh;
-  /* padding: 10px 0; */
   display: flex;
   flex-direction: column;
-   justify-content: space-between;
+  justify-content: space-between;
   align-items: center;
-  /* border-radius: 0px 20px 20px 0px; */
 }
 
 .sideTop {
@@ -39,15 +37,14 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* padding-bottom:10px; */
 }
 
-.sideBottom .navSideLink {
-background-color: transparent;
-height: 40px;
-width: 40px;
-border: 1px solid #3498db;
-border-radius: 50%;
+.sideBottomNavLink {
+  background-color: transparent;
+  height: 40px;
+  width: 40px;
+  border: 1px solid #3498db;
+  border-radius: 50%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -56,17 +53,21 @@ border-radius: 50%;
   cursor: pointer;
   transition: all 0.3s ease;
 }
-.sideBottom .navSideLink svg{
+
+.sideBottomNavLink svg {
   color: #3498db;
 }
 
-.sideBottom .navSideLink.active {
- background-color:#3498db;
- color: white;
+.sideBottomNavLinkActive {
+  background-color: #3498db;
 }
-.sideBottom .navSideLink:hover {
- opacity: 4%;
+.sideBottomNavLinkActive svg {
+ color: var(--color-colors-backgroundColor);
 }
+.sideBottomNavLink:hover {
+  opacity: 4%;
+}
+
 .navSideLink {
   color: #D6D6D6;
   display: flex;
@@ -95,7 +96,7 @@ border-radius: 50%;
   color: #3498db;
 }
 
-.navSideLink.active svg {
+.navSideLinkActive svg {
   background-color: #3498db;
   color: #0A1623;
 }

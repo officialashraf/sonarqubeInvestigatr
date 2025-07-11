@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import "./recentCriteria.css"
+import "./recentCriteria.module.css"
 import TuneIcon from '@mui/icons-material/Tune';
 import SearchIcon from '@mui/icons-material/Search';
 import { TextField, IconButton, List, ListItem, ListItemText, ListItemSecondaryAction } from "@mui/material";
