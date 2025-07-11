@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
-import '../User/addUser.css'
+import '../User/addUser.module.css'
 import { CloseButton } from 'react-bootstrap';
 import CommonTextInput from '../../Common/MultiSelect/CommonTextInput';
 import AppButton from '../../Common/Buttton/button';

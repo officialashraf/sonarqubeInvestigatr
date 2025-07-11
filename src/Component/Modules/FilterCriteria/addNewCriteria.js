@@ -7,7 +7,7 @@ import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import DatePickera from './datepicker';
-import '../FilterCriteria/createCriteria.css';
+import '../FilterCriteria/createCriteria.module.css';
 import { customStyles } from '../Case/createCase';
 import { setKeywords, setPage, setSearchResults } from '../../../Redux/Action/criteriaAction';
 import Confirm from './confirmCriteria';

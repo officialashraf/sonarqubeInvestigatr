@@ -1,90 +1,91 @@
-import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import axios from 'axios';
-import { Tooltip, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Cell } from 'recharts';
-import '../../../../Summarymain/summary.css';
-import Cookies from "js-cookie";
-import Loader from '../../../../Layout/loader';
 import ReusableBarChart from '../../../../../Common/Charts/BarChart/CommonBarChart';
+// import '../../../../Summarymain/summary.css';
+// import { useState, useEffect } from 'react';
+// import axios from 'axios';
+// import { Tooltip, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Cell } from 'recharts';
+// import Cookies from "js-cookie";
+// import Loader from '../../../../Layout/loader';
 
 const EventGraph = () => {
-
-    const token = Cookies.get("accessToken");
-    const [barData, setBarData] = useState([]);
-    const [loading, setLoading] = useState(false);
     const queryPayload = useSelector((state) => state.criteriaKeywords.queryPayload);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                setLoading(true);
-                const payload = {
-                    query: {
-                        unified_case_id: Array.isArray(queryPayload?.case_id) ? queryPayload.case_id : [],
-                        file_type: Array.isArray(queryPayload?.file_type) ? queryPayload.file_type : [],
-                        keyword: Array.isArray(queryPayload?.keyword) ? queryPayload.keyword : [],
-                    },
-                    aggs_fields: ["EVENT"],
-                    start_time: queryPayload?.start_time || "",
-                    end_time: queryPayload?.end_time || ""
-                };
-                const response = await axios.post(`${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/aggregate`, payload,
-                    {
-                        headers: {
-                            "Content-Type": "application/json",
-                            Authorization: `Bearer ${token}`,
-                        },
-                    }
+    // const token = Cookies.get("accessToken");
+    // const [barData, setBarData] = useState([]);
+    // const [loading, setLoading] = useState(false);
 
-                );
 
-                console.log("EVENTBar data:", response.data);
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             setLoading(true);
+    //             const payload = {
+    //                 query: {
+    //                     unified_case_id: Array.isArray(queryPayload?.case_id) ? queryPayload.case_id : [],
+    //                     file_type: Array.isArray(queryPayload?.file_type) ? queryPayload.file_type : [],
+    //                     keyword: Array.isArray(queryPayload?.keyword) ? queryPayload.keyword : [],
+    //                 },
+    //                 aggs_fields: ["EVENT"],
+    //                 start_time: queryPayload?.start_time || "",
+    //                 end_time: queryPayload?.end_time || ""
+    //             };
+    //             const response = await axios.post(`${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/aggregate`, payload,
+    //                 {
+    //                     headers: {
+    //                         "Content-Type": "application/json",
+    //                         Authorization: `Bearer ${token}`,
+    //                     },
+    //                 }
 
-                const { EVENT } = response.data;
-                const barData = (EVENT || []).map(item => ({
-                    name: item.key.split('-').slice(0, 3).join(''),
-                    value: item.doc_count
-                }));
+    //             );
 
-                if (barData.length === 0) {
-                    barData.push({ name: 'No Data', value: 0 });
-                }
-                setBarData(barData);
+    //             console.log("EVENTBar data:", response.data);
 
-            } catch (error) {
-                console.error('Error fetching data:', error);
-                setBarData([{ name: 'No Data', value: 0 }]);
+    //             const { EVENT } = response.data;
+    //             const barData = (EVENT || []).map(item => ({
+    //                 name: item.key.split('-').slice(0, 3).join(''),
+    //                 value: item.doc_count
+    //             }));
 
-            } finally {
-                setLoading(false);
-            }
-        };
+    //             if (barData.length === 0) {
+    //                 barData.push({ name: 'No Data', value: 0 });
+    //             }
+    //             setBarData(barData);
 
-        fetchData();
-    }, [queryPayload, token]);
+    //         } catch (error) {
+    //             console.error('Error fetching data:', error);
+    //             setBarData([{ name: 'No Data', value: 0 }]);
 
-    const [activeIndex, setActiveIndex] = useState(null);
-    if (loading) {
-        return <Loader />;
-    }
+    //         } finally {
+    //             setLoading(false);
+    //         }
+    //     };
+
+    //     fetchData();
+    // }, [queryPayload, token]);
+
+    // const [activeIndex, setActiveIndex] = useState(null);
+    // if (loading) {
+    //     return <Loader />;
+    // }
     return (
         <>
-           <ReusableBarChart
-  caseId={queryPayload?.case_id || []}
-  aggsFields={["event"]}
-  query={{
-    file_type: queryPayload?.file_type || [],
-    keyword: queryPayload?.keyword || [],
-    start_time: queryPayload?.start_time || "",
-    end_time: queryPayload?.end_time || ""
-  }}
-  transformData={(rawData) =>
-    rawData.map(item => ({
-      name: item.key,
-      value: item.doc_count
-    }))
-  }
-/>
+            <ReusableBarChart
+                caseId={queryPayload?.case_id || []}
+                aggsFields={["event"]}
+                query={{
+                    file_type: queryPayload?.file_type || [],
+                    keyword: queryPayload?.keyword || [],
+                    start_time: queryPayload?.start_time || "",
+                    end_time: queryPayload?.end_time || ""
+                }}
+                transformData={(rawData) =>
+                    rawData.map(item => ({
+                        name: item.key,
+                        value: item.doc_count
+                    }))
+                }
+            />
         </>
     );
 };

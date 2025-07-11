@@ -2,15 +2,12 @@ import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
-import Select from 'react-select';
-import '../User/addUser.css';
+import '../User/addUser.module.css';
 import { CloseButton } from 'react-bootstrap';
 //import { customStyles } from '../Case/createCase'; // Adjust the import path as needed
 import CommonTextInput from '../../Common/MultiSelect/CommonTextInput';
 import SelectFieldOutlined from '../../Common/MultiSelect/SelectFieldOutlined';
 import AppButton from '../../Common/Buttton/button'
-import { customStyles } from '../Case/createCase'; // Adjust the import path as needed
-
 
 const AssignRole = ({ togglePopup, details }) => {
     const token = Cookies.get('accessToken');

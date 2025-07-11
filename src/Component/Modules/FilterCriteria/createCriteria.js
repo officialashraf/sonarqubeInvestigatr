@@ -1,10 +1,8 @@
 import { useState, useEffect } from 'react';
-import Select from 'react-select';
 import DatePickera from './datepicker';
-import { Search, Send, Tune, CalendarToday } from '@mui/icons-material';
+import { Search, Send, Tune } from '@mui/icons-material';
 import { Checkbox, FormControlLabel, InputAdornment, TextField } from '@mui/material';
-import './createCriteria.css';
-import { customStyles } from '../Case/createCase';
+import style from './createCriteria.module.css';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useDispatch, useSelector } from "react-redux";
@@ -12,7 +10,6 @@ import { closePopup, openPopup, setKeywords, setPage, setSearchResults } from '.
 import Confirm from './confirmCriteria';
 import { toast } from 'react-toastify';
 import { useAutoFocusWithManualAutofill } from '../../../utils/autoFocus';
-import SearchBar from '../../Common/SearchBarCriteria/Searchbar';
 import styles from '../../Common/Table/table.module.css';
 import customSelectStyles from '../../Common/CustomStyleSelect/customSelectStyles';
 import CommonMultiSelect from '../../Common/MultiSelect/CommonMultiSelect';
@@ -426,7 +423,7 @@ const CreateCriteria = ({ handleCreateCase }) => {
             <div className="button-container" style={{ textAlign: 'center' }}>
               <button
                 type="submit"
-                style={{ width: '100%', height: '30px' }}
+                style={{ width: '100%', height: '30px'  }}
                 className="add-btn"
               >
                 Search

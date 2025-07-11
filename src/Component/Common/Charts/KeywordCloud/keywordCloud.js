@@ -63,28 +63,13 @@ const KeywordTagList = ({ queryPayload = null, caseId = null, aggsFields = ["soc
       sx={{
         display: 'flex',
         flexWrap: 'wrap',
-        gap: '6px',
+        gap: '3px',
         backgroundColor: '#101d2b',
         borderRadius: '20px',
         p: 2,
-        width: '600px',
-        height: '280px',
+        maxHeight: '280px',
         overflowY: 'auto',
-        overflowX: 'hidden',
-        '&::-webkit-scrollbar': {
-          width: '6px',
-        },
-        '&::-webkit-scrollbar-track': {
-          background: '#1a2332',
-          borderRadius: '10px',
-        },
-        '&::-webkit-scrollbar-thumb': {
-          background: '#0073CF',
-          borderRadius: '10px',
-        },
-        '&::-webkit-scrollbar-thumb:hover': {
-          background: '#005aa3',
-        },
+        overflowX: 'hidden', 
       }}
     >
       {data.length > 0 ? (

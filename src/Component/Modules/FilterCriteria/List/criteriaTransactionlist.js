@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Table } from 'react-bootstrap';
 import axios from 'axios';
 import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material';
-import './table.css';
+import './tableGlobal.css';
 import Cookies from "js-cookie";
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';

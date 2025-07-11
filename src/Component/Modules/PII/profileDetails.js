@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Card, Container } from 'react-bootstrap';
 import { Phone, Email, Person, Cake, Wc } from '@mui/icons-material';
 import Carousel from 'react-bootstrap/Carousel';
-import './profileDetails.css';
+import styles from './profileDetails.module.css';
 import { useSelector } from 'react-redux';
 import userImg from '../../Assets/Images/blank-profile.webp'
 
@@ -38,14 +38,14 @@ const ProfileDetails = () => {
   }
 
   return (
-    <Container className="profile-container">
-      <Card className="profile-card">
+    <Container className={styles.profileContainer}>
+      <Card className={styles.profileCard}>
         <Card.Body className="p-0">
 
-          <div className="profile-details">
-            <div className="profile-header">
-              <div className="profile-avatar-section">
-                <div className="profile-avatar">
+          <div className={styles.profileDetails}>
+            <div className={styles.profileHeader}>
+              <div className={styles.profileAvatarSection}>
+                <div className={styles.profileAvatar}>
                   {profileData && Array.isArray(profileData.images) && profileData.images.length > 0 ? (
                     <Carousel >
                       {profileData.images.map((image, index) => (
@@ -59,53 +59,21 @@ const ProfileDetails = () => {
                     <img src={userImg} alt={`Profile Pic`} width={100} height={100} />
                   )}
                 </div>
-                {/* <div className="profile-id"><ul className="email-list">
-                  {profileData && Array.isArray(profileData.names) && profileData.names.length > 0 ? (
-                    profileData.names.slice(0, 3).map((name, index) => <li key={index}>{name}</li>)
-                  ) : (
-                    <li></li>
-                  )}
-                </ul></div> */}
+      
               </div>
             </div>
-            <div className="detail-item">
-              <div className="profile-name-above-phone">
+            <div className={styles.detailItem}>
+              <div className={styles.profileNameAbovePhone}>
                 {profileData?.names?.[0] || "Unknown Name"}
               </div>
             </div>
-            {/* <div className="detail-item"> */}
-            {/* <div className="detail-label">
-                <Phone fontSize="small" /> Phone Number
-              </div>
-              <div className="detail-value">
-                <ul className="email-list">
-                  {profileData && Array.isArray(profileData.phones) && profileData.phones.length > 0 ? (
-                    profileData.phones.map((phones, index) => <li key={index}>{phones}</li>)
-                  ) : (
-                    <li>--</li>
-                  )}
-                </ul>
-              </div> */}
-            {/* <div className="detail-header">
-                <div className="detail-label">Phone Number</div>
-                <Phone fontSize="small" className="detail-icon" />
-              </div>
-              <div className="detail-value">
-                <ul className="email-list">
-                  {profileData && Array.isArray(profileData.phones) && profileData.phones.length > 0 ? (
-                    profileData.phones.map((phone, index) => <li key={index}>{phone}</li>)
-                  ) : (
-                    <li>--</li>
-                  )}
-                </ul>
-              </div>
-            </div> */}
-            <div className="detail-item">
-              <div className="detail-row">
-                <div className="detail-text">
-                  <div className="detail-label">Phone Number</div>
-                  <div className="detail-value">
-                    <ul className="email-list">
+          
+            <div className={styles.detailItem}>
+              <div className={styles.detailRow}>
+                <div className={styles.detailText}>
+                  <div className={styles.detailLabel}>Phone Number</div>
+                  <div className={styles.detailValue}>
+                    <ul className={styles.emailList}>
                       {profileData && Array.isArray(profileData.phones) && profileData.phones.length > 0 ? (
                         profileData.phones.map((phone, index) => <li key={index}>{phone}</li>)
                       ) : (
@@ -114,18 +82,18 @@ const ProfileDetails = () => {
                     </ul>
                   </div>
                 </div>
-                <div className="detail-icon-wrapper">
-                  <Phone fontSize="medium" className="detail-icon" />
+                <div className={styles.detailIconWrapper}>
+                  <Phone fontSize="medium" className={styles.detailIcon} />
                 </div>
               </div>
             </div>
 
-            <div className="detail-item">
-              <div className="detail-row">
-                <div className="detail-text">
-                  <div className="detail-label">E-mail ID</div>
-                  <div className="detail-value">
-                    <ul className="email-list">
+            <div className={styles.detailItem}>
+              <div className={styles.detailRow}>
+                <div className={styles.detailText}>
+                  <div className={styles.detailLabel}>E-mail ID</div>
+                  <div className={styles.detailValue}>
+                    <ul className={styles.emailList}>
                       {profileData && Array.isArray(profileData.emails) && profileData.emails.length > 0 ? (
                         profileData.emails.map((email, index) => <li key={index}>{email}</li>)
                       ) : (
@@ -134,49 +102,47 @@ const ProfileDetails = () => {
                     </ul>
                   </div>
                 </div>
-                <div className="detail-icon-wrapper">
-                  <Email fontSize="medium" className="detail-icon" />
+                <div className={styles.detailIconWrapper}>
+                  <Email fontSize="medium" className={styles.detailIcon} />
                 </div>
               </div>
             </div>
 
-            <div className="detail-item">
-              <div className="detail-row">
-                <div className="detail-text">
-                  <div className="detail-label">Names</div>
-                  <div className="detail-value">{profileData?.aliases || "--"}</div>
+            <div className={styles.detailItem}>
+              <div className={styles.detailRow}>
+                <div className={styles.detailText}>
+                  <div className={styles.detailLabel}>Names</div>
+                  <div className={styles.detailValue}>{profileData?.aliases || "--"}</div>
                 </div>
-                <div className="detail-icon-wrapper">
-                  <Person fontSize="medium" className="detail-icon" />
-                </div>
-              </div>
-            </div>
-
-            <div className="detail-item">
-              <div className="detail-row">
-                <div className="detail-text">
-                  <div className="detail-label">DOB/Age</div>
-                  <div className="detail-value">{profileData?.ages || "--"}</div>
-                </div>
-                <div className="detail-icon-wrapper">
-                  <Cake fontSize="medium" className="detail-icon" />
+                <div className={styles.detailIconWrapper}>
+                  <Person fontSize="medium" className={styles.detailIcon} />
                 </div>
               </div>
             </div>
 
-            <div className="detail-item">
-              <div className="detail-row">
-                <div className="detail-text">
-                  <div className="detail-label">Gender</div>
-                  <div className="detail-value">{profileData?.gender || "--"}</div>
+            <div className={styles.detailItem}>
+              <div className={styles.detailRow}>
+                <div className={styles.detailText}>
+                  <div className={styles.detailLabel}>DOB/Age</div>
+                  <div className={styles.detailValue}>{profileData?.ages || "--"}</div>
                 </div>
-                <div className="detail-icon-wrapper">
-                  <Wc fontSize="medium" className="detail-icon" />
+                <div className={styles.detailIconWrapper}>
+                  <Cake fontSize="medium" className={styles.detailIcon} />
                 </div>
               </div>
             </div>
 
-
+            <div className={styles.detailItem}>
+              <div className={styles.detailRow}>
+                <div className={styles.detailText}>
+                  <div className={styles.detailLabel}>Gender</div>
+                  <div className={styles.detailValue}>{profileData?.gender || "--"}</div>
+                </div>
+                <div className={styles.detailIconWrapper}>
+                  <Wc fontSize="medium" className={styles.detailIcon} />
+                </div>
+              </div>
+            </div>
           </div>
 
         </Card.Body>

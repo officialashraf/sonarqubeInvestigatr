@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import './date.css';
+import './date.module.css';
 import AppButton from '../../Common/Buttton/button';
 
 const DatePicker = ({ onSubmit, initialDates, onClose }) => {

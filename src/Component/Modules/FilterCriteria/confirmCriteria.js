@@ -2,7 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
-import '../User/addUser.css'
+import '../User/addUser.module.css'
 import { CloseButton } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { openPopup } from '../../../Redux/Action/criteriaAction';
@@ -118,7 +118,7 @@ const Confirm = ({ formData, selectedDates, searchChips }) => {
                             onFocus={handleFocus}
                             ref={inputRef}
                         />
-                        <div className="button-container">
+                        <div className="button-container" style={{marginTop:'15px'}}>
                             <AppButton
                                 type="button"
                                 className="cancel-btn"

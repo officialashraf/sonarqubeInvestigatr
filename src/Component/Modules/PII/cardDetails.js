@@ -11,7 +11,7 @@ import {
   Twitter as TwitterIcon,
   YouTube as YouTubeIcon,
 } from '@mui/icons-material';
-import './cardDetails.css';
+import styles from './cardDetails.module.css';
 import { useSelector } from 'react-redux';
 import { FaSkype, FaGoogle, FaTelegram, FaWhatsapp, FaDiscord, FaSnapchatGhost, FaPinterest } from 'react-icons/fa';
 import { SiPhonepe, SiGooglepay, SiGmail, SiTiktok, SiVk } from 'react-icons/si';
@@ -87,7 +87,7 @@ const UserCards = () => {
 
   if (loading) {
     return (
-      <Container className="loader-container">
+      <Container className={styles.loaderContainer}>
         <CircularProgress />
       </Container>
     );
@@ -95,22 +95,22 @@ const UserCards = () => {
 
   if (error) {
     return (
-      <Container className="error-container">
-        <Typography className="error-message">Error: {error}</Typography>
+      <Container className={styles.errorContainer}>
+        <Typography className={styles.errorMessage}>Error: {error}</Typography>
       </Container>
     );
   }
 
   return (
-    <Container maxWidth="lg" className="cards-container" style={{ marginBottom: '20px' }}>
+    <Container maxWidth="lg" className={styles.cardsContainer} style={{ marginBottom: '20px' }}>
 
       <Grid container spacing={3}>
         {users && users.filter((user) => user.has_account) // Only users with has_account: true
           .map((user) => (
             <Grid item xs={12} sm={6} md={4} key={user.id || Math.random().toString()}>
-              <Card className="user-card">
+              <Card className={styles.userCard}>
                 {/* <CardContent>
-                  <div className="user-header">
+                  <div className={styles.user-header">
                     Platform Icon
                     {user.pii_source ? (
                       <div style={{ marginRight: '15px' }}>
@@ -121,7 +121,7 @@ const UserCards = () => {
                     )}
 
                     User Info
-                    <div className="user-info">
+                    <div className={styles.userInfo">
                       {user && Array.isArray(user.names) && user.names.length > 0 ? (
                         user.names.slice(0, 1).map((name, index) => (
                           <Typography key={index} >{name}</Typography>
@@ -138,54 +138,54 @@ const UserCards = () => {
                     </div>
                   </div>
 
-                  <Typography className="user-info">
+                  <Typography className={styles.userInfo">
                     {user && Array.isArray(user.jobs) && user.jobs.length > 0
                       ? user.jobs.slice(0, 1).map((job, index) => <div key={index}>{job}</div>)
                       : null}
                   </Typography>
 
-                  <Typography className="user-info">
+                  <Typography className={styles.userInfo">
                     {user && Array.isArray(user.educations) && user.educations.length > 0
                       ? user.educations.slice(0, 1).map((edu, index) => <div key={index}>{edu}</div>)
                       : null}
                   </Typography>
 
-                  <Typography className="user-info">
+                  <Typography className={styles.userInfo">
                     {user && Array.isArray(user.usernames) && user.usernames.length > 0
                       ? user.usernames.slice(0, 1).map((username, index) => <div key={index}>{username}</div>)
                       : null}
                   </Typography>
 
-                  <Typography className="user-info">
-                    <PhoneIcon className="info-icon" />
+                  <Typography className={styles.userInfo">
+                    <PhoneIcon className={styles.infoIcon} />
                     {user && Array.isArray(user.phones) && user.phones.length > 0
                       ? user.phones.slice(0, 1).map((phone, index) => <div key={index}>{phone}</div>)
                       : "--"}
                   </Typography>
 
-                  <Typography className="user-info">
-                    <EmailIcon className="info-icon" />
+                  <Typography className={styles.userInfo">
+                    <EmailIcon className={styles.infoIcon} />
                     {user && Array.isArray(user.emails) && user.emails.length > 0
                       ? user.emails.slice(0, 1).map((email, index) => <div key={index}>{email}</div>)
                       : "--"}
                   </Typography>
 
-                  <Typography className="user-info">
-                    <LinkIcon className="info-icon" />
+                  <Typography className={styles.userInfo">
+                    <LinkIcon className={styles.infoIcon} />
                     {user && Array.isArray(user.urls) && user.urls.length > 0
                       ? user.urls.slice(0, 1).map((url, index) => <div key={index}>{url}</div>)
                       : "--"}
                   </Typography>
 
-                  <Typography className="user-info">
-                    <LocationOnIcon className="info-icon" />
+                  <Typography className={styles.userInfo">
+                    <LocationOnIcon className={styles.infoIcon} />
                     {user && Array.isArray(user.addresses) && user.addresses.length > 0
                       ? user.addresses.slice(0, 1).map((address, index) => <div key={index}>{address}</div>)
                       : "--"}
                   </Typography>
                 </CardContent> */}
                 <CardContent>
-                  <div className="user-header">
+                  <div className={styles.userHeader}>
                     {user.pii_source ? (
                       <div style={{ marginRight: '15px' }}>
                         {getPlatformIcon(user.pii_source)}
@@ -193,7 +193,7 @@ const UserCards = () => {
                     ) : (
                       <Avatar />
                     )}
-                    <div className="user-info">
+                    <div className={styles.userInfo}>
                       {Array.isArray(user.names) && user.names.length > 0 ? (
                         <Typography>{user.names[0]}</Typography>
                       ) : (
@@ -206,13 +206,13 @@ const UserCards = () => {
                   </div>
 
                   {/* Phone */}
-                  <div className="info-row">
-                    <div className="info-icon-wrapper">
-                      <PhoneIcon className="info-icon" />
+                  <div className={styles.infoRow}>
+                    <div className={styles.infoIconWrapper}>
+                      <PhoneIcon className={styles.infoIcon} />
                     </div>
-                    <div className="info-text">
-                      <div className="info-label">Phone Number</div>
-                      <div className="info-value">
+                    <div className={styles.infoText}>
+                      <div className={styles.infoLabel}>Phone Number</div>
+                      <div className={styles.infoValue}>
                         {Array.isArray(user.phones) && user.phones.length > 0
                           ? user.phones[0]
                           : "--"}
@@ -221,13 +221,13 @@ const UserCards = () => {
                   </div>
 
                   {/* Email */}
-                  <div className="info-row">
-                    <div className="info-icon-wrapper">
-                      <EmailIcon className="info-icon" />
+                  <div className={styles.infoRow}>
+                    <div className={styles.infoIconWrapper}>
+                      <EmailIcon className={styles.infoIcon} />
                     </div>
-                    <div className="info-text">
-                      <div className="info-label">Email</div>
-                      <div className="info-value">
+                    <div className={styles.infoText}>
+                      <div className={styles.infoLabel}>Email</div>
+                      <div className={styles.infoValue}>
                         {Array.isArray(user.emails) && user.emails.length > 0
                           ? user.emails[0]
                           : "--"}
@@ -236,13 +236,13 @@ const UserCards = () => {
                   </div>
 
                   {/* Link */}
-                  <div className="info-row">
-                    <div className="info-icon-wrapper">
-                      <LinkIcon className="info-icon" />
+                  <div className={styles.infoRow}>
+                    <div className={styles.infoIconWrapper}>
+                      <LinkIcon className={styles.infoIcon} />
                     </div>
-                    <div className="info-text">
-                      <div className="info-label">Link :</div>
-                      <div className="info-value">
+                    <div className={styles.infoText}>
+                      <div className={styles.infoLabel}>Link :</div>
+                      <div className={styles.infoValue}>
                         {Array.isArray(user.urls) && user.urls.length > 0
                           ? user.urls[0]
                           : "--"}
@@ -251,13 +251,13 @@ const UserCards = () => {
                   </div>
 
                   {/* Location */}
-                  <div className="info-row">
-                    <div className="info-icon-wrapper">
-                      <LocationOnIcon className="info-icon" />
+                  <div className={styles.infoRow}>
+                    <div className={styles.infoIconWrapper}>
+                      <LocationOnIcon className={styles.infoIcon} />
                     </div>
-                    <div className="info-text">
-                      <div className="info-label">Location</div>
-                      <div className="info-value">
+                    <div className={styles.infoText}>
+                      <div className={styles.infoLabel}>Location</div>
+                      <div className={styles.infoValue}>
                         {Array.isArray(user.addresses) && user.addresses.length > 0
                           ? user.addresses[0]
                           : "--"}

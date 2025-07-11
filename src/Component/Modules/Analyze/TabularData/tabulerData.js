@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
 import { Table, Pagination } from "react-bootstrap";
-import "./caseTableData.css";
-// import "../../Case/table.css"
+import style from  "./caseTableData.module.css";
 import { useSelector, useDispatch } from "react-redux";
-import "./pagination.css";
 import { fetchSummaryData } from "../../../../Redux/Action/filterAction";
 import Loader from "../../Layout/loader";
 import styles from "../../../Common/Table/table.module.css";
@@ -81,7 +79,7 @@ const TabulerData = () => {
             <thead>
               <tr>
                 {headers.map((header) => (
-                  <th key={header} className="fixed-th" >
+                  <th key={header} className={style.fixedTh} >
                     {header
                       .split("_")
                       .map((word) =>
@@ -98,7 +96,7 @@ const TabulerData = () => {
               {data.map((item, index) => (
                 <tr key={index}>
                   {headers.map((header) => (
-                    <td key={header} className="fixed-td">
+                    <td key={header} className={style.fixedTd}>
                       <div
                         className="cell-content"
                         style={{
@@ -128,7 +126,7 @@ const TabulerData = () => {
       </div>
 
       {/* Pagination Wrapper */}
-      <div className={styles.paginationContainer}>
+      <div className={style.paginationContainer}>
         <Pagination style={{ width: "200px" }}>
           <Pagination.First onClick={() => handlePageChange(1)} disabled={currentPage === 1} />
           <Pagination.Prev
@@ -158,8 +156,8 @@ const TabulerData = () => {
               );
             } else if (number === "...") {
               return (
-                <Pagination.Item key={index} disabled>
-                  {number} className={styles.pageItem}
+                <Pagination.Item key={index} className={style.pageItem} disabled>
+                  {number} 
                 </Pagination.Item>
               );
             }

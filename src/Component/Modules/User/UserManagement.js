@@ -1,9 +1,9 @@
 import { Plus } from "react-bootstrap-icons";
 import { Col, Table } from "react-bootstrap";
 import { FiMoreVertical } from "react-icons/fi";
-import "../Case/table.css";
+import "../Case/tableGlobal.css";
 import AddUser from "./addUser";
-import "../Case/table.css";
+import "../Case/tableGlobal.css";
 import EditUser from "./editUser";
 import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
 import Dropdown from "react-bootstrap/Dropdown";

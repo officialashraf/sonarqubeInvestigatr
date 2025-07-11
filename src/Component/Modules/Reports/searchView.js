@@ -3,14 +3,13 @@ import Select from 'react-select';
 import DatePickera from '../FilterCriteria/datepicker';
 import { Search, Send, CalendarToday } from '@mui/icons-material';
 import { InputAdornment, TextField } from '@mui/material';
-import '../FilterCriteria/createCriteria.css';
+import '../FilterCriteria/createCriteria.module.css';
 import { customStyles } from '../Case/createCase';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useDispatch, useSelector } from "react-redux";
 import { setPage } from '../../../Redux/Action/criteriaAction';
 import { setReportResults } from '../../../Redux/Action/reportAction';
-import { toast } from 'react-toastify';
 import { useAutoFocusWithManualAutofill } from '../../../utils/autoFocus';
 
 export const sharedSxStyles = {

@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react'
 import { NavDropdown } from 'react-bootstrap';
 import Cookies from 'js-cookie';
-import './notification.css'
+import styles from './notification.module.css'
 import Loader from "../Layout/loader";
 import { jwtDecode } from "jwt-decode";
 import { toast } from 'react-toastify';
@@ -169,7 +169,7 @@ const NotificationList = ({ isOpen, setIsOpen }) => {
 
                 {loading ? (
                     <NavDropdown.Item
-                        className="nav-dropdown-item"
+                        className={styles.navDropdownItem}
                         style={{ maxWidth: '252px', padding: '10px', display: 'flex', justifyContent: 'center' }}
                     >
                         <Loader />
@@ -182,7 +182,7 @@ const NotificationList = ({ isOpen, setIsOpen }) => {
                     notifications.map((item) => (
                         <NavDropdown.Item
                             key={item.id}
-                            className="nav-dropdown-item"
+                            className={styles.navDropdownItem}
                             style={{
                                 display: 'flex',
                                 justifyContent: 'space-between',

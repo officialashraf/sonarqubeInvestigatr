@@ -325,3 +325,8 @@ gap: -1rem;
     max-height: 47.5vh;
   }
 }
+@media (max-width: 800px) {
+  .reactSelectContainer {
+    width: 200px;
+  }
+}

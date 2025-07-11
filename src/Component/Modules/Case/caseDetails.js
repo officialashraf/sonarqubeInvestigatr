@@ -83,8 +83,8 @@ const CaseDetails = ({ caseId, togglePopupA }) => {
         <DetailBox label="Description" value={item.description} />
         <DetailBox label="Created On" value={item.created_on?.slice(0, 12)} />
         <DetailBox label="Created By" value={item.created_by} />
-        <DetailBox label="Edited On" value={item.editedOn} />
-        <DetailBox label="Edited By" value={item.editedBy} />
+        <DetailBox label="Edited On" value={item.modified_on} />
+        <DetailBox label="Edited By" value={item.modified_by} />
         <DetailBox label="Assignee" value={item.assignee} />
         <DetailBox label="Watcher(s)" value={formatWatchers()} />
         <DetailBox label="Archived By" value={item.archivedBy} />
