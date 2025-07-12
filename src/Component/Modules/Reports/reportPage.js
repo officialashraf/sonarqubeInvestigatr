@@ -1,27 +1,22 @@
-import React from "react";
 import { useState, useEffect } from 'react';
 import Select from 'react-select';
 import DatePickera from '../FilterCriteria/datepicker';
 import { Search, CalendarToday } from '@mui/icons-material';
 import { InputAdornment, TextField } from '@mui/material';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import Cookies from 'js-cookie';
 import { setPage } from '../../../Redux/Action/criteriaAction';
 import { setReportResults } from '../../../Redux/Action/reportAction';
-import { fetchSummaryData } from '../../../Redux/Action/filterAction';
-import '../FilterCriteria/createCriteria.css';
+import '../FilterCriteria/createCriteria.module.css';
 import styles from '../../Common/Table/table.module.css';
-import Loader from '../Layout/loader';
 import AddButton from '../../Common/Buttton/button';
 import axios from 'axios';
 import GridView from './gridView';
-import SearchBarDateSelect from '../../Common/SearchBar/SearchBarDateSelect';
 import customSelectStyles from "../../Common/CustomStyleSelect/customSelectStyles";
 
 const ReportPage = () => {
   const Token = Cookies.get('accessToken');
   const dispatch = useDispatch();
-
   // Search form state
   const [formData, setFormData] = useState({
     searchQuery: [],
@@ -183,7 +178,7 @@ const ReportPage = () => {
         </div>
         <div style={{ display: 'flex', flexWrap: 'nowrap', alignItems: 'center', gap: '10px' , minWidth: '200ox'}}>
           <Select
-          className="react-select-container"
+          className={styles.reactSelectContainer}
             isMulti
             options={caseOptions}
             value={formData.caseIds}

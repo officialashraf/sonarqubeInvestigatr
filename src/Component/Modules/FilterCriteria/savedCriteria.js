@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import './savedCriteria.css';
+import './savedCriteriaGlobal.css';
 import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
 import InputAdornment from '@mui/material/InputAdornment';

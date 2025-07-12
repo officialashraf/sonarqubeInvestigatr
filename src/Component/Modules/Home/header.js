@@ -2,8 +2,13 @@
 import React, { useEffect, useState } from 'react';
 import { Navbar, Nav, NavDropdown, Container } from 'react-bootstrap';
 import { Bell, PersonCircle } from 'react-bootstrap-icons';
+<<<<<<< HEAD
 import { FaArrowLeft } from "react-icons/fa";
 import "./header.css";
+=======
+import { FaArrowLeft } from 'react-icons/fa';
+import styles from "./header.module.css";
+>>>>>>> 7588038cf42dd7390974b28da672b0b1119e1a72
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
@@ -136,20 +141,22 @@ const Header = ({ title }) => {
 
   return (
     <>
-      <Navbar bg="black" variant="dark">
-        <Container className="containerss d-flex justify-content-between align-items-center">
-          <Navbar.Brand className="custom-navbar-brand">
-            {["Users", "Roles", "Connections", "Case Analysis"].includes(title) && (
+
+      <Navbar>
+  <Container className={`${styles.containerss} d-flex justify-content-between align-items-center`}>
+   
+    <Navbar.Brand className={styles.navbarBrand}>
+       {["Users", "Roles", "Connections", "Case Analysis"].includes(title) && (
               <FaArrowLeft
                 style={{ color: 'white', cursor: 'pointer', marginRight: '10px' }}
                 onClick={() => navigate(-1)}
                 size={20}
               />
             )}
-            {title}
-          </Navbar.Brand>
+      {title}
+    </Navbar.Brand>
 
-          <Nav className="custom-nav">
+    <Nav className={styles.customNav}>
             <div style={{ position: "relative", marginRight: "15px" }}>
               <div
                 style={{

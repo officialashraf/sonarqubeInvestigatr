@@ -1,10 +1,10 @@
-.parent-container {
+:global(.parent-container) {
   max-width: 600px;
   margin: 0 auto;
   padding: 20px;
 }
 
-.open-popup-btn {
+:global(.open-popup-btn) {
   padding: 10px 15px;
   background-color: #4a90e2;
   color: white;
@@ -13,14 +13,14 @@
   cursor: pointer;
 }
 
-.selected-date-display {
+:global(.selected-date-display) {
   margin-top: 20px;
   padding: 15px;
   background-color: #101D2B;
   border-radius: 4px;
 }
 
-.close-icon {
+:global(.close-icon) {
   position: absolute;
   right: 15px;
   background: none;
@@ -30,32 +30,32 @@
   color: #FFFFFF;
   z-index: 10;
 }
-.close-icon:hover {
+:global(.close-icon):hover {
     color: #D9D9D9;
   }
-.popup-content {
+:global(.popup-content) {
   padding: 10px;
 }
 
 /* DatePicker styles */
-.date-picker-container {
+:global(.date-picker-container) {
   font-family: Arial, sans-serif;
   width: 100%;
   color: #D2D2D2;
 }
 
-.date-picker-layout {
+:global(.date-picker-layout) {
   display: flex;
 }
 
-.presets-container {
+:global(.presets-container) {
   width: auto;
   /* padding: 20px 10px; */
   border-right: 1px solid #ddd;
   background-color: #101D2B;
 }
 
-.preset-option {
+:global(.preset-option) {
   padding: 10px;
   cursor: pointer;
   transition: background-color 0.2s;
@@ -64,31 +64,31 @@
   color: white;
 }
 
-.preset-option:hover {
+:global(.preset-option:hover) {
   background-color: #d4d4d4;
 }
 
-.calendar-container {
+:global(.calendar-container) {
   flex: 1;
   padding: 5px;
   background-color: #101D2B;
 }
 
-.date-inputs {
+:global(.date-inputs) {
   display: flex;
   justify-content: space-between;
 }
 
-.date-input-group {
+:global(.date-input-group) {
   width: 48%;
 }
 
-.date-input-group label {
+:global(.date-input-group label) {
   display: block;
   color: white;
 }
 
-.date-input-group input {
+:global(.date-input-group input) {
   width: 100%;
   background-color: #101d2b;
   border: 1px solid #ddd;
@@ -96,13 +96,13 @@
   color: white;
 }
 
-.time-selectors {
+:global(.time-selectors) {
   display: flex;
   justify-content: space-between;
   margin-bottom: 0px;
 }
 
-.time-selector {
+:global(.time-selector) {
   display: flex;
   align-items: center;
   background-color: #101D2B;
@@ -111,32 +111,31 @@
   border: 1px solid #ddd;
 }
 
-.time-arrows {
+:global(.time-arrows){
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.time-arrow {
+:global(.time-arrow) {
   background: none;
   border: none;
   color: black;
   cursor: pointer;
 }
 
-.time-separator {
+:global(.time-separator) {
   margin: 0 5px;
-
   color: #333;
 }
 
-.calendar-header {
+:global(.calendar-header) {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.calendar-nav {
+:global(.calendar-nav) {
   background: none;
   border: none;
   color: black;
@@ -144,12 +143,12 @@
   cursor: pointer;
 }
 
-.current-month {
+:global(.current-month) {
   font-weight: bold;
   color: #333;
 }
 
-.calendar-grid {
+:global(.calendar-grid) {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 5px;
@@ -158,14 +157,14 @@
   border: 1px solid #ddd;
 }
 
-.day-name {
+:global(.day-name) {
   text-align: center;
 
   padding: 5px 0;
   color: #777;
 }
 
-.calendar-day {
+:global(.calendar-day) {
   text-align: center;
   cursor: pointer;
   border-radius: 50%;
@@ -173,41 +172,41 @@
   color: white;
 }
 
-.calendar-day:hover {
+:global(.calendar-day):hover {
   background-color: #e6e6e6;
 }
 
-.outside-month {
+:global(.outside-month) {
   color: #aaa;
 }
 
-.start-date,
-.end-date {
+:global(.start-date),
+:global(.end-date) {
   background-color: gray;
   color: white;
 }
 
-.in-range {
+:global(.in-range){
   background-color: rgba(74, 144, 226, 0.2);
 }
 
-.date-picker-actions {
+:global(.date-picker-actions) {
   margin-top: 20px;
 }
 
-.save-search {
+:global(.save-search) {
   margin-bottom: 15px;
   color: #333;
 }
 
-.button-group {
+:global(.button-group) {
   display: flex;
   justify-content: flex-end;
   margin-top: 4px;
 }
 
-.btn-clear,
-.btn-done {
+:global(.btn-clear),
+:global(.btn-done) {
   padding: 10px 15px;
   border: none;
   border-radius: 5px;
@@ -217,8 +216,8 @@
   color: #000;
 }
 
-.btn-clear:hover,
-.btn-done:hover {
+:global(.btn-clear):hover,
+:global(.btn-done):hover {
   background-color: black;
   color: white;
 }

@@ -4,7 +4,7 @@ import { Form, InputGroup, Button, Badge } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import Cookies from 'js-cookie';
-import "./main.css"
+import "./mainGlobal.css"
 import { jwtDecode } from "jwt-decode";
 import { useAutoFocusWithManualAutofill } from '../../../utils/autoFocus';
 import { InputField } from '../../Common/InpuField/inputField';

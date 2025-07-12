@@ -190,18 +190,7 @@ td {
   --bs-btn-padding-x: 0remv !important;
 }
 
-.custom-confirm-button {
-  padding: 10px 15px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 14px;
-  margin-left: 5px;
-  background-color: #0073cf;
-  color: white;
-  width: 30%;
-  height: 10%;
-}
+
 
 
 .search-bar1 .form-control:focus {
@@ -236,6 +225,23 @@ td {
   background-color: #2196F3;
   color: white;
 }
+.custom-confirm-button:hover {
+  background-color: #2196F3;
+  color: white;
+}
+.custom-confirm-button {
+    background-color: #0073cf;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+    height: 10%;
+    margin-left: 5px;
+    padding: 10px 15px;
+    width: 30%;
+}
+
 .badge-custom {
   --bs-badge-font-weight: 0 !important;
   font-family: sans-serif !important;

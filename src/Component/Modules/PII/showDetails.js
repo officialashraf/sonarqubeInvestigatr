@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import "./searchBar.css";
+import styles from "./searchBar.module.css";
 import { Search } from "react-bootstrap-icons";
 import UserCards from "./cardDetails";
 import ProfileDetails from "./profileDetails";
@@ -75,8 +75,8 @@ const ShowDetails = () => {
 
   return (
     <>
-      <div className="search-bar-container">
-        <div className="search-bar">
+      <div className={styles.searchBarContainer}>
+        <div className={styles.searchBar}>
           {/* <select className="search-dropdown" value={searchType} onChange={(e) => {
             setSearchType(e.target.value);
             setQuery('');
@@ -86,7 +86,7 @@ const ShowDetails = () => {
             <option value="email">Email</option>
           </select> */}
           <Select
-            className="search-dropdown"
+            className={styles.searchDropdown}
             options={options}
             value={options.find(o => o.value === searchType)}
             onChange={(selected) => {
@@ -132,7 +132,7 @@ const ShowDetails = () => {
                 border: "1px solid #0073CF !important"
               }}
               inputStyle={{
-                marginLeft: "30px", //  fix for visibility
+                marginLeft: "50px", //  fix for visibility
               }}
                inputProps={{
     onKeyDown: (e) => {
@@ -145,7 +145,7 @@ const ShowDetails = () => {
             />
           ) : (
             <input
-              className="search-input"
+              className={styles.searchInput}
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
@@ -165,9 +165,9 @@ const ShowDetails = () => {
 
 
         </div>
-        <div className="search-results-container">
-          <div className="searchresult"  >
-            <div className="wrapper">
+        <div className={styles.searchResultsContainer}>
+          <div className={styles.searchresult}  >
+            <div className={styles.wrapper}>
               {loading ? (
                 <Loader />
               ) : (<>

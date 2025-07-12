@@ -1,5 +1,5 @@
 import { Card, CardContent, Grid } from "@mui/material";
-import "../../../../Analyze/GraphicalData/graphical.css";
+import styles from "../../../../Analyze/GraphicalData/graphicalData.module.css";
 import LineGrapgh from "./criteriaLineChart";
 import KeywordChart from "./criteriaKeywordCloude";
 import SentimentPieChart from "./criteriaSentiment";
@@ -17,7 +17,7 @@ const Header = ({ title }) =>
     justifyContent="space-between"
     p={0}
     sx={{ mt: 0, mb: 0, height: "20px" }}
-    className="graphCards"
+    className={styles.graphCards}
   >
     <p style={{ color: "white" }}>
       {title}
@@ -133,38 +133,38 @@ const ComponentNine = () => (
 
 const GrapghicalCriteria = () => {
   return (
-    <div className="responsiveContainer" >
+    <div className={styles.responsiveContainer} >
 
-      <Grid container spacing={1} p={1} className="responsiveGrid" style={{
+      <Grid container spacing={1} p={1} className={styles.responsiveGrid} style={{
         background: "#080E17", marginLeft: "0 px !important", height: '100vh',
         overflowY: 'auto'
       }}>
-        <Grid item xs={12} sx={{ paddingLeft: '0px !important', paddingTop: "0px !important" }} className="grapghCards">
+        <Grid item xs={12} sx={{ paddingLeft: '0px !important', paddingTop: "0px !important" }} className={styles.graphCards}>
           <ComponentOne />
         </Grid>
-        <Grid item xs={6} p={1} pb={0} sx={{ paddingLeft: '0 !important' }} className="grapghCards">
+        <Grid item xs={6} p={1} pb={0} sx={{ paddingLeft: '0 !important' }} className={styles.graphCards}>
           <ComponentTwo />
         </Grid>
-        <Grid item xs={6} p={1} pb={0} className="grapghCards">
+        <Grid item xs={6} p={1} pb={0} className={styles.graphCards}>
           <ComponentThree />
         </Grid>
-        <Grid item xs={6} p={1} pb={0}  className="grapghCards">
+        <Grid item xs={6} p={1} pb={0}  className={styles.graphCards}>
           <ComponentFour />
         </Grid>
 
-        <Grid item xs={6} p={1} pb={0} className="grapghCards">
+        <Grid item xs={6} p={1} pb={0} className={styles.graphCards}>
           <ComponentFive />
         </Grid>
-        <Grid item xs={6} p={1} pb={0} className="grapghCards">
+        <Grid item xs={6} p={1} pb={0} className={styles.graphCards}>
           <ComponentSix />
         </Grid>
-        <Grid item xs={6} p={1} pb={0} className="grapghCards">
+        <Grid item xs={6} p={1} pb={0} className={styles.graphCards}>
           <ComponentSeven />
         </Grid>
-        <Grid item xs={6} p={1} pb={0} mb={10} className="grapghCards">
+        <Grid item xs={6} p={1} pb={0} mb={10} className={styles.graphCards}>
           <ComponentEight />
         </Grid>
-        <Grid item xs={6} p={1} pb={0} mb={10} className="grapghCards">
+        <Grid item xs={6} p={1} pb={0} mb={10} className={styles.graphCards}>
           <ComponentNine />
         </Grid>
       </Grid>

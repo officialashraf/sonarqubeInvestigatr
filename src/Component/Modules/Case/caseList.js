@@ -1,16 +1,16 @@
 import { useState, useEffect } from "react";
-import {
-  Table,
-  InputGroup,
-  FormControl,
-  Dropdown,
-  Badge,
-  Button,
-} from "react-bootstrap";
-import { Search, Plus, FileEarmarkPlus } from "react-bootstrap-icons";
+// import {
+//   Table,
+//   InputGroup,
+//   FormControl,
+//   Dropdown,
+//   Badge,
+//   Button,
+// } from "react-bootstrap";
+// import { Search, Plus, FileEarmarkPlus } from "react-bootstrap-icons";
+// import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
 import axios from "axios";
-import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
-// import "./table.css";
+// import "./tableGlobal.css";
 import CreateCase from "./createCase";
 import Cookies from "js-cookie";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -38,13 +38,13 @@ const DataTable = () => {
   const [showPopupB, setShowPopupB] = useState(false);
   const [selectedData, setSelectedData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  // const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  const onFieldClick = (item) => {
-    dispatch(setCaseData(item));
-    const caseId = item.id; // Set the case data in Redux store
-    navigate(`/cases/${caseId}`); // Navigate to the new page
-  };
+  // const onFieldClick = (item) => {
+  //   dispatch(setCaseData(item));
+  //   const caseId = item.id; // Set the case data in Redux store
+  //   navigate(`/cases/${caseId}`); // Navigate to the new page
+  // };
 
   useEffect(() => {
     if (location.pathname === "/cases") {
@@ -186,19 +186,19 @@ const DataTable = () => {
     getUserData(); // Call the getUserData function
   }, []);
 
-  const handleSearch = (event) => {
-    const searchValue = event.target.value;
-    setSearchTerm(searchValue);
+  // const handleSearch = (event) => {
+  //   const searchValue = event.target.value;
+  //   setSearchTerm(searchValue);
 
-    const filtered = data.filter((item) => {
-      return Object.values(item).some((value) => {
-        return String(value ?? "") // convert null/undefined to empty string
-          .toLowerCase()
-          .includes(searchValue.toLowerCase());
-      });
-    });
-    setFilteredData(filtered);
-  };
+  //   const filtered = data.filter((item) => {
+  //     return Object.values(item).some((value) => {
+  //       return String(value ?? "") // convert null/undefined to empty string
+  //         .toLowerCase()
+  //         .includes(searchValue.toLowerCase());
+  //     });
+  //   });
+  //   setFilteredData(filtered);
+  // };
   const togglePopup = () => {
     setShowPopup((prev) => !prev);
   };
@@ -211,35 +211,35 @@ const DataTable = () => {
     setSelectedData(item.id);
   };
 
-  const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
+  // const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
 
-  const handleSort = (key) => {
-    let direction = "asc";
-    if (sortConfig.key === key && sortConfig.direction === "asc") {
-      direction = "desc";
-    }
-    setSortConfig({ key, direction });
+  // const handleSort = (key) => {
+  //   let direction = "asc";
+  //   if (sortConfig.key === key && sortConfig.direction === "asc") {
+  //     direction = "desc";
+  //   }
+  //   setSortConfig({ key, direction });
 
-    const sortedData = [...filteredData].sort((a, b) => {
-      if (typeof a[key] === "number" && typeof b[key] === "number") {
-        return direction === "asc" ? a[key] - b[key] : b[key] - a[key];
-      } else {
-        const aValue = a[key] ?? null;
-        const bValue = b[key] ?? null;
-        if (aValue === null && bValue === null) return 0;
-        if (aValue === null) return 1;
-        if (bValue === null) return -1;
-        if (aValue < bValue) {
-          return direction === "asc" ? -1 : 1;
-        }
-        if (aValue > bValue) {
-          return direction === "asc" ? 1 : -1;
-        }
-        return 0;
-      }
-    });
-    setFilteredData(sortedData);
-  };
+  //   const sortedData = [...filteredData].sort((a, b) => {
+  //     if (typeof a[key] === "number" && typeof b[key] === "number") {
+  //       return direction === "asc" ? a[key] - b[key] : b[key] - a[key];
+  //     } else {
+  //       const aValue = a[key] ?? null;
+  //       const bValue = b[key] ?? null;
+  //       if (aValue === null && bValue === null) return 0;
+  //       if (aValue === null) return 1;
+  //       if (bValue === null) return -1;
+  //       if (aValue < bValue) {
+  //         return direction === "asc" ? -1 : 1;
+  //       }
+  //       if (aValue > bValue) {
+  //         return direction === "asc" ? 1 : -1;
+  //       }
+  //       return 0;
+  //     }
+  //   });
+  //   setFilteredData(sortedData);
+  // };
   if (loading) {
     return <Loader />;
   }
@@ -256,20 +256,7 @@ const DataTable = () => {
     { key: "status", label: "Status", render: (val) => <span className="badge bg-dark">{val}</span> }
   ];
 
-  const caseData = [
-    {
-      id: 6,
-      title: "Text",
-      description: "Issue Description",
-      created_on: "25-06-2025",
-      created_by: "Analyst",
-      assignee: "Admin",
-      watchers: "Admin",
-      modified_on: "05/16/2025",
-      status: "Open"
-    },
-    // more rows
-  ];
+
 
   return (
     <>
@@ -608,8 +595,8 @@ const DataTable = () => {
             <Plus size={20} />
             Add New Case
           </button> */}
-          <AppButton onClick={togglePopup} children={" + Add New Case"}/>
-          
+          <AppButton onClick={togglePopup} children={" + Add New Case"} />
+
         </div>
       )}
       {showPopup && <CreateCase togglePopup={togglePopup} />}

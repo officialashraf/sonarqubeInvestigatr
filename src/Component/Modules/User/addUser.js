@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import "./addUser.css";
+import "./addUser.module.css";
 // import { IoMdSearch } from "react-icons/io";
 import axios from "axios";
 import Cookies from "js-cookie";

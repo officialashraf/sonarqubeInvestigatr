@@ -3,7 +3,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
 import Select from 'react-select';
-import '../User/addUser.css';
+import '../User/addUser.module.css';
 import { CloseButton } from 'react-bootstrap';
 import { useAutoFocusWithManualAutofill } from '../../../utils/autoFocus';
 import CommonTextInput from '../../Common/MultiSelect/CommonTextInput';
@@ -178,7 +178,7 @@ const AddRole = ({ togglePopup }) => {
                     <span style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
 
                         <h5 >Assign permissions to role </h5>
-                        <CloseButton variant="white" style={{ color: 'white'}} />
+                        <CloseButton variant="white" onClick={() => togglePopup(false)} style={{ color: 'white'}} />
                     </span>
                     <form onSubmit={(e) => e.preventDefault()}>
                         <div className="form-group" style={{ marginBottom: '15px' }}>

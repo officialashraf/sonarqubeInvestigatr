@@ -1,11 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Button } from 'react-bootstrap';
-import { FaPlus } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
 import Summary from './summary.js';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import './mainContainer.css';
+import './mainContainer.module.css';
 import AddFilter2 from '../Filters/addFilter.js';
 import Loader from '../Layout/loader.js';
 import { toast } from 'react-toastify';
@@ -20,11 +18,9 @@ const MainContainer = () => {
   const [filterdata, setfilterdata] = useState([]);
   const caseData = useSelector((state) => state.caseData.caseData);
   console.log("Received Case ID:",caseData.id);
-  const [showPopup, setShowPopup] = useState(false);
   const [isLoading, setIsLoading] = useState(true); // Track loading state
-
  
-  const [showCdr, setShowCdr] = useState(false);
+ const [showCdr, setShowCdr] = useState(false);
 const [showAddFilter, setShowAddFilter] = useState(false);
 const [showFileUpload, setShowFileUpload] = useState(false);
 const [showFtpPopup, setShowFtpPopup] = useState(false);

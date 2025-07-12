@@ -63,28 +63,13 @@ const KeywordTagList = ({ queryPayload = null, caseId = null, aggsFields = ["soc
       sx={{
         display: 'flex',
         flexWrap: 'wrap',
-        gap: '6px',
+        gap: '3px',
         backgroundColor: '#101d2b',
         borderRadius: '20px',
         p: 2,
-        width: '600px',
-        height: '280px',
+        maxHeight: '280px',
         overflowY: 'auto',
-        overflowX: 'hidden',
-        '&::-webkit-scrollbar': {
-          width: '6px',
-        },
-        '&::-webkit-scrollbar-track': {
-          background: '#1a2332',
-          borderRadius: '10px',
-        },
-        '&::-webkit-scrollbar-thumb': {
-          background: '#0073CF',
-          borderRadius: '10px',
-        },
-        '&::-webkit-scrollbar-thumb:hover': {
-          background: '#005aa3',
-        },
+        overflowX: 'hidden', 
       }}
     >
       {data.length > 0 ? (
@@ -97,7 +82,7 @@ const KeywordTagList = ({ queryPayload = null, caseId = null, aggsFields = ["soc
             <Tooltip
               key={index}
               title={
-                <Box>
+                <Box sx={{ all: 'unset' }}>
                   <p  sx={{  color: '#fff' }}>
                     Hashtag: {item.key}
                   </p>
@@ -108,17 +93,6 @@ const KeywordTagList = ({ queryPayload = null, caseId = null, aggsFields = ["soc
               }
               arrow
               placement="top"
-              sx={{
-                '& .MuiTooltip-tooltip': {
-                  backgroundColor: '#1a2332',
-                  border: '1px solid #0073CF',
-                  fontSize: '12px',
-                  maxWidth: '200px',
-                },
-                '& .MuiTooltip-arrow': {
-                  color: '#1a2332',
-                },
-              }}
             >
               <Box
                 sx={{

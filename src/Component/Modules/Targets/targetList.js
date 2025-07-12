@@ -1,12 +1,6 @@
 import { useEffect, useState } from "react";
-import "../Case/table.css";
+import "../Case/tableGlobal.css";
 import { useNavigate } from "react-router-dom";
-import { Plus } from "react-bootstrap-icons";
-import { Col, Table } from "react-bootstrap";
-import { FaArrowLeft } from "react-icons/fa";
-import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
-import Dropdown from "react-bootstrap/Dropdown";
-import { FiMoreVertical } from "react-icons/fi";
 import { toast } from 'react-toastify';
 import axios from "axios";
 import Cookies from 'js-cookie';
@@ -28,8 +22,7 @@ const TargetList = () => {
   const [showPopupE, setShowPopupE] = useState(false);
   const [showPopupD, setShowPopupD] = useState(false);
   const [details, setDetails] = useState([])
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
+  // const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
 
   const fetchTargets = async () => {
@@ -71,63 +64,62 @@ const TargetList = () => {
     };
   }, [])
 
+  // const handleSearch = (event) => {
+  //   const searchValue = event.target.value;
+  //   setSearchTerm(searchValue);
 
-  const handleSearch = (event) => {
-    const searchValue = event.target.value;
-    setSearchTerm(searchValue);
+  //   const filtered = data.filter(item => {
+  //     return Object.values(item).some((value) => {
+  //       if (value !== null && value !== undefined) {
+  //         // Convert the value to a string and check if it includes the search value
+  //         return value
+  //           .toString()
+  //           .toLowerCase()
+  //           .includes(searchValue.toLowerCase());
+  //       }
+  //       return false;
+  //     });
+  //   });
+  //   setFilteredData(filtered);
+  // };
 
-    const filtered = data.filter(item => {
-      return Object.values(item).some((value) => {
-        if (value !== null && value !== undefined) {
-          // Convert the value to a string and check if it includes the search value
-          return value
-            .toString()
-            .toLowerCase()
-            .includes(searchValue.toLowerCase());
-        }
-        return false;
-      });
-    });
-    setFilteredData(filtered);
-  };
+  // const handleSort = (key) => {
+  //   let direction = "asc";
 
-  const handleSort = (key) => {
-    let direction = "asc";
+  //   if (sortConfig.key === key && sortConfig.direction === "asc") {
+  //     direction = "desc";
+  //   }
 
-    if (sortConfig.key === key && sortConfig.direction === "asc") {
-      direction = "desc";
-    }
+  //   setSortConfig({ key, direction });
 
-    setSortConfig({ key, direction });
+  //   const sortedData = [...filteredData].sort((a, b) => {
+  //     const aValue = a[key] ?? null;
+  //     const bValue = b[key] ?? null;
 
-    const sortedData = [...filteredData].sort((a, b) => {
-      const aValue = a[key] ?? null;
-      const bValue = b[key] ?? null;
+  //     if (aValue === null && bValue === null) return 0;
+  //     if (aValue === null) return 1;
+  //     if (bValue === null) return -1;
 
-      if (aValue === null && bValue === null) return 0;
-      if (aValue === null) return 1;
-      if (bValue === null) return -1;
+  //     if (key === "last_logout" || key === "created_on") {
+  //       const aDate = new Date(aValue);
+  //       const bDate = new Date(bValue);
+  //       return direction === "asc" ? aDate - bDate : bDate - aDate;
+  //     }
 
-      if (key === "last_logout" || key === "created_on") {
-        const aDate = new Date(aValue);
-        const bDate = new Date(bValue);
-        return direction === "asc" ? aDate - bDate : bDate - aDate;
-      }
+  //     if (typeof aValue === "string" && typeof bValue === "string") {
+  //       return direction === "asc"
+  //         ? aValue.localeCompare(bValue)
+  //         : bValue.localeCompare(aValue);
+  //     }
 
-      if (typeof aValue === "string" && typeof bValue === "string") {
-        return direction === "asc"
-          ? aValue.localeCompare(bValue)
-          : bValue.localeCompare(aValue);
-      }
+  //     if (typeof aValue === "number" && typeof bValue === "number") {
+  //       return direction === "asc" ? aValue - bValue : bValue - aValue;
+  //     }
 
-      if (typeof aValue === "number" && typeof bValue === "number") {
-        return direction === "asc" ? aValue - bValue : bValue - aValue;
-      }
-
-      return 0;
-    });
-    setFilteredData(sortedData);
-  };
+  //     return 0;
+  //   });
+  //   setFilteredData(sortedData);
+  // };
 
   const togglePopup = () => {
     setShowPopup((prev) => !prev);
@@ -206,22 +198,20 @@ const TargetList = () => {
   if (loading) {
     return <Loader />
   }
-const targetColumns = [
+  const targetColumns = [
     { key: "id", label: "Target ID" },
     { key: "name", label: "Target" },
     { key: "type", label: "Type" },
     { key: "synonyms", label: "Synonyms" },
-        { key: "threat_weightage", label: "Threat Score(1-10)" },
-  
+    { key: "threat_weightage", label: "Threat Score(1-10)" },
     { key: "created_on", label: "Created On" },
     { key: "created_by", label: "Created By" },
-
     { key: "modified_on", label: "Edited On" },
-       { key: "modified_by", label: "Edited By" },
-     { key: "description", label: "Description" },
+    { key: "modified_by", label: "Edited By" },
+    { key: "description", label: "Description" },
   ];
 
- 
+
   return (
     <>{data &&
       data.length > 0 ? (
@@ -571,27 +561,27 @@ const targetColumns = [
       //   </div>
       // </div>
       <div>
-          <TableModal
+        <TableModal
           title="Target Details"
-        data={data}
-        columns={targetColumns}
-               idPrefix="TAR"
-         btnTitle=" + Add New Target"
-           onRowAction={{
-                edit: (row) => togglePopupE(row),
-                delete: (row) => confirmDelete(row.id, row.name),
-                details: (row) => togglePopupD(row),
-              }}
-         i
+          data={data}
+          columns={targetColumns}
+          idPrefix="TAR"
+          btnTitle=" + Add New Target"
+          onRowAction={{
+            edit: (row) => togglePopupE(row),
+            delete: (row) => confirmDelete(row.id, row.name),
+            details: (row) => togglePopupD(row),
+          }}
+          i
           onAddClick={() => togglePopup()}
-      />
-</div>
-      ) : (
+        />
+      </div>
+    ) : (
       <div className="resourcesContainer" style={{ border: 'none' }}>
         <h3 className="title">Let's Get Started!</h3>
         <p className="content">Add targets to get started</p>
         {/* <button className='add-btn' title='Add New Case' onClick={togglePopup}><Plus size={20} />Add New Target</button> */}
-      <AppButton onClick={togglePopup} children={" + Add New Target"}/>
+        <AppButton onClick={togglePopup} children={" + Add New Target"} />
       </div>
     )
     }

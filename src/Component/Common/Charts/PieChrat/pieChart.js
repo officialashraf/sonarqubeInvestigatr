@@ -14,7 +14,7 @@ const getCSSVar = (variable) =>
   ];
 
 const ReusablePieChart = ({
-  caseId,
+  caseId =[],
   aggsFields = [],
   query = {},
   extraPayload = {},
@@ -34,6 +34,7 @@ const ReusablePieChart = ({
       try {
         setLoading(true);
         const payload = {
+          // query:Array.isArray(caseId) ? caseId.join(",") : caseId,
           query: { unified_case_id: String(caseId), ...query },
           aggs_fields: aggsFields,
           ...extraPayload

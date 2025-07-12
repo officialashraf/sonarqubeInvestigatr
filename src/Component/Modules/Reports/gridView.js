@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { Table, Pagination } from "react-bootstrap";
-import "../Analyze/TabularData/caseTableData.css";
+import style from "../Analyze/TabularData/caseTableData.module.css";
 import { useSelector, useDispatch } from "react-redux";
-import "../Layout/pagination.css";
 import { fetchSummaryData } from "../../../Redux/Action/filterAction";
 import Loader from "../Layout/loader";
 import axios from 'axios';
@@ -184,13 +183,13 @@ const GridView = () => {
               </tbody>
             </Table>
           ) : (
-            <Table hover responsive size="sm" className={styles.table}>
+            <Table hover className={styles.table}>
               <thead>
 
                 <tr>
                   {data.length > 0 && [...new Set(data.flatMap(item => Object.keys(item)))]
                     .map((key, index) => (
-                      <th key={index} className="fixed-th">
+                      <th key={index} className={style.fixedTh}>
                         {key
                           .split("_") // Split by underscores
                           .map(word => {
@@ -210,7 +209,7 @@ const GridView = () => {
                   data.map((item, rowIndex) => (
                     <tr key={rowIndex}>
                       {[...new Set(data.flatMap(item => Object.keys(item)))].map((key, colIndex) => (
-                        <td key={colIndex} className="fixed-td">
+                        <td key={colIndex} className={style.fixedTd}>
                           <div
                             className="cell-content"
                             style={{
@@ -252,7 +251,7 @@ const GridView = () => {
         </div>
 
         {dataAvailable && (
-          <div className="paginationstabs"
+          <div className={style.paginationContainer}
             style={{
               // display: "flex",
               // alignItems: "self-end",
@@ -264,7 +263,6 @@ const GridView = () => {
               alignItems: "center",
               marginTop: "auto", // push to bottom
               padding: "10px 20px",
-
               marginBottom: "30px",
               boxShadow: "0 -2px 5px rgba(0,0,0,0.05)"
             }}

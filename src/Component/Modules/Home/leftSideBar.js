@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Nav } from 'react-bootstrap';
 import { ListTask, Folder, BarChart, People, Bullseye, Search } from 'react-bootstrap-icons';
 import { useNavigate } from 'react-router-dom';
-import "./sideBar.css"
+import styles from "./sideBar.module.css"
 import { useDispatch, useSelector } from 'react-redux';
 import { openPopup } from '../../../Redux/Action/criteriaAction';
 import RecentCriteria from '../FilterCriteria/recentCriteria';
@@ -39,32 +39,32 @@ const Sidebar = () => {
 
   return (
     <>
-      <div className='sideB'>
-        <div className='sideTop'>
-          {menuItems.slice(0, 5).map((item, index) => (
-            <Nav.Link
-              key={index}
-              onClick={() => handleItemClick(item)}
-              className={`navSideLink ${selectedItem === item.label ? 'active' : ''}`}
-            >
-              {item.icon}
-              <span>{item.label}</span>
-            </Nav.Link>
-          ))}
-        </div>
-
-        <div className='sideBottom'>
-          {menuItems.slice(5).map((item, index) => (
-            <Nav.Link
-              key={index}
-              onClick={() => handleItemClick(item)}
-              className={`navSideLink ${selectedItem === item.label ? 'active' : ''}`}
-            >
-              {item.icon}
-            </Nav.Link>
-          ))}
-        </div>
+         <div className={styles.sideB}>
+      <div className={styles.sideTop}>
+        {menuItems.slice(0, 5).map((item, index) => (
+          <Nav.Link
+            key={index}
+            onClick={() => handleItemClick(item)}
+            className={`${styles.navSideLink} ${selectedItem === item.label ? styles.navSideLinkActive : ''}`}
+          >
+            {item.icon}
+            <span>{item.label}</span>
+          </Nav.Link>
+        ))}
       </div>
+
+      <div className={styles.sideBottom}>
+        {menuItems.slice(5).map((item, index) => (
+          <Nav.Link
+            key={index}
+            onClick={() => handleItemClick(item)}
+            className={`${styles.sideBottomNavLink} ${selectedItem === item.label ? styles.sideBottomNavLinkActive : ''}`}
+          >
+            {item.icon}
+          </Nav.Link>
+        ))}
+      </div>
+    </div>
 
       {/* Popup Components */}
       {activePopup === "recent" && <RecentCriteria />}

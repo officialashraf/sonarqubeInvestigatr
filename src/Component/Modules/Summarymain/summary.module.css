@@ -1,4 +1,5 @@
-.box.MuiBox-root.css-0{
+/* ========= GLOBAL MUI & TABLE OVERRIDES ========= */
+:global(.MuiBox-root.css-0){
   background-color: var(--color-colors-secondary) !important;
   border-radius:25px;
 }
@@ -37,26 +38,9 @@ g.recharts-layer .recharts-bar:hover {
   background-color: white;
 }
 
-/* Button Styling */
-.add-new-filter-button {
-  color: white;
-  font-size: 12px;
-  background-color: gray;
-  border: 1px solid gray;
-  border-radius: 5px;
-  padding: 8px 16px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
 
-.add-new-filter-button:hover {
-  background-color: #000000;
-  color: #ffffff;
-  border: 1px solid black;
-  border-radius: 5px;
-}
 
-/* Graph Container */
+/* ========= GRAPH CONTAINER ========= */
 .graphchats {
   display: flex;
   flex-wrap: nowrap;
@@ -68,7 +52,7 @@ g.recharts-layer .recharts-bar:hover {
   overflow-x: auto;
   overflow-y: hidden;
   scrollbar-width: thin;
-  scrollbar-color: #888 #f1f1f1;
+  scrollbar-color:var(--color-colors-primaryAccent) var(--color-colors-secondary);
 }
 
 .graphchats::-webkit-scrollbar {
@@ -89,9 +73,9 @@ g.recharts-layer .recharts-bar:hover {
   background: #555;
 }
 
-/* Individual Graph Boxes */
-.box {
-  flex: 0 0 350px; /* Don't grow/shrink, fixed width */
+/* ========= INDIVIDUAL GRAPH BOXES ========= */
+.boxes {
+  flex: 0 0 350px;
   min-width: 350px;
   max-width: 350px;
   height: 320px;
@@ -104,28 +88,27 @@ g.recharts-layer .recharts-bar:hover {
   overflow: hidden;
 }
 
-/* Filter Count */
+/* ========= FILTER COUNTER ========= */
 .filterCount {
   text-align: center;
   margin: 10px 0;
 }
 
-/* Input Autofill Fix */
-.input:-webkit-autofill {
+/* ========= INPUT AUTOFILL FIX ========= */
+:global(.input:-webkit-autofill) {
   background-color: transparent !important;
   transition: background-color 5000s ease-in-out 0s;
 }
 
-/* ===== RESPONSIVE DESIGN ===== */
+/* ========= RESPONSIVE MEDIA QUERIES ========= */
 
-/* Large Desktop (1920px and above) */
+/* Large Desktop */
 @media screen and (min-width: 1920px) {
   .graphchats {
     justify-content: center;
-    overflow-x: auto;
   }
-  
-  .box {
+
+  .boxes {
     flex: 0 0 400px;
     min-width: 400px;
     max-width: 400px;
@@ -133,15 +116,13 @@ g.recharts-layer .recharts-bar:hover {
   }
 }
 
-/* Desktop (1200px to 1919px) */
+/* Desktop */
 @media screen and (min-width: 1200px) and (max-width: 1919px) {
-  .graphchats {
-    justify-content: flex-start;
-    overflow-x: auto;
+.graphchats {
     justify-content: center;
   }
-  
-  .box {
+
+  .boxes {
     flex: 0 0 350px;
     min-width: 350px;
     max-width: 350px;
@@ -149,128 +130,71 @@ g.recharts-layer .recharts-bar:hover {
   }
 }
 
-/* Tablet Landscape (1024px to 1199px) */
+/* Tablet Landscape */
 @media screen and (min-width: 1024px) and (max-width: 1199px) {
-  .graphchats {
-    justify-content: flex-start;
-    overflow-x: auto;
-  }
-  
-  .box {
-    flex: 0 0 350px;
-    min-width: 350px;
-    max-width: 350px;
+  .boxes {
     height: 300px;
-  }
-  
-  .add-new-filter-button {
-    padding: 6px 12px;
-    font-size: 11px;
   }
 }
 
-/* Tablet Portrait (768px to 1023px) */
+/* Tablet Portrait */
 @media screen and (min-width: 768px) and (max-width: 1023px) {
-  .graphchats {
-    justify-content: flex-start;
-    overflow-x: auto;
-  }
-  
-   .box {
-    flex: 0 0 350px;
-    min-width: 350px;
-    max-width: 350px;
+  .boxes {
     height: 300px;
-  }
-  
-  .add-new-filter-button {
-    padding: 6px 12px;
-    font-size: 11px;
   }
 }
 
-/* Mobile Landscape (520px to 767px) */
+/* Mobile Landscape */
 @media screen and (min-width: 520px) and (max-width: 767px) {
-  .graphchats {
-    justify-content: flex-start;
-    overflow-x: auto;
+ .graphchats {
     gap: 15px;
   }
-  
-  .box {
-    flex: 0 0 350px;
-    min-width: 350px;
-    max-width: 350px;
+
+ .boxes {
     height: 300px;
-  }
-  
-  .add-new-filter-button {
-    padding: 5px 10px;
-    font-size: 10px;
   }
 }
 
-/* Mobile Portrait (480px to 519px) */
+/* Mobile Portrait */
 @media screen and (min-width: 480px) and (max-width: 519px) {
   .graphchats {
-    justify-content: flex-start;
-    overflow-x: auto;
     gap: 10px;
     padding: 5px;
   }
-  
-  .box {
+
+ .boxes {
     flex: 0 0 260px;
     min-width: 260px;
     max-width: 260px;
     height: 240px;
   }
-  
-  .add-new-filter-button {
-    padding: 5px 10px;
-    font-size: 10px;
-    width: 100%;
-    text-align: center;
-  }
 }
 
-/* Small Mobile (below 480px) */
+/* Small Mobile */
 @media screen and (max-width: 479px) {
-  .graphchats {
-    justify-content: flex-start;
-    overflow-x: auto;
+ .graphchats {
     gap: 10px;
     padding: 5px;
   }
-  
-  .box {
+
+ .boxes {
     flex: 0 0 250px;
     min-width: 250px;
     max-width: 250px;
     height: 220px;
   }
-  
-  .add-new-filter-button {
-    padding: 4px 8px;
-    font-size: 9px;
-    width: 100%;
-    text-align: center;
-  }
-  
-  /* Make summary title smaller on very small screens */
-  h5 {
+h5 {
     font-size: 16px;
   }
 }
 
-/* Additional responsive adjustments */
+/* Header Adjustments on Small Screens */
 @media screen and (max-width: 600px) {
-  .container-fluid {
+ .containerFluid {
     padding: 0 10px;
   }
-  
-  /* Stack the header elements on small screens */
-  .MuiBox-root {
+
+.MuiBox-root {
     flex-direction: column !important;
     align-items: stretch !important;
     gap: 10px;

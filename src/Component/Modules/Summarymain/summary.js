@@ -2,13 +2,12 @@ import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { Box } from '@mui/material';
-import { PieChart, Pie, Tooltip, Legend, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Cell } from 'recharts';
+import { Tooltip, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Cell } from 'recharts';
 import { FaRss, FaFacebookF, FaTwitter, FaInstagram, FaVk, FaTiktok, FaYoutube, FaLinkedinIn } from "react-icons/fa";
-import './summary.css';
+import style from './summary.module.css';
 import styles from "./record.module.css";
 import Cookies from "js-cookie";
 import ReusablePieChart from '../../Common/Charts/PieChrat/pieChart';
-
 
 const Summary = ({ filters }) => {
 
@@ -21,23 +20,22 @@ const Summary = ({ filters }) => {
   const caseId = useSelector((state) => state.caseData.caseData.id);
   console.log("casiId", caseId)
 
-const iconMap = {
-  facebook: <FaFacebookF  size={20} />,
-  twitter: <FaTwitter  size={20} />,
-  instagram: <FaInstagram  size={20} />,
-  youtube: <FaYoutube  size={20} />,
-  "rss feed": <FaRss  size={20} />,
-  linkedin: <FaLinkedinIn  size={20} />,
-  vk: <FaVk  size={20} />,
-  tiktok: <FaTiktok  size={20} />,
-};
+  const iconMap = {
+    facebook: <FaFacebookF size={20} />,
+    twitter: <FaTwitter size={20} />,
+    instagram: <FaInstagram size={20} />,
+    youtube: <FaYoutube size={20} />,
+    "rss feed": <FaRss size={20} />,
+    linkedin: <FaLinkedinIn size={20} />,
+    vk: <FaVk size={20} />,
+    tiktok: <FaTiktok size={20} />,
+  };
   useEffect(() => {
     const fetchData = async () => {
       try {
 
         const response = await axios.post(`${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/aggregate`, {
           query: { unified_case_id: String(caseId) },
-
           aggs_fields: ["unified_record_type", "unified_date_only", "unified_type"]
         },
           {
@@ -71,13 +69,13 @@ const iconMap = {
 
         //Table Data (unified_type)
         const tableData = (unified_type || []).map(item => {
-  const key = item.key.toLowerCase().trim();  // space, caps handle
-  return {
-    icon: iconMap[key] || <FaRss color="#ccc" size={22} />,  // fallback
-    name: item.key,
-    value: item.doc_count,
-  };
-});
+          const key = item.key.toLowerCase().trim();  // space, caps handle
+          return {
+            icon: iconMap[key] || <FaRss color="#ccc" size={22} />,  // fallback
+            name: item.key,
+            value: item.doc_count,
+          };
+        });
 
         console.log("tabledtaa", tableData)
         //  Set States
@@ -113,21 +111,21 @@ const iconMap = {
   const [activeIndex, setActiveIndex] = useState(null);
   return (
     <>
-<h6 style={{ textAlign: "center" }}> FilterCount: {filters}</h6>
-      <div className='container-fluid'>
+      <h6 style={{ textAlign: "center" }}> FilterCount: {filters}</h6>
+      <div className={style.containerFluid}>
         <Box width="100%">
-          <div className='graphchats'>
-            <Box className="box">
-              
-            <ReusablePieChart
-  caseId={caseId}
-  aggsFields={["unified_record_type"]}
-/>
+          <div className={style.graphchats}>
+            <Box className={style.boxes}>
+
+              <ReusablePieChart
+                caseId={caseId}
+                aggsFields={["unified_record_type"]}
+              />
 
             </Box>
 
             {/* Bar Chart */}
-            <Box className="box">
+            <Box className={style.boxes}>
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={barData}>
 
@@ -178,26 +176,26 @@ const iconMap = {
             </Box>
 
             {/* Table */}
-            <Box className="box" style={{ overflow: 'auto' , paddingTop:'40px'}}>
+            <Box className={style.boxes} style={{ overflow: 'auto', paddingTop: '40px' }}>
               <div className={styles.card}>
-      {tableData.map((item, index) => (
-        <div className={styles.row} key={index}>
-          <div className={styles.left}>
-            <div className={styles.icon}>{item.icon}</div>
-            <div>
-             <p className={styles.name}>{item.name}</p>
-             <p className={styles.count}>{item.value}</p>
-             </div>
-          </div>
-         
-        </div>
-      ))}
+                {tableData.map((item, index) => (
+                  <div className={styles.row} key={index}>
+                    <div className={styles.left}>
+                      <div className={styles.icon}>{item.icon}</div>
+                      <div>
+                        <p className={styles.name}>{item.name}</p>
+                        <p className={styles.count}>{item.value}</p>
+                      </div>
+                    </div>
 
-      <div className={styles.footer}>
-        <span>Total:</span>
-        <span>{totalCount}</span>
-      </div>
-    </div>
+                  </div>
+                ))}
+
+                <div className={styles.footer}>
+                  <span>Total:</span>
+                  <span>{totalCount}</span>
+                </div>
+              </div>
             </Box>
           </div >
         </Box >

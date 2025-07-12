@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import ExistingFilters from "./existingFilter";
 import axios from 'axios';
 import AddNewFilter from './addNewFilter';
-import "./main.css"
+import "./mainGlobal.css"
 import { Plus, X } from 'react-bootstrap-icons'
 import { useSelector, useDispatch } from 'react-redux';
 import { setCaseData } from '../../../Redux/Action/caseAction';
