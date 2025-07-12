@@ -161,6 +161,12 @@ const ReportPage = () => {
     }
   };
 
+  const isSearchDisabled = (
+    (Array.isArray(formData.searchQuery) && formData.searchQuery.length === 0) &&
+    (Array.isArray(formData.caseIds) && formData.caseIds.length === 0) &&
+    (!selectedDates.startDate && !selectedDates.endDate)
+  );
+
   return (
     <div style={{ backgroundColor: '#080E17', color: 'white', padding: '20px' }}>
       <h5 style={{ marginBottom: '20px' }}>Search Report</h5>
@@ -222,6 +228,7 @@ const ReportPage = () => {
         /> */}
         <AddButton
           type="submit"
+          disabled={isSearchDisabled}
         >
           Search
         </AddButton>

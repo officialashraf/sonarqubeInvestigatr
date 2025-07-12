@@ -54,9 +54,9 @@ const handleProceed = (selectedOption) => {
       <Navbar expand="sm" className="justify-content-between custom-navbarH">
         <Container fluid className="custom-containerH">
           <Row className="w-100">
-            <Col xs="auto" className='cassIcon p-2'>
+            {/* <Col xs="auto" className='cassIcon p-2'>
               <FaArrowLeft style={{ cursor: 'pointer' }} onClick={() => navigate('/cases')} size={20} />
-            </Col>
+            </Col> */}
 
             <Col>
               <div className="case-info">

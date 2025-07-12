@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Navbar, Nav, NavDropdown, Container } from 'react-bootstrap';
 import { Bell, PersonCircle } from 'react-bootstrap-icons';
+import { FaArrowLeft } from "react-icons/fa";
 import "./header.css";
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
@@ -18,6 +19,7 @@ import AboutUs from './aboutUs';
 import ProfileImage from '.././../Assets/Images/prifileImage.jpg'
 
 const Header = ({ title }) => {
+  console.log("Header title prop:", title);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const token = Cookies.get('accessToken');
@@ -137,6 +139,13 @@ const Header = ({ title }) => {
       <Navbar bg="black" variant="dark">
         <Container className="containerss d-flex justify-content-between align-items-center">
           <Navbar.Brand className="custom-navbar-brand">
+            {["Users", "Roles", "Connections", "Case Analysis"].includes(title) && (
+              <FaArrowLeft
+                style={{ color: 'white', cursor: 'pointer', marginRight: '10px' }}
+                onClick={() => navigate(-1)}
+                size={20}
+              />
+            )}
             {title}
           </Navbar.Brand>
 

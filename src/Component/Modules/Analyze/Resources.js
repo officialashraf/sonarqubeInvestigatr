@@ -239,10 +239,20 @@ const Resources = () => {
                       onClick={() => handleResourceClick(resource)}
                     >
                       <img
-                        src={resource.socialmedia_from_imageurl ?? resource.socialmedia_media_url}
-                        onError={(e) => {
+                        src={
+                          resource.unified_type === "rss feed"
+                            ? (resource.socialmedia_from_imageurl || resource.socialmedia_media_url || "/images/rss.jpg")
+                            : (resource.socialmedia_from_imageurl ?? resource.socialmedia_media_url)
+                        }
+                        // onError={(e) => {
+                        //   e.target.onerror = null; // prevents infinite loop
+                        //   e.target.src = resource.unified_type === "rss feed"
+                        //     ? "/images/rss.jpg"
+                        //     : "https://www.kurin.com/wp-content/uploads/placeholder-square.png";
+                        // }}
+                          onError={(e) => {
                           e.target.onerror = null; // prevents infinite loop
-                          e.target.src = 'https://www.kurin.com/wp-content/uploads/placeholder-square.jpg';
+                            e.target.src = "/images/placeholder-square.png";
                         }}
                         alt="pic_not_found"
                         className="resourceImage"
@@ -699,7 +709,7 @@ const Resources = () => {
                       alt="Social Media"
                       onError={(e) => {
                         e.target.onerror = null;
-                        e.target.src = "https://www.kurin.com/wp-content/uploads/placeholder-square.jpg";
+                        e.target.src = "/images/placeholder-square.png";
                       }}
                     />
                   )}

@@ -7,7 +7,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import LockResetIcon from '@mui/icons-material/LockReset';
-import { FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
 
@@ -49,13 +48,6 @@ const TableModal = ({ columns = [],title, data = [], onAddClick, searchPlacehold
 
       <div className={styles.header}>
        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}> 
-        {["User Dashboard", "Role Dashboard", "Connection Dashboard"].includes(title) && (
-          <FaArrowLeft
-            style={{ cursor: 'pointer', marginRight: '10px' }}
-            onClick={() => navigate('/admin')}
-            size={20}
-          />
-        )}
          <input
           className={styles.searchBar}
           placeholder={searchPlaceholder}

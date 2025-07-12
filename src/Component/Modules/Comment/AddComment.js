@@ -19,6 +19,8 @@ import { Edit as EditIcon, Delete as DeleteIcon } from "@mui/icons-material";
 import Cookies from 'js-cookie';
 import UpdateComment from './updatecomment';
 import { useAutoFocusWithManualAutofill } from '../../../utils/autoFocus';
+import CommonTextInput from '../../Common/MultiSelect/CommonTextInput'
+import AppButton from '../../Common/Buttton/button';
 
 //const API_BASE_URL = `${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1`;
 
@@ -160,24 +162,25 @@ const AddComment = ({ show, onClose, selectedResource }) => {
                   />
                   <ListItemSecondaryAction>
                     <IconButton edge="end" size="small" onClick={() => handleEditClick(comment)}>
-                      <EditIcon fontSize="small" />
+                      <EditIcon fontSize="small" style={{ color: '#0073cf'}} />
                     </IconButton>
                     <IconButton edge="end" size="small" onClick={() => handleDelete(comment.id)}>
-                      <DeleteIcon fontSize="small" />
+                      <DeleteIcon fontSize="small" style={{ color: '#0073cf' }} />
                     </IconButton>
                   </ListItemSecondaryAction>
                 </ListItem>
               ))}
             </List>
           ) : (
-            <Typography color="textSecondary" sx={{ textAlign: 'center', my: 2 }}>
+            <Typography  sx={{ textAlign: 'center', my: 2 }}>
               No comments found
             </Typography>
           )}
           <form onSubmit={handleAddComment}>
-            <label htmlFor="title">Add Comment</label>
-            <input
-              className="com"
+            {/* <label htmlFor="title">Add Comment</label> */}
+            <CommonTextInput
+            label="Add Comment"
+              // className="com"
               type="text"
               id="title"
               name="title"
@@ -215,10 +218,10 @@ const AddComment = ({ show, onClose, selectedResource }) => {
           </Box> */}
 
             <div className="button-container">
-              <button type="submit" className="create-btn" disabled={isSubmitting || !newComment.trim()}> {isSubmitting ? 'Adding...' : 'Add'}</button>
-              <button type="button" className="cancel-btn" onClick={onClose}>
+              <AppButton type="submit" className="create-btn" disabled={isSubmitting || !newComment.trim()}> {isSubmitting ? 'Adding...' : 'Add'}</AppButton>
+              <AppButton type="button" className="cancel-btn" onClick={onClose}>
                 Cancel
-              </button>
+              </AppButton>
             </div>
           </form>
         </div>

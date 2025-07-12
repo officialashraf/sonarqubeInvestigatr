@@ -302,8 +302,8 @@
   background-color: #101D2B;
   width: 100%;
   max-width: 600px;
-  height: 80vh;
-  /* max-height: 100%; */
+  /* height: 80vh; */
+  max-height: 100%;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
@@ -412,11 +412,11 @@
 }
 
 .postMedia {
-  height: calc(50% - 4px); /* Fixed height */
-  object-fit: contain;
+  /* height: calc(50% - 4px);  */
+  object-fit: cover;
   border-radius: 0px; /* Soft rounded corners */
   display: block; /* Ensures it behaves like a block element */
-  margin: auto;
+  /* margin: auto; */
 }
 
 .imageGridWrapper .postMedia:only-child {
