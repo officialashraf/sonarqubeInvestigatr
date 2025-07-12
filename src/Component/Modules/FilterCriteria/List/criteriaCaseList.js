@@ -6,6 +6,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import Loader from '../../Layout/loader';
 import styles from "../../../Common/Table/table.module.css";
+import style from  "../../Analyze/TabularData/caseTableData.module.css";
 
 const CriteriaCaseTable = () => {
   const token = Cookies.get("accessToken");
@@ -186,7 +187,7 @@ const CriteriaCaseTable = () => {
                 {/* Dynamically generate headers from all unique keys */}
                 {searchResults.length > 0 && [...new Set(searchResults.flatMap(item => Object.keys(item)))]
                   .map((key, index) => (
-                    <th key={index} className="fixed-th">
+                    <th key={index}  className={style.fixedTh}>
                       {key
                         .split("_") // Split by underscores
                         .map(word => {
@@ -207,7 +208,7 @@ const CriteriaCaseTable = () => {
                   <tr key={rowIndex}>
                     {/* Dynamically generate table cells */}
                     {[...new Set(searchResults.flatMap(item => Object.keys(item)))].map((key, colIndex) => (
-                      <td key={colIndex} className="fixed-td">
+                      <td key={colIndex}  className={style.fixedTd}>
                         <div
                           className="cell-content"
                           style={{
