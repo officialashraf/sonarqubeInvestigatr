@@ -51,11 +51,13 @@ const HeaderFilter = () => {
   return (
     <>
       <Navbar expand="sm" className="justify-content-between custom-navbarH">
+
     <Container fluid className={styles.customContainerH}>
   <Row className="w-100">
     {/* <Col xs="auto" className={`${styles.caseIcon} p-2`}>
       <FaArrowLeft style={{ cursor: 'pointer' }} onClick={() => navigate('/cases')} size={20} />
     </Col> */}
+
 
     <Col>
       <div className={styles.caseInfo}>

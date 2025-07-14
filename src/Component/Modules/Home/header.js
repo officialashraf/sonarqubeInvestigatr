@@ -19,6 +19,7 @@ import AboutUs from './aboutUs';
 import ProfileImage from '.././../Assets/Images/prifileImage.jpg'
 
 const Header = ({ title }) => {
+  console.log("Header title prop:", title);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const token = Cookies.get('accessToken');
@@ -135,6 +136,7 @@ const Header = ({ title }) => {
 
   return (
     <>
+
       <Navbar>
   <Container className={`${styles.containerss} d-flex justify-content-between align-items-center`}>
    

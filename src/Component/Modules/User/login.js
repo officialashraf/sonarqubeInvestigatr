@@ -204,7 +204,7 @@ const LoginPage = () => {
             {/* Logo Section (Centered) */}
             <Row className="justify-content-center">
                 <img
-                    src="/images/investigatr.jpg"
+                    src="/images/investigatr.png"
                     alt="Investigatr"
                     className={style.logoCenter} /* Use the CSS class */
                 />

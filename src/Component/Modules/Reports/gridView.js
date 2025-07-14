@@ -163,13 +163,13 @@ const GridView = () => {
   return (
     <>
       <div className="grid-view-header" style={{
-        // display: 'flex',
-        // flexDirection: 'column',
+        display: 'flex',
+        flexDirection: 'column',
         // minHeight: '100vh',
       }}>
         <div
           className={styles.tableWrapper}
-          style={{ marginTop: '12px', padding: '10px', backgroundColor: '#101D2B' }}
+          style={{ marginTop: '12px', padding: '2px 10px 10px 10px', backgroundColor: '#101D2B' }}
         >
           {!dataAvailable ? (
             <Table hover responsive size="sm" className={styles.table}>            <thead></thead>
@@ -217,20 +217,45 @@ const GridView = () => {
                               // padding: "0px 0px 0px 5px",
                               // height: '37px',
                               // fontFamily: 'sans-serif',
-                              fontWeight: 'normal',
-                              overflow: 'hidden',
+                              fontWeight: "400",
+                              overflow: 'auto',
                               //  textOverflow: 'ellipsis',
                               whiteSpace: 'nowrap',
                               //  vertical- align: middle;
                               padding: '0px 5px 0px 5px',
                               fontSize: '12px',
-                              fontFamily: 'Helvetica'
+                              fontFamily: 'roboto',
+                              scrollbarWidth: 'none',
+                              msOverflowStyle: 'none',
                             }}
                             title={typeof item[key] === 'object' ? JSON.stringify(item[key]) : item[key]}
                           >
-                            {typeof item[key] === 'object' && item[key] !== null
+                            {key === "socialmedia_hashtags" && Array.isArray(item[key]) ? (
+                                  <div style={{ display: "flex", gap: "4px" }}>
+                                    {item[key].map((tag, i) => (
+                                      <span
+                                        key={i}
+                                        style={{
+                                          backgroundColor: "#FFC107",
+                                          color: "#000",
+                                          padding: "2px 6px",
+                                          borderRadius: "12px",
+                                          fontSize: "11px",
+                                          whiteSpace: "nowrap",
+                                        }}
+                                      >
+                                        {tag}
+                                      </span>
+                                    ))}
+                                  </div>
+                                ) : typeof item[key] === "object" && item[key] !== null ? (
+                              JSON.stringify(item[key])
+                            ) : (
+                              item[key] || "-"
+                            )}
+                            {/* {typeof item[key] === 'object' && item[key] !== null
                               ? JSON.stringify(item[key])
-                              : item[key] || '-'}
+                              : item[key] || '-'} */}
                           </div>
                         </td>
                       ))}

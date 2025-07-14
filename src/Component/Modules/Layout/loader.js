@@ -4,7 +4,7 @@ const Loader = ({ style }) => {
   return (
     <div className={styles.loading}>
       <div style={style}></div>
-      <h6>Please wait</h6>
+      <h6 style={{ color: 'white'}}>Please wait</h6>
     </div>
   )
 }

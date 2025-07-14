@@ -23,7 +23,6 @@
   
 }
 
-
 .table-container {
   overflow-x: auto; /* Enable horizontal scroll if content exceeds table width */
 }
@@ -69,5 +68,12 @@
   }
 }
 
-
-
+/* Disabled pagination item color */
+:global(.pagination .page-item.disabled),
+:global(.pagination .page-item.disabled .page-link) {
+  background-color: #080E17 !important;
+  color: var(--color-colors-neutralText) !important;
+  border: none !important;
+  box-shadow: none !important;
+  text-decoration: none !important;
+}

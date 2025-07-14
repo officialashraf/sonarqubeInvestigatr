@@ -22,6 +22,7 @@ const CaseHeader = ({ onIconClick, activeView }) => {
           className={styles.headerRow}
           // style={{ background: "lightgray" }}
         >
+
            {/* <div className={styles.backIcon} onClick={backToSnap}>
           <FaArrowLeft />
         </div> */}

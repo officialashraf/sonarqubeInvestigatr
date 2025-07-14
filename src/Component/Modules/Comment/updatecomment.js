@@ -2,6 +2,8 @@ import { useState } from 'react'
 import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
 import axios from 'axios';
+import AppButton from '../../Common/Buttton/button';
+import CommonTextInput from '../../Common/MultiSelect/CommonTextInput';
 
 const UpdateComment = ({ onClose, comment, resourceId, GetCommentList }) => {
   const [newComment, setNewComment] = useState(comment.comment || "");
@@ -52,9 +54,10 @@ const UpdateComment = ({ onClose, comment, resourceId, GetCommentList }) => {
         <div className="popup-content">
           <form onSubmit={handleUpdate}>
 
-            <label htmlFor="title">Update Comment:</label>
-            <input
-              className="com"
+            {/* <label htmlFor="title">Update Comment:</label> */}
+            <CommonTextInput
+            label="Update Comment"
+              // className="com"
               type="text"
               id="title"
               name="title"
@@ -65,10 +68,10 @@ const UpdateComment = ({ onClose, comment, resourceId, GetCommentList }) => {
             />
 
             <div className="button-container">
-              <button type="submit" className="create-btn" disabled={isSubmitting}>{isSubmitting ? 'Editing...' : 'Edit'}</button>
-              <button type="button" className="cancel-btn" onClick={onClose}>
+              <AppButton type="submit" className="create-btn" disabled={isSubmitting}>{isSubmitting ? 'Editing...' : 'Edit'}</AppButton>
+              <AppButton type="button" className="cancel-btn" onClick={onClose}>
                 Cancel
-              </button>
+              </AppButton>
             </div>
           </form>
         </div>
