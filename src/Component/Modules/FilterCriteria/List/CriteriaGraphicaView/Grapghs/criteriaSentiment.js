@@ -80,16 +80,9 @@ const CriteriaSentimentChart = () => {
   // }
   return (
     <ReusablePieChart
-      caseId={queryPayload.case_id}
+      // caseId={queryPayload}
       aggsFields={["sentiment"]}
-      query={{
-        file_type: queryPayload.file_type,
-        keyword: queryPayload.keyword
-      }}
-      extraPayload={{
-        start_time: queryPayload.start_time,
-        end_time: queryPayload.end_time
-      }}
+     queryPayload={queryPayload}
     />
 
   );

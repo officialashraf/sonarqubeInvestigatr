@@ -7,14 +7,15 @@ import Loader from '../../../Modules/Layout/loader';
 import styles from './barchart.module.css';
 
 const ReusableBarChart = ({
-    caseId,
     aggsFields = [],
+queryPayload = null,
+ caseId = null,
     chartHeight = 280,
     transformData = (rawData) => rawData.map(item => ({
         name: item.key.split('-').slice(0, 3).join(''),
         value: item.doc_count
     })),
-    query = {},
+    // query = {},
 }) => {
     const [barData, setBarData] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -25,10 +26,23 @@ const ReusableBarChart = ({
         const fetchData = async () => {
             try {
                 setLoading(true);
-                const response = await axios.post(`${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/aggregate`, {
-                    query: { unified_case_id: String(caseId), ...query },
-                    aggs_fields: aggsFields
-                }, {
+                 const payload = queryPayload
+          ? {
+              query: {
+                unified_case_id: Array.isArray(queryPayload?.case_id) ? queryPayload.case_id : [],
+                file_type: Array.isArray(queryPayload?.file_type) ? queryPayload.file_type : [],
+                keyword: Array.isArray(queryPayload?.keyword) ? queryPayload.keyword : [],
+              },
+              aggs_fields: aggsFields,
+              start_time: queryPayload?.start_time || "",
+              end_time: queryPayload?.end_time || ""
+            }
+          : {
+              query: { unified_case_id: String(caseId) },
+              aggs_fields: aggsFields
+            };
+
+                const response = await axios.post(`${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/aggregate`, payload, {
                     headers: {
                         "Content-Type": "application/json",
                         Authorization: `Bearer ${token}`,
@@ -49,7 +63,7 @@ const ReusableBarChart = ({
         };
 
         if (caseId) fetchData();
-    }, [caseId, aggsFields.join(','), JSON.stringify(query), token]);
+    }, [caseId, aggsFields.join(','), queryPayload, token]);
 
     if (loading) return <Loader />;
     return (

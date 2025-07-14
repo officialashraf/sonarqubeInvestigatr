@@ -82,7 +82,7 @@ const KeywordTagList = ({ queryPayload = null, caseId = null, aggsFields = ["soc
             <Tooltip
               key={index}
               title={
-                <Box>
+                <Box sx={{ all: 'unset' }}>
                   <p  sx={{  color: '#fff' }}>
                     Hashtag: {item.key}
                   </p>
@@ -93,17 +93,7 @@ const KeywordTagList = ({ queryPayload = null, caseId = null, aggsFields = ["soc
               }
               arrow
               placement="top"
-              sx={{
-                '& .MuiTooltip-tooltip': {
-                  backgroundColor: '#1a2332',
-                  border: '1px solid #0073CF',
-                  fontSize: '12px',
-                  maxWidth: '200px',
-                },
-                '& .MuiTooltip-arrow': {
-                  color: '#1a2332',
-                },
-              }}
+        
             >
               <Box
                 sx={{
@@ -126,7 +116,7 @@ const KeywordTagList = ({ queryPayload = null, caseId = null, aggsFields = ["soc
                   },
                 }}
               >
-                #{item.key}
+                {item.key}
               </Box>
             </Tooltip>
           );

@@ -5,13 +5,15 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { useNavigate } from 'react-router-dom';
 import { MdAdminPanelSettings } from "react-icons/md";
 import { FaUsersBetweenLines } from "react-icons/fa6";
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 
 const UserDashboard = () => {
   const navigate = useNavigate();
   const cardData = [
     { title: 'User Management' },
     { title: 'Roles and Permissions' },
-    { title: 'Connection Management'}
+    { title: 'Connection Management'},
+    { title: 'Catalogue Management'}
   ];
 
   const handleCheckboxChange = (title) => {
@@ -21,6 +23,8 @@ const UserDashboard = () => {
       navigate("/roles");
     } else if (title === "Connection Management"){
       navigate("/connections")
+    }else if (title === "Catalogue Management"){
+      navigate("/catalogue")
     }
   };
   return <div className="container-fluid  py-4">
@@ -46,6 +50,7 @@ const UserDashboard = () => {
                   {index === 0 && <FaUsersBetweenLines />}
                   {index === 1 && <MdAdminPanelSettings />}
                   {index === 2 && <HttpsIcon/>}
+                  {index === 3 && <AutoAwesomeIcon/>}
                 </IconButton>
               </div>
               <Typography variant="subtitle1">

@@ -139,7 +139,7 @@ const Header = ({ title }) => {
   <Container className={`${styles.containerss} d-flex justify-content-between align-items-center`}>
    
     <Navbar.Brand className={styles.navbarBrand}>
-       {["Users", "Roles", "Connections", "Case Analysis"].includes(title) && (
+       {["Users", "Roles", "Connections", "Case Analysis", "Catalogue"].includes(title) && (
               <FaArrowLeft
                 style={{ color: 'white', cursor: 'pointer', marginRight: '10px' }}
                 onClick={() => navigate(-1)}
