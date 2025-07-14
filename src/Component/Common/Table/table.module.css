@@ -311,7 +311,7 @@ gap: -1rem;
 /* 📱 For short screens: height ≤ 1024px */
 @media screen and (max-height: 1024px) {
   .tableWrapper {
-    max-height: 67vh;
+/*     max-height: 67vh; */
   }
 }
 @media screen and (max-height: 940px) {
@@ -322,7 +322,7 @@ gap: -1rem;
 /* 📱 For very short screens: height ≤ 540px */
 @media screen and (max-width: 768px) {
   .tableWrapper {
-    max-height: 47.5vh;
+    max-height: 50vh;
   }
 }
 @media (max-width: 800px) {
