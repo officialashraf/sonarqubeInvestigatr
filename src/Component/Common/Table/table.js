@@ -7,16 +7,51 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import LockResetIcon from '@mui/icons-material/LockReset';
-import { FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { Button, Select, MenuItem, Checkbox, Typography, TextField } from "@mui/material";
+import DropdownField from "../SelectDropDown/selectDropDown";
+import { InputField } from "../InpuField/inputField";
 
 
-const TableModal = ({ columns = [],title, data = [], onAddClick, searchPlaceholder = "Search...", idPrefix = "", btnTitle = '', onRowClick, onRowAction = {}, enableRowClick = false,
+const TableModal = ({ columns = [], title, data = [], onAddClick, searchPlaceholder = "Search...", idPrefix = "", btnTitle = '', onRowClick, onRowAction = {}, enableRowClick = false, editable = false, onSaveChanges,
 
 }) => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [sortConfig, setSortConfig] = useState({ key: "", direction: "asc" });
+  const [editedRows, setEditedRows] = useState({});
+
+  const groupOptions = [
+    { label: "Group 1", value: "Group 1" },
+    { label: "Group 2", value: "Group 2" },
+    { label: "Group 3", value: "Group 3" },
+    { label: "OSINT", value: "OSINT" },
+    { label: "CDR", value: "CDR" },
+    { label: "IPDR", value: "IPDR" },
+    { label: "Common", value: "Common" },
+  ];
+
+
+  const handleGroupChange = (id, value) => {
+    setEditedRows(prev => ({
+      ...prev,
+      [id]: { ...(prev[id] || {}), group_name: value }
+    }));
+  };
+
+  const handleVisibilityChange = (id, value) => {
+    setEditedRows(prev => ({
+      ...prev,
+      [id]: { ...(prev[id] || {}), is_visible: value }
+    }));
+  };
+
+  const handleDisplayNameChange = (id, value) => {
+    setEditedRows(prev => ({
+      ...prev,
+      [id]: { ...(prev[id] || {}), display_name: value }
+    }));
+  };
 
   const handleSort = (key) => {
     const direction = sortConfig.key === key && sortConfig.direction === "asc" ? "desc" : "asc";
@@ -48,22 +83,22 @@ const TableModal = ({ columns = [],title, data = [], onAddClick, searchPlacehold
     <>
 
       <div className={styles.header}>
-       <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}> 
-        {/* {["User Dashboard", "Role Dashboard", "Connection Dashboard"].includes(title) && (
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          {/* {["User Dashboard", "Role Dashboard", "Connection Dashboard"].includes(title) && (
           <FaArrowLeft
             style={{ cursor: 'pointer', marginRight: '10px' }}
             onClick={() => navigate('/admin')}
             size={20}
           />
         )} */}
-         <input
-          className={styles.searchBar}
-          placeholder={searchPlaceholder}
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
+          <input
+            className={styles.searchBar}
+            placeholder={searchPlaceholder}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
         </div>
-       
+
 
         <AppButton onClick={() => onAddClick && onAddClick()} children={btnTitle} />
       </div>
@@ -81,7 +116,7 @@ const TableModal = ({ columns = [],title, data = [], onAddClick, searchPlacehold
                   </th>
 
                 ))}
-                {onRowAction && <th className={styles.th}>Actions</th>}
+                {onRowAction && title !== "Catalogue Dashboard" && <th className={styles.th}>Actions</th>}
               </tr>
             </thead>
             <tbody>
@@ -94,15 +129,67 @@ const TableModal = ({ columns = [],title, data = [], onAddClick, searchPlacehold
                     <td key={col.key}>
                       {col.key === "id" && idPrefix
                         ? `${idPrefix}${String(row[col.key]).padStart(4, "0")}`
-                        : (col.key === "watchers" || col.key === "synonyms")
-                          ? Array.isArray(row[col.key])
-                            ? row[col.key].join(", ")
-                            : row[col.key]
-                          : row[col.key]}
+                        : editable && col.key === "group_name"
+                          ? (
+                            // <Select
+                            //   value={editedRows[row.id]?.group_name || row.group_name}
+                            //   onChange={(e) => handleGroupChange(row.id, e.target.value)}
+                            //   size="small"
+                            // >
+                            //   {groupOptions.map((group) => (
+                            //     <MenuItem key={group} value={group}>
+                            //       {group}
+                            //     </MenuItem>
+                            //   ))}
+                            // </Select>
+                            <DropdownField
+                              // label="Group "
+                              source="Select Group"
+                              value={editedRows[row.id]?.group_name || row.group_name}
+                              onChange={(e) => handleGroupChange(row.id, e)}
+                              disabled={!editable}
+                              required={true}
+                              options={groupOptions}
+                            />
+                          )
+                          : editable && col.key === "display_name"
+                            ? (
+                              <InputField
+                                // label="Display Name"
+                                value={editedRows[row.id]?.display_name ?? row.display_name}
+                                placeholder={row.display_name}
+                                onChange={(e) => handleDisplayNameChange(row.id, e.target.value)}
+                              />
+                            )
+
+                            : editable && col.key === "is_visible"
+                              ? (
+                                <>
+                                  <Checkbox
+                                    checked={
+                                      editedRows[row.id]?.is_visible !== undefined
+                                        ? editedRows[row.id].is_visible
+                                        : row.is_visible
+                                    }
+                                    onChange={(e) =>
+                                      handleVisibilityChange(row.id, e.target.checked)
+                                    }
+                                  />
+
+                                  {(
+                                    editedRows[row.id]?.is_visible !== undefined
+                                      ? editedRows[row.id].is_visible
+                                      : row.is_visible
+                                  ) ? "Yes" : "No"}
+                                </>
+                              )
+                              : row[col.key]}
                     </td>
                   ))}
 
-                  {onRowAction && (
+
+
+                  {onRowAction && title !== "Catalogue Dashboard" && (
                     <td className={styles.actionCol}>
                       <EditIcon
                         className={styles.iconEdit}
@@ -157,7 +244,21 @@ const TableModal = ({ columns = [],title, data = [], onAddClick, searchPlacehold
               ))}
             </tbody>
           </Table>
+
         </div>
+        {editable && (
+          <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "16px" }}>
+            <AppButton
+              variant="contained"
+              color="primary"
+              onClick={() => onSaveChanges(editedRows)}
+              disabled={Object.keys(editedRows).length === 0}
+            >
+              Save All Changes
+            </AppButton>
+          </div>
+        )}
+
       </div>
     </>
   );

@@ -115,7 +115,7 @@ const KeywordTagList = ({ queryPayload = null, caseId = null, aggsFields = ["soc
                   },
                 }}
               >
-                #{item.key}
+                {item.key}
               </Box>
             </Tooltip>
           );

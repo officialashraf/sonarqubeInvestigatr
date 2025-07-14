@@ -36,6 +36,7 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
 
   const [sources, setSources] = useState([
     {
+       id: undefined,
       source: '',
       platform: [],
       keywords: [], // Initialize as an array with a single empty string
@@ -59,6 +60,7 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
     setFilterName('');
     setDescription('');
     setSources([{
+       id: undefined,
       source: '',
       platform: [],
       keywords: [],
@@ -268,6 +270,7 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
         }
 
         return {
+          id: criteria.id,
           source: criteria.source,
           platform: criteria.platform || [],
           keywords: criteria.keywords || [],
@@ -296,6 +299,7 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
 
   const handleAddSource = () => {
     setSources([...sources, {
+       id: undefined,
       source: '',
       platform: [],
       keywords: [],
@@ -357,10 +361,11 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
     return;
   }
   setIsSubmitting(true);
-  const postData = {
-    name: filterName,
-    description: description,
-    filter_criteria: sources.map((source) => ({
+const postData = {
+  name: filterName,
+  description: description,
+  filter_criteria: sources.map((source) => {
+    const baseSource = {
       source: source.source,
       platform: source.platform,
       keywords: source.keywords,
@@ -368,8 +373,17 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
         ? source.urls.filter(url => url.trim() !== "")
         : undefined,
       interval: source.intervalValue * conversionFactors[source.intervalUnit],
-    })),
-  };
+    };
+
+    // Agar update mode hai aur source.id hai, to id bhi include karo
+    if (filterDetails?.id && source.id) {
+      baseSource.id = source.id;
+      console.log("souce.id",source.id)
+    }
+
+    return baseSource;
+  }),
+};
   console.log("postdata save filter", postData);
   try {
     const url = filterDetails?.id
