@@ -13,6 +13,7 @@ import AddButton from '../../Common/Buttton/button';
 import axios from 'axios';
 import GridView from './gridView';
 import customSelectStyles from "../../Common/CustomStyleSelect/customSelectStyles";
+import { toast } from 'react-toastify';
 
 const ReportPage = () => {
   const Token = Cookies.get('accessToken');
@@ -103,6 +104,17 @@ const ReportPage = () => {
   // Handle search submit
   const handleSearch = async (e) => {
     e.preventDefault();
+    const isSearchEmpty = (
+      (!formData.searchQuery || formData.searchQuery.length === 0) &&
+      (!formData.caseIds || formData.caseIds.length === 0) &&
+      (!selectedDates.startDate && !selectedDates.endDate)
+    );
+
+    if (isSearchEmpty) {
+      // ✅ Replace this with toast or snackbar if needed
+      toast("Enter a keyword, or choose a case or date to proceed.");
+      return;
+    }
     try {
       const payload = {
         keyword: Array.isArray(formData.searchQuery) ? formData.searchQuery : [],
@@ -156,16 +168,12 @@ const ReportPage = () => {
     }
   };
 
-  const isSearchDisabled = (
-    (Array.isArray(formData.searchQuery) && formData.searchQuery.length === 0) &&
-    (Array.isArray(formData.caseIds) && formData.caseIds.length === 0) &&
-    (!selectedDates.startDate && !selectedDates.endDate)
-  );
+
 
   return (
-    <div style={{ backgroundColor: '#080E17', color: 'white', padding: '20px' }}>
+    <div style={{ backgroundColor: '#080E17', color: 'white' }}>
       <h5 style={{ marginBottom: '20px' }}>Search Report</h5>
-      <form onSubmit={handleSearch} style={{ display: 'flex', gap: '10px', marginBottom: '20px'}}>
+      <form onSubmit={handleSearch} style={{ display: 'flex', gap: '10px'}}>
         <div className={styles.searchBarContainer}>
           <input
             className={styles.searchBar}
@@ -223,7 +231,6 @@ const ReportPage = () => {
         /> */}
         <AddButton
           type="submit"
-          disabled={isSearchDisabled}
         >
           Search
         </AddButton>

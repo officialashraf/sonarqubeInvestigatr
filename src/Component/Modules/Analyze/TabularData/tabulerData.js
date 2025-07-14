@@ -71,9 +71,9 @@ const TabulerData = () => {
   }
   return (
     <>
-      <div className={styles.mainContainer} styles={{ display: "grid", gap: "15px" }}>
+      <div className={styles.mainContainer} styles={{ display: "grid" }}>
       {/* Table Wrapper */}
-      <div className={styles.tableWrapper} style={{ overflowY: "auto", height:"60vh"}}>
+      <div className={styles.tableWrapper} style={{ overflowY: "auto", height:"65vh"}}>
         {data && data.length > 0 ? (
           <Table hover  className={styles.table}>
             <thead>
@@ -92,31 +92,65 @@ const TabulerData = () => {
                 ))}
               </tr>
             </thead>
-            <tbody>
-              {data.map((item, index) => (
-                <tr key={index}>
-                  {headers.map((header) => (
-                    <td key={header} className={style.fixedTd}>
-                      <div
-                        className="cell-content"
-                        style={{
-                          cursor: "pointer",
-                          fontWeight: "normal",
-                          overflow: "hidden",
-                          whiteSpace: "nowrap",
-                          padding: "0px 5px",
-                          fontSize: "12px",
-                          fontFamily: "Helvetica",
-                        }}
-                        title={item[header]}
-                      >
-                        {item[header]}
-                      </div>
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
+              <tbody>
+                {data.map((item, index) => (
+                  <tr key={index}>
+                    {headers.map((header) => (
+                      <td key={header} className={style.fixedTd}>
+                        <div
+                          className="cell-content"
+                          style={{
+                            cursor: "pointer",
+                            fontWeight: "400",
+                            overflow: "auto",
+                            whiteSpace: "nowrap",
+                            padding: "0px 5px",
+                            fontSize: "12px",
+                            fontFamily: "roboto",
+                            scrollbarWidth: "none",          
+                            msOverflowStyle: "none",  
+                          }}
+                          title={item[header]}
+                        >
+                          {header === "socialmedia_hashtags" ? (
+                            (() => {
+                              let tags = [];
+                              try {
+                                // Convert string to array
+                                tags = JSON.parse(item[header].replace(/'/g, '"'));
+                              } catch (err) {
+                                tags = [];
+                              }
+                              return (
+                                <div style={{ display: "flex", gap: "4px" }}>
+                                  {tags.map((tag, i) => (
+                                    <span
+                                      key={i}
+                                      style={{
+                                        backgroundColor: "#FFC107",
+                                        color: "#000",
+                                        padding: "2px 6px",
+                                        borderRadius: "12px",
+                                        fontSize: "11px",
+                                        whiteSpace: "nowrap",
+                                      }}
+                                    >
+                                      #{tag}
+                                    </span>
+                                  ))}
+                                </div>
+                              );
+                            })()
+                          ) : (
+                            item[header]
+                          )}
+                        </div>
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+
           </Table>
         ) : (
           <p className="text-center" style={{ margin: "20px 0px", border: "1px solid #ccc" }}>
@@ -126,8 +160,8 @@ const TabulerData = () => {
       </div>
 
       {/* Pagination Wrapper */}
-      <div className={style.paginationContainer}>
-        <Pagination style={{ width: "200px" }}>
+      <div className={style.paginationContainer} style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <Pagination >
           <Pagination.First onClick={() => handlePageChange(1)} disabled={currentPage === 1} />
           <Pagination.Prev
             onClick={() => handlePageChange(currentPage - 1)}

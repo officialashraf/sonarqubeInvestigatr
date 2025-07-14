@@ -2,13 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import { Navbar, Nav, NavDropdown, Container } from 'react-bootstrap';
 import { Bell, PersonCircle } from 'react-bootstrap-icons';
-<<<<<<< HEAD
-import { FaArrowLeft } from "react-icons/fa";
-import "./header.css";
-=======
 import { FaArrowLeft } from 'react-icons/fa';
 import styles from "./header.module.css";
->>>>>>> 7588038cf42dd7390974b28da672b0b1119e1a72
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
