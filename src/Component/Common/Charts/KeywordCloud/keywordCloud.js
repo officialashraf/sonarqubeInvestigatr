@@ -93,7 +93,6 @@ const KeywordTagList = ({ queryPayload = null, caseId = null, aggsFields = ["soc
               }
               arrow
               placement="top"
-        
             >
               <Box
                 sx={{
