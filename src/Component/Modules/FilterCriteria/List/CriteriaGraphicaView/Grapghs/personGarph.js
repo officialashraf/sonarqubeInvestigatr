@@ -73,12 +73,7 @@ const PersonGraph = () => {
             <ReusableBarChart
                 caseId={queryPayload?.case_id || []}
                 aggsFields={["person"]}
-                query={{
-                    file_type: queryPayload?.file_type || [],
-                    keyword: queryPayload?.keyword || [],
-                    start_time: queryPayload?.start_time || "",
-                    end_time: queryPayload?.end_time || ""
-                }}
+                 queryPayload={queryPayload}
                 transformData={(rawData) =>
                     rawData.map(item => ({
                         name: item.key,

@@ -14,10 +14,10 @@ const getCSSVar = (variable) =>
   ];
 
 const ReusablePieChart = ({
-  caseId =[],
+
   aggsFields = [],
-  query = {},
-  extraPayload = {},
+queryPayload = null,
+ caseId = null,
   chartHeight = 300,
   transformData = (rawData) =>
     rawData.map(item => ({
@@ -33,12 +33,21 @@ const ReusablePieChart = ({
     const fetchData = async () => {
       try {
         setLoading(true);
-        const payload = {
-          // query:Array.isArray(caseId) ? caseId.join(",") : caseId,
-          query: { unified_case_id: String(caseId), ...query },
-          aggs_fields: aggsFields,
-          ...extraPayload
-        };
+       const payload = queryPayload
+          ? {
+              query: {
+                unified_case_id: Array.isArray(queryPayload?.case_id) ? queryPayload.case_id : [],
+                file_type: Array.isArray(queryPayload?.file_type) ? queryPayload.file_type : [],
+                keyword: Array.isArray(queryPayload?.keyword) ? queryPayload.keyword : [],
+              },
+              aggs_fields: aggsFields,
+              start_time: queryPayload?.start_time || "",
+              end_time: queryPayload?.end_time || ""
+            }
+          : {
+              query: { unified_case_id: String(caseId) },
+              aggs_fields: aggsFields
+            };
 
         const response = await axios.post(
           `${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/aggregate`,
@@ -64,8 +73,9 @@ const ReusablePieChart = ({
       }
     };
 
-    if (caseId || query?.unified_case_id?.length) fetchData();
-  }, [caseId, aggsFields.join(','), JSON.stringify(query), token]);
+    // if (caseId || queryPayload?.unified_case_id?.length) 
+      fetchData();
+  }, [caseId, aggsFields, queryPayload, token]);
 
   if (loading) return <Loader />;
 

@@ -6,7 +6,6 @@ import MainFilter from '../Component/Modules/Summarymain/mainFilterPage.js';
 import AddFilter2 from '../Component/Modules/Filters/addFilter.js';
 import CaseTableDataFilter from '../Component/Modules/Analyze/caseTableDataFilter.js';
 import CaseAddFilter from '../Component/Modules/Summarymain/unusable/caseAddFilter.js';
-// import RightSidebar from '../Component/Modules/Home/rightSideBar.js';
 import Sidebar from '../Component/Modules/Home/leftSideBar.js';
 import styles from '../Component/Modules/Home/dashboard.module.css';
 import Summary from '../Component/Modules/Summarymain/summary.js';
@@ -17,7 +16,6 @@ import '../App.css'
 import ProtectedRoute from './protectRoute.js';
 import Loader from '../Component/Modules/Layout/loader.js';
 import SearchResults from '../Component/Modules/FilterCriteria/List/fullscreen.js';
-import Confirm from '../Component/Modules/FilterCriteria/confirmCriteria.js';
 import LogoutUser from '../Component/Modules/User/logout.js';
 import ShowDetails from '../Component/Modules/PII/showDetails.js';
 import LicensePage from '../Component/Modules/User/license.js';
@@ -30,8 +28,8 @@ import TargetDashboard from '../Component/Modules/Targets/targetDashboard.js';
 import { setupAxiosInterceptors } from './axiosConfig.js';
 import LicenseGuard from './licenseGaurd.js';
 import ConnectionManagement from '../Component/Modules/Connections/connectionManagement.js';
-import AboutUs from '../Component/Modules/Home/aboutUs.js';
 import DAButton from '../Component/Common/Buttton/button.js';
+import CatelogList from '../Component/Modules/Catlog/catelogList.js';
 
 const styels = {}
 const AppContent = () => {
@@ -60,7 +58,7 @@ const AppContent = () => {
     if (path === "/roles") return "Roles";
     if (path === "/targets") return "Target";
     if (path === "/connections") return "Connections";
-
+    if (path === "/catalogue") return "Catalogue";
     return "Cases";
   };
   const excludedPaths = ["/login", "/", "/license"];
@@ -113,15 +111,14 @@ const AppContent = () => {
                   <Route path="/line" element={<LineChart1 />} />
                   <Route path="/grapg" element={<GraphicalData />} />
                   <Route path="/search" element={<SearchResults />} />
-                  <Route path="/confirm" element={<Confirm />} />
                   <Route path="logout" element={<LogoutUser />} />
                   <Route path="/users" element={<UserManagement />} />
                   <Route path="/admin" element={<UserDashboard />} />
                   <Route path="/roles" element={<RolesPermission />} />
                   <Route path="/reports" element={<ReportPage />} />
                   <Route path="/targets" element={<TargetDashboard />} />
-                  <Route path="/about" element={<AboutUs />} />
                   <Route path="/connections" element={<ConnectionManagement />} />
+                  <Route path="/catalogue" element={<CatelogList/>} />
                   <Route path="*" element={<div className='notfound'><h4>Work in progress........</h4></div>} />
                 </Route>
                 <Route path='loader' element={<Loader />} />
