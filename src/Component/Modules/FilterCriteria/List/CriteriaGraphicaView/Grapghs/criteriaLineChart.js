@@ -71,8 +71,8 @@ const CriteriaLineChart = () => {
   return (
  <ReusableLineGraph 
   queryPayload={queryPayload}
-  aggsFields={["unified_date_only", "unified_record_type"]}
-  recordLineField="unified_record_type"
+  aggsFields={["unified_date_only", "unified_type"]}
+  recordLineField="unified_type"
 />
 
   );

@@ -22,7 +22,7 @@ const Summary = ({ filters }) => {
 
   const iconMap = {
     facebook: <FaFacebookF size={20} />,
-    twitter: <FaTwitter size={20} />,
+    X: <FaTwitter size={20} />,
     instagram: <FaInstagram size={20} />,
     youtube: <FaYoutube size={20} />,
     "rss feed": <FaRss size={20} />,
@@ -49,7 +49,7 @@ const Summary = ({ filters }) => {
         console.log("summary data:", response.data);
 
         const { unified_record_type, unified_date_only, unified_type } = response.data;
-        const pieData = (unified_record_type || []).map(item => ({
+        const pieData = (unified_type || []).map(item => ({
           name: item.key,
           value: item.doc_count
         }));
@@ -68,7 +68,7 @@ const Summary = ({ filters }) => {
         }
 
         //Table Data (unified_type)
-        const tableData = (unified_type || []).map(item => {
+        const tableData = (unified_record_type || []).map(item => {
           const key = item.key.toLowerCase().trim();  // space, caps handle
           return {
             icon: iconMap[key] || <FaRss color="#ccc" size={22} />,  // fallback
@@ -119,14 +119,14 @@ const Summary = ({ filters }) => {
 
               <ReusablePieChart
                 caseId={caseId}
-                aggsFields={["unified_record_type"]}
+                aggsFields={["unified_type"]}
               />
 
             </Box>
 
             {/* Bar Chart */}
-            <Box className={style.boxes}>
-              <ResponsiveContainer width="100%" height={300}>
+            <Box className={style.boxes} >
+              <ResponsiveContainer width="100%" height={300} style={{ overflow: 'auto'}}>
                 <BarChart data={barData}>
 
 
