@@ -10,7 +10,8 @@ const getCSSVar = (variable) =>
   const COLORS = [
     getCSSVar('--color-colors-warning'),
     getCSSVar('--color-colors-success'),
-    getCSSVar('--color-colors-danger')
+    getCSSVar('--color-colors-danger'),
+     getCSSVar('--color-colors-primaryAccent')
   ];
 
 const ReusablePieChart = ({
@@ -106,7 +107,11 @@ queryPayload = null,
     fillColor = getCSSVar('--color-colors-warning');
   } else if (entry.name === "Rss Feed") {
     fillColor = getCSSVar('--color-colors-success');
-  } else {
+  } 
+   else if (entry.name === "Web Feed") {
+    fillColor = getCSSVar('--color-colors-primaryAccent');
+  } 
+  else {
     fillColor = COLORS[index % COLORS.length];
   }
 

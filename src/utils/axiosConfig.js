@@ -8,7 +8,11 @@ export const setupAxiosInterceptors = () => {
     (error) => {
       const errorMessage = error?.response?.data?.detail || "";
 
-      if (errorMessage === ("Signature has expired." || "Signature expired." || "Your license has been expired.")) {
+      if (
+  errorMessage === "Signature has expired." ||
+  errorMessage === "Signature expired." ||
+  errorMessage === "Your license has been expired."
+) {
         Cookies.remove("accessToken"); //  localStorage.removeItem()
         window.location.href = "/login"; // history.push("/login") if router
       }

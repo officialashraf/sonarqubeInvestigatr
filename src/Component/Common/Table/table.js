@@ -22,36 +22,47 @@ const TableModal = ({ columns = [], title, data = [], onAddClick, searchPlacehol
   const [editedRows, setEditedRows] = useState({});
 
   const groupOptions = [
-    { label: "Group 1", value: "Group 1" },
-    { label: "Group 2", value: "Group 2" },
-    { label: "Group 3", value: "Group 3" },
+    { label: "Group 1", value: "group 1" },
+    { label: "Group 2", value: "group 2" },
+    { label: "Group 3", value: "group 3" },
     { label: "OSINT", value: "OSINT" },
     { label: "CDR", value: "CDR" },
     { label: "IPDR", value: "IPDR" },
     { label: "Common", value: "Common" },
   ];
 
+const handleGroupChange = (id, newGroup) => {
+  setEditedRows((prev) => ({
+    ...prev,
+    [id]: {
+      ...prev[id],
+      group_name: newGroup,
+    },
+  }));
+};
 
-  const handleGroupChange = (id, value) => {
-    setEditedRows(prev => ({
-      ...prev,
-      [id]: { ...(prev[id] || {}), group_name: value }
-    }));
-  };
 
-  const handleVisibilityChange = (id, value) => {
-    setEditedRows(prev => ({
-      ...prev,
-      [id]: { ...(prev[id] || {}), is_visible: value }
-    }));
-  };
+const handleVisibilityChange = (id, newValue) => {
+  setEditedRows((prev) => ({
+    ...prev,
+    [id]: {
+      ...prev[id],
+      is_visible: newValue,
+    },
+  }));
+};
 
-  const handleDisplayNameChange = (id, value) => {
-    setEditedRows(prev => ({
-      ...prev,
-      [id]: { ...(prev[id] || {}), display_name: value }
-    }));
-  };
+
+const handleDisplayNameChange = (id, newValue) => {
+  setEditedRows((prev) => ({
+    ...prev,
+    [id]: {
+      ...prev[id],
+      display_name: newValue,
+    },
+  }));
+};
+
 
   const handleSort = (key) => {
     const direction = sortConfig.key === key && sortConfig.direction === "asc" ? "desc" : "asc";

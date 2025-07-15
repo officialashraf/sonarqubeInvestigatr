@@ -74,8 +74,8 @@ const LineGraph = () => {
   return (
   <ReusableLineGraph
     caseId={caseId}
-    aggsFields={["unified_date_only", "unified_record_type"]}
-    recordLineField="unified_record_type"
+    aggsFields={["unified_date_only", "unified_type"]}
+    recordLineField="unified_type"
   />
 
   );
