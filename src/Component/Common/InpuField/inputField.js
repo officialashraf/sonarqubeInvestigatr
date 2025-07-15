@@ -15,7 +15,7 @@ export const InputField = React.forwardRef(
       autoFocus,
       readOnly,
       onFocus,
-      error = false,  // ✅ new prop (true/false)
+      error = false,  // new prop (true/false)
       disabled
     },
     ref

@@ -63,34 +63,38 @@ const CatlogList = () => {
             window.removeEventListener("databaseUpdated", handleDatabaseUpdated);
         };
     }, []);
-    const handleSaveChanges = async (editedRows) => {
-        const token = Cookies.get("accessToken");
-        try {
-            const updatePromises = Object.entries(editedRows).map(([id, row]) =>
-                axios.put(
-                    `${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/mappings/${id}`,
-                    {
-                        group_name: row.group_name,
-                        display_name: row.display_name, // or fetch from existing data if needed
-                        is_visible: row.is_visible,
-                    },
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                            "Content-Type": "application/json",
-                        },
-                    }
-                )
-            );
 
-            await Promise.all(updatePromises);
-            toast.success("All changes saved successfully!");
-            fetchCatalog(); // reload latest data
-        } catch (error) {
-            toast.error("Failed to save changes.");
-            console.error(error);
-        }
-    };
+
+    const handleSaveChanges = async (editedRows) => {
+  const token = Cookies.get("accessToken");
+
+  const rowsToUpdate = Object.entries(editedRows).map(([id, row]) => ({
+    id: Number(id),
+    ...row, // only include changed fields (group_name, display_name, is_visible)
+  }));
+
+  if (rowsToUpdate.length === 0) return;
+
+  try {
+    await axios.put(
+      `${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/mappings/batch-update`,
+      { rows: rowsToUpdate },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    toast.success("Changes saved successfully!");
+    fetchCatalog(); // Refresh table data
+  } catch (err) {
+    console.error(err);
+    toast.error("Failed to save changes.", err);
+  }
+};
+
 
     if (loading) {
         return <Loader />
@@ -131,9 +135,9 @@ const CatlogList = () => {
             ) : (
                 <div className="resourcesContainer" style={{ border: 'none' }}>
                     <h3 className="title">Let's Get Started!</h3>
-                    <p className="content">Add roles to get started</p>
+                    <p className="content">Add catalogue to get started</p>
                     {/* <button className='add-btn' title='Add New Case' onClick={togglePopup}><Plus size={20} />Add New Roles</button> */}
-                    <AppButton onClick={togglePopup} children={" + Add New Role"} />
+                    <AppButton onClick={togglePopup} children={" + Add New Catalogue"} />
                 </div>
             )
             }
