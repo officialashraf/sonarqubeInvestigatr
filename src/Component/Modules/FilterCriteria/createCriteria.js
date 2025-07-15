@@ -59,14 +59,14 @@ const CreateCriteria = ({ handleCreateCase }) => {
   const [fileTypeOptions, setFileTypeOptions] = useState([]);
   const [error, setError] = useState({});
 
-  const validateForm = () => {
-    const errors = {};
+  // const validateForm = () => {
+  //   const errors = {};
 
-    if (!formData.searchQuery) {
-      errors.searchQuery = "At least one keyword is required";
-    }
-    return errors;
-  };
+  //   if (!formData.searchQuery) {
+  //     errors.searchQuery = "At least one keyword is required";
+  //   }
+  //   return errors;
+  // };
 
 
   const activePopup = useSelector((state) => state.popup?.activePopup || null);
@@ -75,7 +75,7 @@ const CreateCriteria = ({ handleCreateCase }) => {
   // Fetch case IDs on component mount
   // if (activePopup !== "create") return null;
   // Fetch case data from API
-
+ 
   useEffect(() => {
     const fetchCaseData = async () => {
       try {
@@ -123,17 +123,41 @@ const CreateCriteria = ({ handleCreateCase }) => {
     fetchCaseData();
     fetchFileTypes();
   }, [Token]);
-  // Handle checkbox change for saving criteria
-  const handleSaveCriteriaChange = (e) => {
-    e.preventDefault();
-    const validationErrors = validateForm();
-    if (Object.keys(validationErrors).length > 0) {
-      setError(validationErrors);
-      return;
+  useEffect(() => {
+    const isSearchQueryEmpty = !formData.searchQuery || formData.searchQuery.length === 0;
+    const isCaseIdsEmpty = !formData.caseIds || formData.caseIds.length === 0;
+    const isFileTypeEmpty = !formData.filetype || formData.filetype.length === 0;
+    const isLatitudeEmpty = !formData.latitude;
+    const isLongitudeEmpty = !formData.longitude;
+
+    const nothingFilled = isSearchQueryEmpty && isCaseIdsEmpty && isFileTypeEmpty && isLatitudeEmpty && isLongitudeEmpty;
+
+    if (nothingFilled && formData.includeArchived) {
+      setFormData(prev => ({ ...prev, includeArchived: false }));
+      setShowSavePopup(false); // Close the save popup as well
     }
+  }, [formData]);
+  // Handle checkbox change for saving criteria
+const handleSaveCriteriaChange = (e) => {
+    e.preventDefault();
+
+    const isSearchQueryEmpty = !formData.searchQuery || (Array.isArray(formData.searchQuery) && formData.searchQuery.length === 0) || (typeof formData.searchQuery === 'string' && formData.searchQuery.trim() === '');
+    const isCaseIdsEmpty = !formData.caseIds || formData.caseIds.length === 0;
+    const isFileTypeEmpty = !formData.filetype || formData.filetype.length === 0;
+    const isLatitudeEmpty = !formData.latitude || formData.latitude.trim() === '';
+    const isLongitudeEmpty = !formData.longitude || formData.longitude.trim() === '';
+    const isDateEmpty = !selectedDates.startDate && !selectedDates.endDate;
+
+    const isAnyFieldFilled = !(isSearchQueryEmpty && isCaseIdsEmpty && isFileTypeEmpty && isLatitudeEmpty && isLongitudeEmpty && isDateEmpty);
+
     const isChecked = e.target.checked;
 
     if (isChecked) {
+      if (!isAnyFieldFilled) {
+        toast.error("Please select at least one search criteria before saving.");
+        // Do not check the checkbox or open popup if validation fails
+        return;
+      }
       setFormData((prev) => ({ ...prev, includeArchived: true }));
       setShowSavePopup(true); // Open the popup
     } else {
@@ -161,11 +185,19 @@ const CreateCriteria = ({ handleCreateCase }) => {
 
   };
 
-  const handleSearch = async (e) => {
+const handleSearch = async (e) => {
     e.preventDefault();
-    const validationErrors = validateForm();
-    if (Object.keys(validationErrors).length > 0) {
-      setError(validationErrors);
+
+    // Validation: check if all relevant fields are empty
+    const isSearchQueryEmpty = !formData.searchQuery || (Array.isArray(formData.searchQuery) && formData.searchQuery.length === 0) || (typeof formData.searchQuery === 'string' && formData.searchQuery.trim() === '');
+    const isCaseIdsEmpty = !formData.caseIds || formData.caseIds.length === 0;
+    const isFileTypeEmpty = !formData.filetype || formData.filetype.length === 0;
+    const isLatitudeEmpty = !formData.latitude || formData.latitude.trim() === '';
+    const isLongitudeEmpty = !formData.longitude || formData.longitude.trim() === '';
+    const isDateEmpty = !selectedDates.startDate && !selectedDates.endDate;
+
+    if (isSearchQueryEmpty && isCaseIdsEmpty && isFileTypeEmpty && isLatitudeEmpty && isLongitudeEmpty && isDateEmpty) {
+      toast.error("Please enter at least one search criteria before searching.");
       return;
     }
     try {
@@ -178,6 +210,8 @@ const CreateCriteria = ({ handleCreateCase }) => {
 
         file_type: formData.filetype?.length > 0 ? formData.filetype.map(type => type.value) : [],
         page: 1, // Start at page 1
+        ...(formData.latitude && { latitude: formData.latitude }),
+        ...(formData.longitude && { longitude: formData.longitude }),
       };
 
       if (selectedDates.startDate && selectedDates.startTime) {

@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 import { openPopup } from '../../../Redux/Action/criteriaAction';
 import { useAutoFocusWithManualAutofill } from '../../../utils/autoFocus';
 import AppButton, { AddButton } from '../../Common/Buttton/button'
+import CommonTextInput from '../../Common/MultiSelect/CommonTextInput';
 
 const Confirm = ({ formData, selectedDates, searchChips }) => {
     const dispatch = useDispatch();
@@ -98,12 +99,13 @@ const Confirm = ({ formData, selectedDates, searchChips }) => {
                     </span>
                     <form onSubmit={(e) => e.preventDefault()}> {/* Prevent form submission default */}
 
-                        <label>Search Title *</label>
+                        {/* <label>Search Title *</label> */}
 
-                        <input
+                        <CommonTextInput
+                            label="Search Title *"
                             type="text"
                             placeholder="Enter title"
-                            className="com"
+                            // className="com"
                             value={searchTitle} // Bind input value to state
                             onChange={(e) => setSearchTitle(e.target.value)} // Update state on input
                             onBlur={() => {
