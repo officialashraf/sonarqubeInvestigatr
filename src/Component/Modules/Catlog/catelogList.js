@@ -65,13 +65,22 @@ const CatlogList = () => {
     }, []);
 
 
-    const handleSaveChanges = async (editedRows) => {
+    const allowedKeys = ["group_name", "display_name", "is_visible"];
+
+const handleSaveChanges = async (editedRows) => {
   const token = Cookies.get("accessToken");
 
-  const rowsToUpdate = Object.entries(editedRows).map(([id, row]) => ({
-    id: Number(id),
-    ...row, // only include changed fields (group_name, display_name, is_visible)
-  }));
+  const rowsToUpdate = Object.entries(editedRows).map(([id, changes]) => {
+    const cleanRow = { id: Number(id) };
+
+    allowedKeys.forEach((key) => {
+      if (changes[key] !== undefined) {
+        cleanRow[key] = changes[key];
+      }
+    });
+
+    return cleanRow;
+  });
 
   if (rowsToUpdate.length === 0) return;
 
@@ -88,19 +97,20 @@ const CatlogList = () => {
     );
 
     toast.success("Changes saved successfully!");
-    fetchCatalog(); // Refresh table data
-  } catch (err) {
-    console.error(err);
-    toast.error("Failed to save changes.", err);
+    fetchCatalog();
+  } catch (error) {
+    console.error(error);
+    toast.error("Failed to save changes.",error);
   }
 };
+
 
 
     if (loading) {
         return <Loader />
     }
     const roleColumns = [
-        { key: "id", label: "Catlog ID" },
+        { key: "id", label: "Catalogue ID" },
         { key: "column_name", label: "Column Name" },
         { key: "group_name", label: "Group Name" },
         { key: "display_name", label: "Dispaly Name" },

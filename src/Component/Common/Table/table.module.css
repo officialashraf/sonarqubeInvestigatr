@@ -206,6 +206,14 @@ gap: -1rem;
   max-width: 200px;
 }
 
+.noPadding{
+  padding: 0px !important;
+}
+.noPaddingInput{
+  padding: 0px 5px !important;
+  margin-bottom: 0px !important;
+}
+
 .table thead th:first-child {
   border-top-left-radius: var(--shape-borderRadius);
   border-bottom-left-radius: var(--shape-borderRadius);
@@ -269,6 +277,9 @@ gap: -1rem;
   border-radius: 5px;
 }
 
+.customnWrapper{
+margin-bottom: 0px !important;
+}
 .iconEdit:hover {
   transform: scale(1.2);
   opacity: 0.7;
@@ -329,4 +340,8 @@ gap: -1rem;
   .reactSelectContainer {
     width: 200px;
   }
+}
+:global(.css-imrjgg-MuiButtonBase-root-MuiCheckbox-root){
+  padding: 0px 9px !important;
+  color: white !important;
 }

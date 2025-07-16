@@ -137,30 +137,23 @@ const handleDisplayNameChange = (id, newValue) => {
                   onClick={() => enableRowClick && onRowClick && onRowClick(row)}
                 >
                   {columns.map((col) => (
-                    <td key={col.key}>
+                    <td key={col.key} >
                       {col.key === "id" && idPrefix
                         ? `${idPrefix}${String(row[col.key]).padStart(4, "0")}`
                         : editable && col.key === "group_name"
                           ? (
-                            // <Select
-                            //   value={editedRows[row.id]?.group_name || row.group_name}
-                            //   onChange={(e) => handleGroupChange(row.id, e.target.value)}
-                            //   size="small"
-                            // >
-                            //   {groupOptions.map((group) => (
-                            //     <MenuItem key={group} value={group}>
-                            //       {group}
-                            //     </MenuItem>
-                            //   ))}
-                            // </Select>
+                            // <span>shushu</span>
+                           
                             <DropdownField
                               // label="Group "
                               source="Select Group"
                               value={editedRows[row.id]?.group_name || row.group_name}
-                              onChange={(e) => handleGroupChange(row.id, e)}
+                              onChange={(e) => handleGroupChange(row.id, e.target?.value)}
                               disabled={!editable}
                               required={true}
                               options={groupOptions}
+                               customPadding={styles.noPadding}
+                               customnWrapper={styles.customnWrapper}
                             />
                           )
                           : editable && col.key === "display_name"
@@ -170,7 +163,10 @@ const handleDisplayNameChange = (id, newValue) => {
                                 value={editedRows[row.id]?.display_name ?? row.display_name}
                                 placeholder={row.display_name}
                                 onChange={(e) => handleDisplayNameChange(row.id, e.target.value)}
+                                customPaddingInput={styles.noPaddingInput}
+                                customnWrapper={styles.customnWrapper}
                               />
+                              // <span>tpka aaaaaam</span>
                             )
 
                             : editable && col.key === "is_visible"

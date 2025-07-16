@@ -16,12 +16,14 @@ export const InputField = React.forwardRef(
       readOnly,
       onFocus,
       error = false,  // new prop (true/false)
-      disabled
+      disabled,
+      customPaddingInput,
+      customnWrapper
     },
     ref
   ) => {
     return (
-      <div className={styles.inputWrapper}>
+      <div className={`${styles.inputWrapper }${customnWrapper || ''}`}>
         <div className={`${styles.inputGroup} ${error ? styles.error : ''}`}>
           <label className={`${styles.label} 
           ${error ? styles.errorLabel : ''}
@@ -31,7 +33,8 @@ export const InputField = React.forwardRef(
           </label>
           <input
             ref={ref}
-            className={`${styles.input} ${error ? styles.errorInput : ''}`}
+            className={`${styles.input} ${error ? styles.errorInput : ''} ${customPaddingInput || ''}`}
+          
             type={type}
             name={name}
             value={value}
