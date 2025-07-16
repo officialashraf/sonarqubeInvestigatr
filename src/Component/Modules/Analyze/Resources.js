@@ -258,7 +258,7 @@ const Resources = () => {
                         className="resourceImage"
                       />
                       <div className="resourceDetails">
-                        <p className="resourceType">{resource.unified_type}</p>
+                        <p className="resourceType">{resource.unified_record_type}</p>
                         <p className="resourceContent">{resource.socialmedia_activity}</p>
                       </div>
                     </div>
@@ -294,7 +294,7 @@ const Resources = () => {
 
 
               {/*  Instagram Layout */}
-              {selectedResource.unified_type === "Instagram" && (
+              {selectedResource.unified_record_type === "Instagram" && (
                 <div className="resourceDetailsView marginSides20">
                   <div className="profile-section">
 
@@ -376,7 +376,7 @@ const Resources = () => {
                 </div>
               )}
               {/* LinkedIn Layout */}
-              {selectedResource.unified_type === "LinkedIn" && (
+              {selectedResource.unified_record_type === "LinkedIn" && (
                 <div className="resourceDetailsView marginSides20">
                   <div className="profile-section">
                     <img
@@ -457,7 +457,7 @@ const Resources = () => {
                 </div>
               )}
               {/* Twitter Layout */}
-              {selectedResource.unified_type === "Twitter" && (
+              {selectedResource.unified_record_type === "Twitter" && (
                 <div className="resourceDetailsView marginSides20">
                   <div className="profile-section">
                     <img
@@ -563,7 +563,7 @@ const Resources = () => {
               )}
 
               {/* {/tiktok/} */}
-              {selectedResource.unified_type === "Tiktok" && (
+              {selectedResource.unified_record_type === "Tiktok" && (
                 <div class="tiktok-container">
                   <video src={selectedResource.socialmedia_from_imageurl} autoplay muted loop></video>
 
@@ -587,7 +587,7 @@ const Resources = () => {
               )}
 
               {/* {/FaceBook/} */}
-              {selectedResource.unified_type === "Facebook" && (
+              {selectedResource.unified_record_type === "Facebook" && (
                 <div className="resourceDetailsView marginSides20">
                   <div className="profile-section">
                     <img
@@ -657,7 +657,7 @@ const Resources = () => {
               )}
 
               {/* RSS feed*/}
-              {selectedResource.unified_type === "rss feed" && (
+              {selectedResource.unified_record_type === "rss feed" && (
                 <div className="resourceDetailsView">
                   <div className="profile-section">
                     <h3>{selectedResource.unified_activity_title}</h3>
@@ -672,7 +672,7 @@ const Resources = () => {
               )}
 
               {/* VK */}
-              {selectedResource.unified_type === "VK" && (
+              {selectedResource.unified_record_type === "VK" && (
                 <div className="resourceDetailsView marginSides20">
                   <div className="profile-section">
 
@@ -740,7 +740,7 @@ const Resources = () => {
                 </div>
               )}
 
-              {selectedResource.unified_type === "YouTube" && (
+              {selectedResource.unified_record_type === "YouTube" && (
                 <div className="resourceDetailsView yt">
                   <div className="videoWrapper">
                     {selectedResource.socialmedia_media_url && (
