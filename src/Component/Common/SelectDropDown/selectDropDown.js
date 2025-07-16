@@ -10,9 +10,11 @@ import styles from './selectDropDown.module.css';
   name,
   error = false,
   disabled = false,
+  customPadding,
+  customnWrapper
 }) => {
   return (
-    <div className={styles.dropdownWrapper}>
+    <div className={`${styles.dropdownWrapper} ${customnWrapper || ''}`}>
       <div className={`${styles.dropdownGroup} ${error ? styles.error : ''}`}>
          <label className={`${styles.label} 
                   ${error ? styles.errorLabel : ''}
@@ -22,7 +24,8 @@ import styles from './selectDropDown.module.css';
                   </label>
            <div className={styles.selectWrapper}>
         <select
-          className={`${styles.select} ${error ? styles.errorSelect : ''}`}
+ className={`${styles.select} ${error ? styles.errorSelect : ''} ${customPadding || ''}`}  // Only override if value is passed
+
           value={value}
           onChange={onChange}
           name={name}

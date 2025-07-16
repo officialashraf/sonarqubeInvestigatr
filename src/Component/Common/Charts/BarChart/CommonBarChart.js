@@ -79,12 +79,12 @@ queryPayload = null,
                       <CartesianGrid  horizontal={true} vertical={false}  stroke='#F3F3F51A'/>
 
                         <XAxis type="number"
-         tick={{ fill: '#fff', fontSize:10 }}
+         tick={{ fill: '#fff', fontSize:12 }}
                         />
                         <YAxis 
                             dataKey="name" 
                             type="category" 
-                            tick={{ fontSize: 8, width: 150, wordWrap: "break-word", fill: '#fff' }} 
+                            tick={{ fontSize: 12, width: 150, wordWrap: "break-word", fill: '#fff' }} 
                         />
                      <Tooltip
                     wrapperStyle={{
