@@ -133,7 +133,7 @@ const Summary = ({ filters }) => {
 
                   <XAxis
                     dataKey="name"
-                    tick={{ fill: "#D6D6D6", fontSize: 12 }}
+                    tick={{ fill: "#D6D6D6", fontSize: 8 }}
                     axisLine={{ stroke: "#1c2833" }}
                     tickLine={{ stroke: "#1c2833" }}
                   />

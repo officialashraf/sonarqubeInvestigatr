@@ -137,7 +137,7 @@ const TabulerData = () => {
                                         whiteSpace: "nowrap",
                                       }}
                                     >
-                                      #{tag}
+                                      {tag}
                                     </span>
                                   ))}
                                 </div>

@@ -34,9 +34,9 @@ const UserDashboard = () => {
           <Card
             sx={{
               width: 300,
-              backgroundColor: "black",
+              backgroundColor: "#101d2b",
               color: "white",
-              borderRadius: "5px"
+              borderRadius: "15px"
             }}
           >
             <CardContent onClick={() => handleCheckboxChange(data.title)}>
