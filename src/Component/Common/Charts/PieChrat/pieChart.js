@@ -110,6 +110,8 @@ queryPayload = null,
   } 
    else if (entry.name === "Web Feed") {
     fillColor = getCSSVar('--color-colors-primaryAccent');
+  } else if (entry.name === "Dark Web") {
+    fillColor = 'black';
   } 
   else {
     fillColor = COLORS[index % COLORS.length];

@@ -18,7 +18,8 @@ export const InputField = React.forwardRef(
       error = false,  // new prop (true/false)
       disabled,
       customPaddingInput,
-      customnWrapper
+      customnWrapper,
+       required = true,
     },
     ref
   ) => {
@@ -45,7 +46,7 @@ export const InputField = React.forwardRef(
             autoFocus={autoFocus}
             readOnly={readOnly}
             onFocus={onFocus}
-            required
+            required={required}
             disabled={disabled}
           />
         </div>
