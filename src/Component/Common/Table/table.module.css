@@ -341,7 +341,7 @@ margin-bottom: 0px !important;
     width: 200px;
   }
 }
-:global(.css-imrjgg-MuiButtonBase-root-MuiCheckbox-root){
+/* :global(.css-imrjgg-MuiButtonBase-root-MuiCheckbox-root){
   padding: 0px 9px !important;
   color: white !important;
-}
+} */

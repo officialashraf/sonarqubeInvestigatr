@@ -137,9 +137,10 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
       if (!source.source || source.source.trim() === "") {
         sourceError.source = "Source type is required";
       }
-      if (source.source && source.source !== 'rss feed' && (!source.platform || source.platform.length === 0)) {
-        sourceError.platform = "At least one platform is required";
-      }
+   if (source.source && source.source !== 'rss feed' && source.source !== 'dark web' && (!source.platform || source.platform.length === 0)) {
+  sourceError.platform = "At least one platform is required";
+}
+
       if (!source.intervalValue || source.intervalValue <= 0) {
         sourceError.intervalValue = "Interval value must be greater than 0";
       }
@@ -149,9 +150,10 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
       if (source.source === 'rss feed' && source.urls.length === 0) {
         sourceError.urls = "At least one RSS URL is required";
       }
-      if (source.source !== 'rss feed' && source.keywords.length === 0) {
-        sourceError.keywords = "At least one keyword is required";
-      }
+      if (source.source !== 'rss feed' && source.source !== 'dark web' && source.keywords.length === 0) {
+  sourceError.keywords = "At least one keyword is required";
+}
+
       if (source.source === 'rss feed' && source.urls.length === 0) {
         sourceError.urls = "RSS URLs cannot be empty";
       }
@@ -667,6 +669,7 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
                         { label: 'Social Media', value: 'social media' },
                         { label: 'Social Media Profile', value: 'social media profile' },
                         { label: 'RSS Feed', value: 'rss feed' },
+                         { label: 'Dark Web', value: 'dark web' },
                       ]}
                     />
                     {error.sources?.[sourceIndex]?.source && (
@@ -674,7 +677,7 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
                     )}
                   </div>
 
-                  {source.source && source.source !== 'rss feed' && (
+                  {source.source && source.source !== 'rss feed' && source.source !== 'dark web' &&(
                     <div className="col-md-6">
                       <DropdownField
                         label="Select Platform *"
@@ -715,7 +718,7 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
                     </div>
                   )}
                   
-                  {source.source && source.source !== 'rss feed' && (
+                  {source.source && source.source !== 'rss feed'  && (
                     <div className="col-md-6" style={{ marginRight: '5px', width: '45%' }}>
                       <InputField
                         label={source.source === "social media profile" ? "User ID *" : "Keyword *"}
@@ -727,6 +730,7 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
                         disabled={filterDetails?.id && !isEditable}
                         style={{ maxWidth: '96%' }}
                         error={!!error.sources?.[sourceIndex]?.keywords}
+                        required={false}
                       />
                       <div className="mt-2" style={{ display: "flex", flexWrap: "wrap", gap: "5px" }}>
                         {source.keywords.map((keyword, keyIndex) => (
@@ -778,6 +782,7 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
                         onKeyDown={(e) => handleUrlKeyDown(sourceIndex, e)}
                         disabled={filterDetails?.id && !isEditable}
                         style={{ width: '96%' }}
+                        required={false}
                       />
                       
                       <div className="mt-2" style={{ display: "flex", flexWrap: "wrap", gap: "5px" }}>

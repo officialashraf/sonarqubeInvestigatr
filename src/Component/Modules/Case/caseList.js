@@ -250,18 +250,7 @@ const DataTable = () => {
     { key: "created_on", label: "Created On" },
     { key: "created_by", label: "Created By" },
     { key: "assignee", label: "Assignee" },
-    {
-      key: "watchers",
-      label: "Watchers",
-      render: (val) => {
-        if (Array.isArray(val)) {
-          return val.join(", ");
-        } else if (typeof val === "string") {
-          return val.split(",").map((w) => w.trim()).join(", ");
-        }
-        return "";
-      }
-    },
+    { key: "watchers",      label: "Watchers",   },
     { key: "modified_on", label: "Edited On" },
     { key: "modified_by", label: "Edited By" },
     { key: "status", label: "Status", render: (val) => <span className="badge bg-dark">{val}</span> }
