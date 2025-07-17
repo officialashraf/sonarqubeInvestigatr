@@ -38,7 +38,7 @@ const Resources = () => {
   console.log("Summary Headers from Redux:", summaryHeaders);
 
   const [showPopup, setShowPopup] = useState(false);
-  const [currentPage, setCurrentPage] = useState(page);
+  const [currentPage, setCurrentPage] = useState(page || 1);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
   const sidebarRef = useRef(null);
@@ -47,29 +47,24 @@ const Resources = () => {
   const [allResources, setAllResources] = useState([]);
   const [loadedPages, setLoadedPages] = useState([]);
 
-  // Initialize with first page
+  // Initialize with current page from Redux or 1
   useEffect(() => {
-    console.log("data1.id:", data1?.id);
     if (data1?.id) {
       setLoading(true);
-      // Reset states for new case
-      setAllResources([]);
-      setLoadedPages([]);
-      setCurrentPage(1); // Start from page 1
-
+      setCurrentPage(page || 1); // Use Redux page or default to 1
       dispatch(fetchSummaryData({
         queryPayload: { unified_case_id: data1.id },
-        page: 1, // Always start from page 1
+        page: page || 1,
         itemsPerPage: 50,
       })).then(() => {
         setLoading(false);
       });
     }
-  }, [data1?.id, dispatch]); // Only depend on data1.id
+  }, [data1?.id, dispatch, page]);
 
-  // Load additional pages
+  // Load page data on currentPage change
   useEffect(() => {
-    if (data1?.id && currentPage > 1) {
+    if (data1?.id) {
       setLoading(true);
       dispatch(fetchSummaryData({
         queryPayload: { unified_case_id: data1.id },
@@ -81,67 +76,13 @@ const Resources = () => {
     }
   }, [currentPage, data1?.id, dispatch]);
 
-  // Simplified resource management
+  // Update allResources to only contain current page data
   useEffect(() => {
-    if (summaryData && Array.isArray(summaryData) && summaryData.length > 0) {
-      const pageFromRedux = page; // Get current page from Redux
-
-      setLoadedPages(prevLoadedPages => {
-        // If this page is already loaded, don't add it again
-        if (prevLoadedPages.includes(pageFromRedux)) {
-          return prevLoadedPages;
-        }
-
-        const updatedLoadedPages = [...prevLoadedPages, pageFromRedux].sort((a, b) => a - b);
-
-        // Keep only last 2 pages
-        if (updatedLoadedPages.length > 2) {
-          return updatedLoadedPages.slice(-2);
-        }
-
-        return updatedLoadedPages;
-      });
-
-      setAllResources(prevResources => {
-        // Create a map to store resources by page
-        const resourcesByPage = new Map();
-
-        // Add existing resources
-        prevResources.forEach(resource => {
-          const resourcePage = resource.page || pageFromRedux;
-          if (!resourcesByPage.has(resourcePage)) {
-            resourcesByPage.set(resourcePage, []);
-          }
-          resourcesByPage.get(resourcePage).push(resource);
-        });
-
-        // Add new resources
-        const newResourcesWithPage = summaryData.map(resource => ({
-          ...resource,
-          page: pageFromRedux
-        }));
-
-        resourcesByPage.set(pageFromRedux, newResourcesWithPage);
-
-        // Keep only resources from the last 2 pages
-        const sortedPages = Array.from(resourcesByPage.keys()).sort((a, b) => a - b);
-        const pagesToKeep = sortedPages.slice(-2);
-
-        const finalResources = [];
-        pagesToKeep.forEach(page => {
-          if (resourcesByPage.has(page)) {
-            finalResources.push(...resourcesByPage.get(page));
-          }
-        });
-
-        // Ensure max 100 items
-        return finalResources.slice(-100);
-      });
-
-      // Update hasMore
-      setHasMore(pageFromRedux < totalPages);
+    if (summaryData && Array.isArray(summaryData)) {
+      setAllResources(summaryData);
+      setHasMore(currentPage < totalPages);
     }
-  }, [summaryData, page, totalPages]);
+  }, [summaryData, currentPage, totalPages]);
 
 
   // ... rest of your component ...
@@ -156,8 +97,8 @@ const Resources = () => {
         sidebarElement.scrollTop + sidebarElement.clientHeight >=
         sidebarElement.scrollHeight - 10
       ) {
+        scrollDirectionRef.current = 'down';
         if (!loading && hasMore) {
-          scrollDirectionRef.current = 'down';
           setCurrentPage(prev => prev + 1);
         }
       } else if (
@@ -180,16 +121,12 @@ const Resources = () => {
     const scrollContainer = sidebarRef.current;
     if (!scrollContainer) return;
 
-    if (scrollDirectionRef.current === 'up') {
-
-      const newScrollTop = currentPage === 1
-        ? scrollContainer.scrollHeight * 0 // Move slightly down when at page 1
-        : scrollContainer.scrollHeight / 2 - scrollContainer.clientHeight / 2; // Default centering
-      scrollContainer.scrollTo({
-        top: newScrollTop,
-        behavior: 'smooth',
-      });
-    }
+    // Scroll to center both when scrolling up or down
+    const newScrollTop = (scrollContainer.scrollHeight - scrollContainer.clientHeight) / 2;
+    scrollContainer.scrollTo({
+      top: newScrollTop,
+      behavior: 'smooth',
+    });
   }, [currentPage]);
 
   const handleResourceClick = resource => {
@@ -240,25 +177,25 @@ const Resources = () => {
                     >
                       <img
                         src={
-                          resource.unified_type === "rss feed"
+                          resource.unified_record_type === "rss feed"
                             ? (resource.socialmedia_from_imageurl || resource.socialmedia_media_url || "/images/rss.jpg")
-                            : (resource.socialmedia_from_imageurl ?? resource.socialmedia_media_url)
+                            : resource.unified_record_type === "X"
+                              ? (resource.socialmedia_from_imageurl || resource.socialmedia_media_url || "/images/X_logo.jpg")
+                              : resource.unified_record_type === "Facebook"
+                                ? (resource.socialmedia_from_imageurl || resource.socialmedia_media_url || "/images/Facebook_logo.png")
+                                : resource.unified_record_type === "YouTube"
+                                  ? (resource.socialmedia_from_imageurl || resource.socialmedia_media_url || "/images/YouTube-jpg.jpg")
+                                : (resource.socialmedia_from_imageurl || resource.socialmedia_media_url || "/images/placeholder-square.png")
                         }
-                        // onError={(e) => {
-                        //   e.target.onerror = null; // prevents infinite loop
-                        //   e.target.src = resource.unified_type === "rss feed"
-                        //     ? "/images/rss.jpg"
-                        //     : "https://www.kurin.com/wp-content/uploads/placeholder-square.png";
-                        // }}
-                          onError={(e) => {
+                        onError={(e) => {
                           e.target.onerror = null; // prevents infinite loop
-                            e.target.src = "/images/placeholder-square.png";
+                          e.target.src = "/images/placeholder-square.png";
                         }}
                         alt="pic_not_found"
                         className="resourceImage"
                       />
                       <div className="resourceDetails">
-                        <p className="resourceType">{resource.unified_record_type}</p>
+                        <p className="resourceType">{resource.unified_record_type || resource.unified_type}</p>
                         <p className="resourceContent">{resource.socialmedia_activity}</p>
                       </div>
                     </div>
@@ -457,7 +394,7 @@ const Resources = () => {
                 </div>
               )}
               {/* Twitter Layout */}
-              {selectedResource.unified_record_type === "Twitter" && (
+              {selectedResource.unified_record_type === "X" && (
                 <div className="resourceDetailsView marginSides20">
                   <div className="profile-section">
                     <img
@@ -670,7 +607,44 @@ const Resources = () => {
                   </p>
                 </div>
               )}
-
+              {/* DarkWeb*/}
+              {selectedResource.unified_record_type === "AhmiaFi" && (
+                <div className="resourceDetailsView">
+                  <div className="profile-section">
+                    <h3>{selectedResource.unified_activity_title}</h3>
+                  </div>
+                  {/* <div>
+                    <p>Published Date : {selectedResource.site_published_date}</p>
+                  </div> */}
+                  <p className="activityContent">
+                    {selectedResource.site_snippet}
+                  </p>
+                </div>
+              )}
+              {/* DarkWeb*/}
+              {selectedResource.unified_record_type === "Gibiru" && (
+                <div className="resourceDetailsView">
+                  <div className="profile-section">
+                    <h3>{selectedResource.unified_activity_title}</h3>
+                  </div>
+                  {/* <div>
+                    <p>Published Date : {selectedResource.site_published_date}</p>
+                  </div> */}
+                  <p className="activityContent">
+                    {selectedResource.site_snippet}
+                  </p>
+                  <img
+                    src={selectedResource.socialmedia_media_url}
+                    alt="Post"
+                    // onError={(e) => {
+                    //   e.target.onerror = null;
+                    //   e.target.src =
+                    //     "https://www.kurin.com/wp-content/uploads/placeholder-square.jpg";
+                    // }}
+                    className="postImage"
+                  />
+                </div>
+              )}
               {/* VK */}
               {selectedResource.unified_record_type === "VK" && (
                 <div className="resourceDetailsView marginSides20">
@@ -811,22 +785,22 @@ const Resources = () => {
                 </div>
               )}
               {selectedResource?.unified_type ? (
-              <div className="sentimentSection" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '5px' }}>
-                <AppButton
-                  style={{ cursor: 'default', marginBottom: '5px' }}
-                >
-                  {selectedResource.sentiment ? selectedResource.sentiment?.charAt(0)?.toUpperCase() + selectedResource.sentiment?.slice(1) : 'No Data'}
-                </AppButton>
-                {selectedResource && (
+                <div className="sentimentSection" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '5px' }}>
                   <AppButton
-                    onClick={() => setShowPopup(true)}
-                    style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', padding: 0, background: 'transparent', boxShadow: 'none' }}
+                    style={{ cursor: 'default', marginBottom: '5px' }}
                   >
-                    <ChatLeftText size={15} style={{ marginRight: '5px' }} />
-                    Comment
+                    {selectedResource.sentiment ? selectedResource.sentiment?.charAt(0)?.toUpperCase() + selectedResource.sentiment?.slice(1) : 'No Data'}
                   </AppButton>
-                )}
-              </div>
+                  {selectedResource && (
+                    <AppButton
+                      onClick={() => setShowPopup(true)}
+                      style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', padding: 0, background: 'transparent', boxShadow: 'none' }}
+                    >
+                      <ChatLeftText size={15} style={{ marginRight: '5px' }} />
+                      Comment
+                    </AppButton>
+                  )}
+                </div>
               ) : (
                 <div className="noDataWrapper">
                   <p>No Data Available</p>
@@ -836,8 +810,8 @@ const Resources = () => {
             </div>
 
           ) : (
-              <div className="noDataWrapper">
-                <p>No Data Available</p>
+            <div className="noDataWrapper">
+              <p>No Data Available</p>
             </div>
 
           )}

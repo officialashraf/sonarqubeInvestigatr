@@ -16,7 +16,7 @@ const Summary = ({ filters }) => {
   const [barData, setBarData] = useState([]);
   const [tableData, setTableData] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
- 
+
 
   const caseId = useSelector((state) => state.caseData.caseData.id);
   console.log("casiId", caseId)
@@ -109,7 +109,7 @@ const Summary = ({ filters }) => {
   // const togglePopup = () => {
   //   setShowPopup((prev) => !prev);
   // };
- 
+
   return (
     <>
       <h6 style={{ textAlign: "center" }}> FilterCount: {filters}</h6>
@@ -174,7 +174,7 @@ const Summary = ({ filters }) => {
                   </Bar>
                 </BarChart>
               </ResponsiveContainer> */}
-                <BarWithHover barData={barData}/>
+              <BarWithHover barData={barData} />
             </Box>
 
             {/* Table */}
@@ -209,61 +209,61 @@ const Summary = ({ filters }) => {
 
 export default Summary;
 
-const BarWithHover = ({ barData}) => {
+const BarWithHover = ({ barData }) => {
   const [activeIndex, setActiveIndex] = useState(null);
 
   return (
-     <div style={{ overflowX: 'auto', width: '100%' }}>
-    <div style={{ width: `${barData.length * 80}px` }}>
-    <ResponsiveContainer width="100%" height={300} style={{ overflow: 'auto'}}>
-                <BarChart  width={barData.length * 80} data={barData}>
+    <div style={{ overflowX: 'auto', width: '100%', paddingTop: '12px' }}>
+      <div style={{ width: `${Math.max(barData.length * 80, 300)}px` }}>
+        <ResponsiveContainer width="100%" height={300} style={{ overflow: 'auto' }}>
+          <BarChart data={barData}>
 
 
-                  <XAxis
-                    dataKey="name"
-                    tick={{ fill: "#D6D6D6", fontSize: 12 }}
-                    axisLine={{ stroke: "#1c2833" }}
-                    tickLine={{ stroke: "#1c2833" }}
-                  />
-                  <YAxis
-                    tick={{ fill: "#D6D6D6", fontSize: 12 }}
-                    axisLine={{ stroke: "#1c2833" }}
-                    tickLine={{ stroke: "#1c2833" }}
-                  />
+            <XAxis
+              dataKey="name"
+              tick={{ fill: "#D6D6D6", fontSize: 12 }}
+              axisLine={{ stroke: "#1c2833" }}
+              tickLine={{ stroke: "#1c2833" }}
+            />
+            <YAxis
+              tick={{ fill: "#D6D6D6", fontSize: 12 }}
+              axisLine={{ stroke: "#1c2833" }}
+              tickLine={{ stroke: "#1c2833" }}
+            />
 
-                  <Tooltip
-                    wrapperStyle={{
-                      backgroundColor: "#0E2C46",
-                      border: "1px solid #3498db",
-                      borderRadius: "8px",
-                      padding: "8px",
-                      color: "#fff"
-                    }}
-                    contentStyle={{ backgroundColor: "#0E2C46", border: "none" }}
-                    labelStyle={{ color: "#D6D6D6" }}
-                    cursor={{ fill: "#1c2833" }}
-                  />
+            <Tooltip
+              wrapperStyle={{
+                backgroundColor: "#0E2C46",
+                border: "1px solid #3498db",
+                borderRadius: "8px",
+                padding: "8px",
+                color: "#fff"
+              }}
+              contentStyle={{ backgroundColor: "#0E2C46", border: "none" }}
+              labelStyle={{ color: "#D6D6D6" }}
+              cursor={{ fill: "#1c2833" }}
+            />
 
-                  <Bar
-                    dataKey="value"
-                    fill="#3498db"
-                    barSize={15}
-                    radius={[8, 8, 8, 8]}
-                    isAnimationActive={false}
-                  >
-                    {barData.map((entry, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={index === activeIndex ? "#2980b9" : "#3498db"}
-                        onMouseEnter={() => setActiveIndex(index)}
-                        onMouseLeave={() => setActiveIndex(null)}
-                      />
-                    ))}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer> 
-                  </div>
-  </div>
+            <Bar
+              dataKey="value"
+              fill="#3498db"
+              barSize={15}
+              radius={[8, 8, 8, 8]}
+              isAnimationActive={false}
+            >
+              {barData.map((entry, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={index === activeIndex ? "#2980b9" : "#3498db"}
+                  onMouseEnter={() => setActiveIndex(index)}
+                  onMouseLeave={() => setActiveIndex(null)}
+                />
+              ))}
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
   );
 };
 

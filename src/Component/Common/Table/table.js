@@ -31,37 +31,37 @@ const TableModal = ({ columns = [], title, data = [], onAddClick, searchPlacehol
     { label: "Common", value: "Common" },
   ];
 
-const handleGroupChange = (id, newGroup) => {
-  setEditedRows((prev) => ({
-    ...prev,
-    [id]: {
-      ...prev[id],
-      group_name: newGroup,
-    },
-  }));
-};
+  const handleGroupChange = (id, newGroup) => {
+    setEditedRows((prev) => ({
+      ...prev,
+      [id]: {
+        ...prev[id],
+        group_name: newGroup,
+      },
+    }));
+  };
 
 
-const handleVisibilityChange = (id, newValue) => {
-  setEditedRows((prev) => ({
-    ...prev,
-    [id]: {
-      ...prev[id],
-      is_visible: newValue,
-    },
-  }));
-};
+  const handleVisibilityChange = (id, newValue) => {
+    setEditedRows((prev) => ({
+      ...prev,
+      [id]: {
+        ...prev[id],
+        is_visible: newValue,
+      },
+    }));
+  };
 
 
-const handleDisplayNameChange = (id, newValue) => {
-  setEditedRows((prev) => ({
-    ...prev,
-    [id]: {
-      ...prev[id],
-      display_name: newValue,
-    },
-  }));
-};
+  const handleDisplayNameChange = (id, newValue) => {
+    setEditedRows((prev) => ({
+      ...prev,
+      [id]: {
+        ...prev[id],
+        display_name: newValue,
+      },
+    }));
+  };
 
 
   const handleSort = (key) => {
@@ -138,59 +138,61 @@ const handleDisplayNameChange = (id, newValue) => {
                 >
                   {columns.map((col) => (
                     <td key={col.key} >
-                      {col.key === "id" && idPrefix
-                        ? `${idPrefix}${String(row[col.key]).padStart(4, "0")}`
-                        : editable && col.key === "group_name"
-                          ? (
-                            // <span>shushu</span>
-                           
-                            <DropdownField
-                              // label="Group "
-                              source="Select Group"
-                              value={editedRows[row.id]?.group_name || row.group_name}
-                              onChange={(e) => handleGroupChange(row.id, e.target?.value)}
-                              disabled={!editable}
-                              required={true}
-                              options={groupOptions}
-                               customPadding={styles.noPadding}
-                               customnWrapper={styles.customnWrapper}
-                            />
-                          )
-                          : editable && col.key === "display_name"
+                      {col.render
+                        ? col.render(row[col.key], row)
+                        : col.key === "id" && idPrefix
+                          ? `${idPrefix}${String(row[col.key]).padStart(4, "0")}`
+                          : editable && col.key === "group_name"
                             ? (
-                              <InputField
-                                // label="Display Name"
-                                value={editedRows[row.id]?.display_name ?? row.display_name}
-                                placeholder={row.display_name}
-                                onChange={(e) => handleDisplayNameChange(row.id, e.target.value)}
-                                customPaddingInput={styles.noPaddingInput}
+                              // <span>shushu</span>
+
+                              <DropdownField
+                                // label="Group "
+                                source="Select Group"
+                                value={editedRows[row.id]?.group_name || row.group_name}
+                                onChange={(e) => handleGroupChange(row.id, e.target?.value)}
+                                disabled={!editable}
+                                required={true}
+                                options={groupOptions}
+                                customPadding={styles.noPadding}
                                 customnWrapper={styles.customnWrapper}
                               />
-                              // <span>tpka aaaaaam</span>
                             )
-
-                            : editable && col.key === "is_visible"
+                            : editable && col.key === "display_name"
                               ? (
-                                <>
-                                  <Checkbox
-                                    checked={
+                                <InputField
+                                  // label="Display Name"
+                                  value={editedRows[row.id]?.display_name ?? row.display_name}
+                                  placeholder={row.display_name}
+                                  onChange={(e) => handleDisplayNameChange(row.id, e.target.value)}
+                                  customPaddingInput={styles.noPaddingInput}
+                                  customnWrapper={styles.customnWrapper}
+                                />
+                                // <span>tpka aaaaaam</span>
+                              )
+
+                              : editable && col.key === "is_visible"
+                                ? (
+                                  <>
+                                    <Checkbox
+                                      checked={
+                                        editedRows[row.id]?.is_visible !== undefined
+                                          ? editedRows[row.id].is_visible
+                                          : row.is_visible
+                                      }
+                                      onChange={(e) =>
+                                        handleVisibilityChange(row.id, e.target.checked)
+                                      }
+                                    />
+
+                                    {(
                                       editedRows[row.id]?.is_visible !== undefined
                                         ? editedRows[row.id].is_visible
                                         : row.is_visible
-                                    }
-                                    onChange={(e) =>
-                                      handleVisibilityChange(row.id, e.target.checked)
-                                    }
-                                  />
-
-                                  {(
-                                    editedRows[row.id]?.is_visible !== undefined
-                                      ? editedRows[row.id].is_visible
-                                      : row.is_visible
-                                  ) ? "Yes" : "No"}
-                                </>
-                              )
-                              : row[col.key]}
+                                    ) ? "Yes" : "No"}
+                                  </>
+                                )
+                                : row[col.key]}
                     </td>
                   ))}
 
