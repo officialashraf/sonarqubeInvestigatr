@@ -19,7 +19,7 @@ const Header = ({ title }) =>
     sx={{ mt: 0, mb: 0, height: "20px" }}
     className={styles.graphCards}
   >
-    <p style={{ color: "white" }}>
+    <p style={{ color: "white",fontSize:"16px", paddingLeft: "5px"}}>
       {title}
     </p>
 
@@ -60,10 +60,10 @@ const ComponentFour = () => (
   <>
       <Header title="Sentiment" />
   <Card
-    sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius:'25px', marginBottom: "5rem" }}
+    sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius:'25px' }}
   >
     <CardContent>
-      <SentimentPieChart height={250} />
+      <SentimentPieChart  />
     </CardContent>
   </Card>
   </>

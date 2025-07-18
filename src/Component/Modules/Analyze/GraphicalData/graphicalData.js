@@ -21,7 +21,7 @@ const Header = ({ title }) =>
     className={styles.grapghCards}
 
   >
-    <p style={{ color: "white", paddingLeft: "5px" }}>
+    <p style={{ color: "white", paddingLeft: "5px",fontSize:"16px" }}>
       {title}
     </p>
     {/* <Grid item p={0} mt={-2}>
