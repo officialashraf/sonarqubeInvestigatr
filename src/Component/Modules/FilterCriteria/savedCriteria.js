@@ -261,7 +261,7 @@ const SavedCriteria = () => {
                   endAdornment: (
                     <InputAdornment position="end">
                       <SendIcon
-                        style={{ cursor: isLoading ? 'default' : 'pointer', color: '#0073cf' }}
+                        style={{ cursor: isLoading ? 'default' : 'pointer', color: '#0073cf',marginRight:'5px' }}
                         onClick={isLoading ? null : handleSearch}
                       />
                       <TuneIcon

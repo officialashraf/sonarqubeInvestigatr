@@ -137,63 +137,57 @@ const TableModal = ({ columns = [], title, data = [], onAddClick, searchPlacehol
                   onClick={() => enableRowClick && onRowClick && onRowClick(row)}
                 >
                   {columns.map((col) => (
-                    <td key={col.key} >
-                      {col.render
-                        ? col.render(row[col.key], row)
-                        : col.key === "id" && idPrefix
-                          ? `${idPrefix}${String(row[col.key]).padStart(4, "0")}`
-                          : editable && col.key === "group_name"
-                            ? (
-                              // <span>shushu</span>
-
-                              <DropdownField
-                                // label="Group "
-                                source="Select Group"
-                                value={editedRows[row.id]?.group_name || row.group_name}
-                                onChange={(e) => handleGroupChange(row.id, e.target?.value)}
-                                disabled={!editable}
-                                required={true}
-                                options={groupOptions}
-                                customPadding={styles.noPadding}
-                                customnWrapper={styles.customnWrapper}
-                              />
-                            )
-                            : editable && col.key === "display_name"
-                              ? (
-                                <InputField
-                                  // label="Display Name"
-                                  value={editedRows[row.id]?.display_name ?? row.display_name}
-                                  placeholder={row.display_name}
-                                  onChange={(e) => handleDisplayNameChange(row.id, e.target.value)}
-                                  customPaddingInput={styles.noPaddingInput}
-                                  customnWrapper={styles.customnWrapper}
-                                />
-                                // <span>tpka aaaaaam</span>
-                              )
-
-                              : editable && col.key === "is_visible"
-                                ? (
-                                  <>
-                                    <Checkbox
-                                      checked={
-                                        editedRows[row.id]?.is_visible !== undefined
-                                          ? editedRows[row.id].is_visible
-                                          : row.is_visible
-                                      }
-                                      onChange={(e) =>
-                                        handleVisibilityChange(row.id, e.target.checked)
-                                      }
-                                    />
-
-                                    {(
-                                      editedRows[row.id]?.is_visible !== undefined
-                                        ? editedRows[row.id].is_visible
-                                        : row.is_visible
-                                    ) ? "Yes" : "No"}
-                                  </>
-                                )
-                                : row[col.key]}
+                    <td key={col.key}>
+                      {col.render ? (
+                        `${idPrefix}${String(row[col.key]).padStart(4, "0")}`
+                      ) : editable && col.key === "group_name" ? (
+                        <DropdownField
+                          source="Select Group"
+                          value={editedRows[row.id]?.group_name || row.group_name}
+                          onChange={(e) => handleGroupChange(row.id, e.target?.value)}
+                          disabled={!editable}
+                          required={true}
+                          options={groupOptions}
+                          customPadding={styles.noPadding}
+                          customnWrapper={styles.customnWrapper}
+                        />
+                      ) : editable && col.key === "display_name" ? (
+                        <InputField
+                          value={editedRows[row.id]?.display_name ?? row.display_name}
+                          placeholder={row.display_name}
+                          onChange={(e) => handleDisplayNameChange(row.id, e.target.value)}
+                          customPaddingInput={styles.noPaddingInput}
+                          customnWrapper={styles.customnWrapper}
+                        />
+                      ) : editable && col.key === "is_visible" ? (
+                        <>
+                          <Checkbox
+                            checked={
+                              editedRows[row.id]?.is_visible !== undefined
+                                ? editedRows[row.id].is_visible
+                                : row.is_visible
+                            }
+                            onChange={(e) => handleVisibilityChange(row.id, e.target.checked)}
+                            sx={{
+                              padding: '0px 9px',
+                              color: 'white',
+                            }}
+                          />
+                          {(
+                            editedRows[row.id]?.is_visible !== undefined
+                              ? editedRows[row.id].is_visible
+                              : row.is_visible
+                          ) ? "Yes" : "No"}
+                        </>
+                      ) : col.key === "id" && idPrefix ? (
+                        `${idPrefix}${String(row[col.key]).padStart(4, "0")}`
+                      ) : col.key === "watchers" || col.key === "synonyms" ? (
+                        Array.isArray(row[col.key]) ? row[col.key].join(", ") : row[col.key]
+                      ) : (
+                        row[col.key]
+                      )}
                     </td>
+
                   ))}
 
 

@@ -4,10 +4,12 @@ import axios from 'axios';
 import { Box } from '@mui/material';
 import { Tooltip, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Cell } from 'recharts';
 import { FaRss, FaFacebookF, FaTwitter, FaInstagram, FaVk, FaTiktok, FaYoutube, FaLinkedinIn } from "react-icons/fa";
+import XIcon from '@mui/icons-material/X';
 import style from './summary.module.css';
 import styles from "./record.module.css";
 import Cookies from "js-cookie";
 import ReusablePieChart from '../../Common/Charts/PieChrat/pieChart';
+import DataThresholdingIcon from '@mui/icons-material/DataThresholding';
 
 const Summary = ({ filters }) => {
 
@@ -23,7 +25,7 @@ const Summary = ({ filters }) => {
 
   const iconMap = {
     facebook: <FaFacebookF size={20} />,
-    x: <FaTwitter size={20} />,
+    x: <XIcon size={20} />,
     instagram: <FaInstagram size={20} />,
     youtube: <FaYoutube size={20} />,
     "rss feed": <FaRss size={20} />,
@@ -72,7 +74,7 @@ const Summary = ({ filters }) => {
         const tableData = (unified_record_type || []).map(item => {
           const key = item.key.toLowerCase().trim();  // space, caps handle
           return {
-            icon: iconMap[key] || <FaRss color="#ccc" size={22} />,  // fallback
+            icon: iconMap[key] || <DataThresholdingIcon color="#ccc" size={22} />,  // fallback
             name: item.key,
             value: item.doc_count,
           };

@@ -353,7 +353,7 @@ const RecentCriteria = () => {
                   endAdornment: (
                     <InputAdornment position="end">
 
-                      <Send style={{ cursor: 'pointer',  color: "#0073cf" }} onClick={handleSearch} />
+                      <Send style={{ cursor: 'pointer',  color: "#0073cf",marginRight:'5px' }} onClick={handleSearch} />
                       <TuneIcon style={{ cursor: 'pointer' , backgroundColor: "#0073CF", color: '#0A192F' }} onClick={handelCreate} /> {/* New Card List Filter Icon */}
                     </InputAdornment>
                   ), style: {
