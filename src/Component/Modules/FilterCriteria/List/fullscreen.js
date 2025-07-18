@@ -15,6 +15,8 @@ import { setKeywords, setPage, setSearchResults } from '../../../../Redux/Action
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { ListAltOutlined, PieChart } from "@mui/icons-material";
+import { FaPhotoVideo } from "react-icons/fa";
+import ScrollCriteriaViewer from './ResourceView';
 import GrapghicalCriteria from './CriteriaGraphicaView/Grapghs/grapghicalCriteria';
 import AppButton from '../../../Common/Buttton/button';
 import styles from "../../Analyze/caseHeader.module.css";
@@ -253,6 +255,10 @@ const SearchResults = () => {
               }`}
             onClick={() => handleComponentToggle("graph")}
           />
+          <FaPhotoVideo sx={{ fontSize: 40 }}
+            className={`${styles.icon} ${activeComponent === "photoVideo" ? styles.activeIcon : ""}`}
+            onClick={() => handleComponentToggle("photoVideo")}
+          />
           <ListAltOutlined sx={{
             fontSize: 40
           }}
@@ -290,6 +296,9 @@ const SearchResults = () => {
 
         {activeComponent === "graph" && (
           <GrapghicalCriteria searchChips={searchChips} />
+        )}
+        {activeComponent === "photoVideo" && (
+          <ScrollCriteriaViewer />
         )}
         {activeComponent === "list" && (
           <CriteriaCaseTable searchChips={searchChips} />

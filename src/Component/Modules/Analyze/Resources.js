@@ -47,24 +47,26 @@ const Resources = () => {
   const [allResources, setAllResources] = useState([]);
   const [loadedPages, setLoadedPages] = useState([]);
 
-  // Initialize with current page from Redux or 1
+  // Initialize data on mount or when data1.id changes
   useEffect(() => {
     if (data1?.id) {
       setLoading(true);
-      setCurrentPage(page || 1); // Use Redux page or default to 1
+      const initialPage = page || 1;
+      setCurrentPage(initialPage);
+
       dispatch(fetchSummaryData({
         queryPayload: { unified_case_id: data1.id },
-        page: page || 1,
+        page: initialPage,
         itemsPerPage: 50,
       })).then(() => {
         setLoading(false);
       });
     }
-  }, [data1?.id, dispatch, page]);
+  }, [data1?.id, dispatch]); // Removed 'page' from dependencies
 
-  // Load page data on currentPage change
+  // Load page data when currentPage changes (but not on initial load)
   useEffect(() => {
-    if (data1?.id) {
+    if (data1?.id && currentPage !== (page || 1)) {
       setLoading(true);
       dispatch(fetchSummaryData({
         queryPayload: { unified_case_id: data1.id },
@@ -74,7 +76,7 @@ const Resources = () => {
         setLoading(false);
       });
     }
-  }, [currentPage, data1?.id, dispatch]);
+  }, [currentPage, data1?.id, dispatch, page]);
 
   // Update allResources to only contain current page data
   useEffect(() => {
@@ -84,10 +86,6 @@ const Resources = () => {
     }
   }, [summaryData, currentPage, totalPages]);
 
-
-  // ... rest of your component ...
-
-  // Infinite scroll listener
   useEffect(() => {
     const sidebarElement = sidebarRef.current;
     if (!sidebarElement) return;
@@ -97,8 +95,8 @@ const Resources = () => {
         sidebarElement.scrollTop + sidebarElement.clientHeight >=
         sidebarElement.scrollHeight - 10
       ) {
-        scrollDirectionRef.current = 'down';
         if (!loading && hasMore) {
+          scrollDirectionRef.current = 'down';
           setCurrentPage(prev => prev + 1);
         }
       } else if (
@@ -115,25 +113,34 @@ const Resources = () => {
     return () => sidebarElement.removeEventListener("scroll", handleInfiniteScroll);
   }, [loading, hasMore, currentPage]);
 
-
-  // Adjust scroll position after loading previous page to avoid jumpiness
   useEffect(() => {
     const scrollContainer = sidebarRef.current;
     if (!scrollContainer) return;
 
-    // Scroll to center both when scrolling up or down
-    const newScrollTop = (scrollContainer.scrollHeight - scrollContainer.clientHeight) / 2;
-    scrollContainer.scrollTo({
-      top: newScrollTop,
-      behavior: 'smooth',
-    });
+    if (scrollDirectionRef.current === 'up') {
+
+      const newScrollTop = currentPage === 1
+        ? scrollContainer.scrollHeight * 0 // Move slightly down when at page 1
+        : scrollContainer.scrollHeight / 2 - scrollContainer.clientHeight / 2; // Default centering
+      scrollContainer.scrollTo({
+        top: newScrollTop,
+        behavior: 'smooth',
+      });
+    } else if (scrollDirectionRef.current === 'down') {
+      const newScrollTop = currentPage === totalPages
+        ? scrollContainer.scrollHeight // Move to bottom when at last page
+        : scrollContainer.scrollHeight / 2 - scrollContainer.clientHeight / 2; // Default centering
+      scrollContainer.scrollTo({
+        top: newScrollTop,
+        behavior: 'smooth',
+      });
+    }
   }, [currentPage]);
 
   const handleResourceClick = resource => {
     console.log("Selected Resource:", resource);
-    setSelectedResource(resource); // Set the selected resource to display in the right content area
+    setSelectedResource(resource);
   };
-
   const getYouTubeVideoId = (url) => {
     console.log("url", url);
     const regExp = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/|v\/|shorts\/)|youtu\.be\/)([^#&?]{11})/;
@@ -146,7 +153,7 @@ const Resources = () => {
     <div className="container-r">
       {/* Header Section */}
       <div className="top-header">
-        <div className="title">
+        <div style={{ color: '#d9d9d9', fontSize: '16px', fontWeight: '600' }}>
           <h5>Resources Insights</h5>
         </div>
       </div>
@@ -185,7 +192,7 @@ const Resources = () => {
                                 ? (resource.socialmedia_from_imageurl || resource.socialmedia_media_url || "/images/Facebook_logo.png")
                                 : resource.unified_record_type === "YouTube"
                                   ? (resource.socialmedia_from_imageurl || resource.socialmedia_media_url || "/images/YouTube-jpg.jpg")
-                                : (resource.socialmedia_from_imageurl || resource.socialmedia_media_url || "/images/placeholder-square.png")
+                                  : (resource.socialmedia_from_imageurl || resource.socialmedia_media_url || "/images/placeholder-square.png")
                         }
                         onError={(e) => {
                           e.target.onerror = null; // prevents infinite loop
