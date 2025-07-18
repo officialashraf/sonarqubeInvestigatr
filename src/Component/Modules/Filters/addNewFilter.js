@@ -834,7 +834,7 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
             
             <span style={{ marginLeft: '5px' }}>
               <AppButton 
-                onClick={handleSaveFilter}
+                // onClick={handleSaveFilter}
                 disabled={filterDetails?.id && (!isEditable || !isChanged || isSubmitting)}
                 children={isSubmitting ? (filterDetails?.id ? 'Updating...' : 'Saving...') : (filterDetails?.id ? 'Update Filter' : 'Save Filter')} 
               />

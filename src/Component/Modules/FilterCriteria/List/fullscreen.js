@@ -222,7 +222,7 @@ const SearchResults = () => {
               endAdornment: (
                 <InputAdornment position="end">
 
-                  <SendIcon style={{ cursor: 'pointer', color: '#0073CF' }} onClick={handleSearch} />
+                  <SendIcon style={{ cursor: 'pointer', color: '#0073CF',marginRight:'5px' }} onClick={handleSearch} />
                   <TuneIcon onClick={openPopup} style={{ cursor: 'pointer', backgroundColor: "#0073CF", color: '#0A192F' }} /> {/* New Card List Filter Icon */}
 
                 </InputAdornment>

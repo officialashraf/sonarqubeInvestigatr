@@ -316,7 +316,7 @@ const handleSearch = async (e) => {
                 ),
                 endAdornment: (
                   <InputAdornment position="end" >
-                    <Send onClick={() => dispatch(openPopup("recent"))} style={{ cursor: 'pointer', color: "#0073cf" }} />
+                    <Send onClick={() => dispatch(openPopup("recent"))} style={{ cursor: 'pointer', color: "#0073cf" , marginRight:'5px'}} />
                     <Tune onClick={() => dispatch(openPopup("saved"))} style={{ cursor: 'pointer', color: "#0073cf" }} />
                   </InputAdornment>
                 ),
