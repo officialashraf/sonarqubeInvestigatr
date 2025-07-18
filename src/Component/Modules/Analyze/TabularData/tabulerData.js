@@ -5,7 +5,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchSummaryData } from "../../../../Redux/Action/filterAction";
 import Loader from "../../Layout/loader";
 import styles from "../../../Common/Table/table.module.css";
-
+import axios from "axios";
+import Cookies from 'js-cookie';
 const TabulerData = () => {
   const dispatch = useDispatch();
   const caseData = useSelector((state) => state.caseData.caseData);
@@ -25,6 +26,8 @@ const TabulerData = () => {
   console.log("totalresuktswq", totalResults)
 
   const [currentPage, setCurrentPage] = useState(page);
+  const [columnMapping, setColumnMapping] = useState([]);
+
 
   useEffect(() => {
     if (caseData?.id) {
@@ -36,6 +39,39 @@ const TabulerData = () => {
     }
   }, [caseData, currentPage, dispatch]);
 
+useEffect(() => {
+  const fetchMapping = async () => {
+    try {
+      const token = Cookies.get("accessToken");
+      const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/mappings`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
+        }
+      });
+      setColumnMapping(response.data);
+    } catch (error) {
+      console.error("Mapping fetch failed", error);
+    }
+  };
+  fetchMapping();
+}, []);
+
+const processedHeaders = headers.map((header) => {
+  const mapping = columnMapping.find((col) => col.column_name === header);
+  return {
+    key: header,
+    displayName: mapping?.display_name || header
+      .split("_")
+      .map((word) =>
+        word === word.toUpperCase()
+          ? word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+          : word.charAt(0).toUpperCase() + word.slice(1)
+      )
+      .join(" "),
+    groupName: mapping?.group_name || "Others"
+  };
+});
 
   const handlePageChange = (page) => {
     setCurrentPage(page); // Update local state
@@ -78,77 +114,114 @@ const TabulerData = () => {
 
         {data && data.length > 0 ? (
           <Table hover  className={styles.table}>
-            <thead>
-              <tr>
-                {headers.map((header) => (
-                  <th key={header} className={style.fixedTh} >
-                    {header
-                      .split("_")
-                      .map((word) =>
-                        word === word.toUpperCase()
-                          ? word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
-                          : word.charAt(0).toUpperCase() + word.slice(1)
-                      )
-                      .join(" ")}
-                  </th>
-                ))}
-              </tr>
-            </thead>
+          <thead>
+  {/* Group Row */}
+  <tr>
+    {(() => {
+      const groupMap = {};
+      processedHeaders.forEach((col) => {
+        if (!groupMap[col.groupName]) {
+          groupMap[col.groupName] = [];
+        }
+        groupMap[col.groupName].push(col);
+      });
+
+      const headerGroupRow = [];
+      Object.entries(groupMap).forEach(([group, cols]) => {
+        // Only render group if at least one column from this group is present in headers
+        const visibleCols = cols.filter(col => headers.includes(col.key));
+        if (visibleCols.length > 0) {
+          headerGroupRow.push(
+            <th
+              key={`group-${group}`}
+              colSpan={visibleCols.length}
+              className={style.groupTh}
+              style={{
+                textAlign: "center",
+                backgroundColor: "#f0f0f0",
+                fontWeight: "600",
+                fontSize: "13px",
+                borderBottom: "1px solid #ccc",
+              }}
+            >
+              {group}
+            </th>
+          );
+        }
+      });
+
+      return headerGroupRow;
+    })()}
+  </tr>
+
+  {/* Column Display Name Row */}
+  <tr>
+    {processedHeaders
+      .filter(col => headers.includes(col.key)) // ensure only relevant ones
+      .map((col) => (
+        <th key={col.key} className={style.fixedTh}>
+          {col.displayName}
+        </th>
+      ))}
+  </tr>
+</thead>
+
+
               <tbody>
                 {data.map((item, index) => (
                   <tr key={index}>
-                    {headers.map((header) => (
-                      <td key={header} className={style.fixedTd}>
-                        <div
-                          className="cell-content"
-                          style={{
-                            cursor: "pointer",
-                            fontWeight: "400",
-                            overflow: "auto",
-                            whiteSpace: "nowrap",
-                            padding: "0px 5px",
-                            fontSize: "12px",
-                            fontFamily: "roboto",
-                            scrollbarWidth: "none",          
-                            msOverflowStyle: "none",  
-                          }}
-                          title={item[header]}
-                        >
-                          {header === "socialmedia_hashtags" ? (
-                            (() => {
-                              let tags = [];
-                              try {
-                                // Convert string to array
-                                tags = JSON.parse(item[header].replace(/'/g, '"'));
-                              } catch (err) {
-                                tags = [];
-                              }
-                              return (
-                                <div style={{ display: "flex", gap: "4px" }}>
-                                  {tags.map((tag, i) => (
-                                    <span
-                                      key={i}
-                                      style={{
-                                        backgroundColor: "#FFC107",
-                                        color: "#000",
-                                        padding: "2px 6px",
-                                        borderRadius: "12px",
-                                        fontSize: "11px",
-                                        whiteSpace: "nowrap",
-                                      }}
-                                    >
-                                      {tag}
-                                    </span>
-                                  ))}
-                                </div>
-                              );
-                            })()
-                          ) : (
-                            item[header]
-                          )}
-                        </div>
-                      </td>
-                    ))}
+                   {processedHeaders.map((col) => (
+  <td key={col.key} className={style.fixedTd}>
+    <div
+      className="cell-content"
+      style={{
+        cursor: "pointer",
+        fontWeight: "400",
+        overflow: "auto",
+        whiteSpace: "nowrap",
+        padding: "0px 5px",
+        fontSize: "12px",
+        fontFamily: "roboto",
+        scrollbarWidth: "none",
+        msOverflowStyle: "none",
+      }}
+      title={item[col.key]}
+    >
+      {col.key === "socialmedia_hashtags" ? (
+        (() => {
+          let tags = [];
+          try {
+            tags = JSON.parse(item[col.key]?.replace(/'/g, '"') || "[]");
+          } catch (err) {
+            tags = [];
+          }
+          return (
+            <div style={{ display: "flex", gap: "4px" }}>
+              {tags.map((tag, i) => (
+                <span
+                  key={i}
+                  style={{
+                    backgroundColor: "#FFC107",
+                    color: "#000",
+                    padding: "2px 6px",
+                    borderRadius: "12px",
+                    fontSize: "11px",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          );
+        })()
+      ) : (
+        item[col.key]
+      )}
+    </div>
+  </td>
+))}
+
                   </tr>
                 ))}
               </tbody>
