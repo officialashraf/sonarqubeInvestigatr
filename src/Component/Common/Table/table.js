@@ -139,7 +139,7 @@ const TableModal = ({ columns = [], title, data = [], onAddClick, searchPlacehol
                   {columns.map((col) => (
                     <td key={col.key}>
                       {col.render ? (
-                        `${idPrefix}${String(row[col.key]).padStart(4, "0")}`
+                        col.render(row[col.key], row)
                       ) : editable && col.key === "group_name" ? (
                         <DropdownField
                           source="Select Group"

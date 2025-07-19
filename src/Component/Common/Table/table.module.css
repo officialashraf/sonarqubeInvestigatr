@@ -109,6 +109,10 @@ gap: -1rem;
     padding: 0.5rem;
   }
 } */
+.css-qve9l1-MuiInputBase-input-MuiOutlinedInput-input {
+ padding: 0px !important;
+}
+
 
 .tableContainer {
   padding: 20px;

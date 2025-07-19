@@ -382,9 +382,9 @@ const RecentCriteria = () => {
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                 <div style={{ display: "flex", alignItems: "center" }}>
                   <AccessTimeIcon style={{ color: 'var(--color-colors-primaryAccent)' }} />
-                  <label style={{ marginLeft: '5px' }}>Recent</label>
+                  <label style={{ marginLeft: '5px', fontSize: "18px" }}>Recent</label>
                 </div>
-                <label style={{ marginLeft: 'auto', cursor: 'pointer' }} onClick={handleReset}>Clear Recent</label>
+                <label style={{ marginLeft: 'auto', cursor: 'pointer', fontSize: "18px" }} onClick={handleReset}>Clear Recent</label>
               </div>
 
               <div className="chips-container">
@@ -403,7 +403,7 @@ const RecentCriteria = () => {
             <div style={{ height: '300px', overflow: 'auto' }}>
               <div style={{ display: "flex", alignItems: "center" }}>
                 <SaveIcon style={{ color: 'var(--color-colors-primaryAccent)' }} />
-                <label style={{ marginLeft: '5px' }}>Saved Search</label>
+                <label style={{ marginLeft: '5px', fontSize: "16px" }}>Saved Search</label>
               </div>
 
               <List className="bg-gray">
@@ -427,7 +427,7 @@ const RecentCriteria = () => {
                       </ListItemSecondaryAction>
                     </ListItem>
                   ))) : (
-                  <p className="text-gray-400">No matched keyword</p>
+                  <p className="text-gray-400" style={{ display: 'flex' , justifyContent: 'center', fontSize: '18px'}}>No matched keyword</p>
                 )}
               </List>
 
