@@ -2,12 +2,13 @@ const customSelectStyles = {
     control: (provided, state) => ({
         ...provided,
         backgroundColor: 'var(--color-colors-secondary)',
-        border: 'none',
+        border: 'none !important',
         color: 'var(--color-colors-neutralText)',
         minHeight: '38px',
         borderRadius: '15px',
         boxShadow: 'none',
         width: '100%',
+        paddingTop: '5px'
        
     }),
 

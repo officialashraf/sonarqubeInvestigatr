@@ -185,14 +185,14 @@ const Resources = () => {
                       <img
                         src={
                           resource.unified_record_type === "rss feed"
-                            ? (resource.socialmedia_from_imageurl || resource.socialmedia_media_url || "/images/rss.jpg")
+                            ? resource.socialmedia_from_imageurl || resource.socialmedia_media_url || "/images/rss.jpg"
                             : resource.unified_record_type === "X"
-                              ? (resource.socialmedia_from_imageurl || resource.socialmedia_media_url || "/images/X_logo.jpg")
+                              ? resource.socialmedia_from_imageurl || resource.socialmedia_media_url || "/images/X_logo.jpg"
                               : resource.unified_record_type === "Facebook"
-                                ? (resource.socialmedia_from_imageurl || resource.socialmedia_media_url || "/images/Facebook_logo.png")
+                                ? resource.socialmedia_from_imageurl || resource.socialmedia_media_url || "/images/Facebook_logo.png"
                                 : resource.unified_record_type === "YouTube"
-                                  ? (resource.socialmedia_from_imageurl || resource.socialmedia_media_url || "/images/YouTube-jpg.jpg")
-                                  : (resource.socialmedia_from_imageurl || resource.socialmedia_media_url || "/images/placeholder-square.png")
+                                  ? resource.socialmedia_from_imageurl || resource.socialmedia_media_url || "/images/Youtube_image.png"
+                                  : resource.socialmedia_from_imageurl || resource.socialmedia_media_url || "/images/placeholder-square.png"
                         }
                         onError={(e) => {
                           e.target.onerror = null; // prevents infinite loop
