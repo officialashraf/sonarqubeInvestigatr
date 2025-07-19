@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { MdAdminPanelSettings } from "react-icons/md";
 import { FaUsersBetweenLines } from "react-icons/fa6";
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
+import  styles from '../Home/card.module.css';
 
 const UserDashboard = () => {
   const navigate = useNavigate();
@@ -45,7 +46,7 @@ const UserDashboard = () => {
                   <MoreVertIcon />
                 </IconButton>
               </div>
-              <div className="form-check">
+              <div className={styles.customIconCircle}>
                 <IconButton size="small" sx={{ color: "white" }}>
                   {index === 0 && <FaUsersBetweenLines />}
                   {index === 1 && <MdAdminPanelSettings />}
@@ -53,7 +54,7 @@ const UserDashboard = () => {
                   {index === 3 && <AutoAwesomeIcon/>}
                 </IconButton>
               </div>
-              <Typography variant="subtitle1">
+              <Typography variant="subtitle1" sx={{ color: "#0073cf" }}>
                 {data.title}
               </Typography>
               {data.subtitle &&

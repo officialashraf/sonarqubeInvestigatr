@@ -300,7 +300,7 @@ const handleSearch = async (e) => {
           <h5>Create Criteria</h5>
           <form onSubmit={handleSearch} >
             {/* Search Bar with Icons */}
-            <label>Search Keywords</label>
+            <label style={{ fontSize: '14px'}}>Search Keywords</label>
             <TextField
               fullWidth
               className={styles.searchBar}
@@ -415,7 +415,7 @@ const handleSearch = async (e) => {
             />
 
             {/* Location Fields */}
-            <label>Focus your search on a particular location or area</label>
+            <label style={{ fontSize: '14px' }}>Focus your search on a particular location or area</label>
             <div style={{ display: 'flex', justifyContent: 'space-evenly', color: 'white' }}>
               <CommonTextInput
                 name="latitude"

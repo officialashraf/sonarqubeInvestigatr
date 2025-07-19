@@ -253,7 +253,21 @@ const DataTable = () => {
     { key: "watchers",      label: "Watchers",   },
     { key: "modified_on", label: "Edited On" },
     { key: "modified_by", label: "Edited By" },
-    { key: "status", label: "Status", render: (val) => <span className="badge bg-dark">{val}</span> }
+    { key: "status", label: "Status"
+      , render: (val) => (
+      <span
+        style={{
+          backgroundColor: "#FFC107",
+          color: "#000",
+          padding: "2px 6px",
+          borderRadius: "12px",
+          fontSize: "11px",
+          whiteSpace: "nowrap",
+        }}
+      >
+      {val}
+      </span>
+    ) }
   ];
 
 
@@ -567,7 +581,7 @@ const DataTable = () => {
             onRowClick={(row) => {
               dispatch(setCaseData(row));
               console.log('Row clicked:', row);
-              const caseId = row.id // 👀 Check this!
+              const caseId = row.id 
               navigate(`/cases/${caseId}`);
             }}
             enableRowClick={true}

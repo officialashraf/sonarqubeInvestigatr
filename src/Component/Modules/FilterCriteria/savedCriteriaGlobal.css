@@ -65,6 +65,7 @@
   align-items: center;
   flex-wrap: wrap;
   background: #0A192F;
+  padding: 5px 0px 5px 0px;
 }
 
 .chips-container {

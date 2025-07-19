@@ -173,64 +173,68 @@ const ReportPage = () => {
   return (
     <div style={{ backgroundColor: '#080E17', color: 'white' }}>
       <h5 style={{ marginBottom: '20px' }}>Search Report</h5>
-      <form onSubmit={handleSearch} style={{ display: 'flex', gap: '10px'}}>
-        <div className={styles.searchBarContainer}>
-          <input
-            className={styles.searchBar}
-            name="searchQuery"
-            placeholder="Search..."
-            value={formData.searchQuery}
-            onChange={handleInputChange}
+      <form onSubmit={handleSearch} style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+        <div style={{ display: 'flex', flex: 1, gap: '10px' }}>
+          <div className={styles.searchBarContainer}
+           style={{ flex: 1, display: 'flex', alignItems: 'center', backgroundColor: '#101d2b', borderRadius: '15px', paddingLeft: '10px' }}
+           >
+            <input
+              className={styles.searchBar}
+              name="searchQuery"
+              placeholder="Search..."
+              value={formData.searchQuery}
+              onChange={handleInputChange}
+              style={{ flex: 1, backgroundColor: '#101d2b', border: 'none', color: 'white', height: '38px', borderRadius: '15px' }}
+            />
+            <Search style={{ color: '#0073CF', cursor: 'pointer' }} onClick= {handleSearch}/>
+          </div>
+          <div style={{ flex: 1 }}>
+            <Select
+              className={styles.reactSelectContainer}
+              isMulti
+              options={caseOptions}
+              value={formData.caseIds}
+              onChange={handleCaseChange}
+              placeholder="Select Cases"
+              styles={{
+                ...customSelectStyles,
+                control: (base) => ({
+                  ...base,
+                  backgroundColor: '#101d2b',
+                  borderRadius: '15px',
+                  height: '38px',
+                  minHeight: '38px',
+                  border: 'none',
+                }),
+                menuPortal: base => ({ ...base, zIndex: 9999 }),
+              }}
+              menuPortalTarget={document.body}
+              menuShouldBlockScroll={true}
+            />
+          </div>
+          <TextField
+            placeholder="Date Select"
+            value={
+              selectedDates.startDate && selectedDates.endDate
+                ? `${formatDate(selectedDates.startDate)} to ${formatDate(selectedDates.endDate)}`
+                : formatDate(selectedDates.startDate || selectedDates.endDate)
+            }
+            onClick={togglePopupD}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <CalendarToday style={{ cursor: 'pointer', color: '#0073CF' }} />
+                </InputAdornment>
+              ),
+              readOnly: true,
+              style: { height: '38px', color: 'white', backgroundColor: '#101d2b', borderRadius: '15px', border: 'none' }
+            }}
+            style={{ flex: 1 }}
           />
-          <Search style={{ color: '#0073CF', cursor: 'pointer' }} />
         </div>
-        <div style={{ display: 'flex', flexWrap: 'nowrap', alignItems: 'center', gap: '10px' , minWidth: '200ox'}}>
-          <Select
-          className={styles.reactSelectContainer}
-            isMulti
-            options={caseOptions}
-            value={formData.caseIds}
-            onChange={handleCaseChange}
-            placeholder="Select Cases"
-            styles={customSelectStyles}
-            menuPortalTarget={document.body}
-            menuShouldBlockScroll={true}
-          />
-        </div>
-        <TextField
-          placeholder="Date Select"
-          value={
-            selectedDates.startDate && selectedDates.endDate
-              ? `${formatDate(selectedDates.startDate)} to ${formatDate(selectedDates.endDate)}`
-              : formatDate(selectedDates.startDate || selectedDates.endDate)
-          }
-          onClick={togglePopupD}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <CalendarToday style={{ cursor: 'pointer', color: '#0073CF' }} />
-              </InputAdornment>
-            ),
-            readOnly: true,
-            style: { height: '38px', color: 'white', backgroundColor: '#101d2b', borderRadius: '15px' }
-          }}
-        />
-        {/* <SearchBarDateSelect
-          searchValue={formData.searchQuery}
-          onSearchChange={handleInputChange}
-          onSearchIconClick={() => console.log('Search icon clicked')}
-          selectValue={formData.caseIds}
-          selectOptions={caseOptions}
-          onSelectChange={handleCaseChange}
-          dateValue={
-            selectedDates.startDate && selectedDates.endDate
-              ? `${formatDate(selectedDates.startDate)} to ${formatDate(selectedDates.endDate)}`
-              : formatDate(selectedDates.startDate || selectedDates.endDate)
-          }
-          onDateClick={togglePopupD}
-        /> */}
         <AddButton
           type="submit"
+          style={{ flexShrink: 0, backgroundColor: '#0073CF', color: 'white', height: '38px', borderRadius: '15px', padding: '0 20px' }}
         >
           Search
         </AddButton>
