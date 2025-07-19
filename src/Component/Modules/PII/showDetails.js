@@ -70,7 +70,8 @@ const ShowDetails = () => {
   };
   const options = [
     { value: 'phone number', label: <span style={{ color: '#d2d2d2' }}>Phone</span> },
-    { value: 'email', label: <span style={{ color: '#d2d2d2' }}>Email</span> }
+    { value: 'email', label: <span style={{ color: '#d2d2d2' }}>Email</span> },
+     { value: 'social', label: <span style={{ color: '#d2d2d2' }}>Social Media</span> }
   ];
 
   return (

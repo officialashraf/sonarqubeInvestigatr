@@ -77,3 +77,11 @@
   box-shadow: none !important;
   text-decoration: none !important;
 }
+.groupTh {
+  background-color: transparent;
+  font-weight: bold;
+  text-align: center;
+  font-size: 13px;
+  padding: 8px;
+  border-bottom: 1px solid #ccc;
+}

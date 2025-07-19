@@ -18,16 +18,16 @@ const Header = ({ title }) =>
     p={0}
     sx={{ mt: 0, mb: 0, height: "20px" }}
     className={styles.graphCards}
+    style={{margin:'0px 0px 10px 15px'}}
   >
     <p style={{ color: "white",fontSize:"16px", paddingLeft: "5px"}}>
       {title}
     </p>
-
-  </Grid>;
+</Grid>;
 
 const ComponentOne = () => (
   <>
-     <Header title="Timeline" />
+     <Header title="Timeline"  />
   <Card sx={{ height: "300px", backgroundColor: "#101D2B", borderRadius:'25px' }}>
     <CardContent>
       <LineGrapgh />

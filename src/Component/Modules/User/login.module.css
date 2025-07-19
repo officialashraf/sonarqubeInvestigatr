@@ -178,7 +178,7 @@ img {
   text-decoration: underline;
 }
 .logoCenter {
-  width: 400px;
+  width: 300px;
   object-fit: contain;
   display: block;
   margin: 0 auto; /* Centers the logo horizontally */

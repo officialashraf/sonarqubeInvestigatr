@@ -21,7 +21,7 @@ const EditCase = ({ togglePopup, item }) => {
     assignee: item.assignee || "",
     comment: item.comment || "",
   });
-
+console.log("editCase", item)
   const [users, setUsers] = useState({ data: [] });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState({});
@@ -120,7 +120,14 @@ const EditCase = ({ togglePopup, item }) => {
       }
     });
 
-    const originalWatchers = Array.isArray(item.watchers) ? item.watchers : [];
+    const originalWatchers = Array.isArray(item.watchers)
+  ? item.watchers.map(watcher => {
+      if (typeof watcher === 'number') return watcher; // Already an ID
+      const user = users.data.find(u => u.username === watcher);
+      return user ? user.id : watcher;
+    })
+  : [];
+
     const areWatchersDifferent = JSON.stringify([...formData.watchers].sort()) !== JSON.stringify([...originalWatchers].sort());
 
     // Always send watchers if changed, even if empty array to remove watchers
