@@ -121,7 +121,7 @@ const TabulerData = () => {
             <Table hover className={styles.table}>
               <thead>
                 {/* Group Headers */}
-                <tr>
+                {/* <tr>
                   {(() => {
                     const groupMap = {};
                     processedHeaders.forEach((col) => {
@@ -152,7 +152,7 @@ const TabulerData = () => {
                       return null;
                     });
                   })()}
-                </tr>
+                </tr> */}
 
                 {/* Column Headers */}
                 <tr>
@@ -162,21 +162,14 @@ const TabulerData = () => {
                       <th
                         key={col.key}
                         className={style.fixedTh}
-                       
                       >
-                       <div
-    style={{
-      backgroundColor: getGroupColor(col.groupName),
-      color: "#fff",
-      fontWeight: "bold",
-      textTransform: "uppercase",
-      fontSize: "12px",
-      textAlign: "center",
-      padding: "6px"
-    }}
-  >
-    {col.displayName}
-  </div>
+                        <div
+                          style={{
+                          color: getGroupColor(col.groupName),
+                          }}
+                        >
+                          {col.displayName}
+                        </div>
                       </th>
                     ))}
                 </tr>
@@ -286,7 +279,7 @@ const TabulerData = () => {
         >
           {Object.entries(groupColors).map(([group, color]) => (
             <div key={group} style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              <div style={{ width: "14px", height: "14px", backgroundColor: color, borderRadius: "3px", border: "1px solid #999" }} />
+              <div style={{ width: "14px", height: "14px", backgroundColor: color, borderRadius: "50%", border: "1px solid #999" }} />
               <span style={{ fontSize: "12px" }}>{group}</span>
             </div>
           ))}
@@ -298,7 +291,7 @@ const TabulerData = () => {
 
 export default TabulerData;
 
-  
+
 //   return (
 //     <>
 //       <div
