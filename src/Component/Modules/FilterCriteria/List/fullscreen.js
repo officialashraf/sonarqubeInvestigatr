@@ -224,7 +224,7 @@ const SearchResults = () => {
               endAdornment: (
                 <InputAdornment position="end">
 
-                  <SendIcon style={{ cursor: 'pointer', color: '#0073CF',marginRight:'5px' }} onClick={handleSearch} />
+                  <SendIcon style={{ cursor: 'pointer', color: '#0073CF', marginRight: '5px' }} onClick={handleSearch} />
                   <TuneIcon onClick={openPopup} style={{ cursor: 'pointer', backgroundColor: "#0073CF", color: '#0A192F' }} /> {/* New Card List Filter Icon */}
 
                 </InputAdornment>
@@ -249,21 +249,20 @@ const SearchResults = () => {
             <AppButton children={"Reset"} onClick={resetSearch} />
           </div>
         </div>
-        <div>
-          <PieChart sx={{ fontSize: 40 }}
-            className={`${styles.icon} ${activeComponent === "graph" ? styles.activeIcon : ""
-              }`}
+        <div style={{ display: "flex", gap: "20px", alignItems: "center" }}>
+          <PieChart
+            sx={{ fontSize: 40 }}
+            className={`${styles.icon} ${activeComponent === "graph" ? styles.activeIcon : ""}`}
             onClick={() => handleComponentToggle("graph")}
           />
-          <FaPhotoVideo sx={{ fontSize: 40 }}
+          <FaPhotoVideo
+            sx={{ fontSize: 40 }}
             className={`${styles.icon} ${activeComponent === "photoVideo" ? styles.activeIcon : ""}`}
             onClick={() => handleComponentToggle("photoVideo")}
           />
-          <ListAltOutlined sx={{
-            fontSize: 40
-          }}
-            className={`${styles.icon} ${activeComponent === "list" ? styles.activeIcon : ""
-              }`}
+          <ListAltOutlined
+            sx={{ fontSize: 40 }}
+            className={`${styles.icon} ${activeComponent === "list" ? styles.activeIcon : ""}`}
             onClick={() => handleComponentToggle("list")}
           />
         </div>

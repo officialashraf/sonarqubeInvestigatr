@@ -83,12 +83,32 @@ const TableModal = ({ columns = [], title, data = [], onAddClick, searchPlacehol
         String(row[col.key] || "").toLowerCase().includes(searchTerm.toLowerCase())
       )
     )
-    .sort((a, b) => {
-      if (!sortConfig.key) return 0;
-      const aVal = (a[sortConfig.key] || "").toString().toLowerCase();
-      const bVal = (b[sortConfig.key] || "").toString().toLowerCase();
-      return sortConfig.direction === "asc" ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
-    });
+ .sort((a, b) => {
+  if (!sortConfig.key) return 0;
+
+  const aRaw = a[sortConfig.key] || "";
+  const bRaw = b[sortConfig.key] || "";
+
+  const extractNumber = (val) => {
+    const str = String(val);
+    const match = str.match(/\d+/);
+    return match ? parseInt(match[0], 10) : 0;
+  };
+
+  if (sortConfig.key.toLowerCase() === "id") {
+    const aNum = extractNumber(aRaw);
+    const bNum = extractNumber(bRaw);
+    return sortConfig.direction === "asc" ? aNum - bNum : bNum - aNum;
+  }
+
+  const aVal = String(aRaw).toLowerCase();
+  const bVal = String(bRaw).toLowerCase();
+  return sortConfig.direction === "asc"
+    ? aVal.localeCompare(bVal)
+    : bVal.localeCompare(aVal);
+});
+
+
 
   return (
     <>
@@ -111,7 +131,10 @@ const TableModal = ({ columns = [], title, data = [], onAddClick, searchPlacehol
         </div>
 
 
-        <AppButton onClick={() => onAddClick && onAddClick()} children={btnTitle} />
+        {title !== 'Catalogue Dashboard' && (
+  <AppButton onClick={() => onAddClick && onAddClick()} children={btnTitle} />
+)}
+
       </div>
       <div className={styles.tableContainer}>
         <div className={styles.tableWrapper}>

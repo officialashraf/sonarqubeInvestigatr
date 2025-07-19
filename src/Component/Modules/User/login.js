@@ -11,6 +11,7 @@ import { Eye, EyeSlash } from 'react-bootstrap-icons';
 import { jwtDecode } from "jwt-decode";
 import { useAutoFocusWithManualAutofill } from '../../../utils/autoFocus';
 import AppButton from '../../Common/Buttton/button';
+import Logo from '../../Assets/Images/ProforceLogo.png'
 
 const LoginPage = () => {
     const navigate = useNavigate();
@@ -202,14 +203,14 @@ const LoginPage = () => {
 
         <Container fluid className={style.loginContainer}>
             {/* Logo Section (Centered) */}
-            <Row className="justify-content-center">
+            <Row className="justify-content-center" style={{marginTop:'2rem'}}>
                 <img
-                    src="/images/investigatr.png"
-                    alt="Investigatr"
+                    src={Logo}
+                    alt="Proforce Logo"
                     className={style.logoCenter} /* Use the CSS class */
                 />
             </Row>
-            <h1>Your Gateway to Actionable Intelligence</h1>
+            <h1>A Secure and Unified OSINT Platform for Nigeria</h1>
             {/* Main Content Section (Left and Right Content) */}
             <Row className="justify-content-center">
                 <Col >
@@ -276,7 +277,7 @@ const LoginPage = () => {
                     </Form>
                 </Col>
             </Row>
-            <h1>Secure. Scalable. Built for law enforcement.</h1>
+            <h4> Proudly developed by Proforce</h4>
         </Container>
     );
 }
