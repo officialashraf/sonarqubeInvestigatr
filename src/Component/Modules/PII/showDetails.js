@@ -119,7 +119,7 @@ const ShowDetails = () => {
           />
           {searchType === "phone number" ? (
             <PhoneInput
-              country={"in"}
+              country={"ng"}
               value={query}
               onChange={(value) => setQuery(value)}
               enableSearch={true}
