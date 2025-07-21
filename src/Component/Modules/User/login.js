@@ -21,25 +21,25 @@ const LoginPage = () => {
     const { inputRef, isReadOnly, handleFocus } = useAutoFocusWithManualAutofill();
 
 
-     const [loginData, setLoginData] = useState(null);
+    //  const [loginData, setLoginData] = useState(null);
 
-  useEffect(() => {
-    // Fetch login UI config
-    fetch("/login-text.json", { cache: "no-cache" })
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to load login-text.json");
-        return res.json();
-      })
-      .then((data) => setLoginData(data))
-      .catch((err) => {
-        console.error(err);
-        // Fallback config
-        setLoginData({
-          loginText: "Default Login",
-          logoUrl: "/default-logo.png",
-        });
-      });
-  }, []);
+//   useEffect(() => {
+//     // Fetch login UI config
+//     fetch("/login-text.json", { cache: "no-cache" })
+//       .then((res) => {
+//         if (!res.ok) throw new Error("Failed to load login-text.json");
+//         return res.json();
+//       })
+//       .then((data) => setLoginData(data))
+//       .catch((err) => {
+//         console.error(err);
+//         // Fallback config
+//         setLoginData({
+//           loginText: "Default Login",
+//           logoUrl: "/default-logo.png",
+//         });
+//       });
+//   }, []);
 
     const validateForm = () => {
         const errors = {};
@@ -125,7 +125,7 @@ const LoginPage = () => {
         }
     };
 
-     if (!loginData) return <div>Loading...</div>;
+    //  if (!loginData) return <div>Loading...</div>;
     return (
         //         <Container fluid className={style.loginContainer}>
         //             <Row className="justify-content-center pt-4">
@@ -227,13 +227,13 @@ const LoginPage = () => {
             {/* Logo Section (Centered) */}
             <Row className="justify-content-center" style={{marginTop:'2rem'}}>
                 <img
-                   src={loginData.logoUrl}
+                   src={Logo}
                     alt="Proforce Logo"
                     className={style.logoCenter} /* Use the CSS class */
                 />
                
             </Row>
-            <h1>{loginData.loginTextHeader}</h1>
+            <h1>A secure OSINT platform for Nigeria</h1>
             {/* Main Content Section (Left and Right Content) */}
             <Row className="justify-content-center">
                 <Col >
@@ -295,12 +295,10 @@ const LoginPage = () => {
                         <div className="d-flex justify-content-end mt-3">
                             <AppButton children={"Login to Begin Your Investigation"} />
                         </div>
-
-                      
                     </Form>
                 </Col>
             </Row>
-           <h1>{loginData.loginTextFooter}</h1>
+           <h1> Proudly developed by Proforce</h1>
         </Container>
     );
 }
