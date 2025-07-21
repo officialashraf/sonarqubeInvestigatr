@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { Container, Row, Col, Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -19,6 +19,27 @@ const LoginPage = () => {
     const [error, setError] = useState({});
     const [showPassword, setShowPassword] = useState(false);
     const { inputRef, isReadOnly, handleFocus } = useAutoFocusWithManualAutofill();
+
+
+     const [loginData, setLoginData] = useState(null);
+
+  useEffect(() => {
+    // Fetch login UI config
+    fetch("/login-text.json", { cache: "no-cache" })
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to load login-text.json");
+        return res.json();
+      })
+      .then((data) => setLoginData(data))
+      .catch((err) => {
+        console.error(err);
+        // Fallback config
+        setLoginData({
+          loginText: "Default Login",
+          logoUrl: "/default-logo.png",
+        });
+      });
+  }, []);
 
     const validateForm = () => {
         const errors = {};
@@ -104,6 +125,7 @@ const LoginPage = () => {
         }
     };
 
+     if (!loginData) return <div>Loading...</div>;
     return (
         //         <Container fluid className={style.loginContainer}>
         //             <Row className="justify-content-center pt-4">
@@ -205,12 +227,13 @@ const LoginPage = () => {
             {/* Logo Section (Centered) */}
             <Row className="justify-content-center" style={{marginTop:'2rem'}}>
                 <img
-                    src={Logo}
+                   src={loginData.logoUrl}
                     alt="Proforce Logo"
                     className={style.logoCenter} /* Use the CSS class */
                 />
+               
             </Row>
-            <h1>A Secure and Unified OSINT Platform for Nigeria</h1>
+            <h1>{loginData.loginTextHeader}</h1>
             {/* Main Content Section (Left and Right Content) */}
             <Row className="justify-content-center">
                 <Col >
@@ -277,7 +300,7 @@ const LoginPage = () => {
                     </Form>
                 </Col>
             </Row>
-            <h4> Proudly developed by Proforce</h4>
+           <h1>{loginData.loginTextFooter}</h1>
         </Container>
     );
 }
