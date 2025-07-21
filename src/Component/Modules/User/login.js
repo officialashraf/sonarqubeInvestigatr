@@ -12,6 +12,7 @@ import { jwtDecode } from "jwt-decode";
 import { useAutoFocusWithManualAutofill } from '../../../utils/autoFocus';
 import AppButton from '../../Common/Buttton/button';
 import Logo from '../../Assets/Images/ProforceLogo.png'
+import investigatrLogo from '../../Assets/Images/investigatr.png'; // Assuming this is the logo you want to use
 
 const LoginPage = () => {
     const navigate = useNavigate();
@@ -210,7 +211,8 @@ const LoginPage = () => {
                     className={style.logoCenter} /* Use the CSS class */
                 />
             </Row>
-            <h1>A Secure and Unified OSINT Platform for Nigeria</h1>
+            {/* <h1>Your Gateway to Actionable Intelligence</h1> */}
+            <h1>A Secure and Unified OSINT Platform for Africa</h1>
             {/* Main Content Section (Left and Right Content) */}
             <Row className="justify-content-center">
                 <Col >
@@ -277,6 +279,7 @@ const LoginPage = () => {
                     </Form>
                 </Col>
             </Row>
+            {/* <h4>Secure. Scalable. Built for law Enforcement</h4> */}
             <h4> Proudly developed by Proforce</h4>
         </Container>
     );

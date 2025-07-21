@@ -17,6 +17,11 @@ import { PinAngle, ChatLeftText } from 'react-bootstrap-icons';
 import AddComment from '../Comment/AddComment';
 import { fetchSummaryData } from "../../../Redux/Action/filterAction";
 import AppButton from "../../Common/Buttton/button"
+import YoutubeLogo from '../../Assets/Images/youtube_image.png'
+import Instagram from "../../Assets/Images/Instagram.png"
+import X_logo from "../../Assets/Images/X_logo.jpg";
+import Facebook_logo from "../../Assets/Images/Facebook_logo.png";
+import rss from "../../Assets/Images/rss.jpg";
 
 const Resources = () => {
 
@@ -185,13 +190,15 @@ const Resources = () => {
                       <img
                         src={
                           resource.unified_record_type === "rss feed"
-                            ? resource.socialmedia_from_imageurl || resource.socialmedia_media_url || "/images/rss.jpg"
+                            ? resource.socialmedia_from_imageurl || resource.socialmedia_media_url || rss.jpg
                             : resource.unified_record_type === "X"
-                              ? resource.socialmedia_from_imageurl || resource.socialmedia_media_url || "/images/X_logo.jpg"
+                              ? resource.socialmedia_from_imageurl || resource.socialmedia_media_url || X_logo
                               : resource.unified_record_type === "Facebook"
-                                ? resource.socialmedia_from_imageurl || resource.socialmedia_media_url || "/images/Facebook_logo.png"
-                                : resource.unified_record_type === "YouTube"
-                                  ? resource.socialmedia_from_imageurl || resource.socialmedia_media_url || "/images/Youtube_image.png"
+                                ? resource.socialmedia_from_imageurl || resource.socialmedia_media_url || Facebook_logo
+                              : resource.unified_record_type === "YouTube"
+                                ? resource.socialmedia_from_imageurl || resource.socialmedia_media_url || YoutubeLogo
+                              : resource.unified_record_type === "Instagram"
+                                  ? resource.socialmedia_from_imageurl || resource.socialmedia_media_url || Instagram
                                   : resource.socialmedia_from_imageurl || resource.socialmedia_media_url || "/images/placeholder-square.png"
                         }
                         onError={(e) => {
