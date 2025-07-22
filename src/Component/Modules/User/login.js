@@ -24,23 +24,17 @@ const LoginPage = () => {
 
      const [loginData, setLoginData] = useState(null);
 
-  useEffect(() => {
-    // Fetch login UI config
-    fetch("/login-text.json", { cache: "no-cache" })
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to load login-text.json");
-        return res.json();
-      })
-      .then((data) => setLoginData(data))
-      .catch((err) => {
-        console.error(err);
-        // Fallback config
-        setLoginData({
-          loginText: "Default Login",
+useEffect(() => {
+  fetch('/login-text.json', { cache: "no-store" })
+    .then((res) => res.json())
+    .then((data) => {
+       setLoginData({
+          loginTextHeader: (data.loginTextHeader),
+              loginTextFooter: (data.loginTextFooter),
           logoUrl: "/default-logo.png",
         });
-      });
-  }, []);
+    });
+}, []);
 
     const validateForm = () => {
         const errors = {};
@@ -128,102 +122,7 @@ const LoginPage = () => {
 
     //  if (!loginData) return <div>Loading...</div>;
     return (
-        //         <Container fluid className={style.loginContainer}>
-        //             <Row className="justify-content-center pt-4">
-        //                 {/* Logo (Centered) */}
-        //                 <img
-        //                     src="/images/investigatr.jpg"
-        //                     alt="Invetigatr"
-        //                     style={{ width: '400px', objectFit: 'contain' }}
-        //                 />
-        //             </Row>
-
-        //             <Row className="justify-content-center">
-        //                 <h1 style={{ fontSize: '54px', textAlign: 'center', marginTop: '1rem' }}>
-        //                     Your Gateway to Actionable Intelligence
-        //                 </h1>
-        //             </Row>
-
-        //             <Row className={style.loginRow}>
-        //                 {/* Left Column */}
-        //                 <Col md={6} className={style.leftColumn}>
-        //                     <p style={{ fontSize: '18px', lineHeight: '1.8', marginTop: '50px', marginLeft: '90px', paddingLeft: '50px' }}>
-        //                         A unified platform for OSINT, telecom data, IPDR, and social media insights — built to help you solve cases faster.<br /><br />
-        //                         • Connect data.<br />
-        //                         • Uncover patterns.<br />
-        //                         • Gain real-time intelligence.<br />
-        //                         • Close cases with confidence.<br /><br />
-
-        //                     </p>
-        //                 </Col>
-
-        //                 {/* Right Column (Login Form) */}
-        //                 <Col md={6} className={style.rightColumn}>
-        //                     <Form className={style.loginForm} onSubmit={handleLogin} noValidate>
-        //                         <InputField
-        //                             label="Username *"
-        //                             type="text"
-        //                             ref={inputRef}
-        //                             value={formData.username}
-        //                             onChange={handleChange}
-        //                             placeholder="Enter your username"
-        //                             autoComplete="user-name"
-        //                             name="username"
-        //                             autoFocus
-        //                             readOnly={isReadOnly}
-        //                             onFocus={handleFocus}
-        //                             error={!!error.username}
-        //                         />
-        //                         {error.username && <p style={{ color: "red" }}>{error.username}</p>}
-
-        //                         <div style={{ position: 'relative', justifyContent: 'center' }}>
-        //                             <InputField
-        //                                 label="Password *"
-        //                                 type={showPassword ? "text" : "password"}
-        //                                 value={formData.password}
-        //                                 onChange={handleChange}
-        //                                 placeholder="Enter your password"
-        //                                 autoComplete="current-password"
-        //                                 name="password"
-        //                                 error={!!error.password}
-        //                             />
-        //                             <span
-        //                                 onClick={() => setShowPassword(!showPassword)}
-        //                                 style={{
-        //                                     position: 'absolute',
-        //                                     right: '10px',
-        //                                     top: '40%',
-        //                                     cursor: 'pointer',
-        //                                     userSelect: 'none',
-        //                                     color: 'white',
-        //                                 }}
-        //                                 aria-label={showPassword ? "Hide password" : "Show password"}
-        //                                 role="button"
-        //                                 tabIndex={0}
-        //                                 onKeyDown={(e) => {
-        //                                     if (e.key === 'Enter' || e.key === ' ') {
-        //                                         e.preventDefault();
-        //                                         setShowPassword(!showPassword);
-        //                                     }
-        //                                 }}
-        //                             >
-        //                                 {showPassword ? <Eye size={20} /> : <EyeSlash size={20} />}
-        //                             </span>
-        //                         </div>
-        //                         {error.password && <p style={{ color: "red" }}>{error.password}</p>}
-
-        //                         <div className="d-flex justify-content-end mt-2">
-        //                             <AppButton children={"Login to Begin Your Investigation"} />
-        //                         </div>
-        //                     </Form>
-        //                 </Col>
-        //                 <strong>Secure. Scalable. Built for law enforcement.</strong>
-        //             </Row>
-        //         </Container>
-        //     );
-        // }
-        // export default LoginPage;      
-
+    
         <Container fluid className={style.loginContainer}>
             {/* Logo Section (Centered) */}
             <Row className="justify-content-center" style={{marginTop:'2rem'}}>
@@ -232,10 +131,9 @@ const LoginPage = () => {
                     alt="Proforce Logo"
                     className={style.logoCenter} /* Use the CSS class */
                 />
-               
             </Row>
 
-            <h1>{loginData.loginTextHeader}</h1>
+            <h1>{loginData?.loginTextHeader || "Default Login"}</h1>
 
             {/* <h1>Your Gateway to Actionable Intelligence</h1> */}
 
@@ -304,9 +202,7 @@ const LoginPage = () => {
                 </Col>
             </Row>
 
-           <h1> {loginData.loginTextFooter} </h1>
-
-
+           <h1>{loginData?.loginTextFooter || "Default Login"} </h1>
             {/* <h4>Secure. Scalable. Built for law Enforcement</h4> */}
 
         </Container>
