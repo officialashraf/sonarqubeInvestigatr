@@ -31,7 +31,7 @@ useEffect(() => {
        setLoginData({
           loginTextHeader: (data.loginTextHeader),
               loginTextFooter: (data.loginTextFooter),
-          logoUrl: "/default-logo.png",
+          logoUrl: (data.logoUrl),
         });
     });
 }, []);
@@ -127,7 +127,7 @@ useEffect(() => {
             {/* Logo Section (Centered) */}
             <Row className="justify-content-center" style={{marginTop:'2rem'}}>
                 <img
-                   src={Logo}
+                   src={loginData?.logoUrl || Logo}
                     alt="Proforce Logo"
                     className={style.logoCenter} /* Use the CSS class */
                 />
