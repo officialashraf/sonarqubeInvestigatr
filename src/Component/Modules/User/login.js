@@ -22,25 +22,25 @@ const LoginPage = () => {
     const { inputRef, isReadOnly, handleFocus } = useAutoFocusWithManualAutofill();
 
 
-    //  const [loginData, setLoginData] = useState(null);
+     const [loginData, setLoginData] = useState(null);
 
-//   useEffect(() => {
-//     // Fetch login UI config
-//     fetch("/login-text.json", { cache: "no-cache" })
-//       .then((res) => {
-//         if (!res.ok) throw new Error("Failed to load login-text.json");
-//         return res.json();
-//       })
-//       .then((data) => setLoginData(data))
-//       .catch((err) => {
-//         console.error(err);
-//         // Fallback config
-//         setLoginData({
-//           loginText: "Default Login",
-//           logoUrl: "/default-logo.png",
-//         });
-//       });
-//   }, []);
+  useEffect(() => {
+    // Fetch login UI config
+    fetch("/login-text.json", { cache: "no-cache" })
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to load login-text.json");
+        return res.json();
+      })
+      .then((data) => setLoginData(data))
+      .catch((err) => {
+        console.error(err);
+        // Fallback config
+        setLoginData({
+          loginText: "Default Login",
+          logoUrl: "/default-logo.png",
+        });
+      });
+  }, []);
 
     const validateForm = () => {
         const errors = {};
@@ -235,8 +235,10 @@ const LoginPage = () => {
                
             </Row>
 
+            <h1>{loginData.loginTextHeader}</h1>
+
             {/* <h1>Your Gateway to Actionable Intelligence</h1> */}
-            <h1>A Secure and Unified OSINT Platform for Africa</h1>
+
             {/* Main Content Section (Left and Right Content) */}
             <Row className="justify-content-center">
                 <Col >
@@ -302,8 +304,10 @@ const LoginPage = () => {
                 </Col>
             </Row>
 
+           <h1> {loginData.loginTextFooter} </h1>
+
+
             {/* <h4>Secure. Scalable. Built for law Enforcement</h4> */}
-            <h4> Proudly developed by Proforce</h4>
 
         </Container>
     );
