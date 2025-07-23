@@ -127,8 +127,8 @@ useEffect(() => {
             {/* Logo Section (Centered) */}
             <Row className="justify-content-center" style={{marginTop:'2rem'}}>
                 <img
-                   src={loginData?.logoUrl || Logo}
-                    alt="Proforce Logo"
+                   src={loginData?.logoUrl || "Logo" }
+                    alt="Investigatr Logo"
                     className={style.logoCenter} /* Use the CSS class */
                 />
             </Row>
