@@ -1,6 +1,6 @@
 
 import { configureStore } from '@reduxjs/toolkit'
-import { CaseFilterPayloadReducer, caseReducer, tabReducer } from './Reducers/caseReducer'
+import { caseReducer, tabReducer } from './Reducers/caseReducer'
 import { filterReducer, summaryDataReducer, taskFilterReducer } from './Reducers/filterReducer';
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage"; // Local Storage ke liye
@@ -30,8 +30,6 @@ const rootReducer = combineReducers({
   pii: searchReducer1,
   criteriaKeywords: criteriaReducer,
   report: reportReducer,
-  caseFilter: CaseFilterPayloadReducer,
-
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
