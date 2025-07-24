@@ -1,7 +1,7 @@
 import ReusablePieChart from '../../../Common/Charts/PieChrat/pieChart';
 import { useSelector } from 'react-redux';
 // import axios from 'axios';
-// import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 // import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 // import Cookies from "js-cookie";
 // import Loader from '../../Layout/loader';
@@ -9,7 +9,13 @@ import { useSelector } from 'react-redux';
 
 const SentimentPieChart = () => {
   const caseId = useSelector(state => state.caseData.caseData.id);
-  
+  const [shouldFetch, setShouldFetch] = useState(false);
+
+  useEffect(() => {
+    if (caseId) {
+      setShouldFetch(true);  // 🟢 you can trigger it only when you're ready
+    }
+  }, [caseId]);
   // const token = Cookies.get("accessToken");
   // const [loading, setLoading] = useState(true); // Add loading state
   // let [data, setData] = useState([]);
@@ -76,6 +82,7 @@ const SentimentPieChart = () => {
     <ReusablePieChart
       caseId={caseId}
       aggsFields={aggsFields}
+      shouldFetch={shouldFetch}
     />
   )
 };
