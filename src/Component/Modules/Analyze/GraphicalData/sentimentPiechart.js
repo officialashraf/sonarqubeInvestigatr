@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 
 const SentimentPieChart = () => {
   const caseId = useSelector(state => state.caseData.caseData.id);
+  
   // const token = Cookies.get("accessToken");
   // const [loading, setLoading] = useState(true); // Add loading state
   // let [data, setData] = useState([]);
@@ -70,13 +71,14 @@ const SentimentPieChart = () => {
   // if (loading) {
   //   return <Loader />
   // }
+  const aggsFields = ['sentiment'];
   return (
     <ReusablePieChart
       caseId={caseId}
-      aggsFields={["sentiment"]}
+      aggsFields={aggsFields}
     />
   )
 };
-
+SentimentPieChart.displayName = 'SentimentPieChart';
 export default SentimentPieChart;
 

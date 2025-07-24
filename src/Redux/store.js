@@ -14,8 +14,7 @@ import { userReducer } from './Reducers/userReducer';
 const persistConfig = {
   key: "root",
   storage, // Local Storage
-  blacklist: ['filterData', 'report','user','pii'],
-
+  blacklist: ['summaryData','report','user','pii'],
 };
 
 const rootReducer = combineReducers({

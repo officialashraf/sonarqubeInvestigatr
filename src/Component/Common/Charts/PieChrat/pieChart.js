@@ -76,7 +76,7 @@ queryPayload = null,
 
     // if (caseId || queryPayload?.unified_case_id?.length) 
       fetchData();
-  }, [caseId, aggsFields, queryPayload, token]);
+  }, [caseId, aggsFields, token]);
 
   if (loading) return <Loader />;
 
