@@ -127,7 +127,7 @@ const LoginPage = () => {
             {/* Logo Section (Centered) */}
             <Row className="justify-content-center" style={{marginTop:'2rem'}}>
                 <img
-                   src={loginData?.logoUrl || "Logo" }
+                   src={investigatrLogo}
                     alt="Investigatr Logo"
                     className={style.logoCenter} /* Use the CSS class */
                 />
