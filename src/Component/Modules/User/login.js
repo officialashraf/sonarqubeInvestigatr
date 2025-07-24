@@ -1,4 +1,4 @@
-import { useState,useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Container, Row, Col, Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -11,8 +11,8 @@ import { Eye, EyeSlash } from 'react-bootstrap-icons';
 import { jwtDecode } from "jwt-decode";
 import { useAutoFocusWithManualAutofill } from '../../../utils/autoFocus';
 import AppButton from '../../Common/Buttton/button';
-import Logo from '../../Assets/Images/ProforceLogo.png'
-import investigatrLogo from '../../Assets/Images/investigatr.png'; // Assuming this is the logo you want to use
+// import Logo from '../../Assets/Images/ProforceLogo.png'
+// import investigatrLogo from '../../Assets/Images/investigatr.png'; // Assuming this is the logo you want to use
 
 const LoginPage = () => {
     const navigate = useNavigate();
@@ -22,19 +22,19 @@ const LoginPage = () => {
     const { inputRef, isReadOnly, handleFocus } = useAutoFocusWithManualAutofill();
 
 
-     const [loginData, setLoginData] = useState(null);
+    const [loginData, setLoginData] = useState(null);
 
-useEffect(() => {
-  fetch('/login-text.json', { cache: "no-store" })
-    .then((res) => res.json())
-    .then((data) => {
-       setLoginData({
-          loginTextHeader: (data.loginTextHeader),
-              loginTextFooter: (data.loginTextFooter),
-          logoUrl: (data.logoUrl),
-        });
-    });
-}, []);
+    useEffect(() => {
+        fetch('/login-text.json', { cache: "no-store" })
+            .then((res) => res.json())
+            .then((data) => {
+                setLoginData({
+                    loginTextHeader: (data.loginTextHeader),
+                    loginTextFooter: (data.loginTextFooter),
+                    logoUrl: (data.logoUrl),
+                });
+            });
+    }, []);
 
     const validateForm = () => {
         const errors = {};
@@ -122,7 +122,7 @@ useEffect(() => {
 
     //  if (!loginData) return <div>Loading...</div>;
     return (
-    
+
         <Container fluid className={style.loginContainer}>
             {/* Logo Section (Centered) */}
             <Row className="justify-content-center" style={{marginTop:'2rem'}}>
@@ -202,7 +202,7 @@ useEffect(() => {
                 </Col>
             </Row>
 
-           <h1>{loginData?.loginTextFooter || "Default Login"} </h1>
+            <h1>{loginData?.loginTextFooter || "Default Login"} </h1>
             {/* <h4>Secure. Scalable. Built for law Enforcement</h4> */}
 
         </Container>

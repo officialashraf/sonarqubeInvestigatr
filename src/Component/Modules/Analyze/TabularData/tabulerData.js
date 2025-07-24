@@ -116,7 +116,7 @@ const TabulerData = () => {
   return (
     <>
       <div className={styles.mainContainer}>
-        <div className={styles.tableWrapper} style={{ overflowY: "auto", height: "60vh" }}>
+        <div className={styles.tableWrapper} style={{ overflowY: "auto", height: "48vh" }}>
           {data && data.length > 0 ? (
             <Table hover className={styles.table}>
               <thead>

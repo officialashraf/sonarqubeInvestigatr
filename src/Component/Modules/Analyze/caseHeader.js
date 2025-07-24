@@ -33,49 +33,6 @@ const CaseHeader = ({ onIconClick, activeView }) => {
             <p >{caseData.title}</p>
           </div>
         </div>
-
-        {/* <div
-          className="row py-0 px-2  align-items-start"
-
-        >
-          <div className="col-auto ms-auto d-flex align-items-center gap-3" style={{ margin: "5px", marginBottom: "15px" }}>
-            <PieChart
-              className={`icon-style ${activeView === 'graphicalData' ? 'active-icon' : ''}`}
-              onClick={() => onIconClick("graphicalData")}
-            />
-            <FaPhotoVideo
-              className={`icon-style ${activeView === 'resources' ? 'active-icon' : ''}`}
-              onClick={() => onIconClick("resources")}
-            />
-            <ListAltOutlined
-              className={`icon-style ${activeView === 'caseData' ? 'active-icon' : ''}`}
-              onClick={() => onIconClick("caseData")}
-            />
-          </div>
-        </div> */}
-         <div className={styles.actionIconsContainer}>
-          <PieChart sx={{ fontSize: 40 }}
-          className={`${styles.icon} ${
-            activeView === "graphicalData" ? styles.activeIcon : ""
-          }`}
-          onClick={() => onIconClick("graphicalData")}
-        />
-        <FaPhotoVideo
-          className={`${styles.icon} ${
-            activeView === "resources" ? styles.activeIcon : ""
-          }`}
-          onClick={() => onIconClick("resources")}
-        />
-          <ListAltOutlined sx={{
-            fontSize: 40
-}}
-          className={`${styles.icon} ${
-            activeView === "caseData" ? styles.activeIcon : ""
-          }`}
-          onClick={() => onIconClick("caseData")}
-        />
-      </div>
-
       </div>
     </>
   );

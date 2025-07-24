@@ -1,5 +1,5 @@
 {
   "loginTextHeader": "Welcome to Secure Threat Intelligence Portal",
   "loginTextFooter": "secure Proforce ",
-  "logoUrl": "https://yourserver.com/images/logo.png"
+  "logoUrl": "./images/investigatr.jpg"
 }
