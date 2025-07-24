@@ -126,6 +126,12 @@ const LoginPage = () => {
         <Container fluid className={style.loginContainer}>
             {/* Logo Section (Centered) */}
             <Row className="justify-content-center" style={{marginTop:'2rem'}}>
+
+                {/* <img
+                   src={loginData?.logoUrl || "Logo" }
+                    alt="Investigatr Logo"
+                    className={style.logoCenter} 
+                /> */}
                 <img
                    src={investigatrLogo}
                     alt="Investigatr Logo"
