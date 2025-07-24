@@ -15,7 +15,7 @@ const getCSSVar = (variable) =>
   ];
 
 const ReusablePieChart = ({
-shouldFetch = false,
+
   aggsFields = [],
 queryPayload = null,
  caseId = null,
@@ -73,11 +73,10 @@ queryPayload = null,
         setLoading(false);
       }
     };
- 
-    if (shouldFetch && (caseId || (queryPayload?.unified_case_id?.length > 0))) {
+
+    // if (caseId || queryPayload?.unified_case_id?.length) 
       fetchData();
-    }
-  }, [caseId, aggsFields, queryPayload, token, shouldFetch]); 
+  }, [caseId, aggsFields, token]);
 
   if (loading) return <Loader />;
 
