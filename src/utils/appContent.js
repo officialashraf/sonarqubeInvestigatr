@@ -30,6 +30,7 @@ import LicenseGuard from './licenseGaurd.js';
 import ConnectionManagement from '../Component/Modules/Connections/connectionManagement.js';
 import DAButton from '../Component/Common/Buttton/button.js';
 import CatelogList from '../Component/Modules/Catlog/catelogList.js';
+import AddFilter from '../Component/Modules/Analyze/TabularData/filter.js';
 
 const styels = {}
 const AppContent = () => {
@@ -101,6 +102,7 @@ const AppContent = () => {
                 </Route>
                 <Route element={<ProtectedRoute />}>
                   <Route path="/pii" element={<ShowDetails />} />
+                  <Route path="/addfil" element={<AddFilter />} />
                   <Route path="/cases" element={<Home />} />
                   <Route path="/cases/:caseId" element={<MainFilter />} />
                   <Route path="/add-filter" element={<AddFilter2 />} />

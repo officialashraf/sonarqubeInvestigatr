@@ -13,8 +13,8 @@ const DateBar = () => {
   // const [barData, setBarData] = useState([]);
   // const [loading, setLoading] = useState(false);
   const caseID = useSelector((state) => state.caseData.caseData.id);
-    const caseFilter = useSelector((state) => state.caseFilter.caseFilters);
-    const { agg_fields, ...filteredPayload } = caseFilter;
+    const caseFilter = useSelector((state) => state.caseFilter?.caseFilters);
+   const { agg_fields, ...filteredPayload } = caseFilter || {};
   // console.log("casiId", caseId)
 
   // useEffect(() => {

@@ -5,14 +5,12 @@ import { useSelector } from 'react-redux';
 // import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 // import Cookies from "js-cookie";
 // import Loader from '../../Layout/loader';
-
-
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 const SentimentPieChart = () => {
 
     const caseID = useSelector((state) => state.caseData.caseData.id);
-    const caseFilter = useSelector((state) => state.caseFilter.caseFilters);
-    const { agg_fields, ...filteredPayload } = caseFilter;
+    const caseFilter = useSelector((state) => state.caseFilter?.caseFilters);
+ const { agg_fields, ...filteredPayload } = caseFilter || {};
   const [shouldFetch, setShouldFetch] = useState(false);
 
   useEffect(() => {

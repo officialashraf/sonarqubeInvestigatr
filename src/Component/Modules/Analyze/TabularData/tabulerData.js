@@ -11,6 +11,7 @@ import Cookies from "js-cookie";
 const TabulerData = () => {
   const dispatch = useDispatch();
   const caseData = useSelector((state) => state.caseData.caseData);
+  const caseFilter = useSelector((state) => state.caseFilter?.caseFilters);
   const {
     data,
     headers,
