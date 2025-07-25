@@ -21,9 +21,10 @@ export const logFilterCount = (user) => {
 
 //newcommonapi
 export const fetchSummaryData =
-  ({ queryPayload, page = 1, itemsPerPage = 50, starttime, endtime, fileType }) =>
+  ({ queryPayload, page = 1, itemsPerPage = 50, starttime, endtime, file_type,aggsFields,keyword }) =>
+
     async (dispatch) => {
-      console.log("fetchSummaryData called");
+      console.log("fetchSummaryData called",aggsFields);
       try {
         dispatch({ type: SET_LOADING });
 
@@ -33,7 +34,9 @@ export const fetchSummaryData =
           `${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/search`,
           {
             query: queryPayload,
-            file_type: fileType,
+            keyword:keyword,
+            aggs_fields:aggsFields,
+            file_type: file_type,
             start_time: starttime,
             end_time: endtime,
             page,

@@ -49,32 +49,46 @@ const TabulerData = () => {
   };
 
   useEffect(() => {
-    if (caseData?.id) {
-      dispatch(fetchSummaryData({
-        queryPayload: { unified_case_id: caseData.id },
+    if (caseData?.id && !data) {
+      const queryPayload = {
+        unified_case_id: caseData.id
+      };
+        const summaryPayload ={
+        queryPayload,
+        ...(caseFilter?.file_type && { file_type: caseFilter.file_type }),
+        ...(caseFilter?.start_time && { start_time: caseFilter.start_time }),
+        ...(caseFilter?.end_time && { end_time: caseFilter.end_time }),
+        ...(caseFilter?.aggs_fields && { aggsFields: caseFilter.aggs_fields }),
+        ...(caseFilter?.keyword && { keyword: caseFilter.keyword }),
         page: currentPage,
         itemsPerPage: 50
-      }));
+      }  
+      dispatch(fetchSummaryData(summaryPayload));
+       console.log("su mardtaatbulerr", summaryPayload)
     }
-  }, [caseData, currentPage, dispatch]);
+  }, [caseData?.id]);
 
-  useEffect(() => {
-    const fetchMapping = async () => {
-      try {
-        const token = Cookies.get("accessToken");
-        const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/mappings`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json"
-          }
-        });
-        setColumnMapping(response.data);
-      } catch (error) {
-        console.error("Mapping fetch failed", error);
-      }
-    };
+ useEffect(() => {
+  const fetchMapping = async () => {
+    try {
+      const token = Cookies.get("accessToken");
+      const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/mappings`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
+        }
+      });
+      setColumnMapping(response.data);
+    } catch (error) {
+      console.error("Mapping fetch failed", error);
+    }
+  };
+
+  
     fetchMapping();
-  }, []);
+  
+}, [caseData?.id, page]);
+
 
   const processedHeaders = headers.map((header) => {
     const mapping = columnMapping.find((col) => col.column_name === header);
@@ -91,11 +105,21 @@ const TabulerData = () => {
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
-    dispatch(fetchSummaryData({
-      queryPayload: { unified_case_id: caseData?.id },
-      page: page,
+    const queryPayload = {
+      unified_case_id: caseData.id
+    };
+const pageChangePayload={
+      queryPayload,
+      ...(caseFilter?.file_type && { file_type: caseFilter.file_type }),
+      ...(caseFilter?.aggs_fields && { aggsFields: caseFilter.aggs_fields }),
+      ...(caseFilter?.keyword && { keyword: caseFilter.keyword }),
+      ...(caseFilter?.start_time && { start_time: caseFilter.start_time }),
+      ...(caseFilter?.end_time && { end_time: caseFilter.end_time }),
+      page,
       itemsPerPage: 50
-    }));
+}
+    dispatch(fetchSummaryData(pageChangePayload));
+    console.log("paageechngepayloadda",pageChangePayload)
   };
 
   if (loading) return <Loader />;
@@ -165,7 +189,7 @@ const TabulerData = () => {
                       >
                         <div
                           style={{
-                          color: getGroupColor(col.groupName),
+                            color: getGroupColor(col.groupName),
                           }}
                         >
                           {col.displayName}

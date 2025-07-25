@@ -2,6 +2,8 @@ import {
     SET_SELECTED_TAB,
     SET_CASE_DATA,
     SET_SUMMARY_DATA,
+    SAVE_CASE_FILTER_PAYLOAD,
+    CLEAR_CASE_FILTER_PAYLOAD,
 } from '../Constants/caseCaontant';
 
 const initialState = { selectedTab: 'default', };
@@ -47,3 +49,48 @@ export const summaryReducer = (state = {
             return state;
     }
 };
+export const CaseFilterPayloadReducer = (
+  state = {
+    caseFilters: {
+      caseId: [],
+      file_type: [],
+      start_time: "",
+      end_time: "",
+      aggs_fields: [],
+      keyword: []
+    }
+  },
+  action
+) => {
+  switch (action.type) {
+    case SAVE_CASE_FILTER_PAYLOAD:
+      return {
+        ...state,
+        caseFilters: {
+          aggs_fields: action.payload.aggs_fields || [],
+          keyword: action.payload.keyword || [],
+          caseId: action.payload.caseId || [],
+          file_type: action.payload.file_type || [],
+          start_time: action.payload.start_time || "",
+          end_time: action.payload.end_time || ""
+        }
+      };
+
+    case CLEAR_CASE_FILTER_PAYLOAD:
+      return {
+        ...state,
+        caseFilters: {
+          caseId: [],
+          file_type: [],
+          start_time: "",
+          end_time: "",
+          aggs_fields: [],
+          keyword: []
+        }
+      };
+
+    default:
+      return state;
+  }
+};
+

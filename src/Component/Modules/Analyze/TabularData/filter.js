@@ -13,20 +13,15 @@ import { InputField } from '../../../Common/InpuField/inputField';
 import styles from "../../../Common/Table/table.module.css";
 import { fetchSummaryData } from '../../../../Redux/Action/filterAction';
 
-const AddFilter = ({ handleCreateCase, searchChips, isPopupVisible, setIsPopupVisible, }) => {
 
-    const Token = Cookies.get('accessToken');
-    const dispatch = useDispatch();
-    console.log("searaddnew", searchChips)
-    const [searchPayload, setSearchPayload] = useState(null);
-    const caseId = useSelector((state) => state.caseData.caseData.id);
-    console.log("caseeeee", caseId);
-    // State for dynamic options
-    // const payload = useSelector((state) => state.criteriaKeywords?.queryPayload || '');
-
-    const [showPopupD, setShowPopupD] = useState(false);
-
-    const [fileTypeOptions, setFileTypeOptions] = useState([]);
+const AddFilter = ({ searchChips, isPopupVisible, setIsPopupVisible }) => {
+  console.log("searhleywords",searchChips)
+  const Token = Cookies.get('accessToken');
+  const dispatch = useDispatch();
+  const caseId = useSelector((state) => state.caseData.caseData.id);
+  const caseFilter = useSelector((state) => state.caseFilter.caseFilters);
+  const [fileTypeOptions, setFileTypeOptions] = useState([]);
+  const [showPopupD, setShowPopupD] = useState(false);
 
     // State for form data
     const [formData, setFormData] = useState({
@@ -79,10 +74,52 @@ const AddFilter = ({ handleCreateCase, searchChips, isPopupVisible, setIsPopupVi
         endTime: { hours: 16, minutes: 30 }
     });
     console.log("selectedDates", selectedDates)
+  
 
-    const toggleDatePickerPopup = () => {
-        setShowPopupD(!showPopupD);
+  const toggleDatePickerPopup = () => setShowPopupD(!showPopupD);
+
+
+  //  Final Payload on Search
+  const performSearch = () => {
+    const startTime =
+      selectedDates.startDate && selectedDates.startTime
+        ? `${selectedDates.startDate.toISOString().split('T')[0]}T${String(selectedDates.startTime.hours).padStart(2, '0')}:${String(selectedDates.startTime.minutes).padStart(2, '0')}:00`
+        : null;
+
+    const endTime =
+      selectedDates.endDate && selectedDates.endTime
+        ? `${selectedDates.endDate.toISOString().split('T')[0]}T${String(selectedDates.endTime.hours).padStart(2, '0')}:${String(selectedDates.endTime.minutes).padStart(2, '0')}:00`
+        : null;
+
+    const selectedPlatforms = Array.isArray(formData.platform)
+      ? formData.platform.map(p => p.value)
+      : [];
+
+    const payload = {
+      queryPayload: { unified_case_id: caseId }
     };
+
+    // Add only if present
+    if (selectedPlatforms.length > 0) payload.file_type = selectedPlatforms;
+    if (startTime) payload.starttime = startTime;
+    if (endTime) payload.endtime = endTime;
+      if (searchChips?.keyword) {
+    payload.keyword = searchChips.keyword;
+  }
+    if (caseFilter.aggs_fields && caseFilter.aggs_fields.length > 0)
+      payload.aggsFields = caseFilter.aggs_fields;
+    console.log("fetchdat", payload)
+    dispatch(fetchSummaryData(payload)
+    );
+
+    dispatch(saveCaseFilterPayload({
+      keyword: caseFilter.keyword,
+      aggs_fields: caseFilter.aggs_fields,
+      caseId: caseId,
+      file_type: selectedPlatforms,
+      start_time: startTime,
+      end_time: endTime
+    }));
 
     const handleDateSelection = (dateData) => {
         setSelectedDates(dateData);
@@ -101,41 +138,7 @@ const AddFilter = ({ handleCreateCase, searchChips, isPopupVisible, setIsPopupVi
         return 'Select date range';
     };
 
-    const performSearch = () => {
-        const startTime =
-            selectedDates.startDate && selectedDates.startTime
-                ? `${selectedDates.startDate.toISOString().split('T')[0]}T${String(selectedDates.startTime.hours).padStart(2, '0')}:${String(selectedDates.startTime.minutes).padStart(2, '0')}:00`
-                : "";
-
-        const endTime =
-            selectedDates.endDate && selectedDates.endTime
-                ? `${selectedDates.endDate.toISOString().split('T')[0]}T${String(selectedDates.endTime.hours).padStart(2, '0')}:${String(selectedDates.endTime.minutes).padStart(2, '0')}:00`
-                : "";
-
-        const fileTypes = Array.isArray(formData.platform)
-            ? formData.platform.map(type => type.value)
-            : [];
-
-        // Base payload with required fields
-        const payload = {
-            queryPayload: { unified_case_id: caseId }
-        };
-
-        // Only add fields if they have values
-        if (fileTypes.length > 0) {
-            payload.file_type = fileTypes;
-        }
-
-        if (startTime) {
-            payload.starttime = startTime;
-        }
-
-        if (endTime) {
-            payload.endtime = endTime;
-        }
-
-        setSearchPayload(payload);
-    };
+ 
 
     // Perform search API call
     useEffect(() => {
@@ -253,5 +256,5 @@ const AddFilter = ({ handleCreateCase, searchChips, isPopupVisible, setIsPopupVi
         </>
     );
 };
-
-export default AddFilter;                        
+}
+export default AddFilter;                
