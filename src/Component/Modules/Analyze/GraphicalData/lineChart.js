@@ -9,8 +9,8 @@ import ReusableLineGraph from '../../../Common/Charts/LineGraph/lineGraph';
 
 const LineGraph = () => {
   const caseID = useSelector((state) => state.caseData.caseData.id);
-    const caseFilter = useSelector((state) => state.caseFilter.caseFilters);
-    const { agg_fields, ...filteredPayload } = caseFilter;
+    const caseFilter = useSelector((state) => state.caseFilter?.caseFilters);
+   const { agg_fields, ...filteredPayload } = caseFilter || {};
   // const token = Cookies.get("accessToken");
   // const [data, setData] = useState([]);
   // const [recordTypes, setRecordTypes] = useState([]);

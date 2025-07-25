@@ -8,8 +8,8 @@ import KeywordTagList from '../../../Common/Charts/KeywordCloud/keywordCloud';
 
 const KeywordChart = () => {
    const caseID = useSelector((state) => state.caseData.caseData.id);
-       const caseFilter = useSelector((state) => state.caseFilter.caseFilters);
-    const { agg_fields, ...filteredPayload } = caseFilter;
+       const caseFilter = useSelector((state) => state.caseFilter?.caseFilters);
+ const { agg_fields, ...filteredPayload } = caseFilter || {};
   // const token = Cookies.get("accessToken");
   // const [data, setData] = useState([]);
   // const [loading, setLoading] = useState(false);

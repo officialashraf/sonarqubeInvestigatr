@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { TextField, InputAdornment } from "@mui/material";
+import { PieChart } from "@mui/icons-material";
+import { ListAltOutlined } from "@mui/icons-material";
+import { FaPhotoVideo } from "react-icons/fa";
 import SearchIcon from "@mui/icons-material/Search";
 import SendIcon from "@mui/icons-material/Send";
 import TuneIcon from "@mui/icons-material/Tune";
@@ -19,8 +22,9 @@ import { saveCaseFilterPayload } from "../../../Redux/Action/caseAction";
 const CaseTableDataFilter = () => {
     const dispatch = useDispatch();
 const caseData = useSelector((state) => state.caseData.caseData);
-const { file_type,aggs_fields,keyword } = useSelector((state) => state.caseFilter?.caseFilters || {});
- console.log("caseFilterChips",file_type,aggs_fields,keyword);
+const caseFilter = useSelector((state) => state.caseFilter?.caseFilters );
+const { file_type,aggs_fields,keyword } = caseFilter || {}
+//  console.log("caseFilterChips",file_type,aggs_fields,keyword);
   const [inputValue, setInputValue] = useState("");
   const [searchChips, setSearchChips] = useState([]);
   console.log("searchChips", searchChips)
@@ -29,6 +33,10 @@ const { file_type,aggs_fields,keyword } = useSelector((state) => state.caseFilte
   const [activeComponent, setActiveComponent] = useState("graphicalData");
   const [isPopupVisible, setIsPopupVisible] = useState(false);
 
+  const openPopup = () => {
+    console.log("TuneIcon clicked, opening popup");
+    setIsPopupVisible(true);
+  };
  // redux se caseData lo
 
 useEffect(() => {
@@ -114,10 +122,7 @@ filteredChips.forEach((chip) => {
     setFilteredChips([]);
   };
 
-  const openPopup = () => {
-    setIsPopupVisible(true);
-  };
-
+ 
 const removeChip = (chipToRemoveIndex) => {
   const newChips = [...searchChips];
   newChips.splice(chipToRemoveIndex, 1);
@@ -172,6 +177,26 @@ const removeChip = (chipToRemoveIndex) => {
             <AppButton children={"Reset"} onClick={resetSearch} />
           </div>
         </div>
+
+        <div style={{ display: "flex", gap: "20px", alignItems: "center" }}>
+          <PieChart
+            sx={{ fontSize: 40 }}
+            className={`${styles.icon} ${activeComponent === "graphicalData" ? styles.activeIcon : ""}`}
+            onClick={() => setActiveComponent("graphicalData")}
+          />
+          <FaPhotoVideo
+            sx={{ fontSize: 40 }}
+            className={`${styles.icon} ${activeComponent === "resources" ? styles.activeIcon : ""}`}
+            onClick={() => setActiveComponent("resources")}
+          />
+          <ListAltOutlined
+            sx={{ fontSize: 40 }}
+            className={`${styles.icon} ${activeComponent === "caseData" ? styles.activeIcon : ""}`}
+            onClick={() => setActiveComponent("caseData")}
+          />
+        </div>
+      </div>
+
       <div className="search-term-indicator" style={{ backgroundColor: "#080E17", marginBottom: "10px" }}>
         <div className="chips-container">
           {filteredChips.map((chip, index) => (
@@ -199,9 +224,7 @@ const removeChip = (chipToRemoveIndex) => {
         />
       )}
     </div>
-    </div>
   );
 };
-
 
 export default CaseTableDataFilter;
