@@ -11,7 +11,7 @@ import { Eye, EyeSlash } from 'react-bootstrap-icons';
 import { jwtDecode } from "jwt-decode";
 import { useAutoFocusWithManualAutofill } from '../../../utils/autoFocus';
 import AppButton from '../../Common/Buttton/button';
-// import Logo from '../../Assets/Images/ProforceLogo.png'
+import Logo from '../../Assets/Images/ProforceLogo.png'
  import investigatrLogo from '../../Assets/Images/investigatr.png'; // Assuming this is the logo you want to use
 
 const LoginPage = () => {
@@ -127,8 +127,8 @@ const LoginPage = () => {
             {/* Logo Section (Centered) */}
             <Row className="justify-content-center" style={{marginTop:'2rem'}}>
                 <img
-                   src={investigatrLogo}
-                    alt="Investigatr Logo"
+                   src={Logo}
+                    alt="Logo"
                     className={style.logoCenter} /* Use the CSS class */
                 />
             </Row>
