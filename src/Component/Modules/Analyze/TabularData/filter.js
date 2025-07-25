@@ -12,7 +12,8 @@ import customSelectStyles from '../../../Common/CustomStyleSelect/customSelectSt
 import CommonDateInput from '../../../Common/DateField/DateField';
 import styles from "../../../Common/Table/table.module.css";
 
-const AddFilter = ({ handleCreateCase, searchChips, isPopupVisible, setIsPopupVisible }) => {
+const AddFilter = ({ searchChips, isPopupVisible, setIsPopupVisible }) => {
+  console.log("searhleywords",searchChips)
   const Token = Cookies.get('accessToken');
   const dispatch = useDispatch();
   const caseId = useSelector((state) => state.caseData.caseData.id);
@@ -97,7 +98,7 @@ const AddFilter = ({ handleCreateCase, searchChips, isPopupVisible, setIsPopupVi
     return 'Select date range';
   };
 
-  // 🚀 Final Payload on Search
+  //  Final Payload on Search
   const performSearch = () => {
     const startTime =
       selectedDates.startDate && selectedDates.startTime
@@ -121,11 +122,18 @@ const AddFilter = ({ handleCreateCase, searchChips, isPopupVisible, setIsPopupVi
     if (selectedPlatforms.length > 0) payload.file_type = selectedPlatforms;
     if (startTime) payload.starttime = startTime;
     if (endTime) payload.endtime = endTime;
-console.log("fetchdat",payload)
+      if (searchChips?.keyword) {
+    payload.keyword = searchChips.keyword;
+  }
+    if (caseFilter.aggs_fields && caseFilter.aggs_fields.length > 0)
+      payload.aggsFields = caseFilter.aggs_fields;
+    console.log("fetchdat", payload)
     dispatch(fetchSummaryData(payload)
-);
+    );
 
     dispatch(saveCaseFilterPayload({
+      keyword: caseFilter.keyword,
+      aggs_fields: caseFilter.aggs_fields,
       caseId: caseId,
       file_type: selectedPlatforms,
       start_time: startTime,
@@ -187,7 +195,7 @@ console.log("fetchdat",payload)
                     className="add-btn"
                     disabled={isSearchDisabled}
                     style={{
-                      backgroundColor: isSearchDisabled ? '#ddd' : '#000',
+                      backgroundColor: isSearchDisabled ? '#fffff' : '#00000',
                       cursor: isSearchDisabled ? 'not-allowed' : 'pointer'
                     }}
                   >

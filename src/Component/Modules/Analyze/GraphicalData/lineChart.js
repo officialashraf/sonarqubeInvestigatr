@@ -8,7 +8,9 @@ import { useSelector } from 'react-redux';
 import ReusableLineGraph from '../../../Common/Charts/LineGraph/lineGraph';
 
 const LineGraph = () => {
-  const caseId = useSelector((state) => state.caseData.caseData.id);
+  const caseID = useSelector((state) => state.caseData.caseData.id);
+    const caseFilter = useSelector((state) => state.caseFilter.caseFilters);
+    const { agg_fields, ...filteredPayload } = caseFilter;
   // const token = Cookies.get("accessToken");
   // const [data, setData] = useState([]);
   // const [recordTypes, setRecordTypes] = useState([]);
@@ -73,9 +75,10 @@ const LineGraph = () => {
 
   return (
   <ReusableLineGraph
-    caseId={caseId}
+    caseId={caseID}
     aggsFields={["unified_date_only", "unified_type"]}
     recordLineField="unified_type"
+    queryPayload={filteredPayload}
   />
 
   );

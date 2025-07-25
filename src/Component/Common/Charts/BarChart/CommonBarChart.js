@@ -19,7 +19,10 @@ const ReusableBarChart = ({
 }) => {
     const [barData, setBarData] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [rawData, setRawData] = useState([]);
+    const [showAll, setShowAll] = useState(false);
     const [activeIndex, setActiveIndex] = useState(null);
+    const MAX_BARS = 20
     const token = Cookies.get("accessToken");
 
     useEffect(() => {
@@ -50,10 +53,16 @@ const ReusableBarChart = ({
                 });
 
                 const field = aggsFields[0];
-                const rawData = response.data[field] || [];
-                const transformed = transformData(rawData);
-                setBarData(transformed.length ? transformed : [{ name: 'No Data', value: 0 }]);
+                // const rawData = response.data[field] || [];
+                // const transformed = transformData(rawData);
+                // setBarData(transformed.length ? transformed : [{ name: 'No Data', value: 0 }]);
 
+                const raw = response.data[field] || [];
+                const transformed = transformData(raw);
+                setRawData(transformed); //  Store full transformed data
+
+                const limitedData = transformed.length > MAX_BARS ? transformed.slice(0, MAX_BARS) : transformed;
+                setBarData(limitedData.length ? limitedData : [{ name: 'No Data', value: 0 }]);
             } catch (error) {
                 console.error('Error fetching bar chart data:', error);
                 setBarData([{ name: 'No Data', value: 0 }]);
@@ -64,7 +73,15 @@ const ReusableBarChart = ({
 
         if (caseId) fetchData();
     }, [caseId, aggsFields.join(','), queryPayload, token]);
-
+useEffect(() => {
+        if (showAll) {
+            setBarData(rawData.length ? rawData : [{ name: 'No Data', value: 0 }]);
+        } else {
+            const limited = rawData.length > MAX_BARS ? rawData.slice(0, MAX_BARS) : rawData;
+            setBarData(limited.length ? limited : [{ name: 'No Data', value: 0 }]);
+        }
+    }, [showAll, rawData]);
+       
     if (loading) return <Loader />;
     return (
         <div className={styles.chartWrappers} >
@@ -102,10 +119,10 @@ const ReusableBarChart = ({
                                 contentStyle={{
                                     backgroundColor: "#0E2C46",
                                     border: "none",
-                                    maxWidth: "250px",          // ✅ Add again for internal content box
-                                    whiteSpace: "normal",       // ✅ Allow wrapping
-                                    wordWrap: "break-word",     // ✅ Break long words
-                                    overflowWrap: "break-word", // ✅ Better cross-browser wrapping
+                                    maxWidth: "250px",          //Add again for internal content box
+                                    whiteSpace: "normal",       //Allow wrapping
+                                    wordWrap: "break-word",     //Break long words
+                                    overflowWrap: "break-word", //Better cross-browser wrapping
                                 }}
                                 labelStyle={{ color: "#D6D6D6" }}
                                 cursor={{ fill: "#1c2833" }}
@@ -134,6 +151,22 @@ const ReusableBarChart = ({
                     <div className={styles.noData}>No Data Available</div>
                 )}
             </div>
+            {rawData.length > MAX_BARS && (
+                <div style={{ textAlign: 'center', marginTop: '12px' }}>
+                    <span
+                        onClick={() => setShowAll(!showAll)}
+                        style={{
+                            color: '#0073CF',
+                            cursor: 'pointer',
+                            textDecoration: 'underline',
+                            fontWeight: 'bold',
+                            fontSize: '14px',
+                        }}
+                    >
+                        {showAll ? 'Show Less' : 'Show All'}
+                    </span>
+                </div>
+            )}
         </div>
     );
 };

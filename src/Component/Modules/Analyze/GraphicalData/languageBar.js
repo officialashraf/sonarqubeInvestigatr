@@ -8,7 +8,9 @@ import ReusableBarChart from '../../../Common/Charts/BarChart/CommonBarChart';
 // import Loader from '../../Layout/loader';
 
 const LanguageBar = () => {
-    const caseId = useSelector((state) => state.caseData.caseData.id);
+    const caseID = useSelector((state) => state.caseData.caseData.id);
+    const caseFilter = useSelector((state) => state.caseFilter.caseFilters);
+    const { agg_fields, ...filteredPayload } = caseFilter;
     // console.log("casiId", caseId)
     // const token = Cookies.get("accessToken");
     // const [barData, setBarData] = useState([]);
@@ -65,7 +67,7 @@ const LanguageBar = () => {
     return (
         <>
             <ReusableBarChart
-                caseId={caseId}
+                caseId={caseID}
                 aggsFields={["language"]}
                 query={{}} // if extra filters needed
                 chartHeight={280}
@@ -75,6 +77,7 @@ const LanguageBar = () => {
                         value: item.doc_count
                     }))
                 }
+                queryPayload={filteredPayload}
             />
         </>
     );

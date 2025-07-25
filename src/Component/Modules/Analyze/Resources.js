@@ -85,12 +85,13 @@ const [dataLoaded, setDataLoaded] = useState(false);
        ...(caseFilter?.file_type && { file_type: caseFilter.file_type }),
       ...(caseFilter?.start_time && { start_time: caseFilter.start_time }),
       ...(caseFilter?.end_time && { end_time: caseFilter.end_time }),
+      ...(caseFilter?.aggs_fields && { aggsFields: caseFilter.aggs_fields }),
+        ...(caseFilter?.keyword && { keyword: caseFilter.keyword }),
       page: currentPage,
       itemsPerPage: 50
     })).then(() => {
         setLoading(false);
         setDataLoaded(true);
-        
       });
     }
   }, [data1?.id, summaryData, page, dispatch,caseFilter]);
@@ -107,6 +108,8 @@ const [dataLoaded, setDataLoaded] = useState(false);
        ...(caseFilter?.file_type && { file_type: caseFilter.file_type }),
       ...(caseFilter?.start_time && { start_time: caseFilter.start_time }),
       ...(caseFilter?.end_time && { end_time: caseFilter.end_time }),
+      ...(caseFilter?.aggs_fields && { aggsFields: caseFilter.aggs_fields }),
+        ...(caseFilter?.keyword && { keyword: caseFilter.keyword }),
       page: currentPage,
       itemsPerPage: 50,
   })).then(() => {

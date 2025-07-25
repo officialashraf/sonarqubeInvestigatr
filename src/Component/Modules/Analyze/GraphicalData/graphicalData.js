@@ -1,3 +1,4 @@
+import React from "react";
 import { Card, CardContent, Typography, Grid } from "@mui/material";
 import styles from  './graphicalData.module.css'
 // import { ListAltOutlined,ArrowBack, ArrowForward, MoreVert} from "@mui/icons-material";
@@ -10,6 +11,8 @@ import EventBar from "./eventBar";
 import PersonBar from "./personBar";
 import LanguageBar from "./languageBar";
 import OrgBar from "./orgBar";
+import LazyLoadWrapper from "./lazyLoadWrapper";
+
 
 const Header = ({ title }) =>
   <Grid
@@ -52,7 +55,9 @@ const ComponentOne = () => (
     <Header title="Timelines" />
     <Card sx={{ height: "300px", backgroundColor: "#101D2B", borderRadius: '25px' }}>
       <CardContent>
-        <LineGraph />
+        <LazyLoadWrapper height={300}>
+          <LineGraph />
+        </LazyLoadWrapper>
       </CardContent>
     </Card>
   </>);
@@ -63,7 +68,9 @@ const ComponentTwo = () => (
     <Header title="Keywords" />
     <Card sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius: '25px' }}>
       <CardContent>
+        <LazyLoadWrapper height={300}>
         <KeywordChart />
+        </LazyLoadWrapper>
       </CardContent>
     </Card>
   </>);
@@ -80,8 +87,9 @@ const ComponentThree = () => (
           align="center"
           height={250}
         >
+           <LazyLoadWrapper height={300}>
           <LocationBar />
-          {/* {" "}No Data{" "} */}
+          </LazyLoadWrapper>
         </Typography>
       </CardContent>
     </Card>
@@ -93,7 +101,9 @@ const ComponentFour = () => (
       sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius: '25px' }}
     >
       <CardContent>
+         <LazyLoadWrapper height={300}>
         <SentimentPieChart />
+        </LazyLoadWrapper>
       </CardContent>
     </Card>
   </>
@@ -105,7 +115,9 @@ const ComponentFive = () => (
       sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius: '25px' }}
     >
       <CardContent sx={{ backgroundColor: "#101D2B", borderRadius: '25px' }}>
+         <LazyLoadWrapper height={300}>
         <DateBar />
+      </LazyLoadWrapper>
       </CardContent>
     </Card>
   </>
@@ -117,7 +129,9 @@ const ComponentSix = () => (
       sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius: '25px' }}
     >
       <CardContent>
+         <LazyLoadWrapper height={300}>
         <EventBar />
+        </LazyLoadWrapper>
       </CardContent>
     </Card>
   </>
@@ -129,7 +143,9 @@ const ComponentSeven = () => (
       sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius: '25px' }}
     >
       <CardContent>
-        <PersonBar />
+         <LazyLoadWrapper height={300}>
+          <PersonBar/>
+          </LazyLoadWrapper>
       </CardContent>
     </Card>
   </>
@@ -141,7 +157,9 @@ const ComponentEight = () => (
       sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius: '25px' }}
     >
       <CardContent>
+         <LazyLoadWrapper height={300}>
         <LanguageBar />
+        </LazyLoadWrapper>
       </CardContent>
     </Card>
   </>
@@ -154,11 +172,15 @@ const ComponentNine = () => (
       sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius: '25px', marginBottom: '5rem', borderRadius: '25px' }}
     >
       <CardContent >
+         <LazyLoadWrapper height={300}>
         <OrgBar />
+        </LazyLoadWrapper>
       </CardContent>
     </Card>
   </>
 );
+
+
 const GraphicalData = () => {
   return (
     <div className={styles.responsiveContainer} >
@@ -201,4 +223,4 @@ const GraphicalData = () => {
   );
 };
 
-export default GraphicalData;
+export default React.memo(GraphicalData);

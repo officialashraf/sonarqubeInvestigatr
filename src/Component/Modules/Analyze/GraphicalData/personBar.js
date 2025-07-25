@@ -7,7 +7,9 @@ import ReusableBarChart from '../../../Common/Charts/BarChart/CommonBarChart';im
 // import Loader from '../../Layout/loader';
 
 const PersonBar = () => {
-  const caseId = useSelector((state) => state.caseData.caseData.id);
+   const caseID = useSelector((state) => state.caseData.caseData.id);
+    const caseFilter = useSelector((state) => state.caseFilter.caseFilters);
+    const { agg_fields, ...filteredPayload } = caseFilter;
     // console.log("casiId", caseId)
     // const token = Cookies.get("accessToken");
     // const [barData, setBarData] = useState([]);
@@ -64,7 +66,7 @@ const PersonBar = () => {
     return (
         <>
              <ReusableBarChart
-      caseId={caseId}
+      caseId={caseID}
       aggsFields={["person"]}
       query={{}} // if extra filters needed
       chartHeight={280}
@@ -74,6 +76,7 @@ const PersonBar = () => {
           value: item.doc_count
         }))
       }
+      queryPayload={filteredPayload}
     />
         </>
     );
