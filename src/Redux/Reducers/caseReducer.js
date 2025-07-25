@@ -49,8 +49,6 @@ export const summaryReducer = (state = {
             return state;
     }
 };
-
-
 export const CaseFilterPayloadReducer = (
   state = {
     caseFilters: {
@@ -95,3 +93,4 @@ export const CaseFilterPayloadReducer = (
       return state;
   }
 };
+

@@ -10,7 +10,6 @@ import Cookies from "js-cookie";
 
 const TabulerData = () => {
   const dispatch = useDispatch();
-  const caseFilter = useSelector((state) => state.caseFilter.caseFilters);
   const caseData = useSelector((state) => state.caseData.caseData);
   const {
     data,
@@ -48,7 +47,6 @@ const TabulerData = () => {
     groupColors[groupName] = color;
     return color;
   };
-
 
   useEffect(() => {
     if (caseData?.id && !data) {
@@ -146,7 +144,39 @@ const pageChangePayload={
           {data && data.length > 0 ? (
             <Table hover className={styles.table}>
               <thead>
+                {/* Group Headers */}
+                {/* <tr>
+                  {(() => {
+                    const groupMap = {};
+                    processedHeaders.forEach((col) => {
+                      if (!groupMap[col.groupName]) groupMap[col.groupName] = [];
+                      groupMap[col.groupName].push(col);
+                    });
 
+                    return Object.entries(groupMap).map(([group, cols]) => {
+                      const visibleCols = cols.filter(col => headers.includes(col.key));
+                      if (visibleCols.length > 0) {
+                        return (
+                          <th
+                            key={`group-${group}`}
+                            colSpan={visibleCols.length}
+                            className={style.groupTh}
+                            style={{
+                              textAlign: "center",
+                              backgroundColor: "#f0f0f0",
+                              fontWeight: "600",
+                              fontSize: "13px",
+                              borderBottom: "1px solid #ccc"
+                            }}
+                          >
+                            {group}
+                          </th>
+                        );
+                      }
+                      return null;
+                    });
+                  })()}
+                </tr> */}
 
                 {/* Column Headers */}
                 <tr>
@@ -284,39 +314,7 @@ const pageChangePayload={
 };
 
 export default TabulerData;
-{/* Group Headers */ }
-{/* <tr>
-                  {(() => {
-                    const groupMap = {};
-                    processedHeaders.forEach((col) => {
-                      if (!groupMap[col.groupName]) groupMap[col.groupName] = [];
-                      groupMap[col.groupName].push(col);
-                    });
 
-                    return Object.entries(groupMap).map(([group, cols]) => {
-                      const visibleCols = cols.filter(col => headers.includes(col.key));
-                      if (visibleCols.length > 0) {
-                        return (
-                          <th
-                            key={`group-${group}`}
-                            colSpan={visibleCols.length}
-                            className={style.groupTh}
-                            style={{
-                              textAlign: "center",
-                              backgroundColor: "#f0f0f0",
-                              fontWeight: "600",
-                              fontSize: "13px",
-                              borderBottom: "1px solid #ccc"
-                            }}
-                          >
-                            {group}
-                          </th>
-                        );
-                      }
-                      return null;
-                    });
-                  })()}
-                </tr> */}
 
 //   return (
 //     <>

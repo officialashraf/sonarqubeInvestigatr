@@ -26,7 +26,6 @@ import rss from "../../Assets/Images/rss.jpg";
 const Resources = () => {
 
   const dispatch = useDispatch();
-  const caseFilter = useSelector((state) => state.caseFilter.caseFilters);
   const data1 = useSelector((state) => state.caseData.caseData);
   const {
     data,
@@ -52,30 +51,10 @@ const Resources = () => {
   const [selectedResource, setSelectedResource] = useState(null);
   const [allResources, setAllResources] = useState([]);
   const [loadedPages, setLoadedPages] = useState([]);
-const [dataLoaded, setDataLoaded] = useState(false);
+
   // Initialize data on mount or when data1.id changes
-  // useEffect(() => {
-  //   if (data1?.id) {
-  //     setLoading(true);
-  //     const initialPage = page || 1;
-  //     setCurrentPage(initialPage);
-
-  //     dispatch(fetchSummaryData({
-  //       queryPayload: { unified_case_id: data1.id },
-  //       page: initialPage,
-  //       itemsPerPage: 50,
-  //     })).then(() => {
-  //       setLoading(false);
-  //     });
-  //   }
-  // }, [data1?.id, dispatch]); // Removed 'page' from dependencies
   useEffect(() => {
-    const initialPage = page || 1;
-    setCurrentPage(initialPage);
-
-    const isDataAlreadyFetched = summaryData && summaryData.length > 0;
-
-    if (data1?.id && !isDataAlreadyFetched) {
+    if (data1?.id) {
       setLoading(true);
       const queryPayload = {
       unified_case_id: data1.id
@@ -94,15 +73,12 @@ const [dataLoaded, setDataLoaded] = useState(false);
         setDataLoaded(true);
       });
     }
-  }, [data1?.id, summaryData, page, dispatch,caseFilter]);
+  }, [data1?.id, dispatch]); // Removed 'page' from dependencies
 
   // Load page data when currentPage changes (but not on initial load)
   useEffect(() => {
-    if ( currentPage !== (page || 1)) {
+    if (data1?.id && currentPage !== (page || 1)) {
       setLoading(true);
-      const queryPayload = {
-      unified_case_id: data1.id
-    };
       dispatch(fetchSummaryData({
       queryPayload,
        ...(caseFilter?.file_type && { file_type: caseFilter.file_type }),
@@ -113,10 +89,11 @@ const [dataLoaded, setDataLoaded] = useState(false);
       page: currentPage,
       itemsPerPage: 50,
   })).then(() => {
+
         setLoading(false);
       });
     }
-  }, [currentPage, dispatch, page,caseFilter]);
+  }, [currentPage, data1?.id, dispatch, page]);
 
   // Update allResources to only contain current page data
   useEffect(() => {
@@ -148,8 +125,7 @@ const [dataLoaded, setDataLoaded] = useState(false);
         }
       }
     }, 500);
-
-    sidebarElement.addEventListener("scroll", handleInfiniteScroll);
+barElement.addEventListener("scroll", handleInfiniteScroll);
     return () => sidebarElement.removeEventListener("scroll", handleInfiniteScroll);
   }, [loading, hasMore, currentPage]);
 

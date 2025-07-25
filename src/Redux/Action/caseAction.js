@@ -4,6 +4,7 @@ import {
     SET_SUMMARY_DATA,
     SAVE_CASE_FILTER_PAYLOAD,
     CLEAR_CASE_FILTER_PAYLOAD,
+
 } from '../Constants/caseCaontant';
 export const setSelectedTab = (tab) => ({
     type: SET_SELECTED_TAB,
@@ -28,3 +29,4 @@ export const saveCaseFilterPayload = (payload) => ({
 export const clearCaseFilterPayload = () => ({
   type: CLEAR_CASE_FILTER_PAYLOAD
 });
+

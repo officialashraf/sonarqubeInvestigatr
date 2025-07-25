@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { TextField, InputAdornment } from "@mui/material";
-import { PieChart } from "@mui/icons-material";
-import { ListAltOutlined } from "@mui/icons-material";
-import { FaPhotoVideo } from "react-icons/fa";
 import SearchIcon from "@mui/icons-material/Search";
 import SendIcon from "@mui/icons-material/Send";
 import TuneIcon from "@mui/icons-material/Tune";
@@ -175,26 +172,6 @@ const removeChip = (chipToRemoveIndex) => {
             <AppButton children={"Reset"} onClick={resetSearch} />
           </div>
         </div>
-
-        <div style={{ display: "flex", gap: "20px", alignItems: "center" }}>
-          <PieChart
-            sx={{ fontSize: 40 }}
-            className={`${styles.icon} ${activeComponent === "graphicalData" ? styles.activeIcon : ""}`}
-            onClick={() => setActiveComponent("graphicalData")}
-          />
-          <FaPhotoVideo
-            sx={{ fontSize: 40 }}
-            className={`${styles.icon} ${activeComponent === "resources" ? styles.activeIcon : ""}`}
-            onClick={() => setActiveComponent("resources")}
-          />
-          <ListAltOutlined
-            sx={{ fontSize: 40 }}
-            className={`${styles.icon} ${activeComponent === "caseData" ? styles.activeIcon : ""}`}
-            onClick={() => setActiveComponent("caseData")}
-          />
-        </div>
-      </div>
-
       <div className="search-term-indicator" style={{ backgroundColor: "#080E17", marginBottom: "10px" }}>
         <div className="chips-container">
           {filteredChips.map((chip, index) => (
@@ -222,7 +199,9 @@ const removeChip = (chipToRemoveIndex) => {
         />
       )}
     </div>
+    </div>
   );
 };
+
 
 export default CaseTableDataFilter;

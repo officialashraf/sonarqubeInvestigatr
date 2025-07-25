@@ -22,6 +22,7 @@ export const logFilterCount = (user) => {
 //newcommonapi
 export const fetchSummaryData =
   ({ queryPayload, page = 1, itemsPerPage = 50, starttime, endtime, file_type,aggsFields,keyword }) =>
+
     async (dispatch) => {
       console.log("fetchSummaryData called",aggsFields);
       try {
