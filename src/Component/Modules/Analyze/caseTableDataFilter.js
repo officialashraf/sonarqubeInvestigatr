@@ -24,6 +24,7 @@ const CaseTableDataFilter = () => {
 const caseData = useSelector((state) => state.caseData.caseData);
 const caseFilter = useSelector((state) => state.caseFilter?.caseFilters );
 const { file_type,aggs_fields,keyword } = caseFilter || {}
+
 //  console.log("caseFilterChips",file_type,aggs_fields,keyword);
   const [inputValue, setInputValue] = useState("");
   const [searchChips, setSearchChips] = useState([]);
@@ -38,7 +39,18 @@ const { file_type,aggs_fields,keyword } = caseFilter || {}
     setIsPopupVisible(true);
   };
  // redux se caseData lo
-
+ useEffect(() => {
+    if (caseData?.id) {
+      const savePayload = {
+        caseId: caseData.id,
+        file_type: [],
+        keyword: [],
+        aggs_fields: [],
+      };
+      dispatch(saveCaseFilterPayload(savePayload));
+      console.log("saveredux", savePayload);
+    }
+  }, [caseData?.id]); 
 useEffect(() => {
   const chips = [];
 
@@ -59,29 +71,29 @@ useEffect(() => {
 
 const handleSearchSubmit = () => {
   if (!caseData?.id) return;
-const platformList = ["facebook", "instagram", "vk", "x", "tiktok", "linkedin", "youtube"];
-const aggragtionFields = [
-  "person", "org", "gpe", "loc", "product", "event", "work_of_art",
-  "law", "language", "percent", "money", "date", "time", "quantity"
-];
+// const platformList = ["facebook", "instagram", "vk", "x", "tiktok", "linkedin", "youtube"];
+// const aggragtionFields = [
+//   "person", "org", "gpe", "loc", "product", "event", "work_of_art",
+//   "law", "language", "percent", "money", "date", "time", "quantity"
+// ];
 
-const file_type = [];
-const aggsFields = [];
-const keyword = [];
-console.log("aggsfileds",aggsFields)
-filteredChips.forEach((chip) => {
-  const normalizedChip = chip.toLowerCase().trim();
+// const file_type = [];
+// const aggsFields = [];
+// const keyword = [];
+// console.log("aggsfileds",aggsFields)
+// filteredChips.forEach((chip) => {
+//   const normalizedChip = chip.toLowerCase().trim();
 
-  if (platformList.includes(normalizedChip)) {
-    file_type.push(chip); // send original chip
-  } else if (aggragtionFields.includes(normalizedChip)) {
-    aggsFields.push(chip); // send original chip
-  } else {
-    keyword.push(chip); // send original chip
-  }
-});
+//   if (platformList.includes(normalizedChip)) {
+//     file_type.push(chip); // send original chip
+//   } else if (aggragtionFields.includes(normalizedChip)) {
+//     aggsFields.push(chip); // send original chip
+//   } else {
+//     keyword.push(chip); // send original chip
+//   }
+// });
 
-
+const keyword = [...filteredChips]
   const queryPayload = {
     unified_case_id: caseData.id,
   };
@@ -89,8 +101,10 @@ filteredChips.forEach((chip) => {
   const summaryPayload ={
     queryPayload,
     ...(keyword.length > 0 && { keyword }),
-    ...(aggsFields.length > 0 && { aggsFields }),
-    ...(file_type.length > 0 && { file_type }),
+    // ...(aggsFields.length > 0 && { aggsFields }),
+    // ...(file_type.length > 0 && { file_type }),
+    // file_type: [],       // empty
+    // aggs_fields: [],
     page: 1,
     itemsPerPage: 50
   }
@@ -98,9 +112,11 @@ filteredChips.forEach((chip) => {
   console.log("summaryadte",summaryPayload)
   const savePayload ={
         caseId: caseData.id,
-        file_type:file_type,
         keyword:keyword,
-        aggs_fields:aggsFields,
+        //  file_type:file_type,
+        // aggs_fields:aggsFields,
+    //     file_type: [],       // empty
+    // aggs_fields: [],
       }
      dispatch(saveCaseFilterPayload(savePayload));
       console.log("saveredux", savePayload)
@@ -123,12 +139,12 @@ filteredChips.forEach((chip) => {
   };
 
  
-const removeChip = (chipToRemoveIndex) => {
-  const newChips = [...searchChips];
-  newChips.splice(chipToRemoveIndex, 1);
+const removeChip = (chipToRemove) => {
+  const newChips = searchChips.filter(chip => chip !== chipToRemove);
   setSearchChips(newChips);
   setFilteredChips(newChips);
 };
+
 
 
   return (

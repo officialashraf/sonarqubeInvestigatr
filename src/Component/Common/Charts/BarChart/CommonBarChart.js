@@ -32,7 +32,15 @@ const ReusableBarChart = ({
                 const payload = queryPayload
                     ? {
                         query: {
-                            unified_case_id: Array.isArray(queryPayload?.case_id) ? queryPayload.case_id : [],
+                           unified_case_id: Array.isArray(queryPayload?.case_id)
+                ? queryPayload.case_id
+                : Array.isArray(queryPayload?.caseId)
+                  ? queryPayload.caseId
+                  : queryPayload?.case_id
+                    ? [queryPayload.case_id]
+                    : queryPayload?.caseId
+                      ? [queryPayload.caseId]
+                      : [],
                             file_type: Array.isArray(queryPayload?.file_type) ? queryPayload.file_type : [],
                             keyword: Array.isArray(queryPayload?.keyword) ? queryPayload.keyword : [],
                         },

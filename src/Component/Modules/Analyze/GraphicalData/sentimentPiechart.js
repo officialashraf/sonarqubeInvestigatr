@@ -19,8 +19,8 @@ const SentimentPieChart = () => {
     }
   }, [caseID]);
 
-  const aggsFields = useMemo(() => ['sentiment'], []);
-
+  // const aggsFields = useMemo(() => ['sentiment'], []);
+  const aggsFields = ['sentiment'];
   return (
     <ReusablePieChart
       caseId={caseID}
