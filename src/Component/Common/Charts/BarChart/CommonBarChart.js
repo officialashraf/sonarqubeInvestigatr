@@ -32,7 +32,7 @@ const ReusableBarChart = ({
                 const payload = queryPayload
                     ? {
                         query: {
-                           unified_case_id: Array.isArray(queryPayload?.case_id)
+                          unified_case_id: Array.isArray(queryPayload?.case_id)
                 ? queryPayload.case_id
                 : Array.isArray(queryPayload?.caseId)
                   ? queryPayload.caseId
