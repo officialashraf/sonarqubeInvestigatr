@@ -27,10 +27,12 @@ const CaseHeader = ({ onIconClick, activeView }) => {
           <FaArrowLeft />
         </div> */}
           <div className={styles.headerTitle}>
-            <h5 >
-              Case ID: {`CASE${String(caseData.id).padStart(4, "0")}`}
-            </h5>
-            <p >{caseData.title}</p>
+            <h5>
+  Case ID: {`CASE${String(caseData.id).padStart(4, "0")}`}{" "}
+  <span className={styles.caseTitle}>({caseData.title})</span>
+</h5>
+
+            {/* <p >{caseData.title}</p> */}
           </div>
         </div>
       </div>

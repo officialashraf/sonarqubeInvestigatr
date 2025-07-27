@@ -78,10 +78,11 @@ const CriteriaSentimentChart = () => {
   // if (loading) {
   //   return <Loader />
   // }
+    const aggsFields = ['sentiment'];
   return (
     <ReusablePieChart
       // caseId={queryPayload}
-      aggsFields={["sentiment"]}
+      aggsFields={aggsFields}
      queryPayload={queryPayload}
     />
 

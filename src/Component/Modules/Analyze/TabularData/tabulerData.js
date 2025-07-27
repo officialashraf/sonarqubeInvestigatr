@@ -29,20 +29,19 @@ const TabulerData = () => {
   const getGroupColor = (groupName) => {
     if (groupColors[groupName]) return groupColors[groupName];
 
-    const colorList = [
-      "#4CAF50", // Green
-      "#F44336", // Red
-      "#FF9800", // Orange
-      "#9C27B0", // Purple
-      "#3F51B5", // Indigo
-      "#795548", // Brown
-      "#E91E63", // Pink
-      "#2196F3", // Blue
-      "#FF5722", // Deep Orange
-      "#607D8B", // Blue Grey
-      "#009688", // Teal
-      "#8BC34A", // Light Green
-    ];
+ const colorList = [
+  "#67e467ff", // Very Dark Green
+  "#ce2020ff", // Very Dark Red
+  "#ecf012ff", // Very Dark Orange
+  "#bb6dd4ff", // Very Dark Purple
+  "#060a35ff", // Very Dark Indigo
+  "#1a0a03ff", // Very Dark Brown
+  "#d44c90ff", // Very Dark Pink
+  "#e6f517ff", // Very Dark Blue
+  "#e76570ff", // Very Dark Deep Orange
+  "#45dbcfff", // Very Dark Blue Grey
+ ]
+
 
     const color = colorList[Object.keys(groupColors).length % colorList.length];
     groupColors[groupName] = color;
@@ -191,6 +190,7 @@ const pageChangePayload={
                         <div
                           style={{
                             color: getGroupColor(col.groupName),
+                             fontWeight: "600"
                           }}
                         >
                           {col.displayName}
@@ -224,7 +224,7 @@ const pageChangePayload={
                           }}
                           title={item[col.key]}
                         >
-                          {col.key === "socialmedia_hashtags" ? (() => {
+                         {["targets", "person", "gpe", "unified_case_id", "org","loc", "socialmedia_hashtags"].includes(col.key) ? (() => {
                             let tags = [];
                             try {
                               tags = JSON.parse(item[col.key]?.replace(/'/g, '"') || "[]");
@@ -266,30 +266,48 @@ const pageChangePayload={
         </div>
 
         {/* Pagination */}
-        <div className={style.paginationContainer} style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-          <Pagination>
-            <Pagination.First onClick={() => handlePageChange(1)} disabled={currentPage === 1} />
-            <Pagination.Prev onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
-            {pages.map((number, index) =>
-              number === "..." ? (
-                <Pagination.Item key={index} className={style.pageItem} disabled>
-                  ...
-                </Pagination.Item>
-              ) : (
-                <Pagination.Item
-                  key={index}
-                  active={number === currentPage}
-                  onClick={() => handlePageChange(number)}
-                  className={`${styles.pageItem} ${number === currentPage ? styles.activePage : ""}`}
-                >
-                  {number}
-                </Pagination.Item>
-              )
-            )}
-            <Pagination.Next onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages} />
-            <Pagination.Last onClick={() => handlePageChange(totalPages)} disabled={currentPage === totalPages} />
-          </Pagination>
-        </div>
+      <div
+  className={style.paginationContainer}
+  style={{
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between", // updated
+    width: "100%",                   // ensure full width
+    padding: "0 16px"                // optional padding
+  }}
+>
+  {/* Pagination centered inside a wrapper */}
+  <div style={{ flex: 1, display: "flex", justifyContent: "center" }}>
+    <Pagination>
+      <Pagination.First onClick={() => handlePageChange(1)} disabled={currentPage === 1} />
+      <Pagination.Prev onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
+      {pages.map((number, index) =>
+        number === "..." ? (
+          <Pagination.Item key={index} className={style.pageItem} disabled>
+            ...
+          </Pagination.Item>
+        ) : (
+          <Pagination.Item
+            key={index}
+            active={number === currentPage}
+            onClick={() => handlePageChange(number)}
+            className={`${styles.pageItem} ${number === currentPage ? styles.activePage : ""}`}
+          >
+            {number}
+          </Pagination.Item>
+        )
+      )}
+      <Pagination.Next onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages} />
+      <Pagination.Last onClick={() => handlePageChange(totalPages)} disabled={currentPage === totalPages} />
+    </Pagination>
+  </div>
+
+  {/* Total results on the right */}
+  <div style={{ fontSize: "12px", color: "#ccc" }}>
+    (Total Results - {totalPages * 50 || "0"})
+  </div>
+</div>
+
 
         {/* Group Color Legend */}
         <div

@@ -74,7 +74,8 @@
   gap: 8px;
   /* height: 100px; */
   overflow: auto;
-  margin: 8px 0px 8px 0px;
+  margin: 4px 0px 4px 0px;
+  height: 60px;
 }
 
 .search-chip {

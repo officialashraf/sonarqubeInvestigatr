@@ -164,13 +164,13 @@ const CriteriaCaseTable = () => {
     <>
       <div style={{ backgroundColor: "#101D2B", borderRadius: '15px', padding: "0px 15px 0px 15px" }}>
         <div className="tabs" >
-          <div
+          {/* <div
             className={`tab active`} // "Cases" will always be active
           // onClick={() => setActiveTab('Cases')}
 
           >
             Cases ({totalResults || "no results"})
-          </div>
+          </div> */}
 
         </div>
         <div className={styles.tableWrapper} >
@@ -230,7 +230,7 @@ const CriteriaCaseTable = () => {
                             title={typeof item[key] === 'object' ? JSON.stringify(item[key]) : item[key]}
                           // onClick={() => togglePopupA(item)}
                           >
-                            {key === "socialmedia_hashtags" && Array.isArray(item[key]) ? (
+                            {["socialmedia_hashtags", "targets", "person", "gpe", "unified_case_id", "org","loc"].includes(key) && Array.isArray(item[key]) ? (
                               <div style={{ display: "flex", gap: "4px" }}>
                                 {item[key].map((tag, i) => (
                                   <span
@@ -276,11 +276,27 @@ const CriteriaCaseTable = () => {
         </div>
       </div>
 
-      <div className={styles.paginationContainer}>
-        <div >
-          {renderPagination()}
-        </div>
-      </div>
+   <div
+  className={styles.paginationContainer}
+  style={{
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    width: "100%", // ensures full horizontal space
+    padding: "0 16px", // optional spacing
+  }}
+>
+  {/* Pagination centered */}
+  <div style={{ flex: 1, display: "flex", justifyContent: "center" }}>
+    {renderPagination()}
+  </div>
+
+  {/* Total Result aligned right */}
+  <div style={{ fontSize: "14px", color: "#ccc" }}>
+    (Total Results - {totalResults || "0"})
+  </div>
+</div>
+
 
     </>
   );
