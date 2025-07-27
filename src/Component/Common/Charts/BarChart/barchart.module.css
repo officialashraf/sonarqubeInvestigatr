@@ -1,9 +1,18 @@
 /* src/components/common/BarChart/ReusableBarChart.module.css */
 .chartWrapper {
   width: 100%;
-    overflow-y: auto;
+  overflow-y: auto;
   background-color: #101D2B;
+
+  /* Hide scrollbar cross-browser */
+  scrollbar-width: none;         /* Firefox */
+  -ms-overflow-style: none;      /* IE and Edge */
 }
+
+.chartWrapper::-webkit-scrollbar {
+  display: none;                 /* Chrome, Safari, Opera */
+}
+
 .chartWrappers {
   width: 100%;
   background-color: #101D2B;

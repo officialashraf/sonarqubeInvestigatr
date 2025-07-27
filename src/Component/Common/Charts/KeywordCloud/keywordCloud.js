@@ -80,6 +80,11 @@ const KeywordTagList = ({ queryPayload = null, caseId = null, aggsFields = ["soc
           maxHeight: '280px',
           overflowY: 'auto',
           overflowX: 'hidden',
+           scrollbarWidth: 'none',           // Firefox
+    msOverflowStyle: 'none',          // IE/Edge
+    '&::-webkit-scrollbar': {
+      display: 'none',                // Chrome, Safari, Opera
+    },
         }}
       >
         {displayedData.length > 0 ? (

@@ -205,7 +205,7 @@ const SearchResults = () => {
 
   return (
 
-    <div className="search-container" style={{ backgroundColor: '#080E17', height: '100%', zIndex: '1050' }}>
+    <div className="search-container" style={{ backgroundColor: '#080E17', height: '100%', zIndex: '1050',overflowY:"hidden" }}>
       {/* <div style={{ display: 'flex', justifyContent: 'space-between', aligntems: 'center', marginTop: '5px' }}> */}
       <div className={styles.actionIconsContainer} style={{ display: 'flex', justifyContent: 'space-between', aligntems: 'center', marginTop: '5px' }}>
         {/* 
@@ -267,7 +267,7 @@ const SearchResults = () => {
           />
         </div>
       </div>
-      <div className="search-term-indicator" style={{ backgroundColor: '#080E17', marginBottom: "10px" }}>
+      <div className="search-term-indicator" style={{ backgroundColor: '#080E17' }}>
         <div className="chips-container">
           {filteredChips && filteredChips.map((chip, index) => (
             <div key={index} className="search-chip">
