@@ -202,7 +202,7 @@ const LoginPage = () => {
                 </Col>
             </Row>
 
-            <h1>{loginData?.loginTextFooter || "Default Login"} </h1>
+            <h4>{loginData?.loginTextFooter || "Default Login"} </h4>
             {/* <h4>Secure. Scalable. Built for law Enforcement</h4> */}
 
         </Container>

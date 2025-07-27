@@ -421,7 +421,7 @@ const AddFilter = ({ searchChips, isPopupVisible, setIsPopupVisible }) => {
                 className="add-btn" 
                 disabled={isSearchDisabled}
                 style={{
-                  backgroundColor: isSearchDisabled ? '#ccc' : '#000',
+                  backgroundColor: isSearchDisabled ? '#ccc' : '#0073CF',
                   color: isSearchDisabled ? '#666' : '#fff',
                   cursor: isSearchDisabled ? 'not-allowed' : 'pointer'
                 }}
