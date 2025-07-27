@@ -468,7 +468,7 @@ const CaseTableDataFilter = () => {
                 </div>
             </div>
 
-            <div className="search-term-indicator" style={{ backgroundColor: "#080E17", marginBottom: "10px" }}>
+            <div className="search-term-indicator" style={{ backgroundColor: "#080E17" }}>
                 <div className="chips-container">
                     {filteredChips.map((chip, index) => {
                         // Determine chip type for styling
@@ -519,7 +519,7 @@ const CaseTableDataFilter = () => {
                 </div>
             </div>
 
-            <div style={{ height: "380px", borderRadius: "15px", overflow: "auto" }}>
+            <div style={{ height: "350px", borderRadius: "15px", overflow: "auto" }}>
                 {activeComponent === "graphicalData" && <GraphicalData />}
                 {activeComponent === "resources" && <Resources />}
                 {activeComponent === "caseData" && <TabulerData />}
