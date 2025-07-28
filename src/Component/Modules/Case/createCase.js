@@ -4,6 +4,7 @@ import "./createCaseGlobal.css";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 import { useAutoFocusWithManualAutofill } from "../../../utils/autoFocus";
 import CommonTextInput from "../../Common/MultiSelect/CommonTextInput";
 import CommonTextArea from "../../Common/MultiSelect/CommonText";
@@ -36,6 +37,8 @@ export const customStyles = {
 
 const CreateCase = ({ togglePopup }) => {
   const { inputRef, isReadOnly, handleFocus } = useAutoFocusWithManualAutofill();
+  const { t } = useTranslation();
+
 
   const [formData, setFormData] = useState({
     title: "",
@@ -83,7 +86,7 @@ const CreateCase = ({ togglePopup }) => {
   const handleCreateCase = async () => {
     const token = Cookies.get("accessToken");
     if (!token) {
-      toast.error("Authentication error: No token found");
+      toast.error(t('case_form.auth_error'))
       return;
     }
 
@@ -126,15 +129,16 @@ const CreateCase = ({ togglePopup }) => {
       window.dispatchEvent(new Event("databaseUpdated"));
 
       if (response.status === 200) {
-        toast.success("Case created successfully");
+        toast.success(t('case_form.success'))
+
         togglePopup();
       } else {
-        toast.error("Unexpected response from server");
+          toast.error(t('case_form.unexpected_response'))
       }
 
     } catch (err) {
       console.error("Error during case creation:", err.response || err);
-      toast.error((err.response?.data?.detail || err.message || "Error encountered during case creation."));
+      toast.error(err.response?.data?.detail || err.message || t('case_form.creation_error'))
     } finally {
       setIsSubmitting(false);
     }
@@ -183,46 +187,45 @@ const CreateCase = ({ togglePopup }) => {
           &times;
         </button>
         <div className="popup-content">
-          <h5>Create Case</h5>
+         <h5>{t('case_form.create_case')}</h5>
           <form onSubmit={(e) => {
             e.preventDefault();
             handleCreateCase();
           }}>
             {/* <label htmlFor="title">Title *</label> */}
             <CommonTextInput
-              label="Title *"
+              label={t('case_form.title')}
               type="text"
               id="title"
               name="title"
               value={formData.title}
               onChange={handleInputChange}
-              placeholder="Enter title"
+              placeholder={t('case_form.title_placeholder')}
               readOnly={isReadOnly}
               onFocus={handleFocus}
               ref={inputRef}
             />
-            {error.title && <p style={{ color: "red", margin: '0px' }}>{error.title}</p>}
+            {error.title && <p style={{ color: "red" }}>{t('case_form.title_required')}</p>}
 
             {/* <label htmlFor="description">Description *</label> */}
             <CommonTextArea
               // className="com"
-              label="Description *"
+             label={t('case_form.description')}
               id="description"
               name="description"
               value={formData.description}
               onChange={handleInputChange}
-              placeholder="Enter description"
+              placeholder={t('case_form.description_placeholder')}
             />
-            {error.description && <p style={{ color: "red", margin: '0px' }}>{error.description}</p>}
-
+             {error.description && <p style={{ color: "red" }}>{t('case_form.description_required')}</p>}
             <div>
               {/* <label htmlFor="assignee">Assignee</label> */}
               <CommonSingleSelect
-              label='Assignee'
+                label={t('case_form.assignee')}
                 options={options}
                 customStyles={customSelectStyles}
                 className="com"
-                placeholder="Select assignee"
+                placeholder={t('case_form.select_assignee')}
                 value={options && options.find(option => option.value === formData.assignee) || null}
                 onChange={handleAssigneeChange}
               />
@@ -231,13 +234,13 @@ const CreateCase = ({ togglePopup }) => {
             <div className="watcher-container">
               {/* <label htmlFor="watchers">Watchers</label> */}
               <CommonMultiSelect
-              label='Watchers'
+                label={t('case_form.watchers')}
                 options={options}
                 isMulti
                 
                 customStyles={customSelectStyles}
                 name="watchers"
-                placeholder="Select watchers"
+                 placeholder={t('case_form.select_watchers')}
                 value={options && options.filter(option => formData.watchers.includes(option.value))}
                 onChange={handleWatchersChange}
               />
@@ -245,10 +248,10 @@ const CreateCase = ({ togglePopup }) => {
 
             <div className="button-container">
               <AppButton type="submit" className="create-btn" disabled={isSubmitting}>
-                {isSubmitting ? 'Creating...' : 'Create'}
+                  {isSubmitting ? t('case_form.creating') : t('case_form.create')}
               </AppButton>
               <AppButton type="button" className="cancel-btn" onClick={togglePopup}>
-                Cancel
+                {t('case_form.cancel')}
               </AppButton>
             </div>
           </form>

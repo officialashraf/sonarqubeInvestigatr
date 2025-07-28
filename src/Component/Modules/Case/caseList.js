@@ -23,8 +23,10 @@ import Loader from "../Layout/loader";
 import { SET_PAGINATION } from "../../../Redux/Constants/filterConstant";
 import TableModal from "../../Common/Table/table";
 import AppButton from "../../Common/Buttton/button";
+import { useTranslation } from 'react-i18next';
 
 const DataTable = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
@@ -38,6 +40,49 @@ const DataTable = () => {
   const [showPopupB, setShowPopupB] = useState(false);
   const [selectedData, setSelectedData] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  // Fix for t is not a function error in toast confirmDelete
+  const toastConfirmDelete = (id, title) => {
+    toast(
+      (toastInstance) => (
+        <div>
+          <p>{t("confirm_delete_case", { title })}</p>
+          <button
+            className="custom-confirm-button"
+            onClick={() => {
+              deleteCase(id, title);
+              toast.dismiss(toastInstance.id);
+            }}
+            style={{ padding: "4px 1px", fontSize: "12px", width: "20%" }}
+          >
+            {t("yes")}
+          </button>
+          <button
+            className="custom-confirm-button"
+            onClick={() => toast.dismiss(toastInstance.id)}
+            style={{ padding: "4px 1px", fontSize: "12px", width: "20%" }}
+          >
+            {t("no")}
+          </button>
+        </div>
+      ),
+      {
+        autoClose: false,
+        closeOnClick: false,
+        draggable: false,
+        style: {
+          position: "fixed",
+          top: "300px",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          width: "100%",
+          zIndex: 9999,
+          background: '#101D2B',
+          color: '#d2d2d2'
+        },
+      }
+    );
+  };
   // const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   // const onFieldClick = (item) => {
@@ -74,7 +119,7 @@ const DataTable = () => {
       setFilteredData(response.data.data);
       console.log("data", response.data);
     } catch (error) {
-      toast.error(error.response?.data?.detail || "Error fetching case data");
+      toast.error(error.response?.data?.detail || t("error.fetching_data"));
       console.error("Error fetching data:", error);
     } finally {
       setLoading(false);
@@ -95,45 +140,7 @@ const DataTable = () => {
   }, []);
 
   const confirmDelete = (id, title) => {
-    toast(
-      (t) => (
-        <div>
-          <p>Are you sure you want to delete {title} case?</p>
-          <button
-            className="custom-confirm-button"
-            onClick={() => {
-              deleteCase(id, title);
-              toast.dismiss(t.id);
-            }}
-            style={{ padding: "4px 1px", fontSize: "12px", width: "20%" }}
-          >
-            Yes
-          </button>
-          <button
-            className="custom-confirm-button"
-            onClick={() => toast.dismiss(t.id)}
-            style={{ padding: "4px 1px", fontSize: "12px", width: "20%" }}
-          >
-            No
-          </button>
-        </div>
-      ),
-      {
-        autoClose: false,
-        closeOnClick: false,
-        draggable: false,
-        style: {
-          position: "fixed",
-          top: "300px",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          width: "100%",
-          zIndex: 9999,
-          background: '#101D2B',
-          color: '#d2d2d2'
-        },
-      }
-    );
+    toastConfirmDelete(id, title);
   };
 
   const deleteCase = async (id, title) => {
@@ -155,10 +162,10 @@ const DataTable = () => {
         }
       );
       window.dispatchEvent(new Event("databaseUpdated"));
-      toast.success(`Case ${title} deleted successfully`);
+      toast.success(t("case_deleted_success", { title }));
       console.log("Case Deleted:", response.data);
     } catch (error) {
-      toast.error(error.response?.data?.detail || "Error deleting case");
+      toast.error(error.response?.data?.detail || t("error.deleting_case"));
       console.error("Error deleting case:", error);
     }
   };
@@ -244,373 +251,64 @@ const DataTable = () => {
     return <Loader />;
   }
   const caseColumns = [
-    { key: "id", label: "Case ID", render: (val) => `CASE${String(val).padStart(4, "0")}` },
-    { key: "title", label: "Title" },
-    { key: "description", label: "Description" },
-    { key: "created_on", label: "Created On" },
-    { key: "created_by", label: "Created By" },
-    { key: "assignee", label: "Assignee" },
-    { key: "watchers",      label: "Watchers",   },
-    { key: "modified_on", label: "Edited On" },
-    { key: "modified_by", label: "Edited By" },
-    { key: "status", label: "Status"
-      , render: (val) => (
-      <span
-        style={{
-          backgroundColor: "#FFC107",
-          color: "#000",
-          padding: "2px 6px",
-          borderRadius: "12px",
-          fontSize: "11px",
-          whiteSpace: "nowrap",
-        }}
-      >
-      {val}
-      </span>
-    ) }
+    { key: "id", label: t("case_id"), render: (val) => `CASE${String(val).padStart(4, "0")}` },
+    { key: "title", label: t("title") },
+    { key: "description", label: t("description") },
+    { key: "created_on", label: t("created_on") },
+    { key: "created_by", label: t("created_by") },
+    { key: "assignee", label: t("assignee") },
+    { key: "watchers", label: t("watchers") },
+    { key: "modified_on", label: t("edited_on") },
+    { key: "modified_by", label: t("edited_by") },
+    {
+      key: "status", label: t("status"),
+      render: (val) => (
+        <span
+          style={{
+            backgroundColor: "#FFC107",
+            color: "#000",
+            padding: "2px 6px",
+            borderRadius: "12px",
+            fontSize: "11px",
+            whiteSpace: "nowrap",
+          }}
+        >
+          {val}
+        </span>
+      )
+    }
   ];
-
-
 
   return (
     <>
       {data && data.length > 0 ? (
-        // <div className="data-table-container" style={{ border: "none" }}>
-        //   <div className="top-header">
-        //     <InputGroup className="search-bar1">
-        //       <InputGroup.Text className="search-icon">
-        //         <Search />
-        //       </InputGroup.Text>
-        //       <FormControl
-        //         placeholder="Search case"
-        //         aria-label="Search"
-        //         value={searchTerm}
-        //         onChange={handleSearch}
-        //       />
-        //     </InputGroup>
-
-        //     <div className="header-icons">
-        //       <button className="add-btn" title="Add New Case" onClick={togglePopup}>
-        //         <Plus size={20} />
-        //         Add New Case
-        //       </button>
-        //     </div>
-        //   </div>
-        //   <div className="data-table" style={{ minHeight: isDropdownOpen ? "200px" : "auto" }}>
-        //     <Table striped bordered hover variant="light">
-        //       <thead>
-        //         <tr>
-        //           <th>
-        //             <div
-        //               style={{
-        //                 display: "flex",
-        //                 justifyContent: "space-between",
-        //                 alignItems: "center",
-        //                 width: "100px",
-        //               }}
-        //             >
-        //               Case ID
-        //               <span
-        //                 onClick={() => handleSort("id")}
-        //                 style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
-        //               >
-        //                 {sortConfig.key === "id" ? (
-        //                   sortConfig.direction === "asc" ? (
-        //                     <ArrowDropUp />
-        //                   ) : (
-        //                     <ArrowDropDown />
-        //                   )
-        //                 ) : (
-        //                   <ArrowDropDown />
-        //                 )}
-        //               </span>
-        //             </div>
-        //           </th>
-        //           <th>
-        //             <div
-        //               style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
-        //             >
-        //               Title
-        //               <span
-        //                 onClick={() => handleSort("title")}
-        //                 style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
-        //               >
-        //                 {sortConfig.key === "title" ? (
-        //                   sortConfig.direction === "asc" ? (
-        //                     <ArrowDropUp />
-        //                   ) : (
-        //                     <ArrowDropDown />
-        //                   )
-        //                 ) : (
-        //                   <ArrowDropDown />
-        //                 )}
-        //               </span>
-        //             </div>
-        //           </th>
-        //           <th>
-        //             <div
-        //               style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
-        //             >
-        //               Description
-        //               <span
-        //                 onClick={() => handleSort("description")}
-        //                 style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
-        //               >
-        //                 {sortConfig.key === "description" ? (
-        //                   sortConfig.direction === "asc" ? (
-        //                     <ArrowDropUp />
-        //                   ) : (
-        //                     <ArrowDropDown />
-        //                   )
-        //                 ) : (
-        //                   <ArrowDropDown />
-        //                 )}
-        //               </span>
-        //             </div>
-        //           </th>
-        //           <th>
-        //             <div
-        //               style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
-        //             >
-        //               Created On
-        //               <span
-        //                 onClick={() => handleSort("created_on")}
-        //                 style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
-        //               >
-        //                 {sortConfig.key === "created_on" ? (
-        //                   sortConfig.direction === "asc" ? (
-        //                     <ArrowDropUp />
-        //                   ) : (
-        //                     <ArrowDropDown />
-        //                   )
-        //                 ) : (
-        //                   <ArrowDropDown />
-        //                 )}
-        //               </span>
-        //             </div>
-        //           </th>
-        //           <th>
-        //             <div
-        //               style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
-        //             >
-        //               Created By
-        //               <span
-        //                 onClick={() => handleSort("created_by")}
-        //                 style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
-        //               >
-        //                 {sortConfig.key === "created_by" ? (
-        //                   sortConfig.direction === "asc" ? (
-        //                     <ArrowDropUp />
-        //                   ) : (
-        //                     <ArrowDropDown />
-        //                   )
-        //                 ) : (
-        //                   <ArrowDropDown />
-        //                 )}
-        //               </span>
-        //             </div>
-        //           </th>
-        //           <th>
-        //             <div
-        //               style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
-        //             >
-        //               Assignee
-        //               <span
-        //                 onClick={() => handleSort("assignee")}
-        //                 style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
-        //               >
-        //                 {sortConfig.key === "assignee" ? (
-        //                   sortConfig.direction === "asc" ? (
-        //                     <ArrowDropUp />
-        //                   ) : (
-        //                     <ArrowDropDown />
-        //                   )
-        //                 ) : (
-        //                   <ArrowDropDown />
-        //                 )}
-        //               </span>
-        //             </div>
-        //           </th>
-        //           <th>
-        //             <div
-        //               style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
-        //             >
-        //               Watchers
-        //               <span
-        //                 onClick={() => handleSort("watchers")}
-        //                 style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
-        //               >
-        //                 {sortConfig.key === "watchers" ? (
-        //                   sortConfig.direction === "asc" ? (
-        //                     <ArrowDropUp />
-        //                   ) : (
-        //                     <ArrowDropDown />
-        //                   )
-        //                 ) : (
-        //                   <ArrowDropDown />
-        //                 )}
-        //               </span>
-        //             </div>
-        //           </th>
-        //           <th>
-        //             <div
-        //               style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
-        //             >
-        //               Modified On
-        //               <span
-        //                 onClick={() => handleSort("modified_on")}
-        //                 style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
-        //               >
-        //                 {sortConfig.key === "modified_on" ? (
-        //                   sortConfig.direction === "asc" ? (
-        //                     <ArrowDropUp />
-        //                   ) : (
-        //                     <ArrowDropDown />
-        //                   )
-        //                 ) : (
-        //                   <ArrowDropDown />
-        //                 )}
-        //               </span>
-        //             </div>
-        //           </th>
-        //           <th className="sticky-column">
-        //             <div
-        //               style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
-        //             >
-        //               Status
-        //               <span
-        //                 onClick={() => handleSort("status")}
-        //                 style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}
-        //               >
-        //                 {sortConfig.key === "status" ? (
-        //                   sortConfig.direction === "asc" ? (
-        //                     <ArrowDropUp />
-        //                   ) : (
-        //                     <ArrowDropDown />
-        //                   )
-        //                 ) : (
-        //                   <ArrowDropDown />
-        //                 )}
-        //               </span>
-        //             </div>
-        //           </th>
-        //         </tr>
-        //       </thead>
-        //       <tbody className="tb-1">
-        //         {filteredData &&
-        //           filteredData.map((item, index) => (
-        //             <tr
-        //            style={{ cursor: "pointer" }}
-        //              key={item.id}
-        //               onClick={() => onFieldClick(item)}
-
-        //             >
-        //               <td>
-        //                 {`CASE${String(item.id).padStart(4, "0")}`}
-
-        //               </td>
-
-        //               <td>{item.title}</td>
-        //               <td>{item.description}</td>
-        //               <td>{item.created_on}</td>
-        //               <td>{item.created_by}</td>
-        //               <td>{item.assignee}</td>
-
-        //               <td>
-        //                 {Array.isArray(item.watchers)
-        //                   ? item.watchers.join(", ")
-        //                   : typeof item.watchers === "string"
-        //                     ? item.watchers.split(",").map((w) => w.trim()).join(", ")
-        //                     : ""}
-        //               </td>
-
-        //               <td>{item.modified_on}</td>
-        //               <td
-        //                 className="d-flex justify-content-between align-items-center"
-        //                 disabled={true}
-        //                 onClick={(e) => e.stopPropagation()}
-        //               >
-        //                 <Badge pill bg="dark" className="badge-custom">
-        //                   <span>{item.status}</span>
-        //                 </Badge>
-        //                 <span>
-        //                   {" "}
-        //                   <Dropdown onToggle={(isOpen) => setIsDropdownOpen(isOpen)}>
-        //                     <Dropdown.Toggle
-        //                       className="custom-dropdown-toggle custom-btn"
-        //                     >
-        //                       {" "}
-        //                       ⋮{" "}
-        //                     </Dropdown.Toggle>
-        //                     <Dropdown.Menu className="custom-dropdown-menu">
-        //                       <Dropdown.Item
-        //                         onClick={() => {
-        //                           togglePopupA(item);
-        //                         }}
-        //                         style={{ cursor: "pointer" }}
-        //                       >
-        //                         Details
-        //                       </Dropdown.Item>
-        //                       <Dropdown.Item onClick={() => togglePopupB(item)}>
-        //                         Edit
-        //                       </Dropdown.Item>
-        //                       <Dropdown.Item
-        //                         onClick={() => confirmDelete(item.id, item.title)}
-        //                       >
-        //                         Delete
-        //                       </Dropdown.Item>
-        //                     </Dropdown.Menu>
-        //                   </Dropdown>
-        //                 </span>
-        //               </td>
-        //             </tr>
-        //           ))}
-        //       </tbody>
-        //     </Table>
-        //   </div>
-        // </div>
-
-
-
         <div>
           <TableModal
-            title="Case Details"
+            title={t("case_details")}
             data={data}
             columns={caseColumns}
-
             onRowClick={(row) => {
               dispatch(setCaseData(row));
               console.log('Row clicked:', row);
-              const caseId = row.id 
+              const caseId = row.id
               navigate(`/cases/${caseId}`);
             }}
             enableRowClick={true}
-            // onRowAction={{
-            //   view: (row) => alert("View row: " + JSON.stringify(row))
-            // }}
-
             onRowAction={{
               edit: (row) => togglePopupB(row),
               delete: (row) => confirmDelete(row.id, row.title),
               details: (row) => togglePopupA(row),
             }}
             idPrefix="CASE"
-            btnTitle=" + Add New Case"
+            btnTitle={`+ ${t("add_new_case")}`}
             onAddClick={() => togglePopup()}
           />
-
         </div>
-
       ) : (
         <div className="resourcesContainer" style={{ border: "none" }}>
-          <h3 className="title">Let's Get Started!</h3>
-          <p className="content">Add cases to get started</p>
-          {/* <button className="add-btn" title="Add New Case" onClick={togglePopup} >
-            <Plus size={20} />
-            Add New Case
-          </button> */}
-          <AppButton onClick={togglePopup} children={" + Add New Case"} />
-
+          <h3 className="title">{t("lets_get_started")}</h3>
+          <p className="content">{t("add_cases_to_get_started")}</p>
+          <AppButton onClick={togglePopup} children={`+ ${t("add_new_case")}`} />
         </div>
       )}
       {showPopup && <CreateCase togglePopup={togglePopup} />}
@@ -623,4 +321,3 @@ const DataTable = () => {
 };
 
 export default DataTable;
-

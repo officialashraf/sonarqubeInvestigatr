@@ -4,10 +4,12 @@ import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import PopupModal from "../../Common/Popup/popup";
 import DetailBox from "../../Common/DetailBox/DetailBox";
-import styles from '../../Common/DetailBox/detailBox.module.css'
+import styles from '../../Common/DetailBox/detailBox.module.css';
 import AppButton from "../../Common/Buttton/button";
+import { useTranslation } from "react-i18next";
 
 const CaseDetails = ({ caseId, togglePopupA }) => {
+    const { t } = useTranslation();
     const [item, setItem] = useState(null);
     const [loading, setLoading] = useState(true);
 
@@ -25,11 +27,10 @@ const CaseDetails = ({ caseId, togglePopupA }) => {
                         },
                     }
                 );
-                console.log("Case details response:", response);
                 setItem(response.data.data || response.data);
             } catch (err) {
                 toast.error(
-                    err.response?.data?.detail || "Failed to fetch case details"
+                    err.response?.data?.detail || t("caseDetails.noDetails")
                 );
                 console.error("Error fetching case details:", err.response || err);
             } finally {
@@ -40,20 +41,20 @@ const CaseDetails = ({ caseId, togglePopupA }) => {
         if (caseId) {
             fetchCaseDetails();
         }
-    }, [caseId]);
+    }, [caseId, t]);
 
-     const formatWatchers = () => {
-    if (Array.isArray(item.watchers)) return item.watchers.join(", ");
-    if (typeof item.watchers === "string")
-      return item.watchers.split(",").map((w) => w.trim()).join(", ");
-    return "";
-  };
+    const formatWatchers = () => {
+        if (Array.isArray(item?.watchers)) return item.watchers.join(", ");
+        if (typeof item?.watchers === "string")
+            return item.watchers.split(",").map((w) => w.trim()).join(", ");
+        return "";
+    };
 
     if (loading) {
         return (
             <div className="popup-overlay">
                 <div className="popup-containera">
-                    <div className="popup-content">Loading case details...</div>
+                    <div className="popup-content">{t("caseDetails.loading")}</div>
                 </div>
             </div>
         );
@@ -64,9 +65,9 @@ const CaseDetails = ({ caseId, togglePopupA }) => {
             <div className="popup-overlay">
                 <div className="popup-containera">
                     <div className="popup-content">
-                        <p>No case details found.</p>
+                        <p>{t("caseDetails.noDetails")}</p>
                         <button type="button" className="cancel-btn" onClick={togglePopupA}>
-                            Cancel
+                            {t("caseDetails.cancel")}
                         </button>
                     </div>
                 </div>
@@ -75,28 +76,28 @@ const CaseDetails = ({ caseId, togglePopupA }) => {
     }
 
     return (
-       <PopupModal title={'Case Details'} onClose={togglePopupA}>
-         <div className={styles.container}>
-         <div className={styles.grid}>
-        <DetailBox label="Case ID" value={`CASE${String(item.id).padStart(4, "0")}`} />
-        <DetailBox label="Status" value={item.status} isStatus />
-        <DetailBox label="Description" value={item.description} />
-        <DetailBox label="Created On" value={item.created_on?.slice(0, 12)} />
-        <DetailBox label="Created By" value={item.created_by} />
-        <DetailBox label="Edited On" value={item.modified_on} />
-        <DetailBox label="Edited By" value={item.modified_by} />
-        <DetailBox label="Assignee" value={item.assignee} />
-        <DetailBox label="Watcher(s)" value={formatWatchers()} />
-        <DetailBox label="Archived By" value={item.archivedBy} />
-        <DetailBox label="Archived On" value={item.archivedOn} />
-        <DetailBox label="Archival Reason" value={item.archivalReason} />
-        <DetailBox label="Archival Comments" value={item.archivalComments} />
-      </div>
-    </div>
-    <div className="d-flex justify-content-center mt-3">
-          <AppButton children={"OK"}  onClick={togglePopupA} />
-        </div>
-           </PopupModal> 
+        <PopupModal title={t("caseDetails.title")} onClose={togglePopupA}>
+            <div className={styles.container}>
+                <div className={styles.grid}>
+                    <DetailBox label={t("caseDetails.caseId")} value={`CASE${String(item.id).padStart(4, "0")}`} />
+                    <DetailBox label={t("caseDetails.status")} value={item.status} isStatus />
+                    <DetailBox label={t("caseDetails.description")} value={item.description} />
+                    <DetailBox label={t("caseDetails.createdOn")} value={item.created_on?.slice(0, 12)} />
+                    <DetailBox label={t("caseDetails.createdBy")} value={item.created_by} />
+                    <DetailBox label={t("caseDetails.editedOn")} value={item.modified_on} />
+                    <DetailBox label={t("caseDetails.editedBy")} value={item.modified_by} />
+                    <DetailBox label={t("caseDetails.assignee")} value={item.assignee} />
+                    <DetailBox label={t("caseDetails.watchers")} value={formatWatchers()} />
+                    <DetailBox label={t("caseDetails.archivedBy")} value={item.archivedBy} />
+                    <DetailBox label={t("caseDetails.archivedOn")} value={item.archivedOn} />
+                    <DetailBox label={t("caseDetails.archivalReason")} value={item.archivalReason} />
+                    <DetailBox label={t("caseDetails.archivalComments")} value={item.archivalComments} />
+                </div>
+            </div>
+            <div className="d-flex justify-content-center mt-3">
+                <AppButton children={t("caseDetails.ok")} onClick={togglePopupA} />
+            </div>
+        </PopupModal>
     );
 };
 

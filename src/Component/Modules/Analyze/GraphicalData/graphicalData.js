@@ -10,6 +10,7 @@ import EventBar from "./eventBar";
 import PersonBar from "./personBar";
 import LanguageBar from "./languageBar";
 import OrgBar from "./orgBar";
+import LazyLoadWrapper from "./LazyLoadWrapper";
 
 const Header = ({ title }) =>
   <Grid
@@ -52,7 +53,9 @@ const ComponentOne = () => (
     <Header title="Timelines" />
     <Card sx={{ height: "300px", backgroundColor: "#101D2B", borderRadius: '25px' }}>
       <CardContent>
-        <LineGraph />
+        <LazyLoadWrapper height={300}>
+          <LineGraph />
+        </LazyLoadWrapper>
       </CardContent>
     </Card>
   </>);
@@ -63,7 +66,9 @@ const ComponentTwo = () => (
     <Header title="Keywords" />
     <Card sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius: '25px' }}>
       <CardContent>
-        <KeywordChart />
+        <LazyLoadWrapper height={350}>
+          <KeywordChart />
+        </LazyLoadWrapper>
       </CardContent>
     </Card>
   </>);
@@ -80,7 +85,9 @@ const ComponentThree = () => (
           align="center"
           height={250}
         >
-          <LocationBar />
+          <LazyLoadWrapper height={350}>
+            <LocationBar />
+          </LazyLoadWrapper>
           {/* {" "}No Data{" "} */}
         </Typography>
       </CardContent>
@@ -93,7 +100,9 @@ const ComponentFour = () => (
       sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius: '25px' }}
     >
       <CardContent>
-        <SentimentPieChart />
+        <LazyLoadWrapper height={350}>
+          <SentimentPieChart />
+        </LazyLoadWrapper>
       </CardContent>
     </Card>
   </>
@@ -105,7 +114,9 @@ const ComponentFive = () => (
       sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius: '25px' }}
     >
       <CardContent sx={{ backgroundColor: "#101D2B", borderRadius: '25px' }}>
-        <DateBar />
+        <LazyLoadWrapper height={350}>
+          <DateBar />
+        </LazyLoadWrapper>
       </CardContent>
     </Card>
   </>
@@ -117,7 +128,9 @@ const ComponentSix = () => (
       sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius: '25px' }}
     >
       <CardContent>
-        <EventBar />
+        <LazyLoadWrapper height={350}>
+          <EventBar />
+        </LazyLoadWrapper>
       </CardContent>
     </Card>
   </>
@@ -129,7 +142,9 @@ const ComponentSeven = () => (
       sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius: '25px' }}
     >
       <CardContent>
-        <PersonBar />
+        <LazyLoadWrapper height={350}>
+          <PersonBar />
+        </LazyLoadWrapper>
       </CardContent>
     </Card>
   </>
@@ -141,7 +156,9 @@ const ComponentEight = () => (
       sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius: '25px' }}
     >
       <CardContent>
-        <LanguageBar />
+        <LazyLoadWrapper height={350}>
+          <LanguageBar />
+        </LazyLoadWrapper>
       </CardContent>
     </Card>
   </>
@@ -154,18 +171,22 @@ const ComponentNine = () => (
       sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius: '25px', marginBottom: '5rem', borderRadius: '25px' }}
     >
       <CardContent >
-        <OrgBar />
+        <LazyLoadWrapper height={350}>
+          <OrgBar />
+        </LazyLoadWrapper>
       </CardContent>
     </Card>
   </>
 );
 const GraphicalData = () => {
   return (
-    <div className={styles.responsiveContainer} >
+    <div className={styles.responsiveContainer} 
+    // style={{overflowY: 'auto', maxHeight: '90vh'}}
+    >
 
       <Grid container spacing={1} p={1} className={styles.responsiveGrid} style={{
         background: "#080E17", marginLeft: "0 px !important", height: '100%',
-        overflowY: 'auto'
+         overflowY: 'auto'
       }}>
         <Grid item xs={12} sx={{ paddingLeft: '0px !important', paddingTop: "0px !important" }}  className={styles.grapghCards}>
           <ComponentOne />

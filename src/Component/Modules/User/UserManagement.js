@@ -19,6 +19,8 @@ import { useNavigate } from "react-router-dom";
 import ResetPassword from "./resetPassword";
 import TableModal from "../../Common/Table/table";
 import AppButton from "../../Common/Buttton/button";
+import { useTranslation } from 'react-i18next';
+
 
 const UserManagement = () => {
 
@@ -35,6 +37,8 @@ const UserManagement = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
   console.log(selectedUser);
+  const { t } = useTranslation();
+
 
 
   const togglePopup = () => setShowAddForm(!showAddForm);
@@ -94,11 +98,11 @@ const UserManagement = () => {
   }, []);
 
   const confirmDelete = (id, name) => {
-    toast((t) => (
+    toast((toastInstance) => (
       <div>
-        <p>Are you sure you want to delete {name} user?</p>
-        <button className='custom-confirm-button' onClick={() => { deleteUser(id, name); toast.dismiss(t.id); }} style={{ padding: "4px 1px", fontSize: "12px", width: "20%" }}>Yes</button>
-        <button className='custom-confirm-button' onClick={() => toast.dismiss(t.id)} style={{ padding: "4px 1px", fontSize: "12px", width: "20%" }} >No</button> </div>),
+        <p>{t('user.confirm_delete', { name })}</p>
+        <button className='custom-confirm-button' onClick={() => { deleteUser(id, name); toast.dismiss(toastInstance.id); }} style={{ padding: "4px 1px", fontSize: "12px", width: "20%" }}>Yes</button>
+        <button className='custom-confirm-button' onClick={() => toast.dismiss(toastInstance.id)} style={{ padding: "4px 1px", fontSize: "12px", width: "20%" }} >No</button> </div>),
       {
         autoClose: false, closeOnClick: false, draggable: false, style: {
           position: 'fixed',
@@ -129,7 +133,7 @@ const UserManagement = () => {
           }
         });
       window.dispatchEvent(new Event("databaseUpdated"));
-      toast.success(`User ${name} deleted successfully`)
+      toast.success(t('user.deleted_success', { name }));
       console.log("User Deleted:", response.data);
 
     } catch (err) {
@@ -138,14 +142,14 @@ const UserManagement = () => {
 
       if (err.response) {
 
-        toast.error(err.response?.data?.detail || 'Something went wrong. Please try again');
+        toast.error(err.response?.data?.detail || t('user.error_generic'));
 
       } else if (err.request) {
         // No response from the server
-        toast.error('No response from the server. Please check your connection');
+        toast.error(t('user.no_response'));
       } else {
         // Unknown error occurred
-        toast.error('An unknown error occurred. Please try again');
+        toast.error(t('user.unknown_error'));
       }
     }
   };
@@ -233,18 +237,22 @@ const UserManagement = () => {
   }
 
 const userColumns = [
-    { key: "id", label: "User ID"},
-    { key: "username", label: "Username" },
-    { key: "first_name", label: "First Name" },
-     { key: "last_name", label: "Last Name" },
-      { key: "role", label: "Role" },
-       { key: "email", label: "Email" },
-        { key: "last_logout", label: "Last Active" },
-    { key: "createdOn", label: "Created On" },
-    { key: "createdBy", label: "Created By" },
-       { key: "updatedOn", label: "Edited On" },
-              { key: "updatedBy", label: "Edited By" },
-    { key: "status", label: "Status", render: (val) => <span className="badge bg-dark">{val}</span> }
+  { key: "id", label: t("user.columns.id") },
+  { key: "username", label: t("user.columns.username") },
+  { key: "first_name", label: t("user.columns.first_name") },
+  { key: "last_name", label: t("user.columns.last_name") },
+  { key: "role", label: t("user.columns.role") },
+  { key: "email", label: t("user.columns.email") },
+  { key: "last_logout", label: t("user.columns.last_active") },
+  { key: "createdOn", label: t("user.columns.created_on") },
+  { key: "createdBy", label: t("user.columns.created_by") },
+  { key: "updatedOn", label: t("user.columns.edited_on") },
+  { key: "updatedBy", label: t("user.columns.edited_by") },
+  {
+    key: "status",
+    label: t("user.columns.status"),
+    render: (val) => <span className="badge bg-dark">{val}</span>,
+  },
   ];
 
   return (
@@ -255,7 +263,7 @@ const userColumns = [
             <div>
                 
           <TableModal
-           title="User Dashboard"
+              title={t('user.dashboard_title')}
         data={data}
         columns={userColumns}
        onRowAction={{
@@ -267,15 +275,14 @@ const userColumns = [
    
           onAddClick={() => togglePopup()}
          idPrefix="User"
-         btnTitle=" + Add New User"
+              btnTitle={t('user.add_button')}
       />
 </div>
         ) : (
           <div className="resourcesContainer" style={{ border: 'none' }}>
-            <h3 className="title">Let's Get Started!</h3>
-            <p className="content">Add users to get started</p>
-            {/* <button className='add-btn' title='Add New Case' onClick={togglePopup}><Plus size={20} />Add New Users</button> */}
-           <AppButton onClick={togglePopup} children={" + Add New User"}/>
+            <h3 className="title">{t('user.get_started_title')}</h3>
+            <p className="content">{t('user.get_started_text')}</p>
+            <AppButton onClick={togglePopup}>{t('user.add_button')}</AppButton>
           </div>
         )
       }

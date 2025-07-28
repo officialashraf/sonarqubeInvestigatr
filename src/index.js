@@ -12,6 +12,8 @@ import store, { persistor } from "./Redux/store"; // Store aur Persistor import 
 import { PersistGate } from "redux-persist/integration/react";
 import './Component/Style/DesignTokens/designTokens.css';
 import '@fontsource/roboto';
+import './i18n';  // import i18n configuration
+
 
 
 

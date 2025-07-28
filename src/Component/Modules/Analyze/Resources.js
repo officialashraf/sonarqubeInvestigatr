@@ -53,12 +53,30 @@ const Resources = () => {
   const [loadedPages, setLoadedPages] = useState([]);
 
   // Initialize data on mount or when data1.id changes
-  useEffect(() => {
-    if (data1?.id) {
-      setLoading(true);
-      const initialPage = page || 1;
-      setCurrentPage(initialPage);
+  // useEffect(() => {
+  //   if (data1?.id) {
+  //     setLoading(true);
+  //     const initialPage = page || 1;
+  //     setCurrentPage(initialPage);
 
+  //     dispatch(fetchSummaryData({
+  //       queryPayload: { unified_case_id: data1.id },
+  //       page: initialPage,
+  //       itemsPerPage: 50,
+  //     })).then(() => {
+  //       setLoading(false);
+  //     });
+  //   }
+  // }, [data1?.id, dispatch]); // Removed 'page' from dependencies
+
+  useEffect(() => {
+    const initialPage = page || 1;
+    setCurrentPage(initialPage);
+
+    const isDataAlreadyFetched = summaryData && summaryData.length > 0;
+
+    if (data1?.id && !isDataAlreadyFetched) {
+      setLoading(true);
       dispatch(fetchSummaryData({
         queryPayload: { unified_case_id: data1.id },
         page: initialPage,
@@ -67,8 +85,7 @@ const Resources = () => {
         setLoading(false);
       });
     }
-  }, [data1?.id, dispatch]); // Removed 'page' from dependencies
-
+  }, [data1?.id, summaryData, page, dispatch]);
   // Load page data when currentPage changes (but not on initial load)
   useEffect(() => {
     if (data1?.id && currentPage !== (page || 1)) {
@@ -203,7 +220,11 @@ const Resources = () => {
                         }
                         onError={(e) => {
                           e.target.onerror = null; // prevents infinite loop
-                          e.target.src = "/images/placeholder-square.png";
+                          if(resource.unified_record_type === "X" && e.target.src !== X_logo) {
+                            e.target.src = X_logo;
+                          } else {
+                            e.target.src = "/images/placeholder-square.png";
+                          }
                         }}
                         alt="pic_not_found"
                         className="resourceImage"

@@ -1,7 +1,7 @@
 // Header.js - Fixed Implementation
 import React, { useEffect, useState } from 'react';
 import { Navbar, Nav, NavDropdown, Container } from 'react-bootstrap';
-import { Bell, PersonCircle } from 'react-bootstrap-icons';
+import { Bell, PersonCircle, Globe } from 'react-bootstrap-icons';
 import { FaArrowLeft } from 'react-icons/fa';
 import styles from "./header.module.css";
 import { useNavigate } from 'react-router-dom';
@@ -16,7 +16,8 @@ import { disconnectWebSocket } from '../../../utils/WebSocket/websocket';
 import { CLEAR_SEARCH } from '../../../Redux/Constants/piiConstant';
 import LicenseRenew from '../User/licenseRenew';
 import AboutUs from './aboutUs';
-import ProfileImage from '.././../Assets/Images/prifileImage.jpg'
+import ProfileImage from '.././../Assets/Images/prifileImage.jpg';
+import { useTranslation } from 'react-i18next';
 
 const Header = ({ title }) => {
   console.log("Header title prop:", title);
@@ -25,6 +26,7 @@ const Header = ({ title }) => {
   const token = Cookies.get('accessToken');
   const { notificationCount, setNotificationCount } = useWebSocket();
 
+  const { i18n } = useTranslation();
   const [loggedInUserId, setLoggedInUserId] = useState('');
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [abouUsOpen, setAbouUsOpen] = useState(false);
@@ -34,9 +36,19 @@ const Header = ({ title }) => {
   const [firstname,setfirstName] = useState('');
   const [lastname,setLastName] = useState('');
   const [showPopup, setShowPopup] = useState(false);
+  const [showLangDropdown, setShowLangDropdown] = useState(false);
 
   const togglePopup = () => {
     setShowPopup(prev => !prev);
+  };
+
+  const toggleLangDropdown = () => {
+    setShowLangDropdown(prev => !prev);
+  };
+
+  const changeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+    setShowLangDropdown(false);
   };
 
   useEffect(() => {
@@ -152,7 +164,63 @@ const Header = ({ title }) => {
     </Navbar.Brand>
 
     <Nav className={styles.customNav}>
-            <div style={{ position: "relative", marginRight: "15px" }}>
+            <div style={{ position: "relative", marginRight: "15px", display: "flex", alignItems: "center" }}>
+              <div
+                style={{
+                  marginRight: "10px",
+                  cursor: "pointer",
+                  fontSize: "20px",
+                  color: "white",
+                  position: "relative",
+                  userSelect: "none"
+                }}
+                onClick={toggleLangDropdown}
+                title="Change Language"
+              >
+               {/* <Globe size={20} color="#3498db" /> */}
+               {showLangDropdown && (
+                 <div style={{
+                   position: "absolute",
+                   top: "100%",
+                   left: "50%",
+                   transform: "translateX(-50%)",
+                   backgroundColor: "#0C1622",
+                   borderRadius: "15px",
+                   boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+                   zIndex: 1000,
+                   minWidth: "120px",
+                   color: "white",
+                   cursor: "default",
+                   overflow: "hidden",
+                   border: "2px solid #0073cf"
+                 }}>
+                   <div
+                     style={{
+                       padding: "8px 12px",
+                       cursor: "pointer",
+                       transition: "background-color 0.3s ease",
+                     }}
+                     onClick={() => changeLanguage('en')}
+                     onMouseEnter={e => e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)'}
+                     onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}
+                   >
+                     English
+                   </div>
+                   <div
+                     style={{
+                       padding: "8px 12px",
+                       cursor: "pointer",
+                       transition: "background-color 0.3s ease",
+                     }}
+                     onClick={() => changeLanguage('fr')}
+                     onMouseEnter={e => e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)'}
+                     onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}
+                   >
+                     French
+                   </div>
+                 </div>
+               )}
+              </div>
               <div
                 style={{
                   backgroundColor: "#0C1622",

@@ -41,6 +41,7 @@
    word-break: break-word;
    flex-wrap: wrap; 
    margin-bottom: 10px;
+   gap: 10px;
 }
 .userDetails {
   flex: 1;
@@ -50,7 +51,7 @@
   margin: 0 !important;
 }
 .css-1lt5qva-MuiCardContent-root:last-child {
-  padding-bottom: 0px !important;
+  padding-bottom: 10px !important;
 }
 .userInfo {
   /* margin-bottom: 8px !important; */
