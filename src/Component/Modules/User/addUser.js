@@ -1,22 +1,17 @@
 import { useEffect, useState } from "react";
 import "./addUser.module.css";
-// import { IoMdSearch } from "react-icons/io";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { toast } from 'react-toastify';
-import Select from "react-select";
-import { customStyles } from "../Case/createCase";
-import { useAutoFocusWithManualAutofill } from "../../../utils/autoFocus";
 import CommonTextInput from "../../Common/MultiSelect/CommonTextInput";
 import CommonSingleSelect from "../../Common/MultiSelect/CommonSingleSelect";
 import customSelectStyles from '../../Common/CustomStyleSelect/customSelectStyles';
 import AppButton from "../../Common/Buttton/button";
-
-
-
-
+import { useTranslation } from "react-i18next";
+import { useAutoFocusWithManualAutofill } from "../../../utils/autoFocus";
 
 const AddUser = ({ onClose }) => {
+  const { t } = useTranslation();
   const token = Cookies.get("accessToken");
   const { inputRef, isReadOnly, handleFocus } = useAutoFocusWithManualAutofill();
   const [roles, setRoles] = useState([]);
@@ -40,25 +35,27 @@ const AddUser = ({ onClose }) => {
     const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{6,}$/;
 
     if (!formData.username.trim()) {
-      errors.username = "Username is required";
+      errors.username = t("addUser.errors.username");
     }
 
-     if (!formData.first_name.trim()) {
-      errors.first_name = "Firstname is required";
+    if (!formData.first_name.trim()) {
+      errors.first_name = t("addUser.errors.firstName");
     }
-      if (!formData.role.trim()) {
-      errors.role = "Role is required";
+
+    if (!formData.role.trim()) {
+      errors.role = t("addUser.errors.role");
     }
+
     if (!formData.email.trim()) {
-      errors.email = "Email is required";
+      errors.email = t("addUser.errors.email");
     } else if (!emailRegex.test(formData.email)) {
-      errors.email = "Invalid email format";
+      errors.email = t("addUser.errors.invalidEmail");
     }
 
     if (!formData.password.trim()) {
-      errors.password = "Password is required";
+      errors.password = t("addUser.errors.password");
     } else if (!passwordRegex.test(formData.password)) {
-      errors.password = "Password must be at least 6 characters, include 1 capital letter and 1 special character.";
+      errors.password = t("addUser.errors.invalidPassword");
     }
 
     return errors;
@@ -73,13 +70,10 @@ const AddUser = ({ onClose }) => {
             "Authorization": `Bearer ${token}`
           }
         });
-        console.log("response_Data", response.data)
-        // Map roles into dropdown format
         const formattedRoles = response.data.map(role => ({
           value: role,
           label: role
         }));
-        console.log("response_Dropdown", formattedRoles)
         setRoles(formattedRoles);
         setLoading(false);
       } catch (error) {
@@ -91,18 +85,13 @@ const AddUser = ({ onClose }) => {
     fetchRoles();
   }, [token]);
 
-
   const handleChange = (e) => {
     let { name, value } = e.target;
-
-    // Fields to apply capitalization
     const capitalizeFields = ['first_name', 'last_name', 'role'];
 
     if (name === 'username') {
-      // Prevent capital letters and spaces in username
       value = value.toLowerCase().replace(/\s/g, '');
     } else if (capitalizeFields.includes(name)) {
-      // Capitalize first letter of each word if the field is in the list
       value = value.replace(/\b\w/g, (char) => char.toUpperCase());
     }
 
@@ -112,14 +101,14 @@ const AddUser = ({ onClose }) => {
     }));
     setError((prevErrors) => ({
       ...prevErrors,
-      [name]: ""  // Remove the specific error message
+      [name]: ""
     }));
   };
 
   const handleCreateUser = async (e) => {
     e.preventDefault();
     if (!token) {
-      toast.error("Authentication token missing.");
+      toast.error(t("addUser.errors.authTokenMissing"));
       return;
     }
 
@@ -128,6 +117,7 @@ const AddUser = ({ onClose }) => {
       setError(validationErrors);
       return;
     }
+
     const payloadData = Object.fromEntries(
       Object.entries(formData).filter(([_, value]) => {
         if (value === null || value === undefined) return false;
@@ -138,7 +128,6 @@ const AddUser = ({ onClose }) => {
     );
 
     setIsSubmitting(true);
-    console.log("queryPyload", formData)
     try {
       const response = await axios.post(
         `${window.runtimeConfig.REACT_APP_API_USER_MAN}/api/user-man/v1/user`,
@@ -152,15 +141,15 @@ const AddUser = ({ onClose }) => {
       );
 
       if (response.status === 201 || response.status === 200) {
-        toast.success("User added successfully");
+        toast.success(t("addUser.errors.userAddSuccess"));
         window.dispatchEvent(new Event("databaseUpdated"));
         onClose();
       } else {
-        toast.error("Failed to add user.");
+        toast.error(t("addUser.errors.userAddFailed"));
       }
     } catch (err) {
       console.error("Error creating user:", err);
-      toast.error(err.response?.data?.detail || "Something went wrong");
+      toast.error(err.response?.data?.detail || t("addUser.errors.genericError"));
     } finally {
       setIsSubmitting(false);
     }
@@ -171,46 +160,87 @@ const AddUser = ({ onClose }) => {
       <div className="popup-container">
         <button className="close-icon" onClick={onClose}>&times;</button>
         <div className="popup-content">
-          <h5>Add User</h5>
+          <h5>{t("addUser.title")}</h5>
           <form onSubmit={handleCreateUser}>
+            <CommonTextInput
+              label={t("addUser.username")}
+              ref={inputRef}
+              name="username"
+              autoComplete="username"
+              value={formData.username}
+              onChange={handleChange}
+              placeholder={t("addUser.usernamePlaceholder")}
+              readOnly={isReadOnly}
+              onFocus={handleFocus}
+              requiblack
+            />
+            {error.username && <p style={{ color: "red", margin: '0px' }}>{error.username}</p>}
 
-            {/* <label>Username *</label> */}
-            <CommonTextInput  label='Username *' ref={inputRef} name="username" autoComplete="username" value={formData.username} onChange={handleChange} placeholder="Enter username" readOnly={isReadOnly}
-              onFocus={handleFocus} requiblack />
-            {error.username && <p style={{ color: "red", margin: '0px' }} >{error.username}</p>}
-            {/* <label>First Name *</label> */}
-            <CommonTextInput label='First Name *'  name="first_name" value={formData.first_name} onChange={handleChange} placeholder="Enter first name" />
-             {error.first_name && <p style={{ color: "red", margin: '0px' }} >{error.first_name}</p>}
-            {/* <label>Last Name</label> */}
-            <CommonTextInput label='Last Name' name="last_name" value={formData.last_name} onChange={handleChange} placeholder="Enter last name" />
-            <div>
-              {/* <label>Role *</label> */}
-              <CommonSingleSelect
-                label="Role *"
-                options={roles}
-                placeholder="Select a role"
-                isLoading={loading}
-                value={roles.find(role => role.value === formData.role)}
-                onChange={(selectedOption) => setFormData({ ...formData, role: selectedOption.value })}
-                customStyles={customSelectStyles}
-                // classNamePrefix="select"
-                
-              />
-              {error.role && <p style={{ color: "red", margin: '0px' }} >{error.role}</p>}
-            </div>
-            {/* <label>Email ID *</label> */}
-            <CommonTextInput label='Email ID *' type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Enter email id" requiblack />
+            <CommonTextInput
+              label={t("addUser.firstName")}
+              name="first_name"
+              value={formData.first_name}
+              onChange={handleChange}
+              placeholder={t("addUser.firstNamePlaceholder")}
+            />
+            {error.first_name && <p style={{ color: "red", margin: '0px' }}>{error.first_name}</p>}
+
+            <CommonTextInput
+              label={t("addUser.lastName")}
+              name="last_name"
+              value={formData.last_name}
+              onChange={handleChange}
+              placeholder={t("addUser.lastNamePlaceholder")}
+            />
+
+            <CommonSingleSelect
+              label={t("addUser.role")}
+              options={roles}
+              placeholder={t("addUser.rolePlaceholder")}
+              isLoading={loading}
+              value={roles.find(role => role.value === formData.role)}
+              onChange={(selectedOption) => setFormData({ ...formData, role: selectedOption.value })}
+              customStyles={customSelectStyles}
+            />
+            {error.role && <p style={{ color: "red", margin: '0px' }}>{error.role}</p>}
+
+            <CommonTextInput
+              label={t("addUser.email")}
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder={t("addUser.emailPlaceholder")}
+              requiblack
+            />
             {error.email && <p style={{ color: "red", margin: '0px' }}>{error.email}</p>}
-            {/* <label>Contact Number</label> */}
-            <CommonTextInput label='Contact Number' className="com" name="contact_no" value={formData.contact_no} onChange={handleChange} placeholder="Enter contact number" />
-            {/* <label>Password *</label> */}
-            <CommonTextInput label='Password*' type="password" name="password" value={formData.password} onChange={handleChange} placeholder="Enter password" requiblack />
+
+            <CommonTextInput
+              label={t("addUser.contact")}
+              name="contact_no"
+              value={formData.contact_no}
+              onChange={handleChange}
+              placeholder={t("addUser.contactPlaceholder")}
+            />
+
+            <CommonTextInput
+              label={t("addUser.password")}
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              placeholder={t("addUser.passwordPlaceholder")}
+              requiblack
+            />
             {error.password && <p style={{ color: "red", margin: '0px' }}>{error.password}</p>}
+
             <div className="button-container">
-              <AppButton type="submit"  disabled={isSubmitting}>
-                {isSubmitting ? 'Creating...' : 'Create'}
+              <AppButton type="submit" disabled={isSubmitting}>
+                {isSubmitting ? t("addUser.creating") : t("addUser.create")}
               </AppButton>
-              <AppButton type="button" onClick={onClose} >Cancel</AppButton>
+              <AppButton type="button" onClick={onClose}>
+                {t("addUser.cancel")}
+              </AppButton>
             </div>
           </form>
         </div>

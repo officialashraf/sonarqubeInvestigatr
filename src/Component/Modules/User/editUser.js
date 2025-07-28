@@ -9,9 +9,13 @@ import CommonTextInput from "../../Common/MultiSelect/CommonTextInput";
 import CommonSingleSelect from "../../Common/MultiSelect/CommonSingleSelect";
 import customSelectStyles from '../../Common/CustomStyleSelect/customSelectStyles';
 import AppButton from "../../Common/Buttton/button";
+import { useTranslation } from 'react-i18next';
+
 
 const EditUser = ({ togglePopup, item }) => {
   const token = Cookies.get("accessToken");
+  const { t } = useTranslation();
+
 
   const [roles, setRoles] = useState([]);
   const [users, setUsers] = useState({ data: [] });
@@ -36,13 +40,13 @@ const EditUser = ({ togglePopup, item }) => {
     const emailRegex = /^\S+@\S+\.\S+$/;
 
     if (!formData.username.trim()) {
-      errors.username = "Username is required";
+      errors.username = t('edit_user.username_required');
     }
 
     if (!formData.email.trim()) {
-      errors.email = "Email is required";
+     errors.email = t('edit_user.email_required');
     } else if (!emailRegex.test(formData.email)) {
-      errors.email = "Invalid email format";
+      errors.email = t('edit_user.invalid_email');
     }
 
     return errors;
@@ -60,7 +64,8 @@ const EditUser = ({ togglePopup, item }) => {
       setUsers(response.data);
     } catch (error) {
       console.error('Error fetching user data:', error);
-      toast.error('Failed to fetch user data. Please try again later');
+      toast.error(t('edit_user.user_fetch_error'));
+
     }
   };
   useEffect(() => {
@@ -95,7 +100,7 @@ const EditUser = ({ togglePopup, item }) => {
   const handleEditUser = async (formData) => {
     const token = Cookies.get("accessToken");
     if (!token) {
-      toast.error("Token not found. Please log in again");
+      toast.error(t('edit_user.token_missing'));
       return;
     }
 
@@ -135,7 +140,7 @@ const EditUser = ({ togglePopup, item }) => {
 
       // If nothing has changed 
       if (Object.keys(hasChanged).length === 0) {
-        toast.info("No changes detected.");
+        toast.info(t('edit_user.no_changes'));
         setLoading(false);
         return;
       }
@@ -152,14 +157,14 @@ const EditUser = ({ togglePopup, item }) => {
         },
       ); console.log("respose", response.data)
       if (response.status === 200) {
-        toast.success("User updated successfully.");
+       toast.success(t('edit_user.success'));
         // onUserUpdated?.(response.data); // Notify parent to refresh data
         window.dispatchEvent(new Event("databaseUpdated"));
         togglePopup();// onClose(); // Close modal
       }
     } catch (err) {
       console.error("Update error:", err);
-      toast.error(err.response?.data?.detail || "Something went wrong while updating. Please try again");
+      toast.error(err.response?.data?.detail || t('edit_user.update_error'));
     } finally {
       setLoading(false);
     }
@@ -217,10 +222,10 @@ const EditUser = ({ togglePopup, item }) => {
           &times;
         </button>
         <div className="popup-content">
-          <h5>Edit User</h5>
+          <h5>{t('edit_user.heading')}</h5>
           <form onSubmit={(e) => { e.preventDefault(); handleEditUser(formData); }}>
             {/* <label htmlFor="username">Username <span style={{ color: 'black' }}>*</span></label> */}
-            <CommonTextInput label='Username *'
+           <CommonTextInput label={t('edit_user.username')}
               type="text"
               id="username"
               name="username"
@@ -229,7 +234,7 @@ const EditUser = ({ togglePopup, item }) => {
             />
             {error.username && <p style={{ color: "red", margin: '0px' }} >{error.username}</p>}
             {/* <label htmlFor="firstName">First Name </label> */}
-            <CommonTextInput label='First Name *' 
+            <CommonTextInput label={t('edit_user.first_name')} 
               type="text"
               id="firstName"
               name="firstName"
@@ -238,7 +243,7 @@ const EditUser = ({ togglePopup, item }) => {
             />
 
             {/* <label htmlFor="lastName">Last Name</label> */}
-            <CommonTextInput label='Last Name' 
+            <CommonTextInput label={t('edit_user.last_name')} 
               type="text"
               id="lastName"
               name="lastName"
@@ -248,9 +253,9 @@ const EditUser = ({ togglePopup, item }) => {
             <div>
               {/* <label>Role </label> */}
               <CommonSingleSelect
-                label="Role *"
+                label={t('edit_user.role')}
                 options={roles}
-                placeholder="Select a role"
+                placeholder={t('edit_user.role_placeholder')}
                 isLoading={loading}
                 value={roles.find(role => role.value === formData.role)}
                 onChange={(selectedOption) => setFormData({ ...formData, role: selectedOption.value })}
@@ -259,7 +264,7 @@ const EditUser = ({ togglePopup, item }) => {
               />
             </div>
             {/* <label htmlFor="email">Email ID *</label> */}
-            <CommonTextInput label='Email ID *'
+            <CommonTextInput label={t('edit_user.email')}
               type="email"
               id="email"
               name="email"
@@ -270,7 +275,7 @@ const EditUser = ({ togglePopup, item }) => {
 
 
             {/* <label htmlFor="contactNumber">Contact Number</label> */}
-            <CommonTextInput label='Contact Number'
+            <CommonTextInput label={t('edit_user.contact_number')}
               type="text"
               id="contactNumber"
               name="contactNumber"
@@ -280,9 +285,9 @@ const EditUser = ({ togglePopup, item }) => {
 
             <div className="button-container">
               <AppButton type="submit" className="create-btn" disabled={isBtnDisabled || loading}>
-                {loading ? "Editing..." : "Edit"}
+               {loading ? t('edit_user.editing') : t('edit_user.edit')}
               </AppButton>
-              <AppButton type="button" onClick={togglePopup} className="cancel-btn">Cancel</AppButton>
+              <AppButton type="button" onClick={togglePopup} className="cancel-btn">{t('edit_user.cancel')}</AppButton>
             </div>
           </form>
         </div>

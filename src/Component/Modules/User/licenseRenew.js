@@ -1,21 +1,22 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import  style from  "./login.module.css";
+import { useTranslation } from "react-i18next";
+import style from "./login.module.css";
 import TextareaField from "../../Common/TextField/textField";
 import AppButton from "../../Common/Buttton/button";
 import { Form } from "react-bootstrap";
 import PopupModal from "../../Common/Popup/popup";
 
 const LicenseRenew = ({ togglePopup }) => {
-
+  const { t } = useTranslation();
   const [error, setError] = useState({});
   const [licenseKey, setLicenseKey] = useState("");
 
   const validateForm = () => {
     const errors = {};
     if (!licenseKey.trim()) {
-      errors.licenseKey = "License key is required";
+      errors.licenseKey = t("license.errors.required");
     }
     return errors;
   };
@@ -38,42 +39,42 @@ const LicenseRenew = ({ togglePopup }) => {
           },
         }
       );
-      toast.success("License renewed successfully");
+      toast.success(t("license.success"));
       togglePopup();
-      // navigate("/login");
     } catch (err) {
-      toast.error(err.response?.data?.detail || "License registration failed");
-      setError({ submit: err.response?.data?.detail || "Registration error" });
+      const errorMsg = err.response?.data?.detail || t("license.errors.registrationFailed");
+      toast.error(errorMsg);
+      setError({ submit: errorMsg });
     }
   };
 
   return (
-    <PopupModal title="License Renewal" onClose={togglePopup}>
+    <PopupModal title={t("license.title")} onClose={togglePopup}>
       <div>
-      <Form onSubmit={handleSubmit}>
-        <TextareaField
-          label="License Key *"
-          placeholder="Paste your license key here"
-          value={licenseKey}
-          onChange={(e) => {
-            setLicenseKey(e.target.value);
-            setError((prev) => ({ ...prev, licenseKey: "", submit: "" }));
-          }}
-          rows={3}
-          className="customfiled"
-          error={!!error.licenseKey}
-          style={{ backgroundColor: "white", color: "black" }}
-        />
-        {error.licenseKey && (
-          <p style={{ color: "red", margin: "0px" }}>{error.licenseKey}</p>
-        )}
-        <div className="d-flex justify-content-end mt-3">
-          <AppButton children="Apply" />
-        </div>
-      </Form>
+        <Form onSubmit={handleSubmit}>
+          <TextareaField
+            label={`${t("license.keyLabel")} *`}
+            placeholder={t("license.placeholder")}
+            value={licenseKey}
+            onChange={(e) => {
+              setLicenseKey(e.target.value);
+              setError((prev) => ({ ...prev, licenseKey: "", submit: "" }));
+            }}
+            rows={3}
+            className="customfiled"
+            error={!!error.licenseKey}
+            style={{ backgroundColor: "white", color: "black" }}
+          />
+          {error.licenseKey && (
+            <p style={{ color: "red", margin: "0px" }}>{error.licenseKey}</p>
+          )}
+          <div className="d-flex justify-content-end mt-3">
+            <AppButton>{t("license.applyButton")}</AppButton>
+          </div>
+        </Form>
       </div>
     </PopupModal>
   );
-}
+};
 
 export default LicenseRenew;

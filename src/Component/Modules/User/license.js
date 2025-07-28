@@ -3,12 +3,15 @@ import { Container, Row, Col, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
-import style from  "./login.module.css";
+import style from "./login.module.css";
 import DAButton from "../../Common/Buttton/button";
 import TextareaField from "../../Common/TextField/textField";
 import AppButton from "../../Common/Buttton/button";
+import { useTranslation } from 'react-i18next';
+
 
 const LicensePage = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [error, setError] = useState("");
   const [licenseKey, setLicenseKey] = useState("");
@@ -18,7 +21,7 @@ const LicensePage = () => {
     const errors = {};
 
     if (!licenseKey.trim()) {
-      errors.licenseKey = "Please enter the license key before proceeding";
+      errors.licenseKey = t('login.LicenseValidation' , 'Please enter the license key before proceeding');
     }
     return errors;
   };
@@ -47,7 +50,7 @@ const LicensePage = () => {
         }
       );
       console.log("key", licenseKey)
-      toast.success("License registered successfully");
+      toast.success(t('login.LicenseSuccess'));
       console.log("License Response:", response);
 
       // Redirect to login page upon success
@@ -73,10 +76,12 @@ const LicensePage = () => {
         localStorage.setItem("licenseKey", "VALID");
         navigate("/login");
       } else {
-        toast.error("License registered but verification failed. Try again.");
+       toast.error = t('login.LicenseError', 'License registered but verification failed. Try again.');
+        // toast.error ("License registered but verification failed. Try again.");
+        // t('login.LicenseValidation', 'Please enter the license key before proceeding');
       }
     } catch (err) {
-      toast.error(err.response?.data?.detail || "License registration failed");
+      toast.error(err.response?.data?.detail || t('login.LicenseError1', 'License registration failed'));
       console.warn(err.response?.data?.detail || "Registration err");
       console.log("Err:", err);
     }
@@ -90,29 +95,29 @@ const LicensePage = () => {
           <h1>Investigatr</h1>
         </Col>
         <Col md={6} className={style.rightColumn}>
-        <Form className={style.loginForm} onSubmit={handleSubmit}>
-  <TextareaField
-    label="License Key *"
-    value={licenseKey}
-    onChange={(e) => {
-      setLicenseKey(e.target.value);
-      setError((prevErrors) => ({
-        ...prevErrors,
-        licenseKey: "",
-      }));
-    }}
-    placeholder="Paste your license key here"
-    name="licenseKey"
-    error={!!error.licenseKey}
-    style={{height:'7rem'}}
-  />
+      <Form className={style.loginForm} onSubmit={handleSubmit}>
+        <TextareaField
+          label={t('login.LicenseLabel', 'License Key *')}
+          value={licenseKey}
+          onChange={(e) => {
+            setLicenseKey(e.target.value);
+            setError((prevErrors) => ({
+              ...prevErrors,
+              licenseKey: "",
+            }));
+          }}
+          placeholder={t('login.LicensePlaceholder', 'Paste your license key here ')}
+          name="licenseKey"
+          error={!!error.licenseKey}
+          style={{ height: '7rem' }}
+        />
 
-  {error.licenseKey && <p style={{ color: "red", margin: '0px' }}>{error.licenseKey}</p>}
+        {error.licenseKey && <p style={{ color: "red", margin: '0px' }}>{t(error.licenseKey)}</p>}
 
-  <div className="d-flex justify-content-end mt-2">
-    <AppButton children={'Apply'} />
-  </div>
-</Form>
+        <div className="d-flex justify-content-end mt-2">
+          <AppButton>{t('login.apply', 'Apply')}</AppButton>
+        </div>
+      </Form>
         </Col>
       </Row>
     </Container>

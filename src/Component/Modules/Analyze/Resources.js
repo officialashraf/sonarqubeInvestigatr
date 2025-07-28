@@ -74,8 +74,7 @@ const [dataloaded, setDataLoaded]=useState(false)
         setDataLoaded(true);
       });
     }
-  }, [data1?.id, dispatch]); // Removed 'page' from dependencies
-
+  }, [data1?.id, summaryData, page, dispatch]);
   // Load page data when currentPage changes (but not on initial load)
   useEffect(() => {
     if (data1?.id && currentPage !== (page || 1)) {
@@ -218,7 +217,11 @@ const [dataloaded, setDataLoaded]=useState(false)
                         }
                         onError={(e) => {
                           e.target.onerror = null; // prevents infinite loop
-                          e.target.src = "/images/placeholder-square.png";
+                          if(resource.unified_record_type === "X" && e.target.src !== X_logo) {
+                            e.target.src = X_logo;
+                          } else {
+                            e.target.src = "/images/placeholder-square.png";
+                          }
                         }}
                         alt="pic_not_found"
                         className="resourceImage"

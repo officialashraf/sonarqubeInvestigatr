@@ -11,8 +11,7 @@ import EventBar from "./eventBar";
 import PersonBar from "./personBar";
 import LanguageBar from "./languageBar";
 import OrgBar from "./orgBar";
-import LazyLoadWrapper from "./lazyLoadWrapper";
-
+import LazyLoadWrapper from "./LazyLoadWrapper";
 
 const Header = ({ title }) =>
   <Grid
@@ -68,6 +67,7 @@ const ComponentTwo = () => (
     <Header title="Keywords" />
     <Card sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius: '25px' }}>
       <CardContent>
+
         <LazyLoadWrapper height={300}>
         <KeywordChart />
         </LazyLoadWrapper>
@@ -87,6 +87,7 @@ const ComponentThree = () => (
           align="center"
           height={250}
         >
+
            <LazyLoadWrapper height={300}>
           <LocationBar />
           </LazyLoadWrapper>
@@ -101,6 +102,7 @@ const ComponentFour = () => (
       sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius: '25px' }}
     >
       <CardContent>
+
          <LazyLoadWrapper height={300}>
         <SentimentPieChart />
         </LazyLoadWrapper>
@@ -115,6 +117,7 @@ const ComponentFive = () => (
       sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius: '25px' }}
     >
       <CardContent sx={{ backgroundColor: "#101D2B", borderRadius: '25px' }}>
+
          <LazyLoadWrapper height={300}>
         <DateBar />
       </LazyLoadWrapper>
@@ -129,6 +132,7 @@ const ComponentSix = () => (
       sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius: '25px' }}
     >
       <CardContent>
+
          <LazyLoadWrapper height={300}>
         <EventBar />
         </LazyLoadWrapper>
@@ -143,6 +147,7 @@ const ComponentSeven = () => (
       sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius: '25px' }}
     >
       <CardContent>
+
          <LazyLoadWrapper height={300}>
           <PersonBar/>
           </LazyLoadWrapper>
@@ -157,6 +162,7 @@ const ComponentEight = () => (
       sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius: '25px' }}
     >
       <CardContent>
+
          <LazyLoadWrapper height={300}>
         <LanguageBar />
         </LazyLoadWrapper>
@@ -172,6 +178,7 @@ const ComponentNine = () => (
       sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius: '25px', marginBottom: '5rem', borderRadius: '25px' }}
     >
       <CardContent >
+
          <LazyLoadWrapper height={300}>
         <OrgBar />
         </LazyLoadWrapper>
@@ -183,10 +190,13 @@ const ComponentNine = () => (
 
 const GraphicalData = () => {
   return (
-    <div className={styles.responsiveContainer} >
+    <div className={styles.responsiveContainer} 
+    // style={{overflowY: 'auto', maxHeight: '90vh'}}
+    >
 
       <Grid container spacing={1} p={1} className={styles.responsiveGrid} style={{
         background: "#080E17", marginLeft: "0 px !important", height: '100%',
+
         overflowY: 'auto',overflowX:'hidden'
       }}>
         <Grid item xs={12} sx={{ paddingLeft: '0px !important', paddingTop: "0px !important" }}  className={styles.grapghCards}>

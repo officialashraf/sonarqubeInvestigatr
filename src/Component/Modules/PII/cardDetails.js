@@ -21,7 +21,10 @@ const UserCards = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const profiles = useSelector((state) => state.pii?.data?.cyniqBasicResult || '');
+  
+  const profiles = useSelector((state) => state.pii?.data || []);
+  
+
 
   useEffect(() => {
     // Function to fetch data from API
@@ -101,175 +104,77 @@ const UserCards = () => {
     );
   }
 
+  const iconMap = {
+    phones: PhoneIcon,
+    emails: EmailIcon,
+    addresses: LocationOnIcon,
+    urls: LinkIcon,
+  };
   return (
-    <Container maxWidth="lg" className={styles.cardsContainer} style={{ marginBottom: '20px' }}>
-
+    <Container maxWidth="lg" className={styles.cardsContainer} sx={{ marginBottom: '10px' }}>
       <Grid container spacing={3}>
-        {users && users.filter((user) => user.has_account) // Only users with has_account: true
-          .map((user) => (
-            <Grid item xs={12} sm={6} md={4} key={user.id || Math.random().toString()}>
-              <Card className={styles.userCard}>
-                {/* <CardContent>
-                  <div className={styles.user-header">
-                    Platform Icon
-                    {user.pii_source ? (
-                      <div style={{ marginRight: '15px' }}>
-                        {getPlatformIcon(user.pii_source)}
-                      </div>
-                    ) : (
-                      <Avatar />
-                    )}
-
-                    User Info
-                    <div className={styles.userInfo">
-                      {user && Array.isArray(user.names) && user.names.length > 0 ? (
-                        user.names.slice(0, 1).map((name, index) => (
-                          <Typography key={index} >{name}</Typography>
-                        ))
-                      ) : (
-                        <Typography >Unknown User</Typography>
-                      )}
-
-                      {user && Array.isArray(user.user_ids) && user.user_ids.length > 0 ? (
-                        user.user_ids.slice(0, 1).map((userid, index) => (
-                          <Typography key={index}>{userid}</Typography>
-                        ))
-                      ) : null}
-                    </div>
+        {profiles.map((user, index) => (
+          <Grid item xs={12} sm={6} md={4} key={index}>
+            <Card className={styles.userCard}>
+              <CardContent>
+                {/* Header with Avatar and Name */}
+                {/* <div className={styles.userHeader}>
+                  <Avatar />
+                  <div className={styles.userInfo}>
+                    <Typography>
+                      {user.names && user.names.length > 0
+                        ? user.names[0]
+                        : "Unknown User"}
+                    </Typography>
                   </div>
-
-                  <Typography className={styles.userInfo">
-                    {user && Array.isArray(user.jobs) && user.jobs.length > 0
-                      ? user.jobs.slice(0, 1).map((job, index) => <div key={index}>{job}</div>)
-                      : null}
-                  </Typography>
-
-                  <Typography className={styles.userInfo">
-                    {user && Array.isArray(user.educations) && user.educations.length > 0
-                      ? user.educations.slice(0, 1).map((edu, index) => <div key={index}>{edu}</div>)
-                      : null}
-                  </Typography>
-
-                  <Typography className={styles.userInfo">
-                    {user && Array.isArray(user.usernames) && user.usernames.length > 0
-                      ? user.usernames.slice(0, 1).map((username, index) => <div key={index}>{username}</div>)
-                      : null}
-                  </Typography>
-
-                  <Typography className={styles.userInfo">
-                    <PhoneIcon className={styles.infoIcon} />
-                    {user && Array.isArray(user.phones) && user.phones.length > 0
-                      ? user.phones.slice(0, 1).map((phone, index) => <div key={index}>{phone}</div>)
-                      : "--"}
-                  </Typography>
-
-                  <Typography className={styles.userInfo">
-                    <EmailIcon className={styles.infoIcon} />
-                    {user && Array.isArray(user.emails) && user.emails.length > 0
-                      ? user.emails.slice(0, 1).map((email, index) => <div key={index}>{email}</div>)
-                      : "--"}
-                  </Typography>
-
-                  <Typography className={styles.userInfo">
-                    <LinkIcon className={styles.infoIcon} />
-                    {user && Array.isArray(user.urls) && user.urls.length > 0
-                      ? user.urls.slice(0, 1).map((url, index) => <div key={index}>{url}</div>)
-                      : "--"}
-                  </Typography>
-
-                  <Typography className={styles.userInfo">
-                    <LocationOnIcon className={styles.infoIcon} />
-                    {user && Array.isArray(user.addresses) && user.addresses.length > 0
-                      ? user.addresses.slice(0, 1).map((address, index) => <div key={index}>{address}</div>)
-                      : "--"}
-                  </Typography>
-                </CardContent> */}
-                <CardContent>
-                  <div className={styles.userHeader}>
-                    {user.pii_source ? (
-                      <div style={{ marginRight: '15px' }}>
-                        {getPlatformIcon(user.pii_source)}
-                      </div>
-                    ) : (
-                      <Avatar />
-                    )}
-                    <div className={styles.userInfo}>
-                      {Array.isArray(user.names) && user.names.length > 0 ? (
-                        <Typography>{user.names[0]}</Typography>
-                      ) : (
-                        <Typography>Unknown User</Typography>
-                      )}
-                      {Array.isArray(user.user_ids) && user.user_ids.length > 0 && (
-                        <Typography>{user.user_ids[0]}</Typography>
-                      )}
-                    </div>
+                </div> */}
+                <div className={styles.userHeader}>
+                  <Avatar
+                    src={user.imageUrls && user.imageUrls.length > 0 ? user.imageUrls[0] : undefined}
+                    alt={user.names && user.names.length > 0 ? user.names[0] : "User"}
+                    sx={{ width: 60, height: 60 }}
+                  />
+                  <div className={styles.userInfo}>
+                    <Typography>
+                      {user.names && user.names.length > 0 ? user.names[0] : "Unknown User"}
+                    </Typography>
                   </div>
+                </div>
 
-                  {/* Phone */}
-                  <div className={styles.infoRow}>
-                    <div className={styles.infoIconWrapper}>
-                      <PhoneIcon className={styles.infoIcon} />
-                    </div>
-                    <div className={styles.infoText}>
-                      <div className={styles.infoLabel}>Phone Number</div>
-                      <div className={styles.infoValue}>
-                        {Array.isArray(user.phones) && user.phones.length > 0
-                          ? user.phones[0]
-                          : "--"}
+                {/* Dynamic Fields */}
+                {Object.entries(user).map(([key, value]) => {
+                  if (
+                    key === "names" ||
+                    !value ||
+                    (typeof value === "string" && value.toLowerCase() === "none") ||
+                    (Array.isArray(value) && (value.length === 0 || value.some(v => typeof v === "string" && v.toLowerCase() === "none")))
+                  )
+                    return null;
+
+                  const IconComponent = iconMap[key] || null;
+
+                  return (
+                    <div key={key} className={styles.infoRow}>
+                      <div className={styles.infoIconWrapper}>
+                        {IconComponent && (
+                          <IconComponent className={styles.infoIcon} />
+                        )}
+                      </div>
+                      <div className={styles.infoText}>
+                        <div className={styles.infoLabel}>
+                        {key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, " $1")}
+                        </div>
+                        <div className={styles.infoValue}>
+                          {Array.isArray(value) ? value[0] : value}
+                        </div>
                       </div>
                     </div>
-                  </div>
-
-                  {/* Email */}
-                  <div className={styles.infoRow}>
-                    <div className={styles.infoIconWrapper}>
-                      <EmailIcon className={styles.infoIcon} />
-                    </div>
-                    <div className={styles.infoText}>
-                      <div className={styles.infoLabel}>Email</div>
-                      <div className={styles.infoValue}>
-                        {Array.isArray(user.emails) && user.emails.length > 0
-                          ? user.emails[0]
-                          : "--"}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Link */}
-                  <div className={styles.infoRow}>
-                    <div className={styles.infoIconWrapper}>
-                      <LinkIcon className={styles.infoIcon} />
-                    </div>
-                    <div className={styles.infoText}>
-                      <div className={styles.infoLabel}>Link :</div>
-                      <div className={styles.infoValue}>
-                        {Array.isArray(user.urls) && user.urls.length > 0
-                          ? user.urls[0]
-                          : "--"}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Location */}
-                  <div className={styles.infoRow}>
-                    <div className={styles.infoIconWrapper}>
-                      <LocationOnIcon className={styles.infoIcon} />
-                    </div>
-                    <div className={styles.infoText}>
-                      <div className={styles.infoLabel}>Location</div>
-                      <div className={styles.infoValue}>
-                        {Array.isArray(user.addresses) && user.addresses.length > 0
-                          ? user.addresses[0]
-                          : "--"}
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-
-              </Card>
-
-            </Grid>
-          ))}
+                  );
+                })}
+              </CardContent>
+            </Card>
+          </Grid>
+        ))}
       </Grid>
     </Container>
   );

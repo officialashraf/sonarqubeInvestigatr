@@ -1,10 +1,11 @@
-// ✅ src/components/common/BarChart/ReusableBarChart.jsx
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Tooltip, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Cell } from 'recharts';
 import Cookies from 'js-cookie';
 import Loader from '../../../Modules/Layout/loader';
 import styles from './barchart.module.css';
+import { SlArrowDown } from "react-icons/sl";
+import { SlArrowUp } from "react-icons/sl";
 
 const ReusableBarChart = ({
     aggsFields = [],
@@ -15,15 +16,19 @@ const ReusableBarChart = ({
         name: item.key.split('-').slice(0, 3).join(''),
         value: item.doc_count
     })),
-    // query = {},
 }) => {
     const [barData, setBarData] = useState([]);
+    const [rawData, setRawData] = useState([]); 
     const [loading, setLoading] = useState(false);
     const [rawData, setRawData] = useState([]);
     const [showAll, setShowAll] = useState(false);
     const [activeIndex, setActiveIndex] = useState(null);
+    const [showAll, setShowAll] = useState(false);
+
     const MAX_BARS = 20
     const token = Cookies.get("accessToken");
+
+    const MAX_BARS = 20;
 
     useEffect(() => {
         const fetchData = async () => {
@@ -61,10 +66,10 @@ const ReusableBarChart = ({
                 });
 
                 const field = aggsFields[0];
+
                 // const rawData = response.data[field] || [];
                 // const transformed = transformData(rawData);
                 // setBarData(transformed.length ? transformed : [{ name: 'No Data', value: 0 }]);
-
                 const raw = response.data[field] || [];
                 const transformed = transformData(raw);
                 setRawData(transformed); //  Store full transformed data
@@ -81,7 +86,9 @@ const ReusableBarChart = ({
 
         if (caseId) fetchData();
     }, [caseId, aggsFields.join(','), queryPayload, token]);
-useEffect(() => {
+
+    useEffect(() => {
+
         if (showAll) {
             setBarData(rawData.length ? rawData : [{ name: 'No Data', value: 0 }]);
         } else {
@@ -89,32 +96,29 @@ useEffect(() => {
             setBarData(limited.length ? limited : [{ name: 'No Data', value: 0 }]);
         }
     }, [showAll, rawData]);
-       
     if (loading) return <Loader />;
+
     return (
-        <div className={styles.chartWrappers} >
+        <div className={styles.chartWrappers}>
             <div className={styles.chartWrapper} style={{ height: chartHeight }}>
                 {barData.length > 0 ? (
-                    <ResponsiveContainer width="100%" height={Math.max(barData.length * 50, chartHeight)} >
+                    <ResponsiveContainer width="100%" height={barData.length * 45 < chartHeight ? chartHeight : barData.length * 45}
+>
                         <BarChart
                             data={barData}
                             layout="vertical"
                             barCategoryGap={30}
                             margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
                         >
-                            <CartesianGrid horizontal={true} vertical={false} stroke='#F3F3F51A' />
-
-                            <XAxis type="number"
-                                tick={{ fill: '#fff', fontSize: 12 }}
-                            />
+                            <CartesianGrid horizontal={true} vertical={false} stroke="#F3F3F51A" />
+                            <XAxis type="number" tick={{ fill: '#fff', fontSize: 12 }} />
                             <YAxis
                                 dataKey="name"
                                 type="category"
-                                width={200} // increase if needed
+                                width={200}
                                 tick={<CustomYAxisTick />}
                                 interval={0}
                             />
-
                             <Tooltip
                                 wrapperStyle={{
                                     backgroundColor: "#0E2C46",
@@ -122,21 +126,20 @@ useEffect(() => {
                                     borderRadius: "8px",
                                     padding: "8px",
                                     color: "#fff",
-                                    maxWidth: "250px", // Fix max width
+                                    maxWidth: "250px",
                                 }}
                                 contentStyle={{
                                     backgroundColor: "#0E2C46",
                                     border: "none",
-                                    maxWidth: "250px",          //Add again for internal content box
-                                    whiteSpace: "normal",       //Allow wrapping
-                                    wordWrap: "break-word",     //Break long words
-                                    overflowWrap: "break-word", //Better cross-browser wrapping
+                                    maxWidth: "250px",
+                                    whiteSpace: "normal",
+                                    wordWrap: "break-word",
+                                    overflowWrap: "break-word",
+
                                 }}
                                 labelStyle={{ color: "#D6D6D6" }}
                                 cursor={{ fill: "#1c2833" }}
                             />
-
-
                             <Bar
                                 dataKey="value"
                                 fill="#0073CF"
@@ -159,6 +162,7 @@ useEffect(() => {
                     <div className={styles.noData}>No Data Available</div>
                 )}
             </div>
+
             {rawData.length > MAX_BARS && (
                 <div style={{ textAlign: 'center', marginTop: '12px' }}>
                     <span
@@ -169,28 +173,38 @@ useEffect(() => {
                             textDecoration: 'underline',
                             fontWeight: 'bold',
                             fontSize: '14px',
+                             transition: 'color 0.3s ease',
+        '&:hover': {
+          color: '#005999', // darken the blue on hover
+        },
+        '& svg': {
+          transition: 'transform 0.2s',
+        },
+        '&:hover svg': {
+          transform: 'scale(1.2)', // enlarge the icon slightly on hover
+        }
                         }}
                     >
-                        {showAll ? 'Show Less' : 'Show All'}
+                        {showAll ? <SlArrowDown/> : <SlArrowUp/> }
                     </span>
                 </div>
-            )}
+            )}
+
         </div>
     );
 };
 
 export default ReusableBarChart;
+
 const CustomYAxisTick = ({ x, y, payload }) => {
     const maxCharsPerLine = 25;
 
-    // 🔹 Smart word break with hyphenation
     const breakTextWithHyphen = (text) => {
         const words = text.split(" ");
         const lines = [];
         let currentLine = "";
 
         for (let word of words) {
-            // Long word - break it with hyphens
             if (word.length > maxCharsPerLine) {
                 const parts = word.match(new RegExp(`.{1,${maxCharsPerLine - 1}}`, 'g')) || [];
                 parts.forEach((part, index) => {
@@ -223,19 +237,9 @@ const CustomYAxisTick = ({ x, y, payload }) => {
 
     return (
         <g transform={`translate(${x},${y})`}>
-            <text
-                x={0}
-                y={0}
-                textAnchor="end"
-                fontSize={12}
-                fill="#fff"
-            >
+            <text x={0} y={0} textAnchor="end" fontSize={12} fill="#fff">
                 {lines.map((line, index) => (
-                    <tspan
-                        key={index}
-                        x={0}
-                        dy={index === 0 ? 0 : 14} // 14px spacing per line
-                    >
+                    <tspan key={index} x={0} dy={index === 0 ? 0 : 14}>
                         {line}
                     </tspan>
                 ))}

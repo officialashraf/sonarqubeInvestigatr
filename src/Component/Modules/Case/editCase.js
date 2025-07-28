@@ -10,9 +10,13 @@ import CommonMultiSelect from "../../Common/MultiSelect/CommonMultiSelect";
 import CommonSingleSelect from "../../Common/MultiSelect/CommonSingleSelect";
 import customSelectStyles from '../../Common/CustomStyleSelect/customSelectStyles';
 import AppButton from "../../Common/Buttton/button";
+import { useTranslation } from 'react-i18next';
+
 
 
 const EditCase = ({ togglePopup, item }) => {
+  const { t } = useTranslation();
+
   const [formData, setFormData] = useState({
     title: item.title || "",
     description: item.description || "",
@@ -35,8 +39,8 @@ console.log("editCase", item)
   })) || [];
 
   const statusOptions = [
-    { value: "on hold", label: "On Hold" },
-    { value: "closed", label: "Closed" }
+    { value: "on hold", label: t('edit_case.status_on_hold')},
+    { value: "closed", label: t('edit_case.status_closed') }
   ];
 
   const getUserData = async () => {
@@ -52,7 +56,7 @@ console.log("editCase", item)
       setUsers(response.data);
     } catch (error) {
       console.error('Error fetching user data:', error);
-      toast.error("Failed to fetch users");
+      toast.error(t('edit_case.user_fetch_error'));
     } finally {
       setLoading(false);
     }
@@ -95,15 +99,15 @@ console.log("editCase", item)
 
   const validateForm = () => {
     const errors = {};
-    if (!formData.title.trim()) errors.title = "Title is required";
-    if (!formData.description.trim()) errors.description = "Description is required";
+    if (!formData.title.trim()) errors.title = t('edit_case.title_required');
+    if (!formData.description.trim()) errors.description = t('edit_case.description_required');
     return errors;
   };
 
   const handleEditCase = async () => {
     const token = Cookies.get("accessToken");
     if (!token) {
-      toast.error("Authentication error: No token found");
+      toast.error(t('edit_case.token_missing'));
       return;
     }
 
@@ -155,14 +159,14 @@ console.log("editCase", item)
       );
 
       if (response.status === 200) {
-        toast.success("Case updated successfully");
+        toast.success(t('edit_case.success'));
         window.dispatchEvent(new Event("databaseUpdated"));
         togglePopup();
       }
     } catch (err) {
       console.error("Error updating case:", err);
-      toast.error(err.response?.data?.detail || "Failed to update case");
-    } finally {
+      toast.error(err.response?.data?.detail || t('edit_case.update_error'));
+     } finally {
       setIsSubmitting(false);
     }
   };
@@ -214,7 +218,7 @@ console.log("editCase", item)
     return (
       <div className="popup-overlay">
         <div className="popup-container">
-          <div className="popup-content">Loading case details...</div>
+          <div className="popup-content">{t('edit_case.loading')}</div>
         </div>
       </div>
     );
@@ -225,22 +229,22 @@ console.log("editCase", item)
       <div className="popup-container">
         <button className="close-icon" onClick={togglePopup}>&times;</button>
         <div className="popup-content">
-          <h5>Edit Case</h5>
+          <h5>{t('edit_case.heading')}</h5>
           <form onSubmit={(e) => {
             e.preventDefault();
             handleEditCase();
           }}>
             {/* <label>Title *</label> */}
-            <CommonTextInput label="Title *" name="title" value={formData.title} onChange={handleInputChange} placeholder="Title" />
+            <CommonTextInput label={t('edit_case.title')} name="title" value={formData.title} onChange={handleInputChange} placeholder="Title" />
             {error.title && <p style={{ color: "red" }}>{error.title}</p>}
 
             {/* <label>Description *</label> */}
-            <CommonTextArea label="Description *" name="description" value={formData.description} onChange={handleInputChange} placeholder="Description" />
+            <CommonTextArea label={t('edit_case.description')} name="description" value={formData.description} onChange={handleInputChange} placeholder="Description" />
             {error.description && <p style={{ color: "red" }}>{error.description}</p>}
 
             {/* <label>Assignee</label> */}
             <CommonSingleSelect
-            label="Assignee"
+              label={t('edit_case.assignee')}
               options={options}
               value={options.find(opt => opt.value === formData.assignee) || null}
               onChange={handleAssigneeChange}
@@ -251,8 +255,7 @@ console.log("editCase", item)
 
             {/* <label>Watchers</label> */}
             <CommonMultiSelect
-            label="Watchers"
-
+              label={t('edit_case.watchers')}
               options={options}
               isMulti
               value={formData.watchers.map(wId => {
@@ -267,7 +270,7 @@ console.log("editCase", item)
 
             {/* <label>Status</label> */}
             <CommonSingleSelect
-              label="Status"
+              label={t('edit_case.status')}
               options={statusOptions}
               value={statusOptions.find(opt => opt.value === formData.status) || null}
               onChange={handleStatusChange}
@@ -277,13 +280,13 @@ console.log("editCase", item)
             />
 
             {/* <label>Comment</label> */}
-            <CommonTextInput  name="comment" value={formData.comment} onChange={handleInputChange} placeholder="Comment" />
+            <CommonTextInput label={t('edit_case.comment')} name="comment" value={formData.comment} onChange={handleInputChange} placeholder="Comment" />
 
             <div className="button-container">
               <AppButton type="submit" className="create-btn" disabled={isBtnDisabled || isSubmitting}>
-                {isSubmitting ? 'Editing...' : 'Edit'}
+                {isSubmitting ? t('edit_case.editing') : t('edit_case.edit')}
               </AppButton>
-              <AppButton type="button" className="cancel-btn" onClick={togglePopup}>Cancel</AppButton>
+              <AppButton type="button" className="cancel-btn" onClick={togglePopup}>{t('edit_case.cancel')}</AppButton>
             </div>
           </form>
         </div>

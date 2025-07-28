@@ -6,8 +6,11 @@ import PopupModal from "../../Common/Popup/popup";
 import DetailBox from "../../Common/DetailBox/DetailBox";
 import styles from '../../Common/DetailBox/detailBox.module.css';
 import AppButton from "../../Common/Buttton/button";
+import { useTranslation } from "react-i18next";
+
 
 const UserDetails = ({ userId, toggleDetails }) => {
+  const { t } = useTranslation();
   const [item, setItem] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -24,7 +27,7 @@ const UserDetails = ({ userId, toggleDetails }) => {
         });
         setItem(response.data.data || response.data);
       } catch (err) {
-        toast.error(err.response?.data?.detail || "Failed to fetch user details");
+        toast.error(err.response?.data?.detail || t('errors.fetchUserDetails'));
         console.error("Error fetching user details:", err.response || err);
       } finally {
         setLoading(false);
@@ -34,13 +37,13 @@ const UserDetails = ({ userId, toggleDetails }) => {
     if (userId) {
       fetchUserDetails();
     }
-  }, [userId]);
+  }, [userId, t]);
 
   if (loading) {
     return (
       <div className="popup-overlay">
         <div className="popup-containera">
-          <div className="popup-content">Loading user details...</div>
+          <div className="popup-content">{t('userDetails.loading')}</div>
         </div>
       </div>
     );
@@ -51,9 +54,9 @@ const UserDetails = ({ userId, toggleDetails }) => {
       <div className="popup-overlay">
         <div className="popup-containera">
           <div className="popup-content">
-            <p>No user details found.</p>
+            <p>{t('userDetails.notFound')}</p>
             <button type="button" className="cancel-btn" onClick={toggleDetails}>
-              Cancel
+              {t('common.cancel')}
             </button>
           </div>
         </div>
@@ -62,25 +65,26 @@ const UserDetails = ({ userId, toggleDetails }) => {
   }
 
   return (
-    <PopupModal title={'User Details'} onClose={toggleDetails}>
+    <PopupModal title={t('userDetails.title')} onClose={toggleDetails}>
       <div className={styles.container}>
         <div className={styles.grid}>
-          <DetailBox label="Username" value={item.username} />
-          <DetailBox label="User ID" value={`USER${String(item.id).padStart(4, '0')}`} />
-          <DetailBox label="Email" value={item.email} />
-          <DetailBox label="Last Active" value={item.last_logout} />
-          <DetailBox label="Status" value={item.status.charAt(0).toUpperCase() + item.status.slice(1)} isStatus />
-           <DetailBox label="Created On" value={item.createdOn} />
-            <DetailBox label="Created By" value={item.created_by} />
-             <DetailBox label="Edited On" value={item.updatedOn} />
-              <DetailBox label="Edited By" value={item.updatedBy} />
+          <DetailBox label={t('userDetails.username')} value={item.username} />
+          <DetailBox label={t('userDetails.userId')} value={`USER${String(item.id).padStart(4, '0')}`} />
+          <DetailBox label={t('userDetails.email')} value={item.email} />
+          <DetailBox label={t('userDetails.lastActive')} value={item.last_logout} />
+          <DetailBox label={t('userDetails.status')} value={item.status.charAt(0).toUpperCase() + item.status.slice(1)} isStatus />
+          <DetailBox label={t('userDetails.createdOn')} value={item.createdOn} />
+          <DetailBox label={t('userDetails.createdBy')} value={item.created_by} />
+          <DetailBox label={t('userDetails.editedOn')} value={item.updatedOn} />
+          <DetailBox label={t('userDetails.editedBy')} value={item.updatedBy} />
         </div>
       </div>
       <div className="d-flex justify-content-center mt-3">
-        <AppButton onClick={toggleDetails}>OK</AppButton>
+        <AppButton onClick={toggleDetails}>{t('common.ok')}</AppButton>
       </div>
     </PopupModal>
   );
 };
+
 
 export default UserDetails;

@@ -3,18 +3,22 @@ import { Box, Typography, Tooltip } from '@mui/material';
 import axios from 'axios';
 import Cookies from "js-cookie";
 import Loader from '../../../Modules/Layout/loader';
+import { IoIosArrowDropup } from "react-icons/io";
+import { SlArrowDown } from "react-icons/sl";
+import { SlArrowUp } from "react-icons/sl";
 
 const KeywordTagList = ({ queryPayload = null, caseId = null, aggsFields = ["socialmedia_hashtags"] }) => {
   const token = Cookies.get("accessToken");
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [showAll, setShowAll] = useState(false);
+  const [showAll, setShowAll] = useState(false); // 🔁 Toggle state
+
+
   useEffect(() => {
     const fetchKeywordData = async () => {
       try {
         setLoading(true);
 
-        // Dynamic payload handling
         const payload = queryPayload
           ? {
             query: {
@@ -48,7 +52,6 @@ const KeywordTagList = ({ queryPayload = null, caseId = null, aggsFields = ["soc
 
         const { socialmedia_hashtags } = response.data;
         setData(socialmedia_hashtags || []);
-
       } catch (error) {
         console.error("Error fetching keyword data:", error);
         setData([]);
@@ -91,7 +94,6 @@ const KeywordTagList = ({ queryPayload = null, caseId = null, aggsFields = ["soc
           displayedData.map((item, index) => {
             const docCount = item.doc_count || 0;
             const fontSize = `${Math.min(18, Math.max(11, Math.log2(docCount + 1) * 2))}px`;
-
             return (
               <Tooltip
                 key={index}
@@ -157,9 +159,24 @@ const KeywordTagList = ({ queryPayload = null, caseId = null, aggsFields = ["soc
               cursor: 'pointer',
               textDecoration: 'underline',
               fontWeight: 'bold',
+              fontSize: '15px',
+               transition: 'color 0.3s ease',
+        '&:hover': {
+          color: '#005999', // darken the blue on hover
+        },
+        '& svg': {
+          transition: 'transform 0.2s',
+        },
+        '&:hover svg': {
+          transform: 'scale(1.2)', // enlarge the icon slightly on hover
+        }
             }}
           >
-            {showAll ? 'Show Less' : 'Show All'}
+            {showAll ? <SlArrowDown />
+
+ : <SlArrowUp />
+
+}
           </Typography>
         </Box>
       )}

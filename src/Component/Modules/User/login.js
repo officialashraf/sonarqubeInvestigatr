@@ -11,17 +11,19 @@ import { Eye, EyeSlash } from 'react-bootstrap-icons';
 import { jwtDecode } from "jwt-decode";
 import { useAutoFocusWithManualAutofill } from '../../../utils/autoFocus';
 import AppButton from '../../Common/Buttton/button';
- import Logo from '../../Assets/Images/ProforceLogo.png'
+import Logo from '../../Assets/Images/ProforceLogo.png'
+import investigatrLogo from '../../Assets/Images/investigatr.png'; // Assuming this is the logo you want to use
+import { useTranslation } from 'react-i18next';
+import Logo from '../../Assets/Images/ProforceLogo.png'
 // import investigatrLogo from '../../Assets/Images/investigatr.png'; // Assuming this is the logo you want to use
 
 const LoginPage = () => {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const [formData, setFormData] = useState({ username: "", password: "" });
     const [error, setError] = useState({});
     const [showPassword, setShowPassword] = useState(false);
     const { inputRef, isReadOnly, handleFocus } = useAutoFocusWithManualAutofill();
-
-
     const [loginData, setLoginData] = useState(null);
 
     useEffect(() => {
@@ -40,11 +42,11 @@ const LoginPage = () => {
         const errors = {};
 
         if (!formData.username.trim()) {
-            errors.username = "Username is required";
+            errors.username = t('loginErrors.usernameRequired', 'Username is required');
         }
 
         if (!formData.password.trim()) {
-            errors.password = 'Password is required';
+            errors.password = t('loginErrors.passwordRequired', 'Password is required');
         }
 
         return errors;
@@ -100,7 +102,7 @@ const LoginPage = () => {
 
             } else {
                 // Handle errors when the response is not 200
-                toast.error('An unexpected error has occurred. Please try again');
+                toast.error(t('login.LoginError', 'An unexpected error has occurred. Please try again'));
             }
         } catch (err) {
             // Error handling based on the type of error
@@ -108,7 +110,7 @@ const LoginPage = () => {
 
             if (err.response) {
 
-                toast.error(err.response?.data?.detail || 'Something went wrong. Please try again');
+                toast.error(err.response?.data?.detail || (t('LoginError1', 'Something went wrong. Please try again')));
 
             } else if (err.request) {
                 // No response from the server
@@ -120,9 +122,7 @@ const LoginPage = () => {
         }
     };
 
-    //  if (!loginData) return <div>Loading...</div>;
     return (
-
         <Container fluid className={style.loginContainer}>
             {/* Logo Section (Centered) */}
             <Row className="justify-content-center" style={{marginTop:'2rem'}}>
@@ -133,6 +133,9 @@ const LoginPage = () => {
                 />
             </Row>
 
+            // <h1>{t('welcome')}</h1>
+
+
             <h1>{loginData?.loginTextHeader || "Default Login"}</h1>
 
             {/* <h1>Your Gateway to Actionable Intelligence</h1> */}
@@ -141,15 +144,15 @@ const LoginPage = () => {
             <Row className="justify-content-center">
                 <Col >
                     <Form className={style.loginForm} onSubmit={handleLogin} noValidate>
-                        <h2 style={{ color: 'white', marginBottom: '24px' }}>Login</h2>
+                        <h2 style={{ color: 'white', marginBottom: '24px' }}>{t('login.title', 'Login')}</h2>
 
                         <InputField
-                            label="Username *"
+                            label={t('login.username', 'Username *')}
                             type="text"
                             ref={inputRef}
                             value={formData.username}
                             onChange={handleChange}
-                            placeholder="Enter your username"
+                            placeholder={t('login.usernamePlaceholder', 'Enter your username')}
                             autoComplete="user-name"
                             name="username"
                             autoFocus
@@ -161,11 +164,11 @@ const LoginPage = () => {
 
                         <div style={{ position: 'relative', justifyContent: 'center', marginBottom: '20px' }}>
                             <InputField
-                                label="Password *"
+                                label={t('login.password', 'Password *')}
                                 type={showPassword ? "text" : "password"}
                                 value={formData.password}
                                 onChange={handleChange}
-                                placeholder="Enter your password"
+                                placeholder={t('login.passwordPlaceholder', 'Enter your password')}
                                 autoComplete="current-password"
                                 name="password"
                                 error={!!error.password}
@@ -180,7 +183,7 @@ const LoginPage = () => {
                                     userSelect: 'none',
                                     color: 'white',
                                 }}
-                                aria-label={showPassword ? "Hide password" : "Show password"}
+                                aria-label={showPassword ? t('login.hidePassword', 'Hide password') : t('login.showPassword', 'Show password')}
                                 role="button"
                                 tabIndex={0}
                                 onKeyDown={(e) => {
@@ -196,16 +199,19 @@ const LoginPage = () => {
                         {error.password && <p style={{ color: "red" }}>{error.password}</p>}
 
                         <div className="d-flex justify-content-end mt-3">
-                            <AppButton children={"Login to Begin Your Investigation"} />
+                            <AppButton children={t('login.submit', 'Login to Begin Your Investigation')} />
                         </div>
                     </Form>
                 </Col>
             </Row>
 
+
+            {/* <h4> {t('footer', 'Proudly developed by Proforce')}</h4> */}
+
             <h4>{loginData?.loginTextFooter || "Default Login"} </h4>
             {/* <h4>Secure. Scalable. Built for law Enforcement</h4> */}
-
         </Container>
     );
 }
+
 export default LoginPage;      
