@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { Box } from '@mui/material';
 import { Tooltip, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Cell } from 'recharts';
@@ -10,9 +10,12 @@ import styles from "./record.module.css";
 import Cookies from "js-cookie";
 import ReusablePieChart from '../../Common/Charts/PieChrat/pieChart';
 import DataThresholdingIcon from '@mui/icons-material/DataThresholding';
+import { clearCaseFilterPayload } from '../../../Redux/Action/caseAction';
 
 const Summary = ({ filters }) => {
 
+const dispatch = useDispatch();
+dispatch(clearCaseFilterPayload());
   const token = Cookies.get("accessToken");
   const [pieData, setPieData] = useState([]);
   const [barData, setBarData] = useState([]);
@@ -268,4 +271,3 @@ const BarWithHover = ({ barData }) => {
     </div>
   );
 };
-

@@ -18,10 +18,14 @@ const ReusableBarChart = ({
     })),
 }) => {
     const [barData, setBarData] = useState([]);
-    const [rawData, setRawData] = useState([]); // 
+    const [rawData, setRawData] = useState([]); 
     const [loading, setLoading] = useState(false);
+    const [rawData, setRawData] = useState([]);
+    const [showAll, setShowAll] = useState(false);
     const [activeIndex, setActiveIndex] = useState(null);
-    const [showAll, setShowAll] = useState(false); // Toggle state
+    const [showAll, setShowAll] = useState(false);
+
+    const MAX_BARS = 20
     const token = Cookies.get("accessToken");
 
     const MAX_BARS = 20;
@@ -33,7 +37,15 @@ const ReusableBarChart = ({
                 const payload = queryPayload
                     ? {
                         query: {
-                            unified_case_id: Array.isArray(queryPayload?.case_id) ? queryPayload.case_id : [],
+                          unified_case_id: Array.isArray(queryPayload?.case_id)
+                ? queryPayload.case_id
+                : Array.isArray(queryPayload?.caseId)
+                  ? queryPayload.caseId
+                  : queryPayload?.case_id
+                    ? [queryPayload.case_id]
+                    : queryPayload?.caseId
+                      ? [queryPayload.caseId]
+                      : [],
                             file_type: Array.isArray(queryPayload?.file_type) ? queryPayload.file_type : [],
                             keyword: Array.isArray(queryPayload?.keyword) ? queryPayload.keyword : [],
                         },
@@ -54,13 +66,16 @@ const ReusableBarChart = ({
                 });
 
                 const field = aggsFields[0];
+
+                // const rawData = response.data[field] || [];
+                // const transformed = transformData(rawData);
+                // setBarData(transformed.length ? transformed : [{ name: 'No Data', value: 0 }]);
                 const raw = response.data[field] || [];
                 const transformed = transformData(raw);
                 setRawData(transformed); //  Store full transformed data
 
                 const limitedData = transformed.length > MAX_BARS ? transformed.slice(0, MAX_BARS) : transformed;
-                setBarData(limitedData.length ? limitedData : [{ name: 'No Data', value: 0 }]);
-
+                setBarData(limitedData.length ? limitedData : [{ name: 'No Data', value: 0 }]);
             } catch (error) {
                 console.error('Error fetching bar chart data:', error);
                 setBarData([{ name: 'No Data', value: 0 }]);
@@ -72,8 +87,8 @@ const ReusableBarChart = ({
         if (caseId) fetchData();
     }, [caseId, aggsFields.join(','), queryPayload, token]);
 
-    // 🔁 Handle Toggle
     useEffect(() => {
+
         if (showAll) {
             setBarData(rawData.length ? rawData : [{ name: 'No Data', value: 0 }]);
         } else {
@@ -81,7 +96,6 @@ const ReusableBarChart = ({
             setBarData(limited.length ? limited : [{ name: 'No Data', value: 0 }]);
         }
     }, [showAll, rawData]);
-
     if (loading) return <Loader />;
 
     return (
@@ -121,6 +135,7 @@ const ReusableBarChart = ({
                                     whiteSpace: "normal",
                                     wordWrap: "break-word",
                                     overflowWrap: "break-word",
+
                                 }}
                                 labelStyle={{ color: "#D6D6D6" }}
                                 cursor={{ fill: "#1c2833" }}
@@ -148,7 +163,6 @@ const ReusableBarChart = ({
                 )}
             </div>
 
-            {/* 🔁 Toggle Button */}
             {rawData.length > MAX_BARS && (
                 <div style={{ textAlign: 'center', marginTop: '12px' }}>
                     <span
@@ -175,6 +189,7 @@ const ReusableBarChart = ({
                     </span>
                 </div>
             )}
+
         </div>
     );
 };

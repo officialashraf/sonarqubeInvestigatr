@@ -12,7 +12,9 @@ const EventBar = () => {
     // const token = Cookies.get("accessToken");
     // const [barData, setBarData] = useState([]);
     // const [loading, setLoading] = useState(false);
-    const caseId = useSelector((state) => state.caseData.caseData.id);
+    const caseID = useSelector((state) => state.caseData.caseData.id);
+    const caseFilter = useSelector((state) => state.caseFilter?.caseFilters);
+const { agg_fields, ...filteredPayload } = caseFilter || {};
     // console.log("casiId", caseId)
 
     // useEffect(() => {
@@ -66,7 +68,7 @@ const EventBar = () => {
         <>
 
             <ReusableBarChart
-                caseId={caseId}
+                caseId={caseID}
                 aggsFields={["event"]}
                 query={{}} // if extra filters needed
                 chartHeight={280}
@@ -76,6 +78,7 @@ const EventBar = () => {
                         value: item.doc_count
                     }))
                 }
+                queryPayload={filteredPayload}
             />
         </>
     );

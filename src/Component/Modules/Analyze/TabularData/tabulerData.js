@@ -11,6 +11,7 @@ import Cookies from "js-cookie";
 const TabulerData = () => {
   const dispatch = useDispatch();
   const caseData = useSelector((state) => state.caseData.caseData);
+  const caseFilter = useSelector((state) => state.caseFilter?.caseFilters);
   const {
     data,
     headers,
@@ -28,20 +29,19 @@ const TabulerData = () => {
   const getGroupColor = (groupName) => {
     if (groupColors[groupName]) return groupColors[groupName];
 
-    const colorList = [
-      "#4CAF50", // Green
-      "#F44336", // Red
-      "#FF9800", // Orange
-      "#9C27B0", // Purple
-      "#3F51B5", // Indigo
-      "#795548", // Brown
-      "#E91E63", // Pink
-      "#2196F3", // Blue
-      "#FF5722", // Deep Orange
-      "#607D8B", // Blue Grey
-      "#009688", // Teal
-      "#8BC34A", // Light Green
-    ];
+ const colorList = [
+  "#67e467ff", // Very Dark Green
+  "#ce2020ff", // Very Dark Red
+  "#ecf012ff", // Very Dark Orange
+  "#bb6dd4ff", // Very Dark Purple
+  "#060a35ff", // Very Dark Indigo
+  "#1a0a03ff", // Very Dark Brown
+  "#d44c90ff", // Very Dark Pink
+  "#e6f517ff", // Very Dark Blue
+  "#e76570ff", // Very Dark Deep Orange
+  "#45dbcfff", // Very Dark Blue Grey
+ ]
+
 
     const color = colorList[Object.keys(groupColors).length % colorList.length];
     groupColors[groupName] = color;
@@ -49,32 +49,46 @@ const TabulerData = () => {
   };
 
   useEffect(() => {
-    if (caseData?.id) {
-      dispatch(fetchSummaryData({
-        queryPayload: { unified_case_id: caseData.id },
+    if (caseData?.id && !data) {
+      const queryPayload = {
+        unified_case_id: caseData.id
+      };
+        const summaryPayload ={
+        queryPayload,
+        ...(caseFilter?.file_type && { file_type: caseFilter.file_type }),
+        ...(caseFilter?.start_time && { start_time: caseFilter.start_time }),
+        ...(caseFilter?.end_time && { end_time: caseFilter.end_time }),
+        ...(caseFilter?.aggs_fields && { aggsFields: caseFilter.aggs_fields }),
+        ...(caseFilter?.keyword && { keyword: caseFilter.keyword }),
         page: currentPage,
         itemsPerPage: 50
-      }));
+      }  
+      dispatch(fetchSummaryData(summaryPayload));
+       console.log("su mardtaatbulerr", summaryPayload)
     }
-  }, [caseData, currentPage, dispatch]);
+  }, [caseData?.id]);
 
-  useEffect(() => {
-    const fetchMapping = async () => {
-      try {
-        const token = Cookies.get("accessToken");
-        const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/mappings`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json"
-          }
-        });
-        setColumnMapping(response.data);
-      } catch (error) {
-        console.error("Mapping fetch failed", error);
-      }
-    };
+ useEffect(() => {
+  const fetchMapping = async () => {
+    try {
+      const token = Cookies.get("accessToken");
+      const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/mappings`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
+        }
+      });
+      setColumnMapping(response.data);
+    } catch (error) {
+      console.error("Mapping fetch failed", error);
+    }
+  };
+
+  
     fetchMapping();
-  }, []);
+  
+}, [caseData?.id, page]);
+
 
   const processedHeaders = headers.map((header) => {
     const mapping = columnMapping.find((col) => col.column_name === header);
@@ -91,11 +105,21 @@ const TabulerData = () => {
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
-    dispatch(fetchSummaryData({
-      queryPayload: { unified_case_id: caseData?.id },
-      page: page,
+    const queryPayload = {
+      unified_case_id: caseData.id
+    };
+const pageChangePayload={
+      queryPayload,
+      ...(caseFilter?.file_type && { file_type: caseFilter.file_type }),
+      ...(caseFilter?.aggs_fields && { aggsFields: caseFilter.aggs_fields }),
+      ...(caseFilter?.keyword && { keyword: caseFilter.keyword }),
+      ...(caseFilter?.start_time && { start_time: caseFilter.start_time }),
+      ...(caseFilter?.end_time && { end_time: caseFilter.end_time }),
+      page,
       itemsPerPage: 50
-    }));
+}
+    dispatch(fetchSummaryData(pageChangePayload));
+    console.log("paageechngepayloadda",pageChangePayload)
   };
 
   if (loading) return <Loader />;
@@ -116,7 +140,7 @@ const TabulerData = () => {
   return (
     <>
       <div className={styles.mainContainer}>
-        <div className={styles.tableWrapper} style={{ overflowY: "auto", height: "60vh" }}>
+        <div className={styles.tableWrapper} style={{ overflowY: "auto", height: "48vh" }}>
           {data && data.length > 0 ? (
             <Table hover className={styles.table}>
               <thead>
@@ -164,9 +188,10 @@ const TabulerData = () => {
                         className={style.fixedTh}
                       >
                         <div
-                          style={{
-                          color: getGroupColor(col.groupName),
-                          }}
+                          // style={{
+                          //   color: getGroupColor(col.groupName),
+                          //    fontWeight: "600"
+                          // }}
                         >
                           {col.displayName}
                         </div>
@@ -199,7 +224,7 @@ const TabulerData = () => {
                           }}
                           title={item[col.key]}
                         >
-                          {col.key === "socialmedia_hashtags" ? (() => {
+                         {["targets", "person", "gpe", "unified_case_id", "org","loc", "socialmedia_hashtags"].includes(col.key) ? (() => {
                             let tags = [];
                             try {
                               tags = JSON.parse(item[col.key]?.replace(/'/g, '"') || "[]");
@@ -241,33 +266,51 @@ const TabulerData = () => {
         </div>
 
         {/* Pagination */}
-        <div className={style.paginationContainer} style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-          <Pagination>
-            <Pagination.First onClick={() => handlePageChange(1)} disabled={currentPage === 1} />
-            <Pagination.Prev onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
-            {pages.map((number, index) =>
-              number === "..." ? (
-                <Pagination.Item key={index} className={style.pageItem} disabled>
-                  ...
-                </Pagination.Item>
-              ) : (
-                <Pagination.Item
-                  key={index}
-                  active={number === currentPage}
-                  onClick={() => handlePageChange(number)}
-                  className={`${styles.pageItem} ${number === currentPage ? styles.activePage : ""}`}
-                >
-                  {number}
-                </Pagination.Item>
-              )
-            )}
-            <Pagination.Next onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages} />
-            <Pagination.Last onClick={() => handlePageChange(totalPages)} disabled={currentPage === totalPages} />
-          </Pagination>
-        </div>
+      <div
+  className={style.paginationContainer}
+  style={{
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between", // updated
+    width: "100%",                   // ensure full width
+    padding: "0 16px"                // optional padding
+  }}
+>
+  {/* Pagination centered inside a wrapper */}
+  <div style={{ flex: 1, display: "flex", justifyContent: "center" }}>
+    <Pagination>
+      <Pagination.First onClick={() => handlePageChange(1)} disabled={currentPage === 1} />
+      <Pagination.Prev onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
+      {pages.map((number, index) =>
+        number === "..." ? (
+          <Pagination.Item key={index} className={style.pageItem} disabled>
+            ...
+          </Pagination.Item>
+        ) : (
+          <Pagination.Item
+            key={index}
+            active={number === currentPage}
+            onClick={() => handlePageChange(number)}
+            className={`${styles.pageItem} ${number === currentPage ? styles.activePage : ""}`}
+          >
+            {number}
+          </Pagination.Item>
+        )
+      )}
+      <Pagination.Next onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages} />
+      <Pagination.Last onClick={() => handlePageChange(totalPages)} disabled={currentPage === totalPages} />
+    </Pagination>
+  </div>
+
+  {/* Total results on the right */}
+  <div style={{ fontSize: "12px", color: "#ccc" }}>
+    (Total Results - {totalPages * 50 || "0"})
+  </div>
+</div>
+
 
         {/* Group Color Legend */}
-        <div
+        {/* <div
           className={style.legendContainer}
           style={{
             display: "flex",
@@ -283,7 +326,7 @@ const TabulerData = () => {
               <span style={{ fontSize: "12px" }}>{group}</span>
             </div>
           ))}
-        </div>
+        </div> */}
       </div>
     </>
   );

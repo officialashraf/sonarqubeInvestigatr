@@ -1,4 +1,4 @@
-import { SET_SEARCH_RESULTS, SET_PAGE, CLOSE_POPUP, OPEN_POPUP, SET_KEYWORDS } from "../Constants/criteriaConstant";
+import { SET_SEARCH_RESULTS, SET_PAGE, CLOSE_POPUP, OPEN_POPUP, SET_KEYWORDS, CLEAR_CRITERIA } from "../Constants/criteriaConstant";
 
 // Redux Reducer
 const initialState = {
@@ -71,7 +71,10 @@ export const criteriaReducer = (state = queryState, action) => {
           ...action.payload.queryPayload,
         },
       };
-
+      case CLEAR_CRITERIA:
+      return {
+        ...queryState,
+      };
     default:
       return state;
   }

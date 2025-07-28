@@ -13,6 +13,7 @@ const KeywordTagList = ({ queryPayload = null, caseId = null, aggsFields = ["soc
   const [loading, setLoading] = useState(false);
   const [showAll, setShowAll] = useState(false); // 🔁 Toggle state
 
+
   useEffect(() => {
     const fetchKeywordData = async () => {
       try {
@@ -21,7 +22,15 @@ const KeywordTagList = ({ queryPayload = null, caseId = null, aggsFields = ["soc
         const payload = queryPayload
           ? {
             query: {
-              unified_case_id: Array.isArray(queryPayload?.case_id) ? queryPayload.case_id : [],
+              unified_case_id: Array.isArray(queryPayload?.case_id)
+                ? queryPayload.case_id
+                : Array.isArray(queryPayload?.caseId)
+                  ? queryPayload.caseId
+                  : queryPayload?.case_id
+                    ? [queryPayload.case_id]
+                    : queryPayload?.caseId
+                      ? [queryPayload.caseId]
+                      : [],
               file_type: Array.isArray(queryPayload?.file_type) ? queryPayload.file_type : [],
               keyword: Array.isArray(queryPayload?.keyword) ? queryPayload.keyword : [],
             },
@@ -54,10 +63,12 @@ const KeywordTagList = ({ queryPayload = null, caseId = null, aggsFields = ["soc
     fetchKeywordData();
   }, [caseId, queryPayload, token]);
 
-  if (loading) return <Loader />;
 
   const MAX_HASHTAGS = 50;
-  const displayedData = showAll ? data : data.slice(0, MAX_HASHTAGS);
+  const displayedData = showAll ? data : data.slice(0, MAX_HASHTAGS)
+
+
+  if (loading) return <Loader />;
 
   return (
     <>
@@ -72,13 +83,17 @@ const KeywordTagList = ({ queryPayload = null, caseId = null, aggsFields = ["soc
           maxHeight: '280px',
           overflowY: 'auto',
           overflowX: 'hidden',
+           scrollbarWidth: 'none',           // Firefox
+    msOverflowStyle: 'none',          // IE/Edge
+    '&::-webkit-scrollbar': {
+      display: 'none',                // Chrome, Safari, Opera
+    },
         }}
       >
         {displayedData.length > 0 ? (
           displayedData.map((item, index) => {
             const docCount = item.doc_count || 0;
             const fontSize = `${Math.min(18, Math.max(11, Math.log2(docCount + 1) * 2))}px`;
-
             return (
               <Tooltip
                 key={index}
@@ -170,3 +185,4 @@ const KeywordTagList = ({ queryPayload = null, caseId = null, aggsFields = ["soc
 };
 
 export default KeywordTagList;
+

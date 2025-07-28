@@ -1,4 +1,4 @@
-import { useState,useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Container, Row, Col, Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -14,6 +14,8 @@ import AppButton from '../../Common/Buttton/button';
 import Logo from '../../Assets/Images/ProforceLogo.png'
 import investigatrLogo from '../../Assets/Images/investigatr.png'; // Assuming this is the logo you want to use
 import { useTranslation } from 'react-i18next';
+import Logo from '../../Assets/Images/ProforceLogo.png'
+// import investigatrLogo from '../../Assets/Images/investigatr.png'; // Assuming this is the logo you want to use
 
 const LoginPage = () => {
     const { t } = useTranslation();
@@ -22,6 +24,19 @@ const LoginPage = () => {
     const [error, setError] = useState({});
     const [showPassword, setShowPassword] = useState(false);
     const { inputRef, isReadOnly, handleFocus } = useAutoFocusWithManualAutofill();
+    const [loginData, setLoginData] = useState(null);
+
+    useEffect(() => {
+        fetch('/login-text.json', { cache: "no-store" })
+            .then((res) => res.json())
+            .then((data) => {
+                setLoginData({
+                    loginTextHeader: (data.loginTextHeader),
+                    loginTextFooter: (data.loginTextFooter),
+                    logoUrl: (data.logoUrl),
+                });
+            });
+    }, []);
 
     const validateForm = () => {
         const errors = {};
@@ -113,13 +128,19 @@ const LoginPage = () => {
             <Row className="justify-content-center" style={{marginTop:'2rem'}}>
                 <img
                    src={Logo}
-                    alt="Proforce Logo"
+                    alt="Logo"
                     className={style.logoCenter} /* Use the CSS class */
                 />
             </Row>
 
-            <h1>{t('welcome')}</h1>
+            // <h1>{t('welcome')}</h1>
 
+
+            <h1>{loginData?.loginTextHeader || "Default Login"}</h1>
+
+            {/* <h1>Your Gateway to Actionable Intelligence</h1> */}
+
+            {/* Main Content Section (Left and Right Content) */}
             <Row className="justify-content-center">
                 <Col >
                     <Form className={style.loginForm} onSubmit={handleLogin} noValidate>
@@ -184,8 +205,13 @@ const LoginPage = () => {
                 </Col>
             </Row>
 
-            <h4> {t('footer', 'Proudly developed by Proforce')}</h4>
+
+            {/* <h4> {t('footer', 'Proudly developed by Proforce')}</h4> */}
+
+            <h4>{loginData?.loginTextFooter || "Default Login"} </h4>
+            {/* <h4>Secure. Scalable. Built for law Enforcement</h4> */}
         </Container>
     );
 }
-export default LoginPage;
+
+export default LoginPage;      

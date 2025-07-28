@@ -5,20 +5,20 @@ import Cookies from 'js-cookie';
 import Loader from '../../../Modules/Layout/loader';
 
 const getCSSVar = (variable) =>
-    getComputedStyle(document.documentElement).getPropertyValue(variable).trim();
+  getComputedStyle(document.documentElement).getPropertyValue(variable).trim();
 
-  const COLORS = [
-    getCSSVar('--color-colors-warning'),
-    getCSSVar('--color-colors-success'),
-    getCSSVar('--color-colors-danger'),
-     getCSSVar('--color-colors-primaryAccent')
-  ];
+const COLORS = [
+  getCSSVar('--color-colors-warning'),
+  getCSSVar('--color-colors-success'),
+  getCSSVar('--color-colors-danger'),
+  getCSSVar('--color-colors-primaryAccent')
+];
 
 const ReusablePieChart = ({
 
   aggsFields = [],
-queryPayload = null,
- caseId = null,
+  queryPayload = null,
+  caseId = null,
   chartHeight = 300,
   transformData = (rawData) =>
     rawData.map(item => ({
@@ -31,24 +31,34 @@ queryPayload = null,
   const token = Cookies.get('accessToken');
 
   useEffect(() => {
+    if (!caseId || !aggsFields || aggsFields.length === 0) return;
+
     const fetchData = async () => {
       try {
         setLoading(true);
-       const payload = queryPayload
+        const payload = queryPayload
           ? {
-              query: {
-                unified_case_id: Array.isArray(queryPayload?.case_id) ? queryPayload.case_id : [],
-                file_type: Array.isArray(queryPayload?.file_type) ? queryPayload.file_type : [],
-                keyword: Array.isArray(queryPayload?.keyword) ? queryPayload.keyword : [],
-              },
-              aggs_fields: aggsFields,
-              start_time: queryPayload?.start_time || "",
-              end_time: queryPayload?.end_time || ""
-            }
+            query: {
+              unified_case_id: Array.isArray(queryPayload?.case_id)
+                ? queryPayload.case_id
+                : Array.isArray(queryPayload?.caseId)
+                  ? queryPayload.caseId
+                  : queryPayload?.case_id
+                    ? [queryPayload.case_id]
+                    : queryPayload?.caseId
+                      ? [queryPayload.caseId]
+                      : [],
+              file_type: Array.isArray(queryPayload?.file_type) ? queryPayload.file_type : [],
+              keyword: Array.isArray(queryPayload?.keyword) ? queryPayload.keyword : [],
+            },
+            aggs_fields: aggsFields,
+            start_time: queryPayload?.start_time || "",
+            end_time: queryPayload?.end_time || ""
+          }
           : {
-              query: { unified_case_id: String(caseId) },
-              aggs_fields: aggsFields
-            };
+            query: { unified_case_id: String(caseId) },
+            aggs_fields: aggsFields
+          };
 
         const response = await axios.post(
           `${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/aggregate`,
@@ -75,8 +85,9 @@ queryPayload = null,
     };
 
     // if (caseId || queryPayload?.unified_case_id?.length) 
-      fetchData();
-  }, [caseId, aggsFields, queryPayload, token]);
+    fetchData();
+
+  }, [caseId, aggsFields, token]);
 
   if (loading) return <Loader />;
 
@@ -92,39 +103,39 @@ queryPayload = null,
           dataKey="value"
           stroke="#fff"
           strokeWidth={2}
-          minAngle={3}  
+          minAngle={3}
         >
-         {data.map((entry, index) => {
-  let fillColor;
+          {data.map((entry, index) => {
+            let fillColor;
 
-  if (entry.name === "positive") {
-    fillColor = getCSSVar('--color-colors-success');
-  } else if (entry.name === "negative") {
-    fillColor = getCSSVar('--color-colors-danger');
-  } else if (entry.name === "neutral") {
-    fillColor = getCSSVar('--color-colors-warning');
-  } else if (entry.name === "Social Media") {
-    fillColor = getCSSVar('--color-colors-warning');
-  } else if (entry.name === "Rss Feed") {
-    fillColor = getCSSVar('--color-colors-success');
-  } 
-   else if (entry.name === "Web Feed") {
-    fillColor = getCSSVar('--color-colors-primaryAccent');
-  } else if (entry.name === "Dark Web") {
-    fillColor ="#5C4033";
-  } 
-  else {
-    fillColor = COLORS[index % COLORS.length];
-  }
+            if (entry.name === "positive") {
+              fillColor = getCSSVar('--color-colors-success');
+            } else if (entry.name === "negative") {
+              fillColor = getCSSVar('--color-colors-danger');
+            } else if (entry.name === "neutral") {
+              fillColor = getCSSVar('--color-colors-warning');
+            } else if (entry.name === "Social Media") {
+              fillColor = getCSSVar('--color-colors-warning');
+            } else if (entry.name === "Rss Feed") {
+              fillColor = getCSSVar('--color-colors-success');
+            }
+            else if (entry.name === "Web Feed") {
+              fillColor = getCSSVar('--color-colors-primaryAccent');
+            } else if (entry.name === "Dark Web") {
+              fillColor = "#5C4033";
+            }
+            else {
+              fillColor = COLORS[index % COLORS.length];
+            }
 
-  return (
-    <Cell
-      key={`cell-${index}`}
-      fill={fillColor}
-      strokeWidth={1}
-    />
-  );
-})}
+            return (
+              <Cell
+                key={`cell-${index}`}
+                fill={fillColor}
+                strokeWidth={1}
+              />
+            );
+          })}
 
         </Pie>
 

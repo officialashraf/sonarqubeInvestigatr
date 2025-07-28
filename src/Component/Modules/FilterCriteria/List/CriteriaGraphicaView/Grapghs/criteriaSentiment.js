@@ -1,5 +1,7 @@
+import React, { useEffect, useMemo, useState } from 'react';
 import ReusablePieChart from '../../../../../Common/Charts/PieChrat/pieChart';
 import { useSelector } from 'react-redux';
+
 // import axios from 'axios';
 // import { useEffect, useState } from 'react';
 // import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
@@ -7,10 +9,16 @@ import { useSelector } from 'react-redux';
 // import Loader from '../../../../Layout/loader';
 
 
-
-const CriteriaSentimentChart = () => {
-  const queryPayload = useSelector((state) => state.criteriaKeywords.queryPayload);
-  console.log("querUseselctor", queryPayload)
+// const CriteriaSentimentChart = () => {
+//   const queryPayload = useSelector((state) => state.criteriaKeywords.queryPayload);
+//   console.log("querUseselctor", queryPayload)
+//    const [shouldFetch, setShouldFetch] = useState(false);
+  
+//     useEffect(() => {
+//       if (queryPayload) {
+//         setShouldFetch(true);  // 🟢 you can trigger it only when you're ready
+//       }
+//     }, [queryPayload]);
   // const token = Cookies.get("accessToken");
   // let [data, setData] = useState([]);
   // const [loading, setLoading] = useState(true);
@@ -78,15 +86,63 @@ const CriteriaSentimentChart = () => {
   // if (loading) {
   //   return <Loader />
   // }
+  
+//     const aggsFields = ['sentiment'];
+//   return (
+//  <ReusablePieChart
+//       caseId={queryPayload?.case_id}
+//       aggsFields={aggsFields}
+//       shouldFetch={shouldFetch}
+//       queryPayload={queryPayload}
+
+//     />
+
+//   );
+// };
+// CriteriaSentimentChart.displayName = 'CriteriaSentimentChart';
+// export default CriteriaSentimentChart;
+
+
+
+const CriteriaSentimentChart = React.memo(() => {
+  const queryPayload = useSelector((state) => state.criteriaKeywords?.queryPayload);
+  console.log("queryUseSelector", queryPayload);
+  
+  const [shouldFetch, setShouldFetch] = useState(false);
+  
+  // Memoize the payload to prevent unnecessary re-renders
+  const memoizedPayload = useMemo(() => queryPayload, [
+    queryPayload?.case_id,
+    queryPayload?.keyword,
+    queryPayload?.file_type,
+    queryPayload?.start_time,
+    queryPayload?.end_time
+  ]);
+  
+  useEffect(() => {
+    if (memoizedPayload && Object.keys(memoizedPayload).length > 0) {
+      setShouldFetch(true);
+    } else {
+      setShouldFetch(false);
+    }
+  }, [memoizedPayload]);
+  
+  const aggsFields = ['sentiment'];
+  
+  // Don't render if no payload
+  if (!memoizedPayload) {
+    return <div>No data available</div>;
+  }
+  
   return (
     <ReusablePieChart
-      // caseId={queryPayload}
-      aggsFields={["sentiment"]}
-     queryPayload={queryPayload}
+      caseId={memoizedPayload?.case_id}
+      aggsFields={aggsFields}
+      shouldFetch={shouldFetch}
+      queryPayload={memoizedPayload}
     />
-
   );
-};
+});
 
+CriteriaSentimentChart.displayName = 'CriteriaSentimentChart';
 export default CriteriaSentimentChart;
-

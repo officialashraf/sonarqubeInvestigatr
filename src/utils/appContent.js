@@ -30,6 +30,7 @@ import LicenseGuard from './licenseGaurd.js';
 import ConnectionManagement from '../Component/Modules/Connections/connectionManagement.js';
 import DAButton from '../Component/Common/Buttton/button.js';
 import CatelogList from '../Component/Modules/Catlog/catelogList.js';
+import AddFilter from '../Component/Modules/Analyze/TabularData/filter.js';
 
 const styels = {}
 const AppContent = () => {
@@ -80,7 +81,6 @@ const AppContent = () => {
             <div className={styles.contA}>
               {!excludedPaths.includes(location.pathname) && <Sidebar />}
             </div>
-
             {/* Right Panel: Header + Main Content */}
             <div className={styles.rightPanel}>
 

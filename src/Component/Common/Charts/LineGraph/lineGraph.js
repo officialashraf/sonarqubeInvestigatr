@@ -15,7 +15,7 @@ const ReusableLineGraph = ({
   const [data, setData] = useState([]);
   const [recordTypes, setRecordTypes] = useState([]);
   const [loading, setLoading] = useState(true);
-
+console.log("queryplayold", queryPayload);
   // Color palette for different types
   const colors = [
     '#0073CF', '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', 
@@ -31,7 +31,15 @@ const ReusableLineGraph = ({
         const payload = queryPayload
           ? {
               query: {
-                unified_case_id: Array.isArray(queryPayload?.case_id) ? queryPayload.case_id : [],
+               unified_case_id: Array.isArray(queryPayload?.case_id)
+  ? queryPayload.case_id
+  : Array.isArray(queryPayload?.caseId)
+  ? queryPayload.caseId
+  : queryPayload?.case_id
+  ? [queryPayload.case_id]
+  : queryPayload?.caseId
+  ? [queryPayload.caseId]
+  : [],
                 file_type: Array.isArray(queryPayload?.file_type) ? queryPayload.file_type : [],
                 keyword: Array.isArray(queryPayload?.keyword) ? queryPayload.keyword : [],
               },

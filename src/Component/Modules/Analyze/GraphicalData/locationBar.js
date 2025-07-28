@@ -9,7 +9,9 @@ import ReusableBarChart from '../../../Common/Charts/BarChart/CommonBarChart';
 
 const LocationBar = () => {
     
-    const caseId = useSelector((state) => state.caseData.caseData.id);
+ const caseID = useSelector((state) => state.caseData.caseData.id);
+    const caseFilter = useSelector((state) => state.caseFilter?.caseFilters);
+    const { agg_fields, ...filteredPayload } = caseFilter || {};
     // console.log("casiId", caseId)
     // const token = Cookies.get("accessToken");
     // const [barData, setBarData] = useState([]);
@@ -67,7 +69,7 @@ const LocationBar = () => {
     return (
         <>
             <ReusableBarChart
-      caseId={caseId}
+      caseId={caseID}
       aggsFields={["loc"]}
       query={{}} // if extra filters needed
       chartHeight={280}
@@ -77,6 +79,7 @@ const LocationBar = () => {
           value: item.doc_count
         }))
       }
+      queryPayload={filteredPayload}
     />
         </>
     );

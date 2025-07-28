@@ -27,6 +27,7 @@ const Resources = () => {
 
   const dispatch = useDispatch();
   const data1 = useSelector((state) => state.caseData.caseData);
+  const caseFilter = useSelector((state) => state.caseFilter?.caseFilters);
   const {
     data,
     headers,
@@ -51,38 +52,26 @@ const Resources = () => {
   const [selectedResource, setSelectedResource] = useState(null);
   const [allResources, setAllResources] = useState([]);
   const [loadedPages, setLoadedPages] = useState([]);
-
+const [dataloaded, setDataLoaded]=useState(false)
   // Initialize data on mount or when data1.id changes
-  // useEffect(() => {
-  //   if (data1?.id) {
-  //     setLoading(true);
-  //     const initialPage = page || 1;
-  //     setCurrentPage(initialPage);
-
-  //     dispatch(fetchSummaryData({
-  //       queryPayload: { unified_case_id: data1.id },
-  //       page: initialPage,
-  //       itemsPerPage: 50,
-  //     })).then(() => {
-  //       setLoading(false);
-  //     });
-  //   }
-  // }, [data1?.id, dispatch]); // Removed 'page' from dependencies
-
   useEffect(() => {
-    const initialPage = page || 1;
-    setCurrentPage(initialPage);
-
-    const isDataAlreadyFetched = summaryData && summaryData.length > 0;
-
-    if (data1?.id && !isDataAlreadyFetched) {
+    if (data1?.id) {
       setLoading(true);
-      dispatch(fetchSummaryData({
-        queryPayload: { unified_case_id: data1.id },
-        page: initialPage,
-        itemsPerPage: 50,
-      })).then(() => {
+      const queryPayload = {
+      unified_case_id: data1.id
+    };
+     dispatch(fetchSummaryData({
+      queryPayload,
+       ...(caseFilter?.file_type && { file_type: caseFilter.file_type }),
+      ...(caseFilter?.start_time && { start_time: caseFilter.start_time }),
+      ...(caseFilter?.end_time && { end_time: caseFilter.end_time }),
+      ...(caseFilter?.aggs_fields && { aggsFields: caseFilter.aggs_fields }),
+        ...(caseFilter?.keyword && { keyword: caseFilter.keyword }),
+      page: currentPage,
+      itemsPerPage: 50
+    })).then(() => {
         setLoading(false);
+        setDataLoaded(true);
       });
     }
   }, [data1?.id, summaryData, page, dispatch]);
@@ -90,11 +79,19 @@ const Resources = () => {
   useEffect(() => {
     if (data1?.id && currentPage !== (page || 1)) {
       setLoading(true);
+       const queryPayload = {
+      unified_case_id: data1.id
+    };
       dispatch(fetchSummaryData({
-        queryPayload: { unified_case_id: data1.id },
-        page: currentPage,
-        itemsPerPage: 50,
-      })).then(() => {
+      queryPayload,
+       ...(caseFilter?.file_type && { file_type: caseFilter.file_type }),
+      ...(caseFilter?.start_time && { start_time: caseFilter.start_time }),
+      ...(caseFilter?.end_time && { end_time: caseFilter.end_time }),
+      ...(caseFilter?.aggs_fields && { aggsFields: caseFilter.aggs_fields }),
+        ...(caseFilter?.keyword && { keyword: caseFilter.keyword }),
+      page: currentPage,
+      itemsPerPage: 50,
+  })).then(() => {
         setLoading(false);
       });
     }

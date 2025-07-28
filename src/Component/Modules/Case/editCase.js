@@ -148,7 +148,7 @@ console.log("editCase", item)
     setIsSubmitting(true);
     try {
       const response = await axios.put(
-        `${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/case/${item.id}`,
+       ` ${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/case/${item.id}`,
         hasChanged,
         {
           headers: {
@@ -260,7 +260,7 @@ console.log("editCase", item)
               isMulti
               value={formData.watchers.map(wId => {
                 const match = options.find(opt => opt.value === wId);
-                return match || { value: wId, label: `User ${wId}` };
+                return match || { value: wId, label: `User ${wId} `};
               })}
               onChange={handleWatchersChange}
               customStyles={customSelectStyles}
