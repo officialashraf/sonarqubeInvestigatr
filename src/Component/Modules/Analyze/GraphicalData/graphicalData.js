@@ -11,7 +11,7 @@ import EventBar from "./eventBar";
 import PersonBar from "./personBar";
 import LanguageBar from "./languageBar";
 import OrgBar from "./orgBar";
-import LazyLoadWrapper from "./LazyLoadWrapper";
+import LazyLoadWrapper from "./lazyLoadWrapper";
 
 const Header = ({ title }) =>
   <Grid

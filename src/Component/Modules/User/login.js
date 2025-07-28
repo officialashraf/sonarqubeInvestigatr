@@ -11,8 +11,6 @@ import { Eye, EyeSlash } from 'react-bootstrap-icons';
 import { jwtDecode } from "jwt-decode";
 import { useAutoFocusWithManualAutofill } from '../../../utils/autoFocus';
 import AppButton from '../../Common/Buttton/button';
-import Logo from '../../Assets/Images/ProforceLogo.png'
-import investigatrLogo from '../../Assets/Images/investigatr.png'; // Assuming this is the logo you want to use
 import { useTranslation } from 'react-i18next';
 import Logo from '../../Assets/Images/ProforceLogo.png'
 // import investigatrLogo from '../../Assets/Images/investigatr.png'; // Assuming this is the logo you want to use
@@ -133,7 +131,7 @@ const LoginPage = () => {
                 />
             </Row>
 
-            // <h1>{t('welcome')}</h1>
+            {/* // <h1>{t('welcome')}</h1> */}
 
 
             <h1>{loginData?.loginTextHeader || "Default Login"}</h1>
