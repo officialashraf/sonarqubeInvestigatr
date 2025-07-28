@@ -319,7 +319,7 @@ const CaseTableDataFilter = () => {
 
         // Add time range chip if both start_time and end_time exist
         if (start_time && end_time) {
-            const timeRangeChip = `from ${start_time} to ${end_time}`;
+            const timeRangeChip = `${start_time} to ${end_time}`;
             chips.push(timeRangeChip);
         }
 
@@ -332,7 +332,7 @@ const CaseTableDataFilter = () => {
 
         // Get user input keywords (excluding time range chip)
         const userKeywords = filteredChips.filter(chip => 
-            !(chip.startsWith('from ') && chip.includes(' to '))
+            !( chip.includes(' to '))
         );
 
         const queryPayload = {
@@ -385,7 +385,7 @@ const CaseTableDataFilter = () => {
 
     const removeChip = (chipToRemove) => {
         // If removing time range chip, clear start_time and end_time from redux
-        if (chipToRemove.startsWith('from ') && chipToRemove.includes(' to ')) {
+        if (chipToRemove.includes(' to ')) {
             const currentPayload = {
                 caseId: caseData.id,
                 keyword: keyword || [],
@@ -407,7 +407,6 @@ const CaseTableDataFilter = () => {
             <CaseHeader />
             <div className={styles.actionIconsContainer} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "5px" }}>
                 <div className={styles.searchHeader} style={{ width: "60%", backgroundColor: "#080E17" }}>
-
                     <TextField
                         fullWidth
                         InputProps={{
@@ -483,7 +482,7 @@ const CaseTableDataFilter = () => {
                             chipStyle = { backgroundColor: "#FFD700", color: "#000" };
                         }
                         // Check if chip is time range (yellow)
-                        else if (chip.startsWith('from ') && chip.includes(' to ')) {
+                        else if (chip.includes(' to ')) {
                             chipStyle = { backgroundColor: "#FFD700", color: "#000" };
                         }
 

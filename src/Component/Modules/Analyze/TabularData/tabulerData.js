@@ -188,10 +188,10 @@ const pageChangePayload={
                         className={style.fixedTh}
                       >
                         <div
-                          style={{
-                            color: getGroupColor(col.groupName),
-                             fontWeight: "600"
-                          }}
+                          // style={{
+                          //   color: getGroupColor(col.groupName),
+                          //    fontWeight: "600"
+                          // }}
                         >
                           {col.displayName}
                         </div>
@@ -310,7 +310,7 @@ const pageChangePayload={
 
 
         {/* Group Color Legend */}
-        <div
+        {/* <div
           className={style.legendContainer}
           style={{
             display: "flex",
@@ -326,7 +326,7 @@ const pageChangePayload={
               <span style={{ fontSize: "12px" }}>{group}</span>
             </div>
           ))}
-        </div>
+        </div> */}
       </div>
     </>
   );
