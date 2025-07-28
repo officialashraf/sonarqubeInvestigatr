@@ -302,20 +302,30 @@ const CaseTableDataFilter = () => {
         }
     }, [caseData?.id]);
 
+    // Fixed useEffect - only sync from Redux, don't mix with local state
     useEffect(() => {
         const chips = [];
 
         // Add file_type chips
-        if (Array.isArray(file_type)) chips.push(...file_type);
-        else if (file_type) chips.push(file_type);
+        if (Array.isArray(file_type)) {
+            chips.push(...file_type);
+        } else if (file_type) {
+            chips.push(file_type);
+        }
 
         // Add aggs_fields chips
-        if (Array.isArray(aggs_fields)) chips.push(...aggs_fields);
-        else if (aggs_fields) chips.push(aggs_fields);
+        if (Array.isArray(aggs_fields)) {
+            chips.push(...aggs_fields);
+        } else if (aggs_fields) {
+            chips.push(aggs_fields);
+        }
 
         // Add keyword chips
-        if (Array.isArray(keyword)) chips.push(...keyword);
-        else if (keyword) chips.push(keyword);
+        if (Array.isArray(keyword)) {
+            chips.push(...keyword);
+        } else if (keyword) {
+            chips.push(keyword);
+        }
 
         // Add time range chip if both start_time and end_time exist
         if (start_time && end_time) {
@@ -323,17 +333,41 @@ const CaseTableDataFilter = () => {
             chips.push(timeRangeChip);
         }
 
-        setFilteredChips(chips);
-        setSearchChips(chips);
+        // Remove duplicates using Set
+        const uniqueChips = [...new Set(chips)];
+        
+        setFilteredChips(uniqueChips);
+        setSearchChips(uniqueChips);
     }, [file_type, aggs_fields, keyword, start_time, end_time]);
 
     const handleSearchSubmit = () => {
         if (!caseData?.id) return;
 
-        // Get user input keywords (excluding time range chip)
-        const userKeywords = filteredChips.filter(chip => 
-            !( chip.includes(' to '))
-        );
+        // Separate chips by type
+        const platformList = ["facebook", "instagram", "vk", "x", "tiktok", "linkedin", "youtube"];
+        const aggregationFields = [
+            "person", "org", "gpe", "loc", "product", "event", "work_of_art",
+            "law", "language", "percent", "money", "date", "time", "quantity"
+        ];
+
+        const fileTypeChips = [];
+        const aggsFieldsChips = [];
+        const keywordChips = [];
+
+        // Filter out time range chips and categorize others
+        const nonTimeChips = filteredChips.filter(chip => !chip.includes(' to '));
+        
+        nonTimeChips.forEach((chip) => {
+            const normalizedChip = chip.toLowerCase().trim();
+
+            if (platformList.includes(normalizedChip)) {
+                fileTypeChips.push(chip);
+            } else if (aggregationFields.includes(normalizedChip)) {
+                aggsFieldsChips.push(chip);
+            } else {
+                keywordChips.push(chip);
+            }
+        });
 
         const queryPayload = {
             unified_case_id: caseData.id,
@@ -341,9 +375,9 @@ const CaseTableDataFilter = () => {
 
         const summaryPayload = {
             queryPayload,
-            ...(userKeywords.length > 0 && { keyword: userKeywords }),
-            ...(file_type && file_type.length > 0 && { file_type }),
-            ...(aggs_fields && aggs_fields.length > 0 && { aggs_fields }),
+            ...(keywordChips.length > 0 && { keyword: keywordChips }),
+            ...(fileTypeChips.length > 0 && { file_type: fileTypeChips }),
+            ...(aggsFieldsChips.length > 0 && { aggs_fields: aggsFieldsChips }),
             ...(start_time && { start_time }),
             ...(end_time && { end_time }),
             page: 1,
@@ -355,9 +389,9 @@ const CaseTableDataFilter = () => {
 
         const savePayload = {
             caseId: caseData.id,
-            keyword: userKeywords,
-            file_type: file_type || [],
-            aggs_fields: aggs_fields || [],
+            keyword: keywordChips,
+            file_type: fileTypeChips,
+            aggs_fields: aggsFieldsChips,
             ...(start_time && { start_time }),
             ...(end_time && { end_time }),
         }
@@ -366,12 +400,48 @@ const CaseTableDataFilter = () => {
         console.log("saveredux", savePayload);
     };
 
+    // Fixed handleKeyPress - update Redux immediately
     const handleKeyPress = (e) => {
         if (e.key === "Enter" && inputValue.trim() !== "") {
             const newChip = inputValue.trim();
-            const newChips = [...searchChips, newChip];
-            setSearchChips(newChips);
-            setFilteredChips(newChips);
+            
+            // Don't add if already exists
+            if (filteredChips.includes(newChip)) {
+                setInputValue("");
+                return;
+            }
+
+            // Categorize the new chip
+            const platformList = ["facebook", "instagram", "vk", "x", "tiktok", "linkedin", "youtube"];
+            const aggregationFields = [
+                "person", "org", "gpe", "loc", "product", "event", "work_of_art",
+                "law", "language", "percent", "money", "date", "time", "quantity"
+            ];
+
+            const normalizedChip = newChip.toLowerCase().trim();
+            let updatedKeywords = Array.isArray(keyword) ? [...keyword] : [];
+            let updatedFileTypes = Array.isArray(file_type) ? [...file_type] : [];
+            let updatedAggsFields = Array.isArray(aggs_fields) ? [...aggs_fields] : [];
+
+            if (platformList.includes(normalizedChip)) {
+                updatedFileTypes.push(newChip);
+            } else if (aggregationFields.includes(normalizedChip)) {
+                updatedAggsFields.push(newChip);
+            } else {
+                updatedKeywords.push(newChip);
+            }
+
+            // Update Redux immediately
+            const savePayload = {
+                caseId: caseData.id,
+                keyword: updatedKeywords,
+                file_type: updatedFileTypes,
+                aggs_fields: updatedAggsFields,
+                ...(start_time && { start_time }),
+                ...(end_time && { end_time }),
+            };
+
+            dispatch(saveCaseFilterPayload(savePayload));
             setInputValue("");
         }
     };
@@ -395,11 +465,24 @@ const CaseTableDataFilter = () => {
                 end_time: null,
             };
             dispatch(saveCaseFilterPayload(currentPayload));
+            return;
         }
 
-        const newChips = searchChips.filter(chip => chip !== chipToRemove);
-        setSearchChips(newChips);
-        setFilteredChips(newChips);
+        // Remove from appropriate Redux array
+        const updatedKeywords = Array.isArray(keyword) ? keyword.filter(chip => chip !== chipToRemove) : [];
+        const updatedFileTypes = Array.isArray(file_type) ? file_type.filter(chip => chip !== chipToRemove) : [];
+        const updatedAggsFields = Array.isArray(aggs_fields) ? aggs_fields.filter(chip => chip !== chipToRemove) : [];
+
+        const savePayload = {
+            caseId: caseData.id,
+            keyword: updatedKeywords,
+            file_type: updatedFileTypes,
+            aggs_fields: updatedAggsFields,
+            ...(start_time && { start_time }),
+            ...(end_time && { end_time }),
+        };
+
+        dispatch(saveCaseFilterPayload(savePayload));
     };
 
     return (
