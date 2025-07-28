@@ -20,17 +20,17 @@ const CaseHeader = ({ onIconClick, activeView }) => {
       <div className={styles.caseHeader}>
         <div
           className={styles.headerRow}
-          // style={{ background: "lightgray" }}
+        // style={{ background: "lightgray" }}
         >
 
-           {/* <div className={styles.backIcon} onClick={backToSnap}>
+          {/* <div className={styles.backIcon} onClick={backToSnap}>
           <FaArrowLeft />
         </div> */}
           <div className={styles.headerTitle}>
             <h5>
-  Case ID: {`CASE${String(caseData.id).padStart(4, "0")}`}{" "}
-  <span className={styles.caseTitle}>({caseData.title})</span>
-</h5>
+              Case ID: {`CASE${String(caseData.id).padStart(4, "0")}`}{" "}
+              ({caseData.title})
+            </h5>
 
             {/* <p >{caseData.title}</p> */}
           </div>

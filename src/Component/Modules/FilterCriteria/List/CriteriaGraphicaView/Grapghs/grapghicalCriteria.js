@@ -9,6 +9,7 @@ import PersonGraph from "./personGarph";
 import OrgGraph from "./organisationGraph";
 import LanguageGraph from "./languageGraph";
 import LocationGraph from "./locationGraph";
+import LazyLoadWrapper from "../../../../Analyze/GraphicalData/lazyLoadWrapper";
 
 const Header = ({ title }) =>
   <Grid
@@ -30,7 +31,9 @@ const ComponentOne = () => (
      <Header title="Timeline"  />
   <Card sx={{ height: "300px", backgroundColor: "#101D2B", borderRadius:'25px' }}>
     <CardContent>
+       <LazyLoadWrapper height={300}>
       <LineGrapgh />
+      </LazyLoadWrapper>
     </CardContent>
   </Card>
   </>);
@@ -41,7 +44,9 @@ const ComponentTwo = () => (
       <Header title="Keywords" />
   <Card sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius:'25px' }}>
     <CardContent>
+       <LazyLoadWrapper height={300}>
       <KeywordChart />
+      </LazyLoadWrapper>
     </CardContent>
   </Card>
   </>);
@@ -52,7 +57,9 @@ const ComponentThree = () => (
       <Header title="Location" />
   <Card sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius:'25px' }}>
     <CardContent>
+       <LazyLoadWrapper height={300}>
       <LocationGraph />
+      </LazyLoadWrapper>
     </CardContent>
   </Card>
   </>);
@@ -63,7 +70,9 @@ const ComponentFour = () => (
     sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius:'25px' }}
   >
     <CardContent>
+       <LazyLoadWrapper height={300}>
       <SentimentPieChart  />
+      </LazyLoadWrapper>
     </CardContent>
   </Card>
   </>
@@ -76,7 +85,9 @@ const ComponentFive = () => (
     sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius:'25px' }}
   >
     <CardContent>
+       <LazyLoadWrapper height={300}>
       <DateGraph />
+      </LazyLoadWrapper>
     </CardContent>
   </Card>
   </>
@@ -88,7 +99,9 @@ const ComponentSix = () => (
     sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius:'25px' }}
   >
     <CardContent>
+       <LazyLoadWrapper height={300}>
       <EventGraph />
+      </LazyLoadWrapper>
     </CardContent>
   </Card>
   </>
@@ -100,7 +113,9 @@ const ComponentSeven = () => (
     sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius:'25px' }}
   >
     <CardContent>
+       <LazyLoadWrapper height={300}>
       <PersonGraph />
+      </LazyLoadWrapper>
     </CardContent>
   </Card>
   </>
@@ -112,7 +127,9 @@ const ComponentEight = () => (
     sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius:'25px' }}
   >
     <CardContent>
+       <LazyLoadWrapper height={300}>
       <LanguageGraph />
+      </LazyLoadWrapper>
     </CardContent>
   </Card>
   </>
@@ -125,7 +142,9 @@ const ComponentNine = () => (
     sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius:'25px', marginBottom: '5rem' }}
   >
     <CardContent>
+       <LazyLoadWrapper height={300}>
       <OrgGraph />
+      </LazyLoadWrapper>
     </CardContent>
   </Card>
   </>

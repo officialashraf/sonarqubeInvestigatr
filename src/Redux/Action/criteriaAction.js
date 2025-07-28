@@ -1,4 +1,4 @@
-import { SET_SEARCH_RESULTS, SET_PAGE, OPEN_POPUP, CLOSE_POPUP, SET_KEYWORDS } from "../Constants/criteriaConstant";
+import { SET_SEARCH_RESULTS, SET_PAGE, OPEN_POPUP, CLOSE_POPUP, SET_KEYWORDS, CLEAR_CRITERIA } from "../Constants/criteriaConstant";
 
 // Action Creators
 export const setSearchResults = (payload) => ({
@@ -24,3 +24,8 @@ export const setKeywords = (payload) => ({
   type: SET_KEYWORDS,
   payload,
 });
+export const clearCriteria = () => {
+  return {
+    type: CLEAR_CRITERIA,
+  };
+};

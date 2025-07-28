@@ -123,90 +123,194 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
     // Perform search API call
 
     console.log("payload---", payload)
-    const performSearch = async (e) => {
-        e.preventDefault();
+    // const performSearch = async (e) => {
+    //     e.preventDefault();
 
-        console.log(e);
-        try {
-            // Build the query payload with the correct structure
-            const payloadS = {
-                keyword: Array.isArray(payload.keyword) ? payload.keyword : JSON.parse(payload.keyword || "[]"),
-                case_id: [
-                    ...(Array.isArray(payload.case_id) ? payload.case_id : JSON.parse(payload.case_id || "[]")),
-                    ...(Array.isArray(formData.caseIds) ? formData.caseIds.map(caseId => String(caseId.value)) : [])
-                ],
+    //     console.log(e);
+    //     try {
+    //         // Build the query payload with the correct structure
+    //         const payloadS = {
+    //             keyword: Array.isArray(payload.keyword) ? payload.keyword : JSON.parse(payload.keyword || "[]"),
+    //             case_id: [
+    //                 ...(Array.isArray(payload.case_id) ? payload.case_id : JSON.parse(payload.case_id || "[]")),
+    //                 ...(Array.isArray(formData.caseIds) ? formData.caseIds.map(caseId => String(caseId.value)) : [])
+    //             ],
 
-                file_type: [
-                    ...(Array.isArray(payload.file_type) ? payload.file_type : JSON.parse(payload.file_type || "[]")),
-                    ...(Array.isArray(formData.platform) ? formData.platform.map(type => type.value) : [])
-                ],
-                page: payload.page || 1
-            };
+    //             file_type: [
+    //                 ...(Array.isArray(payload.file_type) ? payload.file_type : JSON.parse(payload.file_type || "[]")),
+    //                 ...(Array.isArray(formData.platform) ? formData.platform.map(type => type.value) : [])
+    //             ],
+    //             page: payload.page || 1
+    //         };
 
-            // Combine start time from both sources
-            if (payload.start_time || (selectedDates.startDate && selectedDates.startTime)) {
-                payload.start_time = payload.start_time || `${selectedDates.startDate.toISOString().split('T')[0]}T${String(selectedDates.startTime.hours).padStart(2, '0')}:${String(selectedDates.startTime.minutes).padStart(2, '0')}:00`;
-            }
+    //         // Combine start time from both sources
+    //         if (payload.start_time || (selectedDates.startDate && selectedDates.startTime)) {
+    //             payload.start_time = payload.start_time || `${selectedDates.startDate.toISOString().split('T')[0]}T${String(selectedDates.startTime.hours).padStart(2, '0')}:${String(selectedDates.startTime.minutes).padStart(2, '0')}:00`;
+    //         }
 
-            // Combine end time from both sources
-            if (payload.end_time || (selectedDates.endDate && selectedDates.endTime)) {
-                payload.end_time = payload.end_time || `${selectedDates.endDate.toISOString().split('T')[0]}T${String(selectedDates.endTime.hours).padStart(2, '0')}:${String(selectedDates.endTime.minutes).padStart(2, '0')}:00`;
-            }
+    //         // Combine end time from both sources
+    //         if (payload.end_time || (selectedDates.endDate && selectedDates.endTime)) {
+    //             payload.end_time = payload.end_time || `${selectedDates.endDate.toISOString().split('T')[0]}T${String(selectedDates.endTime.hours).padStart(2, '0')}:${String(selectedDates.endTime.minutes).padStart(2, '0')}:00`;
+    //         }
 
-            console.log("Query Payload:", payloadS);
+    //         console.log("Query Payload:", payloadS);
 
-            // Make the API request with the correct payload structure
-            const response = await axios.post(
-                `${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/search`,
-                payloadS,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${Token}`,
-                    }
-                }
-            );
-            console.log("response of addnew", response)
-            // Dispatch search results
-            dispatch(setSearchResults({
-                results: response.data.results,
-                total_pages: response.data.total_pages || 1,
-                total_results: response.data.total_results || 0,
-            }));
+    //         // Make the API request with the correct payload structure
+    //         const response = await axios.post(
+    //             `${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/search`,
+    //             payloadS,
+    //             {
+    //                 headers: {
+    //                     'Content-Type': 'application/json',
+    //                     'Authorization': `Bearer ${Token}`,
+    //                 }
+    //             }
+    //         );
+    //         console.log("response of addnew", response)
+    //         // Dispatch search results
+    //         dispatch(setSearchResults({
+    //             results: response.data.results,
+    //             total_pages: response.data.total_pages || 1,
+    //             total_results: response.data.total_results || 0,
+    //         }));
 
-            dispatch(setKeywords({
-                keyword: searchChips,
-                queryPayload: response.data.input  // or other fields if needed
-            }));
-            // Dispatch the initial page number
-            dispatch(setPage(1));
-            console.log("Dispatched setSearchResults with:", response.data.results);
+    //         dispatch(setKeywords({
+    //             keyword: searchChips,
+    //             queryPayload: response.data.input  // or other fields if needed
+    //         }));
+    //         // Dispatch the initial page number
+    //         dispatch(setPage(1));
+    //         console.log("Dispatched setSearchResults with:", response.data.results);
 
 
-            console.log('Search results:', response.data);
-            setIsPopupVisible(false);
-            // Reset form data to initial values
-            setFormData({
-                searchQuery: '',
-                datatype: [],
-                filetype: [],
-                caseIds: [],
-                includeArchived: false,
-                latitude: '',
-                longitude: '',
-            });
+    //         console.log('Search results:', response.data);
+    //         setIsPopupVisible(false);
+    //         // Reset form data to initial values
+    //         setFormData({
+    //             searchQuery: '',
+    //             datatype: [],
+    //             filetype: [],
+    //             caseIds: [],
+    //             includeArchived: false,
+    //             latitude: '',
+    //             longitude: '',
+    //         });
 
-            // Handle the search results, if applicable
-            if (handleCreateCase) {
-                handleCreateCase(response.data);
-            }
+    //         // Handle the search results, if applicable
+    //         if (handleCreateCase) {
+    //             handleCreateCase(response.data);
+    //         }
 
-            // Show the "saved" popup
-            // dispatch(openPopup("saved"));
-        } catch (error) {
-            console.error('Error performing search:', error);
+    //         // Show the "saved" popup
+    //         // dispatch(openPopup("saved"));
+    //     } catch (error) {
+    //         console.error('Error performing search:', error);
+    //     }
+    // };
+// Fix the performSearch function in AddNewCriteria component
+
+const performSearch = async (e) => {
+    e.preventDefault();
+
+    console.log(e);
+    try {
+        // Build the query payload with the correct structure
+        const payloadS = {
+            keyword: Array.isArray(payload.keyword) ? payload.keyword : JSON.parse(payload.keyword || "[]"),
+            case_id: [
+                ...(Array.isArray(payload.case_id) ? payload.case_id : JSON.parse(payload.case_id || "[]")),
+                ...(Array.isArray(formData.caseIds) ? formData.caseIds.map(caseId => String(caseId.value)) : [])
+            ],
+            file_type: [
+                ...(Array.isArray(payload.file_type) ? payload.file_type : JSON.parse(payload.file_type || "[]")),
+                ...(Array.isArray(formData.platform) ? formData.platform.map(type => type.value) : [])
+            ],
+            page: payload.page || 1,
+            latitude: payload.latitude || null,
+            longitude: payload.longitude || null
+        };
+
+        // Handle start_time - combine existing payload and new selection
+        if (payload.start_time || (selectedDates.startDate && selectedDates.startTime)) {
+            payloadS.start_time = payload.start_time || 
+                `${selectedDates.startDate.toISOString().split('T')[0]}T${String(selectedDates.startTime.hours).padStart(2, '0')}:${String(selectedDates.startTime.minutes).padStart(2, '0')}:00`;
+        } else {
+            payloadS.start_time = null;
         }
-    };
+
+        // Handle end_time - combine existing payload and new selection
+        if (payload.end_time || (selectedDates.endDate && selectedDates.endTime)) {
+            payloadS.end_time = payload.end_time || 
+                `${selectedDates.endDate.toISOString().split('T')[0]}T${String(selectedDates.endTime.hours).padStart(2, '0')}:${String(selectedDates.endTime.minutes).padStart(2, '0')}:00`;
+        } else {
+            payloadS.end_time = null;
+        }
+
+        console.log("Query Payload being sent to API:", payloadS);
+
+        // Make the API request with the correct payload structure
+        const response = await axios.post(
+            `${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/search`,
+            payloadS, // This now includes start_time and end_time
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${Token}`,
+                }
+            }
+        );
+        
+        console.log("API Response:", response);
+        
+        // Dispatch search results
+        dispatch(setSearchResults({
+            results: response.data.results,
+            total_pages: response.data.total_pages || 1,
+            total_results: response.data.total_results || 0,
+        }));
+
+        dispatch(setKeywords({
+            keyword: searchChips,
+            queryPayload: response.data.input  // This will include the dates sent to API
+        }));
+        
+        // Dispatch the initial page number
+        dispatch(setPage(1));
+        console.log("Dispatched setSearchResults with:", response.data.results);
+
+        console.log('Search results:', response.data);
+        setIsPopupVisible(false);
+        
+        // Reset form data to initial values
+        setFormData({
+            searchQuery: '',
+            datatype: [],
+            filetype: [],
+            caseIds: [],
+            includeArchived: false,
+            latitude: '',
+            longitude: '',
+        });
+
+        // Reset selected dates
+        setSelectedDates({
+            startDate: null,
+            endDate: null,
+            startTime: { hours: 16, minutes: 30 },
+            endTime: { hours: 16, minutes: 30 }
+        });
+
+        // Handle the search results, if applicable
+        if (handleCreateCase) {
+            handleCreateCase(response.data);
+        }
+
+    } catch (error) {
+        console.error('Error performing search:', error);
+        console.log('Error details:', error.response?.data);
+    }
+};
+
     const handleSaveCriteriaChange = () => {
         setShowSavePopup(true); // Open the popup  
     };
