@@ -3,7 +3,7 @@
   justify-content: flex-end;
   align-items: center;
   padding: 5px; /* Reduced size */
-  width: 100wh;
+  /* width: 100wh; */
 }
 
 .icon-styles {
