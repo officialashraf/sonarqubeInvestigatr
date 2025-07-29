@@ -12,7 +12,6 @@ import { jwtDecode } from "jwt-decode";
 import { useAutoFocusWithManualAutofill } from '../../../utils/autoFocus';
 import AppButton from '../../Common/Buttton/button';
 import { useTranslation } from 'react-i18next';
-import Logo from '../../Assets/Images/ProforceLogo.png'
 // import investigatrLogo from '../../Assets/Images/investigatr.png'; // Assuming this is the logo you want to use
 
 const LoginPage = () => {

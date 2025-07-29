@@ -14,6 +14,12 @@ import { LuPin, LuRepeat2 } from "react-icons/lu";
 import { AiOutlineLike, AiOutlineDislike } from "react-icons/ai";
 import { BsThreeDotsVertical, BsThreeDots } from "react-icons/bs";
 import AppButton from '../../../Common/Buttton/button';
+import YoutubeLogo from '../../../Assets/Images/youtube_image.png'
+import Instagram from "../../../Assets/Images/Instagram.png"
+import X_logo from "../../../Assets/Images/X_logo.jpg";
+import Facebook_logo from "../../../Assets/Images/Facebook_logo.png";
+import rss from "../../../Assets/Images/rss.jpg";
+import placeholder from "../../../Assets/Images/placeholder-square.png"
 
 const ScrollCriteriaViewer = () => {
     const containerRef = useRef(null);
@@ -153,24 +159,30 @@ const ScrollCriteriaViewer = () => {
                                             onClick={() => handleResourceClick(item)}
                                         >
                                             <img
-                                                src={
-                                                    item.unified_record_type === "rss feed"
-                                                        ? (item.socialmedia_from_imageurl || item.socialmedia_media_url || "/images/rss.jpg")
-                                                        : item.unified_record_type === "X"
-                                                            ? (item.socialmedia_from_imageurl || item.socialmedia_media_url || "/images/X_logo.jpg")
-                                                            : item.unified_record_type === "Facebook"
-                                                                ? (item.socialmedia_from_imageurl || item.socialmedia_media_url || "/images/Facebook_logo.png")
-                                                                : item.unified_record_type === "YouTube"
-                                                                    ? (item.socialmedia_from_imageurl || item.socialmedia_media_url || "/images/YouTube-jpg.jpg")
-                                                                    : (item.socialmedia_from_imageurl || item.socialmedia_media_url || "/images/placeholder-square.png")
-                                                }
-                                                onError={(e) => {
-                                                    e.target.onerror = null; // prevents infinite loop
-                                                    e.target.src = "/images/placeholder-square.png";
-                                                }}
-                                                alt="pic_not_found"
-                                                className="resourceImage"
-                                            />
+                                                                   src={
+                                                                     item.unified_record_type === "rss feed"
+                                                                       ? item.socialmedia_from_imageurl || item.socialmedia_media_url || rss.jpg
+                                                                       : item.unified_record_type === "X"
+                                                                         ? item.socialmedia_from_imageurl || item.socialmedia_media_url || X_logo
+                                                                         : item.unified_record_type === "Facebook"
+                                                                           ? item.socialmedia_from_imageurl || item.socialmedia_media_url || Facebook_logo
+                                                                         : item.unified_record_type === "YouTube"
+                                                                           ? item.socialmedia_from_imageurl || item.socialmedia_media_url || YoutubeLogo
+                                                                         : item.unified_record_type === "Instagram"
+                                                                             ? item.socialmedia_from_imageurl || item.socialmedia_media_url || Instagram
+                                                                               : item.socialmedia_from_imageurl || item.socialmedia_media_url || placeholder
+                                                                   }
+                                                                   onError={(e) => {
+                                                                     e.target.onerror = null; // prevents infinite loop
+                                                                     if(item.unified_record_type === "X" && e.target.src !== X_logo) {
+                                                                       e.target.src = X_logo;
+                                                                     } else {
+                                                                       e.target.src = placeholder;
+                                                                     }
+                                                                   }}
+                                                                   alt="pic_not_found"
+                                                                   className="resourceImage"
+                                                                 />
                                             <div className="resourceDetails">
                                                 <p className="resourceType">{item.unified_record_type || item.unified_type}</p>
                                                 <p className="resourceContent">{item.socialmedia_activity}</p>
