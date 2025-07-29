@@ -27,6 +27,7 @@ export const IntervalField = ({
             onChange={(e) => onValueChange(e.target.value)}
             disabled={disabled}
           />
+
           <select
             className={styles.select}
             value={unit}
