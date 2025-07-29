@@ -140,7 +140,7 @@ const pageChangePayload={
   return (
     <>
       <div className={styles.mainContainer}>
-        <div className={styles.tableWrapper} style={{ overflowY: "auto", height: "48vh" }}>
+      <div className={styles.tableWrapper} style={{ overflowY: "auto", overflowX: "auto"}}>
           {data && data.length > 0 ? (
             <Table hover className={styles.table}>
               <thead>

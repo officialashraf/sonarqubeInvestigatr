@@ -11,7 +11,7 @@ import EventBar from "./eventBar";
 import PersonBar from "./personBar";
 import LanguageBar from "./languageBar";
 import OrgBar from "./orgBar";
-import LazyLoadWrapper from "./LazyLoadWrapper";
+import LazyLoadWrapper from "./lazyLoadWrapper";
 
 const Header = ({ title }) =>
   <Grid
@@ -195,9 +195,8 @@ const GraphicalData = () => {
     >
 
       <Grid container spacing={1} p={1} className={styles.responsiveGrid} style={{
-        background: "#080E17", marginLeft: "0 px !important", height: '100%',
-
-        overflowY: 'auto',overflowX:'hidden'
+        background: "#080E17", marginLeft: "0 px !important", height: '90vh',
+        overflowY: 'auto', overflowX: 'hidden'
       }}>
         <Grid item xs={12} sx={{ paddingLeft: '0px !important', paddingTop: "0px !important" }}  className={styles.grapghCards}>
           <ComponentOne />

@@ -99,7 +99,7 @@
   /* overflow: auto; */
   
   margin-bottom: 45px;
-  height: 65vh;
+  height: 62vh;
   border-radius: 18px;
   scrollbar-color: #1e7df8 #0a192f;
   scrollbar-width: thin;
@@ -287,8 +287,8 @@
   background-color: #080e17;
   align-items: center;
   justify-content: center;
-  height: 100%;
-  /* height: 450px; */
+  /* height: 100%; */
+  height: 450px;
   /* min-width: 620px; */
 }
 @media screen and (max-width: 1920px) and (min-width: 1280px) {

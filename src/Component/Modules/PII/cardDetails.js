@@ -167,6 +167,7 @@ const UserCards = () => {
                         <div className={styles.infoValue}>
                           {Array.isArray(value) ? value[0] : value}
                         </div>
+                        
                       </div>
                     </div>
                   );

@@ -403,7 +403,7 @@ const CaseTableDataFilter = () => {
     };
 
     return (
-        <div className="search-container" style={{ backgroundColor: "#080E17", height: "100%", zIndex: "1050" }}>
+        <div className="search-container" style={{ backgroundColor: '#080E17', height: '100%', zIndex: '1050', overflowY: "hidden" }}>
             <CaseHeader />
             <div className={styles.actionIconsContainer} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "5px" }}>
                 <div className={styles.searchHeader} style={{ width: "60%", backgroundColor: "#080E17" }}>
@@ -518,7 +518,7 @@ const CaseTableDataFilter = () => {
                 </div>
             </div>
 
-            <div style={{ height: "350px", borderRadius: "15px", overflow: "auto" }}>
+            <div style={{ borderRadius: "15px", overflowY: "auto" }}>
                 {activeComponent === "graphicalData" && <GraphicalData />}
                 {activeComponent === "resources" && <Resources />}
                 {activeComponent === "caseData" && <TabulerData />}
