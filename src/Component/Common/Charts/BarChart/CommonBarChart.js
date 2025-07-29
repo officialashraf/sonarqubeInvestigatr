@@ -26,7 +26,7 @@ const ReusableBarChart = ({
 
     const token = Cookies.get("accessToken");
 
-    const MAX_BARS = 20;
+
 
     useEffect(() => {
         const fetchData = async () => {

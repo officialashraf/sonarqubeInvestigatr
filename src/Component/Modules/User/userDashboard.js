@@ -43,18 +43,20 @@ const UserDashboard = () => {
             <CardContent onClick={() => handleCheckboxChange(data.title)}>
               <div className="d-flex justify-content-end align-items-end">
                 <IconButton sx={{ color: "white" }} size="small">
-                  <MoreVertIcon />
+                  {/* <MoreVertIcon /> */}
                 </IconButton>
               </div>
-              <div className={styles.customIconCircle}>
-                <IconButton size="small" sx={{ color: "white" }}>
+              <div className={styles.customIconCircle} style={{marginBottom:"5px"}}>
+                <IconButton size="small" 
+                // sx={{ color: "white" }}
+                >
                   {index === 0 && <FaUsersBetweenLines />}
                   {index === 1 && <MdAdminPanelSettings />}
                   {index === 2 && <HttpsIcon/>}
                   {index === 3 && <AutoAwesomeIcon/>}
                 </IconButton>
               </div>
-              <Typography variant="subtitle1" sx={{ color: "#0073cf" }}>
+              <Typography variant="subtitle1" sx={{ color: "#0073cf",marginTop:"5px" }}>
                 {data.title}
               </Typography>
               {data.subtitle &&

@@ -22,7 +22,7 @@ import Instagram from "../../Assets/Images/Instagram.png"
 import X_logo from "../../Assets/Images/X_logo.jpg";
 import Facebook_logo from "../../Assets/Images/Facebook_logo.png";
 import rss from "../../Assets/Images/rss.jpg";
-import placeholder from "../../Assets/Images/placeholder-square.png"
+import PlaceholderImg from "../../Assets/Images/placeholder-square.png";
 
 const Resources = () => {
 
@@ -214,14 +214,14 @@ const [dataloaded, setDataLoaded]=useState(false)
                                 ? resource.socialmedia_from_imageurl || resource.socialmedia_media_url || YoutubeLogo
                               : resource.unified_record_type === "Instagram"
                                   ? resource.socialmedia_from_imageurl || resource.socialmedia_media_url || Instagram
-                                    : resource.socialmedia_from_imageurl || resource.socialmedia_media_url || placeholder
+                                   : resource.socialmedia_from_imageurl || resource.socialmedia_media_url || PlaceholderImg
                         }
                         onError={(e) => {
                           e.target.onerror = null; // prevents infinite loop
                           if(resource.unified_record_type === "X" && e.target.src !== X_logo) {
                             e.target.src = X_logo;
                           } else {
-                            e.target.src = placeholder;
+                            e.target.src = PlaceholderImg;
                           }
                         }}
                         alt="pic_not_found"

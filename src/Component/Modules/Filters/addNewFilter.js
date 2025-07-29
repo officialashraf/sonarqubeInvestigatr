@@ -43,8 +43,8 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
       urls: [],
       keywordInput: '',
       urlInput: '',
-      intervalValue: 1,
-      intervalUnit: 'hours',
+      intervalValue: 15,
+      intervalUnit: 'minutes',
     },
   ]);
   const containerRef = useRef(null);
@@ -86,8 +86,8 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
       urls: [],
       keywordInput: '',
       urlInput: '',
-      intervalValue: 1,
-      intervalUnit: 'hours',
+      intervalValue: 15,
+      intervalUnit: 'minutes',
     }]);
     setFilterDetails(null);
     setIsEditable(true);
@@ -141,9 +141,10 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
   sourceError.platform = "At least one platform is required";
 }
 
-      if (!source.intervalValue || source.intervalValue <= 0) {
-        sourceError.intervalValue = "Interval value must be greater than 0";
-      }
+       const minValue = source.intervalUnit === 'minutes' ? 15 : 1;
+    if (!source.intervalValue || source.intervalValue < minValue) {
+      sourceError.intervalValue = `Interval value must be at least ${minValue} ${source.intervalUnit || 'unit'}`;
+    }
       if (!source.intervalUnit) {
         sourceError.intervalUnit = "Interval unit is required";
       }
@@ -285,39 +286,47 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
     );
   };
 
-  const handleIntervalValueChange = (sourceIndex, value) => {
-    const numericValue = Math.max(1, parseInt(value, 10) || 1);
-    setSources(prevSources =>
-      prevSources.map((src, i) =>
-        i === sourceIndex ? { ...src, intervalValue: numericValue } : src
-      )
-    );
-    
-    // Clear intervalValue error
-    setError(prevErrors => {
-      const newErrors = { ...prevErrors };
-      if (newErrors.sources?.[sourceIndex]?.intervalValue) {
-        newErrors.sources[sourceIndex] = { ...newErrors.sources[sourceIndex], intervalValue: "" };
-      }
-      return newErrors;
-    });
-  };
+ const handleIntervalValueChange = (sourceIndex, value) => {
+  const source = sources[sourceIndex];
+  const minValue = source.intervalUnit === 'minutes' ? 15 : 1;
+  const numericValue = Math.max(minValue, parseInt(value, 10) || minValue);
+  
+  setSources(prevSources =>
+    prevSources.map((src, i) =>
+      i === sourceIndex ? { ...src, intervalValue: numericValue } : src
+    )
+  );
+  
+  // Clear intervalValue error
+  setError(prevErrors => {
+    const newErrors = { ...prevErrors };
+    if (newErrors.sources?.[sourceIndex]?.intervalValue) {
+      newErrors.sources[sourceIndex] = { ...newErrors.sources[sourceIndex], intervalValue: "" };
+    }
+    return newErrors;
+  });
+};
 
-  const handleIntervalUnitChange = (sourceIndex, unit) => {
-    setSources(prevSources =>
-      prevSources.map((src, i) =>
-        i === sourceIndex ? { ...src, intervalUnit: unit } : src
-      )
-    );
-    
-    setError(prevErrors => {
-      const newErrors = { ...prevErrors };
-      if (newErrors.sources?.[sourceIndex]?.intervalUnit) {
-        newErrors.sources[sourceIndex] = { ...newErrors.sources[sourceIndex], intervalUnit: "" };
+const handleIntervalUnitChange = (sourceIndex, unit) => {
+  setSources(prevSources =>
+    prevSources.map((src, i) => {
+      if (i === sourceIndex) {
+        const newMinValue = unit === 'minutes' ? 15 : 1;
+        const adjustedValue = src.intervalValue < newMinValue ? newMinValue : src.intervalValue;
+        return { ...src, intervalUnit: unit, intervalValue: adjustedValue };
       }
-      return newErrors;
-    });
-  };
+      return src;
+    })
+  );
+  
+  setError(prevErrors => {
+    const newErrors = { ...prevErrors };
+    if (newErrors.sources?.[sourceIndex]?.intervalUnit) {
+      newErrors.sources[sourceIndex] = { ...newErrors.sources[sourceIndex], intervalUnit: "" };
+    }
+    return newErrors;
+  });
+};
 
   useEffect(() => {
     if (filterDetails && filterDetails.id) {
@@ -402,8 +411,8 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
         urls: [],
         keywordInput: '',
         urlInput: '',
-        intervalValue: 1,
-        intervalUnit: 'hours',
+        intervalValue: 15,
+        intervalUnit: 'minutes',
       }
     ]);
   };

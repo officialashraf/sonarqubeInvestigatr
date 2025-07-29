@@ -230,7 +230,7 @@ const GridView = () => {
                             }}
                             title={typeof item[key] === 'object' ? JSON.stringify(item[key]) : item[key]}
                           >
-                            {key === "socialmedia_hashtags" && Array.isArray(item[key]) ? (
+                          {["socialmedia_hashtags", "targets", "person", "gpe", "unified_case_id", "org","loc"].includes(key) && Array.isArray(item[key]) ? (
                                   <div style={{ display: "flex", gap: "4px" }}>
                                     {item[key].map((tag, i) => (
                                       <span
