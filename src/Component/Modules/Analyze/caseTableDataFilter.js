@@ -271,13 +271,18 @@ const CaseTableDataFilter = () => {
     const caseData = useSelector((state) => state.caseData.caseData);
     const caseFilter = useSelector((state) => state.caseFilter?.caseFilters);
     console.warn("caseflter", caseFilter)
-    const { file_type, aggs_fields, keyword, start_time, end_time } = caseFilter || {}
+    const { file_type, aggs_fields, keyword, start_time, end_time,target,sentiment } = caseFilter || {}
 
     const [inputValue, setInputValue] = useState("");
-    const [searchChips, setSearchChips] = useState([]);
-    console.log("searchChips", searchChips)
-    const [filteredChips, setFilteredChips] = useState([]);
-    console.log("filterChips", filteredChips)
+    
+    // Local state for managing chips before sending
+    const [localKeywordChips, setLocalKeywordChips] = useState([]);
+    const [localFileTypeChips, setLocalFileTypeChips] = useState([]);
+    const [localAggsFieldsChips, setLocalAggsFieldsChips] = useState([]);
+    const [localStartTime, setLocalStartTime] = useState(null);
+    const [localEndTime, setLocalEndTime] = useState(null);
+     const [localTargets, setlocalTargets] = useState([]);
+      const [localSetiments, setLocalSetiments] = useState([]);
     const [activeComponent, setActiveComponent] = useState("graphicalData");
     const [isPopupVisible, setIsPopupVisible] = useState(false);
 
@@ -286,7 +291,7 @@ const CaseTableDataFilter = () => {
         setIsPopupVisible(true);
     };
 
-    // redux se caseData lo
+    // Initialize with empty payload on case load
     useEffect(() => {
         if (caseData?.id) {
             const savePayload = {
@@ -296,194 +301,131 @@ const CaseTableDataFilter = () => {
                 aggs_fields: [],
                 start_time: null,
                 end_time: null,
+                target:[],
+                sentiment:[]
             };
             dispatch(saveCaseFilterPayload(savePayload));
-            console.log("saveredux", savePayload);
+            console.log("Initial redux payload", savePayload);
         }
     }, [caseData?.id]);
 
-    // Fixed useEffect - only sync from Redux, don't mix with local state
+    // Sync local state with Redux state (for display purposes only)
     useEffect(() => {
+        setLocalKeywordChips(Array.isArray(keyword) ? [...keyword] : []);
+        setLocalFileTypeChips(Array.isArray(file_type) ? [...file_type] : []);
+        setLocalAggsFieldsChips(Array.isArray(aggs_fields) ? [...aggs_fields] : []);
+          setlocalTargets(Array.isArray(target) ? [...target] : []);
+            setLocalSetiments(Array.isArray(sentiment) ? [...sentiment] : []);
+        setLocalStartTime(start_time);
+        setLocalEndTime(end_time);
+    }, [keyword, file_type, aggs_fields, start_time, end_time,sentiment,target]);
+
+    // Generate display chips from local state
+    const getDisplayChips = () => {
         const chips = [];
-
-        // Add file_type chips
-        if (Array.isArray(file_type)) {
-            chips.push(...file_type);
-        } else if (file_type) {
-            chips.push(file_type);
-        }
-
-        // Add aggs_fields chips
-        if (Array.isArray(aggs_fields)) {
-            chips.push(...aggs_fields);
-        } else if (aggs_fields) {
-            chips.push(aggs_fields);
-        }
-
-        // Add keyword chips
-        if (Array.isArray(keyword)) {
-            chips.push(...keyword);
-        } else if (keyword) {
-            chips.push(keyword);
-        }
-
-        // Add time range chip if both start_time and end_time exist
-        if (start_time && end_time) {
-            const timeRangeChip = `${start_time} to ${end_time}`;
-            chips.push(timeRangeChip);
-        }
-
-        // Remove duplicates using Set
-        const uniqueChips = [...new Set(chips)];
         
-        setFilteredChips(uniqueChips);
-        setSearchChips(uniqueChips);
-    }, [file_type, aggs_fields, keyword, start_time, end_time]);
+        // Add all local chips
+        chips.push(...localKeywordChips);
+        chips.push(...localFileTypeChips);
+        chips.push(...localAggsFieldsChips);
+          chips.push(...localSetiments);
+            chips.push(...localTargets);
+        
+        // Add time range chip if both exist
+        if (localStartTime && localEndTime) {
+            chips.push(`${localStartTime} to ${localEndTime}`);
+        }
+        
+        return [...new Set(chips)]; // Remove duplicates
+    };
 
     const handleSearchSubmit = () => {
         if (!caseData?.id) return;
 
-        // Separate chips by type
-        const platformList = ["facebook", "instagram", "vk", "x", "tiktok", "linkedin", "youtube"];
-        const aggregationFields = [
-            "person", "org", "gpe", "loc", "product", "event", "work_of_art",
-            "law", "language", "percent", "money", "date", "time", "quantity"
-        ];
-
-        const fileTypeChips = [];
-        const aggsFieldsChips = [];
-        const keywordChips = [];
-
-        // Filter out time range chips and categorize others
-        const nonTimeChips = filteredChips.filter(chip => !chip.includes(' to '));
-        
-        nonTimeChips.forEach((chip) => {
-            const normalizedChip = chip.toLowerCase().trim();
-
-            if (platformList.includes(normalizedChip)) {
-                fileTypeChips.push(chip);
-            } else if (aggregationFields.includes(normalizedChip)) {
-                aggsFieldsChips.push(chip);
-            } else {
-                keywordChips.push(chip);
-            }
-        });
-
+        // Only update Redux and make API call when Send is clicked
         const queryPayload = {
             unified_case_id: caseData.id,
         };
 
         const summaryPayload = {
             queryPayload,
-            ...(keywordChips.length > 0 && { keyword: keywordChips }),
-            ...(fileTypeChips.length > 0 && { file_type: fileTypeChips }),
-            ...(aggsFieldsChips.length > 0 && { aggs_fields: aggsFieldsChips }),
-            ...(start_time && { start_time }),
-            ...(end_time && { end_time }),
+            ...(localKeywordChips.length > 0 && { keyword: localKeywordChips }),
+            ...(localFileTypeChips.length > 0 && { file_type: localFileTypeChips }),
+            ...(localAggsFieldsChips.length > 0 && { aggs_fields: localAggsFieldsChips }),
+             ...(localSetiments.length > 0 && { sentiment: localSetiments }),
+              ...(localTargets.length > 0 && { target: localTargets }),
+            ...(localStartTime && { start_time: localStartTime }),
+            ...(localEndTime && { end_time: localEndTime }),
             page: 1,
             itemsPerPage: 50
         }
 
+        // Make API call
         dispatch(fetchSummaryData(summaryPayload));
-        console.log("summaryPayload", summaryPayload);
+        console.log("API summaryPayload", summaryPayload);
 
+        // Update Redux state
         const savePayload = {
             caseId: caseData.id,
-            keyword: keywordChips,
-            file_type: fileTypeChips,
-            aggs_fields: aggsFieldsChips,
-            ...(start_time && { start_time }),
-            ...(end_time && { end_time }),
+            keyword: localKeywordChips,
+            file_type: localFileTypeChips,
+            aggs_fields: localAggsFieldsChips,
+            target:localTargets,
+            sentiment:localSetiments,
+            ...(localStartTime && { start_time: localStartTime }),
+            ...(localEndTime && { end_time: localEndTime }),
         }
 
         dispatch(saveCaseFilterPayload(savePayload));
-        console.log("saveredux", savePayload);
+        console.log("Updated redux payload", savePayload);
     };
 
-    // Fixed handleKeyPress - update Redux immediately
+    // Handle adding new chips to local state only
     const handleKeyPress = (e) => {
         if (e.key === "Enter" && inputValue.trim() !== "") {
             const newChip = inputValue.trim();
             
-            // Don't add if already exists
-            if (filteredChips.includes(newChip)) {
+            // Check if already exists in keyword chips only
+            if (localKeywordChips.includes(newChip)) {
                 setInputValue("");
                 return;
             }
 
-            // Categorize the new chip
-            const platformList = ["facebook", "instagram", "vk", "x", "tiktok", "linkedin", "youtube"];
-            const aggregationFields = [
-                "person", "org", "gpe", "loc", "product", "event", "work_of_art",
-                "law", "language", "percent", "money", "date", "time", "quantity"
-            ];
-
-            const normalizedChip = newChip.toLowerCase().trim();
-            let updatedKeywords = Array.isArray(keyword) ? [...keyword] : [];
-            let updatedFileTypes = Array.isArray(file_type) ? [...file_type] : [];
-            let updatedAggsFields = Array.isArray(aggs_fields) ? [...aggs_fields] : [];
-
-            if (platformList.includes(normalizedChip)) {
-                updatedFileTypes.push(newChip);
-            } else if (aggregationFields.includes(normalizedChip)) {
-                updatedAggsFields.push(newChip);
-            } else {
-                updatedKeywords.push(newChip);
-            }
-
-            // Update Redux immediately
-            const savePayload = {
-                caseId: caseData.id,
-                keyword: updatedKeywords,
-                file_type: updatedFileTypes,
-                aggs_fields: updatedAggsFields,
-                ...(start_time && { start_time }),
-                ...(end_time && { end_time }),
-            };
-
-            dispatch(saveCaseFilterPayload(savePayload));
+            // Everything from search bar goes to keywords only
+            setLocalKeywordChips(prev => [...prev, newChip]);
             setInputValue("");
         }
     };
 
     const resetSearch = () => {
-        dispatch(clearCaseFilterPayload());
+        // Clear both local state and Redux
+        setLocalKeywordChips([]);
+        setLocalFileTypeChips([]);
+        setLocalAggsFieldsChips([]);
+        setLocalStartTime(null);
+        setLocalEndTime(null);
         setInputValue("");
-        setSearchChips([]);
-        setFilteredChips([]);
+        
+        dispatch(clearCaseFilterPayload());
     };
 
     const removeChip = (chipToRemove) => {
-        // If removing time range chip, clear start_time and end_time from redux
+        // Remove from local state only
         if (chipToRemove.includes(' to ')) {
-            const currentPayload = {
-                caseId: caseData.id,
-                keyword: keyword || [],
-                file_type: file_type || [],
-                aggs_fields: aggs_fields || [],
-                start_time: null,
-                end_time: null,
-            };
-            dispatch(saveCaseFilterPayload(currentPayload));
+            setLocalStartTime(null);
+            setLocalEndTime(null);
             return;
         }
 
-        // Remove from appropriate Redux array
-        const updatedKeywords = Array.isArray(keyword) ? keyword.filter(chip => chip !== chipToRemove) : [];
-        const updatedFileTypes = Array.isArray(file_type) ? file_type.filter(chip => chip !== chipToRemove) : [];
-        const updatedAggsFields = Array.isArray(aggs_fields) ? aggs_fields.filter(chip => chip !== chipToRemove) : [];
-
-        const savePayload = {
-            caseId: caseData.id,
-            keyword: updatedKeywords,
-            file_type: updatedFileTypes,
-            aggs_fields: updatedAggsFields,
-            ...(start_time && { start_time }),
-            ...(end_time && { end_time }),
-        };
-
-        dispatch(saveCaseFilterPayload(savePayload));
+        // Remove from appropriate local array
+        setLocalKeywordChips(prev => prev.filter(chip => chip !== chipToRemove));
+        setLocalFileTypeChips(prev => prev.filter(chip => chip !== chipToRemove));
+        setLocalAggsFieldsChips(prev => prev.filter(chip => chip !== chipToRemove));
+         setLocalSetiments(prev => prev.filter(chip => chip !== chipToRemove));
+          setlocalTargets(prev => prev.filter(chip => chip !== chipToRemove));
     };
+
+    const displayChips = getDisplayChips();
 
     return (
         <div className="search-container" style={{ backgroundColor: '#080E17', height: '100%', zIndex: '1050', overflowY: "hidden" }}>
@@ -552,19 +494,23 @@ const CaseTableDataFilter = () => {
 
             <div className="search-term-indicator" style={{ backgroundColor: "#080E17" }}>
                 <div className="chips-container">
-                    {filteredChips.map((chip, index) => {
+                    {displayChips.map((chip, index) => {
                         // Determine chip type for styling
                         let chipStyle = { backgroundColor: "#0073CF", color: "white" }; // Default for keywords
                         
-                        // Check if chip is from file_type (yellow)
-                        if (file_type && (Array.isArray(file_type) ? file_type.includes(chip) : file_type === chip)) {
+                        // Check chip type for styling
+                        if (localFileTypeChips.includes(chip)) {
                             chipStyle = { backgroundColor: "#FFD700", color: "#000" };
                         }
-                        // Check if chip is from aggs_fields (yellow)
-                        else if (aggs_fields && (Array.isArray(aggs_fields) ? aggs_fields.includes(chip) : aggs_fields === chip)) {
+                        else if (localAggsFieldsChips.includes(chip)) {
                             chipStyle = { backgroundColor: "#FFD700", color: "#000" };
                         }
-                        // Check if chip is time range (yellow)
+                         else if (localSetiments.includes(chip)) {
+                            chipStyle = { backgroundColor: "#FFD700", color: "#000" };
+                        }
+                         else if (localTargets.includes(chip)) {
+                            chipStyle = { backgroundColor: "#FFD700", color: "#000" };
+                        }
                         else if (chip.includes(' to ')) {
                             chipStyle = { backgroundColor: "#FFD700", color: "#000" };
                         }
@@ -609,7 +555,7 @@ const CaseTableDataFilter = () => {
 
             {isPopupVisible && (
                 <AddFilter
-                    searchChips={keyword}
+                    searchChips={localKeywordChips}
                     isPopupVisible={isPopupVisible}
                     setIsPopupVisible={setIsPopupVisible}
                 />

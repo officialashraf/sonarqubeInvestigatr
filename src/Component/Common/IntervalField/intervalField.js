@@ -8,11 +8,19 @@ export const IntervalField = ({
   onValueChange,
   onUnitChange,
   disabled = false,
+  isDarkWeb = false, // New prop add kiya
 }) => {
+  // Dark web ke liye minimum value calculate karo
+  const getMinValue = () => {
+    if (isDarkWeb) {
+      return unit === 'hours' ? 2 : 1; // hours ke liye min 2, seconds ke liye min 1
+    }
+    return unit === 'minutes' ? 15 : 1; // normal sources ke liye
+  };
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.group}>
-        {/* <label className={styles.label}>{label} *</label> */}
         <label className={`${styles.label} 
                                     ${disabled ? styles.disabledLabel : ''}
                   `}>
@@ -21,7 +29,7 @@ export const IntervalField = ({
         <div className={styles.inputSelectContainer}>
           <input
             type="number"
-            min="1"
+            min={getMinValue()} // Dynamic minimum value
             className={styles.inputse}
             value={value}
             onChange={(e) => onValueChange(e.target.value)}
@@ -35,7 +43,8 @@ export const IntervalField = ({
             disabled={disabled}
           >
             <option value="" disabled>Select Unit</option>
-            <option value="minutes">Minutes</option>
+            {/* Dark web ke liye minutes option nahi dikhao */}
+            {!isDarkWeb && <option value="minutes">Minutes</option>}
             <option value="hours">Hours</option>
           </select>
         </div>

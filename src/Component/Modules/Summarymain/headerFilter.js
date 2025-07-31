@@ -61,9 +61,10 @@ const HeaderFilter = () => {
 
     <Col>
       <div className={styles.caseInfo}>
-        <div className={styles.caseId}>CASE{String(caseData.id).padStart(4, '0')}</div>
+        <div className={styles.caseId}> {`CASE${String(caseData.id).padStart(4, "0")}`}{" "}
+              ({caseData.title})</div>
         <div className={styles.caseTitleStatus}>
-          <span className={styles.caseTitle}>{caseData.title}</span>
+          {/* <span className={styles.caseTitle}>{caseData.title}</span> */}
           <Badge
             pill
             bg={
