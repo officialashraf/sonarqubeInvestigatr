@@ -51,7 +51,7 @@ const Confirm = ({ formData, selectedDates, searchChips }) => {
                     ...(formData.platform?.length > 0 ? formData.platform.map((platform) => platform.value) : [])
                 ],
                 targets: formData.targets?.length > 0 ? formData.targets.map(target => target.value) : [],
-                sentiment: formData.sentiment?.length > 0
+                sentiments: formData.sentiment?.length > 0
                     ? formData.sentiment.map(s => s.value)
                     : [],
 

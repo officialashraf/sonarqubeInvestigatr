@@ -75,7 +75,7 @@ const [dataloaded, setDataLoaded]=useState(false)
         setDataLoaded(true);
       });
     }
-  }, [data1?.id, summaryData, page, dispatch]);
+  }, [data1?.id, dispatch]);
   // Load page data when currentPage changes (but not on initial load)
   useEffect(() => {
     if (data1?.id && currentPage !== (page || 1)) {

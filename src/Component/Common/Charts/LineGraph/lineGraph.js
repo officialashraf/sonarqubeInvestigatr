@@ -22,68 +22,85 @@ console.log("queryplayold", queryPayload);
     '#FFEAA7', '#DDA0DD', '#98D8C8', '#F7DC6F', '#BB8FCE'
   ];
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      setLoading(true);
 
-        // Payload selection logic
-        const payload = queryPayload
-          ? {
-              query: {
-               unified_case_id: Array.isArray(queryPayload?.case_id)
-  ? queryPayload.case_id
-  : Array.isArray(queryPayload?.caseId)
-  ? queryPayload.caseId
-  : queryPayload?.case_id
-  ? [queryPayload.case_id]
-  : queryPayload?.caseId
-  ? [queryPayload.caseId]
-  : [],
-   file_type: Array.isArray(queryPayload?.file_type) ? queryPayload.file_type : [],
-                keyword: Array.isArray(queryPayload?.keyword) ? queryPayload.keyword : [],
-                 targets: Array.isArray(queryPayload?.target) ? queryPayload.target : [],
-                  sentiment: Array.isArray(queryPayload?.sentiment) ? queryPayload.sentiment : [],
-              },
-              aggs_fields: aggsFields,
-              start_time: queryPayload?.start_time || "",
-              end_time: queryPayload?.end_time || ""
-            }
-          : {
-              query: { unified_case_id: String(caseId) },
-              aggs_fields: aggsFields,
-            };
+      // ✅ Always prepare unified_case_id as string[]
+      const caseIdArray = Array.isArray(queryPayload?.case_id)
+        ? queryPayload.case_id
+        : Array.isArray(queryPayload?.caseId)
+          ? queryPayload.caseId
+          : queryPayload?.case_id
+            ? [queryPayload.case_id]
+            : queryPayload?.caseId
+              ? [queryPayload.caseId]
+              : [];
 
-        const response = await axios.post(`${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/timeline`, payload, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
+      const unified_case_id = caseIdArray.map(String); // Ensure string[]
 
-        // Process new data format
-        const rawData = response.data.unified_date_only || response.data || [];
-        
-        // Transform data for multiple lines
-        const processedData = transformDataForMultipleLines(rawData);
-        
-        setData(processedData.chartData);
-        setRecordTypes(processedData.types);
+      // ✅ Prepare raw query object
+      let query = {
+        unified_case_id,
+        file_type: Array.isArray(queryPayload?.file_type) ? queryPayload.file_type : [],
+        keyword: Array.isArray(queryPayload?.keyword) ? queryPayload.keyword : [],
+        targets: Array.isArray(queryPayload?.target) ? queryPayload.target : [],
+        sentiment: Array.isArray(queryPayload?.sentiment) ? queryPayload.sentiment : [],
+      };
 
-      } catch (error) {
-        if (error.response?.data?.detail) {
-          toast.error(error.response.data.detail);
-        }
-        console.error('Error fetching data:', error);
-        setData([]);
-        setRecordTypes([]);
-      } finally {
-        setLoading(false);
+      // ✅ Filter out invalid (empty/null/undefined) fields
+      query = Object.fromEntries(
+        Object.entries(query).filter(
+          ([, value]) =>
+            Array.isArray(value) ? value.length > 0 : value !== null && value !== undefined && value !== ""
+        )
+      );
+
+      // ✅ Build payload
+      const payload = queryPayload
+        ? {
+            query,
+            aggs_fields: aggsFields,
+            ...(queryPayload?.start_time && { start_time: queryPayload.start_time }),
+            ...(queryPayload?.end_time && { end_time: queryPayload.end_time }),
+          }
+        : {
+            query: { unified_case_id: [String(caseId)] },
+            aggs_fields: aggsFields,
+          };
+
+      // 🔁 API Call
+      const response = await axios.post(`${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/timeline`, payload, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      // ✅ Process API Response
+      const rawData = response.data.unified_date_only || response.data || [];
+
+      const processedData = transformDataForMultipleLines(rawData);
+
+      setData(processedData.chartData);
+      setRecordTypes(processedData.types);
+
+    } catch (error) {
+      if (error.response?.data?.detail) {
+        toast.error(error.response.data.detail);
       }
-    };
+      console.error('Error fetching data:', error);
+      setData([]);
+      setRecordTypes([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchData();
-  }, [caseId, queryPayload, token]);
+  fetchData();
+}, [caseId, queryPayload, token]);
+
 
   // Function to transform data for multiple lines
   const transformDataForMultipleLines = (rawData) => {

@@ -7,11 +7,12 @@ import { IoIosArrowDropup } from "react-icons/io";
 import { SlArrowDown } from "react-icons/sl";
 import { SlArrowUp } from "react-icons/sl";
 
-const KeywordTagList = ({ queryPayload = null, caseId = null, aggsFields = ["socialmedia_hashtags"] }) => {
+const KeywordTagList = ({ queryPayload = null, caseId = null, aggsFields}) => {
   const token = Cookies.get("accessToken");
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showAll, setShowAll] = useState(false); // 🔁 Toggle state
+
 
 
   useEffect(() => {
@@ -19,29 +20,46 @@ const KeywordTagList = ({ queryPayload = null, caseId = null, aggsFields = ["soc
       try {
         setLoading(true);
 
+        // ✅ Always convert caseId(s) to string[]
+        const caseIdArray = Array.isArray(queryPayload?.case_id)
+          ? queryPayload.case_id
+          : Array.isArray(queryPayload?.caseId)
+            ? queryPayload.caseId
+            : queryPayload?.case_id
+              ? [queryPayload.case_id]
+              : queryPayload?.caseId
+                ? [queryPayload.caseId]
+                : [];
+
+        const unified_case_id = caseIdArray.map(String); // Ensure all are strings
+
+        // ✅ Prepare raw query object
+        let query = {
+          unified_case_id,
+          file_type: Array.isArray(queryPayload?.file_type) ? queryPayload.file_type : [],
+          keyword: Array.isArray(queryPayload?.keyword) ? queryPayload.keyword : [],
+          targets: Array.isArray(queryPayload?.target) ? queryPayload.target : [],
+          sentiment: Array.isArray(queryPayload?.sentiment) ? queryPayload.sentiment : [],
+        };
+
+        // ✅ Filter out empty/null/undefined/empty-array fields
+        query = Object.fromEntries(
+          Object.entries(query).filter(
+            ([, value]) =>
+              Array.isArray(value) ? value.length > 0 : value !== null && value !== undefined && value !== ""
+          )
+        );
+
+        // ✅ Build payload
         const payload = queryPayload
           ? {
-            query: {
-              unified_case_id: Array.isArray(queryPayload?.case_id)
-                ? queryPayload.case_id
-                : Array.isArray(queryPayload?.caseId)
-                  ? queryPayload.caseId
-                  : queryPayload?.case_id
-                    ? [queryPayload.case_id]
-                    : queryPayload?.caseId
-                      ? [queryPayload.caseId]
-                      : [],
-              file_type: Array.isArray(queryPayload?.file_type) ? queryPayload.file_type : [],
-              keyword: Array.isArray(queryPayload?.keyword) ? queryPayload.keyword : [],
-              targets: Array.isArray(queryPayload?.target) ? queryPayload.target : [],
-              sentiment: Array.isArray(queryPayload?.sentiment) ? queryPayload.sentiment : [],
-            },
+            query,
             aggs_fields: aggsFields,
-            start_time: queryPayload?.start_time || "",
-            end_time: queryPayload?.end_time || ""
+           ...(queryPayload?.start_time && { start_time: queryPayload.start_time }),
+            ...(queryPayload?.end_time && { end_time: queryPayload.end_time }),
           }
           : {
-            query: { unified_case_id: String(caseId) },
+            query: { unified_case_id: [String(caseId)] },
             aggs_fields: aggsFields
           };
 
@@ -62,8 +80,9 @@ const KeywordTagList = ({ queryPayload = null, caseId = null, aggsFields = ["soc
       }
     };
 
-    fetchKeywordData();
-  }, [caseId, queryPayload, token]);
+   fetchKeywordData();
+  }, [caseId, aggsFields.join(","), queryPayload, token]);
+
 
 
   const MAX_HASHTAGS = 50;

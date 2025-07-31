@@ -9,7 +9,7 @@ import { sharedSxStyles } from "./createCriteria";
 import SendIcon from '@mui/icons-material/Send';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from "react-redux";
-import { closePopup, openPopup, setKeywords, setPage, setSearchResults } from '../../../Redux/Action/criteriaAction';
+import { clearCriteria, closePopup, openPopup, setKeywords, setPage, setSearchResults } from '../../../Redux/Action/criteriaAction';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import Loader from '../Layout/loader';
@@ -21,10 +21,10 @@ import styles from '../../Common/Table/table.module.css'
 
 
 const SavedCriteria = () => {
+ const navigate = useNavigate();
+  const dispatch = useDispatch();
   const Token = Cookies.get('accessToken');
   const { inputRef, isReadOnly, handleFocus } = useAutoFocusWithManualAutofill();
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
   const activePopup = useSelector((state) => state.popup.activePopup);
 
   const { searchResults, totalPages, currentPage, totalResults } = useSelector((state) => state.search);
@@ -43,8 +43,23 @@ const SavedCriteria = () => {
   console.log("filetype", fileType)
   const keyword = useSelector((state) => state.criteriaKeywords?.queryPayload?.keyword || '');
   console.log("keyword", keyword)
+   const sentiments = useSelector((state) => state.criteriaKeywords?.queryPayload?.sentiments || '');
+  console.log("keyword", sentiments)
+   const targets = useSelector((state) => state.criteriaKeywords?.queryPayload?.targets || '');
+  console.log("keyword", targets)
   const reduxPayload = useSelector((state) => state.criteriaKeywords?.queryPayload || '');
   console.log("Redux Payload:", reduxPayload);
+
+  // Function to check if chip is from Redux data
+  const isReduxChip = (chip) => {
+    const reduxKeywords = Array.isArray(keyword) ? keyword : [];
+    const reduxCaseIds = Array.isArray(caseId) ? caseId.map(id => String(id)) : [];
+    const reduxFileTypes = Array.isArray(fileType) ? fileType : [];
+    const reduxSentiments = Array.isArray(sentiments) ? sentiments : [];
+    const reduxTargets = Array.isArray(targets) ? targets : [];
+    
+    return [...reduxKeywords, ...reduxCaseIds, ...reduxFileTypes, ...reduxSentiments, ...reduxTargets].includes(chip);
+  };
 
   useEffect(() => {
     console.log("Case ID:", caseId);
@@ -59,7 +74,12 @@ const SavedCriteria = () => {
       if (Array.isArray(caseId) && caseId.every(id => (typeof id === "number" || typeof id === "string"))) {
         combinedChips = [...combinedChips, ...caseId.map((id) => `${id}`)];
       }
-
+ if (Array.isArray(targets) && targets.length > 0) {
+        combinedChips = [...combinedChips, ...targets];
+      }
+       if (Array.isArray(sentiments) && sentiments.length > 0) {
+        combinedChips = [...combinedChips, ...sentiments];
+      }
       // Check if fileType is an array and merge its values
       if (Array.isArray(fileType) && fileType.length > 0) {
         combinedChips = [...combinedChips, ...fileType];
@@ -138,40 +158,56 @@ const SavedCriteria = () => {
     setEnterInput((prev) => prev.filter((exchip) => exchip !== chip));
   };
 
+  // Updated reset function without API call
   const resetSearch = () => {
+    // Check if there's any data to reset
+    const hasData = searchChips.length > 0 || Object.keys(reduxPayload).length > 0;
+    
+    if (!hasData) {
+      toast.info("Data not available");
+      return;
+    }
+
+    // Clear local state only
+    dispatch(clearCriteria());
     setSearchChips([]);
     setInputValue('');
+    setEnterInput([]);
+    
+    toast.success("Search reset successfully");
   };
 
   // Main search function to call API
   const handleSearch = async () => {
     console.log("reduxPayload:", reduxPayload);
     setIsLoading(true);
+    const hasKeywords = keyword.length > 0;
+const hasReduxData = Object.keys(reduxPayload).length > 0;
+
+if (!hasKeywords && !hasReduxData) {
+  toast.info("Please enter keywords or select criteria to search");
+  return;
+}
     try {
-      // console.log("gsdhgfshgdf", searchChips, keyword)
-      // if (searchChips.length === 0 && keyword.length === 0 && enterInput.length===0) {
-      //   console.log("Both searchChips and keyword are empty");
-      //   toast.error("Please enter at least one keyword to search");
-      //   return;
-      // }
       setIsLoading(true);
-      // 1. Redux ke sirf keyword le rahe hain
+      
+      // 1. Redux ke keywords
       const reduxKeywords = Array.isArray(reduxPayload.keyword)
         ? reduxPayload.keyword
         : JSON.parse(reduxPayload.keyword || "[]");
       console.log("reduxKeyword", reduxKeywords)
 
+      // 2. User ke enter kiye gaye keywords (search bar se)
       const userKeywords = Array.isArray(enterInput)
         ? enterInput
         : JSON.parse(enterInput || "[]");
-
       console.log("userKeyword", userKeywords)
-      // 🔥 Keywords only: searchChips se wo elements jo redux keywords ya user keywords me hain
-      const allPossibleKeywords = [...reduxKeywords, ...userKeywords];
-      console.log("alllProgresskeyword", allPossibleKeywords)
-      const finalKeywords = searchChips.filter((chip) => allPossibleKeywords.includes(chip));
-      console.log("finalkeywords", finalKeywords)
-      // 2. case_id aur file_type separately treat honge
+
+      // 🔥 All keywords (Redux + User entered) will be passed as keywords to API
+      const allKeywords = [...reduxKeywords, ...userKeywords];
+      console.log("allKeywords to be sent:", allKeywords)
+
+      // 3. case_id aur file_type separately treat honge (sirf Redux se)
       const reduxCaseIds = Array.isArray(reduxPayload.case_id)
         ? reduxPayload.case_id
         : JSON.parse(reduxPayload.case_id || "[]");
@@ -179,16 +215,24 @@ const SavedCriteria = () => {
       const reduxFileTypes = Array.isArray(reduxPayload.file_type)
         ? reduxPayload.file_type
         : JSON.parse(reduxPayload.file_type || "[]");
+        
+      const reduxSentiments = Array.isArray(reduxPayload.sentiments)
+        ? reduxPayload.sentiments
+        : JSON.parse(reduxPayload.sentiments || "[]");
+        
+      const reduxTargets = Array.isArray(reduxPayload.targets)
+        ? reduxPayload.targets
+        : JSON.parse(reduxPayload.targets || "[]");
+
       console.log("fileType or Caseids", reduxCaseIds, reduxFileTypes)
-      const finalCaseIds = searchChips.filter((chip) => reduxCaseIds.includes(chip));
-      const finalFileTypes = searchChips.filter((chip) => reduxFileTypes.includes(chip));
-      console.log("finalcaseid or finalfiletype", finalCaseIds, finalFileTypes)
 
       const payload = {
-        keyword: finalKeywords,   // Only keywords
-        case_id: finalCaseIds,    // Only case_ids
-        file_type: finalFileTypes,// Only file_types
+        keyword: allKeywords,        // All keywords (Redux + User entered)
+        case_id: reduxCaseIds,       // Only Redux case_ids
+        file_type: reduxFileTypes,   // Only Redux file_types
         page: reduxPayload.page || 1,
+        sentiments: reduxPayload.sentiments || null,
+        targets: reduxPayload.targets || null,
         start_time: reduxPayload.start_time || null,
         end_time: reduxPayload.end_time || null,
         latitude: reduxPayload.latitude || null,
@@ -310,7 +354,14 @@ const SavedCriteria = () => {
               <div className="search-term-indicator">
                 <div className="chips-container">
                   {searchChips && searchChips.map((chip, index) => (
-                    <div key={index} className="search-chip">
+                    <div 
+                      key={index} 
+                      className={`search-chip ${isReduxChip(chip) ? 'redux-chip' : ''}`}
+                      style={{
+                        backgroundColor: isReduxChip(chip) ? '#ffd700' : '', // Yellow color for Redux chips
+                        color: isReduxChip(chip) ? '#000' : '', // Black text for better contrast on yellow
+                      }}
+                    >
                       <span>{chip}</span>
                       <button className="chip-delete-btn" onClick={() => removeChip(chip)}>
                         <CloseIcon fontSize='15px' />
@@ -319,7 +370,12 @@ const SavedCriteria = () => {
                   ))}
                 </div>
                 <div className="action-buttons">
-                  <button className="action-button" onClick={resetSearch}>Reset</button>
+                  <button 
+                    className="action-button" 
+                    onClick={resetSearch}
+                  >
+                    Reset
+                  </button>
                 </div>
               </div>
 

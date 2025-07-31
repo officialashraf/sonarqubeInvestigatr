@@ -36,30 +36,48 @@ const ReusablePieChart = ({
     const fetchData = async () => {
       try {
         setLoading(true);
+
+        // ✅ Always convert caseId to string[]
+        const caseIdArray = Array.isArray(queryPayload?.case_id)
+          ? queryPayload.case_id
+          : Array.isArray(queryPayload?.caseId)
+            ? queryPayload.caseId
+            : queryPayload?.case_id
+              ? [queryPayload.case_id]
+              : queryPayload?.caseId
+                ? [queryPayload.caseId]
+                : [];
+
+        const unified_case_id = caseIdArray.map(String); // Always string[]
+
+        // ✅ Prepare raw query object
+        let query = {
+          unified_case_id,
+          file_type: Array.isArray(queryPayload?.file_type) ? queryPayload.file_type : [],
+          targets: Array.isArray(queryPayload?.target) ? queryPayload.target : [],
+          sentiment: Array.isArray(queryPayload?.sentiment) ? queryPayload.sentiment : [],
+          keyword: Array.isArray(queryPayload?.keyword) ? queryPayload.keyword : [],
+        };
+
+        // ✅ Filter out empty fields
+        query = Object.fromEntries(
+          Object.entries(query).filter(
+            ([, value]) =>
+              Array.isArray(value) ? value.length > 0 : value !== null && value !== undefined && value !== ""
+          )
+        );
+
+        // ✅ Create payload with optional start/end time
         const payload = queryPayload
           ? {
-            query: {
-              unified_case_id: Array.isArray(queryPayload?.case_id)
-                ? queryPayload.case_id
-                : Array.isArray(queryPayload?.caseId)
-                  ? queryPayload.caseId
-                  : queryPayload?.case_id
-                    ? [queryPayload.case_id]
-                    : queryPayload?.caseId
-                      ? [queryPayload.caseId]
-                      : [],
-              file_type: Array.isArray(queryPayload?.file_type) ? queryPayload.file_type : [],
-              targets: Array.isArray(queryPayload?.target) ? queryPayload.target : [],
-              sentiment: Array.isArray(queryPayload?.sentiment) ? queryPayload.sentiment : [],
-              keyword: Array.isArray(queryPayload?.keyword) ? queryPayload.keyword : [],
-            },
+            query,
             aggs_fields: aggsFields,
-            start_time: queryPayload?.start_time || "",
-            end_time: queryPayload?.end_time || ""
+            ...(queryPayload?.start_time && { start_time: queryPayload.start_time }),
+            ...(queryPayload?.end_time && { end_time: queryPayload.end_time }),
           }
           : {
-            query: { unified_case_id: String(caseId) },
-            aggs_fields: aggsFields
+            query: { unified_case_id: [String(caseId)] },
+            aggs_fields: aggsFields,
           };
 
         const response = await axios.post(
@@ -86,10 +104,9 @@ const ReusablePieChart = ({
       }
     };
 
-    // if (caseId || queryPayload?.unified_case_id?.length) 
     fetchData();
-
   }, [caseId, aggsFields, token]);
+
 
   if (loading) return <Loader />;
 
