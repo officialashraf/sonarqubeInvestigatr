@@ -255,8 +255,8 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
 
       // Format sentiment as an array of objects for React-Select
       const selectedSentiments = [];
-      if (criteriaData.sentiment) {
-        const sentimentArray = Array.isArray(criteriaData.sentiment) ? criteriaData.sentiment : [criteriaData.sentiment];
+      if (criteriaData.sentiments) {
+        const sentimentArray = Array.isArray(criteriaData.sentiments) ? criteriaData.sentiments : [criteriaData.sentiments];
 
         sentimentArray.forEach(sentiment => {
           const matchingOption = sentimentOpts.find(option => option.value.toString().toLowerCase() === sentiment.toString().toLowerCase());

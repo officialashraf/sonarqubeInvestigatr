@@ -81,12 +81,12 @@
 
 .search-chip {
   height: 20px;
-  background: rgba(0, 115, 207, 0.3);
+  background: #0073cf;
   padding: 2px 4px 2px 4px;
   border-radius: 16px;
   display: flex;
   align-items: center;
-  color: #0073cf;
+  color: #FFFFFF;
   border: 1px solid #0073cf;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
@@ -99,7 +99,7 @@
   border: none;
   cursor: pointer;
   margin-left: 4px;
-  color: var(--color-colors-primaryAccent);
+  color: #FFFFFF;
   padding: 4px;
   border-radius: 50%;
 }
@@ -114,7 +114,7 @@
 }
 
 .action-button {
-  background: #FF3B3F;
+  background:  #0073cf;
   border: none;
   cursor: pointer;
   padding: 6px 10px;
@@ -126,7 +126,7 @@
 }
 
 .action-button:hover {
-  background: #ff5557;
+  background:  #5dabeb;
   color: white;
 }
 
@@ -189,4 +189,26 @@
     color: white !important; /*  Darkens icon */
     filter: brightness(0.6); /*  Reduces brightness */
     transform: scale(1.1); /*  Slight enlargement */
+}
+
+/* Add this to your savedCriteriaGlobal.css file */
+
+
+
+.search-chip.redux-chip {
+  background-color: #ffd700 !important; /* Golden yellow */
+  color: #000 !important; /* Black text for contrast */
+  border: 1px solid #ffcc00; /* Slightly darker yellow border */
+}
+
+.search-chip.redux-chip:hover {
+  background-color: #ffcc00 !important; /* Darker yellow on hover */
+}
+
+.search-chip.redux-chip .chip-delete-btn {
+  color: #000 !important; /* Black delete button for redux chips */
+}
+
+.search-chip.redux-chip .chip-delete-btn:hover {
+  background-color: rgba(0, 0, 0, 0.1); /* Light dark background on hover */
 }

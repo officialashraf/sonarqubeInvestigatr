@@ -357,6 +357,10 @@ const SearchResults = () => {
   const fileType = useSelector((state) => state.criteriaKeywords?.queryPayload?.file_type || '');
   console.log("filetype", fileType)
 
+  const sentiments = useSelector((state) => state.criteriaKeywords?.queryPayload?.sentiments || '');
+  console.log("sentiments", sentiments)
+  const targets = useSelector((state) => state.criteriaKeywords?.queryPayload?.targets|| '');
+  console.log("targets", targets)
   // Get start_time and end_time from Redux
   const startTime = useSelector((state) => state.criteriaKeywords?.queryPayload?.start_time || '');
   const endTime = useSelector((state) => state.criteriaKeywords?.queryPayload?.end_time || '');
@@ -427,7 +431,15 @@ const SearchResults = () => {
       combinedChips = [...combinedChips, ...caseIdChips];
       reduxSourcedChips = [...reduxSourcedChips, ...caseIdChips];
     }
-
+   if (Array.isArray(targets) && targets.length > 0) {
+      combinedChips = [...combinedChips, ...targets];
+      reduxSourcedChips = [...reduxSourcedChips, ...targets];
+   }
+       if (Array.isArray(sentiments) && sentiments.length > 0) {
+      combinedChips = [...combinedChips, ...sentiments];
+      reduxSourcedChips = [...reduxSourcedChips, ...sentiments];
+       }
+    
     // Add file types
     if (Array.isArray(fileType) && fileType.length > 0) {
       combinedChips = [...combinedChips, ...fileType];
@@ -450,15 +462,15 @@ const SearchResults = () => {
     setSearchChips(combinedChips);
     setReduxChips(reduxSourcedChips);
 
-  }, [keywords, caseId, fileType, startTime, endTime]);
+  }, [keywords, caseId, fileType, startTime, endTime,sentiments,targets]);
 
   const openPopup = () => {
     setIsPopupVisible(true);
   };
 
-  const exitClick = () => {
-    navigate('/cases')
-  }
+  // const exitClick = () => {
+  //   navigate('/cases')
+  // }
 
   console.log("Keywords search:", searchChips);
   const filteredChips = searchChips.filter((chip) =>
@@ -521,10 +533,8 @@ const SearchResults = () => {
       console.log("allPossibleKeywords", allPossibleKeywords)
       const finalKeywords = searchChips.filter((chip) => 
         allPossibleKeywords.includes(chip) && 
-        !chip.includes(' to ') && // Exclude date range chips
-        !chip.includes('From ') && 
-        !chip.includes('Until ')
-      );
+        !chip.includes(' to ')  // Exclude date range chips
+            );
       console.log("finalKeywords", finalKeywords)
 
       // Parse case IDs and file types
@@ -537,15 +547,22 @@ const SearchResults = () => {
         : JSON.parse(reduxPayload.file_type || "[]");
       
       console.log("fileType or Caseids", reduxCaseIds, reduxFileTypes)
-      
-      const finalCaseIds = searchChips.filter((chip) => reduxCaseIds.includes(chip));
-      const finalFileTypes = searchChips.filter((chip) => reduxFileTypes.includes(chip));
-      console.log("finalCaseId or finalFileType", finalCaseIds, finalFileTypes)
+       const reduxSentiments = Array.isArray(reduxPayload.sentiments)
+        ? reduxPayload.sentiments
+        : JSON.parse(reduxPayload.sentiments || "[]");
+         const reduxTargets = Array.isArray(reduxPayload.targets)
+        ? reduxPayload.targets
+        : JSON.parse(reduxPayload.targets || "[]");
+      // const finalCaseIds = searchChips.filter((chip) => reduxCaseIds.includes(chip));
+      // const finalFileTypes = searchChips.filter((chip) => reduxFileTypes.includes(chip));
+      // console.log("finalCaseId or finalFileType", finalCaseIds, finalFileTypes)
 
       const payload = {
         keyword: finalKeywords,
-        case_id: finalCaseIds,
-        file_type: finalFileTypes,
+        case_id: reduxCaseIds,
+        file_type: reduxFileTypes,
+        sentiments:reduxSentiments,
+        targets:reduxTargets,
         page: reduxPayload.page || 1,
         start_time: reduxPayload.start_time || null,
         end_time: reduxPayload.end_time || null,

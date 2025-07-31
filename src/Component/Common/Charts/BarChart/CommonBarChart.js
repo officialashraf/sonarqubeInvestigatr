@@ -31,50 +31,66 @@ const ReusableBarChart = ({
         const fetchData = async () => {
             try {
                 setLoading(true);
+
+                // ✅ Ensure case_id is always an array of strings
+                const caseIdArray = (() => {
+                    if (Array.isArray(queryPayload?.case_id)) return queryPayload.case_id.map(String);
+                    if (Array.isArray(queryPayload?.caseId)) return queryPayload.caseId.map(String);
+                    if (queryPayload?.case_id) return [String(queryPayload.case_id)];
+                    if (queryPayload?.caseId) return [String(queryPayload.caseId)];
+                    return [];
+                })();
+
+                // ✅ Step 1: Prepare raw query
+                const rawQuery = {
+                    unified_case_id: caseIdArray,
+                    file_type: Array.isArray(queryPayload?.file_type) ? queryPayload.file_type : [],
+                    keyword: Array.isArray(queryPayload?.keyword) ? queryPayload.keyword : [],
+                    targets: Array.isArray(queryPayload?.target) ? queryPayload.target : [],
+                    sentiment: Array.isArray(queryPayload?.sentiment) ? queryPayload.sentiment : [],
+                };
+
+                // ✅ Step 2: Remove empty fields
+                const filteredQuery = Object.fromEntries(
+                    Object.entries(rawQuery).filter(
+                        ([, value]) =>
+                            Array.isArray(value) ? value.length > 0 : value !== null && value !== undefined && value !== ""
+                    )
+                );
+
+                // ✅ Step 3: Prepare payload
                 const payload = queryPayload
                     ? {
-                        query: {
-                            unified_case_id: Array.isArray(queryPayload?.case_id)
-                                ? queryPayload.case_id
-                                : Array.isArray(queryPayload?.caseId)
-                                    ? queryPayload.caseId
-                                    : queryPayload?.case_id
-                                        ? [queryPayload.case_id]
-                                        : queryPayload?.caseId
-                                            ? [queryPayload.caseId]
-                                            : [],
-                            file_type: Array.isArray(queryPayload?.file_type) ? queryPayload.file_type : [],
-                            keyword: Array.isArray(queryPayload?.keyword) ? queryPayload.keyword : [],
-                            targets: Array.isArray(queryPayload?.target) ? queryPayload.target : [],
-                            sentiment: Array.isArray(queryPayload?.sentiment) ? queryPayload.sentiment : [],
-                        },
+                        query: filteredQuery,
                         aggs_fields: aggsFields,
-                        start_time: queryPayload?.start_time || "",
-                        end_time: queryPayload?.end_time || ""
+                        ...(queryPayload?.start_time && { start_time: queryPayload.start_time }),
+                        ...(queryPayload?.end_time && { end_time: queryPayload.end_time }),
                     }
                     : {
-                        query: { unified_case_id: String(caseId) },
+                        query: { unified_case_id: caseIdArray },
                         aggs_fields: aggsFields
                     };
 
-                const response = await axios.post(`${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/aggregate`, payload, {
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`,
+                // ✅ Step 4: API call
+                const response = await axios.post(
+                    `${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/aggregate`,
+                    payload,
+                    {
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${token}`,
+                        }
                     }
-                });
+                );
 
                 const field = aggsFields[0];
-
-                // const rawData = response.data[field] || [];
-                // const transformed = transformData(rawData);
-                // setBarData(transformed.length ? transformed : [{ name: 'No Data', value: 0 }]);
                 const raw = response.data[field] || [];
                 const transformed = transformData(raw);
-                setRawData(transformed); //  Store full transformed data
+                setRawData(transformed);
 
                 const limitedData = transformed.length > MAX_BARS ? transformed.slice(0, MAX_BARS) : transformed;
                 setBarData(limitedData.length ? limitedData : [{ name: 'No Data', value: 0 }]);
+
             } catch (error) {
                 console.error('Error fetching bar chart data:', error);
                 setBarData([{ name: 'No Data', value: 0 }]);
@@ -85,6 +101,8 @@ const ReusableBarChart = ({
 
         if (caseId) fetchData();
     }, [caseId, aggsFields.join(','), queryPayload, token]);
+
+
 
     useEffect(() => {
 

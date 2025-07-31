@@ -10,7 +10,7 @@ import KeywordTagList from '../../../../../Common/Charts/KeywordCloud/keywordClo
 
 
 const CriteriaKeywordChart = () => {
-  const queryPayload = useSelector((state) => state.criteriaKeywords.queryPayload);
+  const queryPayload = useSelector((state) => state.criteriaKeywords?.queryPayload);
   // const token = Cookies.get("accessToken");
   // const [data, setData] = useState([]);
   // const [loading, setLoading] = useState(true);
@@ -73,7 +73,9 @@ const CriteriaKeywordChart = () => {
   // }
 
   return (
-   <KeywordTagList queryPayload={queryPayload} />
+   <KeywordTagList queryPayload={queryPayload}
+    aggsFields={["socialmedia_hashtags"]}
+   />
 
   );
 }

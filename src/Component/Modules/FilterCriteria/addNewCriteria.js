@@ -20,6 +20,7 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
     const Token = Cookies.get('accessToken');
     const dispatch = useDispatch();
     console.log("searaddnew", searchChips)
+    
     // State for dynamic options
     const payload = useSelector((state) => state.criteriaKeywords?.queryPayload || '');
 
@@ -27,6 +28,8 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
     const [showSavePopup, setShowSavePopup] = useState(false);
     const [caseOptions, setCaseOptions] = useState([]);
     const [fileTypeOptions, setFileTypeOptions] = useState([]);
+    const [targetsOptions, setTargetsOptions] = useState([]);
+    const [sentimentOptions, setSentimentOptions] = useState([]);
 
     // State for form data
     const [formData, setFormData] = useState({
@@ -35,12 +38,68 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
         fileType: [],
         platform: [],
         caseIds: [],
+        sentiments: [],
+        targets: [],
         startDate: null,
         endDate: null,
         includeArchived: false,
         latitude: '',
         longitude: '',
     });
+
+    // Function to convert payload values to dropdown format
+    const convertPayloadToDropdownFormat = () => {
+        if (!payload) return;
+
+        // Convert case_id to dropdown format
+        const existingCaseIds = Array.isArray(payload.case_id) 
+            ? payload.case_id 
+            : JSON.parse(payload.case_id || "[]");
+        
+        const caseIdsFormatted = existingCaseIds.map(caseId => {
+            const caseOption = caseOptions.find(option => String(option.value) === String(caseId));
+            return caseOption || { value: caseId, label: `CASE${String(caseId).padStart(4, "0")}` };
+        });
+
+        // Convert file_type to dropdown format
+        const existingPlatforms = Array.isArray(payload.file_type) 
+            ? payload.file_type 
+            : JSON.parse(payload.file_type || "[]");
+        
+        const platformsFormatted = existingPlatforms.map(platform => {
+            const platformOption = fileTypeOptions.find(option => option.value === platform);
+            return platformOption || { value: platform, label: platform };
+        });
+
+        // Convert targets to dropdown format
+        const existingTargets = Array.isArray(payload.targets) 
+            ? payload.targets 
+            : JSON.parse(payload.targets || "[]");
+        
+        const targetsFormatted = existingTargets.map(target => {
+            const targetOption = targetsOptions.find(option => option.value === target);
+            return targetOption || { value: target, label: target };
+        });
+
+        // Convert sentiment to dropdown format
+        const existingSentiments = Array.isArray(payload.sentiments) 
+            ? payload.sentiments 
+            : JSON.parse(payload.sentiments || "[]");
+        
+        const sentimentsFormatted = existingSentiments.map(sentiment => {
+            const sentimentOption = sentimentOptions.find(option => option.value === sentiment);
+            return sentimentOption || { value: sentiment, label: sentiment };
+        });
+
+        // Update form data with existing values
+        setFormData(prev => ({
+            ...prev,
+            caseIds: caseIdsFormatted,
+            platform: platformsFormatted,
+            targets: targetsFormatted,
+            sentiments: sentimentsFormatted
+        }));
+    };
     console.log("formdatgertt...", formData)
 
     // Fetch case data from API
@@ -86,9 +145,78 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
             }
         };
 
-        fetchCaseData();
-        fetchFileTypes();
+        // Fetch targets and sentiment data
+        const fetchTargetsAndSentiment = async () => {
+            try {
+                const response = await axios.post(`${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/distinct`, {
+                    fields: ["targets", "sentiment"]
+                }, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${Token}`
+                    }
+                });
+                
+                console.log("targets and sentiment response", response.data);
+                
+                // Format targets options from buckets
+                if (response.data.targets && response.data.targets.buckets) {
+                    const targetsFormatted = response.data.targets.buckets.map(bucket => ({
+                        value: bucket.key,
+                        label: bucket.key
+                    }));
+                    setTargetsOptions(targetsFormatted);
+                }
+                
+                // Format sentiment options from buckets
+                if (response.data.sentiment && response.data.sentiment.buckets) {
+                    const sentimentFormatted = response.data.sentiment.buckets.map(bucket => ({
+                        value: bucket.key,
+                        label: bucket.key
+                    }));
+                    setSentimentOptions(sentimentFormatted);
+                }
+                
+            } catch (error) {
+                console.error('Error fetching targets and sentiment:', error);
+            }
+        };
+
+        if (Token) {
+            fetchCaseData();
+            fetchFileTypes();
+            fetchTargetsAndSentiment();
+        }
     }, [Token]);
+
+    // Effect to populate form data when payload or options change
+    useEffect(() => {
+        if (payload && caseOptions.length > 0 && fileTypeOptions.length > 0 && 
+            targetsOptions.length > 0 && sentimentOptions.length > 0) {
+            convertPayloadToDropdownFormat();
+        }
+    }, [payload, caseOptions, fileTypeOptions, targetsOptions, sentimentOptions]);
+
+    // Effect to populate dates from payload
+    useEffect(() => {
+        if (payload && payload.start_time && payload.end_time) {
+            const startDate = new Date(payload.start_time);
+            const endDate = new Date(payload.end_time);
+            
+            setSelectedDates({
+                startDate: startDate,
+                endDate: endDate,
+                startTime: { 
+                    hours: startDate.getHours(), 
+                    minutes: startDate.getMinutes() 
+                },
+                endTime: { 
+                    hours: endDate.getHours(), 
+                    minutes: endDate.getMinutes() 
+                }
+            });
+        }
+    }, [payload]);
 
     // Date picker state and handlers
     const [selectedDates, setSelectedDates] = useState({
@@ -121,202 +249,118 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
     };
 
     // Perform search API call
-
     console.log("payload---", payload)
-    // const performSearch = async (e) => {
-    //     e.preventDefault();
 
-    //     console.log(e);
-    //     try {
-    //         // Build the query payload with the correct structure
-    //         const payloadS = {
-    //             keyword: Array.isArray(payload.keyword) ? payload.keyword : JSON.parse(payload.keyword || "[]"),
-    //             case_id: [
-    //                 ...(Array.isArray(payload.case_id) ? payload.case_id : JSON.parse(payload.case_id || "[]")),
-    //                 ...(Array.isArray(formData.caseIds) ? formData.caseIds.map(caseId => String(caseId.value)) : [])
-    //             ],
+    const performSearch = async (e) => {
+        e.preventDefault();
 
-    //             file_type: [
-    //                 ...(Array.isArray(payload.file_type) ? payload.file_type : JSON.parse(payload.file_type || "[]")),
-    //                 ...(Array.isArray(formData.platform) ? formData.platform.map(type => type.value) : [])
-    //             ],
-    //             page: payload.page || 1
-    //         };
+        console.log(e);
+        try {
+            // Build the query payload with the correct structure
+            const payloadS = {
+                keyword: Array.isArray(payload.keyword) ? payload.keyword : JSON.parse(payload.keyword || "[]"),
+                case_id: Array.isArray(formData.caseIds) ? formData.caseIds.map(caseId => String(caseId.value)) : [],
+                file_type: Array.isArray(formData.platform) ? formData.platform.map(type => type.value) : [],
+                targets: Array.isArray(formData.targets) ? formData.targets.map(target => target.value) : [],
+                sentiments: Array.isArray(formData.sentiments) ? formData.sentiments.map(sentiment => sentiment.value) : [],
+                page: payload.page || 1,
+                latitude: payload.latitude || null,
+                longitude: payload.longitude || null
+            };
 
-    //         // Combine start time from both sources
-    //         if (payload.start_time || (selectedDates.startDate && selectedDates.startTime)) {
-    //             payload.start_time = payload.start_time || `${selectedDates.startDate.toISOString().split('T')[0]}T${String(selectedDates.startTime.hours).padStart(2, '0')}:${String(selectedDates.startTime.minutes).padStart(2, '0')}:00`;
-    //         }
-
-    //         // Combine end time from both sources
-    //         if (payload.end_time || (selectedDates.endDate && selectedDates.endTime)) {
-    //             payload.end_time = payload.end_time || `${selectedDates.endDate.toISOString().split('T')[0]}T${String(selectedDates.endTime.hours).padStart(2, '0')}:${String(selectedDates.endTime.minutes).padStart(2, '0')}:00`;
-    //         }
-
-    //         console.log("Query Payload:", payloadS);
-
-    //         // Make the API request with the correct payload structure
-    //         const response = await axios.post(
-    //             `${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/search`,
-    //             payloadS,
-    //             {
-    //                 headers: {
-    //                     'Content-Type': 'application/json',
-    //                     'Authorization': `Bearer ${Token}`,
-    //                 }
-    //             }
-    //         );
-    //         console.log("response of addnew", response)
-    //         // Dispatch search results
-    //         dispatch(setSearchResults({
-    //             results: response.data.results,
-    //             total_pages: response.data.total_pages || 1,
-    //             total_results: response.data.total_results || 0,
-    //         }));
-
-    //         dispatch(setKeywords({
-    //             keyword: searchChips,
-    //             queryPayload: response.data.input  // or other fields if needed
-    //         }));
-    //         // Dispatch the initial page number
-    //         dispatch(setPage(1));
-    //         console.log("Dispatched setSearchResults with:", response.data.results);
-
-
-    //         console.log('Search results:', response.data);
-    //         setIsPopupVisible(false);
-    //         // Reset form data to initial values
-    //         setFormData({
-    //             searchQuery: '',
-    //             datatype: [],
-    //             filetype: [],
-    //             caseIds: [],
-    //             includeArchived: false,
-    //             latitude: '',
-    //             longitude: '',
-    //         });
-
-    //         // Handle the search results, if applicable
-    //         if (handleCreateCase) {
-    //             handleCreateCase(response.data);
-    //         }
-
-    //         // Show the "saved" popup
-    //         // dispatch(openPopup("saved"));
-    //     } catch (error) {
-    //         console.error('Error performing search:', error);
-    //     }
-    // };
-// Fix the performSearch function in AddNewCriteria component
-
-const performSearch = async (e) => {
-    e.preventDefault();
-
-    console.log(e);
-    try {
-        // Build the query payload with the correct structure
-        const payloadS = {
-            keyword: Array.isArray(payload.keyword) ? payload.keyword : JSON.parse(payload.keyword || "[]"),
-            case_id: [
-                ...(Array.isArray(payload.case_id) ? payload.case_id : JSON.parse(payload.case_id || "[]")),
-                ...(Array.isArray(formData.caseIds) ? formData.caseIds.map(caseId => String(caseId.value)) : [])
-            ],
-            file_type: [
-                ...(Array.isArray(payload.file_type) ? payload.file_type : JSON.parse(payload.file_type || "[]")),
-                ...(Array.isArray(formData.platform) ? formData.platform.map(type => type.value) : [])
-            ],
-            page: payload.page || 1,
-            latitude: payload.latitude || null,
-            longitude: payload.longitude || null
-        };
-
-        // Handle start_time - combine existing payload and new selection
-        if (payload.start_time || (selectedDates.startDate && selectedDates.startTime)) {
-            payloadS.start_time = payload.start_time || 
-                `${selectedDates.startDate.toISOString().split('T')[0]}T${String(selectedDates.startTime.hours).padStart(2, '0')}:${String(selectedDates.startTime.minutes).padStart(2, '0')}:00`;
-        } else {
-            payloadS.start_time = null;
-        }
-
-        // Handle end_time - combine existing payload and new selection
-        if (payload.end_time || (selectedDates.endDate && selectedDates.endTime)) {
-            payloadS.end_time = payload.end_time || 
-                `${selectedDates.endDate.toISOString().split('T')[0]}T${String(selectedDates.endTime.hours).padStart(2, '0')}:${String(selectedDates.endTime.minutes).padStart(2, '0')}:00`;
-        } else {
-            payloadS.end_time = null;
-        }
-
-        console.log("Query Payload being sent to API:", payloadS);
-
-        // Make the API request with the correct payload structure
-        const response = await axios.post(
-            `${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/search`,
-            payloadS, // This now includes start_time and end_time
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${Token}`,
-                }
+            // Handle start_time - combine existing payload and new selection
+            if (payload.start_time || (selectedDates.startDate && selectedDates.startTime)) {
+                payloadS.start_time = payload.start_time || 
+                    `${selectedDates.startDate.toISOString().split('T')[0]}T${String(selectedDates.startTime.hours).padStart(2, '0')}:${String(selectedDates.startTime.minutes).padStart(2, '0')}:00`;
+            } else {
+                payloadS.start_time = null;
             }
-        );
-        
-        console.log("API Response:", response);
-        
-        // Dispatch search results
-        dispatch(setSearchResults({
-            results: response.data.results,
-            total_pages: response.data.total_pages || 1,
-            total_results: response.data.total_results || 0,
-        }));
 
-        dispatch(setKeywords({
-            keyword: searchChips,
-            queryPayload: response.data.input  // This will include the dates sent to API
-        }));
-        
-        // Dispatch the initial page number
-        dispatch(setPage(1));
-        console.log("Dispatched setSearchResults with:", response.data.results);
+            // Handle end_time - combine existing payload and new selection
+            if (payload.end_time || (selectedDates.endDate && selectedDates.endTime)) {
+                payloadS.end_time = payload.end_time || 
+                    `${selectedDates.endDate.toISOString().split('T')[0]}T${String(selectedDates.endTime.hours).padStart(2, '0')}:${String(selectedDates.endTime.minutes).padStart(2, '0')}:00`;
+            } else {
+                payloadS.end_time = null;
+            }
 
-        console.log('Search results:', response.data);
-        setIsPopupVisible(false);
-        
-        // Reset form data to initial values
-        setFormData({
-            searchQuery: '',
-            datatype: [],
-            filetype: [],
-            caseIds: [],
-            includeArchived: false,
-            latitude: '',
-            longitude: '',
-        });
+            console.log("Query Payload being sent to API:", payloadS);
 
-        // Reset selected dates
-        setSelectedDates({
-            startDate: null,
-            endDate: null,
-            startTime: { hours: 16, minutes: 30 },
-            endTime: { hours: 16, minutes: 30 }
-        });
+            // Make the API request with the correct payload structure
+            const response = await axios.post(
+                `${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/search`,
+                payloadS,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${Token}`,
+                    }
+                }
+            );
+            
+            console.log("API Response:", response);
+            
+            // Dispatch search results
+            dispatch(setSearchResults({
+                results: response.data.results,
+                total_pages: response.data.total_pages || 1,
+                total_results: response.data.total_results || 0,
+            }));
 
-        // Handle the search results, if applicable
-        if (handleCreateCase) {
-            handleCreateCase(response.data);
+            dispatch(setKeywords({
+                keyword: searchChips,
+                queryPayload: response.data.input
+            }));
+            
+            // Dispatch the initial page number
+            dispatch(setPage(1));
+            console.log("Dispatched setSearchResults with:", response.data.results);
+
+            console.log('Search results:', response.data);
+            setIsPopupVisible(false);
+            
+            // Reset form data to initial values
+            setFormData({
+                searchQuery: '',
+                dataType: [],
+                fileType: [],
+                platform: [],
+                caseIds: [],
+                sentiments: [],
+                targets: [],
+                includeArchived: false,
+                latitude: '',
+                longitude: '',
+            });
+
+            // Reset selected dates
+            setSelectedDates({
+                startDate: null,
+                endDate: null,
+                startTime: { hours: 16, minutes: 30 },
+                endTime: { hours: 16, minutes: 30 }
+            });
+
+            // Handle the search results, if applicable
+            if (handleCreateCase) {
+                handleCreateCase(response.data);
+            }
+
+        } catch (error) {
+            console.error('Error performing search:', error);
+            console.log('Error details:', error.response?.data);
         }
-
-    } catch (error) {
-        console.error('Error performing search:', error);
-        console.log('Error details:', error.response?.data);
-    }
-};
+    };
 
     const handleSaveCriteriaChange = () => {
-        setShowSavePopup(true); // Open the popup  
+        setShowSavePopup(true);
     };
+
     const isSearchDisabled =
         (!formData.caseIds || formData.caseIds.length === 0) &&
         (!formData.platform || formData.platform.length === 0) &&
+        (!formData.targets || formData.targets.length === 0) &&
+        (!formData.sentiments || formData.sentiments.length === 0) &&
         (!selectedDates.startDate || !selectedDates.endDate);
 
     return (
@@ -335,13 +379,9 @@ const performSearch = async (e) => {
                                 </span>
                             </div>
 
-
-
                             <form>
-
                                 {/* Case Selection */}
-                                <div >
-                                    
+                                <div>
                                     <CommonMultiSelect
                                         label="Cases"
                                         isMulti
@@ -355,8 +395,7 @@ const performSearch = async (e) => {
                                 </div>
 
                                 {/* Platform Selection */}
-                                <div >
-                                    {/* <label>Platform</label> */}
+                                <div>
                                     <CommonMultiSelect
                                         label="Platform"
                                         isMulti
@@ -369,27 +408,58 @@ const performSearch = async (e) => {
                                     />
                                 </div>
 
-                                {/* Date Range */}
-                                <div >
-                                    {/* <label>Date Range</label> */}
-                                    <CommonDateInput
-                                    label="Date Range"
-
-                                        placeholder="Select date range"
-                                        value={formatDateRange()}
-                                        onClickIcon={toggleDatePickerPopup}
-                                        
+                                {/* Target Selection */}
+                                <div>
+                                    <CommonMultiSelect
+                                        label="Target"
+                                        isMulti
+                                        options={targetsOptions}
+                                        customStyles={customSelectStyles}
+                                        className="com"
+                                        value={formData.targets}
+                                        onChange={(selected) => setFormData(prev => ({ ...prev, targets: selected }))}
+                                        placeholder="Select targets"
                                     />
                                 </div>
 
+                                {/* Sentiment Selection */}
+                                <div>
+                                    <CommonMultiSelect
+                                        label="Sentiment"
+                                        isMulti
+                                        options={sentimentOptions}
+                                        customStyles={customSelectStyles}
+                                        className="com"
+                                        value={formData.sentiments}
+                                        onChange={(selected) => setFormData(prev => ({ ...prev, sentiments: selected }))}
+                                        placeholder="Select sentiments"
+                                    />
+                                </div>
+
+                                {/* Date Range */}
+                                <div>
+                                    <CommonDateInput
+                                        label="Date Range"
+                                        placeholder="Select date range"
+                                        value={formatDateRange()}
+                                        onClickIcon={toggleDatePickerPopup}
+                                    />
+                                </div>
 
                                 {/* Buttons */}
                                 <div className="button-container" style={{ marginTop: '10px' }}>
-                                    <button type="button" onClick={performSearch} className="add-btn" disabled={isSearchDisabled}
+                                    <button 
+                                        type="button" 
+                                        onClick={performSearch} 
+                                        className="add-btn" 
+                                        disabled={isSearchDisabled}
                                         style={{
                                             backgroundColor: isSearchDisabled ? '#fffff' : '#00000',
                                             cursor: isSearchDisabled ? 'not-allowed' : 'pointer'
-                                        }}>Search</button>
+                                        }}
+                                    >
+                                        Search
+                                    </button>
                                     <button
                                         type="button"
                                         className="add-btn"
@@ -428,4 +498,4 @@ const performSearch = async (e) => {
     );
 };
 
-export default AddNewCriteria;                        
+export default AddNewCriteria;
