@@ -28,7 +28,7 @@ const CaseHeader = ({ onIconClick, activeView }) => {
         </div> */}
           <div className={styles.headerTitle}>
             <h5>
-              Case ID: {`CASE${String(caseData.id).padStart(4, "0")}`}{" "}
+             {`CASE${String(caseData.id).padStart(4, "0")}`}{" "}
               ({caseData.title})
             </h5>
 

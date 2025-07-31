@@ -141,7 +141,13 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
   sourceError.platform = "At least one platform is required";
 }
 
-       const minValue = source.intervalUnit === 'minutes' ? 15 : 1;
+      let minValue;
+if (source.source === 'dark web') {
+  minValue = source.intervalUnit === 'hours' ? 2 : 1; // dark web ke liye hours minimum 2
+} else {
+  minValue = source.intervalUnit === 'minutes' ? 15 : 1; // normal sources ke liye
+}
+
     if (!source.intervalValue || source.intervalValue < minValue) {
       sourceError.intervalValue = `Interval value must be at least ${minValue} ${source.intervalUnit || 'unit'}`;
     }
@@ -193,6 +199,8 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
               keywords: [],
               keywordInput: '',
               urlInput: '',
+                intervalValue: value === 'dark web' ? 2 : 15,
+            intervalUnit: value === 'dark web' ? 'hours' : 'minutes',
             }
           : src
       )
@@ -288,7 +296,12 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
 
  const handleIntervalValueChange = (sourceIndex, value) => {
   const source = sources[sourceIndex];
-  const minValue = source.intervalUnit === 'minutes' ? 15 : 1;
+  let minValue;
+  if (source.source === 'dark web') {
+    minValue = source.intervalUnit === 'hours' ? 2 : 1; // hours ke liye min 2, seconds ke liye min 1
+  } else {
+    minValue = source.intervalUnit === 'minutes' ? 15 : 1; // normal sources ke liye
+  }
   const numericValue = Math.max(minValue, parseInt(value, 10) || minValue);
   
   setSources(prevSources =>
@@ -311,7 +324,13 @@ const handleIntervalUnitChange = (sourceIndex, unit) => {
   setSources(prevSources =>
     prevSources.map((src, i) => {
       if (i === sourceIndex) {
-        const newMinValue = unit === 'minutes' ? 15 : 1;
+       let newMinValue;
+        // Dark web ke liye different logic
+        if (src.source === 'dark web') {
+          newMinValue = unit === 'hours' ? 2 : 1; // minutes option nahi hoga dark web ke liye
+        } else {
+          newMinValue = unit === 'minutes' ? 15 : 1; // normal sources ke liye
+        }
         const adjustedValue = src.intervalValue < newMinValue ? newMinValue : src.intervalValue;
         return { ...src, intervalUnit: unit, intervalValue: adjustedValue };
       }
@@ -710,14 +729,15 @@ const handleIntervalUnitChange = (sourceIndex, unit) => {
                   
                   {source.source && (
                     <div className="col-md-6">
-                      <IntervalField
-                        label="Monitoring Interval"
-                        value={source.intervalValue}
-                        unit={source.intervalUnit}
-                        onValueChange={(val) => handleIntervalValueChange(sourceIndex, val)}
-                        onUnitChange={(unit) => handleIntervalUnitChange(sourceIndex, unit)}
-                        disabled={filterDetails?.id && !isEditable}
-                      />
+                     <IntervalField
+  label="Monitoring Interval"
+  value={source.intervalValue}
+  unit={source.intervalUnit}
+  onValueChange={(val) => handleIntervalValueChange(sourceIndex, val)}
+  onUnitChange={(unit) => handleIntervalUnitChange(sourceIndex, unit)}
+  disabled={filterDetails?.id && !isEditable}
+  isDarkWeb={source.source === 'dark web'} // ye prop add karo
+/>
                       {error.sources?.[sourceIndex]?.intervalValue && (
                         <p style={{ color: 'red', margin: 0 }}>{error.sources[sourceIndex].intervalValue}</p>
                       )}
