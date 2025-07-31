@@ -189,14 +189,28 @@ const RecentCriteria = () => {
       const reduxFileTypes = Array.isArray(reduxPayload.file_type)
         ? reduxPayload.file_type
         : JSON.parse(reduxPayload.file_type || "[]");
+
+      const reduxTargets = Array.isArray(reduxPayload.targets)
+        ? reduxPayload.targets
+        : JSON.parse(reduxPayload.targets || "[]");
+
+      const reduxSentiments = Array.isArray(reduxPayload.sentiment)
+        ? reduxPayload.sentiment
+        : JSON.parse(reduxPayload.sentiment || "[]");
+
       console.log("fileType or Caseids", reduxCaseIds, reduxFileTypes)
       const finalCaseIds = keywords.filter((chip) => reduxCaseIds.includes(chip));
       const finalFileTypes = keywords.filter((chip) => reduxFileTypes.includes(chip));
+      const finalTargets = keywords.filter((chip) => reduxTargets.includes(chip));
+      const finalSentiments = keywords.filter((chip) => reduxSentiments.includes(chip));
       console.log("finalcaseid or finalfiletype", finalCaseIds, finalFileTypes)
+      console.log("finalTargets or finalSentiments", finalTargets, finalSentiments)
       const payload = {
         keyword: finalKeywords,   // Only keywords
         case_id: finalCaseIds,    // Only case_ids
         file_type: finalFileTypes,// Only file_types
+        targets: finalTargets,
+        sentiment: finalSentiments,
         page: reduxPayload.page || 1,
         start_time: reduxPayload.start_time || null,
         end_time: reduxPayload.end_time || null,
@@ -264,6 +278,16 @@ const RecentCriteria = () => {
       if (Array.isArray(item.file_type) && item.file_type.length > 0) {
         updatedKeywords.push(...item.file_type.map((ft) => `${ft}`));
         queryPayload.file_type = item.file_type;
+      }
+
+      if (Array.isArray(item.targets) && item.targets.length > 0) {
+        updatedKeywords.push(...item.targets.map((t) => `${t}`));
+        queryPayload.targets = item.targets;
+      }
+
+      if (Array.isArray(item.sentiment) && item.sentiment.length > 0) {
+        updatedKeywords.push(...item.sentiment.map((s) => `${s}`));
+        queryPayload.sentiment = item.sentiment;
       }
 
       if (isValid(item.start_date)) {

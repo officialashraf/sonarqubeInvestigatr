@@ -50,6 +50,10 @@ const Confirm = ({ formData, selectedDates, searchChips }) => {
                     ...(formData.filetype?.length > 0 ? formData.filetype.map((file) => file.value) : []),
                     ...(formData.platform?.length > 0 ? formData.platform.map((platform) => platform.value) : [])
                 ],
+                targets: formData.targets?.length > 0 ? formData.targets.map(target => target.value) : [],
+                sentiment: formData.sentiment?.length > 0
+                    ? formData.sentiment.map(s => s.value)
+                    : [],
 
                 latitude: formData.latitude || "",
                 longitude: formData.longitude || "",
@@ -58,7 +62,7 @@ const Confirm = ({ formData, selectedDates, searchChips }) => {
                     : "" || null,
                 end_time: selectedDates.endDate
                     ? `${selectedDates.endDate.toISOString().split('T')[0]}T${String(selectedDates.endTime.hours).padStart(2, '0')}:${String(selectedDates.endTime.minutes).padStart(2, '0')}:00`
-                    : "" || null,
+                    : "" || null,       
             };
 
             console.log("Criteria Payload:", criteriaPaylod); // Debug: Payload for API

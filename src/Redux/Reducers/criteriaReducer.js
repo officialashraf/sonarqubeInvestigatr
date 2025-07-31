@@ -52,6 +52,8 @@ const queryState = {
     case_id: [],
     file_type: [],
     keyword: [],
+    targets: [],
+    sentiment: [],
     start_time: null,
     end_time: null,
     latitude: null,
@@ -69,6 +71,8 @@ export const criteriaReducer = (state = queryState, action) => {
         queryPayload: {
           ...state.queryPayload,
           ...action.payload.queryPayload,
+          targets: action.payload.queryPayload.targets || [],
+          sentiment: action.payload.queryPayload.sentiment || [],
         },
       };
       case CLEAR_CRITERIA:
