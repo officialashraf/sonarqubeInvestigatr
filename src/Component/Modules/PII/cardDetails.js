@@ -21,13 +21,9 @@ const UserCards = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  
   const profiles = useSelector((state) => state.pii?.data || []);
-  
-
 
   useEffect(() => {
-    // Function to fetch data from API
     const fetchUsers = async () => {
       try {
         setLoading(true);
@@ -35,7 +31,7 @@ const UserCards = () => {
         if (profiles && profiles.length > 0) {
           setUsers(profiles.slice(1));
         } else {
-          setUsers([]); // Set an empty array if profiles is null or empty
+          setUsers([]);
         }
         setLoading(false);
       } catch (error) {
@@ -47,7 +43,6 @@ const UserCards = () => {
     fetchUsers();
   }, [profiles]);
 
-  // Enhanced platform icon mapping with standard platform colors
   const platformIconMap = {
     linkedin: { icon: LinkedInIcon, color: "#0A66C2" },
     facebook: { icon: FacebookIcon, color: "#1877F2" },
@@ -67,7 +62,6 @@ const UserCards = () => {
     snapchat: { icon: FaSnapchatGhost, color: "#FFFC00" },
     pinterest: { icon: FaPinterest, color: "#E60023" },
     axisbank: { icon: SiPhonepe, color: "#97144D" },
-    // Default for unknown platforms
     default: { icon: Avatar }
   };
 
@@ -82,7 +76,6 @@ const UserCards = () => {
         style={{
           fontSize: '2rem',
           color: platform.color,
-
         }}
       />
     );
@@ -110,6 +103,7 @@ const UserCards = () => {
     addresses: LocationOnIcon,
     urls: LinkIcon,
   };
+
   return (
     <Container maxWidth="lg" className={styles.cardsContainer} sx={{ marginBottom: '10px' }}>
       <Grid container spacing={3}>
@@ -117,25 +111,14 @@ const UserCards = () => {
           <Grid item xs={12} sm={6} md={4} key={index}>
             <Card className={styles.userCard}>
               <CardContent>
-                {/* Header with Avatar and Name */}
-                {/* <div className={styles.userHeader}>
-                  <Avatar />
-                  <div className={styles.userInfo}>
-                    <Typography>
-                      {user.names && user.names.length > 0
-                        ? user.names[0]
-                        : "Unknown User"}
-                    </Typography>
-                  </div>
-                </div> */}
                 <div className={styles.userHeader}>
                   <Avatar
                     src={user.imageUrls && user.imageUrls.length > 0 ? user.imageUrls[0] : undefined}
                     alt={
                       user.names &&
-                        user.names.length > 0 &&
-                        typeof user.names[0] === 'string' &&
-                        !["none", "null", "undefined", "n"].includes(user.names[0].toLowerCase())
+                      user.names.length > 0 &&
+                      typeof user.names[0] === 'string' &&
+                      !["none", "null", "undefined", "n"].includes(user.names[0].toLowerCase())
                         ? user.names[0]
                         : ""
                     }
@@ -143,11 +126,15 @@ const UserCards = () => {
                   />
                   <div className={styles.userInfo}>
                     <Typography>
-                      {user.names && user.names.length > 0 &&
+                      {(user.names && user.names.length > 0 &&
                         typeof user.names[0] === 'string' &&
-                        !["none", "null", "undefined", "n"].includes(user.names[0].toLowerCase())
+                        !["none", "null", "undefined", "n"].includes(user.names[0].toLowerCase()))
                         ? user.names[0]
-                        : ""}
+                        : (user.user_displayname && typeof user.user_displayname === 'string' &&
+                          !["none", "null", "undefined", "n"].includes(user.user_displayname.toLowerCase())
+                          ? user.user_displayname
+                          : "")
+                      }
                     </Typography>
                   </div>
                 </div>
@@ -161,7 +148,7 @@ const UserCards = () => {
                     (Array.isArray(value) && (value.length === 0 || value.some(v => typeof v === "string" && v.toLowerCase() === "none")))
                   )
                     return null;
-
+                    
                   const IconComponent = iconMap[key] || null;
 
                   return (
@@ -173,12 +160,11 @@ const UserCards = () => {
                       </div>
                       <div className={styles.infoText}>
                         <div className={styles.infoLabel}>
-                        {key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, " $1")}
+                          {key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, " $1")}
                         </div>
                         <div className={styles.infoValue}>
                           {Array.isArray(value) ? value[0] : value}
                         </div>
-                        
                       </div>
                     </div>
                   );

@@ -20,10 +20,15 @@ const ShowDetails = () => {
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const [searchType, setSearchType] = useState("phone number");
+  const [platform, setPlatform] = useState(""); // New state for social media platform
 
   const handleSearch = async () => {
 
     if (!query.trim()) return;
+    if (searchType === "social" && !platform.trim()) {
+      toast.info("Please select a social media platform");
+      return;
+    }
     console.log("Seartype", searchType)
 
     if (searchType === "email") {
@@ -42,50 +47,68 @@ const ShowDetails = () => {
       }
     }
     setLoading(true);
-    let url = searchType === "email"
-      ? `${window.runtimeConfig.REACT_APP_API_OSINT_MAN }/api/pii/getEmailInfo/${query}`
-      : `${window.runtimeConfig.REACT_APP_API_OSINT_MAN }/api/pii/getPhoneNumberInfo/${query.startsWith('+') ? query : '+' + query }`;
+    let url = "";
+    if (searchType === "email") {
+      url = `${window.runtimeConfig.REACT_APP_API_OSINT_MAN}/api/pii/getEmailInfo/${query}`;
+    } else if (searchType === "phone number") {
+      url = `${window.runtimeConfig.REACT_APP_API_OSINT_MAN}/api/pii/getPhoneNumberInfo/${query.startsWith('+') ? query : '+' + query}`;
+    } else if (searchType === "social") {
+      url = `${window.runtimeConfig.REACT_APP_API_OSINT_MAN}/api/osint-man/v1/${platform}/socialinfo/${query}`;
+    }
 
+    url = encodeURI(url); // Encode URL to handle special characters
 
-url = encodeURI(url); // Encode URL to handle special characters
-
-try {
-  console.log("Final URL:", url);
-  const response = await axios.get(url, { // Pass headers inside request
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`
+    try {
+      console.log("Final URL:", url);
+      const response = await axios.get(url, { // Pass headers inside request
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
         }
       });
-// setData(response.data);
-dispatch(searchSuccess(response.data));
-console.log("data", response.data);
+      // setData(response.data);
+      dispatch(searchSuccess(response.data));
+      console.log("data", response.data);
     } catch (err) {
-  console.log("error", err.message);
-  toast.error(err.response?.data?.detail || 'Failed to search');
-  console.log("full error", err);
-} finally {
-  setLoading(false);
-}
+      console.log("error", err.message);
+      toast.error(err.response?.data?.detail || 'Failed to search');
+      console.log("full error", err);
+    } finally {
+      setLoading(false);
+    }
   };
 const options = [
   { value: 'phone number', label: <span style={{ color: '#d2d2d2' }}>Phone</span> },
   { value: 'email', label: <span style={{ color: '#d2d2d2' }}>Email</span> },
-  { value: 'social', label: <span style={{ color: '#d2d2d2' }}>Social Media</span> }
+  { value: 'social', label: <span style={{ color: '#d2d2d2' }}>Social Media</span>
+  }
+];
+
+const socialPlatforms = [
+  { value: 'linkedin', label: 'LinkedIn' },
+  { value: 'facebook', label: 'Facebook' },
+  { value: 'instagram', label: 'Instagram' },
+  { value: 'X', label: 'X' },
+  { value: 'youtube', label: 'YouTube' },
+  { value: 'tiktok', label: 'TikTok' },
+  { value: 'vk', label: 'VK' },
+  { value: 'skype', label: 'Skype' },
+  { value: 'google', label: 'Google' },
+  { value: 'gpay', label: 'Google Pay' },
+  { value: 'phonepay', label: 'PhonePe' },
+  { value: 'whatsapp', label: 'WhatsApp' },
+  { value: 'gmail', label: 'Gmail' },
+  { value: 'telegram', label: 'Telegram' },
+  { value: 'discord', label: 'Discord' },
+  { value: 'snapchat', label: 'Snapchat' },
+  { value: 'pinterest', label: 'Pinterest' },
+  { value: 'axisbank', label: 'Axis Bank' }
 ];
 
 return (
   <>
     <div className={styles.searchBarContainer}>
       <div className={styles.searchBar}>
-        {/* <select className="search-dropdown" value={searchType} onChange={(e) => {
-            setSearchType(e.target.value);
-            setQuery('');
-          }}
-          >
-            <option value="phone number">Phone</option> 
-            <option value="email">Email</option>
-          </select> */}
         <Select
           className={styles.searchDropdown}
           options={options}
@@ -93,6 +116,7 @@ return (
           onChange={(selected) => {
             setSearchType(selected.value);
             setQuery('');
+            setPlatform(''); // Reset platform when search type changes
           }}
           styles={{
             control: (provided) => ({
@@ -117,6 +141,38 @@ return (
             })
           }}
         />
+        {searchType === "social" && (
+          <Select
+            className={styles.searchDropdown}
+            options={socialPlatforms}
+            value={socialPlatforms.find(p => p.value === platform)}
+            onChange={(selected) => setPlatform(selected.value)}
+            placeholder="Select Platform"
+            styles={{
+              control: (provided) => ({
+                ...provided,
+                backgroundColor: '#080E17',
+                color: '#D9D9D9',
+                borderRadius: '15px',
+                border: 'none'
+              }),
+              menu: (provided) => ({
+                ...provided,
+                backgroundColor: '#080E17',
+                borderRadius: '15px',
+                overflow: 'hidden',
+                border: "1px solid #0073CF"
+              }),
+              option: (provided, state) => ({
+                ...provided,
+                backgroundColor: state.isFocused ? '#101D2B' : '#080E17',
+                color: '#D9D9D9',
+                cursor: 'pointer'
+              })
+            }}
+           
+          />
+        )}
         {searchType === "phone number" ? (
           <PhoneInput
             country={"ng"}
@@ -155,33 +211,29 @@ return (
                 handleSearch(); // Validate and execute search only when Enter is pressed
               }
             }}
-            placeholder={`Enter ${searchType} to search`}
-        disabled={!searchType}
-            />
-          )}
+            placeholder={searchType === "social" ? "Enter keyword to search" : `Enter ${searchType} to search`}
+            disabled={!searchType}
+          />
+        )}
         <Search
           style={{ color: '#0073CF', cursor: 'pointer', width: '25px', height: '25px' }}
           onClick={handleSearch} // Triggers validation & search only when clicked
         />
-
-
       </div>
       <div className={styles.searchResultsContainer}>
-        <div className={styles.searchresult}  >
+        <div className={styles.searchresult}>
           <div className={styles.wrapper}>
             {loading ? (
               <Loader />
-            ) : (<>
-              {/* <ProfileDetails /> */}
-              <UserCards />
-            </>
-
-            )
-            }
+            ) : (
+              <>
+                {/* <ProfileDetails /> */}
+                <UserCards />
+              </>
+            )}
           </div>
         </div>
       </div>
-
     </div>
   </>
 );
