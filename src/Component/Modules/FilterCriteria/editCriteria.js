@@ -255,8 +255,8 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
 
       // Format sentiment as an array of objects for React-Select
       const selectedSentiments = [];
-      if (criteriaData.sentiment) {
-        const sentimentArray = Array.isArray(criteriaData.sentiment) ? criteriaData.sentiment : [criteriaData.sentiment];
+      if (criteriaData.sentiments) {
+        const sentimentArray = Array.isArray(criteriaData.sentiments) ? criteriaData.sentiments : [criteriaData.sentiments];
 
         sentimentArray.forEach(sentiment => {
           const matchingOption = sentimentOpts.find(option => option.value.toString().toLowerCase() === sentiment.toString().toLowerCase());
@@ -351,7 +351,7 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
         case_id: formData.caseIds.map(caseId => caseId.value.toString()),
         file_type: formData.filetype.map(file => file.value.toString()),
         targets: formData.targets.map(target => target.value.toString()),
-        sentiment: formData.sentiment.map(s => s.value.toString()),
+        sentiments: formData.sentiment.map(s => s.value.toString()),
         latitude: formData.latitude || "",
         longitude: formData.longitude || "",
         start_time: selectedDates.startDate ?

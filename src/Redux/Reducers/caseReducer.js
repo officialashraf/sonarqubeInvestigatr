@@ -80,20 +80,21 @@ export const CaseFilterPayloadReducer = (
         }
       };
 
-    case CLEAR_CASE_FILTER_PAYLOAD:
-      return {
-        ...state,
-        caseFilters: {
-          caseId: [],
-          file_type: [],
-          start_time: "",
-          end_time: "",
-          aggs_fields: [],
-          keyword: [],
-          target:[],
-           sentiment:[], 
-        }
-      };
+   case CLEAR_CASE_FILTER_PAYLOAD:
+  return {
+    ...state,
+    caseFilters: {
+      ...state.caseFilters,
+      caseId: state.caseFilters.caseId, // Preserve current caseId
+      file_type: [],
+      start_time: "",
+      end_time: "",
+      aggs_fields: [],
+      keyword: [],
+      target: [],
+      sentiment: []
+    }
+  };
 
     default:
       return state;

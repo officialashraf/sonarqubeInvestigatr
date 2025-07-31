@@ -32,8 +32,8 @@ export const setKeywordsWithTargetsSentiment = ({ keyword, queryPayload, targets
     keyword,
     queryPayload: {
       ...queryPayload,
-      targets,
-      sentiment,
+      // targets,
+      // sentiment,
     },
   },
 });

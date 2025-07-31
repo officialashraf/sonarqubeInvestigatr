@@ -75,10 +75,11 @@ export const criteriaReducer = (state = queryState, action) => {
           sentiment: action.payload.queryPayload.sentiment || [],
         },
       };
-      case CLEAR_CRITERIA:
+    case CLEAR_CRITERIA:
       return {
         ...queryState,
       };
+
     default:
       return state;
   }

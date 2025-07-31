@@ -252,7 +252,7 @@ const CreateCriteria = ({ handleCreateCase }) => {
 
         file_type: formData.filetype?.length > 0 ? formData.filetype.map(type => type.value) : [],
         targets: formData.targets?.length > 0 ? formData.targets.map(target => target.value) : [],
-        sentiment: formData.sentiment?.length > 0
+        sentiments: formData.sentiment?.length > 0
           ? formData.sentiment.map(s => s.value)
           : [],
         page: 1, // Start at page 1
