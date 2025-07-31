@@ -345,10 +345,10 @@ const CreateCriteria = ({ handleCreateCase }) => {
         </button>
         <div className="popup-content">
           <h5>Create Criteria</h5>
-          <form onSubmit={handleSearch} style={{    scrollbarColor: '#1e7df8 #0a192f';
-    scrollbarWidth: 'thin';
-    height: '450px';
-    overflowY: 'auto';}}>
+          <form onSubmit={handleSearch} style={{    scrollbarColor: '#1e7df8 #0a192f',
+    scrollbarWidth: 'thin',
+    height: '450px',
+    overflowY: 'auto',}}>
             {/* Search Bar with Icons */}
             <label style={{ fontSize: '14px' }}>Search Keywords</label>
             <TextField
