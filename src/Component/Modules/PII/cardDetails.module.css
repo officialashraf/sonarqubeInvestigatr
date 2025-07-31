@@ -96,6 +96,8 @@
 .infoText {
   display: flex;
   flex-direction: column;
+  min-width: 0;            /* allows shrinking */
+  width: 100%;  
 }
 
 .infoLabel {

@@ -75,7 +75,7 @@ const [dataloaded, setDataLoaded]=useState(false)
         setDataLoaded(true);
       });
     }
-  }, [data1?.id, summaryData, page, dispatch]);
+  }, [data1?.id, dispatch]);
   // Load page data when currentPage changes (but not on initial load)
   useEffect(() => {
     if (data1?.id && currentPage !== (page || 1)) {
@@ -678,6 +678,24 @@ const [dataloaded, setDataLoaded]=useState(false)
                   />
                 </div>
               )}
+              {[
+                "4chan.org", "gab.com", "icq.im", "t.me", "bitchute.com",
+                "bitcointalk.org", "crax.pro", "stopscamfraud.com"
+              ].includes(selectedResource.unified_record_type) && (
+                  <div className="resourceDetailsView">
+                    <div className="profile-section">
+                      <h3>{selectedResource.unified_activity_title}</h3>
+                    </div>
+                    <p className="activityContent">
+                      {selectedResource.unified_activity_content}
+                    </p>
+                    <img
+                      src={selectedResource.socialmedia_media_url}
+                      alt="Post"
+                      className="postImage"
+                    />
+                  </div>
+                )}
               {/* VK */}
               {selectedResource.unified_record_type === "VK" && (
                 <div className="resourceDetailsView marginSides20">

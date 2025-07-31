@@ -351,7 +351,7 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
         case_id: formData.caseIds.map(caseId => caseId.value.toString()),
         file_type: formData.filetype.map(file => file.value.toString()),
         targets: formData.targets.map(target => target.value.toString()),
-        sentiment: formData.sentiment.map(s => s.value.toString()),
+        sentiments: formData.sentiment.map(s => s.value.toString()),
         latitude: formData.latitude || "",
         longitude: formData.longitude || "",
         start_time: selectedDates.startDate ?
