@@ -43,6 +43,8 @@ const CreateCriteria = ({ handleCreateCase }) => {
     datatype: [],
     filetype: [],
     caseIds: [],
+    targets: [],
+    sentiment: [],
     includeArchived: false,
     latitude: '',
     longitude: ''
@@ -58,6 +60,9 @@ const CreateCriteria = ({ handleCreateCase }) => {
   const [caseOptions, setCaseOptions] = useState([]);
   const [fileTypeOptions, setFileTypeOptions] = useState([]);
   const [error, setError] = useState({});
+  const [targetOptions, setTargetOptions] = useState([]);
+  const [sentimentOptions, setSentimentOptions] = useState([]);
+
 
   // const validateForm = () => {
   //   const errors = {};
@@ -75,7 +80,7 @@ const CreateCriteria = ({ handleCreateCase }) => {
   // Fetch case IDs on component mount
   // if (activePopup !== "create") return null;
   // Fetch case data from API
- 
+
   useEffect(() => {
     const fetchCaseData = async () => {
       try {
@@ -120,8 +125,45 @@ const CreateCriteria = ({ handleCreateCase }) => {
 
       }
     };
+    
+    const fetchTargetOptions = async () => {
+      try {
+        const response = await axios.post(
+          `${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/distinct`,
+          { fields: ["targets", "sentiment"] },
+          {
+            headers: {
+              'Authorization': `Bearer ${Token}`,
+              'Content-Type': 'application/json'
+            }
+          }
+        );
+
+        const buckets = response.data?.targets?.buckets || [];
+        const sentimentBuckets = response.data?.sentiment?.buckets || [];
+
+
+        const formatted = buckets.map(bucket => ({
+          value: bucket.key,
+          label: bucket.key
+        }));
+
+        const formattedSentiments = sentimentBuckets.map(bucket => ({
+          value: bucket.key,
+          label: bucket.key
+        }));
+
+        setTargetOptions(formatted);
+        setSentimentOptions(formattedSentiments);
+
+      } catch (error) {
+        console.error("Failed to fetch target options:", error);
+      }
+    };
+
     fetchCaseData();
     fetchFileTypes();
+    fetchTargetOptions();
   }, [Token]);
   useEffect(() => {
     const isSearchQueryEmpty = !formData.searchQuery || formData.searchQuery.length === 0;
@@ -138,7 +180,7 @@ const CreateCriteria = ({ handleCreateCase }) => {
     }
   }, [formData]);
   // Handle checkbox change for saving criteria
-const handleSaveCriteriaChange = (e) => {
+  const handleSaveCriteriaChange = (e) => {
     e.preventDefault();
 
     const isSearchQueryEmpty = !formData.searchQuery || (Array.isArray(formData.searchQuery) && formData.searchQuery.length === 0) || (typeof formData.searchQuery === 'string' && formData.searchQuery.trim() === '');
@@ -185,7 +227,7 @@ const handleSaveCriteriaChange = (e) => {
 
   };
 
-const handleSearch = async (e) => {
+  const handleSearch = async (e) => {
     e.preventDefault();
 
     // Validation: check if all relevant fields are empty
@@ -209,6 +251,10 @@ const handleSearch = async (e) => {
           : [],
 
         file_type: formData.filetype?.length > 0 ? formData.filetype.map(type => type.value) : [],
+        targets: formData.targets?.length > 0 ? formData.targets.map(target => target.value) : [],
+        sentiment: formData.sentiment?.length > 0
+          ? formData.sentiment.map(s => s.value)
+          : [],
         page: 1, // Start at page 1
         ...(formData.latitude && { latitude: formData.latitude }),
         ...(formData.longitude && { longitude: formData.longitude }),
@@ -256,6 +302,7 @@ const handleSearch = async (e) => {
         datatype: [],
         filetype: [],
         caseIds: [],
+        targets: [],
         includeArchived: false,
         latitude: '',
         longitude: ''
@@ -300,7 +347,7 @@ const handleSearch = async (e) => {
           <h5>Create Criteria</h5>
           <form onSubmit={handleSearch} >
             {/* Search Bar with Icons */}
-            <label style={{ fontSize: '14px'}}>Search Keywords</label>
+            <label style={{ fontSize: '14px' }}>Search Keywords</label>
             <TextField
               fullWidth
               className={styles.searchBar}
@@ -316,7 +363,7 @@ const handleSearch = async (e) => {
                 ),
                 endAdornment: (
                   <InputAdornment position="end" >
-                    <Send onClick={() => dispatch(openPopup("recent"))} style={{ cursor: 'pointer', color: "#0073cf" , marginRight:'5px'}} />
+                    <Send onClick={() => dispatch(openPopup("recent"))} style={{ cursor: 'pointer', color: "#0073cf", marginRight: '5px' }} />
                     <Tune onClick={() => dispatch(openPopup("saved"))} style={{ cursor: 'pointer', color: "#0073cf" }} />
                   </InputAdornment>
                 ),
@@ -370,6 +417,25 @@ const handleSearch = async (e) => {
               value={formData.caseIds}
               onChange={(selected) => { setFormData(prev => ({ ...prev, caseIds: selected })); }}
               placeholder="Select cases"
+            />
+
+            <CommonMultiSelect
+              label="Target"
+              value={formData.targets}
+              onChange={(selected) =>
+                setFormData((prev) => ({ ...prev, targets: selected }))
+              }
+              options={targetOptions}
+              customStyles={customSelectStyles}
+            />
+            <CommonMultiSelect
+              label="Sentiment"
+              value={formData.sentiment}
+              onChange={(selected) =>
+                setFormData((prev) => ({ ...prev, sentiment: selected }))
+              }
+              options={sentimentOptions}
+              customStyles={customSelectStyles}
             />
             {/* </div> */}
 
@@ -457,7 +523,7 @@ const handleSearch = async (e) => {
             <div className="button-container" style={{ textAlign: 'center' }}>
               <button
                 type="submit"
-                style={{ width: '100%', height: '30px'  }}
+                style={{ width: '100%', height: '30px' }}
                 className="add-btn"
               >
                 Search

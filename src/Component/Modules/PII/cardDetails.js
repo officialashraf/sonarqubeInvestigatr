@@ -131,12 +131,23 @@ const UserCards = () => {
                 <div className={styles.userHeader}>
                   <Avatar
                     src={user.imageUrls && user.imageUrls.length > 0 ? user.imageUrls[0] : undefined}
-                    alt={user.names && user.names.length > 0 ? user.names[0] : "User"}
+                    alt={
+                      user.names &&
+                        user.names.length > 0 &&
+                        typeof user.names[0] === 'string' &&
+                        !["none", "null", "undefined", "n"].includes(user.names[0].toLowerCase())
+                        ? user.names[0]
+                        : ""
+                    }
                     sx={{ width: 60, height: 60 }}
                   />
                   <div className={styles.userInfo}>
                     <Typography>
-                      {user.names && user.names.length > 0 ? user.names[0] : "Unknown User"}
+                      {user.names && user.names.length > 0 &&
+                        typeof user.names[0] === 'string' &&
+                        !["none", "null", "undefined", "n"].includes(user.names[0].toLowerCase())
+                        ? user.names[0]
+                        : ""}
                     </Typography>
                   </div>
                 </div>

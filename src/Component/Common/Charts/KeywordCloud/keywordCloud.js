@@ -172,10 +172,7 @@ const KeywordTagList = ({ queryPayload = null, caseId = null, aggsFields = ["soc
         }
             }}
           >
-            {showAll ? <SlArrowDown />
-
- : <SlArrowUp />
-
+            {showAll ? <SlArrowUp /> : <SlArrowDown />
 }
           </Typography>
         </Box>

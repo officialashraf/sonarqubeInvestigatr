@@ -24,6 +24,19 @@ export const setKeywords = (payload) => ({
   type: SET_KEYWORDS,
   payload,
 });
+
+// Helper action to set keywords with targets and sentiment
+export const setKeywordsWithTargetsSentiment = ({ keyword, queryPayload, targets, sentiment }) => ({
+  type: SET_KEYWORDS,
+  payload: {
+    keyword,
+    queryPayload: {
+      ...queryPayload,
+      targets,
+      sentiment,
+    },
+  },
+});
 export const clearCriteria = () => {
   return {
     type: CLEAR_CRITERIA,

@@ -23,7 +23,7 @@ const ReusableBarChart = ({
     const [activeIndex, setActiveIndex] = useState(null);
     const [showAll, setShowAll] = useState(false);
 
-
+    const MAX_BARS = 20;
     const token = Cookies.get("accessToken");
 
 

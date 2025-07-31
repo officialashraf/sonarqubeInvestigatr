@@ -26,6 +26,8 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
   const [showPopupD, setShowPopupD] = useState(false);
   const [caseOptions, setCaseOptions] = useState([]);
   const [fileTypeOptions, setFileTypeOptions] = useState([]);
+  const [targetOptions, setTargetOptions] = useState([]);
+  const [sentimentOptions, setSentimentOptions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [dataFetched, setDataFetched] = useState(false);
@@ -37,6 +39,8 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
     searchQuery: '',
     filetype: [],
     caseIds: [],
+    targets: [],
+    sentiment: [],
     latitude: '',
     longitude: ''
   });
@@ -96,6 +100,46 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
     }
   }, [Token]);
 
+  // Fetch target and sentiment options from API
+  const fetchTargetAndSentimentOptions = useCallback(async () => {
+    try {
+      const response = await axios.post(
+        `${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/distinct`,
+        { fields: ["targets", "sentiment"] },
+        {
+          headers: {
+            'Authorization': `Bearer ${Token}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+      console.log("criteriaData.targets:", response.targets);
+      console.log("criteriaData.sentiment:", response.sentiment);
+
+
+      const buckets = response.data?.targets?.buckets || [];
+      const sentimentBuckets = response.data?.sentiment?.buckets || [];
+
+      const formattedTargets = buckets.map(bucket => ({
+        value: bucket.key,
+        label: bucket.key
+      }));
+
+      const formattedSentiments = sentimentBuckets.map(bucket => ({
+        value: bucket.key,
+        label: bucket.key
+      }));
+
+      setTargetOptions(formattedTargets);
+      setSentimentOptions(formattedSentiments);
+      return { targets: formattedTargets, sentiments: formattedSentiments };
+    } catch (error) {
+      console.error("Failed to fetch target and sentiment options:", error);
+      toast.error('Failed to fetch target and sentiment options');
+      return { targets: [], sentiments: [] };
+    }
+  }, [Token]);
+
   // Process keywords - handle both string and array formats
   const processKeywords = (keywords) => {
     if (!keywords) return '';
@@ -123,7 +167,7 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
   };
 
   // Fetch criteria details by ID
-  const fetchCriteriaDetails = useCallback(async (caseOpts, fileTypeOpts) => {
+  const fetchCriteriaDetails = useCallback(async (caseOpts, fileTypeOpts, targetOpts, sentimentOpts) => {
     try {
       const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/criteria/${criteriaId}`, {
         headers: {
@@ -194,6 +238,36 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
         });
       }
 
+      // Format targets as an array of objects for React-Select
+      const selectedTargets = [];
+      if (criteriaData.targets) {
+        const targetsArray = Array.isArray(criteriaData.targets) ? criteriaData.targets : [criteriaData.targets];
+
+        targetsArray.forEach(target => {
+          const matchingOption = targetOpts.find(option => option.value.toString().toLowerCase() === target.toString().toLowerCase());
+          if (matchingOption) {
+            selectedTargets.push(matchingOption);
+          } else {
+            selectedTargets.push({ value: target, label: target });
+          }
+        });
+      }
+
+      // Format sentiment as an array of objects for React-Select
+      const selectedSentiments = [];
+      if (criteriaData.sentiment) {
+        const sentimentArray = Array.isArray(criteriaData.sentiment) ? criteriaData.sentiment : [criteriaData.sentiment];
+
+        sentimentArray.forEach(sentiment => {
+          const matchingOption = sentimentOpts.find(option => option.value.toString().toLowerCase() === sentiment.toString().toLowerCase());
+          if (matchingOption) {
+            selectedSentiments.push(matchingOption);
+          } else {
+            selectedSentiments.push({ value: sentiment, label: sentiment });
+          }
+        });
+      }
+
       // Process keywords properly
       const processedKeywords = processKeywords(criteriaData.keyword);
 
@@ -202,6 +276,8 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
         searchQuery: processedKeywords,
         caseIds: selectedCaseIds,
         filetype: selectedFileTypes,
+        targets: selectedTargets,
+        sentiment: selectedSentiments,
         latitude: criteriaData.latitude || '',
         longitude: criteriaData.longitude || ''
       });
@@ -210,6 +286,8 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
         searchQuery: processedKeywords,
         caseIds: selectedCaseIds,
         filetype: selectedFileTypes,
+        targets: selectedTargets,
+        sentiment: selectedSentiments,
         latitude: criteriaData.latitude || '',
         longitude: criteriaData.longitude || ''
       });
@@ -230,11 +308,14 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
       const fetchAllData = async () => {
         setIsLoading(true);
         try {
-          const [caseOpts, fileTypeOpts] = await Promise.all([
+          const [caseOpts, fileTypeOpts, targetSentimentOpts] = await Promise.all([
             fetchCaseData(),
-            fetchFileTypes()
+            fetchFileTypes(),
+            fetchTargetAndSentimentOptions()
           ]);
-          await fetchCriteriaDetails(caseOpts, fileTypeOpts);
+          const targetOpts = targetSentimentOpts.targets || [];
+          const sentimentOpts = targetSentimentOpts.sentiments || [];
+          await fetchCriteriaDetails(caseOpts, fileTypeOpts, targetOpts, sentimentOpts);
           setDataFetched(true);
         } catch (error) {
           console.error("Error fetching data:", error);
@@ -245,7 +326,7 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
 
       fetchAllData();
     }
-  }, [dataFetched, Token, criteriaId, fetchCaseData, fetchFileTypes, fetchCriteriaDetails]);
+  }, [dataFetched, Token, criteriaId, fetchCaseData, fetchFileTypes, fetchCriteriaDetails, fetchTargetAndSentimentOptions]);
 
   // Handle form update submission
   const handleUpdate = async (e) => {
@@ -269,6 +350,8 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
         keyword: keywordsArray, // Now properly formatted as array
         case_id: formData.caseIds.map(caseId => caseId.value.toString()),
         file_type: formData.filetype.map(file => file.value.toString()),
+        targets: formData.targets.map(target => target.value.toString()),
+        sentiment: formData.sentiment.map(s => s.value.toString()),
         latitude: formData.latitude || "",
         longitude: formData.longitude || "",
         start_time: selectedDates.startDate ?
@@ -311,7 +394,11 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
       JSON.stringify(formData.caseIds.map(caseId => caseId.value.toString())) ===
       JSON.stringify(initialFormData.caseIds.map(caseId => caseId.value.toString())) &&
       JSON.stringify(formData.filetype.map(file => file.value.toString())) ===
-      JSON.stringify(initialFormData.filetype.map(file => file.value.toString()));
+      JSON.stringify(initialFormData.filetype.map(file => file.value.toString())) &&
+      JSON.stringify(formData.targets.map(target => target.value.toString())) ===
+      JSON.stringify(initialFormData.targets.map(target => target.value.toString())) &&
+      JSON.stringify(formData.sentiment.map(s => s.value.toString())) ===
+      JSON.stringify(initialFormData.sentiment.map(s => s.value.toString()));
 
     setIsBtnDisabled(isSame);
   }, [formData, initialFormData]);
@@ -430,6 +517,28 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
               onChange={(selected) => setFormData(prev => ({ ...prev, caseIds: selected || [] }))}
               placeholder="Select cases"
               isLoading={caseOptions.length === 0}
+            />
+
+            <CommonMultiSelect
+              label="Target"
+              isMulti
+              options={targetOptions}
+              customStyles={customSelectStyles}
+              value={formData.targets}
+              onChange={(selected) => setFormData(prev => ({ ...prev, targets: selected || [] }))}
+              placeholder="Select targets"
+              isLoading={targetOptions.length === 0}
+            />
+
+            <CommonMultiSelect
+              label="Sentiment"
+              isMulti
+              options={sentimentOptions}
+              customStyles={customSelectStyles}
+              value={formData.sentiment}
+              onChange={(selected) => setFormData(prev => ({ ...prev, sentiment: selected || [] }))}
+              placeholder="Select sentiment"
+              isLoading={sentimentOptions.length === 0}
             />
 
 
