@@ -1,4 +1,3 @@
-
 import axios from 'axios';
 import { SET_TASK_FILTER_ID, SET_DATA, SET_HEADERS, LOG_FILTER_COUNT, SET_ERROR, SET_PAGINATION, SET_LOADING } from '../Constants/filterConstant'
 import Cookies from "js-cookie";
@@ -21,7 +20,7 @@ export const logFilterCount = (user) => {
 
 //newcommonapi
 export const fetchSummaryData =
-  ({ queryPayload, page = 1, itemsPerPage = 50, starttime, endtime, file_type,aggsFields,keyword }) =>
+  ({ queryPayload, page = 1, itemsPerPage = 50, starttime, endtime, file_type,aggsFields,keyword,target,sentiment }) =>
 
     async (dispatch) => {
       console.log("fetchSummaryData called",aggsFields);
@@ -39,6 +38,8 @@ export const fetchSummaryData =
             file_type: file_type,
             start_time: starttime,
             end_time: endtime,
+            target:target,
+            sentiment:sentiment,
             page,
           },
           {

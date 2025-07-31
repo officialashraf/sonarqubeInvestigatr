@@ -24,9 +24,8 @@ const ReusableBarChart = ({
     const [showAll, setShowAll] = useState(false);
 
     const MAX_BARS = 20;
+
     const token = Cookies.get("accessToken");
-
-
 
     useEffect(() => {
         const fetchData = async () => {
@@ -35,17 +34,19 @@ const ReusableBarChart = ({
                 const payload = queryPayload
                     ? {
                         query: {
-                          unified_case_id: Array.isArray(queryPayload?.case_id)
-                ? queryPayload.case_id
-                : Array.isArray(queryPayload?.caseId)
-                  ? queryPayload.caseId
-                  : queryPayload?.case_id
-                    ? [queryPayload.case_id]
-                    : queryPayload?.caseId
-                      ? [queryPayload.caseId]
-                      : [],
+                            unified_case_id: Array.isArray(queryPayload?.case_id)
+                                ? queryPayload.case_id
+                                : Array.isArray(queryPayload?.caseId)
+                                    ? queryPayload.caseId
+                                    : queryPayload?.case_id
+                                        ? [queryPayload.case_id]
+                                        : queryPayload?.caseId
+                                            ? [queryPayload.caseId]
+                                            : [],
                             file_type: Array.isArray(queryPayload?.file_type) ? queryPayload.file_type : [],
                             keyword: Array.isArray(queryPayload?.keyword) ? queryPayload.keyword : [],
+                            targets: Array.isArray(queryPayload?.target) ? queryPayload.target : [],
+                            sentiment: Array.isArray(queryPayload?.sentiment) ? queryPayload.sentiment : [],
                         },
                         aggs_fields: aggsFields,
                         start_time: queryPayload?.start_time || "",
@@ -73,7 +74,7 @@ const ReusableBarChart = ({
                 setRawData(transformed); //  Store full transformed data
 
                 const limitedData = transformed.length > MAX_BARS ? transformed.slice(0, MAX_BARS) : transformed;
-                setBarData(limitedData.length ? limitedData : [{ name: 'No Data', value: 0 }]);
+                setBarData(limitedData.length ? limitedData : [{ name: 'No Data', value: 0 }]);
             } catch (error) {
                 console.error('Error fetching bar chart data:', error);
                 setBarData([{ name: 'No Data', value: 0 }]);
@@ -101,7 +102,7 @@ const ReusableBarChart = ({
             <div className={styles.chartWrapper} style={{ height: chartHeight }}>
                 {barData.length > 0 ? (
                     <ResponsiveContainer width="100%" height={barData.length * 45 < chartHeight ? chartHeight : barData.length * 45}
->
+                    >
                         <BarChart
                             data={barData}
                             layout="vertical"
@@ -171,19 +172,19 @@ const ReusableBarChart = ({
                             textDecoration: 'underline',
                             fontWeight: 'bold',
                             fontSize: '14px',
-                             transition: 'color 0.3s ease',
-        '&:hover': {
-          color: '#005999', // darken the blue on hover
-        },
-        '& svg': {
-          transition: 'transform 0.2s',
-        },
-        '&:hover svg': {
-          transform: 'scale(1.2)', // enlarge the icon slightly on hover
-        }
+                            transition: 'color 0.3s ease',
+                            '&:hover': {
+                                color: '#005999', // darken the blue on hover
+                            },
+                            '& svg': {
+                                transition: 'transform 0.2s',
+                            },
+                            '&:hover svg': {
+                                transform: 'scale(1.2)', // enlarge the icon slightly on hover
+                            }
                         }}
                     >
-                        {showAll ? <SlArrowUp /> : <SlArrowDown /> }
+                        {showAll ? <SlArrowUp /> : <SlArrowDown />}
                     </span>
                 </div>
             )}

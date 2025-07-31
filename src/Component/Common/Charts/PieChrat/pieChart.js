@@ -49,6 +49,8 @@ const ReusablePieChart = ({
                       ? [queryPayload.caseId]
                       : [],
               file_type: Array.isArray(queryPayload?.file_type) ? queryPayload.file_type : [],
+              targets: Array.isArray(queryPayload?.target) ? queryPayload.target : [],
+              sentiment: Array.isArray(queryPayload?.sentiment) ? queryPayload.sentiment : [],
               keyword: Array.isArray(queryPayload?.keyword) ? queryPayload.keyword : [],
             },
             aggs_fields: aggsFields,

@@ -33,6 +33,8 @@ const KeywordTagList = ({ queryPayload = null, caseId = null, aggsFields = ["soc
                       : [],
               file_type: Array.isArray(queryPayload?.file_type) ? queryPayload.file_type : [],
               keyword: Array.isArray(queryPayload?.keyword) ? queryPayload.keyword : [],
+              targets: Array.isArray(queryPayload?.target) ? queryPayload.target : [],
+              sentiment: Array.isArray(queryPayload?.sentiment) ? queryPayload.sentiment : [],
             },
             aggs_fields: aggsFields,
             start_time: queryPayload?.start_time || "",
@@ -83,11 +85,11 @@ const KeywordTagList = ({ queryPayload = null, caseId = null, aggsFields = ["soc
           maxHeight: '280px',
           overflowY: 'auto',
           overflowX: 'hidden',
-           scrollbarWidth: 'none',           // Firefox
-    msOverflowStyle: 'none',          // IE/Edge
-    '&::-webkit-scrollbar': {
-      display: 'none',                // Chrome, Safari, Opera
-    },
+          scrollbarWidth: 'none',           // Firefox
+          msOverflowStyle: 'none',          // IE/Edge
+          '&::-webkit-scrollbar': {
+            display: 'none',                // Chrome, Safari, Opera
+          },
         }}
       >
         {displayedData.length > 0 ? (
@@ -160,20 +162,19 @@ const KeywordTagList = ({ queryPayload = null, caseId = null, aggsFields = ["soc
               textDecoration: 'underline',
               fontWeight: 'bold',
               fontSize: '15px',
-               transition: 'color 0.3s ease',
-        '&:hover': {
-          color: '#005999', // darken the blue on hover
-        },
-        '& svg': {
-          transition: 'transform 0.2s',
-        },
-        '&:hover svg': {
-          transform: 'scale(1.2)', // enlarge the icon slightly on hover
-        }
+              transition: 'color 0.3s ease',
+              '&:hover': {
+                color: '#005999', // darken the blue on hover
+              },
+              '& svg': {
+                transition: 'transform 0.2s',
+              },
+              '&:hover svg': {
+                transform: 'scale(1.2)', // enlarge the icon slightly on hover
+              }
             }}
           >
-            {showAll ? <SlArrowUp /> : <SlArrowDown />
-}
+            {showAll ? <SlArrowUp /> : <SlArrowDown />}
           </Typography>
         </Box>
       )}

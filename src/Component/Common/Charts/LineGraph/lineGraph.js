@@ -40,8 +40,10 @@ console.log("queryplayold", queryPayload);
   : queryPayload?.caseId
   ? [queryPayload.caseId]
   : [],
-                file_type: Array.isArray(queryPayload?.file_type) ? queryPayload.file_type : [],
+   file_type: Array.isArray(queryPayload?.file_type) ? queryPayload.file_type : [],
                 keyword: Array.isArray(queryPayload?.keyword) ? queryPayload.keyword : [],
+                 targets: Array.isArray(queryPayload?.target) ? queryPayload.target : [],
+                  sentiment: Array.isArray(queryPayload?.sentiment) ? queryPayload.sentiment : [],
               },
               aggs_fields: aggsFields,
               start_time: queryPayload?.start_time || "",
