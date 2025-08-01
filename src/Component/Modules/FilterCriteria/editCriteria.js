@@ -557,36 +557,7 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
             />
 
 
-            {/* Location Fields */}
-            // <div >
-            //   <label>Focus your search on a particular location or area</label>
-            //   <div style={{ display: 'flex', justifyContent: 'space-evenly', color: 'white' }}>
-            //     <CommonTextInput
-            //       name="latitude"
-            //       placeholder="Latitude"
-            //       className={styles.searchBar}
-            //       value={formData.latitude}
-            //       onChange={handleInputChange}
-            //       autoComplete='off'
-            //       showIcon={false}
-
-
-
-
-            //     />
-            //     <CommonTextInput
-            //       name="longitude"
-            //       placeholder="Longitude"
-            //       value={formData.longitude}
-            //       onChange={handleInputChange}
-            //       sx={sharedSxStyles}
-            //       autoComplete='off'
-            //       showIcon={false}
-
-            //     />
-            //   </div>
-            // </div>
-
+         
             {/* Update Button */}
             <div className="button-container d-flex gap-2" style={{ textAlign: 'center' }}>
               <AppButton
