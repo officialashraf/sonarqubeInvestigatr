@@ -60,29 +60,29 @@ const AddFilter = ({ searchChips, isPopupVisible, setIsPopupVisible }) => {
   console.log("selectedDates", selectedDates)
 
   // Fetch platforms
-  useEffect(() => {
-    const fetchFileTypes = async () => {
-      try {
-        const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_OSINT_MAN}/api/osint-man/v1/platforms`, {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${Token}`
-          },
-        });
-        console.log("platforms", response.data)
-        const fileTypeOptionsFormatted = response.data.data.map(platform => ({
-          value: platform,
-          label: platform
-        }));
+  // useEffect(() => {
+  //   const fetchFileTypes = async () => {
+  //     try {
+  //       const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_OSINT_MAN}/api/osint-man/v1/platforms`, {
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //           'Authorization': `Bearer ${Token}`
+  //         },
+  //       });
+  //       console.log("platforms", response.data)
+  //       const fileTypeOptionsFormatted = response.data.data.map(platform => ({
+  //         value: platform,
+  //         label: platform
+  //       }));
 
-        setFileTypeOptions(fileTypeOptionsFormatted);
-      } catch (error) {
-        console.error('Error fetching file types:', error);
-      }
-    };
+  //       setFileTypeOptions(fileTypeOptionsFormatted);
+  //     } catch (error) {
+  //       console.error('Error fetching file types:', error);
+  //     }
+  //   };
 
-    fetchFileTypes();
-  }, [Token]);
+  //   fetchFileTypes();
+  // }, [Token]);
 
   // Fetch targets and sentiment from API
   useEffect(() => {
@@ -116,6 +116,13 @@ const AddFilter = ({ searchChips, isPopupVisible, setIsPopupVisible }) => {
           }));
           setSentimentOptions(sentimentFormatted);
         }
+           if (response.data.unified_record_type && response.data.unified_record_type.buckets) {
+           const fileTypeOptionsFormatted = response.data.unified_record_type.buckets.map(bucket => ({
+          value: bucket.key,
+          label: bucket.key
+        }));
+        setFileTypeOptions(fileTypeOptionsFormatted);
+      }
         
       } catch (error) {
         console.error('Error fetching targets and sentiment:', error);
