@@ -125,31 +125,31 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
         };
 
         // Fetch file types from API
-        const fetchFileTypes = async () => {
-            try {
-                const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_OSINT_MAN}/api/osint-man/v1/platforms`, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${Token}`
-                    },
-                });
-                console.log("platforms", response.data)
-                const fileTypeOptionsFormatted = response.data.data.map(platform => ({
-                    value: platform,
-                    label: platform
-                }));
+        // const fetchFileTypes = async () => {
+        //     try {
+        //         const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_OSINT_MAN}/api/osint-man/v1/platforms`, {
+        //             headers: {
+        //                 'Content-Type': 'application/json',
+        //                 'Authorization': `Bearer ${Token}`
+        //             },
+        //         });
+        //         console.log("platforms", response.data)
+        //         const fileTypeOptionsFormatted = response.data.data.map(platform => ({
+        //             value: platform,
+        //             label: platform
+        //         }));
 
-                setFileTypeOptions(fileTypeOptionsFormatted);
-            } catch (error) {
-                console.error('Error fetching file types:', error);
-            }
-        };
+        //         setFileTypeOptions(fileTypeOptionsFormatted);
+        //     } catch (error) {
+        //         console.error('Error fetching file types:', error);
+        //     }
+        // };
 
         // Fetch targets and sentiment data
         const fetchTargetsAndSentiment = async () => {
             try {
                 const response = await axios.post(`${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/distinct`, {
-                    fields: ["targets", "sentiment"]
+                    fields: ["targets", "sentiment","unified_record_type"]
                 }, {
                     headers: {
                         'Content-Type': 'application/json',
@@ -176,6 +176,13 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
                     }));
                     setSentimentOptions(sentimentFormatted);
                 }
+                  if (response.data.unified_record_type && response.data.unified_record_type.buckets) {
+                    const fileTypeOptionsFormatted = response.data.unified_record_type.buckets.map(bucket => ({
+                        value: bucket.key,
+                        label: bucket.key
+                    }));
+                    setFileTypeOptions(fileTypeOptionsFormatted);
+                }
                 
             } catch (error) {
                 console.error('Error fetching targets and sentiment:', error);
@@ -184,7 +191,7 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
 
         if (Token) {
             fetchCaseData();
-            fetchFileTypes();
+            // fetchFileTypes();
             fetchTargetsAndSentiment();
         }
     }, [Token]);

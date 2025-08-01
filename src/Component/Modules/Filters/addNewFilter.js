@@ -239,6 +239,29 @@ if (source.source === 'dark web') {
       event.preventDefault();
     }
   };
+const handleKeywordKeyDown = (index, event) => {
+  if (event.key === "Enter" && sources[index].keywordInput.trim()) {
+    event.preventDefault();
+
+    const input = sources[index].keywordInput.trim();
+    const newKeywords = input
+      .split(",")
+      .map(k => k.trim())
+      .filter(k => k.length > 0);
+
+    setSources(prevSources =>
+      prevSources.map((src, i) =>
+        i === index
+          ? {
+              ...src,
+              keywords: [...src.keywords, ...newKeywords],
+              keywordInput: '',
+            }
+          : src
+      )
+    );
+  }
+};
 
   const handleUrlChange = (index, value) => {
     setSources(prevSources =>
