@@ -333,8 +333,9 @@ if (!hasKeywords && !hasReduxData) {
                 onChange={handleInputChange}
                 onKeyPress={handleKeyPress}
                 placeholder="Search..."
+                autoComplete="off"
                 sx={sharedSxStyles}
-                disabled={isLoading}
+                // disabled={isLoading}
               />
             </div>
 
