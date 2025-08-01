@@ -587,8 +587,6 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
             //   </div>
             // </div>
 
-            {/* <h5 >SELECT ON MAP</h5> */}
-
             {/* Update Button */}
             <div className="button-container d-flex gap-2" style={{ textAlign: 'center' }}>
               <AppButton
