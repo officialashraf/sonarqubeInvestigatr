@@ -508,7 +508,6 @@ const CreateCriteria = ({ handleCreateCase }) => {
             //   />
             // </div>
 
-            {/* Save Criteria Checkbox */}
             <FormControlLabel
               control={
                 <Checkbox
