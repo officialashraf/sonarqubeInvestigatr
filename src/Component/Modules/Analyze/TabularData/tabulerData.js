@@ -19,8 +19,10 @@ const TabulerData = () => {
     totalPages,
     loading,
     error,
+    totalResults,
   } = useSelector((state) => state.filterData);
 
+  
   const [currentPage, setCurrentPage] = useState(page);
   const [columnMapping, setColumnMapping] = useState([]);
 
@@ -50,19 +52,29 @@ const TabulerData = () => {
 
   useEffect(() => {
     if (caseData?.id && !data) {
-      const queryPayload = {
-        unified_case_id: caseData.id
-      };
-        const summaryPayload ={
-        queryPayload,
-        ...(caseFilter?.file_type && { file_type: caseFilter.file_type }),
-        ...(caseFilter?.start_time && { start_time: caseFilter.start_time }),
-        ...(caseFilter?.end_time && { end_time: caseFilter.end_time }),
-        ...(caseFilter?.aggs_fields && { aggsFields: caseFilter.aggs_fields }),
-        ...(caseFilter?.keyword && { keyword: caseFilter.keyword }),
-        page: currentPage,
-        itemsPerPage: 50
-      }  
+      // const queryPayload = {
+      //   unified_case_id: caseData.id
+      // };
+          const rawPayload = {
+      case_id: String(caseData.id),
+      file_type: caseFilter?.file_type,
+      start_time: caseFilter?.start_time,
+      end_time: caseFilter?.end_time,
+      aggsFields: caseFilter?.aggs_fields,
+      keyword: caseFilter?.keyword,
+      page: currentPage,
+      itemsPerPage: 50,
+    };
+        const summaryPayload =Object.fromEntries(
+      Object.entries(rawPayload).filter(
+        ([_, value]) =>
+          value !== undefined &&
+          value !== null &&
+          value !== "" &&
+          !(Array.isArray(value) && value.length === 0) &&
+          !(typeof value === "object" && !Array.isArray(value) && Object.keys(value).length === 0)
+      )
+    ); 
       dispatch(fetchSummaryData(summaryPayload));
        console.log("su mardtaatbulerr", summaryPayload)
     }
@@ -105,19 +117,29 @@ const TabulerData = () => {
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
-    const queryPayload = {
-      unified_case_id: caseData.id
-    };
-const pageChangePayload={
-      queryPayload,
-      ...(caseFilter?.file_type && { file_type: caseFilter.file_type }),
-      ...(caseFilter?.aggs_fields && { aggsFields: caseFilter.aggs_fields }),
-      ...(caseFilter?.keyword && { keyword: caseFilter.keyword }),
-      ...(caseFilter?.start_time && { start_time: caseFilter.start_time }),
-      ...(caseFilter?.end_time && { end_time: caseFilter.end_time }),
+    // const queryPayload = {
+    //   unified_case_id: caseData.id
+    // };
+  const rawPayload = {
+      case_id: String(caseData.id),
+      file_type: caseFilter?.file_type,
+      start_time: caseFilter?.start_time,
+      end_time: caseFilter?.end_time,
+      aggsFields: caseFilter?.aggs_fields,
+      keyword: caseFilter?.keyword,
       page,
-      itemsPerPage: 50
-}
+      itemsPerPage: 50,
+    };
+        const pageChangePayload =Object.fromEntries(
+      Object.entries(rawPayload).filter(
+        ([_, value]) =>
+          value !== undefined &&
+          value !== null &&
+          value !== "" &&
+          !(Array.isArray(value) && value.length === 0) &&
+          !(typeof value === "object" && !Array.isArray(value) && Object.keys(value).length === 0)
+      )
+    ); 
     dispatch(fetchSummaryData(pageChangePayload));
     console.log("paageechngepayloadda",pageChangePayload)
   };
@@ -304,7 +326,7 @@ const pageChangePayload={
 
   {/* Total results on the right */}
   <div style={{ fontSize: "12px", color: "#ccc" }}>
-    (Total Results - {totalPages * 50 || "0"})
+    (Total Results - { totalResults })
   </div>
 </div>
 

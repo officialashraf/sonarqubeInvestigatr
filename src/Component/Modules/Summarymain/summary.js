@@ -64,7 +64,7 @@ dispatch(clearCaseFilterPayload());
           pieData.push({ name: 'No Data', value: 0 });
         }
         const barData = (unified_date_only || []).map(item => ({
-          name: item.key.split('-').slice(0, 3).join(''),
+          name: item.key_as_string.split('-').slice(0, 3).join(''),
           value: item.doc_count,
 
         }));

@@ -125,7 +125,7 @@ const CreateCriteria = ({ handleCreateCase }) => {
 
       }
     };
-    
+
     const fetchTargetOptions = async () => {
       try {
         const response = await axios.post(
@@ -269,10 +269,24 @@ const CreateCriteria = ({ handleCreateCase }) => {
       }
 
       console.log("search payload", payload);
+      const isValid = (v) =>
+        Array.isArray(v) ? v.length > 0 :
+          typeof v === 'string' ? v.trim() !== '' :
+            v !== null && v !== undefined;
 
+      const filteredPayload = {};
+      Object.entries(payload).forEach(([key, value]) => {
+        if (isValid(value)) {
+          filteredPayload[key] = value;
+        }
+      });
+
+      const paginatedQuery = {
+        ...filteredPayload
+      };
       const response = await axios.post(
         `${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/search`,
-        payload,
+        paginatedQuery,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -345,10 +359,12 @@ const CreateCriteria = ({ handleCreateCase }) => {
         </button>
         <div className="popup-content">
           <h5>Create Criteria</h5>
-          <form onSubmit={handleSearch} style={{    scrollbarColor: '#1e7df8 #0a192f',
-    scrollbarWidth: 'thin',
-    height: '450px',
-    overflowY: 'auto',}}>
+          <form onSubmit={handleSearch}
+          //       style={{    scrollbarColor: '#1e7df8 #0a192f',
+          // scrollbarWidth: 'thin',
+          // height: '450px',
+          // overflowY: 'auto',}}
+          >
             {/* Search Bar with Icons */}
             <label style={{ fontSize: '14px' }}>Search Keywords</label>
             <TextField
@@ -484,7 +500,7 @@ const CreateCriteria = ({ handleCreateCase }) => {
             />
 
             {/* Location Fields */}
-            <label style={{ fontSize: '14px' }}>Focus your search on a particular location or area</label>
+            {/* <label style={{ fontSize: '14px' }}>Focus your search on a particular location or area</label>
             <div style={{ display: 'flex', justifyContent: 'space-evenly', color: 'white' }}>
               <CommonTextInput
                 name="latitude"
@@ -505,7 +521,7 @@ const CreateCriteria = ({ handleCreateCase }) => {
 
                 autoComplete='off'
               />
-            </div>
+            </div> */}
 
             {/* Save Criteria Checkbox */}
             <FormControlLabel

@@ -37,7 +37,23 @@ const ScrollCriteriaViewer = () => {
 
         setLoading(true);
         try {
-            const paginatedQuery = { ...payload, page };
+            const isValid = (v) =>
+                Array.isArray(v) ? v.length > 0 :
+                    typeof v === 'string' ? v.trim() !== '' :
+                        v !== null && v !== undefined;
+
+            const filteredPayload = {};
+            Object.entries(payload).forEach(([key, value]) => {
+                if (isValid(value)) {
+                    filteredPayload[key] = value;
+                }
+            });
+
+            const paginatedQuery = {
+                ...filteredPayload,
+                page
+            };
+
 
             const response = await axios.post(
                 `${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/search`,
@@ -159,30 +175,30 @@ const ScrollCriteriaViewer = () => {
                                             onClick={() => handleResourceClick(item)}
                                         >
                                             <img
-                                                                   src={
-                                                                     item.unified_record_type === "rss feed"
-                                                                       ? item.socialmedia_from_imageurl || item.socialmedia_media_url || rss.jpg
-                                                                       : item.unified_record_type === "X"
-                                                                         ? item.socialmedia_from_imageurl || item.socialmedia_media_url || X_logo
-                                                                         : item.unified_record_type === "Facebook"
-                                                                           ? item.socialmedia_from_imageurl || item.socialmedia_media_url || Facebook_logo
-                                                                         : item.unified_record_type === "YouTube"
-                                                                           ? item.socialmedia_from_imageurl || item.socialmedia_media_url || YoutubeLogo
-                                                                         : item.unified_record_type === "Instagram"
-                                                                             ? item.socialmedia_from_imageurl || item.socialmedia_media_url || Instagram
-                                                                               : item.socialmedia_from_imageurl || item.socialmedia_media_url || placeholder
-                                                                   }
-                                                                   onError={(e) => {
-                                                                     e.target.onerror = null; // prevents infinite loop
-                                                                     if(item.unified_record_type === "X" && e.target.src !== X_logo) {
-                                                                       e.target.src = X_logo;
-                                                                     } else {
-                                                                       e.target.src = placeholder;
-                                                                     }
-                                                                   }}
-                                                                   alt="pic_not_found"
-                                                                   className="resourceImage"
-                                                                 />
+                                                src={
+                                                    item.unified_record_type === "rss feed"
+                                                        ? item.socialmedia_from_imageurl || item.socialmedia_media_url || rss.jpg
+                                                        : item.unified_record_type === "X"
+                                                            ? item.socialmedia_from_imageurl || item.socialmedia_media_url || X_logo
+                                                            : item.unified_record_type === "Facebook"
+                                                                ? item.socialmedia_from_imageurl || item.socialmedia_media_url || Facebook_logo
+                                                                : item.unified_record_type === "YouTube"
+                                                                    ? item.socialmedia_from_imageurl || item.socialmedia_media_url || YoutubeLogo
+                                                                    : item.unified_record_type === "Instagram"
+                                                                        ? item.socialmedia_from_imageurl || item.socialmedia_media_url || Instagram
+                                                                        : item.socialmedia_from_imageurl || item.socialmedia_media_url || placeholder
+                                                }
+                                                onError={(e) => {
+                                                    e.target.onerror = null; // prevents infinite loop
+                                                    if (item.unified_record_type === "X" && e.target.src !== X_logo) {
+                                                        e.target.src = X_logo;
+                                                    } else {
+                                                        e.target.src = placeholder;
+                                                    }
+                                                }}
+                                                alt="pic_not_found"
+                                                className="resourceImage"
+                                            />
                                             <div className="resourceDetails">
                                                 <p className="resourceType">{item.unified_record_type || item.unified_type}</p>
                                                 <p className="resourceContent">{item.socialmedia_activity}</p>

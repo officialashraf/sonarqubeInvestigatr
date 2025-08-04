@@ -1,6 +1,7 @@
 import React from 'react';
 import Select from 'react-select';
 
+
 const CommonMultiSelect = ({
     label,
     value,
@@ -11,7 +12,8 @@ const CommonMultiSelect = ({
     isDisabled = false,
     error = false,
     customStyles = {}
-}) => {
+}) =>
+     {
     return (
         <div style={{
             marginBottom: '16px', position: 'relative', overflow: 'visible'

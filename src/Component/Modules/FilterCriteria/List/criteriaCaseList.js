@@ -30,12 +30,23 @@ const CriteriaCaseTable = () => {
           return;
         }
 
-        // Determine if the current keywords match those in the payload
-        let paginatedQuery;
 
-        if (payload) {
-          paginatedQuery = { ...payload, page: currentPage };
-        }
+        const isValid = (v) =>
+          Array.isArray(v) ? v.length > 0 :
+            typeof v === 'string' ? v.trim() !== '' :
+              v !== null && v !== undefined;
+
+        const filteredPayload = {};
+        Object.entries(payload).forEach(([key, value]) => {
+          if (isValid(value)) {
+            filteredPayload[key] = value;
+          }
+        });
+
+        const paginatedQuery = {
+          ...filteredPayload,
+          page:currentPage
+        };
         console.log("Sending queryQWQ:", paginatedQuery);
 
         const response = await axios.post(
@@ -230,7 +241,7 @@ const CriteriaCaseTable = () => {
                             title={typeof item[key] === 'object' ? JSON.stringify(item[key]) : item[key]}
                           // onClick={() => togglePopupA(item)}
                           >
-                            {["socialmedia_hashtags", "targets", "person", "gpe", "unified_case_id", "org","loc"].includes(key) && Array.isArray(item[key]) ? (
+                            {["socialmedia_hashtags", "targets", "person", "gpe", "unified_case_id", "org", "loc"].includes(key) && Array.isArray(item[key]) ? (
                               <div style={{ display: "flex", gap: "4px" }}>
                                 {item[key].map((tag, i) => (
                                   <span
@@ -276,26 +287,26 @@ const CriteriaCaseTable = () => {
         </div>
       </div>
 
-   <div
-  className={styles.paginationContainer}
-  style={{
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    width: "100%", // ensures full horizontal space
-    padding: "0 16px", // optional spacing
-  }}
->
-  {/* Pagination centered */}
-  <div style={{ flex: 1, display: "flex", justifyContent: "center" }}>
-    {renderPagination()}
-  </div>
+      <div
+        className={styles.paginationContainer}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          width: "100%", // ensures full horizontal space
+          padding: "0 16px", // optional spacing
+        }}
+      >
+        {/* Pagination centered */}
+        <div style={{ flex: 1, display: "flex", justifyContent: "center" }}>
+          {renderPagination()}
+        </div>
 
-  {/* Total Result aligned right */}
-  <div style={{ fontSize: "14px", color: "#ccc" }}>
-    (Total Results - {totalResults || "0"})
-  </div>
-</div>
+        {/* Total Result aligned right */}
+        <div style={{ fontSize: "14px", color: "#ccc" }}>
+          (Total Results - {totalResults || "0"})
+        </div>
+      </div>
 
 
     </>

@@ -558,7 +558,7 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
 
 
             {/* Location Fields */}
-            <div >
+            {/* <div >
               <label>Focus your search on a particular location or area</label>
               <div style={{ display: 'flex', justifyContent: 'space-evenly', color: 'white' }}>
                 <CommonTextInput
@@ -585,7 +585,7 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
 
                 />
               </div>
-            </div>
+            </div> */}
 
             {/* <h5 >SELECT ON MAP</h5> */}
 
