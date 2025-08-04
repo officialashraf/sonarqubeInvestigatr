@@ -25,10 +25,10 @@ const CriteriaCaseTable = () => {
 
       try {
         // Don't proceed if there are no keywords
-        if (!keywords || keywords.length === 0) {
-          setLoading(false);
-          return;
-        }
+        // if (!keywords || keywords.length === 0) {
+        //   setLoading(false);
+        //   return;
+        // }
 
 
         const isValid = (v) =>
