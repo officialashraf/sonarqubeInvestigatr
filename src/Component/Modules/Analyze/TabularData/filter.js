@@ -116,13 +116,14 @@ const AddFilter = ({ searchChips, isPopupVisible, setIsPopupVisible }) => {
           }));
           setSentimentOptions(sentimentFormatted);
         }
-         if (response.data.unified_record_type && response.data.unified_record_type.buckets) {
+           if (response.data.unified_record_type && response.data.unified_record_type.buckets) {
            const fileTypeOptionsFormatted = response.data.unified_record_type.buckets.map(bucket => ({
           value: bucket.key,
           label: bucket.key
         }));
         setFileTypeOptions(fileTypeOptionsFormatted);
       }
+
       } catch (error) {
         console.error('Error fetching targets and sentiment:', error);
       }

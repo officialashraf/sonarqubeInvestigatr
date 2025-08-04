@@ -149,7 +149,9 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
         const fetchTargetsAndSentiment = async () => {
             try {
                 const response = await axios.post(`${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/distinct`, {
+
                     fields: ["targets", "sentiment", "unified_record_type"]
+
                 }, {
                     headers: {
                         'Content-Type': 'application/json',
@@ -176,7 +178,8 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
                     }));
                     setSentimentOptions(sentimentFormatted);
                 }
-                if (response.data.unified_record_type && response.data.unified_record_type.buckets) {
+                  if (response.data.unified_record_type && response.data.unified_record_type.buckets) {
+
                     const fileTypeOptionsFormatted = response.data.unified_record_type.buckets.map(bucket => ({
                         value: bucket.key,
                         label: bucket.key

@@ -556,7 +556,6 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
               sx={sharedSxStyles}
             />
 
-
             {/* Location Fields */}
             {/* <div >
               <label>Focus your search on a particular location or area</label>

@@ -20,6 +20,7 @@ import X_logo from "../../../Assets/Images/X_logo.jpg";
 import Facebook_logo from "../../../Assets/Images/Facebook_logo.png";
 import rss from "../../../Assets/Images/rss.jpg";
 import placeholder from "../../../Assets/Images/placeholder-square.png"
+import TiktokLogo from "../../../Assets/Images/tiktok.png";
 
 const ScrollCriteriaViewer = () => {
     const containerRef = useRef(null);
@@ -184,14 +185,26 @@ const ScrollCriteriaViewer = () => {
                                                                 ? item.socialmedia_from_imageurl || item.socialmedia_media_url || Facebook_logo
                                                                 : item.unified_record_type === "YouTube"
                                                                     ? item.socialmedia_from_imageurl || item.socialmedia_media_url || YoutubeLogo
-                                                                    : item.unified_record_type === "Instagram"
-                                                                        ? item.socialmedia_from_imageurl || item.socialmedia_media_url || Instagram
-                                                                        : item.socialmedia_from_imageurl || item.socialmedia_media_url || placeholder
+                                                                    : item.unified_record_type === "Tiktok"
+                                                                        ? item.socialmedia_from_imageurl || item.socialmedia_media_url || TiktokLogo
+                                                                        : item.unified_record_type === "Instagram"
+                                                                            ? item.socialmedia_from_imageurl || item.socialmedia_media_url || Instagram
+                                                                            : item.socialmedia_from_imageurl || item.socialmedia_media_url || placeholder
                                                 }
                                                 onError={(e) => {
                                                     e.target.onerror = null; // prevents infinite loop
-                                                    if (item.unified_record_type === "X" && e.target.src !== X_logo) {
+                                                    if (item.unified_record_type === "Facebook") {
+                                                        e.target.src = Facebook_logo;
+                                                    } else if (item.unified_record_type === "Instagram") {
+                                                        e.target.src = Instagram;
+                                                    } else if (item.unified_record_type === "YouTube") {
+                                                        e.target.src = YoutubeLogo;
+                                                    } else if (item.unified_record_type === "X") {
                                                         e.target.src = X_logo;
+                                                    } else if (item.unified_record_type === "rss feed") {
+                                                        e.target.src = rss.jpg;
+                                                    } else if (item.unified_record_type === "Tiktok") {
+                                                        e.target.src = TiktokLogo;
                                                     } else {
                                                         e.target.src = placeholder;
                                                     }
@@ -626,6 +639,24 @@ const ScrollCriteriaViewer = () => {
                                     />
                                 </div>
                             )}
+                            {[
+                                "4chan.org", "gab.com", "icq.im", "t.me", "bitchute.com",
+                                "bitcointalk.org", "crax.pro", "stopscamfraud.com"
+                            ].includes(selectedResource.unified_record_type) && (
+                                    <div className="resourceDetailsView">
+                                        <div className="profile-section">
+                                            <h3>{selectedResource.unified_activity_title}</h3>
+                                        </div>
+                                        <p className="activityContent">
+                                            {selectedResource.unified_activity_content}
+                                        </p>
+                                        <img
+                                            src={selectedResource.socialmedia_media_url}
+                                            alt="Post"
+                                            className="postImage"
+                                        />
+                                    </div>
+                                )}
                             {/* VK */}
                             {selectedResource.unified_record_type === "VK" && (
                                 <div className="resourceDetailsView marginSides20">

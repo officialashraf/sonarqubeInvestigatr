@@ -62,10 +62,21 @@
   background-color: #101D2b;
 }
 
-:global(.form-control.search-input):focus{
+.searchInput:focus {
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+:global(.react-select__control:focus) {
+  box-shadow: none !important;
+  border-color: transparent !important;
+  outline: none !important;
+}
+
+/* :global(.form-control.search-input):focus{
   border-radius: 15px !important;
   border:1px solid var(--color-colors-hoverState) !important
-}
+} */
 
 .search-button {
   height: 36px;
@@ -265,6 +276,12 @@
     width: 300px;
     outline: none;
 }
+
+:global(.react-tel-input .form-control:focus) {
+    outline: none !important;
+    box-shadow: none !important;
+    border: none !important;
+}
 :global(.react-tel-input .selected-flag) {
   background-color: var(--color-colors-secondary) !important;
   color: var(--color-colors-neutralText) !important;
@@ -287,7 +304,7 @@
 .searchInput:-webkit-autofill:hover,
 .searchInput:-webkit-autofill:focus,
 .searchInput:-webkit-autofill:active {
-  box-shadow: 0 0 0px 1000px var(--color-colors-secondary) inset !important;
+  /* box-shadow: 0 0 0px 1000px var(--color-colors-secondary) inset !important; */
   -webkit-box-shadow: 0 0 0px 1000px var(--color-colors-secondary) inset !important;
   border-radius: 0 !important;
   border: none !important;

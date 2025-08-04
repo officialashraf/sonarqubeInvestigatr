@@ -18,7 +18,8 @@ import AddComment from '../Comment/AddComment';
 import { fetchSummaryData } from "../../../Redux/Action/filterAction";
 import AppButton from "../../Common/Buttton/button"
 import YoutubeLogo from '../../Assets/Images/youtube_image.png'
-import Instagram from "../../Assets/Images/Instagram.png"
+import Instagram from "../../Assets/Images/Instagram.jpg"
+import TiktokLogo from "../../Assets/Images/tiktok.png"
 import X_logo from "../../Assets/Images/X_logo.jpg";
 import Facebook_logo from "../../Assets/Images/Facebook_logo.png";
 import rss from "../../Assets/Images/rss.jpg";
@@ -214,17 +215,31 @@ const Resources = () => {
                               ? resource.socialmedia_from_imageurl || resource.socialmedia_media_url || X_logo
                               : resource.unified_record_type === "Facebook"
                                 ? resource.socialmedia_from_imageurl || resource.socialmedia_media_url || Facebook_logo
-                                : resource.unified_record_type === "YouTube"
-                                  ? resource.socialmedia_from_imageurl || resource.socialmedia_media_url || YoutubeLogo
-                                  : resource.unified_record_type === "Instagram"
-                                    ? resource.socialmedia_from_imageurl || resource.socialmedia_media_url || Instagram
-                                    : resource.socialmedia_from_imageurl || resource.socialmedia_media_url || PlaceholderImg
+
+                              : resource.unified_record_type === "YouTube"
+                                ? resource.socialmedia_from_imageurl || resource.socialmedia_media_url || YoutubeLogo
+                                : resource.unified_record_type === "Tiktok"
+                                ? resource.socialmedia_from_imageurl || resource.socialmedia_media_url || TiktokLogo
+                              : resource.unified_record_type === "Instagram"
+                                  ? resource.socialmedia_from_imageurl || resource.socialmedia_media_url || Instagram
+                                   : resource.socialmedia_from_imageurl || resource.socialmedia_media_url || PlaceholderImg
                         }
                         onError={(e) => {
                           e.target.onerror = null; // prevents infinite loop
-                          if (resource.unified_record_type === "X" && e.target.src !== X_logo) {
+                          if (resource.unified_record_type === "Facebook") {
+                            e.target.src = Facebook_logo;
+                          } else if (resource.unified_record_type === "Instagram") {
+                            e.target.src = Instagram;
+                          } else if (resource.unified_record_type === "YouTube") {
+                            e.target.src = YoutubeLogo;
+                          } else if (resource.unified_record_type === "X") {
                             e.target.src = X_logo;
-                          } else {
+                          } else if (resource.unified_record_type === "rss feed") {
+                            e.target.src = rss.jpg;
+                          } 
+                          else if (resource.unified_record_type === "Tiktok") {
+                              e.target.src = TiktokLogo;
+                           }else {
                             e.target.src = PlaceholderImg;
                           }
                         }}
@@ -866,7 +881,7 @@ const Resources = () => {
 
           ) : (
             <div className="noDataWrapper">
-              <p>No Data Available</p>
+              <p>Select resource for better visibility</p>
             </div>
 
           )}

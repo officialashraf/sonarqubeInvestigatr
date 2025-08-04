@@ -12,7 +12,7 @@ const COLORS = [
   getCSSVar('--color-colors-success'),
   getCSSVar('--color-colors-danger'),
   getCSSVar('--color-colors-primaryAccent'),
-  getCSSVar('--color-colors-copper2')
+   getCSSVar('--color-colors-copper2')
 ];
 
 const ReusablePieChart = ({
@@ -138,8 +138,9 @@ const ReusablePieChart = ({
               fillColor = getCSSVar('--color-colors-warning');
             } else if (entry.name === "Rss Feed") {
               fillColor = getCSSVar('--color-colors-success');
-            }
-            else if (entry.name === "Web Feed") {
+            } else if (entry.name === "DeepWeb") {
+              fillColor = getCSSVar('--color-colors-copper2');
+            } else if (entry.name === "Web Feed") {
               fillColor = getCSSVar('--color-colors-primaryAccent');
             } else if (entry.name === "DeepWeb") {
               fillColor = getCSSVar('--color-colors-copper2');
