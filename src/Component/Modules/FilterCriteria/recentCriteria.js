@@ -27,83 +27,82 @@ const RecentCriteria = () => {
   const [criteriaId, setCriteriaId] = useState()
   const [showEditPopup, setShowEditPopup] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [enterInput, setEnterInput] = useState([]);
-  const [keywords, setKeyword] = useState([]);
+  const [userEnteredKeywords, setUserEnteredKeywords] = useState([]); // Only user-entered keywords
+  const [reduxKeywords, setReduxKeywords] = useState([]); // Only Redux keywords
 
+  // Redux selectors
   const recentKeyword = useSelector(
     (state) => state.criteriaKeywords?.queryPayload?.keyword);
 
   const caseId = useSelector(
     (state) => state.criteriaKeywords?.queryPayload?.case_id || '');
-  console.log("caseId", caseId);
 
   const fileType = useSelector(
     (state) => state.criteriaKeywords?.queryPayload?.file_type || '');
-  console.log("fileType", fileType);
 
   const keyword = useSelector(
     (state) => state.criteriaKeywords?.queryPayload?.keyword || '');
-  console.log("keyword", keyword);
 
   const sentiments = useSelector(
     (state) => state.criteriaKeywords?.queryPayload?.sentiments || '');
 
   const targets = useSelector(
     (state) => state.criteriaKeywords?.queryPayload?.targets || '');
+    
+  const start_time = useSelector(
+    (state) => state.criteriaKeywords?.queryPayload?.start_time || '');
+  
+  const end_time = useSelector(
+    (state) => state.criteriaKeywords?.queryPayload?.end_time || '');
 
   const reduxPayload = useSelector((state) => state.criteriaKeywords?.queryPayload || '');
   console.log("Redux Payload:", reduxPayload);
 
-  // Function to check if chip is from Redux data
-  const isReduxChip = (chip) => {
-    const reduxKeywords = Array.isArray(keyword) ? keyword : [];
-    const reduxCaseIds = Array.isArray(caseId) ? caseId.map(id => String(id)) : [];
-    const reduxFileTypes = Array.isArray(fileType) ? fileType : [];
-    const reduxSentiments = Array.isArray(sentiments) ? sentiments : [];
-    const reduxTargets = Array.isArray(targets) ? targets : [];
-    
-    return [...reduxKeywords, ...reduxCaseIds, ...reduxFileTypes, ...reduxSentiments, ...reduxTargets].includes(chip);
-  };
-
+  // Initialize Redux keywords from Redux data
   useEffect(() => {
     const isValid = (val) =>
       val !== null && val !== undefined && val.toString().trim() !== "";
 
-    let updatedKeywords = [];
+    let updatedReduxKeywords = [];
 
     // Handle recentKeyword
     if (Array.isArray(recentKeyword) && recentKeyword.length > 0) {
-      updatedKeywords = [...updatedKeywords, ...recentKeyword];
+      updatedReduxKeywords = [...updatedReduxKeywords, ...recentKeyword];
     } else if (isValid(recentKeyword)) {
-      updatedKeywords.push(recentKeyword);
+      updatedReduxKeywords.push(recentKeyword);
     }
+    
     if (Array.isArray(caseId) && caseId.length > 0) {
-      updatedKeywords = [...updatedKeywords, ...caseId.map(id => `${id}`)];
+      updatedReduxKeywords = [...updatedReduxKeywords, ...caseId.map(id => `${id}`)];
     } else if (isValid(caseId)) {
-      updatedKeywords.push(`${caseId}`);
+      updatedReduxKeywords.push(`${caseId}`);
     }
 
     // Handle fileType — always as array of strings
     if (Array.isArray(fileType) && fileType.length > 0) {
-      updatedKeywords = [...updatedKeywords, ...fileType.map(ft => `${ft}`)];
+      updatedReduxKeywords = [...updatedReduxKeywords, ...fileType.map(ft => `${ft}`)];
     } else if (isValid(fileType)) {
-      updatedKeywords.push(`${fileType}`);
+      updatedReduxKeywords.push(`${fileType}`);
     }
 
     // Handle sentiments
     if (Array.isArray(sentiments) && sentiments.length > 0) {
-      updatedKeywords = [...updatedKeywords, ...sentiments];
+      updatedReduxKeywords = [...updatedReduxKeywords, ...sentiments];
     }
 
     // Handle targets
     if (Array.isArray(targets) && targets.length > 0) {
-      updatedKeywords = [...updatedKeywords, ...targets];
+      updatedReduxKeywords = [...updatedReduxKeywords, ...targets];
     }
 
-    console.log("Updated keyword state (processed):", updatedKeywords);
-    setKeyword(updatedKeywords);
-  }, [recentKeyword, caseId, fileType, sentiments, targets]);
+    // Handle time range - create a single chip for date range if both exist
+    if (isValid(start_time) && isValid(end_time)) {
+      updatedReduxKeywords.push(`${start_time} to ${end_time}`);
+    }
 
+    console.log("Updated Redux keywords:", updatedReduxKeywords);
+    setReduxKeywords(updatedReduxKeywords);
+  }, [recentKeyword, caseId, fileType, sentiments, targets, start_time, end_time]);
 
   const activePopup = useSelector((state) => state.popup?.activePopup || null);
   console.log("Current Active Popup:", activePopup);
@@ -118,26 +117,84 @@ const RecentCriteria = () => {
     setShowEditPopup(!showEditPopup);
   };
 
-  // Handle Enter key press
+  // Handle Enter key press - Add to user-entered keywords only
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && searchQuery.trim() !== "") {
       e.preventDefault(); // Prevent form submission
-      setKeyword([...keywords, searchQuery.trim()]); // Add new keyword to the list
-      setEnterInput(prev => [...prev, searchQuery.trim()]);
+      const newKeyword = searchQuery.trim();
+      setUserEnteredKeywords(prev => [...prev, newKeyword]); // Add to user-entered keywords only
       setSearchQuery(""); // Clear input field
     }
   };
 
-  // Remove chip when clicked
-  const handleRemoveItem = (chipToDelete) => {
-    setKeyword(keywords.filter((chip) => chip !== chipToDelete));
-    setEnterInput((prev) => prev.filter((chip) => chip !== chipToDelete));
+  // Check if chip is from Redux or user-entered
+  const isReduxChip = (chip) => {
+    return reduxKeywords.includes(chip);
+  };
+
+  // Check if chip is a time range chip
+  const isTimeRangeChip = (chip) => {
+    return chip.includes(' to ');
+  };
+
+  // Remove chip - handle both Redux and user-entered
+  const handleRemoveItem = (chipToRemove) => {
+    if (isReduxChip(chipToRemove)) {
+      // Remove from Redux keywords and update Redux store
+      const updatedReduxKeywords = reduxKeywords.filter(chip => chip !== chipToRemove);
+      setReduxKeywords(updatedReduxKeywords);
+      
+      // Update Redux store - need to determine which field this chip belongs to
+      const updatedPayload = { ...reduxPayload };
+      
+      // Handle time range chip removal
+      if (isTimeRangeChip(chipToRemove)) {
+        // Remove start_time and end_time from Redux payload
+        delete updatedPayload.start_time;
+        delete updatedPayload.end_time;
+      } else {
+        // Check and update keyword field
+        if (Array.isArray(keyword) && keyword.includes(chipToRemove)) {
+          updatedPayload.keyword = keyword.filter(k => k !== chipToRemove);
+        }
+        
+        // Check and update case_id field
+        if (Array.isArray(caseId) && caseId.map(id => String(id)).includes(chipToRemove)) {
+          updatedPayload.case_id = caseId.filter(id => String(id) !== chipToRemove);
+        }
+        
+        // Check and update file_type field
+        if (Array.isArray(fileType) && fileType.includes(chipToRemove)) {
+          updatedPayload.file_type = fileType.filter(ft => ft !== chipToRemove);
+        }
+        
+        // Check and update sentiments field
+        if (Array.isArray(sentiments) && sentiments.includes(chipToRemove)) {
+          updatedPayload.sentiments = sentiments.filter(s => s !== chipToRemove);
+        }
+        
+        // Check and update targets field
+        if (Array.isArray(targets) && targets.includes(chipToRemove)) {
+          updatedPayload.targets = targets.filter(t => t !== chipToRemove);
+        }
+      }
+      
+      // Dispatch updated payload to Redux
+      dispatch(setKeywords({
+        keyword: updatedReduxKeywords,
+        queryPayload: updatedPayload
+      }));
+      
+    } else {
+      // Remove from user-entered keywords
+      setUserEnteredKeywords(prev => prev.filter(chip => chip !== chipToRemove));
+    }
   };
 
   const handleReset = () => {
-     dispatch(clearCriteria());
-    setKeyword([]);
-    setEnterInput([]);
+    dispatch(clearCriteria());
+    setReduxKeywords([]);
+    setUserEnteredKeywords([]);
   };
 
   const fetchData = useCallback(async () => {
@@ -154,12 +211,12 @@ const RecentCriteria = () => {
       if (data && data.data) {
         setSavedSearch(data.data.data); // Extract keywords
         console.log("setSavedSearch", savedSearch)
-
       }
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   }, [Token])
+  
   useEffect(() => {
     fetchData();
   }, [fetchData]);
@@ -178,7 +235,6 @@ const RecentCriteria = () => {
         toast.success("Criteria successfully deleted")
         // Filter the list to remove the item locally
         fetchData()
-
         console.log("Criteria successfully deleted!");
       }
     } catch (error) {
@@ -186,40 +242,33 @@ const RecentCriteria = () => {
       console.error("Error deleting item:", error);
     }
   };
-  console.log("keyword", keywords, searchQuery)
 
   const handleSearch = async () => {
     // Check if there's any data to search
-    const hasKeywords = keywords.length > 0;
+    const hasUserKeywords = userEnteredKeywords.length > 0;
+    const hasReduxKeywords = reduxKeywords.length > 0;
     const hasReduxData = Object.keys(reduxPayload).length > 0;
     
-    if (!hasKeywords && !hasReduxData) {
+    if (!hasUserKeywords && !hasReduxKeywords && !hasReduxData) {
       toast.info("Please enter keywords or select criteria to search");
       return;
     }
 
     console.log("reduxPayload:", reduxPayload);
-    console.log("enterInput:", enterInput);
-    console.log("searchChips:", keywords);
+    console.log("reduxKeywords:", reduxKeywords);
+    console.log("userEnteredKeywords:", userEnteredKeywords);
 
     try {
-      // 1. Redux keywords + User entered keywords
-      const reduxKeywords = Array.isArray(reduxPayload.keyword)
+      // Get Redux keywords from current payload
+      const currentReduxKeywords = Array.isArray(reduxPayload.keyword)
         ? reduxPayload.keyword
         : JSON.parse(reduxPayload.keyword || "[]");
-      console.log("reduxKeyword", reduxKeywords)
-
-      const userKeywords = Array.isArray(enterInput)
-        ? enterInput
-        : JSON.parse(enterInput || "[]");
-
-      console.log("userKeyword", userKeywords)
       
       // All keywords (Redux + User entered) will be passed as keywords to API
-      const allKeywords = [...reduxKeywords, ...userKeywords];
+      const allKeywords = [...currentReduxKeywords, ...userEnteredKeywords];
       console.log("allKeywords to be sent:", allKeywords)
 
-      // 2. case_id aur file_type separately treat honge (sirf Redux se)
+      // Get other Redux data
       const reduxCaseIds = Array.isArray(reduxPayload.case_id)
         ? reduxPayload.case_id
         : JSON.parse(reduxPayload.case_id || "[]");
@@ -238,7 +287,7 @@ const RecentCriteria = () => {
 
       console.log("fileType or Caseids", reduxCaseIds, reduxFileTypes)
 
-      const payload = {
+      const rawPayload = {
         keyword: allKeywords,        // All keywords (Redux + User entered)
         case_id: reduxCaseIds,       // Only Redux case_ids
         file_type: reduxFileTypes,   // Only Redux file_types
@@ -250,6 +299,15 @@ const RecentCriteria = () => {
         latitude: reduxPayload.latitude || null,
         longitude: reduxPayload.longitude || null
       };
+
+       const isValid = (v) =>
+        Array.isArray(v) ? v.length > 0 :
+          typeof v === 'string' ? v.trim() !== '' :
+            v !== null && v !== undefined;
+
+      const payload = Object.fromEntries(
+        Object.entries(rawPayload).filter(([_, value]) => isValid(value))
+      );
 
       console.log("Sending search query:", payload);
 
@@ -286,7 +344,6 @@ const RecentCriteria = () => {
     }
   };
 
-
   const ReuseCriteria = async (item) => {
     console.log("detailscriterai", item);
 
@@ -294,7 +351,6 @@ const RecentCriteria = () => {
       val !== null && val !== undefined && val.toString().trim() !== "";
 
     let updatedKeywords = [];
-
     const queryPayload = {};
 
     if (item) {
@@ -324,12 +380,16 @@ const RecentCriteria = () => {
       }
 
       if (isValid(item.start_date)) {
-        queryPayload.start_date = item.start_date;
+        queryPayload.start_time = item.start_time;
       }
 
-
       if (isValid(item.end_date)) {
-        queryPayload.end_date = item.end_date;
+        queryPayload.end_time = item.end_time;
+      }
+
+      // Add time range chip if both dates exist
+      if (isValid(item.start_time) && isValid(item.end_time)) {
+        updatedKeywords.push(`${item.start_time} to ${item.end_time}`);
       }
 
       if (isValid(item.lat)) {
@@ -339,7 +399,11 @@ const RecentCriteria = () => {
       if (isValid(item.long)) {
         queryPayload.long = item.long;
       }
-      setKeyword(updatedKeywords)
+      
+      // Set as Redux keywords since these come from saved criteria
+      setReduxKeywords(updatedKeywords);
+      // Clear user-entered keywords when reusing criteria
+      setUserEnteredKeywords([]);
     }
 
     try {
@@ -353,17 +417,16 @@ const RecentCriteria = () => {
           },
         }
       );
+      
       console.log("Reusee Qeury Payload", queryPayload)
       console.log("QueryResponse", response)
       console.log("updatedetRecent", updatedKeywords)
+      
       // Dispatch updated keywords
       dispatch(setKeywords({
         keyword: updatedKeywords,
         queryPayload: response.data.input // or other fields if needed
       }));
-
-      // Update local state if needed
-      setKeyword(updatedKeywords);
 
       // Store API result in Redux
       dispatch(setSearchResults({
@@ -385,6 +448,19 @@ const RecentCriteria = () => {
     (typeof item.title === "string" && item.title.toLowerCase().includes(searchQuery.toLowerCase()))
   ) : [];
 
+  // Combine all keywords for display
+  const allDisplayKeywords = [...reduxKeywords, ...userEnteredKeywords];
+
+  // Function to determine chip style based on type
+  const getChipStyle = (chip) => {
+    if (isTimeRangeChip(chip)) {
+      return { backgroundColor: '#FFD700', color: '#000' }; // Yellow for time range
+    }
+    return isReduxChip(chip) 
+      ? { backgroundColor: '#ffd700', color: '#000' } // Yellow for Redux chips
+      : { backgroundColor: '#0073cf', color: 'white' }; // Blue for user-entered chips
+  };
+
   return (
     <div className="popup-overlay">
       <div className="popup-container">
@@ -393,7 +469,7 @@ const RecentCriteria = () => {
         </button>
         <div className="popup-content">
           <h5>Saved Criteria</h5>
-          <div className="container p-4  text-white " >
+          <div className="container p-4 text-white">
             <div className="d-flex align-items-center mb-3">
               <TextField
                 fullWidth
@@ -409,16 +485,16 @@ const RecentCriteria = () => {
                   ),
                   endAdornment: (
                     <InputAdornment position="end">
-
-                      <Send style={{ cursor: 'pointer',  color: "#0073cf",marginRight:'5px' }} onClick={handleSearch} />
-                      <TuneIcon style={{ cursor: 'pointer' , backgroundColor: "#0073CF", color: '#0A192F' }} onClick={handelCreate} /> {/* New Card List Filter Icon */}
+                      <Send style={{ cursor: 'pointer', color: "#0073cf", marginRight:'5px' }} onClick={handleSearch} />
+                      <TuneIcon style={{ cursor: 'pointer', backgroundColor: "#0073CF", color: '#0A192F' }} onClick={handelCreate} />
                     </InputAdornment>
-                  ), style: {
-                    height: '38px', // Use consistent height
-                    padding: '10px', // Ensure uniform padding
-                    backgroundColor: '#080E17', // Background color
-                    borderRadius: '15px', // Rounded corners
-                    color: 'white', // Text 
+                  ), 
+                  style: {
+                    height: '38px',
+                    padding: '10px',
+                    backgroundColor: '#080E17',
+                    borderRadius: '15px',
+                    color: 'white',
                     border: '1px solid #0073CF',
                   },
                   autoComplete: 'off',
@@ -433,8 +509,8 @@ const RecentCriteria = () => {
                 sx={sharedSxStyles}
                 style={customSelectStyles}
               />
-
             </div>
+            
             <div>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                 <div style={{ display: "flex", alignItems: "center" }}>
@@ -445,25 +521,47 @@ const RecentCriteria = () => {
               </div>
 
               <div className="chips-container">
-                {keywords && keywords.map((chip, index) => (
-                  <div 
-                    key={index} 
-                    className={`search-chip ${isReduxChip(chip) ? 'redux-chip' : ''}`}
-                    style={{
-                      backgroundColor: isReduxChip(chip) ? '#ffd700' : '', // Yellow color for Redux chips
-                      color: isReduxChip(chip) ? '#000' : '', // Black text for better contrast on yellow
-                    }}
-                  >
-                    <span>{chip}</span>
-                    <button className="chip-delete-btn" onClick={() => handleRemoveItem(chip)}>
-                      <CloseIcon fontSize='15px' />
-                    </button>
-                  </div>
-                ))}
+                {allDisplayKeywords && allDisplayKeywords.map((chip, index) => {
+                  const chipStyle = getChipStyle(chip);
+                  
+                  return (
+                    <div 
+                      key={index} 
+                      className="search-chip"
+                      style={{
+                        ...chipStyle,
+                        padding: "4px 8px",
+                        borderRadius: "12px",
+                        margin: "2px",
+                        display: "inline-flex",
+                        alignItems: "center",
+                        fontSize: "12px"
+                      }}
+                    >
+                      <span>{chip}</span>
+                      <button 
+                        className="chip-delete-btn" 
+                        onClick={() => handleRemoveItem(chip)}
+                        style={{
+                          background: "none",
+                          border: "none",
+                          marginLeft: "4px",
+                          cursor: "pointer",
+                          color: chipStyle.color,
+                          display: "flex",
+                          alignItems: "center"
+                        }}
+                      >
+                        <CloseIcon style={{ fontSize: "15px" }} />
+                      </button>
+                    </div>
+                  );
+                })}
               </div>
-
             </div>
+            
             <hr />
+            
             <div style={{ height: '300px', overflow: 'auto' }}>
               <div style={{ display: "flex", alignItems: "center" }}>
                 <SaveIcon style={{ color: 'var(--color-colors-primaryAccent)' }} />
@@ -480,9 +578,8 @@ const RecentCriteria = () => {
                           <Edit style={{ cursor: 'pointer', color: '#0073cf' }}
                             onClick={() => {
                               toggleEditPopup();
-                              setCriteriaId(item.id); // Set the selected item's ID
+                              setCriteriaId(item.id);
                             }}
-                            
                           />
                         </IconButton>
                         <IconButton edge="end" color="dark" onClick={() => handleDelete(index, item.id)}>
@@ -491,14 +588,14 @@ const RecentCriteria = () => {
                       </ListItemSecondaryAction>
                     </ListItem>
                   ))) : (
-                  <p className="text-gray-400" style={{ display: 'flex' , justifyContent: 'center', fontSize: '18px'}}>No matched keyword</p>
+                  <p className="text-gray-400" style={{ display: 'flex', justifyContent: 'center', fontSize: '18px'}}>No matched keyword</p>
                 )}
               </List>
-
             </div>
           </div>
         </div>
       </div>
+      
       {showEditPopup && (
         <EditCriteria
           togglePopup={toggleEditPopup}

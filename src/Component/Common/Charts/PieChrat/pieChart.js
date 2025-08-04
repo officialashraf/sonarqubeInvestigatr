@@ -49,37 +49,37 @@ const ReusablePieChart = ({
                 ? [queryPayload.caseId]
                 : [];
 
-        const unified_case_id = caseIdArray.map(String); // Always string[]
+        const case_id = caseIdArray.map(String); // Ensure string[]
 
-        // ✅ Prepare raw query object
-        let query = {
-          unified_case_id,
+        let flatQuery = {
+          case_id,
+          aggs_fields: aggsFields,
           file_type: Array.isArray(queryPayload?.file_type) ? queryPayload.file_type : [],
-          targets: Array.isArray(queryPayload?.target) ? queryPayload.target : [],
-          sentiment: Array.isArray(queryPayload?.sentiment) ? queryPayload.sentiment : [],
           keyword: Array.isArray(queryPayload?.keyword) ? queryPayload.keyword : [],
+          targets: Array.isArray(queryPayload?.target) ? queryPayload.target : 
+           Array.isArray(queryPayload?.targets) ? queryPayload.targets :
+           [],
+          sentiments: Array.isArray(queryPayload?.sentiments)
+            ? queryPayload.sentiments
+            : Array.isArray(queryPayload?.sentiment)
+              ? queryPayload.sentiment
+              : [],
+          ...(queryPayload?.start_time && { start_time: queryPayload.start_time }),
+          ...(queryPayload?.end_time && { end_time: queryPayload.end_time }),
+          page: 1,
+          size: 50,
         };
 
-        // ✅ Filter out empty fields
-        query = Object.fromEntries(
-          Object.entries(query).filter(
+        //  Remove empty/null/undefined arrays or values
+        flatQuery = Object.fromEntries(
+          Object.entries(flatQuery).filter(
             ([, value]) =>
               Array.isArray(value) ? value.length > 0 : value !== null && value !== undefined && value !== ""
           )
         );
 
-        // ✅ Create payload with optional start/end time
-        const payload = queryPayload
-          ? {
-            query,
-            aggs_fields: aggsFields,
-            ...(queryPayload?.start_time && { start_time: queryPayload.start_time }),
-            ...(queryPayload?.end_time && { end_time: queryPayload.end_time }),
-          }
-          : {
-            query: { unified_case_id: [String(caseId)] },
-            aggs_fields: aggsFields,
-          };
+        const payload = flatQuery;
+
 
         const response = await axios.post(
           `${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/aggregate`,
@@ -142,7 +142,10 @@ const ReusablePieChart = ({
               fillColor = getCSSVar('--color-colors-copper2');
             } else if (entry.name === "Web Feed") {
               fillColor = getCSSVar('--color-colors-primaryAccent');
-            } else if (entry.name === "Dark Web") {
+            } else if (entry.name === "DeepWeb") {
+              fillColor = getCSSVar('--color-colors-copper2');
+            }
+            else if (entry.name === "Dark Web") {
               fillColor = "#5C4033";
             }
             else {

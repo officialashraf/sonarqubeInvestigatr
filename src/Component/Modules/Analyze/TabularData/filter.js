@@ -123,7 +123,7 @@ const AddFilter = ({ searchChips, isPopupVisible, setIsPopupVisible }) => {
         }));
         setFileTypeOptions(fileTypeOptionsFormatted);
       }
-        
+
       } catch (error) {
         console.error('Error fetching targets and sentiment:', error);
       }
@@ -247,15 +247,14 @@ useEffect(() => {
       : [];
 
     const payload = {
-   queryPayload : {
-  unified_case_id: String(caseId)
-}
+case_id: String(caseId)
+
     };
 
     // Add only if present
     if (selectedPlatforms.length > 0) payload.file_type = selectedPlatforms;
-    if (selectedTargets.length > 0) payload.target = selectedTargets;
-    if (selectedSentiments.length > 0) payload.sentiment = selectedSentiments;
+    if (selectedTargets.length > 0) payload.targets = selectedTargets;
+    if (selectedSentiments.length > 0) payload.sentiments = selectedSentiments;
     if (startTime) payload.starttime = startTime;
     if (endTime) payload.endtime = endTime;
     if (searchChips?.length > 0) {

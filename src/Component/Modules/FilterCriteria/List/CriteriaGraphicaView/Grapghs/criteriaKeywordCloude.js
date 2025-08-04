@@ -11,6 +11,7 @@ import KeywordTagList from '../../../../../Common/Charts/KeywordCloud/keywordClo
 
 const CriteriaKeywordChart = () => {
   const queryPayload = useSelector((state) => state.criteriaKeywords?.queryPayload);
+  console.log("keyword",queryPayload)
   // const token = Cookies.get("accessToken");
   // const [data, setData] = useState([]);
   // const [loading, setLoading] = useState(true);

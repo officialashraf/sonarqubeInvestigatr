@@ -33,43 +33,46 @@ const ReusableBarChart = ({
                 setLoading(true);
 
                 // ✅ Ensure case_id is always an array of strings
-                const caseIdArray = (() => {
-                    if (Array.isArray(queryPayload?.case_id)) return queryPayload.case_id.map(String);
-                    if (Array.isArray(queryPayload?.caseId)) return queryPayload.caseId.map(String);
-                    if (queryPayload?.case_id) return [String(queryPayload.case_id)];
-                    if (queryPayload?.caseId) return [String(queryPayload.caseId)];
-                    return [];
-                })();
+                const caseIdArray = Array.isArray(queryPayload?.case_id)
+                    ? queryPayload.case_id
+                    : Array.isArray(queryPayload?.caseId)
+                        ? queryPayload.caseId
+                        : queryPayload?.case_id
+                            ? [queryPayload.case_id]
+                            : queryPayload?.caseId
+                                ? [queryPayload.caseId]
+                                : [];
+                const case_id = caseIdArray.map(String); // Ensure string[]
 
-                // ✅ Step 1: Prepare raw query
-                const rawQuery = {
-                    unified_case_id: caseIdArray,
+                let flatQuery = {
+                    case_id,
+                    aggs_fields: aggsFields,
                     file_type: Array.isArray(queryPayload?.file_type) ? queryPayload.file_type : [],
                     keyword: Array.isArray(queryPayload?.keyword) ? queryPayload.keyword : [],
-                    targets: Array.isArray(queryPayload?.target) ? queryPayload.target : [],
-                    sentiment: Array.isArray(queryPayload?.sentiment) ? queryPayload.sentiment : [],
+                    targets: Array.isArray(queryPayload?.target) ? queryPayload.target :
+                    Array.isArray(queryPayload?.targets) ? queryPayload.targets :
+                    [],
+                    sentiments: Array.isArray(queryPayload?.sentiments)
+                        ? queryPayload.sentiments
+                        : Array.isArray(queryPayload?.sentiment)
+                            ? queryPayload.sentiment
+                            : [],
+                    ...(queryPayload?.start_time && { start_time: queryPayload.start_time }),
+                    ...(queryPayload?.end_time && { end_time: queryPayload.end_time }),
+                    page: 1,
+                    size: 50,
                 };
 
-                // ✅ Step 2: Remove empty fields
-                const filteredQuery = Object.fromEntries(
-                    Object.entries(rawQuery).filter(
+                //  Remove empty/null/undefined arrays or values
+                flatQuery = Object.fromEntries(
+                    Object.entries(flatQuery).filter(
                         ([, value]) =>
                             Array.isArray(value) ? value.length > 0 : value !== null && value !== undefined && value !== ""
                     )
                 );
 
-                // ✅ Step 3: Prepare payload
-                const payload = queryPayload
-                    ? {
-                        query: filteredQuery,
-                        aggs_fields: aggsFields,
-                        ...(queryPayload?.start_time && { start_time: queryPayload.start_time }),
-                        ...(queryPayload?.end_time && { end_time: queryPayload.end_time }),
-                    }
-                    : {
-                        query: { unified_case_id: caseIdArray },
-                        aggs_fields: aggsFields
-                    };
+                const payload = flatQuery;
+
 
                 // ✅ Step 4: API call
                 const response = await axios.post(

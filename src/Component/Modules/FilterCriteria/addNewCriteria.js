@@ -20,7 +20,7 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
     const Token = Cookies.get('accessToken');
     const dispatch = useDispatch();
     console.log("searaddnew", searchChips)
-    
+
     // State for dynamic options
     const payload = useSelector((state) => state.criteriaKeywords?.queryPayload || '');
 
@@ -52,40 +52,40 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
         if (!payload) return;
 
         // Convert case_id to dropdown format
-        const existingCaseIds = Array.isArray(payload.case_id) 
-            ? payload.case_id 
+        const existingCaseIds = Array.isArray(payload.case_id)
+            ? payload.case_id
             : JSON.parse(payload.case_id || "[]");
-        
+
         const caseIdsFormatted = existingCaseIds.map(caseId => {
             const caseOption = caseOptions.find(option => String(option.value) === String(caseId));
             return caseOption || { value: caseId, label: `CASE${String(caseId).padStart(4, "0")}` };
         });
 
         // Convert file_type to dropdown format
-        const existingPlatforms = Array.isArray(payload.file_type) 
-            ? payload.file_type 
+        const existingPlatforms = Array.isArray(payload.file_type)
+            ? payload.file_type
             : JSON.parse(payload.file_type || "[]");
-        
+
         const platformsFormatted = existingPlatforms.map(platform => {
             const platformOption = fileTypeOptions.find(option => option.value === platform);
             return platformOption || { value: platform, label: platform };
         });
 
         // Convert targets to dropdown format
-        const existingTargets = Array.isArray(payload.targets) 
-            ? payload.targets 
+        const existingTargets = Array.isArray(payload.targets)
+            ? payload.targets
             : JSON.parse(payload.targets || "[]");
-        
+
         const targetsFormatted = existingTargets.map(target => {
             const targetOption = targetsOptions.find(option => option.value === target);
             return targetOption || { value: target, label: target };
         });
 
         // Convert sentiment to dropdown format
-        const existingSentiments = Array.isArray(payload.sentiments) 
-            ? payload.sentiments 
+        const existingSentiments = Array.isArray(payload.sentiments)
+            ? payload.sentiments
             : JSON.parse(payload.sentiments || "[]");
-        
+
         const sentimentsFormatted = existingSentiments.map(sentiment => {
             const sentimentOption = sentimentOptions.find(option => option.value === sentiment);
             return sentimentOption || { value: sentiment, label: sentiment };
@@ -149,16 +149,18 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
         const fetchTargetsAndSentiment = async () => {
             try {
                 const response = await axios.post(`${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/distinct`, {
-                    fields: ["targets", "sentiment","unified_record_type"]
+
+                    fields: ["targets", "sentiment", "unified_record_type"]
+
                 }, {
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${Token}`
                     }
                 });
-                
+
                 console.log("targets and sentiment response", response.data);
-                
+
                 // Format targets options from buckets
                 if (response.data.targets && response.data.targets.buckets) {
                     const targetsFormatted = response.data.targets.buckets.map(bucket => ({
@@ -167,7 +169,7 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
                     }));
                     setTargetsOptions(targetsFormatted);
                 }
-                
+
                 // Format sentiment options from buckets
                 if (response.data.sentiment && response.data.sentiment.buckets) {
                     const sentimentFormatted = response.data.sentiment.buckets.map(bucket => ({
@@ -177,13 +179,13 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
                     setSentimentOptions(sentimentFormatted);
                 }
                   if (response.data.unified_record_type && response.data.unified_record_type.buckets) {
+
                     const fileTypeOptionsFormatted = response.data.unified_record_type.buckets.map(bucket => ({
                         value: bucket.key,
                         label: bucket.key
                     }));
                     setFileTypeOptions(fileTypeOptionsFormatted);
                 }
-                
             } catch (error) {
                 console.error('Error fetching targets and sentiment:', error);
             }
@@ -198,7 +200,7 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
 
     // Effect to populate form data when payload or options change
     useEffect(() => {
-        if (payload && caseOptions.length > 0 && fileTypeOptions.length > 0 && 
+        if (payload && caseOptions.length > 0 && fileTypeOptions.length > 0 &&
             targetsOptions.length > 0 && sentimentOptions.length > 0) {
             convertPayloadToDropdownFormat();
         }
@@ -209,17 +211,17 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
         if (payload && payload.start_time && payload.end_time) {
             const startDate = new Date(payload.start_time);
             const endDate = new Date(payload.end_time);
-            
+
             setSelectedDates({
                 startDate: startDate,
                 endDate: endDate,
-                startTime: { 
-                    hours: startDate.getHours(), 
-                    minutes: startDate.getMinutes() 
+                startTime: {
+                    hours: startDate.getHours(),
+                    minutes: startDate.getMinutes()
                 },
-                endTime: { 
-                    hours: endDate.getHours(), 
-                    minutes: endDate.getMinutes() 
+                endTime: {
+                    hours: endDate.getHours(),
+                    minutes: endDate.getMinutes()
                 }
             });
         }
@@ -277,7 +279,7 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
 
             // Handle start_time - combine existing payload and new selection
             if (payload.start_time || (selectedDates.startDate && selectedDates.startTime)) {
-                payloadS.start_time = payload.start_time || 
+                payloadS.start_time = payload.start_time ||
                     `${selectedDates.startDate.toISOString().split('T')[0]}T${String(selectedDates.startTime.hours).padStart(2, '0')}:${String(selectedDates.startTime.minutes).padStart(2, '0')}:00`;
             } else {
                 payloadS.start_time = null;
@@ -285,18 +287,32 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
 
             // Handle end_time - combine existing payload and new selection
             if (payload.end_time || (selectedDates.endDate && selectedDates.endTime)) {
-                payloadS.end_time = payload.end_time || 
+                payloadS.end_time = payload.end_time ||
                     `${selectedDates.endDate.toISOString().split('T')[0]}T${String(selectedDates.endTime.hours).padStart(2, '0')}:${String(selectedDates.endTime.minutes).padStart(2, '0')}:00`;
             } else {
                 payloadS.end_time = null;
             }
 
             console.log("Query Payload being sent to API:", payloadS);
+            const isValid = (v) =>
+                Array.isArray(v) ? v.length > 0 :
+                    typeof v === 'string' ? v.trim() !== '' :
+                        v !== null && v !== undefined;
 
+            const filteredPayload = {};
+            Object.entries(payloadS).forEach(([key, value]) => {
+                if (isValid(value)) {
+                    filteredPayload[key] = value;
+                }
+            });
+
+            const paginatedQuery = {
+                ...filteredPayload,
+            };
             // Make the API request with the correct payload structure
             const response = await axios.post(
                 `${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/search`,
-                payloadS,
+                paginatedQuery,
                 {
                     headers: {
                         'Content-Type': 'application/json',
@@ -304,9 +320,9 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
                     }
                 }
             );
-            
+
             console.log("API Response:", response);
-            
+
             // Dispatch search results
             dispatch(setSearchResults({
                 results: response.data.results,
@@ -318,14 +334,14 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
                 keyword: searchChips,
                 queryPayload: response.data.input
             }));
-            
+
             // Dispatch the initial page number
             dispatch(setPage(1));
             console.log("Dispatched setSearchResults with:", response.data.results);
 
             console.log('Search results:', response.data);
             setIsPopupVisible(false);
-            
+
             // Reset form data to initial values
             setFormData({
                 searchQuery: '',
@@ -377,7 +393,7 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
                     <div className="popup-container" style={{ width: '40%' }}>
                         <div className="popup-content" style={{ marginTop: '4rem' }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <h5 style={{ margin: 0, color: 'white'}}>Filter Criteria</h5>
+                                <h5 style={{ margin: 0, color: 'white' }}>Filter Criteria</h5>
                                 <span
                                     style={{ cursor: 'pointer', fontSize: '20px', color: 'white' }}
                                     onClick={() => setIsPopupVisible(false)}
@@ -455,10 +471,10 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
 
                                 {/* Buttons */}
                                 <div className="button-container" style={{ marginTop: '10px' }}>
-                                    <button 
-                                        type="button" 
-                                        onClick={performSearch} 
-                                        className="add-btn" 
+                                    <button
+                                        type="button"
+                                        onClick={performSearch}
+                                        className="add-btn"
                                         disabled={isSearchDisabled}
                                         style={{
                                             backgroundColor: isSearchDisabled ? '#fffff' : '#00000',

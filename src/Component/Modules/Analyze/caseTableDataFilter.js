@@ -140,7 +140,7 @@
 //     setFilteredChips([]);
 //   };
 
- 
+
 // const removeChip = (chipToRemove) => {
 //   const newChips = searchChips.filter(chip => chip !== chipToRemove);
 //   setSearchChips(newChips);
@@ -154,7 +154,7 @@
 //       <CaseHeader/>
 //       <div className={styles.actionIconsContainer} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "5px" }}>
 //         <div className={styles.searchHeader} style={{ width: "60%", backgroundColor: "#080E17" }}>
-          
+
 //           <TextField
 //             fullWidth
 //             InputProps={{
@@ -271,18 +271,18 @@ const CaseTableDataFilter = () => {
     const caseData = useSelector((state) => state.caseData.caseData);
     const caseFilter = useSelector((state) => state.caseFilter?.caseFilters);
     console.warn("caseflter", caseFilter)
-    const { file_type, aggs_fields, keyword, start_time, end_time,target,sentiment } = caseFilter || {}
+    const { file_type, aggs_fields, keyword, start_time, end_time, target, sentiment } = caseFilter || {}
 
     const [inputValue, setInputValue] = useState("");
-    
+
     // Local state for managing chips before sending
     const [localKeywordChips, setLocalKeywordChips] = useState([]);
     const [localFileTypeChips, setLocalFileTypeChips] = useState([]);
     const [localAggsFieldsChips, setLocalAggsFieldsChips] = useState([]);
     const [localStartTime, setLocalStartTime] = useState(null);
     const [localEndTime, setLocalEndTime] = useState(null);
-     const [localTargets, setlocalTargets] = useState([]);
-      const [localSetiments, setLocalSetiments] = useState([]);
+    const [localTargets, setlocalTargets] = useState([]);
+    const [localSetiments, setLocalSetiments] = useState([]);
     const [activeComponent, setActiveComponent] = useState("graphicalData");
     const [isPopupVisible, setIsPopupVisible] = useState(false);
 
@@ -301,8 +301,8 @@ const CaseTableDataFilter = () => {
                 aggs_fields: [],
                 start_time: null,
                 end_time: null,
-                target:[],
-                sentiment:[]
+                target: [],
+                sentiment: []
             };
             dispatch(saveCaseFilterPayload(savePayload));
             console.log("Initial redux payload", savePayload);
@@ -314,28 +314,28 @@ const CaseTableDataFilter = () => {
         setLocalKeywordChips(Array.isArray(keyword) ? [...keyword] : []);
         setLocalFileTypeChips(Array.isArray(file_type) ? [...file_type] : []);
         setLocalAggsFieldsChips(Array.isArray(aggs_fields) ? [...aggs_fields] : []);
-          setlocalTargets(Array.isArray(target) ? [...target] : []);
-            setLocalSetiments(Array.isArray(sentiment) ? [...sentiment] : []);
+        setlocalTargets(Array.isArray(target) ? [...target] : []);
+        setLocalSetiments(Array.isArray(sentiment) ? [...sentiment] : []);
         setLocalStartTime(start_time);
         setLocalEndTime(end_time);
-    }, [keyword, file_type, aggs_fields, start_time, end_time,sentiment,target]);
+    }, [keyword, file_type, aggs_fields, start_time, end_time, sentiment, target]);
 
     // Generate display chips from local state
     const getDisplayChips = () => {
         const chips = [];
-        
+
         // Add all local chips
         chips.push(...localKeywordChips);
         chips.push(...localFileTypeChips);
         chips.push(...localAggsFieldsChips);
-          chips.push(...localSetiments);
-            chips.push(...localTargets);
-        
+        chips.push(...localSetiments);
+        chips.push(...localTargets);
+
         // Add time range chip if both exist
         if (localStartTime && localEndTime) {
             chips.push(`${localStartTime} to ${localEndTime}`);
         }
-        
+
         return [...new Set(chips)]; // Remove duplicates
     };
 
@@ -343,23 +343,22 @@ const CaseTableDataFilter = () => {
         if (!caseData?.id) return;
 
         // Only update Redux and make API call when Send is clicked
-        const queryPayload = {
-            unified_case_id: caseData.id,
-        };
+        // const queryPayload = {
+        //     unified_case_id: caseData.id,
+        // };
 
         const summaryPayload = {
-            queryPayload,
+            case_id: String(caseData.id),
             ...(localKeywordChips.length > 0 && { keyword: localKeywordChips }),
             ...(localFileTypeChips.length > 0 && { file_type: localFileTypeChips }),
             ...(localAggsFieldsChips.length > 0 && { aggs_fields: localAggsFieldsChips }),
-             ...(localSetiments.length > 0 && { sentiment: localSetiments }),
-              ...(localTargets.length > 0 && { target: localTargets }),
-            ...(localStartTime && { start_time: localStartTime }),
-            ...(localEndTime && { end_time: localEndTime }),
+            ...(localSetiments.length > 0 && { sentiments: localSetiments }),
+            ...(localTargets.length > 0 && { target: localTargets }),
+            ...(localStartTime && { starttime: localStartTime }),
+            ...(localEndTime && { endtime: localEndTime }),
             page: 1,
             itemsPerPage: 50
         }
-
         // Make API call
         dispatch(fetchSummaryData(summaryPayload));
         console.log("API summaryPayload", summaryPayload);
@@ -370,8 +369,8 @@ const CaseTableDataFilter = () => {
             keyword: localKeywordChips,
             file_type: localFileTypeChips,
             aggs_fields: localAggsFieldsChips,
-            target:localTargets,
-            sentiment:localSetiments,
+            target: localTargets,
+            sentiment: localSetiments,
             ...(localStartTime && { start_time: localStartTime }),
             ...(localEndTime && { end_time: localEndTime }),
         }
@@ -384,7 +383,7 @@ const CaseTableDataFilter = () => {
     const handleKeyPress = (e) => {
         if (e.key === "Enter" && inputValue.trim() !== "") {
             const newChip = inputValue.trim();
-            
+
             // Check if already exists in keyword chips only
             if (localKeywordChips.includes(newChip)) {
                 setInputValue("");
@@ -405,7 +404,7 @@ const CaseTableDataFilter = () => {
         setLocalStartTime(null);
         setLocalEndTime(null);
         setInputValue("");
-        
+
         dispatch(clearCaseFilterPayload());
     };
 
@@ -421,8 +420,8 @@ const CaseTableDataFilter = () => {
         setLocalKeywordChips(prev => prev.filter(chip => chip !== chipToRemove));
         setLocalFileTypeChips(prev => prev.filter(chip => chip !== chipToRemove));
         setLocalAggsFieldsChips(prev => prev.filter(chip => chip !== chipToRemove));
-         setLocalSetiments(prev => prev.filter(chip => chip !== chipToRemove));
-          setlocalTargets(prev => prev.filter(chip => chip !== chipToRemove));
+        setLocalSetiments(prev => prev.filter(chip => chip !== chipToRemove));
+        setlocalTargets(prev => prev.filter(chip => chip !== chipToRemove));
     };
 
     const displayChips = getDisplayChips();
@@ -497,7 +496,7 @@ const CaseTableDataFilter = () => {
                     {displayChips.map((chip, index) => {
                         // Determine chip type for styling
                         let chipStyle = { backgroundColor: "#0073CF", color: "white" }; // Default for keywords
-                        
+
                         // Check chip type for styling
                         if (localFileTypeChips.includes(chip)) {
                             chipStyle = { backgroundColor: "#FFD700", color: "#000" };
@@ -505,10 +504,10 @@ const CaseTableDataFilter = () => {
                         else if (localAggsFieldsChips.includes(chip)) {
                             chipStyle = { backgroundColor: "#FFD700", color: "#000" };
                         }
-                         else if (localSetiments.includes(chip)) {
+                        else if (localSetiments.includes(chip)) {
                             chipStyle = { backgroundColor: "#FFD700", color: "#000" };
                         }
-                         else if (localTargets.includes(chip)) {
+                        else if (localTargets.includes(chip)) {
                             chipStyle = { backgroundColor: "#FFD700", color: "#000" };
                         }
                         else if (chip.includes(' to ')) {
@@ -526,8 +525,8 @@ const CaseTableDataFilter = () => {
                                 fontSize: "12px"
                             }}>
                                 <span>{chip}</span>
-                                <button 
-                                    className="chip-delete-btn" 
+                                <button
+                                    className="chip-delete-btn"
                                     onClick={() => removeChip(chip)}
                                     style={{
                                         background: "none",

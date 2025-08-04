@@ -222,23 +222,7 @@ if (source.source === 'dark web') {
       return newErrors;
     });
   };
-
-  // const handleKeywordKeyDown = (index, event) => {
-  //   if (event.key === "Enter" && sources[index].keywordInput.trim()) {
-  //     setSources(prevSources =>
-  //       prevSources.map((src, i) =>
-  //         i === index
-  //           ? {
-  //               ...src,
-  //               keywords: [...src.keywords, src.keywordInput.trim()],
-  //               keywordInput: '',
-  //             }
-  //           : src
-  //       )
-  //     );
-  //     event.preventDefault();
-  //   }
-  // };
+  
 const handleKeywordKeyDown = (index, event) => {
   if (event.key === "Enter" && sources[index].keywordInput.trim()) {
     event.preventDefault();
@@ -263,6 +247,25 @@ const handleKeywordKeyDown = (index, event) => {
   }
 };
 
+  // const handleKeywordKeyDown = (index, event) => {
+  //   if (event.key === "Enter" && sources[index].keywordInput.trim()) {
+  //     setSources(prevSources =>
+  //       prevSources.map((src, i) =>
+  //         i === index
+  //           ? {
+  //               ...src,
+  //               keywords: [...src.keywords, src.keywordInput.trim()],
+  //               keywordInput: '',
+  //             }
+  //           : src
+  //       )
+  //     );
+  //     event.preventDefault();
+  //   }
+  // };
+
+
+
   const handleUrlChange = (index, value) => {
     setSources(prevSources =>
       prevSources.map((src, i) =>
@@ -271,20 +274,29 @@ const handleKeywordKeyDown = (index, event) => {
     );
   };
 
+ 
   const handleUrlKeyDown = (index, event) => {
-    if (event.key === 'Enter' && sources[index].urlInput.trim()) {
-      setSources(prevSources =>
-        prevSources.map((src, i) =>
-          i === index
-            ? {
-                ...src,
-                urls: [...src.urls, src.urlInput.trim()],
-                urlInput: '',
-              }
-            : src
-        )
-      );
-      event.preventDefault();
+  if (event.key === 'Enter' && sources[index].urlInput.trim()) {
+    event.preventDefault();
+
+    const input = sources[index].urlInput.trim();
+    const newUrls = input
+      .split(",")
+      .map(u => u.trim())
+      .filter(u => u.length > 0);
+
+    setSources(prevSources =>
+      prevSources.map((src, i) =>
+        i === index
+          ? {
+              ...src,
+              urls: [...src.urls, ...newUrls],
+              urlInput: '',
+            }
+          : src
+      )
+    );
+     event.preventDefault();
       
       // Clear URL error
       setError(prevErrors => {
@@ -294,8 +306,8 @@ const handleKeywordKeyDown = (index, event) => {
         }
         return newErrors;
       });
-    }
-  };
+  }
+};
 
   const handleDeleteKeyword = (sourceIndex, keyIndex) => {
     setSources(prevSources =>
