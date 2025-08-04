@@ -1,4 +1,3 @@
-
 import axios from 'axios';
 import { SET_TASK_FILTER_ID, SET_DATA, SET_HEADERS, LOG_FILTER_COUNT, SET_ERROR, SET_PAGINATION, SET_LOADING } from '../Constants/filterConstant'
 import Cookies from "js-cookie";
@@ -21,9 +20,10 @@ export const logFilterCount = (user) => {
 
 //newcommonapi
 export const fetchSummaryData =
-  ({ queryPayload, page = 1, itemsPerPage = 50 }) =>
+  ({ queryPayload, page = 1, itemsPerPage = 50, starttime, endtime, file_type,aggsFields,keyword,targets,sentiments,case_id }) =>
+
     async (dispatch) => {
-      console.log("fetchSummaryData called");
+      console.log("fetchSummaryData called",aggsFields);
       try {
         dispatch({ type: SET_LOADING });
 
@@ -33,6 +33,14 @@ export const fetchSummaryData =
           `${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/search`,
           {
             query: queryPayload,
+            case_id:[case_id],
+            keyword:keyword,
+            aggs_fields:aggsFields,
+            file_type: file_type,
+            targets:targets,
+            sentiments:sentiments,
+            start_time: starttime,
+            end_time: endtime,
             page,
           },
           {

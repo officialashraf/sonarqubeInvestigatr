@@ -1,0 +1,636 @@
+.container-r {
+  width: 100%;
+  height: auto;
+  background-color: #080e17;
+}
+
+.top-header {
+  display: flex;
+  padding: 2px;
+  background-color: #080e17 !important;
+  font-size: 18px;
+  border-radius: 5px;
+  font: Poppins;
+  font-weight: 600;
+}
+
+.title h5 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.jobs {
+  display: flex;
+  align-items: center;
+}
+
+.job-content {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+}
+
+.job-content h6 {
+  margin: 0;
+  font-size: 10px;
+  font-weight: bold;
+  color: black;
+  cursor: pointer;
+}
+
+.dropdown-icon {
+  font-size: 12px;
+  color: #333;
+  cursor: pointer;
+}
+
+.icons {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  margin-left: 10px;
+}
+
+.icons svg {
+  font-size: 12px;
+  color: #555;
+  cursor: pointer;
+}
+
+/* Content Section */
+.contents {
+  display: flex;
+  /* height: calc(100vh - 100px); Adjust height based on header */
+  height: 77.5vh;
+  background-color: #080e17;
+}
+
+/* Left Sidebar */
+.left-sidebar {
+  /* width: 20%;
+  background-color: #101D2B;
+  color: white; */
+  /* padding: 16px; */
+  /* overflow: auto; */
+  /* margin-bottom: 45px; */
+  /* height: 71vh; */
+  border-radius: 18px; 
+  overflow-x: auto;
+  border-radius: 18px;
+  scrollbar-color: #1e7df8 #0a192f;
+  scrollbar-width: thin;
+  height: 100%;
+  width: 100%;
+}
+.overflow-wrapper {
+  width: 100%;
+  height: 100%;
+  overflow-x: auto; /* Only horizontal scrolling */
+  overflow-y: hidden; /* Disable vertical scrolling */
+  padding: 10px; /* Add padding if needed for content spacing */
+}
+.left-content {
+  width: 283.08px;
+  background-color: #101d2b;
+  color: white;
+  /* padding: 16px; */
+  /* overflow: auto; */
+  
+  margin-bottom: 45px;
+  height: 62vh;
+  border-radius: 18px;
+  scrollbar-color: #1e7df8 #0a192f;
+  scrollbar-width: thin;
+}
+@media screen and (max-width: 1920px) and (min-width: 1280px) {
+  .left-sidebar {
+    max-height: 78vh;
+    overflow-y: auto; /* Allow vertical scrolling */
+  }
+}
+#scrollableDiv {
+  border: 2px solid red;
+}
+.inner-content {
+  padding-bottom: 60px; /* ya jitna space chahiye */
+  height: 100px;
+}
+
+/* .sidebar-header {
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #a5a5a5; /* Border below the title 
+} */
+.sidebar-header h5 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+  color: #000000;
+}
+.sidebar-header .search-icon {
+  font-size: 18px;
+  color: #ffffff;
+  margin-right: 10px; /* Space between the icon and the title */
+}
+
+.resourceItem {
+  display: flex;
+  align-items: center;
+  background-color: #101d2b;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-bottom: 5px;
+  color: rgb(255, 255, 255);
+}
+
+.resourceItem:hover {
+  background-color: #0073cf;
+  color: white;
+}
+
+.resourceItem.active {
+  background-color: #0073cf;
+  color: white;
+}
+
+.resourceImage {
+  width: 50px;
+  height: 50px;
+  margin: 5px;
+  border-radius: 10px;
+}
+
+.resourceDetails {
+  display: flex;
+  flex-direction: column;
+}
+
+.resourceType {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  letter-spacing: 0.5px;
+  font-family: "Poppins", sans-serif;
+}
+
+.resourceContent {
+  font-size: 12px;
+  color: #bdc3c7;
+  margin: 0;
+}
+.commentBar {
+  background-color: black;
+  color: white;
+  height: 25px;
+  display: flex;
+  align-items: center; /* Centers content vertically */
+  justify-content: center; /* Centers content horizontally */
+  padding: 10px;
+  margin-top: 50%;
+}
+
+@media (max-width: 1280px) and (min-width: 768px) {
+  .left-sidebar {
+    /* width: 30%; Sidebar takes full width on small screens */
+    padding: 8px;
+    /* margin-bottom: 4rem; */
+    /* height: 78vh; */
+  }
+  .left-content{
+    width: 30%;
+  }
+
+  .right-content {
+    width: 100%;
+    /* padding: 8px; */
+  }
+  .h4 {
+    font-size: 12px;
+  }
+
+  .top-header {
+    /* flex-direction: column; Stack elements vertically */
+    align-items: flex-start;
+    /* padding: 8px; */
+  }
+  .title h5 {
+    font-size: 15px; /* Adjust font size for small screens */
+  }
+
+  .subscribeButton {
+    font-size: 12px; /* Adjust button font size */
+  }
+}
+@media (max-width: 480px) {
+  .container-r {
+    padding: 8px; /* Reduce padding for very small screens */
+  }
+
+  .channel-action {
+    /* flex-direction: column; */
+    gap: 8px; /* Reduce spacing on smaller screens */
+  }
+
+  .actionButton {
+    font-size: 12px; /* Smaller font size for small screens */
+  }
+  .actions {
+    justify-content: space-between;
+  }
+
+  .actionButton {
+    font-size: 0.75rem;
+    padding: 4px 6px;
+    flex: 1 1 45%; /* Let buttons occupy approx half the row */
+  }
+
+  .like,
+  .comment {
+    font-size: 10px;
+  }
+}
+@media (max-width: 360px) {
+  .actionButton span + span {
+    display: none; /* Hides label text */
+  }
+}
+
+@media (max-width: 888px) {
+  .right-content {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: scroll;
+    overflow-y: auto;
+    padding: 8px;
+    height: 100%; /* Optional: or adjust based on screen size */
+  }
+}
+
+/* Right Content Area */
+
+.resourceDetailsContainer {
+  display: flex;
+  justify-content: center;
+}
+.right-content {
+  flex: 1;
+  padding-left: 10px;
+  /* padding-top: 10px; */
+  padding-bottom: 50px;
+  width: 50%;
+  overflow-x: auto;
+  overflow-y: auto;
+  background-color: #080e17;
+  align-items: center;
+  justify-content: center;
+  /* height: 100%; */
+  height: 450px;
+  /* min-width: 620px; */
+}
+@media screen and (max-width: 1920px) and (min-width: 1280px) {
+  .right-content {
+    max-height: 80vh;
+    overflow-y: auto; /* Allow vertical scrolling */
+  }
+}
+.resourceDetailsView {
+  padding: 10px;
+  background-color: #101D2B;
+  width: 100%;
+  max-width: 600px;
+  /* height: 80vh; */
+  max-height: 100%;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  margin: 0px 20px;
+  /* margin: auto; */
+  overflow: hidden;
+  flex-shrink: 1;
+}
+.vkIframe {
+  width: 100%;
+  height: auto;
+  max-width: 800px; /* or whatever max width works for you */
+  display: block;
+  object-fit: contain; /* Keeps aspect ratio without overflow */
+  border-radius: 10px;
+}
+.marginSides20 {
+  margin-left: 5%;
+  margin-right: 5%;
+}
+
+.sentiment {
+      font-size: 16px;
+    font-weight: 500;
+    justify-content: flex-start;
+    background-color: #0073CF;
+    border-radius: 15px;
+    height: 56px;
+    padding: 16px 24px 16px 24px;
+    width: 170.49px;
+    /* margin-top: 10px; */
+}
+
+
+.profile-section {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.profileImage {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.displayName {
+    font-size: 16px;
+    color: #FFFFFF;
+    margin: 0px;
+    align-items: center;
+    font-weight: 500;
+}
+.name-date {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.postDate {
+     font-size: 14px;
+    color: #D9D9D9;
+    margin: 2px 0 0 0;
+    font-weight: 400;
+}
+.postImage {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  border-radius: 10px;
+  display: block;
+}
+@media  (max-width: 1920px) {
+  .postImage {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    border-radius: 10px;
+    display: block;
+  }
+  
+}
+.noDataWrapper {
+  text-align: center;
+  padding: 20px;
+  font-weight: bold;
+  font-size: 18px;
+  color: #D9D9D9;
+  background-color: #101D2B;
+  border-radius: 15px;
+}
+.imageFlexWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px; /* Space between images */
+  margin-top: 10px;
+  justify-content: center;
+}
+.imageGridWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center; /* Center the items */
+  margin-top: 10px;
+}
+
+.postMedia {
+  /* height: calc(50% - 4px);  */
+  object-fit: cover;
+  border-radius: 0px; /* Soft rounded corners */
+  display: block; /* Ensures it behaves like a block element */
+  /* margin: auto; */
+}
+
+.imageGridWrapper .postMedia:only-child {
+  height: auto;
+  object-fit: contain;
+  width: 100%; /* Full width for single image */
+}
+
+.imageGridWrapper .postMedia {
+  width: calc(50% - 4px);
+}
+body {
+  overflow-x: hidden;
+}
+
+.activityContent {
+  font-size: 11px;
+  color: #D9D9D9;
+  line-height: 1.5;
+  margin: 0px;
+}
+
+.like-commment-share {
+  display: flex;
+  justify-content: space-evenly;
+  gap: 15px; /* You can increase or decrease this value */
+  font-size: 20px; /* Optional: control icon size */
+  color: #FFFFFF; /* Optional: adjust icon color */
+  align-items: center;
+  font-weight: 400;
+}
+.like {
+  font-size: 20px; /* Optional: control icon size */
+  color: #FFFFFF;
+  gap: 1px;
+}
+.comment {
+  font-size: 20px; /* Optional: control icon size */
+  color: #FFFFFF;
+  gap: 1px;
+}
+.repost {
+  font-size: 20px; /* Optional: control icon size */
+  color: #FFFFFF;
+  gap: 1px;
+}
+.vk {
+  justify-content: flex-start;
+}
+.unified-date {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tiktok-container {
+  position: relative;
+  width: 300px;
+  height: 600px;
+  overflow: hidden;
+  border-radius: 20px;
+  background-color: black;
+  margin-left: 20%;
+  margin-right: 20%;
+}
+
+video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.right-panel {
+  position: absolute;
+  right: 10px;
+  bottom: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+  gap: 15px;
+}
+
+.icon {
+  text-align: center;
+  font-size: 18px;
+}
+
+.icon span {
+  display: block;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.profile-pic {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid white;
+}
+
+.bottom-content {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  right: 60px;
+  color: white;
+  font-family: sans-serif;
+}
+
+.username {
+  font-weight: bold;
+}
+
+.caption {
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.channel-action {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px; /* Adds spacing between sections */
+  padding: 10px;
+  border-bottom: 1px solid #646464;
+  flex-wrap: wrap; /* Important for small screens */
+}
+.channelInfo {
+  display: flex;
+  /* margin-left: 16px; */
+  align-items: center;
+  gap: 8px;
+}
+
+.channelLogo {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.channelName {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.subscribers {
+  font-size: 0.875rem;
+  color: #080E17;
+}
+
+.subscribeButton {
+  margin-left: auto;
+  background-color: #080E17;
+  color: rgb(255, 255, 255);
+  padding: 2px 8px;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  flex-shrink: 0;
+  font-size: 1rem;
+}
+
+.subscribeButton:hover {
+  background-color: #000000;
+  color: white;
+}
+
+.actions {
+  display: flex;
+  gap: 16px;
+  /* width: 100%; */
+  gap: 12px;
+  flex-wrap: wrap; /* Allow buttons to move to next line on small screens */
+
+  max-width: 800px;
+}
+
+.actionButton {
+  display: flex; /* Align icon + text */
+  background-color: #080E17;
+  color: white;
+  border: none;
+  align-items: center;
+  /* padding: 8px 16px; */
+  border-radius: 12px;
+  font-size: 1rem;
+  cursor: pointer;
+  gap: 4px;
+  white-space: nowrap; /* Prevent text from wrapping inside button */
+}
+
+.actionButton:hover {
+  background-color: #e0e0e0;
+}
+@media (max-width: 600px) {
+  .channel-action {
+    flex-direction: column; /* Stack vertically */
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .channelLogo {
+    width: 36px;
+    height: 36px;
+  }
+
+  .channelName {
+    font-size: 0.9rem;
+  }
+
+  .subscribeButton {
+    font-size: 0.85rem;
+    padding: 2px 6px;
+  }
+}

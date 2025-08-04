@@ -1,8 +1,8 @@
 export default {
-  productName: "opensearch",
-  version: "0.1.0",
+  productName: "OSINT",
+  version: "1.0.0",
   lastModifiedOn: "Mon Jun 9 11:10:38 2025 +0530",
-  updatedBy: "officialashraf",
+  updatedBy: "Curated Codes",
   commit: "678fe1d",
-  maintainedBy: "Ashraf Shaikh"
+  maintainedBy: "Curated Codes"
 };

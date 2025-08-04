@@ -10,6 +10,12 @@ import originalWarn from './utils/warn';
 import { Provider } from "react-redux"
 import store, { persistor } from "./Redux/store"; // Store aur Persistor import karo
 import { PersistGate } from "redux-persist/integration/react";
+import './Component/Style/DesignTokens/designTokens.css';
+import '@fontsource/roboto';
+import './i18n';  // import i18n configuration
+
+
+
 
 const loadConfig = async () => {
 

@@ -1,4 +1,4 @@
-import { SET_SEARCH_RESULTS, SET_PAGE, CLOSE_POPUP, OPEN_POPUP, SET_KEYWORDS } from "../Constants/criteriaConstant";
+import { SET_SEARCH_RESULTS, SET_PAGE, CLOSE_POPUP, OPEN_POPUP, SET_KEYWORDS, CLEAR_CRITERIA } from "../Constants/criteriaConstant";
 
 // Redux Reducer
 const initialState = {
@@ -52,6 +52,8 @@ const queryState = {
     case_id: [],
     file_type: [],
     keyword: [],
+    targets: [],
+    sentiment: [],
     start_time: null,
     end_time: null,
     latitude: null,
@@ -69,7 +71,13 @@ export const criteriaReducer = (state = queryState, action) => {
         queryPayload: {
           ...state.queryPayload,
           ...action.payload.queryPayload,
+          targets: action.payload.queryPayload.targets || [],
+          sentiment: action.payload.queryPayload.sentiment || [],
         },
+      };
+    case CLEAR_CRITERIA:
+      return {
+        ...queryState,
       };
 
     default:

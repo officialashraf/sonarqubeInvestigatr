@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import Loader from "../Component/Pages/Layout/loader";
+import Loader from "../Component/Modules/Layout/loader";
 
 const LicenseValidator =()=>{
   const navigate = useNavigate();
@@ -35,8 +35,7 @@ const LicenseValidator =()=>{
     // Show loading spinner while waiting for the response
     return (
       <div style={{
-        background: 'black',
-        color: 'white',
+            color: 'white',
       }}>
         <p>Checking license validity...</p>
         <Loader style={{ borderBottomColor:"white"}}/>

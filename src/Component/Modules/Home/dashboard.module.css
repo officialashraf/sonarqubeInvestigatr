@@ -1,0 +1,52 @@
+/* ✅ Main Container */
+.ContainerDashboard {
+  width: 100%;
+  min-height: 100vh;
+  height: auto;
+  display: flex;
+  background-color: var(--color-colors-backgroundColor);
+  color: var(--color-colors-neutralText);
+  font-family: var(--font-fontFamily);
+}
+
+/* ✅ Two Column Layout */
+.dashboardContainer {
+  display: grid;
+  grid-template-columns: 96px auto;
+  width: 100%;
+  min-height: 100%;
+}
+
+/* ✅ Sidebar */
+.contA {
+  background-color: var(--color-colors-backgroundColor);
+  color: var(--color-colors-neutralText);
+  /* padding-top: 5px; */
+}
+
+/* ✅ Right Side (Header + Main Content) */
+.rightPanel {
+  display: grid;
+  grid-template-rows: 50px auto; /* adjust header height as needed */
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ✅ Header */
+.contD {
+  background-color: var(--color-colors-backgroundColor);
+  color: var(--color-colors-neutralText);
+  text-align: center;
+  padding: 10px 20px;
+}
+
+/* Main Content */
+.contB {
+  background-color: var(--color-colors-backgroundColor);
+  color: var(--color-colors-neutralText);
+  overflow: auto;
+  padding: 20px 20px 0px 20px;
+  height: 100%;
+  scrollbar-color: #1e7df8 #0a192f;
+   scrollbar-width: thin;
+}
