@@ -556,36 +556,31 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
               sx={sharedSxStyles}
             />
 
-
             {/* Location Fields */}
-             {/* <div >
-               <label>Focus your search on a particular location or area</label>
-               <div style={{ display: 'flex', justifyContent: 'space-evenly', color: 'white' }}>
-                 <CommonTextInput
-                   name="latitude"
-                   placeholder="Latitude"
-                   className={styles.searchBar}
-                   value={formData.latitude}
-                   onChange={handleInputChange}
-                   autoComplete='off'
-                   showIcon={false}
+            {/* <div >
+              <label>Focus your search on a particular location or area</label>
+              <div style={{ display: 'flex', justifyContent: 'space-evenly', color: 'white' }}>
+                <CommonTextInput
+                  name="latitude"
+                  placeholder="Latitude"
+                  className={styles.searchBar}
+                  value={formData.latitude}
+                  onChange={handleInputChange}
+                  autoComplete='off'
+                  showIcon={false}
+                />
+                <CommonTextInput
+                  name="longitude"
+                  placeholder="Longitude"
+                  value={formData.longitude}
+                  onChange={handleInputChange}
+                  sx={sharedSxStyles}
+                  autoComplete='off'
+                  showIcon={false}
 
-
-
-
-                 />
-                 <CommonTextInput
-                   name="longitude"
-                   placeholder="Longitude"
-                   value={formData.longitude}
-                   onChange={handleInputChange}
-                   sx={sharedSxStyles}
-                   autoComplete='off'
-                   showIcon={false}
-
-                 />
-               </div>
-             </div> */}
+                />
+              </div>
+            </div> */}
 
             {/* <h5 >SELECT ON MAP</h5> */}
 

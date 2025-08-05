@@ -7,7 +7,7 @@ import { IoIosArrowDropup } from "react-icons/io";
 import { SlArrowDown } from "react-icons/sl";
 import { SlArrowUp } from "react-icons/sl";
 
-const KeywordTagList = ({ queryPayload = null, caseId = null, aggsFields}) => {
+const KeywordTagList = ({ queryPayload = null, caseId = null, aggsFields }) => {
   const token = Cookies.get("accessToken");
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -31,38 +31,36 @@ const KeywordTagList = ({ queryPayload = null, caseId = null, aggsFields}) => {
                 ? [queryPayload.caseId]
                 : [];
 
-        const unified_case_id = caseIdArray.map(String); // Ensure all are strings
-
         // ✅ Prepare raw query object
-        let query = {
-          unified_case_id,
+
+        const case_id = caseIdArray.map(String); // Ensure string[]
+
+        let flatQuery = {
+          case_id,
+          aggs_fields: aggsFields,
           file_type: Array.isArray(queryPayload?.file_type) ? queryPayload.file_type : [],
           keyword: Array.isArray(queryPayload?.keyword) ? queryPayload.keyword : [],
           targets: Array.isArray(queryPayload?.target) ? queryPayload.target : [],
-          sentiment: Array.isArray(queryPayload?.sentiment) ? queryPayload.sentiment : [],
+          sentiments: Array.isArray(queryPayload?.sentiments)
+            ? queryPayload.sentiments
+            : Array.isArray(queryPayload?.sentiment)
+              ? queryPayload.sentiment
+              : [],
+          ...(queryPayload?.start_time && { start_time: queryPayload.start_time }),
+          ...(queryPayload?.end_time && { end_time: queryPayload.end_time }),
+          // page: 1,
+          // size: 50,
         };
 
-        // ✅ Filter out empty/null/undefined/empty-array fields
-        query = Object.fromEntries(
-          Object.entries(query).filter(
+        //  Remove empty/null/undefined arrays or values
+        flatQuery = Object.fromEntries(
+          Object.entries(flatQuery).filter(
             ([, value]) =>
               Array.isArray(value) ? value.length > 0 : value !== null && value !== undefined && value !== ""
           )
         );
 
-        // ✅ Build payload
-        const payload = queryPayload
-          ? {
-            query,
-            aggs_fields: aggsFields,
-           ...(queryPayload?.start_time && { start_time: queryPayload.start_time }),
-            ...(queryPayload?.end_time && { end_time: queryPayload.end_time }),
-          }
-          : {
-            query: { unified_case_id: [String(caseId)] },
-            aggs_fields: aggsFields
-          };
-
+        const payload = flatQuery;
         const response = await axios.post(`${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/aggregate`, payload, {
           headers: {
             "Content-Type": "application/json",
@@ -80,7 +78,7 @@ const KeywordTagList = ({ queryPayload = null, caseId = null, aggsFields}) => {
       }
     };
 
-   fetchKeywordData();
+    fetchKeywordData();
   }, [caseId, aggsFields.join(","), queryPayload, token]);
 
 

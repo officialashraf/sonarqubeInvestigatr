@@ -51,6 +51,7 @@ const customSelectStyles = {
         borderRadius: '10px',
           scrollbarColor: '#1e7df8 var(--color-colors-secondary)',
         scrollbarWidth: 'thin',
+          maxHeight: '150px', // 👈 Limit the dropdown menu heigh
     }),
 
     option: (provided, state) => ({

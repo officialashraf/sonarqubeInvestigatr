@@ -87,9 +87,15 @@ const AddFilter = ({ searchChips, isPopupVisible, setIsPopupVisible }) => {
   // Fetch targets and sentiment from API
   useEffect(() => {
     const fetchTargetsAndSentiment = async () => {
+      const case_id = Array.isArray(caseId)
+  ? caseId.map(String)
+  : [String(caseId)];
+
       try {
         const response = await axios.post('http://5.180.148.40:8005/api/das/distinct', {
-          fields: ["targets", "sentiment", "unified_record_type"]
+
+          fields: ["targets", "sentiment","unified_record_type"],
+          case_id,
         }, {
           headers: {
             'Content-Type': 'application/json',
@@ -123,7 +129,7 @@ const AddFilter = ({ searchChips, isPopupVisible, setIsPopupVisible }) => {
         }));
         setFileTypeOptions(fileTypeOptionsFormatted);
       }
-        
+
       } catch (error) {
         console.error('Error fetching targets and sentiment:', error);
       }
@@ -247,15 +253,14 @@ useEffect(() => {
       : [];
 
     const payload = {
-   queryPayload : {
-  unified_case_id: String(caseId)
-}
+case_id: String(caseId)
+
     };
 
     // Add only if present
     if (selectedPlatforms.length > 0) payload.file_type = selectedPlatforms;
-    if (selectedTargets.length > 0) payload.target = selectedTargets;
-    if (selectedSentiments.length > 0) payload.sentiment = selectedSentiments;
+    if (selectedTargets.length > 0) payload.targets = selectedTargets;
+    if (selectedSentiments.length > 0) payload.sentiments = selectedSentiments;
     if (startTime) payload.starttime = startTime;
     if (endTime) payload.endtime = endTime;
     if (searchChips?.length > 0) {

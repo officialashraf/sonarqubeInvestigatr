@@ -11,8 +11,7 @@ import rss from "../../../Assets/Images/rss.jpg";
 import placeholder from "../../../Assets/Images/placeholder-square.png"
 import TiktokLogo from "../../../Assets/Images/tiktok.png";
 import ResourceDetails from '../../Analyze/ResourceDetails';
-import useInfiniteScroll from '../../../Hooks/useInfiniteScroll'; // ✅ ensure correct path
-
+import useInfiniteScroll from '../../../Hooks/useInfiniteScroll'; 
 
 const ScrollCriteriaViewer = () => {
     // const containerRef = useRef(null);
@@ -36,6 +35,9 @@ const ScrollCriteriaViewer = () => {
     });
 
     const fetchPageData = async (page) => {
+
+        // if (!keywords || keywords.length === 0 || page < 1 || page > totalPages) return;
+
         setLoading(true);
         try {
             const isValid = (v) =>
@@ -45,8 +47,15 @@ const ScrollCriteriaViewer = () => {
 
             const filteredPayload = {};
             Object.entries(payload).forEach(([key, value]) => {
-                if (isValid(value)) filteredPayload[key] = value;
+                if (isValid(value)) {
+                    filteredPayload[key] = value;
+                }
             });
+
+            const paginatedQuery = {
+                ...filteredPayload,
+                page
+            };
 
             const response = await axios.post(
                 `${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/search`,

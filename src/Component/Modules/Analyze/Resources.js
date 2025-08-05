@@ -44,20 +44,25 @@ const Resources = () => {
     onPageChange: (page) => setCurrentPage(page)
   });
 
+  const [loadedPages, setLoadedPages] = useState([]);
+
   // Initialize data on mount or when data1.id changes
   useEffect(() => {
     if (data1?.id) {
       setLoading(true);
-      const queryPayload = {
-        unified_case_id: data1.id
-      };
+
+      //   const queryPayload = {
+      //   unified_case_id: data1.id
+      // };
       dispatch(fetchSummaryData({
-        queryPayload,
+        case_id: String(data1.id),
         ...(caseFilter?.file_type && { file_type: caseFilter.file_type }),
-        ...(caseFilter?.start_time && { start_time: caseFilter.start_time }),
-        ...(caseFilter?.end_time && { end_time: caseFilter.end_time }),
         ...(caseFilter?.aggs_fields && { aggsFields: caseFilter.aggs_fields }),
+        ...(caseFilter?.sentiment && { sentiments: caseFilter.sentiment }),
+        ...(caseFilter?.target && { targets: caseFilter.target }),
         ...(caseFilter?.keyword && { keyword: caseFilter.keyword }),
+        ...(caseFilter?.start_time && { starttime: caseFilter.start_time }),
+        ...(caseFilter?.end_time && { endtime: caseFilter.end_time }),
         page: currentPage,
         itemsPerPage: 50
       })).then(() => {
@@ -65,7 +70,30 @@ const Resources = () => {
         setDataLoaded(true);
       });
     }
-  }, [data1?.id, dispatch, currentPage]);
+  }, [data1?.id, dispatch]);
+  // Load page data when currentPage changes (but not on initial load)
+  useEffect(() => {
+    if (data1?.id && currentPage !== (page || 1)) {
+      setLoading(true);
+      //    const queryPayload = {
+      //   unified_case_id: data1.id
+      // };
+      dispatch(fetchSummaryData({
+        case_id:String(data1.id),
+        ...(caseFilter?.file_type && { file_type: caseFilter.file_type }),
+        ...(caseFilter?.start_time && { starttime: caseFilter.start_time }),
+        ...(caseFilter?.end_time && { endtime: caseFilter.end_time }),
+        ...(caseFilter?.aggs_fields && { aggsFields: caseFilter.aggs_fields }),
+        ...(caseFilter?.sentiment && { sentiments: caseFilter.sentiment }),
+        ...(caseFilter?.target && { targets: caseFilter.target }),
+        ...(caseFilter?.keyword && { keyword: caseFilter.keyword }),
+        page: currentPage,
+        itemsPerPage: 50,
+      })).then(() => {
+        setLoading(false);
+      });
+    }
+  }, [currentPage, data1?.id, dispatch, page]);
 
   // Update allResources to only contain current page data
   useEffect(() => {
@@ -120,14 +148,13 @@ const Resources = () => {
                               ? resource.socialmedia_from_imageurl || resource.socialmedia_media_url || X_logo
                               : resource.unified_record_type === "Facebook"
                                 ? resource.socialmedia_from_imageurl || resource.socialmedia_media_url || Facebook_logo
-                                : resource.unified_record_type === "YouTube"
-                                  ? resource.socialmedia_from_imageurl || resource.socialmedia_media_url || YoutubeLogo
-                                  : resource.unified_record_type === "Tiktok"
-                                    ? resource.socialmedia_from_imageurl || resource.socialmedia_media_url || TiktokLogo
-                                    : resource.unified_record_type === "Instagram"
-                                      ? resource.socialmedia_from_imageurl || resource.socialmedia_media_url || Instagram
-                                      : resource.socialmedia_from_imageurl || resource.socialmedia_media_url || PlaceholderImg
-                        }
+                              : resource.unified_record_type === "YouTube"
+                                ? resource.socialmedia_from_imageurl || resource.socialmedia_media_url || YoutubeLogo
+                                : resource.unified_record_type === "Tiktok"
+                                ? resource.socialmedia_from_imageurl || resource.socialmedia_media_url || TiktokLogo
+                              : resource.unified_record_type === "Instagram"
+                                  ? resource.socialmedia_from_imageurl || resource.socialmedia_media_url || Instagram
+                                   : resource.socialmedia_from_imageurl || resource.socialmedia_media_url || PlaceholderImg                        }
                         onError={(e) => {
                           e.target.onerror = null; // prevents infinite loop
                           if (resource.unified_record_type === "Facebook") {
