@@ -48,7 +48,7 @@ const TargetCreate = ({ togglePopup, existingTargets = [] }) => {
     { value: "vehiclenumber", label: "Vehicle Number" },
     { value: "vehicleownername", label: "Vehicle Owner Name" },
     { value: "passportnumber", label: "Passport Number" },
-    { value: "criminalhistoryoffence", label: "Criminal History Offence" },
+    { value: "criminalhistoryoffense", label: "Criminal History Offense" },
     { value: "criminalhistoryprisonernumber", label: "Criminal History Prisoner Number" },
     { value: "armtype", label: "Arm Type" },
     { value: "armmodelnumber", label: "Arm Model Number" }

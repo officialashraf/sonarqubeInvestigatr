@@ -14,8 +14,8 @@ import { clearCaseFilterPayload } from '../../../Redux/Action/caseAction';
 
 const Summary = ({ filters }) => {
 
-const dispatch = useDispatch();
-dispatch(clearCaseFilterPayload());
+  const dispatch = useDispatch();
+  dispatch(clearCaseFilterPayload());
   const token = Cookies.get("accessToken");
   const [pieData, setPieData] = useState([]);
   const [barData, setBarData] = useState([]);
@@ -39,9 +39,12 @@ dispatch(clearCaseFilterPayload());
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const case_id = Array.isArray(caseId)
+          ? caseId.map(String)
+          : [String(caseId)];
 
         const response = await axios.post(`${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/aggregate`, {
-          query: { unified_case_id: String(caseId) },
+          case_id,
           aggs_fields: ["unified_record_type", "unified_date_only", "unified_type"]
         },
           {

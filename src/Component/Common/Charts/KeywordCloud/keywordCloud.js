@@ -48,8 +48,8 @@ const KeywordTagList = ({ queryPayload = null, caseId = null, aggsFields }) => {
               : [],
           ...(queryPayload?.start_time && { start_time: queryPayload.start_time }),
           ...(queryPayload?.end_time && { end_time: queryPayload.end_time }),
-          page: 1,
-          size: 50,
+          // page: 1,
+          // size: 50,
         };
 
         //  Remove empty/null/undefined arrays or values
