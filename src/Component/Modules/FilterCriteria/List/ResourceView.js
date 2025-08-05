@@ -34,7 +34,7 @@ const ScrollCriteriaViewer = () => {
     const [loading, setLoading] = useState(false);
 
     const fetchPageData = async (page) => {
-        if (!keywords || keywords.length === 0 || page < 1 || page > totalPages) return;
+        // if (!keywords || keywords.length === 0 || page < 1 || page > totalPages) return;
 
         setLoading(true);
         try {

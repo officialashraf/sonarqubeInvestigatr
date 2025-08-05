@@ -51,17 +51,19 @@ const TabulerData = () => {
   };
 
   useEffect(() => {
-    if (caseData?.id && !data) {
+    if (caseData?.id) {
       // const queryPayload = {
       //   unified_case_id: caseData.id
       // };
           const rawPayload = {
       case_id: String(caseData.id),
       file_type: caseFilter?.file_type,
-      start_time: caseFilter?.start_time,
-      end_time: caseFilter?.end_time,
+      starttime: caseFilter?.start_time,
+      endtime: caseFilter?.end_time,
       aggsFields: caseFilter?.aggs_fields,
       keyword: caseFilter?.keyword,
+      sentiments:caseFilter?.sentiment,
+      targets:caseFilter?.target,
       page: currentPage,
       itemsPerPage: 50,
     };
@@ -123,10 +125,12 @@ const TabulerData = () => {
   const rawPayload = {
       case_id: String(caseData.id),
       file_type: caseFilter?.file_type,
-      start_time: caseFilter?.start_time,
-      end_time: caseFilter?.end_time,
+      starttime: caseFilter?.start_time,
+      endtime: caseFilter?.end_time,
       aggsFields: caseFilter?.aggs_fields,
       keyword: caseFilter?.keyword,
+      sentiments:caseFilter?.sentiment,
+      targets:caseFilter?.target,
       page,
       itemsPerPage: 50,
     };

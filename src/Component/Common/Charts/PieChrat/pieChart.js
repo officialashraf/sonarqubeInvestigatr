@@ -12,7 +12,7 @@ const COLORS = [
   getCSSVar('--color-colors-success'),
   getCSSVar('--color-colors-danger'),
   getCSSVar('--color-colors-primaryAccent'),
-   getCSSVar('--color-colors-copper2')
+  getCSSVar('--color-colors-copper2')
 ];
 
 const ReusablePieChart = ({
@@ -39,15 +39,15 @@ const ReusablePieChart = ({
         setLoading(true);
 
         // ✅ Always convert caseId to string[]
-        const caseIdArray = Array.isArray(queryPayload?.case_id)
-          ? queryPayload.case_id
-          : Array.isArray(queryPayload?.caseId)
-            ? queryPayload.caseId
+        const caseIdArray =
+          Array.isArray(queryPayload?.case_id)
+            ? queryPayload.case_id
             : queryPayload?.case_id
               ? [queryPayload.case_id]
-              : queryPayload?.caseId
-                ? [queryPayload.caseId]
+              : caseId
+                ? [caseId]
                 : [];
+
 
         const case_id = caseIdArray.map(String); // Ensure string[]
 
@@ -56,9 +56,9 @@ const ReusablePieChart = ({
           aggs_fields: aggsFields,
           file_type: Array.isArray(queryPayload?.file_type) ? queryPayload.file_type : [],
           keyword: Array.isArray(queryPayload?.keyword) ? queryPayload.keyword : [],
-          targets: Array.isArray(queryPayload?.target) ? queryPayload.target : 
-           Array.isArray(queryPayload?.targets) ? queryPayload.targets :
-           [],
+          targets: Array.isArray(queryPayload?.target) ? queryPayload.target :
+            Array.isArray(queryPayload?.targets) ? queryPayload.targets :
+              [],
           sentiments: Array.isArray(queryPayload?.sentiments)
             ? queryPayload.sentiments
             : Array.isArray(queryPayload?.sentiment)
@@ -66,8 +66,8 @@ const ReusablePieChart = ({
               : [],
           ...(queryPayload?.start_time && { start_time: queryPayload.start_time }),
           ...(queryPayload?.end_time && { end_time: queryPayload.end_time }),
-          page: 1,
-          size: 50,
+          // page: 1,
+          // size: 50,
         };
 
         //  Remove empty/null/undefined arrays or values
@@ -142,11 +142,9 @@ const ReusablePieChart = ({
               fillColor = getCSSVar('--color-colors-copper2');
             } else if (entry.name === "Web Feed") {
               fillColor = getCSSVar('--color-colors-primaryAccent');
-            } else if (entry.name === "DeepWeb") {
-              fillColor = getCSSVar('--color-colors-copper2');
             }
             else if (entry.name === "Dark Web") {
-              fillColor = "#5C4033";
+              fillColor = "#b3229dff";
             }
             else {
               fillColor = COLORS[index % COLORS.length];

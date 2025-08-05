@@ -18,8 +18,8 @@ const ReusableLineGraph = ({
 console.log("queryplayold", queryPayload);
   // Color palette for different types
   const colors = [
-    '#0073CF', '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', 
-    '#FFEAA7', '#DDA0DD', '#98D8C8', '#F7DC6F', '#BB8FCE'
+    '#0073CF', '#FF6B6B',  '#45B7D1', '#F7DC6F','#96CEB4', 
+     '#DDA0DD', '#98D8C8',  ''
   ];
 
 useEffect(() => {
@@ -55,8 +55,8 @@ let flatQuery = {
               : [],
   ...(queryPayload?.start_time && { start_time: queryPayload.start_time }),
   ...(queryPayload?.end_time && { end_time: queryPayload.end_time }),
-  page: 1,
-  size: 50,
+  // page: 1,
+  // size: 50,
 };
 
 //  Remove empty/null/undefined arrays or values
