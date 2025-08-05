@@ -396,9 +396,7 @@ const CreateCriteria = ({ handleCreateCase }) => {
               onSearchClick={() => dispatch(openPopup("recent"))}
               onTuneClick={() => dispatch(openPopup("saved"))}
             /> */}
-
-
-            {/* Filetype Dropdown (Multi Select) */}
+              {/* Filetype Dropdown (Multi Select) */}
             <CommonMultiSelect
               label="Source Type"
               value={formData.filetype}
@@ -485,28 +483,28 @@ const CreateCriteria = ({ handleCreateCase }) => {
             />
 
             {/* Location Fields */}
-            // <label style={{ fontSize: '14px' }}>Focus your search on a particular location or area</label>
-            // <div style={{ display: 'flex', justifyContent: 'space-evenly', color: 'white' }}>
-            //   <CommonTextInput
-            //     name="latitude"
-            //     placeholder="Latitude"
-            //     // className="com me-2"
-            //     value={formData.latitude}
-            //     onChange={handleInputChange}
-            //     showIcon={false}
-            //     autoComplete='off'
-            //   />
-            //   <CommonTextInput
-            //     name="longitude"
-            //     placeholder="Longitude"
-            //     showIcon={false}
-            //     value={formData.longitude}
-            //     onChange={handleInputChange}
+             {/* <label style={{ fontSize: '14px' }}>Focus your search on a particular location or area</label>
+             <div style={{ display: 'flex', justifyContent: 'space-evenly', color: 'white' }}>
+               <CommonTextInput
+                name="latitude"
+                placeholder="Latitude"
+                // className="com me-2"
+                value={formData.latitude}
+                onChange={handleInputChange}
+                showIcon={false}
+                autoComplete='off'
+              />
+               <CommonTextInput
+                name="longitude"
+                placeholder="Longitude"
+                showIcon={false}
+                value={formData.longitude}
+                onChange={handleInputChange}
 
 
-            //     autoComplete='off'
-            //   />
-            // </div>
+                autoComplete='off'
+              />
+            </div> */}
 
             {/* Save Criteria Checkbox */}
             <FormControlLabel

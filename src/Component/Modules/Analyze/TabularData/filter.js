@@ -89,7 +89,7 @@ const AddFilter = ({ searchChips, isPopupVisible, setIsPopupVisible }) => {
     const fetchTargetsAndSentiment = async () => {
       try {
         const response = await axios.post('http://5.180.148.40:8005/api/das/distinct', {
-          fields: ["targets", "sentiment,"unified_record_type"]
+          fields: ["targets", "sentiment", "unified_record_type"]
         }, {
           headers: {
             'Content-Type': 'application/json',

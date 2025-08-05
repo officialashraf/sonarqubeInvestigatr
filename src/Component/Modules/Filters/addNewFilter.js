@@ -223,22 +223,22 @@ if (source.source === 'dark web') {
     });
   };
 
-  const handleKeywordKeyDown = (index, event) => {
-    if (event.key === "Enter" && sources[index].keywordInput.trim()) {
-      setSources(prevSources =>
-        prevSources.map((src, i) =>
-          i === index
-            ? {
-                ...src,
-                keywords: [...src.keywords, src.keywordInput.trim()],
-                keywordInput: '',
-              }
-            : src
-        )
-      );
-      event.preventDefault();
-    }
-  };
+  // const handleKeywordKeyDown = (index, event) => {
+  //   if (event.key === "Enter" && sources[index].keywordInput.trim()) {
+  //     setSources(prevSources =>
+  //       prevSources.map((src, i) =>
+  //         i === index
+  //           ? {
+  //               ...src,
+  //               keywords: [...src.keywords, src.keywordInput.trim()],
+  //               keywordInput: '',
+  //             }
+  //           : src
+  //       )
+  //     );
+  //     event.preventDefault();
+  //   }
+  // };
 const handleKeywordKeyDown = (index, event) => {
   if (event.key === "Enter" && sources[index].keywordInput.trim()) {
     event.preventDefault();
