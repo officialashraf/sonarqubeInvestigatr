@@ -474,7 +474,8 @@ body {
 
 .tiktok-container {
   position: relative;
-  width: 300px;
+  width: 100%;
+  max-width: 600px;
   height: 600px;
   overflow: hidden;
   border-radius: 20px;

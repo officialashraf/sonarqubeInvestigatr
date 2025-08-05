@@ -58,7 +58,7 @@ const TabulerData = () => {
           const rawPayload = {
       case_id: String(caseData.id),
       file_type: caseFilter?.file_type,
-      starttime: caseFilter?.start_time,
+     starttime: caseFilter?.start_time,
       endtime: caseFilter?.end_time,
       aggsFields: caseFilter?.aggs_fields,
       keyword: caseFilter?.keyword,

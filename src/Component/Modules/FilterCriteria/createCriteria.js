@@ -413,9 +413,7 @@ const CreateCriteria = ({ handleCreateCase }) => {
               onSearchClick={() => dispatch(openPopup("recent"))}
               onTuneClick={() => dispatch(openPopup("saved"))}
             /> */}
-
-
-            {/* Filetype Dropdown (Multi Select) */}
+              {/* Filetype Dropdown (Multi Select) */}
             <CommonMultiSelect
               label="Source Type"
               value={formData.filetype}
@@ -502,6 +500,7 @@ const CreateCriteria = ({ handleCreateCase }) => {
             />
 
             {/* Location Fields */}
+
             {/* <label style={{ fontSize: '14px' }}>Focus your search on a particular location or area</label>
             <div style={{ display: 'flex', justifyContent: 'space-evenly', color: 'white' }}>
               <CommonTextInput
@@ -513,6 +512,7 @@ const CreateCriteria = ({ handleCreateCase }) => {
                 showIcon={false}
                 autoComplete='off'
               />
+
               <CommonTextInput
                 name="longitude"
                 placeholder="Longitude"
