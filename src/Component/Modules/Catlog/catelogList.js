@@ -113,7 +113,7 @@ const handleSaveChanges = async (editedRows) => {
         { key: "id", label: "Catalogue ID" },
         { key: "column_name", label: "Column Name" },
         { key: "group_name", label: "Group Name" },
-        { key: "display_name", label: "Dispaly Name" },
+        { key: "display_name", label: "Display Name" },
         { key: "is_visible", label: "Visible" },
     ];
 

@@ -161,7 +161,8 @@ return (
                 backgroundColor: '#080E17',
                 borderRadius: '15px',
                 overflow: 'hidden',
-                border: "1px solid #0073CF"
+                border: "1px solid #0073CF",
+                 color: '#D9D9D9',
               }),
               option: (provided, state) => ({
                 ...provided,

@@ -51,7 +51,7 @@ const TabulerData = () => {
   };
 
   useEffect(() => {
-    if (caseData?.id && !data) {
+    if (caseData?.id) {
       // const queryPayload = {
       //   unified_case_id: caseData.id
       // };

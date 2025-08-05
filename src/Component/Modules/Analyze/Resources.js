@@ -63,7 +63,7 @@ const Resources = () => {
       //   unified_case_id: data1.id
       // };
       dispatch(fetchSummaryData({
-        case_id: data1.id,
+        case_id: String(data1.id),
         ...(caseFilter?.file_type && { file_type: caseFilter.file_type }),
         ...(caseFilter?.aggs_fields && { aggsFields: caseFilter.aggs_fields }),
         ...(caseFilter?.sentiment && { sentiments: caseFilter.sentiment }),
@@ -87,7 +87,7 @@ const Resources = () => {
       //   unified_case_id: data1.id
       // };
       dispatch(fetchSummaryData({
-        case_id: data1.id,
+        case_id:String(data1.id),
         ...(caseFilter?.file_type && { file_type: caseFilter.file_type }),
         ...(caseFilter?.start_time && { starttime: caseFilter.start_time }),
         ...(caseFilter?.end_time && { endtime: caseFilter.end_time }),

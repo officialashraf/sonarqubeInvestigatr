@@ -87,9 +87,14 @@ const AddFilter = ({ searchChips, isPopupVisible, setIsPopupVisible }) => {
   // Fetch targets and sentiment from API
   useEffect(() => {
     const fetchTargetsAndSentiment = async () => {
+      const case_id = Array.isArray(caseId)
+  ? caseId.map(String)
+  : [String(caseId)];
+
       try {
         const response = await axios.post('http://5.180.148.40:8005/api/das/distinct', {
-          fields: ["targets", "sentiment","unified_record_type"]
+          fields: ["targets", "sentiment","unified_record_type"],
+          case_id,
         }, {
           headers: {
             'Content-Type': 'application/json',
