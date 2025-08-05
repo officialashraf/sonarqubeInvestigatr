@@ -61,7 +61,7 @@ const useInfiniteScroll = ({
         : container.scrollHeight / 2 - container.clientHeight / 2;
       container.scrollTo({
         top: newScrollTop,
-        behavior: 'smooth',
+        behavior: 'auto',
       });
     }
   }, [currentPage, totalPages]);
