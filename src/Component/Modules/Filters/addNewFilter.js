@@ -222,7 +222,7 @@ if (source.source === 'dark web') {
       return newErrors;
     });
   };
-  
+
 const handleKeywordKeyDown = (index, event) => {
   if (event.key === "Enter" && sources[index].keywordInput.trim()) {
     event.preventDefault();

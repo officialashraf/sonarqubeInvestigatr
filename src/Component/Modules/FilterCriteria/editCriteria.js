@@ -568,10 +568,6 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
                   onChange={handleInputChange}
                   autoComplete='off'
                   showIcon={false}
-
-
-
-
                 />
                 <CommonTextInput
                   name="longitude"
