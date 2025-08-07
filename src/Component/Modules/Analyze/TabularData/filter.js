@@ -92,8 +92,7 @@ const AddFilter = ({ searchChips, isPopupVisible, setIsPopupVisible }) => {
   : [String(caseId)];
 
       try {
-        const response = await axios.post('http://5.180.148.40:8005/api/das/distinct', {
-
+        const response = await axios.post(`${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/distinct`, {
           fields: ["targets", "sentiment","unified_record_type"],
           case_id,
         }, {
