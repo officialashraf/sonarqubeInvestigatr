@@ -4,9 +4,10 @@ import style from "./caseTableData.module.css";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchSummaryData } from "../../../../Redux/Action/filterAction";
 import Loader from "../../Layout/loader";
-import styles from "../../../Common/Table/table.module.css";
+// import styles from "../../../Common/Table/table.module.css";
 import axios from "axios";
 import Cookies from "js-cookie";
+import CommonTableComponent from "../../../Common/Table/CommonTableComponent";
 
 const TabulerData = () => {
   const dispatch = useDispatch();
@@ -164,197 +165,23 @@ const TabulerData = () => {
   }
 
   return (
-    <>
-      <div className={styles.mainContainer}>
-      <div className={styles.tableWrapper} style={{ overflowY: "auto", overflowX: "auto"}}>
-          {data && data.length > 0 ? (
-            <Table hover className={styles.table}>
-              <thead>
-                {/* Group Headers */}
-                {/* <tr>
-                  {(() => {
-                    const groupMap = {};
-                    processedHeaders.forEach((col) => {
-                      if (!groupMap[col.groupName]) groupMap[col.groupName] = [];
-                      groupMap[col.groupName].push(col);
-                    });
-
-                    return Object.entries(groupMap).map(([group, cols]) => {
-                      const visibleCols = cols.filter(col => headers.includes(col.key));
-                      if (visibleCols.length > 0) {
-                        return (
-                          <th
-                            key={`group-${group}`}
-                            colSpan={visibleCols.length}
-                            className={style.groupTh}
-                            style={{
-                              textAlign: "center",
-                              backgroundColor: "#f0f0f0",
-                              fontWeight: "600",
-                              fontSize: "13px",
-                              borderBottom: "1px solid #ccc"
-                            }}
-                          >
-                            {group}
-                          </th>
-                        );
-                      }
-                      return null;
-                    });
-                  })()}
-                </tr> */}
-
-                {/* Column Headers */}
-                <tr>
-                  {processedHeaders
-                    .filter(col => headers.includes(col.key))
-                    .map((col) => (
-                      <th
-                        key={col.key}
-                        className={style.fixedTh}
-                      >
-                        <div
-                          // style={{
-                          //   color: getGroupColor(col.groupName),
-                          //    fontWeight: "600"
-                          // }}
-                        >
-                          {col.displayName}
-                        </div>
-                      </th>
-                    ))}
-                </tr>
-              </thead>
-
-              <tbody>
-                {data.map((item, index) => (
-                  <tr key={index}>
-                    {processedHeaders.map((col) => (
-                      <td
-                        key={col.key}
-                        className={style.fixedTd}
-                        style={{ backgroundColor: getGroupColor(col.groupName) }}
-                      >
-                        <div
-                          className="cell-content"
-                          style={{
-                            cursor: "pointer",
-                            fontWeight: "400",
-                            overflow: "auto",
-                            whiteSpace: "nowrap",
-                            padding: "0px 5px",
-                            fontSize: "12px",
-                            fontFamily: "roboto",
-                            scrollbarWidth: "none",
-                            msOverflowStyle: "none"
-                          }}
-                          title={item[col.key]}
-                        >
-                         {["targets", "person", "gpe", "unified_case_id", "org","loc", "socialmedia_hashtags"].includes(col.key) ? (() => {
-                            let tags = [];
-                            try {
-                              tags = JSON.parse(item[col.key]?.replace(/'/g, '"') || "[]");
-                            } catch (err) {
-                              tags = [];
-                            }
-                            return (
-                              <div style={{ display: "flex", gap: "4px" }}>
-                                {tags.map((tag, i) => (
-                                  <span
-                                    key={i}
-                                    style={{
-                                      backgroundColor: "#FFC107",
-                                      color: "#000",
-                                      padding: "2px 6px",
-                                      borderRadius: "12px",
-                                      fontSize: "11px",
-                                      whiteSpace: "nowrap"
-                                    }}
-                                  >
-                                    {tag}
-                                  </span>
-                                ))}
-                              </div>
-                            );
-                          })() : item[col.key]}
-                        </div>
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
-          ) : (
-            <p className="text-center" style={{ margin: "20px 0px", border: "1px solid #ccc" }}>
-              No data available
-            </p>
-          )}
-        </div>
-
-        {/* Pagination */}
-      <div
-  className={style.paginationContainer}
-  style={{
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between", // updated
-    width: "100%",                   // ensure full width
-    padding: "0 16px"                // optional padding
-  }}
->
-  {/* Pagination centered inside a wrapper */}
-  <div style={{ flex: 1, display: "flex", justifyContent: "center" }}>
-    <Pagination>
-      <Pagination.First onClick={() => handlePageChange(1)} disabled={currentPage === 1} />
-      <Pagination.Prev onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
-      {pages.map((number, index) =>
-        number === "..." ? (
-          <Pagination.Item key={index} className={style.pageItem} disabled>
-            ...
-          </Pagination.Item>
-        ) : (
-          <Pagination.Item
-            key={index}
-            active={number === currentPage}
-            onClick={() => handlePageChange(number)}
-            className={`${styles.pageItem} ${number === currentPage ? styles.activePage : ""}`}
-          >
-            {number}
-          </Pagination.Item>
-        )
-      )}
-      <Pagination.Next onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages} />
-      <Pagination.Last onClick={() => handlePageChange(totalPages)} disabled={currentPage === totalPages} />
-    </Pagination>
-  </div>
-
-  {/* Total results on the right */}
-  <div style={{ fontSize: "12px", color: "#ccc" }}>
-    (Total Results - { totalResults })
-  </div>
-</div>
-
-
-        {/* Group Color Legend */}
-        {/* <div
-          className={style.legendContainer}
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            flexWrap: "wrap",
-            gap: "12px",
-            marginTop: "12px"
-          }}
-        >
-          {Object.entries(groupColors).map(([group, color]) => (
-            <div key={group} style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              <div style={{ width: "14px", height: "14px", backgroundColor: color, borderRadius: "50%", border: "1px solid #999" }} />
-              <span style={{ fontSize: "12px" }}>{group}</span>
-            </div>
-          ))}
-        </div> */}
-      </div>
-    </>
+    <CommonTableComponent
+      data={data}
+      headers={headers}
+      loading={loading}
+      error={error}
+      currentPage={currentPage}
+      totalPages={totalPages}
+      totalResults={totalResults}
+      handlePageChange={handlePageChange}
+      columnMapping={columnMapping}
+      useColumnMapping={true}
+      groupColors={groupColors}
+      getGroupColor={getGroupColor}
+      showGroupHeaders={false} // Set to true if you want group headers
+      specialColumns={["targets", "person", "gpe", "unified_case_id", "org", "loc", "socialmedia_hashtags"]}
+    />
+      
   );
 };
 
