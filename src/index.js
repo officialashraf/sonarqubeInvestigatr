@@ -14,9 +14,6 @@ import './Component/Style/DesignTokens/designTokens.css';
 import '@fontsource/roboto';
 import './i18n';  // import i18n configuration
 
-
-
-
 const loadConfig = async () => {
 
 const timestamp = new Date().getTime();
