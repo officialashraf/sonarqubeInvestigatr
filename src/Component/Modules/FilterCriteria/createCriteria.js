@@ -305,7 +305,7 @@ const CreateCriteria = ({ handleCreateCase }) => {
 
       dispatch(setKeywords({
         keyword: response.data.input.keyword,
-        queryPayload: response.data.input  // or other fields if needed
+        queryPayload: payload  // or other fields if needed
       }));
       console.log("setkeywordDispacth", response.data.input.keyword)
       // Dispatch initial page number

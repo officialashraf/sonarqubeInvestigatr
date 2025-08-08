@@ -194,9 +194,7 @@ useEffect(() => {
   useEffect(() => {
     if (caseId && searchPayload) {
       dispatch(fetchSummaryData({
-        queryPayload: {
-          unified_case_id: caseId,
-        },
+        case_id: caseId,
         fileType: searchPayload.file_type,
         starttime: searchPayload.starttime,
         endtime: searchPayload.endtime

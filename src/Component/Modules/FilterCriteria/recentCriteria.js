@@ -96,10 +96,19 @@ const RecentCriteria = () => {
     }
 
     // Handle time range - create a single chip for date range if both exist
-    if (isValid(start_time) && isValid(end_time)) {
-      updatedReduxKeywords.push(`${start_time} to ${end_time}`);
-    }
-
+  if (isValid(start_time) && isValid(end_time)) {
+        const formatDateTime = (dateStr) => {
+          try {
+            const date = new Date(dateStr);
+            const dateStr2 = date.toISOString().split('T')[0]; // YYYY-MM-DD
+            const timeStr = date.toTimeString().split(' ')[0].substring(0, 5); // HH:MM
+            return `${dateStr2} ${timeStr}`;
+          } catch (error) {
+            return dateStr;
+          }
+        };
+        updatedReduxKeywords.push(`${formatDateTime(start_time)} to ${formatDateTime(end_time)}`);
+      }
     console.log("Updated Redux keywords:", updatedReduxKeywords);
     setReduxKeywords(updatedReduxKeywords);
   }, [recentKeyword, caseId, fileType, sentiments, targets, start_time, end_time]);
@@ -179,7 +188,7 @@ const RecentCriteria = () => {
         }
       }
       
-      // Dispatch updated payload to Redux
+      // Dispatch updated payload to Redux - NO API call triggered
       dispatch(setKeywords({
         keyword: updatedReduxKeywords,
         queryPayload: updatedPayload

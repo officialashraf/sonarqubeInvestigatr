@@ -116,7 +116,9 @@ const CriteriaSentimentChart = React.memo(() => {
     queryPayload?.keyword,
     queryPayload?.file_type,
     queryPayload?.start_time,
-    queryPayload?.end_time
+    queryPayload?.end_time,
+     queryPayload?.targets,
+      queryPayload?.sentiments
   ]);
   
   useEffect(() => {
