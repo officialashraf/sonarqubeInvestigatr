@@ -519,7 +519,9 @@ export default function ResourceDetails({
                     {resource.socialmedia_media_url && (() => {
                         let urls = [];
                         try {
-                            urls = JSON.parse(resource.socialmedia_media_url);
+                            urls = typeof resource.socialmedia_media_url === 'string'
+                                ? JSON.parse(resource.socialmedia_media_url)
+                                : resource.socialmedia_media_url;
                         } catch (error) {
                             return <p>Invalid media format</p>;
                         }
@@ -545,6 +547,7 @@ export default function ResourceDetails({
                             </div>
                         );
                     })()}
+
                     <div className="view" style={{ display: "flex", gap: "4px" }}>
                         <div className="time">
                             <span>
