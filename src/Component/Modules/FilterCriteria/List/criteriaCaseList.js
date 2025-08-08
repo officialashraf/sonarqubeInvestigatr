@@ -7,6 +7,7 @@ import Cookies from 'js-cookie';
 import Loader from '../../Layout/loader';
 import styles from "../../../Common/Table/table.module.css";
 import style from "../../Analyze/TabularData/caseTableData.module.css";
+import CommonTableComponent from '../../../Common/Table/CommonTableComponent';
 
 const CriteriaCaseTable = () => {
   const token = Cookies.get("accessToken");
@@ -18,6 +19,9 @@ const CriteriaCaseTable = () => {
   // console.log("setisloading",setIsLoading)
   const [loading, setLoading] = useState(false);
 
+  const headers = searchResults.length > 0
+    ? [...new Set(searchResults.flatMap(item => Object.keys(item)))]
+    : [];
   // Fetch data when page changes
   useEffect(() => {
     const fetchPageData = async () => {
@@ -173,141 +177,19 @@ const CriteriaCaseTable = () => {
 
   return (
     <>
-      <div style={{ backgroundColor: "#101D2B", borderRadius: '15px', padding: "0px 15px 0px 15px" }}>
-        <div className="tabs" >
-          {/* <div
-            className={`tab active`} // "Cases" will always be active
-          // onClick={() => setActiveTab('Cases')}
-
-          >
-            Cases ({totalResults || "no results"})
-          </div> */}
-
-        </div>
-        <div className={styles.tableWrapper} >
-
-          {loading ? (
-            <div>
-              <Loader />
-            </div>
-          ) : (
-            // <Table striped bordered hover variant='light'>
-            <Table hover className={styles.table}>
-              <thead >
-                <tr>
-                  {/* Dynamically generate headers from all unique keys */}
-                  {searchResults.length > 0 && [...new Set(searchResults.flatMap(item => Object.keys(item)))]
-                    .map((key, index) => (
-                      <th key={index} className={style.fixedTh}>
-                        {key
-                          .split("_") // Split by underscores
-                          .map(word => {
-                            return word === word.toUpperCase() //  Check if it's fully uppercase
-                              ? word.charAt(0).toUpperCase() + word.slice(1).toLowerCase() //  Convert all except first letter to lowercase
-                              : word.charAt(0).toUpperCase() + word.slice(1); //  Keep normal capitalization
-                          })
-                          .join(" ") // Rejoin words with space
-
-                        }
-                      </th>
-                    ))}
-                </tr>
-              </thead>
-              <tbody>
-                {searchResults.length > 0 ? (
-                  searchResults.map((item, rowIndex) => (
-                    <tr key={rowIndex}>
-                      {/* Dynamically generate table cells */}
-                      {[...new Set(searchResults.flatMap(item => Object.keys(item)))].map((key, colIndex) => (
-                        <td key={colIndex} className={style.fixedTd}>
-                          <div
-                            className="cell-content"
-                            style={{
-                              cursor: 'pointer',
-                              // padding: "0px 0px 0px 5px",
-                              // height: '37px',
-                              // fontFamily: 'sans-serif',
-                              fontWeight: '400',
-                              overflow: 'auto',
-                              //  textOverflow: 'ellipsis',
-                              whiteSpace: 'nowrap',
-                              //  vertical- align: middle;
-                              padding: '0px 5px 0px 5px',
-                              fontSize: '12px',
-                              fontFamily: 'roboto',
-                              scrollbarWidth: 'none',
-                              msOverflowStyle: 'none',
-                            }}
-                            title={typeof item[key] === 'object' ? JSON.stringify(item[key]) : item[key]}
-                          // onClick={() => togglePopupA(item)}
-                          >
-                            {["socialmedia_hashtags", "targets", "person", "gpe", "unified_case_id", "org", "loc"].includes(key) && Array.isArray(item[key]) ? (
-                              <div style={{ display: "flex", gap: "4px" }}>
-                                {item[key].map((tag, i) => (
-                                  <span
-                                    key={i}
-                                    style={{
-                                      backgroundColor: "#FFC107",
-                                      color: "#000",
-                                      padding: "2px 6px",
-                                      borderRadius: "12px",
-                                      fontSize: "11px",
-                                      whiteSpace: "nowrap",
-                                    }}
-                                  >
-                                    {tag}
-                                  </span>
-                                ))}
-                              </div>
-                            ) : typeof item[key] === "object" && item[key] !== null ? (
-                              JSON.stringify(item[key])
-                            ) : (
-                              item[key] || "-"
-                            )}
-                            {/* {typeof item[key] === 'object' && item[key] !== null
-                              ? JSON.stringify(item[key]) // Handle objects/arrays by converting to string
-                              : item[key] || '-'} */}
-                          </div>
-                        </td>
-                      ))}
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan={searchResults.length > 0 ?
-                      [...new Set(searchResults.flatMap(item => Object.keys(item)))].length : 1}
-                      className="text-center">
-                      No data available
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </Table>
-          )}
-        </div>
-      </div>
-
-      <div
-        className={styles.paginationContainer}
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          width: "100%", // ensures full horizontal space
-          padding: "0 16px", // optional spacing
-        }}
-      >
-        {/* Pagination centered */}
-        <div style={{ flex: 1, display: "flex", justifyContent: "center" }}>
-          {renderPagination()}
-        </div>
-
-        {/* Total Result aligned right */}
-        <div style={{ fontSize: "14px", color: "#ccc" }}>
-          (Total Results - {totalResults || "0"})
-        </div>
-      </div>
-
+      <CommonTableComponent
+        data={searchResults}
+        headers={headers}
+        loading={loading}
+        currentPage={currentPage}
+        totalPages={totalPages}
+        totalResults={totalResults}
+        handlePageChange={handlePageChange}
+        useColumnMapping={false}
+        specialColumns={["socialmedia_hashtags", "targets", "person", "gpe", "unified_case_id", "org", "loc"]}
+        containerStyle={{ backgroundColor: "transparent" }}
+        tableWrapperStyle={{ backgroundColor: "transparent" }}
+      />
 
     </>
   );

@@ -20,6 +20,7 @@ import ScrollCriteriaViewer from './ResourceView';
 import GrapghicalCriteria from './CriteriaGraphicaView/Grapghs/grapghicalCriteria';
 import AppButton from '../../../Common/Buttton/button';
 import styles from "../../Analyze/caseHeader.module.css";
+import SearchUIContainer from '../../../Common/SearchBarCriteria/SearchUIContainer';
 
 const SearchResults = () => {
   const token = Cookies.get('accessToken');
@@ -266,128 +267,155 @@ const SearchResults = () => {
   };
 
   return (
-    <div className="search-container" style={{ backgroundColor: '#080E17', height: '100%', zIndex: '1050', overflowY: "hidden" }}>
-      <div className={styles.actionIconsContainer} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '5px' }}>
-        <div className={styles.searchHeader} style={{ width: '60%', backgroundColor: '#080E17' }}>
-          <TextField
-            fullWidth
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon style={{ color: '#0073CF' }} />
-                </InputAdornment>
-              ),
-              endAdornment: (
-                <InputAdornment position="end">
-                  <SendIcon style={{ cursor: 'pointer', color: '#0073CF', marginRight: '5px' }} onClick={handleSearch} />
-                  <TuneIcon onClick={openPopup} style={{ cursor: 'pointer', backgroundColor: "#0073CF", color: '#0A192F' }} />
-                </InputAdornment>
-              ),
-              style: {
-                height: '38px',
-                padding: '0 8px',
-                backgroundColor: "#101D2B",
-                borderRadius: "15px",
-                color: 'white',
-                fontSize: "12px",
-                marginBottom: "5px",
-              },
-            }}
-            type="text"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            onKeyPress={handleKeyPress}
-            placeholder="Search..."
-            sx={sharedSxStyles}
-          />
-          <div style={{ padding: '0px 0px', height: '20px', marginLeft: "5px" }}>
-            <AppButton children={"Reset"} onClick={resetSearch} />
-          </div>
-        </div>
-        <div style={{ display: "flex", gap: "20px", alignItems: "center" }}>
-          <PieChart
-            sx={{ fontSize: 40 }}
-            className={`${styles.icon} ${activeComponent === "graph" ? styles.activeIcon : ""}`}
-            onClick={() => handleComponentToggle("graph")}
-          />
-          <FaPhotoVideo
-            sx={{ fontSize: 40 }}
-            className={`${styles.icon} ${activeComponent === "photoVideo" ? styles.activeIcon : ""}`}
-            onClick={() => handleComponentToggle("photoVideo")}
-          />
-          <ListAltOutlined
-            sx={{ fontSize: 40 }}
-            className={`${styles.icon} ${activeComponent === "list" ? styles.activeIcon : ""}`}
-            onClick={() => handleComponentToggle("list")}
-          />
-        </div>
-      </div>
+    <SearchUIContainer
+      inputValue={inputValue}
+      setInputValue={setInputValue}
+      handleSearch={handleSearch}
+      handleKeyPress={handleKeyPress}
+      resetSearch={resetSearch}
+      activeComponent={activeComponent}
+      setActiveComponent={handleComponentToggle}
+      displayChips={filteredChips}
+      chipCheckFunctions={[
+        (chip) => localCaseIdChips.includes(chip),
+        (chip) => localFileTypeChips.includes(chip),
+        (chip) => localSentimentChips.includes(chip),
+        (chip) => localTargetChips.includes(chip),
+        (chip) => chip.includes(' to ')
+      ]}
+      removeChip={removeChip}
+      PopupComponent={AddNewCriteria}
+      isPopupVisible={isPopupVisible}
+      setIsPopupVisible={setIsPopupVisible}
+      componentsMap={{
+        graph: { icon: PieChart, component: <GrapghicalCriteria searchChips={displayChips} /> },
+        photoVideo: { icon: FaPhotoVideo, component: <ScrollCriteriaViewer /> },
+        list: { icon: ListAltOutlined, component: <CriteriaCaseTable searchChips={displayChips} /> },
+      }}
+    />
 
-      <div className="search-term-indicator" style={{ backgroundColor: '#080E17' }}>
-        <div className="chips-container">
-          {filteredChips && filteredChips.map((chip, index) => {
-            // Determine chip type for styling (same logic as CaseTableDataFilter)
-            let chipStyle = { backgroundColor: "#0073CF", color: "white" }; // Default for keywords
+    // <div className="search-container" style={{ backgroundColor: '#080E17', height: '100%', zIndex: '1050', overflowY: "hidden" }}>
+    //   <div className={styles.actionIconsContainer} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '5px' }}>
+    //     <div className={styles.searchHeader} style={{ width: '60%', backgroundColor: '#080E17' }}>
+    //       <TextField
+    //         fullWidth
+    //         InputProps={{
+    //           startAdornment: (
+    //             <InputAdornment position="start">
+    //               <SearchIcon style={{ color: '#0073CF' }} />
+    //             </InputAdornment>
+    //           ),
+    //           endAdornment: (
+    //             <InputAdornment position="end">
+    //               <SendIcon style={{ cursor: 'pointer', color: '#0073CF', marginRight: '5px' }} onClick={handleSearch} />
+    //               <TuneIcon onClick={openPopup} style={{ cursor: 'pointer', backgroundColor: "#0073CF", color: '#0A192F' }} />
+    //             </InputAdornment>
+    //           ),
+    //           style: {
+    //             height: '38px',
+    //             padding: '0 8px',
+    //             backgroundColor: "#101D2B",
+    //             borderRadius: "15px",
+    //             color: 'white',
+    //             fontSize: "12px",
+    //             marginBottom: "5px",
+    //           },
+    //         }}
+    //         type="text"
+    //         value={inputValue}
+    //         onChange={(e) => setInputValue(e.target.value)}
+    //         onKeyPress={handleKeyPress}
+    //         placeholder="Search..."
+    //         sx={sharedSxStyles}
+    //       />
+    //       <div style={{ padding: '0px 0px', height: '20px', marginLeft: "5px" }}>
+    //         <AppButton children={"Reset"} onClick={resetSearch} />
+    //       </div>
+    //     </div>
+    //     <div style={{ display: "flex", gap: "20px", alignItems: "center" }}>
+    //       <PieChart
+    //         sx={{ fontSize: 40 }}
+    //         className={`${styles.icon} ${activeComponent === "graph" ? styles.activeIcon : ""}`}
+    //         onClick={() => handleComponentToggle("graph")}
+    //       />
+    //       <FaPhotoVideo
+    //         sx={{ fontSize: 40 }}
+    //         className={`${styles.icon} ${activeComponent === "photoVideo" ? styles.activeIcon : ""}`}
+    //         onClick={() => handleComponentToggle("photoVideo")}
+    //       />
+    //       <ListAltOutlined
+    //         sx={{ fontSize: 40 }}
+    //         className={`${styles.icon} ${activeComponent === "list" ? styles.activeIcon : ""}`}
+    //         onClick={() => handleComponentToggle("list")}
+    //       />
+    //     </div>
+    //   </div>
 
-            // Check chip type for styling
-            if (localCaseIdChips.includes(chip) ||
-              localFileTypeChips.includes(chip) ||
-              localSentimentChips.includes(chip) ||
-              localTargetChips.includes(chip) ||
-              chip.includes(' to ')) {
-              chipStyle = { backgroundColor: "#FFD700", color: "#000" };
-            }
+    //   <div className="search-term-indicator" style={{ backgroundColor: '#080E17' }}>
+    //     <div className="chips-container">
+    //       {filteredChips && filteredChips.map((chip, index) => {
+    //         // Determine chip type for styling (same logic as CaseTableDataFilter)
+    //         let chipStyle = { backgroundColor: "#0073CF", color: "white" }; // Default for keywords
 
-            return (
-              <div
-                key={index}
-                className="search-chip"
-                style={{
-                  ...chipStyle,
-                  padding: "4px 8px",
-                  borderRadius: "12px",
-                  margin: "2px",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  fontSize: "12px"
-                }}
-              >
-                <span>{chip}</span>
-                <button
-                  className="chip-delete-btn"
-                  onClick={() => removeChip(chip)}
-                  style={{
-                    background: "none",
-                    border: "none",
-                    marginLeft: "4px",
-                    cursor: "pointer",
-                    color: chipStyle.color,
-                    display: "flex",
-                    alignItems: "center"
-                  }}
-                >
-                  <CloseIcon style={{ fontSize: "15px" }} />
-                </button>
-              </div>
-            );
-          })}
-        </div>
-      </div>
+    //         // Check chip type for styling
+    //         if (localCaseIdChips.includes(chip) ||
+    //           localFileTypeChips.includes(chip) ||
+    //           localSentimentChips.includes(chip) ||
+    //           localTargetChips.includes(chip) ||
+    //           chip.includes(' to ')) {
+    //           chipStyle = { backgroundColor: "#FFD700", color: "#000" };
+    //         }
 
-      <div className="search-results" style={{ backgroundColor: "#101D2B" }}>
-        {activeComponent === "graph" && (
-          <GrapghicalCriteria searchChips={displayChips} />
-        )}
-        {activeComponent === "photoVideo" && (
-          <ScrollCriteriaViewer />
-        )}
-        {activeComponent === "list" && (
-          <CriteriaCaseTable searchChips={displayChips} />
-        )}
-      </div>
+    //         return (
+    //           <div
+    //             key={index}
+    //             className="search-chip"
+    //             style={{
+    //               ...chipStyle,
+    //               padding: "4px 8px",
+    //               borderRadius: "12px",
+    //               margin: "2px",
+    //               display: "inline-flex",
+    //               alignItems: "center",
+    //               fontSize: "12px"
+    //             }}
+    //           >
+    //             <span>{chip}</span>
+    //             <button
+    //               className="chip-delete-btn"
+    //               onClick={() => removeChip(chip)}
+    //               style={{
+    //                 background: "none",
+    //                 border: "none",
+    //                 marginLeft: "4px",
+    //                 cursor: "pointer",
+    //                 color: chipStyle.color,
+    //                 display: "flex",
+    //                 alignItems: "center"
+    //               }}
+    //             >
+    //               <CloseIcon style={{ fontSize: "15px" }} />
+    //             </button>
+    //           </div>
+    //         );
+    //       })}
+    //     </div>
+    //   </div>
 
-      {isPopupVisible && <AddNewCriteria searchChips={localKeywordChips} isPopupVisible={isPopupVisible} setIsPopupVisible={setIsPopupVisible} />}
-    </div>
+    //   <div className="search-results" style={{ backgroundColor: "#101D2B" }}>
+    //     {activeComponent === "graph" && (
+    //       <GrapghicalCriteria searchChips={displayChips} />
+    //     )}
+    //     {activeComponent === "photoVideo" && (
+    //       <ScrollCriteriaViewer />
+    //     )}
+    //     {activeComponent === "list" && (
+    //       <CriteriaCaseTable searchChips={displayChips} />
+    //     )}
+    //   </div>
+
+    //   {isPopupVisible && <AddNewCriteria searchChips={localKeywordChips} isPopupVisible={isPopupVisible} setIsPopupVisible={setIsPopupVisible} />}
+    // </div>
   );
 };
 

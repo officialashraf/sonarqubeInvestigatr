@@ -265,6 +265,7 @@ import AddFilter from "./TabularData/filter";
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchSummaryData } from "../../../Redux/Action/filterAction";
 import { clearCaseFilterPayload, saveCaseFilterPayload } from "../../../Redux/Action/caseAction";
+import SearchUIContainer from "../../Common/SearchBarCriteria/SearchUIContainer";
 
 const CaseTableDataFilter = () => {
     const dispatch = useDispatch();
@@ -427,139 +428,168 @@ const CaseTableDataFilter = () => {
     const displayChips = getDisplayChips();
 
     return (
-        <div className="search-container" style={{ backgroundColor: '#080E17', height: '100%', zIndex: '1050', overflowY: "hidden" }}>
-            <CaseHeader />
-            <div className={styles.actionIconsContainer} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "5px" }}>
-                <div className={styles.searchHeader} style={{ width: "60%", backgroundColor: "#080E17" }}>
-                    <TextField
-                        fullWidth
-                        InputProps={{
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <SearchIcon style={{ color: "#0073CF" }} />
-                                </InputAdornment>
-                            ),
-                            endAdornment: (
-                                <InputAdornment position="end">
-                                    <SendIcon
-                                        style={{ cursor: "pointer", color: "#0073CF", marginRight: "5px" }}
-                                        onClick={handleSearchSubmit}
-                                    />
-                                    <TuneIcon
-                                        style={{ cursor: "pointer", backgroundColor: "#0073CF", color: "#0A192F" }}
-                                        onClick={openPopup}
-                                    />
-                                </InputAdornment>
-                            ),
-                            style: {
-                                height: "38px",
-                                padding: "0 8px",
-                                backgroundColor: "#101D2B",
-                                borderRadius: "15px",
-                                color: "white",
-                                fontSize: "12px",
-                                marginBottom: "5px",
-                            },
-                        }}
-                        type="text"
-                        value={inputValue}
-                        onChange={(e) => setInputValue(e.target.value)}
-                        onKeyPress={handleKeyPress}
-                        placeholder="Search..."
-                    />
-                    <div style={{ padding: "0px 0px", height: "20px", marginLeft: "5px" }}>
-                        <AppButton children={"Reset"} onClick={resetSearch} />
-                    </div>
-                </div>
+        // <div className="search-container" style={{ backgroundColor: '#080E17', height: '100%', zIndex: '1050', overflowY: "hidden" }}>
+        //     <CaseHeader />
+        //     <div className={styles.actionIconsContainer} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "5px" }}>
+        //         <div className={styles.searchHeader} style={{ width: "60%", backgroundColor: "#080E17" }}>
+        //             <TextField
+        //                 fullWidth
+        //                 InputProps={{
+        //                     startAdornment: (
+        //                         <InputAdornment position="start">
+        //                             <SearchIcon style={{ color: "#0073CF" }} />
+        //                         </InputAdornment>
+        //                     ),
+        //                     endAdornment: (
+        //                         <InputAdornment position="end">
+        //                             <SendIcon
+        //                                 style={{ cursor: "pointer", color: "#0073CF", marginRight: "5px" }}
+        //                                 onClick={handleSearchSubmit}
+        //                             />
+        //                             <TuneIcon
+        //                                 style={{ cursor: "pointer", backgroundColor: "#0073CF", color: "#0A192F" }}
+        //                                 onClick={openPopup}
+        //                             />
+        //                         </InputAdornment>
+        //                     ),
+        //                     style: {
+        //                         height: "38px",
+        //                         padding: "0 8px",
+        //                         backgroundColor: "#101D2B",
+        //                         borderRadius: "15px",
+        //                         color: "white",
+        //                         fontSize: "12px",
+        //                         marginBottom: "5px",
+        //                     },
+        //                 }}
+        //                 type="text"
+        //                 value={inputValue}
+        //                 onChange={(e) => setInputValue(e.target.value)}
+        //                 onKeyPress={handleKeyPress}
+        //                 placeholder="Search..."
+        //             />
+        //             <div style={{ padding: "0px 0px", height: "20px", marginLeft: "5px" }}>
+        //                 <AppButton children={"Reset"} onClick={resetSearch} />
+        //             </div>
+        //         </div>
 
-                <div style={{ display: "flex", gap: "20px", alignItems: "center" }}>
-                    <PieChart
-                        sx={{ fontSize: 40 }}
-                        className={`${styles.icon} ${activeComponent === "graphicalData" ? styles.activeIcon : ""}`}
-                        onClick={() => setActiveComponent("graphicalData")}
-                    />
-                    <FaPhotoVideo
-                        sx={{ fontSize: 40 }}
-                        className={`${styles.icon} ${activeComponent === "resources" ? styles.activeIcon : ""}`}
-                        onClick={() => setActiveComponent("resources")}
-                    />
-                    <ListAltOutlined
-                        sx={{ fontSize: 40 }}
-                        className={`${styles.icon} ${activeComponent === "caseData" ? styles.activeIcon : ""}`}
-                        onClick={() => setActiveComponent("caseData")}
-                    />
-                </div>
-            </div>
+        //         <div style={{ display: "flex", gap: "20px", alignItems: "center" }}>
+        //             <PieChart
+        //                 sx={{ fontSize: 40 }}
+        //                 className={`${styles.icon} ${activeComponent === "graphicalData" ? styles.activeIcon : ""}`}
+        //                 onClick={() => setActiveComponent("graphicalData")}
+        //             />
+        //             <FaPhotoVideo
+        //                 sx={{ fontSize: 40 }}
+        //                 className={`${styles.icon} ${activeComponent === "resources" ? styles.activeIcon : ""}`}
+        //                 onClick={() => setActiveComponent("resources")}
+        //             />
+        //             <ListAltOutlined
+        //                 sx={{ fontSize: 40 }}
+        //                 className={`${styles.icon} ${activeComponent === "caseData" ? styles.activeIcon : ""}`}
+        //                 onClick={() => setActiveComponent("caseData")}
+        //             />
+        //         </div>
+        //     </div>
 
-            <div className="search-term-indicator" style={{ backgroundColor: "#080E17" }}>
-                <div className="chips-container">
-                    {displayChips.map((chip, index) => {
-                        // Determine chip type for styling
-                        let chipStyle = { backgroundColor: "#0073CF", color: "white" }; // Default for keywords
+        //     <div className="search-term-indicator" style={{ backgroundColor: "#080E17" }}>
+        //         <div className="chips-container">
+        //             {displayChips.map((chip, index) => {
+        //                 // Determine chip type for styling
+        //                 let chipStyle = { backgroundColor: "#0073CF", color: "white" }; // Default for keywords
 
-                        // Check chip type for styling
-                        if (localFileTypeChips.includes(chip)) {
-                            chipStyle = { backgroundColor: "#FFD700", color: "#000" };
-                        }
-                        else if (localAggsFieldsChips.includes(chip)) {
-                            chipStyle = { backgroundColor: "#FFD700", color: "#000" };
-                        }
-                        else if (localSetiments.includes(chip)) {
-                            chipStyle = { backgroundColor: "#FFD700", color: "#000" };
-                        }
-                        else if (localTargets.includes(chip)) {
-                            chipStyle = { backgroundColor: "#FFD700", color: "#000" };
-                        }
-                        else if (chip.includes(' to ')) {
-                            chipStyle = { backgroundColor: "#FFD700", color: "#000" };
-                        }
+        //                 // Check chip type for styling
+        //                 if (localFileTypeChips.includes(chip)) {
+        //                     chipStyle = { backgroundColor: "#FFD700", color: "#000" };
+        //                 }
+        //                 else if (localAggsFieldsChips.includes(chip)) {
+        //                     chipStyle = { backgroundColor: "#FFD700", color: "#000" };
+        //                 }
+        //                 else if (localSetiments.includes(chip)) {
+        //                     chipStyle = { backgroundColor: "#FFD700", color: "#000" };
+        //                 }
+        //                 else if (localTargets.includes(chip)) {
+        //                     chipStyle = { backgroundColor: "#FFD700", color: "#000" };
+        //                 }
+        //                 else if (chip.includes(' to ')) {
+        //                     chipStyle = { backgroundColor: "#FFD700", color: "#000" };
+        //                 }
 
-                        return (
-                            <div key={index} className="search-chip" style={{
-                                ...chipStyle,
-                                padding: "4px 8px",
-                                borderRadius: "12px",
-                                margin: "2px",
-                                display: "inline-flex",
-                                alignItems: "center",
-                                fontSize: "12px"
-                            }}>
-                                <span>{chip}</span>
-                                <button
-                                    className="chip-delete-btn"
-                                    onClick={() => removeChip(chip)}
-                                    style={{
-                                        background: "none",
-                                        border: "none",
-                                        marginLeft: "4px",
-                                        cursor: "pointer",
-                                        color: chipStyle.color,
-                                        display: "flex",
-                                        alignItems: "center"
-                                    }}
-                                >
-                                    <CloseIcon style={{ fontSize: "15px" }} />
-                                </button>
-                            </div>
-                        );
-                    })}
-                </div>
-            </div>
+        //                 return (
+        //                     <div key={index} className="search-chip" style={{
+        //                         ...chipStyle,
+        //                         padding: "4px 8px",
+        //                         borderRadius: "12px",
+        //                         margin: "2px",
+        //                         display: "inline-flex",
+        //                         alignItems: "center",
+        //                         fontSize: "12px"
+        //                     }}>
+        //                         <span>{chip}</span>
+        //                         <button
+        //                             className="chip-delete-btn"
+        //                             onClick={() => removeChip(chip)}
+        //                             style={{
+        //                                 background: "none",
+        //                                 border: "none",
+        //                                 marginLeft: "4px",
+        //                                 cursor: "pointer",
+        //                                 color: chipStyle.color,
+        //                                 display: "flex",
+        //                                 alignItems: "center"
+        //                             }}
+        //                         >
+        //                             <CloseIcon style={{ fontSize: "15px" }} />
+        //                         </button>
+        //                     </div>
+        //                 );
+        //             })}
+        //         </div>
+        //     </div>
 
-            <div style={{ borderRadius: "15px", overflowY: "auto" }}>
-                {activeComponent === "graphicalData" && <GraphicalData />}
-                {activeComponent === "resources" && <Resources />}
-                {activeComponent === "caseData" && <TabulerData />}
-            </div>
+        //     <div style={{ borderRadius: "15px", overflowY: "auto" }}>
+        //         {activeComponent === "graphicalData" && <GraphicalData />}
+        //         {activeComponent === "resources" && <Resources />}
+        //         {activeComponent === "caseData" && <TabulerData />}
+        //     </div>
 
-            {isPopupVisible && (
-                <AddFilter
-                    searchChips={localKeywordChips}
-                    isPopupVisible={isPopupVisible}
-                    setIsPopupVisible={setIsPopupVisible}
-                />
-            )}
-        </div>
+        //     {isPopupVisible && (
+        //         <AddFilter
+        //             searchChips={localKeywordChips}
+        //             isPopupVisible={isPopupVisible}
+        //             setIsPopupVisible={setIsPopupVisible}
+        //         />
+        //     )}
+        // </div>
+        <SearchUIContainer
+            inputValue={inputValue}
+            setInputValue={setInputValue}
+            handleSearch={handleSearchSubmit}
+            handleKeyPress={handleKeyPress}
+            resetSearch={resetSearch}
+            activeComponent={activeComponent}
+            setActiveComponent={setActiveComponent}
+            displayChips={displayChips}
+            chipCheckFunctions={[
+                (chip) => localFileTypeChips.includes(chip),
+                (chip) => localAggsFieldsChips.includes(chip),
+                (chip) => localSetiments.includes(chip),
+                (chip) => localTargets.includes(chip),
+                (chip) => chip.includes(' to ')
+            ]}
+            removeChip={removeChip}
+            PopupComponent={AddFilter}
+            isPopupVisible={isPopupVisible}
+            setIsPopupVisible={setIsPopupVisible}
+            showCaseHeader={true}
+            CaseHeaderComponent={<CaseHeader />}
+            componentsMap={{
+                graphicalData: { icon: PieChart, component: <GraphicalData /> },
+                resources: { icon: FaPhotoVideo, component: <Resources /> },
+                caseData: { icon: ListAltOutlined, component: <TabulerData /> },
+            }}
+        />
+
     );
 };
 
