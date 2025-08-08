@@ -1,5 +1,13 @@
-import { useState, useEffect } from 'react';
-import { Card, CardContent, Typography, Grid, Container, CircularProgress, Avatar } from '@mui/material';
+import { useState } from 'react';
+import {
+  Card,
+  CardContent,
+  Typography,
+  Grid,
+  Container,
+  CircularProgress,
+  Avatar
+} from '@mui/material';
 import {
   Link as LinkIcon,
   Email as EmailIcon,
@@ -13,35 +21,40 @@ import {
 } from '@mui/icons-material';
 import styles from './cardDetails.module.css';
 import { useSelector } from 'react-redux';
-import { FaSkype, FaGoogle, FaTelegram, FaWhatsapp, FaDiscord, FaSnapchatGhost, FaPinterest } from 'react-icons/fa';
-import { SiPhonepe, SiGooglepay, SiGmail, SiTiktok, SiVk } from 'react-icons/si';
+import {
+  FaSkype,
+  FaGoogle,
+  FaTelegram,
+  FaWhatsapp,
+  FaDiscord,
+  FaSnapchatGhost,
+  FaPinterest,
+} from 'react-icons/fa';
+import {
+  SiPhonepe,
+  SiGooglepay,
+  SiGmail,
+  SiTiktok,
+  SiVk,
+} from 'react-icons/si';
 
 const UserCards = () => {
-  const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const profiles = useSelector((state) => state.pii?.data || []);
+  // Log to debug
+  console.log('profiles from redux:', profiles);
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        setLoading(true);
+  let users = [];
+  if (Array.isArray(profiles)) {
+    users = profiles.length > 1 ? profiles.slice(1) : profiles;
+  } else if (typeof profiles === 'object' && profiles !== null) {
+    users = [profiles];
+  }
 
-        if (profiles && profiles.length > 0) {
-          setUsers(profiles.slice(1));
-        } else {
-          setUsers([]);
-        }
-        setLoading(false);
-      } catch (error) {
-        setError(error.message);
-        setLoading(false);
-      }
-    };
+  console.log('users to render:', users);
 
-    fetchUsers();
-  }, [profiles]);
 
   const platformIconMap = {
     linkedin: { icon: LinkedInIcon, color: "#0A66C2" },
@@ -62,7 +75,7 @@ const UserCards = () => {
     snapchat: { icon: FaSnapchatGhost, color: "#FFFC00" },
     pinterest: { icon: FaPinterest, color: "#E60023" },
     axisbank: { icon: SiPhonepe, color: "#97144D" },
-    default: { icon: Avatar }
+    default: { icon: Avatar },
   };
 
   const getPlatformIcon = (source) => {
@@ -116,9 +129,9 @@ const UserCards = () => {
                     src={user.imageUrls && user.imageUrls.length > 0 ? user.imageUrls[0] : undefined}
                     alt={
                       user.names &&
-                      user.names.length > 0 &&
-                      typeof user.names[0] === 'string' &&
-                      !["none", "null", "undefined", "n"].includes(user.names[0].toLowerCase())
+                        user.names.length > 0 &&
+                        typeof user.names[0] === 'string' &&
+                        !["none", "null", "undefined", "n"].includes(user.names[0].toLowerCase())
                         ? user.names[0]
                         : ""
                     }
@@ -148,7 +161,7 @@ const UserCards = () => {
                     (Array.isArray(value) && (value.length === 0 || value.some(v => typeof v === "string" && v.toLowerCase() === "none")))
                   )
                     return null;
-                    
+
                   const IconComponent = iconMap[key] || null;
 
                   return (
