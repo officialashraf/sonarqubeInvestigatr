@@ -10,9 +10,11 @@ import { AiOutlineLike, AiOutlineDislike } from "react-icons/ai";
 import { BsThreeDots } from "react-icons/bs";
 import { ChatLeftText } from 'react-bootstrap-icons';
 import AppButton from "../../Common/Buttton/button"
-import AddComment from '../Comment/AddComment'; 
+import AddComment from '../Comment/AddComment';
+
+// Import all the logo images
 import YoutubeLogo from '../../Assets/Images/youtube_image.png';
-import Instagram from "../../Assets/Images/Instagram.jpg";       
+import Instagram from "../../Assets/Images/Instagram.jpg";
 import TiktokLogo from "../../Assets/Images/tiktok.png";
 import X_logo from "../../Assets/Images/X_logo.jpg";
 import Facebook_logo from "../../Assets/Images/Facebook_logo.png";
@@ -26,19 +28,144 @@ function getYouTubeVideoId(url) {
     return match ? match[1] : '';
 }
 
+// Main Component that can render both list view and detail view
 export default function ResourceDetails({
+    // Single resource detail view props
     resource,
     showCommentPopup = false,
     showPopup = false,
     setShowPopup = () => { },
+
+    // List view props
+    isListView = false,
+    resources = [],
+    selectedResource = null,
+    loading = false,
+    currentPage = 1,
+    totalPages = 1,
+    hasMore = false,
+    handleResourceClick = () => { },
+    containerRef = null,
+    sidebarRef = null,
+    title = "Resources Insights",
+    noDataMessage = "No Data Load for this case,\nTry again after some time.",
+    // noMoreDataMessage = "No more data available.",
+    selectResourceMessage = "Select resource for better visibility"
 }) {
-    if (!resource) {
-        return (
-            <div className="noDataWrapper">
-                <p>No Data Available</p>
+
+    // Function to get the correct image source with fallback
+    const getImageSource = (item) => {
+        const baseImage = item.socialmedia_from_imageurl || item.socialmedia_media_url;
+
+        switch (item.unified_record_type) {
+            case "rss feed":
+                return baseImage || rss;
+            case "X":
+                return baseImage || X_logo;
+            case "Facebook":
+                return baseImage || Facebook_logo;
+            case "YouTube":
+                return baseImage || YoutubeLogo;
+            case "Tiktok":
+                return baseImage || TiktokLogo;
+            case "Instagram":
+                return baseImage || Instagram;
+            default:
+                return baseImage || PlaceholderImg;
+        }
+    };
+
+    // Function to handle image error
+    const handleImageError = (e, item) => {
+        e.target.onerror = null; // prevents infinite loop
+
+        switch (item.unified_record_type) {
+            case "Facebook":
+                e.target.src = Facebook_logo;
+                break;
+            case "Instagram":
+                e.target.src = Instagram;
+                break;
+            case "YouTube":
+                e.target.src = YoutubeLogo;
+                break;
+            case "X":
+                e.target.src = X_logo;
+                break;
+            case "rss feed":
+                e.target.src = rss;
+                break;
+            case "Tiktok":
+                e.target.src = TiktokLogo;
+                break;
+            default:
+                e.target.src = PlaceholderImg;
+        }
+    };
+
+    // Function to render resource items for list view
+    const renderResourceItem = (item) => (
+        <div
+            key={item.row_id}
+            className={`resourceItem ${selectedResource?.row_id === item.row_id ? "active" : ""}`}
+            onClick={() => handleResourceClick(item)}
+        >
+            <img
+                src={getImageSource(item)}
+                onError={(e) => handleImageError(e, item)}
+                alt="pic_not_found"
+                className="resourceImage"
+            />
+            <div className="resourceDetails">
+                <p className="resourceType">{item.unified_record_type || item.unified_type}</p>
+                <p className="resourceContent">{item.socialmedia_activity}</p>
             </div>
-        );
-    }
+        </div>
+    );
+
+    // Function to render loading indicator
+    const renderLoading = () => (
+        loading && (
+            <div style={{ textAlign: 'center', padding: '10px', color: 'white' }}>
+                Loading...
+            </div>
+        )
+    );
+
+    // Function to render no data message
+    const renderNoData = () => (
+        <p style={{ textAlign: "center", marginTop: "2rem", color: "gray" }}>
+            {noDataMessage.split('\n').map((line, index) => (
+                <React.Fragment key={index}>
+                    {line}
+                    {index < noDataMessage.split('\n').length - 1 && <br />}
+                </React.Fragment>
+            ))}
+        </p>
+    );
+
+    // Function to render no more data message
+    // const renderNoMoreData = () => {
+    //     // For ScrollCriteriaViewer (uses currentPage and totalPages)
+    //     if (currentPage >= totalPages && resources.length > 0) {
+    //         return (
+    //             <p style={{ textAlign: "center", marginTop: "2rem" }}>
+    //                 {noMoreDataMessage}
+    //             </p>
+    //         );
+    //     }
+
+    //     // For Resources (uses hasMore)
+    //     if (!hasMore && resources.length > 0) {
+    //         return (
+    //             <p style={{ textAlign: "center", marginTop: "2rem" }}>
+    //                 {noMoreDataMessage}
+    //             </p>
+    //         );
+    //     }
+
+    //     return null;
+    // };
 
     // Helper to show correct fallback image
     const fallbackImg = (type) => {
@@ -52,6 +179,92 @@ export default function ResourceDetails({
             default: return PlaceholderImg;
         }
     };
+
+    // If it's list view, render the full component with sidebar
+    if (isListView) {
+        return (
+            <div className="container-r">
+                {/* Header Section */}
+                <div className="top-header">
+                    <div style={{ color: '#d9d9d9', fontSize: '16px', fontWeight: '600' }}>
+                        <h5>{title}</h5>
+                    </div>
+                </div>
+
+                {/* Content Section */}
+                <div className="contents">
+                    <div className="left-content">
+                        <div className="overflow-wrapper">
+                            <div
+                                className="left-sidebar"
+                                ref={containerRef || sidebarRef}
+                            >
+                                <div className="inner-content" style={{ paddingBottom: '60px' }}>
+                                    <div className="sidebar-header">
+                                        <div style={{ marginBottom: '10px', color: '#000' }}>
+                                            {/* Header content can be added here if needed */}
+                                        </div>
+                                        {renderLoading()}
+                                    </div>
+
+                                    {/* Resource Items */}
+                                    {resources && resources.length > 0 ? (
+                                        resources.map(renderResourceItem)
+                                    ) : (
+                                        renderNoData()
+                                    )}
+
+                                    {/* No More Data Message */}
+                                    {/* {renderNoMoreData()} */}
+
+                                    {/* Loading at bottom (for infinite scroll) */}
+                                    {renderLoading()}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Right Content */}
+                    <div className="right-content">
+                        {selectedResource ? (
+                            <div className="resourceDetailsContainer">
+                                {/* Recursive call for detail view */}
+                                <ResourceDetails
+                                    resource={selectedResource}
+                                    showCommentPopup={showCommentPopup}
+                                    showPopup={showPopup}
+                                    setShowPopup={setShowPopup}
+                                    isListView={false}
+                                />
+
+                                {/* Comment Component (only if showCommentPopup is true) */}
+                                {showCommentPopup && (
+                                    <AddComment
+                                        show={showPopup}
+                                        onClose={() => setShowPopup(false)}
+                                        selectedResource={selectedResource}
+                                    />
+                                )}
+                            </div>
+                        ) : (
+                            <div className="noDataWrapper">
+                                <p>{selectResourceMessage}</p>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    // If not list view, render single resource detail (existing functionality)
+    if (!resource) {
+        return (
+            <div className="noDataWrapper">
+                <p>No Data Available</p>
+            </div>
+        );
+    }
 
     return (
         <div className="resourceDetailsContainer">
@@ -263,22 +476,22 @@ export default function ResourceDetails({
 
             {/* --- Tiktok --- */}
             {resource.unified_record_type === "Tiktok" && (
-                <div class="tiktok-container">
-                    <video src={resource.socialmedia_from_imageurl} autoplay muted loop></video>
+                <div className="tiktok-container">
+                    <video src={resource.socialmedia_from_imageurl} autoPlay muted loop></video>
 
-                    <div class="right-panel">
-                        <img src="your-profile.jpg" alt="pic_not_found" class="profile-pic" />
-                        <div class="icon"><GoEye /><span>{resource.socialmedia_activity_view_count}</span></div>
-                        <div class="icon">❤<span>{resource.socialmedia_activity_like_count}</span></div>
-                        <div class="icon"><FaRegCommentDots /><span></span></div>
-                        <div class="icon"><FaRegBookmark /><span></span></div>
-                        <div class="icon"><PiShareFatBold /><span></span></div>
+                    <div className="right-panel">
+                        <img src="your-profile.jpg" alt="pic_not_found" className="profile-pic" />
+                        <div className="icon"><GoEye /><span>{resource.socialmedia_activity_view_count}</span></div>
+                        <div className="icon">❤<span>{resource.socialmedia_activity_like_count}</span></div>
+                        <div className="icon"><FaRegCommentDots /><span></span></div>
+                        <div className="icon"><FaRegBookmark /><span></span></div>
+                        <div className="icon"><PiShareFatBold /><span></span></div>
                     </div>
 
-                    <div class="bottom-content">
-                        <p class="username">{resource.socialmedia_from_displayname}</p>
+                    <div className="bottom-content">
+                        <p className="username">{resource.socialmedia_from_displayname}</p>
                         <p>{resource.socialmedia_from_screenname}</p>
-                        <p class="caption">
+                        <p className="caption">
                             {resource.unified_activity_content}
                         </p>
                     </div>
