@@ -20,7 +20,7 @@ import ProfileImage from '.././../Assets/Images/prifileImage.jpg';
 import { useTranslation } from 'react-i18next';
 
 const Header = ({ title }) => {
-  console.log("Header title prop:", title);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const token = Cookies.get('accessToken');
@@ -68,7 +68,6 @@ const Header = ({ title }) => {
         console.log("Token decoded successfully for user:", decodedToken);
       } catch (error) {
         console.error("Error decoding token:", error.message);
-        // If token is invalid, logout
         handleTokenError();
       }
     } else {
@@ -124,7 +123,7 @@ const Header = ({ title }) => {
       // Always perform client-side cleanup
       Cookies.remove('accessToken');
       Cookies.remove('refreshToken');
-      dispatch({ type: CLEAR_SEARCH }); // ✅ Triggers reset
+      dispatch({ type: CLEAR_SEARCH }); // 
 
       // Clear any remaining state
       setLoggedInUserId('');

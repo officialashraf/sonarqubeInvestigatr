@@ -309,6 +309,7 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
             const paginatedQuery = {
                 ...filteredPayload,
             };
+            console.log("pagintedQuery",paginatedQuery)
             // Make the API request with the correct payload structure
             const response = await axios.post(
                 `${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/search`,

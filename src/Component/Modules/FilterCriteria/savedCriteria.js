@@ -47,11 +47,22 @@ const SavedCriteria = () => {
   console.log("keyword", sentiments)
   const targets = useSelector((state) => state.criteriaKeywords?.queryPayload?.targets || '');
   console.log("keyword", targets)
+  const start_time = useSelector((state) => state.criteriaKeywords?.queryPayload?.start_time || '');
+  const end_time = useSelector((state) => state.criteriaKeywords?.queryPayload?.end_time || '');
   const reduxPayload = useSelector((state) => state.criteriaKeywords?.queryPayload || '');
   console.log("Redux Payload:", reduxPayload);
 
+  // Check if chip is a time range chip
+  const isTimeRangeChip = (chip) => {
+    return chip.includes(' to ');
+  };
+
   // Function to check if chip is from Redux data
   const isReduxChip = (chip) => {
+    if (isTimeRangeChip(chip)) {
+      return true; // Time range chips are always from Redux
+    }
+    
     const reduxKeywords = Array.isArray(keyword) ? keyword : [];
     const reduxCaseIds = Array.isArray(caseId) ? caseId.map(id => String(id)) : [];
     const reduxFileTypes = Array.isArray(fileType) ? fileType : [];
@@ -86,13 +97,29 @@ const SavedCriteria = () => {
       } else if (isValid(fileType)) {
         combinedChips.push(fileType); // Add fileType if it's a valid single value
       }
+
+      // Handle time range - create a single chip for date range
+      if (isValid(start_time) && isValid(end_time)) {
+        const formatDateTime = (dateStr) => {
+          try {
+            const date = new Date(dateStr);
+            const dateStr2 = date.toISOString().split('T')[0]; // YYYY-MM-DD
+            const timeStr = date.toTimeString().split(' ')[0].substring(0, 5); // HH:MM
+            return `${dateStr2} ${timeStr}`;
+          } catch (error) {
+            return dateStr;
+          }
+        };
+        combinedChips.push(`${formatDateTime(start_time)} to ${formatDateTime(end_time)}`);
+      }
+
       console.log("Combined Chips:", combinedChips);
       setSearchChips(combinedChips);
     } else {
       console.log("Keywords is not an array or doesn't exist.");
       setSearchChips([]); // Fallback for empty or invalid data
     }
-  }, [keyword, caseId, fileType]);
+  }, [keyword, caseId, fileType, targets, sentiments, start_time, end_time]);
 
   const displayResults = searchResults
   console.log("searchChips", searchChips);
@@ -151,12 +178,28 @@ const SavedCriteria = () => {
     setInputValue(query);
   };
 
-  // Updated removeChip function - only update local state, not Redux
+  // Updated removeChip function - handle time range chips and update Redux for them
   const removeChip = (chipToDelete) => {
-    // Update only local state - Redux will be updated when user clicks Send
+    // Update local state first
     const updatedChips = searchChips.filter((item) => item !== chipToDelete);
     setSearchChips(updatedChips);
-    setEnterInput((prev) => prev.filter((exchip) => exchip !== chipToDelete));
+    
+    // If it's a time range chip, update Redux immediately
+    if (isTimeRangeChip(chipToDelete)) {
+      // Create new payload without start_time and end_time
+      const { start_time, end_time, ...payloadWithoutTime } = reduxPayload;
+      
+      console.log("Removed time range chip, updated payload:", payloadWithoutTime);
+      
+      // Update Redux to remove time fields
+      dispatch(setKeywords({
+        keyword: updatedChips.filter(k => !isTimeRangeChip(k)),
+        queryPayload: payloadWithoutTime
+      }));
+    } else {
+      // For non-time chips, just update local state (user-entered chips)
+      setEnterInput((prev) => prev.filter((exchip) => exchip !== chipToDelete));
+    }
 
     console.log("Chip removed from UI:", chipToDelete);
     console.log("Updated local chips:", updatedChips);
@@ -181,7 +224,7 @@ const SavedCriteria = () => {
     toast.success("Search reset successfully");
   };
 
-  // Main search function to call API - Now handles removed chips
+  // Main search function to call API - Now handles removed chips properly
   const handleSearch = async () => {
     console.log("reduxPayload:", reduxPayload);
     setIsLoading(true);
@@ -211,19 +254,23 @@ const SavedCriteria = () => {
         : JSON.parse(reduxPayload.targets || "[]");
 
       // Filter Redux data based on current searchChips (removed chips won't be included)
-      const filteredKeywords = reduxKeywords.filter(kw => searchChips.includes(kw));
-      const filteredCaseIds = reduxCaseIds.filter(id => searchChips.includes(String(id)));
-      const filteredFileTypes = reduxFileTypes.filter(ft => searchChips.includes(ft));
-      const filteredSentiments = reduxSentiments.filter(s => searchChips.includes(s));
-      const filteredTargets = reduxTargets.filter(t => searchChips.includes(t));
+      // Exclude time range chips from filtering as they're handled separately
+      const nonTimeChips = searchChips.filter(chip => !isTimeRangeChip(chip));
+      
+      const filteredKeywords = reduxKeywords.filter(kw => nonTimeChips.includes(kw));
+      const filteredCaseIds = reduxCaseIds.filter(id => nonTimeChips.includes(String(id)));
+      const filteredFileTypes = reduxFileTypes.filter(ft => nonTimeChips.includes(ft));
+      const filteredSentiments = reduxSentiments.filter(s => nonTimeChips.includes(s));
+      const filteredTargets = reduxTargets.filter(t => nonTimeChips.includes(t));
 
       // Add user entered keywords
       const allKeywords = [...filteredKeywords, ...enterInput];
 
       // Check if there's any data to search
+      const hasTimeData = reduxPayload.start_time && reduxPayload.end_time;
       const hasData = allKeywords.length > 0 || filteredCaseIds.length > 0 ||
         filteredFileTypes.length > 0 || filteredSentiments.length > 0 ||
-        filteredTargets.length > 0;
+        filteredTargets.length > 0 || hasTimeData;
 
       if (!hasData) {
         toast.info("Please enter keywords or select criteria to search");
@@ -237,6 +284,7 @@ const SavedCriteria = () => {
       console.log("File Types:", filteredFileTypes);
       console.log("Sentiments:", filteredSentiments);
       console.log("Targets:", filteredTargets);
+      console.log("Time data:", reduxPayload.start_time, reduxPayload.end_time);
 
       const rawPayload = {
         keyword: allKeywords,
@@ -304,6 +352,16 @@ const SavedCriteria = () => {
 
   // Get the filtered results to display
   const resultsToDisplay = getFilteredResults();
+
+  // Function to determine chip style based on type
+  const getChipStyle = (chip) => {
+    if (isTimeRangeChip(chip)) {
+      return { backgroundColor: '#28a745', color: 'white' }; // Green for time range
+    }
+    return isReduxChip(chip) 
+      ? { backgroundColor: '#ffd700', color: '#000' } // Yellow for Redux chips
+      : { backgroundColor: '#0073cf', color: 'white' }; // Blue for user-entered chips
+  };
 
   return (
     <div className="popup-overlay">
@@ -378,39 +436,53 @@ const SavedCriteria = () => {
             <div>
               <div className="search-term-indicator">
                 <div className="chips-container">
-                  {searchChips && searchChips.map((chip, index) => (
-                    <div
-                      key={index}
-                      className={`search-chip ${isReduxChip(chip) ? 'redux-chip' : ''}`}
-                      style={{
-                        backgroundColor: isReduxChip(chip) ? '#ffd700' : '#0073CF', // Yellow for Redux, Blue for user-entered
-                        color: isReduxChip(chip) ? '#000' : '#fff', // Black text for yellow, white for blue
-                        padding: "4px 8px",
-                        borderRadius: "12px",
-                        margin: "2px",
-                        display: "inline-flex",
-                        alignItems: "center",
-                        fontSize: "12px"
-                      }}
-                    >
-                      <span>{chip}</span>
-                      <button
-                        className="chip-delete-btn"
-                        onClick={() => removeChip(chip)}
+                  {searchChips && searchChips.map((chip, index) => {
+                    const chipStyle = getChipStyle(chip);
+                    
+                    return (
+                      <div
+                        key={index}
+                        className={`search-chip ${isReduxChip(chip) ? 'redux-chip' : ''}`}
                         style={{
-                          background: "none",
-                          border: "none",
-                          marginLeft: "4px",
-                          cursor: "pointer",
-                          color: isReduxChip(chip) ? '#000' : '#fff',
-                          display: "flex",
-                          alignItems: "center"
+                          ...chipStyle,
+                          padding: "6px 10px",
+                          borderRadius: "16px",
+                          margin: "3px",
+                          display: "inline-flex",
+                          alignItems: "center",
+                          fontSize: "13px",
+                          // maxWidth: "200px",
+                          // overflow: "hidden",
+                          // textOverflow: "ellipsis",
+                          whiteSpace: "nowrap"
                         }}
                       >
-                        <CloseIcon style={{ fontSize: "15px" }} />
-                      </button>
-                    </div>
-                  ))}
+                        <span style={{ 
+                          // overflow: "hidden", 
+                          // textOverflow: "ellipsis",
+                          // maxWidth: "calc(100% - 20px)" 
+                        }}>
+                          {chip}
+                        </span>
+                        <button
+                          className="chip-delete-btn"
+                          onClick={() => removeChip(chip)}
+                          style={{
+                            background: "none",
+                            border: "none",
+                            marginLeft: "6px",
+                            cursor: "pointer",
+                            color: chipStyle.color,
+                            display: "flex",
+                            alignItems: "center",
+                            flexShrink: 0
+                          }}
+                        >
+                          <CloseIcon style={{ fontSize: "16px" }} />
+                        </button>
+                      </div>
+                    );
+                  })}
                 </div>
                 <div className="action-buttons">
                   <button

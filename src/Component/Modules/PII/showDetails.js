@@ -77,77 +77,48 @@ const ShowDetails = () => {
       setLoading(false);
     }
   };
-const options = [
-  { value: 'phone number', label: <span style={{ color: '#d2d2d2' }}>Phone</span> },
-  { value: 'email', label: <span style={{ color: '#d2d2d2' }}>Email</span> },
-  { value: 'social', label: <span style={{ color: '#d2d2d2' }}>Social Media</span>
-  }
-];
+  const options = [
+    { value: 'phone number', label: <span style={{ color: '#d2d2d2' }}>Phone</span> },
+    { value: 'email', label: <span style={{ color: '#d2d2d2' }}>Email</span> },
+    {
+      value: 'social', label: <span style={{ color: '#d2d2d2' }}>Social Media</span>
+    }
+  ];
 
-const socialPlatforms = [
-  { value: 'linkedin', label: 'LinkedIn' },
-  { value: 'facebook', label: 'Facebook' },
-  { value: 'instagram', label: 'Instagram' },
-  { value: 'X', label: 'X' },
-  { value: 'youtube', label: 'YouTube' },
-  { value: 'tiktok', label: 'TikTok' },
-  { value: 'vk', label: 'VK' },
-  { value: 'skype', label: 'Skype' },
-  { value: 'google', label: 'Google' },
-  { value: 'gpay', label: 'Google Pay' },
-  { value: 'phonepay', label: 'PhonePe' },
-  { value: 'whatsapp', label: 'WhatsApp' },
-  { value: 'gmail', label: 'Gmail' },
-  { value: 'telegram', label: 'Telegram' },
-  { value: 'discord', label: 'Discord' },
-  { value: 'snapchat', label: 'Snapchat' },
-  { value: 'pinterest', label: 'Pinterest' },
-  { value: 'axisbank', label: 'Axis Bank' }
-];
+  const socialPlatforms = [
+    { value: 'linkedin', label: 'LinkedIn' },
+    { value: 'facebook', label: 'Facebook' },
+    { value: 'instagram', label: 'Instagram' },
+    { value: 'X', label: 'X' },
+    { value: 'youtube', label: 'YouTube' },
+    { value: 'tiktok', label: 'TikTok' },
+    { value: 'vk', label: 'VK' },
+    { value: 'skype', label: 'Skype' },
+    { value: 'google', label: 'Google' },
+    { value: 'gpay', label: 'Google Pay' },
+    { value: 'phonepay', label: 'PhonePe' },
+    { value: 'whatsapp', label: 'WhatsApp' },
+    { value: 'gmail', label: 'Gmail' },
+    { value: 'telegram', label: 'Telegram' },
+    { value: 'discord', label: 'Discord' },
+    { value: 'snapchat', label: 'Snapchat' },
+    { value: 'pinterest', label: 'Pinterest' },
+    { value: 'axisbank', label: 'Axis Bank' }
+  ];
 
-return (
-  <>
-    <div className={styles.searchBarContainer}>
-      <div className={styles.searchBar}>
-        <Select
-          className={styles.searchDropdown}
-          options={options}
-          value={options.find(o => o.value === searchType)}
-          onChange={(selected) => {
-            setSearchType(selected.value);
-            setQuery('');
-            setPlatform(''); // Reset platform when search type changes
-          }}
-          styles={{
-            control: (provided) => ({
-              ...provided,
-              backgroundColor: '#080E17',
-              color: '#D9D9D9',
-              borderRadius: '15px',
-              border: 'none'
-            }),
-            menu: (provided) => ({
-              ...provided,
-              backgroundColor: '#080E17',
-              borderRadius: '15px',
-              overflow: 'hidden',
-              border: "1px solid #0073CF"
-            }),
-            option: (provided, state) => ({
-              ...provided,
-              backgroundColor: state.isFocused ? '#101D2B' : '#080E17',
-              color: '#D9D9D9',
-              cursor: 'pointer'
-            })
-          }}
-        />
-        {searchType === "social" && (
+  return (
+    <>
+      <div className={styles.searchBarContainer}>
+        <div className={styles.searchBar}>
           <Select
             className={styles.searchDropdown}
-            options={socialPlatforms}
-            value={socialPlatforms.find(p => p.value === platform)}
-            onChange={(selected) => setPlatform(selected.value)}
-            placeholder="Select Platform"
+            options={options}
+            value={options.find(o => o.value === searchType)}
+            onChange={(selected) => {
+              setSearchType(selected.value);
+              setQuery('');
+              setPlatform(''); // Reset platform when search type changes
+            }}
             styles={{
               control: (provided) => ({
                 ...provided,
@@ -161,8 +132,7 @@ return (
                 backgroundColor: '#080E17',
                 borderRadius: '15px',
                 overflow: 'hidden',
-                border: "1px solid #0073CF",
-                 color: '#D9D9D9',
+                border: "1px solid #0073CF"
               }),
               option: (provided, state) => ({
                 ...provided,
@@ -171,73 +141,106 @@ return (
                 cursor: 'pointer'
               })
             }}
-           
           />
-        )}
-        {searchType === "phone number" ? (
-          <PhoneInput
-            country={"ng"}
-            value={query}
-            onChange={(value) => setQuery(value)}
-            enableSearch={true}
-            inputClass="search-input"
-            dropdownStyle={{
-              maxHeight: "160px",
-              overflowY: "scroll",
-              backgroundColor: "#080E17",
-              borderRadius: "15px",
-              color: "#D9D9D9",
-              border: "1px solid #0073CF !important"
-            }}
-            inputStyle={{
-              marginLeft: "50px", //  fix for visibility
-            }}
-            inputProps={{
-              onKeyDown: (e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  handleSearch(); //  Triggers on Enter
+          {searchType === "social" && (
+            <Select
+              className={styles.searchDropdown}
+              options={socialPlatforms}
+              value={socialPlatforms.find(p => p.value === platform)}
+              onChange={(selected) => setPlatform(selected.value)}
+              placeholder="Select Platform"
+              styles={{
+                singleValue: (provided) => ({
+                  ...provided,
+                  color: '#FFFFFF'  // 👈 White color for selected text
+                }),
+                control: (provided) => ({
+                  ...provided,
+                  backgroundColor: '#080E17',
+                  color: '#D9D9D9',
+                  borderRadius: '15px',
+                  border: 'none'
+                }),
+                menu: (provided) => ({
+                  ...provided,
+                  backgroundColor: '#080E17',
+                  borderRadius: '15px',
+                  overflow: 'hidden',
+                  border: "1px solid #0073CF",
+                }),
+                option: (provided, state) => ({
+                  ...provided,
+                  backgroundColor: state.isFocused ? '#101D2B' : '#080E17',
+                  color: '#D9D9D9',
+                  cursor: 'pointer'
+                })
+              }}
+            />
+          )}
+          {searchType === "phone number" ? (
+            <PhoneInput
+              country={"ng"}
+              value={query}
+              onChange={(value) => setQuery(value)}
+              enableSearch={true}
+              inputClass="search-input"
+              dropdownStyle={{
+                maxHeight: "160px",
+                overflowY: "scroll",
+                backgroundColor: "#080E17",
+                borderRadius: "15px",
+                color: "#D9D9D9",
+                border: "1px solid #0073CF !important"
+              }}
+              inputStyle={{
+                marginLeft: "50px", //  fix for visibility
+              }}
+              inputProps={{
+                onKeyDown: (e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    handleSearch(); //  Triggers on Enter
+                  }
                 }
-              }
-            }}
+              }}
+            />
+          ) : (
+            <input
+              className={styles.searchInput}
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleSearch(); // Validate and execute search only when Enter is pressed
+                }
+              }}
+              placeholder={searchType === "social" ? "Enter keyword to search" : `Enter ${searchType} to search`}
+              disabled={!searchType}
+            />
+          )}
+          <Search
+            style={{ color: '#0073CF', cursor: 'pointer', width: '25px', height: '25px' }}
+            onClick={handleSearch} // Triggers validation & search only when clicked
           />
-        ) : (
-          <input
-            className={styles.searchInput}
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                handleSearch(); // Validate and execute search only when Enter is pressed
-              }
-            }}
-            placeholder={searchType === "social" ? "Enter keyword to search" : `Enter ${searchType} to search`}
-            disabled={!searchType}
-          />
-        )}
-        <Search
-          style={{ color: '#0073CF', cursor: 'pointer', width: '25px', height: '25px' }}
-          onClick={handleSearch} // Triggers validation & search only when clicked
-        />
-      </div>
-      <div className={styles.searchResultsContainer}>
-        <div className={styles.searchresult}>
-          <div className={styles.wrapper}>
-            {loading ? (
-              <Loader />
-            ) : (
-              <>
-                {/* <ProfileDetails /> */}
-                <UserCards />
-              </>
-            )}
+        </div>
+        <div className={styles.searchResultsContainer}>
+          <div className={styles.searchresult}>
+            <div className={styles.wrapper}>
+              {loading ? (
+                <Loader />
+              ) : (
+                <>
+                  {/* <ProfileDetails /> */}
+                  <UserCards />
+                </>
+              )}
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </>
-);
+    </>
+  );
 };
 
 export default ShowDetails;
