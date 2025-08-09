@@ -512,39 +512,61 @@ export default function ResourceDetails({
                         />
                         <div className="name-date">
                             <p className="displayName">{resource.socialmedia_from_displayname}</p>
-                            <p className="postDate">{resource.unified_date_only}</p>
+                           <p className="postDate">  {new Intl.DateTimeFormat(undefined, {
+                                year: 'numeric',
+                                month: 'short',
+                                day: '2-digit',
+                                hour: '2-digit',
+                                minute: '2-digit',
+                                hour12: true
+                            }).format(new Date(resource.socialmedia_activity_time))}</p>
                         </div>
                     </div>
                     <p className="activityContent">{resource.unified_activity_content}</p>
-                    {resource.socialmedia_media_url && (() => {
+                   {resource.socialmedia_media_url && (() => {
                         let urls = [];
                         try {
-                            urls = JSON.parse(resource.socialmedia_media_url);
+                            urls = typeof resource.socialmedia_media_url === 'string'
+                                ? JSON.parse(resource.socialmedia_media_url)
+                                : resource.socialmedia_media_url;
                         } catch (error) {
+                            console.error("Media URL parse error:", error);
                             return <p>Invalid media format</p>;
                         }
                         return (
                             <div className="imageGridWrapper">
                                 {urls.map((url, index) => {
                                     url = url.trim();
-                                    if (url.includes('video')) {
+                                    if (url.includes('video') || /\.(mp4|mov|webm|ogg)$/i.test(url)) {
                                         return (
                                             <video key={index} controls className="postImage" preload="metadata">
                                                 <source src={url} type="video/mp4" />
                                                 Your browser does not support the video tag.
                                             </video>
                                         );
-                                    } else if (url.includes('pbs') || url.includes('twimg')) {
+                                    }
+                                    else if (/\.(jpg|jpeg|png|gif)$/i.test(url) || url.includes('scontent')) {
                                         return (
-                                            <img key={index} src={url} alt={`Post ${index}`} className="postMedia" />
+                                            <img
+                                                key={index}
+                                                src={url}
+                                                alt={`Post ${index}`}
+                                                className="postMedia"
+                                                loading="lazy"
+                                                onError={e => {
+                                                    e.target.onerror = null;
+                                                    e.target.src = "/images/placeholder-square.png";
+                                                }}
+                                            />
                                         );
-                                    } else {
+                                    }
+                                    else {
                                         return <p key={index}>Media not available</p>;
                                     }
                                 })}
                             </div>
                         );
-                    })()}
+                    })()}
                     <div className="view" style={{ display: "flex", gap: "4px" }}>
                         <div className="time">
                             <span>
