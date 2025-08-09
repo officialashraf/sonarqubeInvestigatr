@@ -544,7 +544,7 @@ export default function ResourceDetails({
                         );
 
                         if (validMedia.length === 0) {
-                            return <p>Media not available</p>; // Agar media na mile toh ye print hoga
+                            return <p></p>;
                         }
 
                         return (
@@ -559,10 +559,16 @@ export default function ResourceDetails({
                                             </video>
                                         );
                                     }
+                                    // Image case
                                     return (
-                                        <p>Media Not Available</p>
-                                           
-                                       
+                                        <img
+                                            key={index}
+                                            src={url}
+                                            alt={""}
+                                            className="postMedia"
+                                            loading="lazy"
+                                          
+                                        />
                                     );
                                 })}
                             </div>
