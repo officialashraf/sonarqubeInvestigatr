@@ -546,7 +546,7 @@ export default function ResourceDetails({
                                         );
                                     }
                                     else if (/\.(jpg|jpeg|png|gif)$/i.test(url) || url.includes('scontent')) {
-                                        return  <p key={index}>Media not available</p>;    
+                                        return null;    
                                 })}
                             </div>
                         );
