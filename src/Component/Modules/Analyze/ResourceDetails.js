@@ -546,23 +546,7 @@ export default function ResourceDetails({
                                         );
                                     }
                                     else if (/\.(jpg|jpeg|png|gif)$/i.test(url) || url.includes('scontent')) {
-                                        return (
-                                            <img
-                                                key={index}
-                                                src={url}
-                                                alt={`Post ${index}`}
-                                                className="postMedia"
-                                                loading="lazy"
-                                                onError={e => {
-                                                    e.target.onerror = null;
-                                                    e.target.src = "/images/placeholder-square.png";
-                                                }}
-                                            />
-                                        );
-                                    }
-                                    else {
-                                        return <p key={index}>Media not available</p>;
-                                    }
+                                        return  <p key={index}>Media not available</p>;    
                                 })}
                             </div>
                         );
