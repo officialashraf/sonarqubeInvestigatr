@@ -320,7 +320,7 @@ margin-bottom: 0px !important;
 .tableWrapper {
   overflow-x: auto;
   overflow-y: auto;
-  max-height: 60vh; /* Default for large height screens */
+  max-height: 65vh; /* Default for large height screens */
   border-radius: var(--shape-borderRadius);
   scrollbar-color: #1e7df8 #0a192f;
   scrollbar-width: thin;
@@ -335,7 +335,7 @@ margin-bottom: 0px !important;
 }
 @media screen and (max-height: 940px) {
   .tableWrapper {
-    max-height: 54vh;
+    max-height: 65vh;
   }
 }
 /* 📱 For very short screens: height ≤ 540px */
