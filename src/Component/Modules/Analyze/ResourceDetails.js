@@ -523,58 +523,51 @@ export default function ResourceDetails({
                         </div>
                     </div>
                     <p className="activityContent">{resource.unified_activity_content}</p>
-                 {resource.socialmedia_media_url && (() => {
-    let urls = [];
-    try {
-        urls = typeof resource.socialmedia_media_url === 'string'
-            ? JSON.parse(resource.socialmedia_media_url)
-            : resource.socialmedia_media_url;
-    } catch (error) {
-        console.error("Media URL parse error:", error);
-        return <p>Invalid media format</p>;
-    }
+                {resource.socialmedia_media_url && (() => {
+                        let urls = [];
+                        try {
+                            urls = typeof resource.socialmedia_media_url === 'string'
+                                ? JSON.parse(resource.socialmedia_media_url)
+                                : resource.socialmedia_media_url;
+                        } catch (error) {
+                            console.error("Media URL parse error:", error);
+                            return <p>Invalid media format</p>;
+                        }
 
-    return (
-        <div className="imageGridWrapper">
-            {urls.map((url, index) => {
-                url = url.trim();
+                        // Filter valid media URLs
+                        const validMedia = urls.filter(url =>
+                            url &&
+                            (/\.(jpg|jpeg|png|gif)$/i.test(url.trim()) ||
+                                url.includes('scontent') ||
+                                /\.(mp4|mov|webm|ogg)$/i.test(url.trim()) ||
+                                url.includes('video'))
+                        );
 
-                if (
-                    url.includes('video') ||
-                    /\.(mp4|mov|webm|ogg)$/i.test(url)
-                ) {
-                    return (
-                        <video
-                            key={index}
-                            controls
-                            className="postImage"
-                            preload="metadata"
-                        >
-                            <source src={url} type="video/mp4" />
-                            Your browser does not support the video tag.
-                        </video>
-                    );
-                }
+                        if (validMedia.length === 0) {
+                            return <p>Media not available</p>; // Agar media na mile toh ye print hoga
+                        }
 
-                if (
-                    /\.(jpg|jpeg|png|gif)$/i.test(url) ||
-                    url.includes('scontent')
-                ) {
-                    return (
-                        <img
-                            key={index}
-                            src={url}
-                            alt={`media-${index}`}
-                            className="postImage"
-                        />
-                    );
-                }
-
-                return null; // If it’s neither video nor image
-            })}
-        </div>
-    );
-})()}
+                        return (
+                            <div className="imageGridWrapper">
+                                {validMedia.map((url, index) => {
+                                    url = url.trim();
+                                    if (url.includes('video') || /\.(mp4|mov|webm|ogg)$/i.test(url)) {
+                                        return (
+                                            <video key={index} controls className="postImage" preload="metadata">
+                                                <source src={url} type="video/mp4" />
+                                                Your browser does not support the video tag.
+                                            </video>
+                                        );
+                                    }
+                                    return (
+                                        <p>Media Not Available</p>
+                                           
+                                       
+                                    );
+                                })}
+                            </div>
+                        );
+                    })()}
 
                     <div className="view" style={{ display: "flex", gap: "4px" }}>
                         <div className="time">
