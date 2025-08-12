@@ -251,7 +251,7 @@ const RecentCriteria = () => {
       console.error("Error deleting item:", error);
     }
   };
-
+const payload = {}
   const handleSearch = async () => {
     // Check if there's any data to search
     const hasUserKeywords = userEnteredKeywords.length > 0;
@@ -314,7 +314,7 @@ const RecentCriteria = () => {
           typeof v === 'string' ? v.trim() !== '' :
             v !== null && v !== undefined;
 
-      const payload = Object.fromEntries(
+       payload = Object.fromEntries(
         Object.entries(rawPayload).filter(([_, value]) => isValid(value))
       );
 
@@ -352,7 +352,7 @@ const RecentCriteria = () => {
       toast.error("Search failed. Please try again.");
     }
   };
-
+  const queryPayload = {};
   const ReuseCriteria = async (item) => {
     console.log("detailscriterai", item);
 
@@ -360,7 +360,7 @@ const RecentCriteria = () => {
       val !== null && val !== undefined && val.toString().trim() !== "";
 
     let updatedKeywords = [];
-    const queryPayload = {};
+  
 
     if (item) {
       if (Array.isArray(item.keyword) && item.keyword.length > 0) {
@@ -434,7 +434,7 @@ const RecentCriteria = () => {
       // Dispatch updated keywords
       dispatch(setKeywords({
         keyword: updatedKeywords,
-        queryPayload: response.data.input // or other fields if needed
+        queryPayload: queryPayload // or other fields if needed
       }));
 
       // Store API result in Redux
