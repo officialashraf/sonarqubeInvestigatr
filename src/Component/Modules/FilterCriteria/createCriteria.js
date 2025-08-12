@@ -147,7 +147,7 @@ const CreateCriteria = ({ handleCreateCase }) => {
           value: bucket.key,
           label: bucket.key
         }));
-
+    console.log("targetoptions",formatted)
         const formattedSentiments = sentimentBuckets.map(bucket => ({
           value: bucket.key,
           label: bucket.key
