@@ -4,11 +4,12 @@ import Cookies from 'js-cookie';
 import { useDispatch, useSelector } from 'react-redux';
 import { setKeywords, setPage, setSearchResults } from '../../../Redux/Action/criteriaAction';
 import CriteriaForm from '../../Common/FilterForm/CriteriaForm';
-
+import Confirm from './confirmCriteria';
 const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPopupVisible }) => {
     const Token = Cookies.get('accessToken');
     const dispatch = useDispatch();
     const payload = useSelector((state) => state.criteriaKeywords?.queryPayload || {});
+    const [showSavePopup, setShowSavePopup] = useState(false);
 
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [formData, setFormData] = useState({
@@ -53,14 +54,39 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
 
     // Populate formData from payload
     useEffect(() => {
-        if (payload.case_id && options.cases.length > 0) {
+        if (options.cases.length > 0 || options.platforms.length > 0 || options.targets.length > 0 || options.sentiments.length > 0) {
             setFormData(prev => ({
                 ...prev,
-                caseIds: (Array.isArray(payload.case_id) ? payload.case_id : JSON.parse(payload.case_id || '[]'))
-                    .map(id => options.cases.find(opt => String(opt.value) === String(id)) || { value: id, label: id })
+                caseIds: payload.case_id && payload.case_id.length > 0
+                    ? (Array.isArray(payload.case_id) ? payload.case_id : JSON.parse(payload.case_id || '[]'))
+                        .map(id => options.cases.find(opt => String(opt.value) === String(id)) || { value: id, label: id })
+                    : [],
+                platform: payload.file_type && payload.file_type.length > 0 && options.platforms.length > 0
+                    ? options.platforms.filter(opt => payload.file_type.includes(opt.value))
+                    : [],
+                targets: payload.targets && payload.targets.length > 0 && options.targets.length > 0
+                    ? options.targets.filter(opt => payload.targets.includes(opt.value))
+                    : [],
+                sentiments: payload.sentiments && payload.sentiments.length > 0 && options.sentiments.length > 0
+                    ? options.sentiments.filter(opt => payload.sentiments.includes(opt.value))
+                    : []
             }));
+
+            // Populate selected dates
+            if (payload.start_time && payload.end_time) {
+                const startDate = new Date(payload.start_time);
+                const endDate = new Date(payload.end_time);
+                setSelectedDates({
+                    startDate,
+                    endDate,
+                    startTime: { hours: startDate.getHours(), minutes: startDate.getMinutes() },
+                    endTime: { hours: endDate.getHours(), minutes: endDate.getMinutes() }
+                });
+            } else {
+                setSelectedDates({});
+            }
         }
-    }, [payload, options.cases]);
+    }, [payload, options]);
 
     const performSearch = async () => {
         try {
@@ -117,6 +143,7 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
     if (!isPopupVisible) return null;
 
     return (
+        <>
         <CriteriaForm
             title="Filter Criteria"
             caseFieldConfig={{ show: false, readOnly: false }}
@@ -128,7 +155,7 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
             toggleDatePicker={() => setShowDatePicker(p => !p)}
             showDatePicker={showDatePicker}
             onSearch={performSearch}
-            onCreate={() => console.log('Create logic here')}
+            onCreate={() => setShowSavePopup(true)}
             onCancel={() => setIsPopupVisible(false)}
             showCreateButton={true}
             isSearchDisabled={
@@ -139,6 +166,16 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
                 !(selectedDates.startDate && selectedDates.endDate)
             }
         />
+         {
+        showSavePopup && (
+            <Confirm
+                formData={formData}
+                selectedDates={selectedDates}
+                searchChips={searchChips}
+            />
+        )
+    }
+        </>
     );
 };
 
