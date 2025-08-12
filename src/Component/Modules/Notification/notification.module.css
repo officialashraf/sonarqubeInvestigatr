@@ -12,3 +12,7 @@
     color: inherit !important;
     cursor: default !important; /* ✅ Avoid pointer change */
 }
+:global(.dropdown-toggle)::after {
+  content: none !important;
+  display: none !important;
+}

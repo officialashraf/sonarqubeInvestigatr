@@ -143,7 +143,7 @@ const AddComment = ({ show, onClose, selectedResource }) => {
     <div className="popup-overlay" >
       <div className="popup-container">
         <div className="popup-content">
-          <label htmlFor="title">Comments</label>
+          <h5>Comments</h5>
           <button className="close-icon" onClick={onClose}>
             &times;
           </button>
@@ -155,14 +155,38 @@ const AddComment = ({ show, onClose, selectedResource }) => {
           ) : commentsArray.length > 0 ? (
             <List style={{ minHeight: 'auto', maxHeight: '400px', overflow: 'auto' }}>
               {commentsArray.map((comment, index) => (
-                <ListItem key={index}>
+                <ListItem key={index} alignItems="flex-start">
                   <ListItemText
-                    primary={comment.comment}
+                    primary={
+                      <span style={{
+                        display: 'block',
+                        hyphens: 'auto',
+                        whiteSpace:'pre-wrap',
+                        wordBreak: 'break-word',
+                        overflowWrap: 'anywhere',
+                        whiteSpace: 'normal',
+                        maxWidth: '90%',
+                        justifyContent:'center'
+                      }}>
+                        {comment.comment}
+                      </span>
+                    }
 
+                    secondary={
+                      <>
+                        <span style={{ display: 'block', fontSize: '12px', color: '#555' }}>
+                          Created On: <strong>{new Date(comment.created_on).toLocaleString()}</strong>
+                        </span>
+                        <span style={{ display: 'block', fontSize: '12px', color: '#555' }}>
+                          Created By: <strong>{comment.user}</strong>
+                        </span>
+
+                      </>
+                    }
                   />
                   <ListItemSecondaryAction>
                     <IconButton edge="end" size="small" onClick={() => handleEditClick(comment)}>
-                      <EditIcon fontSize="small" style={{ color: '#0073cf'}} />
+                      <EditIcon fontSize="small" style={{ color: '#0073cf' }} />
                     </IconButton>
                     <IconButton edge="end" size="small" onClick={() => handleDelete(comment.id)}>
                       <DeleteIcon fontSize="small" style={{ color: '#0073cf' }} />
@@ -172,14 +196,14 @@ const AddComment = ({ show, onClose, selectedResource }) => {
               ))}
             </List>
           ) : (
-            <Typography  sx={{ textAlign: 'center', my: 2 }}>
+            <Typography sx={{ textAlign: 'center', my: 2 }}>
               No comments found
             </Typography>
           )}
           <form onSubmit={handleAddComment}>
             {/* <label htmlFor="title">Add Comment</label> */}
             <CommonTextInput
-            label="Add Comment"
+              label="Add Comment"
               // className="com"
               type="text"
               id="title"
@@ -194,8 +218,8 @@ const AddComment = ({ show, onClose, selectedResource }) => {
               }}
               placeholder="Enter your comment"
               readOnly={isReadOnly}
-            onFocus={handleFocus}
-            ref={inputRef}
+              onFocus={handleFocus}
+              ref={inputRef}
 
             />
             {error.comment && <p style={{ color: "red", margin: '0px' }} >{error.comment}</p>}

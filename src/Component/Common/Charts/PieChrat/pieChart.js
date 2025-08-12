@@ -1,3 +1,222 @@
+// import { useState, useEffect } from 'react';
+// import axios from 'axios';
+// import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
+// import Cookies from 'js-cookie';
+// import Loader from '../../../Modules/Layout/loader';
+
+// const getCSSVar = (variable) =>
+//   getComputedStyle(document.documentElement).getPropertyValue(variable).trim();
+
+// const COLORS = [
+//   getCSSVar('--color-colors-warning'),
+//   getCSSVar('--color-colors-success'),
+//   getCSSVar('--color-colors-danger'),
+//   getCSSVar('--color-colors-primaryAccent'),
+//   getCSSVar('--color-colors-copper2')
+// ];
+
+// const ReusablePieChart = ({
+
+//   aggsFields = [],
+//   queryPayload = null,
+//   caseId = null,
+//   chartHeight = 300,
+//   transformData = (rawData) =>
+//     rawData.map(item => ({
+//       name: item.key,
+//       value: item.doc_count
+//     }))
+// }) => {
+//   const [data, setData] = useState([]);
+//   const [loading, setLoading] = useState(false);
+//   const token = Cookies.get('accessToken');
+
+//   useEffect(() => {
+//     if (!caseId || !aggsFields || aggsFields.length === 0) return;
+
+//     const fetchData = async () => {
+//       try {
+//         setLoading(true);
+
+//         // ✅ Always convert caseId to string[]
+//         const caseIdArray =
+//           Array.isArray(queryPayload?.case_id)
+//             ? queryPayload.case_id
+//             : queryPayload?.case_id
+//               ? [queryPayload.case_id]
+//               : caseId
+//                 ? [caseId]
+//                 : [];
+
+
+//         const case_id = caseIdArray.map(String); // Ensure string[]
+
+//         let flatQuery = {
+//           case_id,
+//           aggs_fields: aggsFields,
+//           file_type: Array.isArray(queryPayload?.file_type) ? queryPayload.file_type : [],
+//           keyword: Array.isArray(queryPayload?.keyword) ? queryPayload.keyword : [],
+//           targets: Array.isArray(queryPayload?.target) ? queryPayload.target :
+//             Array.isArray(queryPayload?.targets) ? queryPayload.targets :
+//               [],
+//           sentiments: Array.isArray(queryPayload?.sentiments)
+//             ? queryPayload.sentiments
+//             : Array.isArray(queryPayload?.sentiment)
+//               ? queryPayload.sentiment
+//               : [],
+//           ...(queryPayload?.start_time && { start_time: queryPayload.start_time }),
+//           ...(queryPayload?.end_time && { end_time: queryPayload.end_time }),
+//           // page: 1,
+//           // size: 50,
+//         };
+
+//         //  Remove empty/null/undefined arrays or values
+//         flatQuery = Object.fromEntries(
+//           Object.entries(flatQuery).filter(
+//             ([, value]) =>
+//               Array.isArray(value) ? value.length > 0 : value !== null && value !== undefined && value !== ""
+//           )
+//         );
+
+//         const payload = flatQuery;
+
+
+//         const response = await axios.post(
+//           `${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/aggregate`,
+//           payload,
+//           {
+//             headers: {
+//               'Content-Type': 'application/json',
+//               Authorization: `Bearer ${token}`
+//             }
+//           }
+//         );
+
+//         const field = aggsFields[0];
+//         const rawData = response.data[field] || [];
+//         const transformed = transformData(rawData);
+//         setData(transformed.length ? transformed : [{ name: 'No Data', value: 0 }]);
+
+//       } catch (error) {
+//         console.error('Error fetching pie chart data:', error);
+//         setData([{ name: 'No Data', value: 0 }]);
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+
+//     fetchData();
+//   }, [caseId, aggsFields, token]);
+
+
+//   if (loading) return <Loader />;
+
+//   return (
+//     <ResponsiveContainer width="100%" height={chartHeight}>
+//       <PieChart>
+//         <Pie
+//           data={data}
+//           cx="50%"
+//           cy="50%"
+//           innerRadius={60}
+//           outerRadius={80}
+//           dataKey="value"
+//           stroke="#fff"
+//           strokeWidth={2}
+//           minAngle={3}
+//         >
+//           {data.map((entry, index) => {
+//             let fillColor;
+
+//             if (entry.name === "positive") {
+//               fillColor = getCSSVar('--color-colors-success');
+//             } else if (entry.name === "negative") {
+//               fillColor = getCSSVar('--color-colors-danger');
+//             } else if (entry.name === "neutral") {
+//               fillColor = getCSSVar('--color-colors-warning');
+//             } else if (entry.name === "Social Media") {
+//               fillColor = getCSSVar('--color-colors-warning');
+//             } else if (entry.name === "Rss Feed") {
+//               fillColor = getCSSVar('--color-colors-success');
+//             } else if (entry.name === "DeepWeb") {
+//               fillColor = getCSSVar('--color-colors-copper2');
+//             } else if (entry.name === "Web Feed") {
+//               fillColor = getCSSVar('--color-colors-primaryAccent');
+//             }
+//             else if (entry.name === "Dark Web") {
+//               fillColor = "#b3229dff";
+//             }
+//             else {
+//               fillColor = COLORS[index % COLORS.length];
+//             }
+
+//             return (
+//               <Cell
+//                 key={`cell-${index}`}
+//                 fill={fillColor}
+//                 strokeWidth={1}
+//               />
+//             );
+//           })}
+
+//         </Pie>
+
+//         <Tooltip
+//           wrapperStyle={{
+//             backgroundColor: "#0E2C46",
+//             border: "1px solid #3498db",
+//             borderRadius: "8px",
+//             padding: "8px",
+//           }}
+//           contentStyle={{
+//             backgroundColor: "#0E2C46",
+//             border: "none",
+//             color: "#fff",
+//           }}
+//           labelStyle={{ color: "#fff" }}
+//           cursor={{ fill: "#fff" }}
+//         />
+
+//         <Legend
+//           align="center"
+//           verticalAlign="bottom"
+//           layout="horizontal"
+//           iconType="circle"
+//           content={({ payload }) => (
+//             <ul style={{ display: 'flex', justifyContent: 'center', padding: 0, listStyle: 'none' }}>
+//               {payload.map((entry, index) => (
+//                 <li
+//                   key={`item-${index}`}
+//                   style={{
+//                     display: 'flex',
+//                     alignItems: 'center',
+//                     marginRight: 15,
+//                     color: entry.color,
+//                     fontSize: 12,
+//                   }}
+//                 >
+//                   <div
+//                     style={{
+//                       width: 10,
+//                       height: 10,
+//                       borderRadius: '50%',
+//                       backgroundColor: entry.color,
+//                       marginRight: 5,
+//                     }}
+//                   />
+//                   {entry.value} ({entry.payload.value})
+//                 </li>
+//               ))}
+//             </ul>
+//           )}
+//         />
+//       </PieChart>
+//     </ResponsiveContainer>
+//   );
+// };
+
+// export default ReusablePieChart;
+
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
@@ -12,11 +231,14 @@ const COLORS = [
   getCSSVar('--color-colors-success'),
   getCSSVar('--color-colors-danger'),
   getCSSVar('--color-colors-primaryAccent'),
-  getCSSVar('--color-colors-copper2')
+  getCSSVar('--color-colors-copper2'),
+  "#ff7f50", "#87ceeb", "#da70d6", "#32cd32", "#ffd700",
+  "#ff69b4", "#ba55d3", "#cd5c5c", "#ffa500", "#40e0d0"
 ];
 
-const ReusablePieChart = ({
+const getRandomColor = () => COLORS[Math.floor(Math.random() * COLORS.length)];
 
+const ReusablePieChart = ({
   aggsFields = [],
   queryPayload = null,
   caseId = null,
@@ -38,7 +260,6 @@ const ReusablePieChart = ({
       try {
         setLoading(true);
 
-        // ✅ Always convert caseId to string[]
         const caseIdArray =
           Array.isArray(queryPayload?.case_id)
             ? queryPayload.case_id
@@ -48,8 +269,7 @@ const ReusablePieChart = ({
                 ? [caseId]
                 : [];
 
-
-        const case_id = caseIdArray.map(String); // Ensure string[]
+        const case_id = caseIdArray.map(String);
 
         let flatQuery = {
           case_id,
@@ -66,11 +286,8 @@ const ReusablePieChart = ({
               : [],
           ...(queryPayload?.start_time && { start_time: queryPayload.start_time }),
           ...(queryPayload?.end_time && { end_time: queryPayload.end_time }),
-          // page: 1,
-          // size: 50,
         };
 
-        //  Remove empty/null/undefined arrays or values
         flatQuery = Object.fromEntries(
           Object.entries(flatQuery).filter(
             ([, value]) =>
@@ -78,12 +295,9 @@ const ReusablePieChart = ({
           )
         );
 
-        const payload = flatQuery;
-
-
         const response = await axios.post(
           `${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/aggregate`,
-          payload,
+          flatQuery,
           {
             headers: {
               'Content-Type': 'application/json',
@@ -107,7 +321,6 @@ const ReusablePieChart = ({
 
     fetchData();
   }, [caseId, aggsFields, token]);
-
 
   if (loading) return <Loader />;
 
@@ -142,12 +355,11 @@ const ReusablePieChart = ({
               fillColor = getCSSVar('--color-colors-copper2');
             } else if (entry.name === "Web Feed") {
               fillColor = getCSSVar('--color-colors-primaryAccent');
-            }
-            else if (entry.name === "Dark Web") {
+            } else if (entry.name === "Dark Web") {
               fillColor = "#b3229dff";
-            }
-            else {
-              fillColor = COLORS[index % COLORS.length];
+            } else {
+              // ✅ Random color for unknown fields
+              fillColor = getRandomColor();
             }
 
             return (
@@ -158,7 +370,6 @@ const ReusablePieChart = ({
               />
             );
           })}
-
         </Pie>
 
         <Tooltip
@@ -176,40 +387,74 @@ const ReusablePieChart = ({
           labelStyle={{ color: "#fff" }}
           cursor={{ fill: "#fff" }}
         />
-
-        <Legend
-          align="center"
-          verticalAlign="bottom"
-          layout="horizontal"
-          iconType="circle"
-          content={({ payload }) => (
-            <ul style={{ display: 'flex', justifyContent: 'center', padding: 0, listStyle: 'none' }}>
-              {payload.map((entry, index) => (
-                <li
-                  key={`item-${index}`}
+<Legend
+  align="center"
+  verticalAlign="bottom"
+  layout="horizontal"
+  content={({ payload }) => {
+    const isOverflow = payload.length > 6; // yahan limit adjust kar sakte ho
+    return (
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: isOverflow ? 'flex-start' : 'center',
+          overflowX: isOverflow ? 'auto' : 'visible',
+          padding: '5px 0',
+          maxWidth: '100%',
+          whiteSpace: 'nowrap',
+        }}
+      >
+        <ul
+          style={{
+            display: 'flex',
+            listStyle: 'none',
+            margin: 0,
+            padding: 0,
+          }}
+        >
+          {payload.map((entry, index) => (
+            <li
+              key={`item-${index}`}
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                marginRight: 15,
+                color: entry.color,
+                fontSize: 12,
+                flexShrink: 0,
+              }}
+            >
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  marginBottom: 2,
+                }}
+              >
+                <div
                   style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    marginRight: 15,
-                    color: entry.color,
-                    fontSize: 12,
+                    width: 10,
+                    height: 10,
+                    borderRadius: '50%',
+                    backgroundColor: entry.color,
+                    marginRight: 5,
                   }}
-                >
-                  <div
-                    style={{
-                      width: 10,
-                      height: 10,
-                      borderRadius: '50%',
-                      backgroundColor: entry.color,
-                      marginRight: 5,
-                    }}
-                  />
-                  {entry.value} ({entry.payload.value})
-                </li>
-              ))}
-            </ul>
-          )}
-        />
+                />
+                {entry.value}
+              </div>
+              <span style={{ color: entry.color }}>
+                {entry.payload.value}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  }}
+/>
+
+
       </PieChart>
     </ResponsiveContainer>
   );

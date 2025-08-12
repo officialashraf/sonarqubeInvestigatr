@@ -791,7 +791,7 @@ const handleIntervalUnitChange = (sourceIndex, unit) => {
                         error={!!error.sources?.[sourceIndex]?.keywords}
                         required={false}
                       />
-                      <div className="mt-2" style={{ display: "flex", flexWrap: "wrap", gap: "5px" }}>
+                      <div className="mt-21" style={{ display: "flex", flexWrap: "wrap", gap: "3px" }}>
                         {source.keywords.map((keyword, keyIndex) => (
                           <Badge
                             key={keyIndex}
@@ -812,14 +812,14 @@ const handleIntervalUnitChange = (sourceIndex, unit) => {
                           >
                             {keyword}
                             {(!filterDetails?.id || isEditable) && (
-                              <Button
+                              <div
                                 variant="link"
                                 className="text-light p-0 ms-1"
                                 onClick={() => handleDeleteKeyword(sourceIndex, keyIndex)}
-                                style={{color:"rgb(0, 115, 207)"}}
+                                style={{color:"rgb(0, 115, 207)", cursor:'pointer'}}
                               >
-                                ×
-                              </Button>
+                                X
+                              </div>
                             )}
                           </Badge>
                         ))}
@@ -844,7 +844,7 @@ const handleIntervalUnitChange = (sourceIndex, unit) => {
                         required={false}
                       />
                       
-                      <div className="mt-2" style={{ display: "flex", flexWrap: "wrap", gap: "5px" }}>
+                      <div className="mt-1" style={{ display: "flex", flexWrap: "wrap", gap: "3px" }}>
                         {source.urls.filter((url) => url.trim() !== "").map((url, urlIndex) => (
                           <Badge
                             key={urlIndex}
@@ -866,14 +866,14 @@ const handleIntervalUnitChange = (sourceIndex, unit) => {
                           >
                             {url}
                             {(!filterDetails?.id || isEditable) && (
-                              <Button
+                              <div
                                 variant="link"
-                                className="text-light p-0 ms-2"
+                                className="text-light p-0 ms-1"
                                 onClick={() => handleDeleteUrl(sourceIndex, urlIndex)}
-                                style={{color:"rgb(0, 115, 207)"}}
+                                style={{color:"rgb(0, 115, 207)", cursor:'pointer'}}
                               >
-                                ×
-                              </Button>
+                                X
+                              </div>
                             )}
                           </Badge>
                         ))}
