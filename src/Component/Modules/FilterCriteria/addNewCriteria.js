@@ -44,6 +44,7 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
                 const fOpts = distinctRes.data.unified_record_type.buckets.map(b => ({ value: b.key, label: b.key }));
 
                 setOptions({ cases: caseOpts, platforms: fOpts, targets: tOpts, sentiments: sOpts });
+            
             } catch (err) {
                 console.error('Error fetching options', err);
             }

@@ -167,7 +167,7 @@ const ComponentTen = () => (
 );
 const ComponentEleven = () => (
   <>
-    <Header title="Eventypestring" />
+    <Header title="Even Types" />
     <Card
       sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius: '25px'}}
     >
