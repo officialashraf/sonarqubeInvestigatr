@@ -354,7 +354,7 @@ const CaseTableDataFilter = () => {
             ...(localFileTypeChips.length > 0 && { file_type: localFileTypeChips }),
             ...(localAggsFieldsChips.length > 0 && { aggs_fields: localAggsFieldsChips }),
             ...(localSetiments.length > 0 && { sentiments: localSetiments }),
-            ...(localTargets.length > 0 && { target: localTargets }),
+            ...(localTargets.length > 0 && { targets: localTargets }),
             ...(localStartTime && { starttime: localStartTime }),
             ...(localEndTime && { endtime: localEndTime }),
             page: 1,

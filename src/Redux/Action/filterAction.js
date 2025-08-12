@@ -27,7 +27,7 @@ export const fetchSummaryData =
   ({ queryPayload, page = 1, itemsPerPage = 50, starttime, endtime, file_type,aggsFields,keyword,targets,sentiments,case_id }) =>
 
     async (dispatch) => {
-      console.log("fetchSummaryData called",aggsFields);
+      console.log("fetchSummaryData called",targets);
       try {
         dispatch({ type: SET_LOADING });
 
