@@ -10,6 +10,8 @@ import OrgGraph from "./organisationGraph";
 import LanguageGraph from "./languageGraph";
 import LocationGraph from "./locationGraph";
 import LazyLoadWrapper from "../../../../Analyze/GraphicalData/lazyLoadWrapper";
+import SerachEventypesrting from "./serachEventypesrting";
+import SearchSummary from "./searchSummary";
 
 const Header = ({ title }) =>
   <Grid
@@ -19,134 +21,162 @@ const Header = ({ title }) =>
     p={0}
     sx={{ mt: 0, mb: 0, height: "20px" }}
     className={styles.graphCards}
-    style={{margin:'0px 0px 10px 15px'}}
+    style={{ margin: '0px 0px 10px 15px' }}
   >
-    <p style={{ color: "white",fontSize:"16px", paddingLeft: "5px"}}>
+    <p style={{ color: "white", fontSize: "16px", paddingLeft: "5px" }}>
       {title}
     </p>
-</Grid>;
+  </Grid>;
 
 const ComponentOne = () => (
   <>
-     <Header title="Timeline"  />
-  <Card sx={{ height: "300px", backgroundColor: "#101D2B", borderRadius:'25px' }}>
-    <CardContent>
-       <LazyLoadWrapper height={300}>
-      <LineGrapgh />
-      </LazyLoadWrapper>
-    </CardContent>
-  </Card>
+    <Header title="Timeline" />
+    <Card sx={{ height: "300px", backgroundColor: "#101D2B", borderRadius: '25px' }}>
+      <CardContent>
+        <LazyLoadWrapper height={300}>
+          <LineGrapgh />
+        </LazyLoadWrapper>
+      </CardContent>
+    </Card>
   </>);
 
 
 const ComponentTwo = () => (
   <>
-      <Header title="Keywords" />
-  <Card sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius:'25px' }}>
-    <CardContent>
-       <LazyLoadWrapper height={300}>
-      <KeywordChart />
-      </LazyLoadWrapper>
-    </CardContent>
-  </Card>
+    <Header title="Keywords" />
+    <Card sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius: '25px' }}>
+      <CardContent>
+        <LazyLoadWrapper height={300}>
+          <KeywordChart />
+        </LazyLoadWrapper>
+      </CardContent>
+    </Card>
   </>);
 
 
 const ComponentThree = () => (
   <>
-      <Header title="Location" />
-  <Card sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius:'25px' }}>
-    <CardContent>
-       <LazyLoadWrapper height={300}>
-      <LocationGraph />
-      </LazyLoadWrapper>
-    </CardContent>
-  </Card>
+    <Header title="Location" />
+    <Card sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius: '25px' }}>
+      <CardContent>
+        <LazyLoadWrapper height={300}>
+          <LocationGraph />
+        </LazyLoadWrapper>
+      </CardContent>
+    </Card>
   </>);
 const ComponentFour = () => (
   <>
-      <Header title="Sentiment" />
-  <Card
-    sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius:'25px' }}
-  >
-    <CardContent>
-       <LazyLoadWrapper height={300}>
-      <SentimentPieChart  />
-      </LazyLoadWrapper>
-    </CardContent>
-  </Card>
+    <Header title="Sentiment" />
+    <Card
+      sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius: '25px' }}
+    >
+      <CardContent>
+        <LazyLoadWrapper height={300}>
+          <SentimentPieChart />
+        </LazyLoadWrapper>
+      </CardContent>
+    </Card>
   </>
 );
 
 const ComponentFive = () => (
   <>
-      <Header title="Time" />
-  <Card
-    sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius:'25px' }}
-  >
-    <CardContent>
-       <LazyLoadWrapper height={300}>
-      <DateGraph />
-      </LazyLoadWrapper>
-    </CardContent>
-  </Card>
+    <Header title="Time" />
+    <Card
+      sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius: '25px' }}
+    >
+      <CardContent>
+        <LazyLoadWrapper height={300}>
+          <DateGraph />
+        </LazyLoadWrapper>
+      </CardContent>
+    </Card>
   </>
 );
 const ComponentSix = () => (
   <>
-      <Header title="Events" />
-  <Card
-    sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius:'25px' }}
-  >
-    <CardContent>
-       <LazyLoadWrapper height={300}>
-      <EventGraph />
-      </LazyLoadWrapper>
-    </CardContent>
-  </Card>
+    <Header title="Events" />
+    <Card
+      sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius: '25px' }}
+    >
+      <CardContent>
+        <LazyLoadWrapper height={300}>
+          <EventGraph />
+        </LazyLoadWrapper>
+      </CardContent>
+    </Card>
   </>
 );
 const ComponentSeven = () => (
   <>
-      <Header title="Persons" />
-  <Card
-    sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius:'25px' }}
-  >
-    <CardContent>
-       <LazyLoadWrapper height={300}>
-      <PersonGraph />
-      </LazyLoadWrapper>
-    </CardContent>
-  </Card>
+    <Header title="Persons" />
+    <Card
+      sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius: '25px' }}
+    >
+      <CardContent>
+        <LazyLoadWrapper height={300}>
+          <PersonGraph />
+        </LazyLoadWrapper>
+      </CardContent>
+    </Card>
   </>
 );
 const ComponentEight = () => (
   <>
-   <Header title="Languages" />
-  <Card
-    sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius:'25px' }}
-  >
-    <CardContent>
-       <LazyLoadWrapper height={300}>
-      <LanguageGraph />
-      </LazyLoadWrapper>
-    </CardContent>
-  </Card>
+    <Header title="Languages" />
+    <Card
+      sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius: '25px' }}
+    >
+      <CardContent>
+        <LazyLoadWrapper height={300}>
+          <LanguageGraph />
+        </LazyLoadWrapper>
+      </CardContent>
+    </Card>
   </>
 );
 
 const ComponentNine = () => (
   <>
-      <Header title="Organisations" />
-  <Card
-    sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius:'25px', marginBottom: '5rem' }}
-  >
-    <CardContent>
-       <LazyLoadWrapper height={300}>
-      <OrgGraph />
-      </LazyLoadWrapper>
-    </CardContent>
-  </Card>
+    <Header title="Organisations" />
+    <Card
+      sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius: '25px' }}
+    >
+      <CardContent>
+        <LazyLoadWrapper height={300}>
+          <OrgGraph />
+        </LazyLoadWrapper>
+      </CardContent>
+    </Card>
+  </>
+);
+const ComponentTen = () => (
+  <>
+    <Header title="Summary" />
+    <Card
+      sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius: '25px', marginBottom:'5rem' }}
+    >
+      <CardContent>
+        <LazyLoadWrapper height={300}>
+          <SearchSummary />
+        </LazyLoadWrapper>
+      </CardContent>
+    </Card>
+  </>
+);
+const ComponentEleven = () => (
+  <>
+    <Header title="Eventypestring" />
+    <Card
+      sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius: '25px', marginBottom: '5rem' }}
+    >
+      <CardContent>
+        <LazyLoadWrapper height={300}>
+          <SerachEventypesrting />
+        </LazyLoadWrapper>
+      </CardContent>
+    </Card>
   </>
 );
 
@@ -156,7 +186,7 @@ const GrapghicalCriteria = () => {
 
       <Grid container spacing={1} p={1} className={styles.responsiveGrid} style={{
         background: "#080E17", marginLeft: "0 px !important", height: '100vh',
-        overflowY: 'auto',overflowX:'hidden'
+        overflowY: 'auto', overflowX: 'hidden'
       }}>
         <Grid item xs={12} sx={{ paddingLeft: '0px !important', paddingTop: "0px !important" }} className={styles.graphCards}>
           <ComponentOne />
@@ -167,7 +197,7 @@ const GrapghicalCriteria = () => {
         <Grid item xs={6} p={1} pb={0} className={styles.graphCards}>
           <ComponentThree />
         </Grid>
-        <Grid item xs={6} p={1} pb={0}  className={styles.graphCards}>
+        <Grid item xs={6} p={1} pb={0} className={styles.graphCards}>
           <ComponentFour />
         </Grid>
 
@@ -180,11 +210,17 @@ const GrapghicalCriteria = () => {
         <Grid item xs={6} p={1} pb={0} className={styles.graphCards}>
           <ComponentSeven />
         </Grid>
-        <Grid item xs={6} p={1} pb={0} mb={10} className={styles.graphCards}>
+        <Grid item xs={6} p={1} pb={0}  className={styles.graphCards}>
           <ComponentEight />
         </Grid>
-        <Grid item xs={6} p={1} pb={0} mb={10} className={styles.graphCards}>
+        <Grid item xs={6} p={1} pb={0}  className={styles.graphCards}>
           <ComponentNine />
+        </Grid>
+        <Grid item xs={6} p={1} pb={0} mb={10} className={styles.graphCards}>
+          <ComponentTen />
+        </Grid>
+        <Grid item xs={6} p={1} pb={0} mb={10} className={styles.graphCards}>
+          <ComponentEleven />
         </Grid>
       </Grid>
 
