@@ -13,7 +13,7 @@ const CaseEventtypestring = () => {
     <>
       <ReusableBarChart
         caseId={caseID}
-        aggsFields={["socialmedia_activity"]}
+        aggsFields={["eventtypestring"]}
         query={{}} // if extra filters needed
         chartHeight={280}
         transformData={(rawData) =>

@@ -796,13 +796,13 @@ const handleIntervalUnitChange = (sourceIndex, unit) => {
                         error={!!error.sources?.[sourceIndex]?.keywords}
                         required={false}
                       />
-                      <div className="mt-1" style={{ display: "flex", flexWrap: "wrap", gap: "2px" }}>
+                      <div className="mt-21" style={{ display: "flex", flexWrap: "wrap", gap: "3px" }}>
                         {source.keywords.map((keyword, keyIndex) => (
                           <Badge
                             key={keyIndex}
                             pill
                             bg="rgba(0, 115, 207, 0.3)"
-                            className="d-inline-flex align-items-center custom-badge"
+                            className="me-2 mb-1 d-inline-flex align-items-center custom-badge"
                             style={{
                               display: "inline-flex",
                               alignItems: "center",
@@ -817,14 +817,14 @@ const handleIntervalUnitChange = (sourceIndex, unit) => {
                           >
                             {keyword}
                             {(!filterDetails?.id || isEditable) && (
-                              <Button
+                              <div
                                 variant="link"
                                 className="text-light p-0 ms-1"
                                 onClick={() => handleDeleteKeyword(sourceIndex, keyIndex)}
-                                style={{color:"rgb(0, 115, 207)"}}
+                                style={{color:"rgb(0, 115, 207)", cursor:'pointer'}}
                               >
-                                ×
-                              </Button>
+                                X
+                              </div>
                             )}
                           </Badge>
                         ))}
@@ -849,17 +849,17 @@ const handleIntervalUnitChange = (sourceIndex, unit) => {
                         required={false}
                       />
                       
-                      <div className="mt-1" style={{ display: "flex", flexWrap: "wrap", gap: "5px" }}>
+                      <div className="mt-1" style={{ display: "flex", flexWrap: "wrap", gap: "3px" }}>
                         {source.urls.filter((url) => url.trim() !== "").map((url, urlIndex) => (
                           <Badge
                             key={urlIndex}
                             pill
                             bg="rgba(0, 115, 207, 0.3)"
                             radius={30}
-                            className="d-inline-flex align-items-center custom-badge"
+                            className="me-2 mb-2 d-inline-flex align-items-center custom-badge"
                             style={{
-                              // display: "inline-flex",
-                              // alignItems: "center",
+                              display: "inline-flex",
+                              alignItems: "center",
                               minWidth: "auto",
                               maxWidth: "100%",
                               whiteSpace: "normal",
@@ -871,14 +871,14 @@ const handleIntervalUnitChange = (sourceIndex, unit) => {
                           >
                             {url}
                             {(!filterDetails?.id || isEditable) && (
-                              <Button
+                              <div
                                 variant="link"
-                                className="text-light p-0 ms-2"
+                                className="text-light p-0 ms-1"
                                 onClick={() => handleDeleteUrl(sourceIndex, urlIndex)}
-                                style={{color:"rgb(0, 115, 207)"}}
+                                style={{color:"rgb(0, 115, 207)", cursor:'pointer'}}
                               >
-                                ×
-                              </Button>
+                                X
+                              </div>
                             )}
                           </Badge>
                         ))}
