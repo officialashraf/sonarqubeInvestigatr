@@ -8,7 +8,7 @@ const SearchEventypestring = () => {
         <>
             <ReusableBarChart
                 caseId={queryPayload?.case_id || []}
-                aggsFields={["event_type_string"]}
+                aggsFields={["eventtypestring"]}
                 queryPayload={queryPayload}
                 transformData={(rawData) =>
                     rawData.map(item => ({
