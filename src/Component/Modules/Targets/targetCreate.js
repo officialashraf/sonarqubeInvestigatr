@@ -74,10 +74,6 @@ const TargetCreate = ({ togglePopup, existingTargets = [] }) => {
     if (!formData.name) {
       errors.name = "Target is required";
     }
-
-    if (!formData.description) {
-      errors.description = "Description is required";
-    }
     if (!formData.type) {
       errors.type = "Type is required";
     }
@@ -311,13 +307,12 @@ const TargetCreate = ({ togglePopup, existingTargets = [] }) => {
               placeholder="Enter description"
             ></textarea> */}
             <CommonTextArea
-              label="Description *"
+              label="Description"
               name="description"
               value={formData.description}
               onChange={handleInputChange}
               placeholder="Enter description"
             />
-            {error.description && <p style={{ color: "red", margin: '0px' }} >{error.description}</p>}
             {/* <label htmlFor="synonyms">Alternative Keywords/Synonym (up to 5 keywords) </label>
             <div className="synonym-input-container">
               <input

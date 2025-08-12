@@ -43,8 +43,8 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
       urls: [],
       keywordInput: '',
       urlInput: '',
-      intervalValue: 15,
-      intervalUnit: 'minutes',
+      intervalValue: 6,
+      intervalUnit: 'hours',
     },
   ]);
   const containerRef = useRef(null);
@@ -86,8 +86,8 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
       urls: [],
       keywordInput: '',
       urlInput: '',
-      intervalValue: 15,
-      intervalUnit: 'minutes',
+      intervalValue: 6,
+      intervalUnit: 'hours',
     }]);
     setFilterDetails(null);
     setIsEditable(true);
@@ -123,10 +123,6 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
     // Validate main filter fields
     if (!filterName.trim()) {
       errors.name = "Filter name is required";
-    }
-
-    if (!description.trim()) {
-      errors.description = "Description is required";
     }
 
     const sourceErrors = [];
@@ -199,8 +195,10 @@ if (source.source === 'dark web') {
               keywords: [],
               keywordInput: '',
               urlInput: '',
-                intervalValue: value === 'dark web' ? 2 : 15,
-            intervalUnit: value === 'dark web' ? 'hours' : 'minutes',
+            //     intervalValue: value === 'dark web' ? 2 : 15,
+            // intervalUnit: value === 'dark web' ? 'hours' : 'minutes',
+            intervalValue: 6,    // default 6 hours
+            intervalUnit: 'hours'
             }
           : src
       )
@@ -359,12 +357,10 @@ const handleIntervalUnitChange = (sourceIndex, unit) => {
   setSources(prevSources =>
     prevSources.map((src, i) => {
       if (i === sourceIndex) {
-       let newMinValue;
+       let newMinValue = src.intervalValue;
         // Dark web ke liye different logic
-        if (src.source === 'dark web') {
-          newMinValue = unit === 'hours' ? 2 : 1; // minutes option nahi hoga dark web ke liye
-        } else {
-          newMinValue = unit === 'minutes' ? 15 : 1; // normal sources ke liye
+        if (unit === 'hours' && ![3, 6, 9, 12].includes(src.intervalValue)) {
+          newMinValue = 6; // <-- Default to 6 if not allowed value
         }
         const adjustedValue = src.intervalValue < newMinValue ? newMinValue : src.intervalValue;
         return { ...src, intervalUnit: unit, intervalValue: adjustedValue };
@@ -465,8 +461,8 @@ const handleIntervalUnitChange = (sourceIndex, unit) => {
         urls: [],
         keywordInput: '',
         urlInput: '',
-        intervalValue: 15,
-        intervalUnit: 'minutes',
+        intervalValue: 6,
+        intervalUnit: 'hours',
       }
     ]);
   };
@@ -684,21 +680,19 @@ const handleIntervalUnitChange = (sourceIndex, unit) => {
         
         <Form.Group className="mb-3">
           <InputField
-            label="Description *"
+            label="Description"
             placeholder="Please enter a description here"
-            error={!!error.description}
             as="textarea"
             rows={3}
             value={description}
             onChange={(e) => {
               setDescription(e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1));
-              setError(prev => ({ ...prev, description: '' }));
             }}
             onKeyDown={handleEnterKey}
             style={{ backgroundColor: "white", color: "black" }}
             disabled={filterDetails?.id && !isEditable}
+            required={false}
           />
-          {error.description && <p style={{ color: "red", margin: '0px' }} >{error.description}</p>}
         </Form.Group>
         
         <div>
@@ -771,6 +765,7 @@ const handleIntervalUnitChange = (sourceIndex, unit) => {
   onValueChange={(val) => handleIntervalValueChange(sourceIndex, val)}
   onUnitChange={(unit) => handleIntervalUnitChange(sourceIndex, unit)}
   disabled={filterDetails?.id && !isEditable}
+                        allowedHourValues={[3, 6, 9, 12]}
   isDarkWeb={source.source === 'dark web'} // ye prop add karo
 />
                       {error.sources?.[sourceIndex]?.intervalValue && (

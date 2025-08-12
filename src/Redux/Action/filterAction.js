@@ -2,6 +2,7 @@ import axios from 'axios';
 import { SET_TASK_FILTER_ID, SET_DATA, SET_HEADERS, LOG_FILTER_COUNT, SET_ERROR, SET_PAGINATION, SET_LOADING } from '../Constants/filterConstant'
 import Cookies from "js-cookie";
 import { toast } from 'react-toastify';
+import { CLEAR_SUMMARY_DATA } from "../Constants/filterConstant";
 
 export const setTaskFilter = (taskId, filterId) => ({
 
@@ -16,6 +17,9 @@ export const logFilterCount = (user) => {
     payload: user,
   };
 };
+export const clearFilterData = () => ({
+  type: CLEAR_SUMMARY_DATA
+});
 
 
 //newcommonapi

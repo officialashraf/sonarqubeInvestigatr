@@ -75,10 +75,6 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
     if (!formData.name) {
       errors.name = "Target is required";
     }
-
-    if (!formData.description) {
-      errors.description = "Description is required";
-    }
     if (!formData.type) {
       errors.type = "Type is required";
     }
@@ -169,8 +165,7 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
     const payloadData = Object.fromEntries(
       Object.entries(formData).filter(([key, value]) => {
         if (value === null || value === undefined) return false;
-        if (typeof value === "string" && value.trim() === "") return false;
-        // Allow empty array for synonyms to be sent to backend to remove synonyms
+        if (typeof value === "string" && value.trim() === "" && key !== "description") return false; // Allow empty array for synonyms to be sent to backend to remove synonyms
         if (Array.isArray(value) && value.length === 0 && key !== "synonyms") return false;
         return true;
       })
@@ -335,14 +330,13 @@ const TargetUpdate = ({ togglePopup, id, existingTargets = [] }) => {
 
             {/* <label htmlFor="description">Description *</label> */}
             <CommonTextArea
-              label="Description *"
+              label="Description"
               id="description"
               name="description"
               value={formData.description}
               onChange={handleInputChange}
               placeholder="Enter description"
             />
-            {error.description && <p style={{ color: "red", margin: '0px' }} >{error.description}</p>}
             {/* <label htmlFor="synonyms">Alternative Keywords/Synonym (up to 5 keywords)</label> */}
             <div className={styles.synonymInputContainer}>
               <CommonChipsInput

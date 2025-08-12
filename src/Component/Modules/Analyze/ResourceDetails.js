@@ -523,7 +523,7 @@ export default function ResourceDetails({
                         </div>
                     </div>
                     <p className="activityContent">{resource.unified_activity_content}</p>
-                {resource.socialmedia_media_url && (() => {
+                    {resource.socialmedia_media_url && (() => {
                         let urls = [];
                         try {
                             urls = typeof resource.socialmedia_media_url === 'string'
@@ -573,8 +573,10 @@ export default function ResourceDetails({
                                 })}
                             </div>
                         );
-                    })()}
+                    })()}
 
+
+            
                     <div className="view" style={{ display: "flex", gap: "4px" }}>
                         <div className="time">
                             <span>

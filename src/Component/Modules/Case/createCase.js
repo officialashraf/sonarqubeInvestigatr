@@ -79,7 +79,6 @@ const CreateCase = ({ togglePopup }) => {
   const validateForm = () => {
     const errors = {};
     if (!formData.title.trim()) errors.title = "Title is required";
-    if (!formData.description.trim()) errors.description = "Description is required";
     return errors;
   };
 
@@ -217,7 +216,6 @@ const CreateCase = ({ togglePopup }) => {
               onChange={handleInputChange}
               placeholder={t('case_form.description_placeholder')}
             />
-             {error.description && <p style={{ color: "red" }}>{t('case_form.description_required')}</p>}
             <div>
               {/* <label htmlFor="assignee">Assignee</label> */}
               <CommonSingleSelect

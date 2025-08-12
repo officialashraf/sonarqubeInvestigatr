@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./Resources.css";
 import { useDispatch, useSelector } from "react-redux";
 import AddComment from '../Comment/AddComment';
-import { fetchSummaryData } from "../../../Redux/Action/filterAction";
+import { fetchSummaryData, clearFilterData } from "../../../Redux/Action/filterAction";
 import useInfiniteScroll from '../../../Component/Hooks/useInfiniteScroll';
 import YoutubeLogo from '../../Assets/Images/youtube_image.png'
 import Instagram from "../../Assets/Images/Instagram.jpg"
@@ -50,6 +50,10 @@ const Resources = () => {
   useEffect(() => {
     if (data1?.id) {
       setLoading(true);
+      // Clear previous data immediately when case changes
+      dispatch(clearFilterData());
+      setAllResources([]);
+      setSelectedResource(null);
 
       //   const queryPayload = {
       //   unified_case_id: data1.id

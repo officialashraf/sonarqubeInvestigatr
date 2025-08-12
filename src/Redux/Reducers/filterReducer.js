@@ -1,5 +1,5 @@
 
-import { SET_TASK_FILTER_ID, SET_HEADERS, SET_DATA, LOG_FILTER_COUNT, SET_PAGINATION, SET_LOADING, SET_ERROR } from "../Constants/filterConstant";
+import { SET_TASK_FILTER_ID, SET_HEADERS, SET_DATA, LOG_FILTER_COUNT, SET_PAGINATION, SET_LOADING, SET_ERROR, CLEAR_SUMMARY_DATA } from "../Constants/filterConstant";
 
 const initialState = {
   taskId: null,
@@ -43,6 +43,8 @@ const initialState1 = {
 };
 export const summaryDataReducer = (state = initialState1, action) => {
   switch (action.type) {
+    case CLEAR_SUMMARY_DATA:
+      return { ...state, data: [], headers: [], totalResults: 0, totalPages: 0, page: 1 };
     case SET_DATA:
       return { ...state, data: action.payload, loading: false };
     case SET_HEADERS:
