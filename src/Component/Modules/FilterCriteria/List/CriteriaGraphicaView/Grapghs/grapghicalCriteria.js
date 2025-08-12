@@ -155,7 +155,7 @@ const ComponentTen = () => (
   <>
     <Header title="Summary" />
     <Card
-      sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius: '25px', marginBottom:'5rem' }}
+      sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius: '25px'}}
     >
       <CardContent>
         <LazyLoadWrapper height={300}>
@@ -169,7 +169,7 @@ const ComponentEleven = () => (
   <>
     <Header title="Eventypestring" />
     <Card
-      sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius: '25px', marginBottom: '5rem' }}
+      sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius: '25px'}}
     >
       <CardContent>
         <LazyLoadWrapper height={300}>
@@ -185,7 +185,7 @@ const GrapghicalCriteria = () => {
     <div className={styles.responsiveContainer} >
 
       <Grid container spacing={1} p={1} className={styles.responsiveGrid} style={{
-        background: "#080E17", marginLeft: "0 px !important", height: '100vh',
+        background: "#080E17", marginLeft: "0 px !important", height: '74vh',
         overflowY: 'auto', overflowX: 'hidden'
       }}>
         <Grid item xs={12} sx={{ paddingLeft: '0px !important', paddingTop: "0px !important" }} className={styles.graphCards}>
@@ -216,10 +216,10 @@ const GrapghicalCriteria = () => {
         <Grid item xs={6} p={1} pb={0}  className={styles.graphCards}>
           <ComponentNine />
         </Grid>
-        <Grid item xs={6} p={1} pb={0} mb={10} className={styles.graphCards}>
+        <Grid item xs={6} p={1} pb={0}  className={styles.graphCards}>
           <ComponentTen />
         </Grid>
-        <Grid item xs={6} p={1} pb={0} mb={10} className={styles.graphCards}>
+        <Grid item xs={6} p={1} pb={0}  className={styles.graphCards}>
           <ComponentEleven />
         </Grid>
       </Grid>

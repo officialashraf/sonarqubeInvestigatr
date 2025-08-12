@@ -69,7 +69,7 @@ input.MuiInputBase-input:-webkit-autofill,
 input.MuiInputBase-input:-webkit-autofill:focus,
 input.MuiInputBase-input:-webkit-autofill:hover {
   /* line-height: normal !important; */
-  height: 5px !important;
+  height: 4px !important;
   border: none !important;
   border-radius:'none' !important;
 }

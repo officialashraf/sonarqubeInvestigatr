@@ -328,13 +328,21 @@ margin-bottom: 0px !important;
 }
 
 /* 📱 For short screens: height ≤ 1024px */
-@media screen and (max-height: 1024px) {
-/*     max-height: 67vh; */
+@media screen and (max-width: 1920px) {
+  .tableWrapper {
+    /* max-height: 67vh; */
+  }
 }
 @media screen and (max-height: 940px) {
   .tableWrapper {
-    max-height: 54vh;
+    max-height: 60vh;
   }
+}
+@media screen and (max-height: 640px) {
+  .tableWrapper {
+    max-height: 50vh;
+  }
+  
 }
 /* 📱 For very short screens: height ≤ 540px */
 @media screen and (max-width: 768px) {

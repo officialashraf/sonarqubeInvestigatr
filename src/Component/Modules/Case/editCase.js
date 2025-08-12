@@ -100,7 +100,6 @@ console.log("editCase", item)
   const validateForm = () => {
     const errors = {};
     if (!formData.title.trim()) errors.title = t('edit_case.title_required');
-    if (!formData.description.trim()) errors.description = t('edit_case.description_required');
     return errors;
   };
 
@@ -240,7 +239,7 @@ console.log("editCase", item)
 
             {/* <label>Description *</label> */}
             <CommonTextArea label={t('edit_case.description')} name="description" value={formData.description} onChange={handleInputChange} placeholder="Description" />
-            {error.description && <p style={{ color: "red" }}>{error.description}</p>}
+            
 
             {/* <label>Assignee</label> */}
             <CommonSingleSelect

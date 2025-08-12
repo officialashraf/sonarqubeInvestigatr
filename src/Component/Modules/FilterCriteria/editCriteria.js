@@ -479,7 +479,7 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
                 InputProps={{
                   style: {
                     height: '38px',
-                    padding: '0 8px',
+                    // padding: '0 8px',
                     color: 'white',
                     border: '1px solid #0073CF',
                     borderRadius: '15px',
@@ -490,6 +490,7 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
                 onChange={handleInputChange}
                 sx={sharedSxStyles}
                 multiline={false}
+                // autoComplete='off'
               />
               {/* {error.searchQuery && <p style={{ color: "red", margin: '0px' }} >{error.searchQuery}</p>} */}
             </div>
