@@ -796,13 +796,13 @@ const handleIntervalUnitChange = (sourceIndex, unit) => {
                         error={!!error.sources?.[sourceIndex]?.keywords}
                         required={false}
                       />
-                      <div className="mt-2" style={{ display: "flex", flexWrap: "wrap", gap: "5px" }}>
+                      <div className="mt-1" style={{ display: "flex", flexWrap: "wrap", gap: "2px" }}>
                         {source.keywords.map((keyword, keyIndex) => (
                           <Badge
                             key={keyIndex}
                             pill
                             bg="rgba(0, 115, 207, 0.3)"
-                            className="me-2 mb-1 d-inline-flex align-items-center custom-badge"
+                            className="d-inline-flex align-items-center custom-badge"
                             style={{
                               display: "inline-flex",
                               alignItems: "center",
@@ -849,17 +849,17 @@ const handleIntervalUnitChange = (sourceIndex, unit) => {
                         required={false}
                       />
                       
-                      <div className="mt-2" style={{ display: "flex", flexWrap: "wrap", gap: "5px" }}>
+                      <div className="mt-1" style={{ display: "flex", flexWrap: "wrap", gap: "5px" }}>
                         {source.urls.filter((url) => url.trim() !== "").map((url, urlIndex) => (
                           <Badge
                             key={urlIndex}
                             pill
                             bg="rgba(0, 115, 207, 0.3)"
                             radius={30}
-                            className="me-2 mb-2 d-inline-flex align-items-center custom-badge"
+                            className="d-inline-flex align-items-center custom-badge"
                             style={{
-                              display: "inline-flex",
-                              alignItems: "center",
+                              // display: "inline-flex",
+                              // alignItems: "center",
                               minWidth: "auto",
                               maxWidth: "100%",
                               whiteSpace: "normal",

@@ -133,8 +133,8 @@ const NotificationList = ({ isOpen, setIsOpen }) => {
             <NavDropdown
                 id="profile-dropdown"
                 align="end"
-                show={isOpen}
-                onToggle={(isOpen) => setIsOpen(isOpen)}
+                 show={isOpen}
+                 onToggle={(isOpen) => setIsOpen(isOpen)}
                 style={{
                     display: isOpen ? "block" : "none", height: "500px", overflowY: "auto", position: 'relative', scrollbarColor: '#1e7df8 #0a192f',    
                     scrollbarWidth: 'thin',
@@ -193,13 +193,19 @@ const NotificationList = ({ isOpen, setIsOpen }) => {
                                 opacity: item.isRead ? 0.7 : 1
                             }}
                         >
-                            <span style={{
-                                flex: 1,
-                                marginRight: '10px',
-                                color: '#d2d2d2'
-                            }}>
-                                {item.message}
-                            </span>
+                            <div style={{ flex: 1, marginRight: '10px', color: '#d2d2d2' }}>
+      <div
+        style={{
+          whiteSpace: 'normal',
+          wordBreak: 'break-word'
+        }}
+      >
+        {item.message}
+      </div>
+      <div style={{ fontSize: '12px', color: '#888' }}>
+        Created On: <strong>{new Date(item.created_on).toLocaleString()}</strong>
+      </div>
+    </div>
 
                             {item.is_read ? (
                                 <span style={{

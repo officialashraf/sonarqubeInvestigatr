@@ -12,6 +12,8 @@ import PersonBar from "./personBar";
 import LanguageBar from "./languageBar";
 import OrgBar from "./orgBar";
 import LazyLoadWrapper from "./lazyLoadWrapper";
+import CaseSummary from "./casesummary";
+import CaseEventtypestring from "./caseEventtypestring";
 
 const Header = ({ title }) =>
   <Grid
@@ -186,6 +188,34 @@ const ComponentNine = () => (
     </Card>
   </>
 );
+const ComponentTen = () => (
+  <>
+    <Header title="Summary" />
+    <Card
+      sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius: '25px', marginBottom:'5rem' }}
+    >
+      <CardContent>
+        <LazyLoadWrapper height={300}>
+          <CaseSummary />
+        </LazyLoadWrapper>
+      </CardContent>
+    </Card>
+  </>
+);
+const ComponentEleven = () => (
+  <>
+    <Header title="Eventypestring" />
+    <Card
+      sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius: '25px', marginBottom: '5rem' }}
+    >
+      <CardContent>
+        <LazyLoadWrapper height={300}>
+          <CaseEventtypestring/>
+        </LazyLoadWrapper>
+      </CardContent>
+    </Card>
+  </>
+);
 
 
 const GraphicalData = () => {
@@ -219,13 +249,18 @@ const GraphicalData = () => {
         <Grid item xs={6} p={1} pb={0}  className={styles.grapghCards}>
           <ComponentSeven />
         </Grid>
-        <Grid item xs={6} p={1} pb={0} mb={10}  className={styles.grapghCards} >
+        <Grid item xs={6} p={1} pb={0}   className={styles.grapghCards} >
           <ComponentEight />
         </Grid>
-        <Grid item xs={6} p={1} pb={0} mb={10} >
+        <Grid item xs={6} p={1} pb={0}  >
           <ComponentNine />
         </Grid>
-
+ <Grid item xs={6} p={1} pb={0} mb={10} className={styles.graphCards}>
+          <ComponentTen />
+        </Grid>
+        <Grid item xs={6} p={1} pb={0} mb={10} className={styles.graphCards}>
+          <ComponentEleven />
+        </Grid>
       </Grid>
 
     </div>

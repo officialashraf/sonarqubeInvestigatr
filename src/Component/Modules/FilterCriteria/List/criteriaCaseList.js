@@ -176,7 +176,6 @@ const CriteriaCaseTable = () => {
   }
 
   return (
-    <>
       <CommonTableComponent
         data={searchResults}
         headers={headers}
@@ -190,8 +189,6 @@ const CriteriaCaseTable = () => {
         containerStyle={{ backgroundColor: "transparent" }}
         tableWrapperStyle={{ backgroundColor: "transparent" }}
       />
-
-    </>
   );
 };
 

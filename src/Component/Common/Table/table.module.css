@@ -335,7 +335,7 @@ margin-bottom: 0px !important;
 }
 @media screen and (max-height: 940px) {
   .tableWrapper {
-    max-height: 65vh;
+    max-height: 54vh;
   }
 }
 /* 📱 For very short screens: height ≤ 540px */
