@@ -125,10 +125,6 @@ const AddNewFilter = ({ onNewFilterCreated, filterIde, onClose }) => {
       errors.name = "Filter name is required";
     }
 
-    if (!description.trim()) {
-      errors.description = "Description is required";
-    }
-
     const sourceErrors = [];
 
     sources.forEach((source, sourceIndex) => {
@@ -684,21 +680,19 @@ const handleIntervalUnitChange = (sourceIndex, unit) => {
         
         <Form.Group className="mb-3">
           <InputField
-            label="Description *"
+            label="Description"
             placeholder="Please enter a description here"
-            error={!!error.description}
             as="textarea"
             rows={3}
             value={description}
             onChange={(e) => {
               setDescription(e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1));
-              setError(prev => ({ ...prev, description: '' }));
             }}
             onKeyDown={handleEnterKey}
             style={{ backgroundColor: "white", color: "black" }}
             disabled={filterDetails?.id && !isEditable}
+            required={false}
           />
-          {error.description && <p style={{ color: "red", margin: '0px' }} >{error.description}</p>}
         </Form.Group>
         
         <div>

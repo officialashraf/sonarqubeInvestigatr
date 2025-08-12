@@ -82,7 +82,7 @@ const TargetDetails = ({ togglePopup, id }) => {
     return (
       <div className="popup-overlay">
         <div className="popup-containera">
-          <div className="popup-content" style={{height:'300px'}}>
+          <div className="popup-content">
             Loading target details...
           </div>
         </div>

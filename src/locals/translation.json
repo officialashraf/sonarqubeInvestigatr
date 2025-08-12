@@ -56,7 +56,7 @@
   "case_form": {
     "create_case": "Create Case",
     "title": "Title *",
-    "description": "Description *",
+    "description": "Description",
     "title_placeholder": "Enter title",
     "description_placeholder": "Enter description",
     "assignee": "Assignee",

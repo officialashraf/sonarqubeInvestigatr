@@ -11,7 +11,7 @@ const useInfiniteScroll = ({
 }) => {
   const containerRef = useRef(null);
   const scrollDirectionRef = useRef(null);
-  const canFetchRef = useRef(true); // ✅ used to prevent duplicate fetches
+  const canFetchRef = useRef(true); 
 
 
   useEffect(() => {
