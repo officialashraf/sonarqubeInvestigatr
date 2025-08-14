@@ -31,7 +31,7 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
                 );
                 const caseOpts = caseRes.data.data.map(c => ({
                     value: c.id,
-                    label: `CASE${String(c.id).padStart(4, '0')} - ${c.title || 'Untitled'}`
+                    label: `CASE${String(c.id).padStart(4, '0')} - ${c.title || ' '}`
                 }));
 
                 const distinctRes = await axios.post(
@@ -39,12 +39,30 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
                     { fields: ['targets', 'sentiment', 'unified_record_type'] },
                     { headers: { Authorization: `Bearer ${Token}` } }
                 );
-                const tOpts = distinctRes.data.targets.buckets.map(b => ({ value: b.key, label: b.key }));
+                // const tOpts = distinctRes.data.targets.buckets.map(b => ({ value: b.key, label: b.key }));
                 const sOpts = distinctRes.data.sentiment.buckets.map(b => ({ value: b.key, label: b.key }));
                 const fOpts = distinctRes.data.unified_record_type.buckets.map(b => ({ value: b.key, label: b.key }));
+                const targetIds = distinctRes.data.targets.buckets.map(b => parseInt(b.key, 10)).filter(id => !isNaN(id));
 
+                // 2️⃣ Second API - get target names using target IDs
+                let tOpts = [];
+                if (targetIds.length > 0) {
+                    const targetRes = await axios.post(
+                        `${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/target-names`,
+                        { target_ids: targetIds },
+                        { headers: { Authorization: `Bearer ${Token}` } }
+                    );
+
+                    // API expected to return something like [{id:1,name:"X"}]
+                    tOpts = targetRes.data.map(t => ({
+                        value: t.id,
+                        label: `TAR${String(t.id).padStart(4, '0')} - ${t.name || ' '}`,
+                        name: t.name,
+                    }));
+
+                }
                 setOptions({ cases: caseOpts, platforms: fOpts, targets: tOpts, sentiments: sOpts });
-            
+
             } catch (err) {
                 console.error('Error fetching options', err);
             }
@@ -64,9 +82,21 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
                 platform: payload.file_type && payload.file_type.length > 0 && options.platforms.length > 0
                     ? options.platforms.filter(opt => payload.file_type.includes(opt.value))
                     : [],
-                targets: payload.targets && payload.targets.length > 0 && options.targets.length > 0
-                    ? options.targets.filter(opt => payload.targets.includes(opt.value))
-                    : [],
+                targets:
+                    payload.targets && payload.targets.length > 0 && options.targets.length > 0
+                        ? options.targets.filter(opt => {
+                            // Saare payload.targets ko string bana ke compare karo
+                            const normalizedTargets = payload.targets.map(t => {
+                                if (typeof t === "object" && t !== null) {
+                                    return String(t.value); // object ka value field
+                                }
+                                return String(t); // string ya integer
+                            });
+
+                            return normalizedTargets.includes(String(opt.value));
+                        })
+                        : [],
+
                 sentiments: payload.sentiments && payload.sentiments.length > 0 && options.sentiments.length > 0
                     ? options.sentiments.filter(opt => payload.sentiments.includes(opt.value))
                     : []
@@ -91,32 +121,32 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
     const performSearch = async () => {
         try {
             const payloadS = {};
-            
+
             // Only add non-empty fields
 
             if (searchChips?.length > 0) {
                 payloadS.keyword = searchChips;
-            }      
+            }
             if (formData.caseIds && formData.caseIds.length > 0) {
                 payloadS.case_id = formData.caseIds.map(c => String(c.value));
             }
-            
+
             if (formData.platform && formData.platform.length > 0) {
                 payloadS.file_type = formData.platform.map(p => p.value);
             }
-            
+
             if (formData.targets && formData.targets.length > 0) {
                 payloadS.targets = formData.targets.map(t => t.value);
             }
-            
+
             if (formData.sentiments && formData.sentiments.length > 0) {
                 payloadS.sentiments = formData.sentiments.map(s => s.value);
             }
-            
+
             if (selectedDates.startDate && selectedDates.startTime) {
                 payloadS.start_time = `${selectedDates.startDate.toISOString().split('T')[0]}T${String(selectedDates.startTime.hours).padStart(2, '0')}:${String(selectedDates.startTime.minutes).padStart(2, '0')}:00`;
             }
-            
+
             if (selectedDates.endDate && selectedDates.endTime) {
                 payloadS.end_time = `${selectedDates.endDate.toISOString().split('T')[0]}T${String(selectedDates.endTime.hours).padStart(2, '0')}:${String(selectedDates.endTime.minutes).padStart(2, '0')}:00`;
             }
@@ -131,7 +161,24 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
                 total_pages: res.data.total_pages || 1,
                 total_results: res.data.total_results || 0
             }));
-            dispatch(setKeywords({ keyword: searchChips, queryPayload: res.data.input }));
+            dispatch(setKeywords({
+                keyword: searchChips,
+                queryPayload: {
+                    case_id: payloadS.case_id || [],
+                    file_type: payloadS.file_type || [],
+                    keyword: searchChips || [],
+                    targets: payloadS.targets || [],
+                    sentiment: payloadS.sentiments || [],
+                    start_time: payloadS.start_time ?? null,
+                    end_time: payloadS.end_time ?? null,
+                    latitude: payloadS.latitude ?? null,
+                    longitude: payloadS.longitude ?? null,
+                    page: payloadS.page ?? 1
+                }
+            }));
+
+            console.log("payloadS", payloadS)
+
             dispatch(setPage(1));
             if (handleCreateCase) handleCreateCase(res.data);
             setIsPopupVisible(false);
@@ -144,37 +191,37 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
 
     return (
         <>
-        <CriteriaForm
-            title="Filter Criteria"
-            caseFieldConfig={{ show: false, readOnly: false }}
-            options={options}
-            formData={formData}
-            setFormData={setFormData}
-            selectedDates={selectedDates}
-            setSelectedDates={setSelectedDates}
-            toggleDatePicker={() => setShowDatePicker(p => !p)}
-            showDatePicker={showDatePicker}
-            onSearch={performSearch}
-            onCreate={() => setShowSavePopup(true)}
-            onCancel={() => setIsPopupVisible(false)}
-            showCreateButton={true}
-            isSearchDisabled={
-                !formData.caseIds.length &&
-                !formData.platform.length &&
-                !formData.targets.length &&
-                !formData.sentiments.length &&
-                !(selectedDates.startDate && selectedDates.endDate)
-            }
-        />
-         {
-        showSavePopup && (
-            <Confirm
+            <CriteriaForm
+                title="Filter Criteria"
+                caseFieldConfig={{ show: false, readOnly: false }}
+                options={options}
                 formData={formData}
+                setFormData={setFormData}
                 selectedDates={selectedDates}
-                searchChips={searchChips}
+                setSelectedDates={setSelectedDates}
+                toggleDatePicker={() => setShowDatePicker(p => !p)}
+                showDatePicker={showDatePicker}
+                onSearch={performSearch}
+                onCreate={() => setShowSavePopup(true)}
+                onCancel={() => setIsPopupVisible(false)}
+                showCreateButton={true}
+                isSearchDisabled={
+                    !formData.caseIds.length &&
+                    !formData.platform.length &&
+                    !formData.targets.length &&
+                    !formData.sentiments.length &&
+                    !(selectedDates.startDate && selectedDates.endDate)
+                }
             />
-        )
-    }
+            {
+                showSavePopup && (
+                    <Confirm
+                        formData={formData}
+                        selectedDates={selectedDates}
+                        searchChips={searchChips}
+                    />
+                )
+            }
         </>
     );
 };

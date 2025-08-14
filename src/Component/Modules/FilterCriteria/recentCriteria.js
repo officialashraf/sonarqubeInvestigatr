@@ -91,9 +91,11 @@ const RecentCriteria = () => {
     }
 
     // Handle targets
-    if (Array.isArray(targets) && targets.length > 0) {
-      updatedReduxKeywords = [...updatedReduxKeywords, ...targets];
-    }
+   updatedReduxKeywords = [
+  ...updatedReduxKeywords,
+  ...targets.map(t => t.name) // or t.value or t.id
+];
+
 
     // Handle time range - create a single chip for date range if both exist
   if (isValid(start_time) && isValid(end_time)) {
@@ -143,7 +145,8 @@ const RecentCriteria = () => {
 
   // Check if chip is a time range chip
   const isTimeRangeChip = (chip) => {
-    return chip.includes(' to ');
+    return chip
+    // .includes(' to ');
   };
 
   // Remove chip - handle both Redux and user-entered
@@ -251,7 +254,7 @@ const RecentCriteria = () => {
       console.error("Error deleting item:", error);
     }
   };
-const payload = {}
+let payload={};
   const handleSearch = async () => {
     // Check if there's any data to search
     const hasUserKeywords = userEnteredKeywords.length > 0;
@@ -352,7 +355,7 @@ const payload = {}
       toast.error("Search failed. Please try again.");
     }
   };
-  const queryPayload = {};
+
   const ReuseCriteria = async (item) => {
     console.log("detailscriterai", item);
 
@@ -360,7 +363,7 @@ const payload = {}
       val !== null && val !== undefined && val.toString().trim() !== "";
 
     let updatedKeywords = [];
-  
+    const queryPayload = {};
 
     if (item) {
       if (Array.isArray(item.keyword) && item.keyword.length > 0) {
@@ -434,7 +437,7 @@ const payload = {}
       // Dispatch updated keywords
       dispatch(setKeywords({
         keyword: updatedKeywords,
-        queryPayload: queryPayload // or other fields if needed
+        queryPayload: response.data.input // or other fields if needed
       }));
 
       // Store API result in Redux

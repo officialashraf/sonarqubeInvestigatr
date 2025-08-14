@@ -38,9 +38,16 @@ const KeywordTagList = ({ queryPayload = null, caseId = null, aggsFields }) => {
         let flatQuery = {
           case_id,
           aggs_fields: aggsFields,
+           keyword: Array.isArray(queryPayload?.keyword) ? queryPayload.keyword : [],
           file_type: Array.isArray(queryPayload?.file_type) ? queryPayload.file_type : [],
-          keyword: Array.isArray(queryPayload?.keyword) ? queryPayload.keyword : [],
-          targets: Array.isArray(queryPayload?.target) ? queryPayload.target : [],
+          targets: Array.isArray(queryPayload?.target)
+            ? queryPayload.target.map(t => String(t.value))
+            : Array.isArray(queryPayload?.targets)
+              ? queryPayload.targets.map(t => String(t.value))
+              : [],
+
+
+
           sentiments: Array.isArray(queryPayload?.sentiments)
             ? queryPayload.sentiments
             : Array.isArray(queryPayload?.sentiment)

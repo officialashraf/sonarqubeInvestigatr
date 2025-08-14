@@ -24,20 +24,44 @@ const AddFilter = ({ searchChips, isPopupVisible, setIsPopupVisible }) => {
   useEffect(() => {
     const fetchOptions = async () => {
       try {
+        // 1️⃣ First API - get distinct data including target IDs
         const res = await axios.post(
           `${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/distinct`,
           { fields: ['targets', 'sentiment', 'unified_record_type'], case_id: [String(caseId)] },
           { headers: { Authorization: `Bearer ${Token}` } }
         );
+
+        const targetIds = res.data.targets.buckets.map(b => parseInt(b.key, 10)).filter(id => !isNaN(id));
+
+        // 2️⃣ Second API - get target names using target IDs
+        let targetOptions = [];
+        if (targetIds.length > 0) {
+          const targetRes = await axios.post(
+            `${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/target-names`,
+            { target_ids: targetIds },
+            { headers: { Authorization: `Bearer ${Token}` } }
+          );
+
+          // API expected to return something like [{id:1,name:"X"}]
+          targetOptions = targetRes.data.map(t => ({
+            value: t.id,
+            label: `TAR${String(t.id).padStart(4, '0')} - ${t.name || ' '}`,
+            name: t.name,
+          }));
+        }
+        console.log("targetnmas", targetOptions)
+        // 3️⃣ Set all options
         setOptions({
           platforms: res.data.unified_record_type.buckets.map(b => ({ value: b.key, label: b.key })),
-          targets: res.data.targets.buckets.map(b => ({ value: b.key, label: b.key })),
+          targets: targetOptions,
           sentiments: res.data.sentiment.buckets.map(b => ({ value: b.key, label: b.key }))
         });
+        console.log("setoptions", options)
       } catch (err) {
         console.error('Error fetching filter data', err);
       }
     };
+
     if (Token && caseId) fetchOptions();
   }, [Token, caseId]);
 
@@ -46,9 +70,26 @@ const AddFilter = ({ searchChips, isPopupVisible, setIsPopupVisible }) => {
     if (options.platforms.length && caseFilter?.file_type) {
       setFormData(prev => ({ ...prev, platform: options.platforms.filter(opt => caseFilter.file_type.includes(opt.value)) }));
     }
-    if (options.targets.length && caseFilter?.target) {
-      setFormData(prev => ({ ...prev, targets: options.targets.filter(opt => caseFilter.target.includes(opt.value)) }));
+  if (options.targets.length && caseFilter?.target) {
+  // Saare targets ko string bana ke compare karne ke liye normalize karo
+  const caseFilterTargetValues = caseFilter.target.map(t => {
+    if (typeof t === "object" && t !== null) {
+      return String(t.value); // object type
     }
+    return String(t); // integer ya string type
+  });
+
+  setFormData(prev => ({
+    ...prev,
+    targets: options.targets
+      .filter(opt => caseFilterTargetValues.includes(String(opt.value)))
+      .map(opt => ({
+        value: opt.value,
+        label: opt.label,
+        name: opt.name
+      }))
+  }));
+}
     if (options.sentiments.length && caseFilter?.sentiment) {
       setFormData(prev => ({ ...prev, sentiments: options.sentiments.filter(opt => caseFilter.sentiment.includes(opt.value)) }));
     }
@@ -65,6 +106,7 @@ const AddFilter = ({ searchChips, isPopupVisible, setIsPopupVisible }) => {
   }, [options, caseFilter]);
 
   const performSearch = () => {
+    // const combinedKeywords = Array.from(new Set(searchChips));
     const payload = { case_id: String(caseId) };
 
     if (formData.platform?.length > 0) {
@@ -92,10 +134,11 @@ const AddFilter = ({ searchChips, isPopupVisible, setIsPopupVisible }) => {
     if (searchChips?.length > 0) {
       payload.keyword = searchChips;
     }
-
-    if (caseFilter?.aggs_fields?.length > 0) {
-      payload.aggsFields = caseFilter.aggs_fields;
+ 
+    if (formData.targets?.length > 0) {
+      payload.targets = formData.targets.map(t => String(t.value));
     }
+
 
     // If there's only case_id, skip dispatch
     if (Object.keys(payload).length === 1) {
@@ -104,12 +147,13 @@ const AddFilter = ({ searchChips, isPopupVisible, setIsPopupVisible }) => {
     }
 
     dispatch(fetchSummaryData(payload));
+    console.log("fetchSummaryData....", payload)
     dispatch(saveCaseFilterPayload({
       keyword: payload.keyword || [],
       aggs_fields: caseFilter?.aggs_fields || [],
       caseId,
       file_type: payload.file_type || [],
-      target: payload.targets || [],
+      target: formData.targets || [],
       sentiment: payload.sentiments || [],
       start_time: payload.starttime || null,
       end_time: payload.endtime || null

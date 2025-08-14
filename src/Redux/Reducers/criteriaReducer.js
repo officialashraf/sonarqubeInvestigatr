@@ -63,18 +63,27 @@ const queryState = {
 };
 
 export const criteriaReducer = (state = queryState, action) => {
+  console.log("critereraaylo", queryState)
   switch (action.type) {
-    case SET_KEYWORDS:
-      return {
-        ...state,
-        keywords: action.payload.keyword,
-        queryPayload: {
-          ...state.queryPayload,
-          ...action.payload.queryPayload,
-          targets: action.payload.queryPayload.targets || [],
-          sentiment: action.payload.queryPayload.sentiment || [],
-        },
-      };
+   case SET_KEYWORDS:
+  return {
+    ...state,
+    keywords: action.payload.keyword || [],
+    queryPayload: {
+      ...state.queryPayload,
+      case_id: action.payload.queryPayload?.case_id || [],
+      file_type: action.payload.queryPayload?.file_type || [],
+      keyword: action.payload.queryPayload?.keyword || [],
+      targets: action.payload.queryPayload?.targets || [],
+      sentiments: action.payload.queryPayload?.sentiment || [],
+      start_time: action.payload.queryPayload?.start_time ?? null,
+      end_time: action.payload.queryPayload?.end_time ?? null,
+      latitude: action.payload.queryPayload?.latitude ?? null,
+      longitude: action.payload.queryPayload?.longitude ?? null,
+      page: action.payload.queryPayload?.page ?? 1
+    }
+  };
+  
     case CLEAR_CRITERIA:
       return {
         ...queryState,

@@ -276,9 +276,12 @@ const ReusablePieChart = ({
           aggs_fields: aggsFields,
           file_type: Array.isArray(queryPayload?.file_type) ? queryPayload.file_type : [],
           keyword: Array.isArray(queryPayload?.keyword) ? queryPayload.keyword : [],
-          targets: Array.isArray(queryPayload?.target) ? queryPayload.target :
-            Array.isArray(queryPayload?.targets) ? queryPayload.targets :
-              [],
+          targets: Array.isArray(queryPayload?.target)
+            ? queryPayload.target.map(t => String(t.value))
+            : Array.isArray(queryPayload?.targets)
+              ? queryPayload.targets.map(t => String(t.value))
+              : [],
+
           sentiments: Array.isArray(queryPayload?.sentiments)
             ? queryPayload.sentiments
             : Array.isArray(queryPayload?.sentiment)
@@ -387,72 +390,72 @@ const ReusablePieChart = ({
           labelStyle={{ color: "#fff" }}
           cursor={{ fill: "#fff" }}
         />
-<Legend
-  align="center"
-  verticalAlign="bottom"
-  layout="horizontal"
-  content={({ payload }) => {
-    const isOverflow = payload.length > 6; // yahan limit adjust kar sakte ho
-    return (
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: isOverflow ? 'flex-start' : 'center',
-          overflowX: isOverflow ? 'auto' : 'visible',
-          padding: '5px 0',
-          maxWidth: '100%',
-          whiteSpace: 'nowrap',
-        }}
-      >
-        <ul
-          style={{
-            display: 'flex',
-            listStyle: 'none',
-            margin: 0,
-            padding: 0,
-          }}
-        >
-          {payload.map((entry, index) => (
-            <li
-              key={`item-${index}`}
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                marginRight: 15,
-                color: entry.color,
-                fontSize: 12,
-                flexShrink: 0,
-              }}
-            >
+        <Legend
+          align="center"
+          verticalAlign="bottom"
+          layout="horizontal"
+          content={({ payload }) => {
+            const isOverflow = payload.length > 6; // yahan limit adjust kar sakte ho
+            return (
               <div
                 style={{
                   display: 'flex',
-                  alignItems: 'center',
-                  marginBottom: 2,
+                  justifyContent: isOverflow ? 'flex-start' : 'center',
+                  overflowX: isOverflow ? 'auto' : 'visible',
+                  padding: '5px 0',
+                  maxWidth: '100%',
+                  whiteSpace: 'nowrap',
                 }}
               >
-                <div
+                <ul
                   style={{
-                    width: 10,
-                    height: 10,
-                    borderRadius: '50%',
-                    backgroundColor: entry.color,
-                    marginRight: 5,
+                    display: 'flex',
+                    listStyle: 'none',
+                    margin: 0,
+                    padding: 0,
                   }}
-                />
-                {entry.value}
+                >
+                  {payload.map((entry, index) => (
+                    <li
+                      key={`item-${index}`}
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        marginRight: 15,
+                        color: entry.color,
+                        fontSize: 12,
+                        flexShrink: 0,
+                      }}
+                    >
+                      <div
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          marginBottom: 2,
+                        }}
+                      >
+                        <div
+                          style={{
+                            width: 10,
+                            height: 10,
+                            borderRadius: '50%',
+                            backgroundColor: entry.color,
+                            marginRight: 5,
+                          }}
+                        />
+                        {entry.value}
+                      </div>
+                      <span style={{ color: entry.color }}>
+                        {entry.payload.value}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <span style={{ color: entry.color }}>
-                {entry.payload.value}
-              </span>
-            </li>
-          ))}
-        </ul>
-      </div>
-    );
-  }}
-/>
+            );
+          }}
+        />
 
 
       </PieChart>

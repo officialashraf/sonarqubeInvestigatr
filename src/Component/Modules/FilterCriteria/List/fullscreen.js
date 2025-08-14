@@ -106,7 +106,10 @@ const SearchResults = () => {
     setLocalCaseIdChips(Array.isArray(caseId) ? [...caseId] : []);
     setLocalFileTypeChips(Array.isArray(fileType) ? [...fileType] : []);
     setLocalSentimentChips(Array.isArray(sentiments) ? [...sentiments] : []);
-    setLocalTargetChips(Array.isArray(targets) ? [...targets] : []);
+   setLocalTargetChips(
+            Array.isArray(targets) && targets.length > 0
+                ? targets.map(t => ({ id: t.id, name: t.name, value: t.value ?? t.id, }))
+                : []);
     setLocalStartTime(startTime);
     setLocalEndTime(endTime);
 
@@ -121,7 +124,7 @@ const SearchResults = () => {
     chips.push(...localCaseIdChips);
     chips.push(...localFileTypeChips);
     chips.push(...localSentimentChips);
-    chips.push(...localTargetChips);
+   chips.push(...localTargetChips.map(t => t.name));
 
     // Add time range chip if both exist
     const dateRangeChip = createDateRangeChip(localStartTime, localEndTime);
@@ -176,7 +179,8 @@ const SearchResults = () => {
     setLocalCaseIdChips(prev => prev.filter(chip => chip !== chipToRemove));
     setLocalFileTypeChips(prev => prev.filter(chip => chip !== chipToRemove));
     setLocalSentimentChips(prev => prev.filter(chip => chip !== chipToRemove));
-    setLocalTargetChips(prev => prev.filter(chip => chip !== chipToRemove));
+   setLocalTargetChips(prev => prev.filter(chip => chip.name !== chipToRemove));
+
   };
 
   const resetSearch = () => {
@@ -209,7 +213,7 @@ const SearchResults = () => {
         case_id: localCaseIdChips,
         file_type: localFileTypeChips,
         sentiments: localSentimentChips,
-        targets: localTargetChips,
+        targets: localTargetChips.map(t => String(t.value)),
         page: reduxPayload.page || 1,
         start_time: localStartTime || null,
         end_time: localEndTime || null,
@@ -253,10 +257,21 @@ const SearchResults = () => {
         total_results: response.data.total_results || 0,
       }));
 
-      dispatch(setKeywords({
-        keyword: response.data.input.keyword,
-        queryPayload: response.data.input
-      }));
+     dispatch(setKeywords({
+                keyword:finalKeywords,
+                queryPayload: {
+                    case_id: payload.case_id || [],
+                    file_type: payload.file_type || [],
+                    keyword: payload.keyword || [],
+                    targets: localTargetChips || [],
+                    sentiment: payload.sentiments || [],
+                    start_time: payload.start_time ?? null,
+                    end_time: payload.end_time ?? null,
+                    latitude: payload.latitude ?? null,
+                    longitude: payload.longitude ?? null,
+                    page: payload.page ?? 1
+                }
+            }));
 
       // handleComponentToggle("list")
       dispatch(setPage(1));
@@ -292,6 +307,7 @@ const SearchResults = () => {
         photoVideo: { icon: FaPhotoVideo, component: <ScrollCriteriaViewer /> },
         list: { icon: ListAltOutlined, component: <CriteriaCaseTable searchChips={displayChips} /> },
       }}
+       popupSearchChips={localKeywordChips}
     />
 
     // <div className="search-container" style={{ backgroundColor: '#080E17', height: '100%', zIndex: '1050', overflowY: "hidden" }}>

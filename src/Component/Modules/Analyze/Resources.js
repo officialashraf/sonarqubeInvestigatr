@@ -63,7 +63,9 @@ const Resources = () => {
         ...(caseFilter?.file_type && { file_type: caseFilter.file_type }),
         ...(caseFilter?.aggs_fields && { aggsFields: caseFilter.aggs_fields }),
         ...(caseFilter?.sentiment && { sentiments: caseFilter.sentiment }),
-        ...(caseFilter?.target && { targets: caseFilter.target }),
+        ...(Array.isArray(caseFilter?.target) && {
+          targets: caseFilter.target.map(t => String(t.value))
+        }),
         ...(caseFilter?.keyword && { keyword: caseFilter.keyword }),
         ...(caseFilter?.start_time && { starttime: caseFilter.start_time }),
         ...(caseFilter?.end_time && { endtime: caseFilter.end_time }),
@@ -83,13 +85,16 @@ const Resources = () => {
       //   unified_case_id: data1.id
       // };
       dispatch(fetchSummaryData({
-        case_id:String(data1.id),
+        case_id: String(data1.id),
         ...(caseFilter?.file_type && { file_type: caseFilter.file_type }),
         ...(caseFilter?.start_time && { starttime: caseFilter.start_time }),
         ...(caseFilter?.end_time && { endtime: caseFilter.end_time }),
         ...(caseFilter?.aggs_fields && { aggsFields: caseFilter.aggs_fields }),
         ...(caseFilter?.sentiment && { sentiments: caseFilter.sentiment }),
-        ...(caseFilter?.target && { targets: caseFilter.target }),
+        ...(Array.isArray(caseFilter?.target) && {
+          targets: caseFilter.target.map(t => String(t.value))
+        }),
+
         ...(caseFilter?.keyword && { keyword: caseFilter.keyword }),
         page: currentPage,
         itemsPerPage: 50,
@@ -125,7 +130,7 @@ const Resources = () => {
       setShowPopup={setShowPopup}
       title="Resources Insights"
     />
-);
-  };
+  );
+};
 
-      export default Resources;
+export default Resources;
