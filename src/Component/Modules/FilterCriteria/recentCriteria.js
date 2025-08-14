@@ -27,8 +27,15 @@ const RecentCriteria = () => {
   const [criteriaId, setCriteriaId] = useState()
   const [showEditPopup, setShowEditPopup] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [userEnteredKeywords, setUserEnteredKeywords] = useState([]); // Only user-entered keywords
-  const [reduxKeywords, setReduxKeywords] = useState([]); // Only Redux keywords
+  
+  // Local state for managing chips (same as SearchResults)
+  const [localKeywordChips, setLocalKeywordChips] = useState([]);
+  const [localCaseIdChips, setLocalCaseIdChips] = useState([]);
+  const [localFileTypeChips, setLocalFileTypeChips] = useState([]);
+  const [localSentimentChips, setLocalSentimentChips] = useState([]);
+  const [localTargetChips, setLocalTargetChips] = useState([]);
+  const [localStartTime, setLocalStartTime] = useState(null);
+  const [localEndTime, setLocalEndTime] = useState(null);
 
   // Redux selectors
   const recentKeyword = useSelector(
@@ -58,62 +65,101 @@ const RecentCriteria = () => {
   const reduxPayload = useSelector((state) => state.criteriaKeywords?.queryPayload || '');
   console.log("Redux Payload:", reduxPayload);
 
-  // Initialize Redux keywords from Redux data
+  // Helper function to format date
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-GB'); // DD/MM/YYYY format
+  };
+
+  // Helper function to create date range chip
+  const createDateRangeChip = (start, end) => {
+    if (!start && !end) return null;
+
+    const formattedStart = formatDate(start);
+    const formattedEnd = formatDate(end);
+
+    if (formattedStart && formattedEnd) {
+      return `${formattedStart} to ${formattedEnd}`;
+    } else if (formattedStart) {
+      return `From ${formattedStart}`;
+    } else if (formattedEnd) {
+      return `Until ${formattedEnd}`;
+    }
+    return null;
+  };
+
+  // Sync local state with Redux state and track Redux originated chips
   useEffect(() => {
-    const isValid = (val) =>
-      val !== null && val !== undefined && val.toString().trim() !== "";
+    console.log("Syncing Redux to local state");
+    console.log("Keywords:", keyword);
+    console.log("Case ID:", caseId);
+    console.log("File Type:", fileType);
+    console.log("Sentiments:", sentiments);
+    console.log("Targets:", targets);
+    console.log("Start Time:", start_time);
+    console.log("End Time:", end_time);
 
-    let updatedReduxKeywords = [];
+    const newReduxChips = new Set();
 
-    // Handle recentKeyword
-    if (Array.isArray(recentKeyword) && recentKeyword.length > 0) {
-      updatedReduxKeywords = [...updatedReduxKeywords, ...recentKeyword];
-    } else if (isValid(recentKeyword)) {
-      updatedReduxKeywords.push(recentKeyword);
+    // Update local state from Redux and track Redux originated chips
+    const keywordChips = Array.isArray(keyword) ? [...keyword] : [];
+    const caseIdChips = Array.isArray(caseId) ? [...caseId.map(id => String(id))] : [];
+    const fileTypeChips = Array.isArray(fileType) ? [...fileType] : [];
+    const sentimentChips = Array.isArray(sentiments) ? [...sentiments] : [];
+    const targetChips = Array.isArray(targets) && targets.length > 0
+      ? targets.map(t => ({ 
+          id: t.id, 
+          name: t.name, 
+          value: t.value ?? t.id,
+          label: t.label ?? t.name 
+        }))
+      : [];
+
+    setLocalKeywordChips(keywordChips);
+    setLocalCaseIdChips(caseIdChips);
+    setLocalFileTypeChips(fileTypeChips);
+    setLocalSentimentChips(sentimentChips);
+    setLocalTargetChips(targetChips);
+    setLocalStartTime(start_time);
+    setLocalEndTime(end_time);
+
+    // Track all Redux originated chips
+    keywordChips.forEach(chip => newReduxChips.add(chip));
+    caseIdChips.forEach(chip => newReduxChips.add(chip));
+    fileTypeChips.forEach(chip => newReduxChips.add(chip));
+    sentimentChips.forEach(chip => newReduxChips.add(chip));
+    targetChips.forEach(t => newReduxChips.add(t.name));
+
+    // Add date range chip if exists
+    const dateRangeChip = createDateRangeChip(start_time, end_time);
+    if (dateRangeChip) {
+      newReduxChips.add(dateRangeChip);
     }
-    
-    if (Array.isArray(caseId) && caseId.length > 0) {
-      updatedReduxKeywords = [...updatedReduxKeywords, ...caseId.map(id => `${id}`)];
-    } else if (isValid(caseId)) {
-      updatedReduxKeywords.push(`${caseId}`);
+
+    setReduxOriginatedChips(newReduxChips);
+
+  }, [keyword, caseId, fileType, sentiments, targets, start_time, end_time]);
+
+  // Generate display chips from local state (same as SearchResults)
+  const getDisplayChips = () => {
+    const chips = [];
+
+    // Add all local chips
+    chips.push(...localKeywordChips);
+    chips.push(...localCaseIdChips);
+    chips.push(...localFileTypeChips);
+    chips.push(...localSentimentChips);
+    chips.push(...localTargetChips.map(t => t.name)); // Show target name in chips
+
+    // Add time range chip if both exist
+    const dateRangeChip = createDateRangeChip(localStartTime, localEndTime);
+    if (dateRangeChip) {
+      chips.push(dateRangeChip);
     }
 
-    // Handle fileType — always as array of strings
-    if (Array.isArray(fileType) && fileType.length > 0) {
-      updatedReduxKeywords = [...updatedReduxKeywords, ...fileType.map(ft => `${ft}`)];
-    } else if (isValid(fileType)) {
-      updatedReduxKeywords.push(`${fileType}`);
-    }
-
-    // Handle sentiments
-    if (Array.isArray(sentiments) && sentiments.length > 0) {
-      updatedReduxKeywords = [...updatedReduxKeywords, ...sentiments];
-    }
-
-    // Handle targets
-   updatedReduxKeywords = [
-  ...updatedReduxKeywords,
-  ...targets.map(t => t.name) // or t.value or t.id
-];
-
-
-    // Handle time range - create a single chip for date range if both exist
-  if (isValid(start_time) && isValid(end_time)) {
-        const formatDateTime = (dateStr) => {
-          try {
-            const date = new Date(dateStr);
-            const dateStr2 = date.toISOString().split('T')[0]; // YYYY-MM-DD
-            const timeStr = date.toTimeString().split(' ')[0].substring(0, 5); // HH:MM
-            return `${dateStr2} ${timeStr}`;
-          } catch (error) {
-            return dateStr;
-          }
-        };
-        updatedReduxKeywords.push(`${formatDateTime(start_time)} to ${formatDateTime(end_time)}`);
-      }
-    console.log("Updated Redux keywords:", updatedReduxKeywords);
-    setReduxKeywords(updatedReduxKeywords);
-  }, [recentKeyword, caseId, fileType, sentiments, targets, start_time, end_time]);
+    return [...new Set(chips)]; // Remove duplicates
+  };
 
   const activePopup = useSelector((state) => state.popup?.activePopup || null);
   console.log("Current Active Popup:", activePopup);
@@ -128,85 +174,80 @@ const RecentCriteria = () => {
     setShowEditPopup(!showEditPopup);
   };
 
-  // Handle Enter key press - Add to user-entered keywords only
+  // Handle Enter key press - Add to local keyword chips and track as user input
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && searchQuery.trim() !== "") {
       e.preventDefault(); // Prevent form submission
       const newKeyword = searchQuery.trim();
-      setUserEnteredKeywords(prev => [...prev, newKeyword]); // Add to user-entered keywords only
+      
+      // Check if already exists
+      if (localKeywordChips.includes(newKeyword)) {
+        setSearchQuery("");
+        return;
+      }
+      
+      setLocalKeywordChips(prev => [...prev, newKeyword]);
+      
+      // Track as user input chip
+      setUserInputChips(prev => new Set([...prev, newKeyword]));
+      
       setSearchQuery(""); // Clear input field
     }
   };
 
-  // Check if chip is from Redux or user-entered
-  const isReduxChip = (chip) => {
-    return reduxKeywords.includes(chip);
-  };
-
-  // Check if chip is a time range chip
-  const isTimeRangeChip = (chip) => {
-    return chip
-    // .includes(' to ');
-  };
-
-  // Remove chip - handle both Redux and user-entered
+  // Remove chip from local state and update tracking sets
   const handleRemoveItem = (chipToRemove) => {
-    if (isReduxChip(chipToRemove)) {
-      // Remove from Redux keywords and update Redux store
-      const updatedReduxKeywords = reduxKeywords.filter(chip => chip !== chipToRemove);
-      setReduxKeywords(updatedReduxKeywords);
-      
-      // Update Redux store - need to determine which field this chip belongs to
-      const updatedPayload = { ...reduxPayload };
-      
-      // Handle time range chip removal
-      if (isTimeRangeChip(chipToRemove)) {
-        // Remove start_time and end_time from Redux payload
-        delete updatedPayload.start_time;
-        delete updatedPayload.end_time;
-      } else {
-        // Check and update keyword field
-        if (Array.isArray(keyword) && keyword.includes(chipToRemove)) {
-          updatedPayload.keyword = keyword.filter(k => k !== chipToRemove);
-        }
-        
-        // Check and update case_id field
-        if (Array.isArray(caseId) && caseId.map(id => String(id)).includes(chipToRemove)) {
-          updatedPayload.case_id = caseId.filter(id => String(id) !== chipToRemove);
-        }
-        
-        // Check and update file_type field
-        if (Array.isArray(fileType) && fileType.includes(chipToRemove)) {
-          updatedPayload.file_type = fileType.filter(ft => ft !== chipToRemove);
-        }
-        
-        // Check and update sentiments field
-        if (Array.isArray(sentiments) && sentiments.includes(chipToRemove)) {
-          updatedPayload.sentiments = sentiments.filter(s => s !== chipToRemove);
-        }
-        
-        // Check and update targets field
-        if (Array.isArray(targets) && targets.includes(chipToRemove)) {
-          updatedPayload.targets = targets.filter(t => t !== chipToRemove);
-        }
-      }
-      
-      // Dispatch updated payload to Redux - NO API call triggered
-      dispatch(setKeywords({
-        keyword: updatedReduxKeywords,
-        queryPayload: updatedPayload
-      }));
-      
-    } else {
-      // Remove from user-entered keywords
-      setUserEnteredKeywords(prev => prev.filter(chip => chip !== chipToRemove));
+    console.log("Removing chip:", chipToRemove);
+    
+    // Handle date range chips
+    if (chipToRemove.includes(' to ')) {
+      setLocalStartTime(null);
+      setLocalEndTime(null);
+      // Remove from tracking sets
+      setReduxOriginatedChips(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(chipToRemove);
+        return newSet;
+      });
+      return;
     }
+
+    // Remove from appropriate local array
+    setLocalKeywordChips(prev => prev.filter(chip => chip !== chipToRemove));
+    setLocalCaseIdChips(prev => prev.filter(chip => chip !== chipToRemove));
+    setLocalFileTypeChips(prev => prev.filter(chip => chip !== chipToRemove));
+    setLocalSentimentChips(prev => prev.filter(chip => chip !== chipToRemove));
+    setLocalTargetChips(prev => prev.filter(chip => chip.name !== chipToRemove));
+
+    // Remove from tracking sets
+    setReduxOriginatedChips(prev => {
+      const newSet = new Set(prev);
+      newSet.delete(chipToRemove);
+      return newSet;
+    });
+    setUserInputChips(prev => {
+      const newSet = new Set(prev);
+      newSet.delete(chipToRemove);
+      return newSet;
+    });
   };
 
   const handleReset = () => {
+    // Clear both local state and Redux
+    setLocalKeywordChips([]);
+    setLocalCaseIdChips([]);
+    setLocalFileTypeChips([]);
+    setLocalSentimentChips([]);
+    setLocalTargetChips([]);
+    setLocalStartTime(null);
+    setLocalEndTime(null);
+    setSearchQuery('');
+    
+    // Clear tracking sets
+    setReduxOriginatedChips(new Set());
+    setUserInputChips(new Set());
+    
     dispatch(clearCriteria());
-    setReduxKeywords([]);
-    setUserEnteredKeywords([]);
   };
 
   const fetchData = useCallback(async () => {
@@ -254,78 +295,58 @@ const RecentCriteria = () => {
       console.error("Error deleting item:", error);
     }
   };
-let payload={};
+
   const handleSearch = async () => {
-    // Check if there's any data to search
-    const hasUserKeywords = userEnteredKeywords.length > 0;
-    const hasReduxKeywords = reduxKeywords.length > 0;
-    const hasReduxData = Object.keys(reduxPayload).length > 0;
+    // Check if there's any data to search using local state
+    const hasLocalKeywords = localKeywordChips.length > 0;
+    const hasLocalCaseIds = localCaseIdChips.length > 0;
+    const hasLocalFileTypes = localFileTypeChips.length > 0;
+    const hasLocalSentiments = localSentimentChips.length > 0;
+    const hasLocalTargets = localTargetChips.length > 0;
+    const hasLocalDates = localStartTime || localEndTime;
     
-    if (!hasUserKeywords && !hasReduxKeywords && !hasReduxData) {
+    if (!hasLocalKeywords && !hasLocalCaseIds && !hasLocalFileTypes && 
+        !hasLocalSentiments && !hasLocalTargets && !hasLocalDates) {
       toast.info("Please enter keywords or select criteria to search");
       return;
     }
 
-    console.log("reduxPayload:", reduxPayload);
-    console.log("reduxKeywords:", reduxKeywords);
-    console.log("userEnteredKeywords:", userEnteredKeywords);
+    console.log("Local state for search:");
+    console.log("localKeywordChips:", localKeywordChips);
+    console.log("localCaseIdChips:", localCaseIdChips);
+    console.log("localFileTypeChips:", localFileTypeChips);
+    console.log("localSentimentChips:", localSentimentChips);
+    console.log("localTargetChips:", localTargetChips);
 
     try {
-      // Get Redux keywords from current payload
-      const currentReduxKeywords = Array.isArray(reduxPayload.keyword)
-        ? reduxPayload.keyword
-        : JSON.parse(reduxPayload.keyword || "[]");
-      
-      // All keywords (Redux + User entered) will be passed as keywords to API
-      const allKeywords = [...currentReduxKeywords, ...userEnteredKeywords];
-      console.log("allKeywords to be sent:", allKeywords)
-
-      // Get other Redux data
-      const reduxCaseIds = Array.isArray(reduxPayload.case_id)
-        ? reduxPayload.case_id
-        : JSON.parse(reduxPayload.case_id || "[]");
-
-      const reduxFileTypes = Array.isArray(reduxPayload.file_type)
-        ? reduxPayload.file_type
-        : JSON.parse(reduxPayload.file_type || "[]");
-
-      const reduxTargets = Array.isArray(reduxPayload.targets)
-        ? reduxPayload.targets
-        : JSON.parse(reduxPayload.targets || "[]");
-
-      const reduxSentiments = Array.isArray(reduxPayload.sentiments)
-        ? reduxPayload.sentiments
-        : JSON.parse(reduxPayload.sentiments || "[]");
-
-      console.log("fileType or Caseids", reduxCaseIds, reduxFileTypes)
-
-      const rawPayload = {
-        keyword: allKeywords,        // All keywords (Redux + User entered)
-        case_id: reduxCaseIds,       // Only Redux case_ids
-        file_type: reduxFileTypes,   // Only Redux file_types
-        targets: reduxTargets,       // Only Redux targets
-        sentiments: reduxSentiments, // Only Redux sentiments
+      // Use local state for search payload
+      const payload = {
+        keyword: localKeywordChips,
+        case_id: localCaseIdChips,
+        file_type: localFileTypeChips,
+        sentiments: localSentimentChips,
+        targets: localTargetChips.map(t => String(t.value)), // Send value to API
         page: reduxPayload.page || 1,
-        start_time: reduxPayload.start_time || null,
-        end_time: reduxPayload.end_time || null,
+        start_time: localStartTime || null,
+        end_time: localEndTime || null,
         latitude: reduxPayload.latitude || null,
         longitude: reduxPayload.longitude || null
       };
 
-       const isValid = (v) =>
+      const isValid = (v) =>
         Array.isArray(v) ? v.length > 0 :
           typeof v === 'string' ? v.trim() !== '' :
             v !== null && v !== undefined;
 
-       payload = Object.fromEntries(
-        Object.entries(rawPayload).filter(([_, value]) => isValid(value))
+      const filteredPayload = Object.fromEntries(
+        Object.entries(payload).filter(([_, value]) => isValid(value))
       );
 
-      console.log("Sending search query:", payload);
+      console.log("Sending search query:", filteredPayload);
 
       const response = await axios.post(
         `${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/search`,
-        payload,
+        filteredPayload,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -343,10 +364,36 @@ let payload={};
         total_results: response.data.total_results || 0,
       }));
 
+      // Update Redux with current local state
       dispatch(setKeywords({
-        keyword: response.data.input.keyword,
-        queryPayload: response.data.input
+        keyword: localKeywordChips,
+        queryPayload: {
+          case_id: localCaseIdChips,
+          file_type: localFileTypeChips,
+          keyword: localKeywordChips,
+          targets: localTargetChips,
+          sentiment: localSentimentChips,
+          start_time: localStartTime,
+          end_time: localEndTime,
+          latitude: payload.latitude,
+          longitude: payload.longitude,
+          page: 1
+        }
       }));
+
+      // After successful search, mark current user input chips as Redux originated
+      const currentDisplayChips = getDisplayChips();
+      const newReduxChips = new Set([...reduxOriginatedChips]);
+      
+      // Add all current chips to Redux originated (since they're now stored in Redux)
+      userInputChips.forEach(chip => {
+        if (currentDisplayChips.includes(chip)) {
+          newReduxChips.add(chip);
+        }
+      });
+      
+      setReduxOriginatedChips(newReduxChips);
+      setUserInputChips(new Set()); // Clear user input tracking
 
       dispatch(setPage(1));
       dispatch(openPopup("saved"));
@@ -362,46 +409,74 @@ let payload={};
     const isValid = (val) =>
       val !== null && val !== undefined && val.toString().trim() !== "";
 
-    let updatedKeywords = [];
+    // Reset local state and tracking first
+    setLocalKeywordChips([]);
+    setLocalCaseIdChips([]);
+    setLocalFileTypeChips([]);
+    setLocalSentimentChips([]);
+    setLocalTargetChips([]);
+    setLocalStartTime(null);
+    setLocalEndTime(null);
+    setUserInputChips(new Set()); // Clear user input tracking
+    
+    const newReduxChips = new Set();
     const queryPayload = {};
 
     if (item) {
       if (Array.isArray(item.keyword) && item.keyword.length > 0) {
-        updatedKeywords.push(...item.keyword.map((kw) => `${kw}`));
+        setLocalKeywordChips([...item.keyword]);
         queryPayload.keyword = item.keyword;
+        item.keyword.forEach(chip => newReduxChips.add(chip));
       }
 
       if (Array.isArray(item.case_id) && item.case_id.length > 0) {
-        updatedKeywords.push(...item.case_id.map((id) => `${id}`));
+        const caseIds = item.case_id.map(id => String(id));
+        setLocalCaseIdChips(caseIds);
         queryPayload.case_id = item.case_id;
+        caseIds.forEach(chip => newReduxChips.add(chip));
       }
 
       if (Array.isArray(item.file_type) && item.file_type.length > 0) {
-        updatedKeywords.push(...item.file_type.map((ft) => `${ft}`));
+        setLocalFileTypeChips([...item.file_type]);
         queryPayload.file_type = item.file_type;
+        item.file_type.forEach(chip => newReduxChips.add(chip));
       }
 
       if (Array.isArray(item.targets) && item.targets.length > 0) {
-        updatedKeywords.push(...item.targets.map((t) => `${t}`));
-        queryPayload.targets = item.targets;
+        // Handle targets properly with name, value, label
+        const targetChips = item.targets.map(t => ({
+          id: t.id || t.value || t.name,
+          name: t.name,
+          value: t.value || t.id || t.name,
+          label: t.label || t.name
+        }));
+        setLocalTargetChips(targetChips);
+        queryPayload.targets = item.targets.map(t => String(t.value || t.id || t.name));
+        targetChips.forEach(t => newReduxChips.add(t.name));
       }
 
       if (Array.isArray(item.sentiments) && item.sentiments.length > 0) {
-        updatedKeywords.push(...item.sentiments.map((s) => `${s}`));
+        setLocalSentimentChips([...item.sentiments]);
         queryPayload.sentiments = item.sentiments;
+        item.sentiments.forEach(chip => newReduxChips.add(chip));
       }
 
-      if (isValid(item.start_date)) {
+      if (isValid(item.start_time)) {
+        setLocalStartTime(item.start_time);
         queryPayload.start_time = item.start_time;
       }
 
-      if (isValid(item.end_date)) {
+      if (isValid(item.end_time)) {
+        setLocalEndTime(item.end_time);
         queryPayload.end_time = item.end_time;
       }
 
-      // Add time range chip if both dates exist
+      // Add date range chip to Redux originated set if both dates exist
       if (isValid(item.start_time) && isValid(item.end_time)) {
-        updatedKeywords.push(`${item.start_time} to ${item.end_time}`);
+        const dateRangeChip = createDateRangeChip(item.start_time, item.end_time);
+        if (dateRangeChip) {
+          newReduxChips.add(dateRangeChip);
+        }
       }
 
       if (isValid(item.lat)) {
@@ -411,12 +486,10 @@ let payload={};
       if (isValid(item.long)) {
         queryPayload.long = item.long;
       }
-      
-      // Set as Redux keywords since these come from saved criteria
-      setReduxKeywords(updatedKeywords);
-      // Clear user-entered keywords when reusing criteria
-      setUserEnteredKeywords([]);
     }
+
+    // Set all reused chips as Redux originated
+    setReduxOriginatedChips(newReduxChips);
 
     try {
       const response = await axios.post(
@@ -430,14 +503,25 @@ let payload={};
         }
       );
       
-      console.log("Reusee Qeury Payload", queryPayload)
+      console.log("Reuse Query Payload", queryPayload)
       console.log("QueryResponse", response)
-      console.log("updatedetRecent", updatedKeywords)
       
-      // Dispatch updated keywords
+      // Update Redux with the reused criteria
+      const allDisplayChips = getDisplayChips();
       dispatch(setKeywords({
-        keyword: updatedKeywords,
-        queryPayload: response.data.input // or other fields if needed
+        keyword: allDisplayChips,
+        queryPayload: {
+          case_id: localCaseIdChips,
+          file_type: localFileTypeChips,
+          keyword: localKeywordChips,
+          targets: localTargetChips,
+          sentiment: localSentimentChips,
+          start_time: localStartTime,
+          end_time: localEndTime,
+          latitude: queryPayload.lat || null,
+          longitude: queryPayload.long || null,
+          page: 1
+        }
       }));
 
       // Store API result in Redux
@@ -447,8 +531,7 @@ let payload={};
         total_results: response.data.total_results || 0,
       }));
 
-      console.log("Updated keyword state after reuse:", updatedKeywords);
-      console.log("Query Payload dispatched:", queryPayload);
+      console.log("Updated local state after reuse");
       dispatch(openPopup("saved"));
     } catch (error) {
       console.error("API call failed in ReuseCriteria:", error);
@@ -460,17 +543,27 @@ let payload={};
     (typeof item.title === "string" && item.title.toLowerCase().includes(searchQuery.toLowerCase()))
   ) : [];
 
-  // Combine all keywords for display
-  const allDisplayKeywords = [...reduxKeywords, ...userEnteredKeywords];
+  // Get display chips from local state
+  const allDisplayKeywords = getDisplayChips();
 
-  // Function to determine chip style based on type
+  // Track which chips came from Redux vs user input
+  const [reduxOriginatedChips, setReduxOriginatedChips] = useState(new Set());
+  const [userInputChips, setUserInputChips] = useState(new Set());
+
+  // Function to determine chip style based on origin
   const getChipStyle = (chip) => {
-    if (isTimeRangeChip(chip)) {
-      return { backgroundColor: '#FFD700', color: '#000' }; // Yellow for time range
+    // User entered chips are always blue
+    if (userInputChips.has(chip)) {
+      return { backgroundColor: '#0073cf', color: 'white' }; // Blue for user entered
     }
-    return isReduxChip(chip) 
-      ? { backgroundColor: '#ffd700', color: '#000' } // Yellow for Redux chips
-      : { backgroundColor: '#0073cf', color: 'white' }; // Blue for user-entered chips
+    
+    // Redux originated chips are yellow
+    if (reduxOriginatedChips.has(chip)) {
+      return { backgroundColor: '#ffd700', color: '#000' }; // Yellow for Redux originated
+    }
+    
+    // Default (fallback)
+    return { backgroundColor: '#0073cf', color: 'white' };
   };
 
   return (
