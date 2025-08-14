@@ -23,67 +23,65 @@ const CriteriaCaseTable = () => {
     ? [...new Set(searchResults.flatMap(item => Object.keys(item)))]
     : [];
   // Fetch data when page changes
-  useEffect(() => {
-    const fetchPageData = async () => {
-      setLoading(true);
+ useEffect(() => {
+  const fetchPageData = async () => {
+    setLoading(true);
 
-      try {
-        // Don't proceed if there are no keywords
-        // if (!keywords || keywords.length === 0) {
-        //   setLoading(false);
-        //   return;
-        // }
+    try {
+      const isValid = (v) =>
+        Array.isArray(v) ? v.length > 0 :
+          typeof v === 'string' ? v.trim() !== '' :
+            v !== null && v !== undefined;
 
-
-        const isValid = (v) =>
-          Array.isArray(v) ? v.length > 0 :
-            typeof v === 'string' ? v.trim() !== '' :
-              v !== null && v !== undefined;
-
-        const filteredPayload = {};
-        Object.entries(payload).forEach(([key, value]) => {
-          if (isValid(value)) {
+      const filteredPayload = {};
+      Object.entries(payload).forEach(([key, value]) => {
+        if (isValid(value)) {
+          if (key === "targets" && Array.isArray(value)) {
+            filteredPayload[key] = value.map(v =>
+              typeof v === "object" && v !== null ? String(v.value) : v
+            );
+          } else {
             filteredPayload[key] = value;
           }
-        });
+        }
+      });
 
-        const paginatedQuery = {
-          ...filteredPayload,
-          page:currentPage
-        };
-        console.log("Sending queryQWQ:", paginatedQuery);
+      const paginatedQuery = {
+        ...filteredPayload,
+        page: currentPage
+      };
+      console.log("Sending queryQWQ:", paginatedQuery);
 
-        const response = await axios.post(
-          `${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/search`,
-          paginatedQuery,
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+      const response = await axios.post(
+        `${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/search`,
+        paginatedQuery,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-        console.log("Search response:", response.data);
+      console.log("Search response:", response.data);
 
-        // Update the Redux store with the new search results
-        dispatch(
-          setSearchResults({
-            results: response.data.results || [],
-            total_pages: response.data.total_pages || 1,
-            total_results: response.data.total_results || 0,
-          })
-        );
-      } catch (error) {
-        console.error('Error fetching page data:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+      dispatch(
+        setSearchResults({
+          results: response.data.results || [],
+          total_pages: response.data.total_pages || 1,
+          total_results: response.data.total_results || 0,
+        })
+      );
+    } catch (error) {
+      console.error('Error fetching page data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    // Call the function to fetch data
-    fetchPageData();
-  }, [currentPage, dispatch, token, keywords, payload]);
+  fetchPageData();
+}, [currentPage, dispatch, token, keywords, payload]);
+
 
   // Handle page change
   const handlePageChange = (pageNumber) => {

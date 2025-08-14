@@ -153,7 +153,7 @@ const ComponentNine = () => (
 );
 const ComponentTen = () => (
   <>
-    <Header title="Summary" />
+    <Header title="Platforms" />
     <Card
       sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius: '25px'}}
     >
@@ -167,7 +167,7 @@ const ComponentTen = () => (
 );
 const ComponentEleven = () => (
   <>
-    <Header title="Even Types" />
+    <Header title="Event Types" />
     <Card
       sx={{ height: "350px", backgroundColor: "#101D2B", borderRadius: '25px'}}
     >
@@ -194,6 +194,12 @@ const GrapghicalCriteria = () => {
         <Grid item xs={6} p={1} pb={0} sx={{ paddingLeft: '0 !important' }} className={styles.graphCards}>
           <ComponentTwo />
         </Grid>
+        <Grid item xs={6} p={1} pb={0}  className={styles.graphCards}>
+          <ComponentTen />
+        </Grid>
+        <Grid item xs={6} p={1} pb={0}  className={styles.graphCards}>
+          <ComponentEleven />
+        </Grid>
         <Grid item xs={6} p={1} pb={0} className={styles.graphCards}>
           <ComponentThree />
         </Grid>
@@ -216,12 +222,7 @@ const GrapghicalCriteria = () => {
         <Grid item xs={6} p={1} pb={0}  className={styles.graphCards}>
           <ComponentNine />
         </Grid>
-        <Grid item xs={6} p={1} pb={0}  className={styles.graphCards}>
-          <ComponentTen />
-        </Grid>
-        <Grid item xs={6} p={1} pb={0}  className={styles.graphCards}>
-          <ComponentEleven />
-        </Grid>
+      
       </Grid>
 
     </div>

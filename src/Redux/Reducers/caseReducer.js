@@ -66,6 +66,7 @@ export const CaseFilterPayloadReducer = (
 ) => {
   switch (action.type) {
     case SAVE_CASE_FILTER_PAYLOAD:
+ 
       return {
         ...state,
         caseFilters: {

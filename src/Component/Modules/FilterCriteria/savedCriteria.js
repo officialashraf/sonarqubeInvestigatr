@@ -54,7 +54,8 @@ const SavedCriteria = () => {
 
   // Check if chip is a time range chip
   const isTimeRangeChip = (chip) => {
-    return chip.includes(' to ');
+    return chip
+    // .includes(' to ');
   };
 
   // Function to check if chip is from Redux data

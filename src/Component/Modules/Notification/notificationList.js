@@ -129,16 +129,17 @@ const NotificationList = ({ isOpen, setIsOpen }) => {
     };
 
     return (
-        <div style={{ height: '500px', border: '1px solid #0073cf'}}>
+        <div style={{ height: '500px', border: '1px solid #0073cf' }}>
             <NavDropdown
                 id="profile-dropdown"
                 align="end"
-                 show={isOpen}
-                 onToggle={(isOpen) => setIsOpen(isOpen)}
+                show={isOpen}
+                onToggle={(isOpen) => setIsOpen(isOpen)}
                 style={{
-                    display: isOpen ? "block" : "none", height: "500px", overflowY: "auto", position: 'relative', scrollbarColor: '#1e7df8 #0a192f',    
+                    display: isOpen ? "block" : "none", height: "500px", overflowY: "auto", position: 'relative', scrollbarColor: '#1e7df8 #0a192f',
                     scrollbarWidth: 'thin',
-                    zIndex: 9999}}
+                    zIndex: 9999
+                }}
             >
                 <div style={{ padding: '10px', borderBottom: '1px solid #0073cf', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#101D2B' }}>
                     <button
@@ -194,18 +195,24 @@ const NotificationList = ({ isOpen, setIsOpen }) => {
                             }}
                         >
                             <div style={{ flex: 1, marginRight: '10px', color: '#d2d2d2' }}>
-      <div
-        style={{
-          whiteSpace: 'normal',
-          wordBreak: 'break-word'
-        }}
-      >
-        {item.message}
-      </div>
-      <div style={{ fontSize: '12px', color: '#888' }}>
-        Created On: <strong>{new Date(item.created_on).toLocaleString()}</strong>
-      </div>
-    </div>
+                                <div
+                                    style={{
+                                        whiteSpace: 'normal',
+                                        wordBreak: 'break-word'
+                                    }}
+                                >
+                                    {item.message}
+                                </div>
+                                <div style={{ fontSize: '12px', color: '#888' }}>
+                                    <strong>
+                                        {item.created_on
+                                            .replace("T", " ")
+                                            .replace(/\.\d+/, "")
+                                            .replace(/\+\d+:\d+/, "")}
+                                    </strong>
+
+                                </div>
+                            </div>
 
                             {item.is_read ? (
                                 <span style={{

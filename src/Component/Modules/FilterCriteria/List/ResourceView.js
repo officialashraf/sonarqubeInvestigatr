@@ -39,20 +39,26 @@ const ScrollCriteriaViewer = () => {
                         v !== null && v !== undefined;
 
             const filteredPayload = {};
-            Object.entries(payload).forEach(([key, value]) => {
-                if (isValid(value)) {
-                    filteredPayload[key] = value;
-                }
-            });
+      Object.entries(payload).forEach(([key, value]) => {
+        if (isValid(value)) {
+          if (key === "targets" && Array.isArray(value)) {
+            filteredPayload[key] = value.map(v =>
+              typeof v === "object" && v !== null ? String(v.value) : v
+            );
+          } else {
+            filteredPayload[key] = value;
+          }
+        }
+      });
 
             const paginatedQuery = {
                 ...filteredPayload,
-                page
+                page:currentPage
             };
 
             const response = await axios.post(
                 `${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/search`,
-                { ...filteredPayload, page },
+               paginatedQuery,
                 {
                     headers: {
                         'Content-Type': 'application/json',

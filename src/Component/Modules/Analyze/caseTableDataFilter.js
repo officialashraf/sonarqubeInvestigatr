@@ -315,7 +315,11 @@ const CaseTableDataFilter = () => {
         setLocalKeywordChips(Array.isArray(keyword) ? [...keyword] : []);
         setLocalFileTypeChips(Array.isArray(file_type) ? [...file_type] : []);
         setLocalAggsFieldsChips(Array.isArray(aggs_fields) ? [...aggs_fields] : []);
-        setlocalTargets(Array.isArray(target) ? [...target] : []);
+        setlocalTargets(
+            Array.isArray(target) && target.length > 0
+                ? target.map(t => ({ id: t.id, name: t.name, value: t.value ?? t.id, }))
+                : []);
+
         setLocalSetiments(Array.isArray(sentiment) ? [...sentiment] : []);
         setLocalStartTime(start_time);
         setLocalEndTime(end_time);
@@ -325,19 +329,17 @@ const CaseTableDataFilter = () => {
     const getDisplayChips = () => {
         const chips = [];
 
-        // Add all local chips
         chips.push(...localKeywordChips);
         chips.push(...localFileTypeChips);
         chips.push(...localAggsFieldsChips);
         chips.push(...localSetiments);
-        chips.push(...localTargets);
+        chips.push(...localTargets.map(t => t.name)); //  only name for UI
 
-        // Add time range chip if both exist
         if (localStartTime && localEndTime) {
             chips.push(`${localStartTime} to ${localEndTime}`);
         }
 
-        return [...new Set(chips)]; // Remove duplicates
+        return [...new Set(chips)];
     };
 
     const handleSearchSubmit = () => {
@@ -347,19 +349,22 @@ const CaseTableDataFilter = () => {
         // const queryPayload = {
         //     unified_case_id: caseData.id,
         // };
-
         const summaryPayload = {
             case_id: String(caseData.id),
             ...(localKeywordChips.length > 0 && { keyword: localKeywordChips }),
             ...(localFileTypeChips.length > 0 && { file_type: localFileTypeChips }),
             ...(localAggsFieldsChips.length > 0 && { aggs_fields: localAggsFieldsChips }),
             ...(localSetiments.length > 0 && { sentiments: localSetiments }),
-            ...(localTargets.length > 0 && { targets: localTargets }),
+            ...(localTargets.length > 0 && {
+                targets: localTargets.map(t => String(t.value)) //  IDs as strings
+            }),
             ...(localStartTime && { starttime: localStartTime }),
             ...(localEndTime && { endtime: localEndTime }),
             page: 1,
             itemsPerPage: 50
-        }
+        };
+
+
         // Make API call
         dispatch(fetchSummaryData(summaryPayload));
         console.log("API summaryPayload", summaryPayload);
@@ -370,11 +375,12 @@ const CaseTableDataFilter = () => {
             keyword: localKeywordChips,
             file_type: localFileTypeChips,
             aggs_fields: localAggsFieldsChips,
-            target: localTargets,
+            target: localTargets, //  keep all 3 keys here
             sentiment: localSetiments,
             ...(localStartTime && { start_time: localStartTime }),
-            ...(localEndTime && { end_time: localEndTime }),
-        }
+            ...(localEndTime && { end_time: localEndTime })
+        };
+
 
         dispatch(saveCaseFilterPayload(savePayload));
         console.log("Updated redux payload", savePayload);
@@ -405,25 +411,27 @@ const CaseTableDataFilter = () => {
         setLocalStartTime(null);
         setLocalEndTime(null);
         setInputValue("");
+        setlocalTargets([]);
 
         dispatch(clearCaseFilterPayload());
     };
-
     const removeChip = (chipToRemove) => {
-        // Remove from local state only
-        if (chipToRemove.includes(' to ')) {
+        if (typeof chipToRemove === 'string' && chipToRemove.includes(' to ')) {
             setLocalStartTime(null);
             setLocalEndTime(null);
             return;
         }
 
-        // Remove from appropriate local array
+        // Remove string chips from keyword, file_type, aggs, sentiments
         setLocalKeywordChips(prev => prev.filter(chip => chip !== chipToRemove));
         setLocalFileTypeChips(prev => prev.filter(chip => chip !== chipToRemove));
         setLocalAggsFieldsChips(prev => prev.filter(chip => chip !== chipToRemove));
         setLocalSetiments(prev => prev.filter(chip => chip !== chipToRemove));
-        setlocalTargets(prev => prev.filter(chip => chip !== chipToRemove));
+
+        // Targets — chipToRemove will be string name
+        setlocalTargets(prev => prev.filter(chip => chip.name !== chipToRemove));
     };
+
 
     const displayChips = getDisplayChips();
 
@@ -578,7 +586,7 @@ const CaseTableDataFilter = () => {
                 (chip) => chip.includes(' to ')
             ]}
             removeChip={removeChip}
-            PopupComponent={AddFilter}
+            PopupComponent={AddFilter }
             isPopupVisible={isPopupVisible}
             setIsPopupVisible={setIsPopupVisible}
             showCaseHeader={true}
@@ -588,6 +596,7 @@ const CaseTableDataFilter = () => {
                 resources: { icon: FaPhotoVideo, component: <Resources /> },
                 caseData: { icon: ListAltOutlined, component: <TabulerData /> },
             }}
+              popupSearchChips={localKeywordChips}
         />
 
     );

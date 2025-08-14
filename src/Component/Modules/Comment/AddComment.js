@@ -161,12 +161,12 @@ const AddComment = ({ show, onClose, selectedResource }) => {
                       <span style={{
                         display: 'block',
                         hyphens: 'auto',
-                        whiteSpace:'pre-wrap',
+                        whiteSpace: 'pre-wrap',
                         wordBreak: 'break-word',
                         overflowWrap: 'anywhere',
                         whiteSpace: 'normal',
                         maxWidth: '90%',
-                        justifyContent:'center'
+                        justifyContent: 'center'
                       }}>
                         {comment.comment}
                       </span>
@@ -175,7 +175,13 @@ const AddComment = ({ show, onClose, selectedResource }) => {
                     secondary={
                       <>
                         <span style={{ display: 'block', fontSize: '12px', color: '#555' }}>
-                          Created On: <strong>{new Date(comment.created_on).toLocaleString()}</strong>
+                          Created On: <strong>
+                            {comment.created_on
+                              .replace("T", " ")
+                              .replace(/\.\d+/, "")
+                              .replace(/\+\d+:\d+/, "")}
+                          </strong>
+
                         </span>
                         <span style={{ display: 'block', fontSize: '12px', color: '#555' }}>
                           Created By: <strong>{comment.user}</strong>

@@ -23,7 +23,7 @@ const TabulerData = () => {
     totalResults,
   } = useSelector((state) => state.filterData);
 
-  
+
   const [currentPage, setCurrentPage] = useState(page);
   const [columnMapping, setColumnMapping] = useState([]);
 
@@ -32,18 +32,18 @@ const TabulerData = () => {
   const getGroupColor = (groupName) => {
     if (groupColors[groupName]) return groupColors[groupName];
 
- const colorList = [
-  "#67e467ff", // Very Dark Green
-  "#ce2020ff", // Very Dark Red
-  "#ecf012ff", // Very Dark Orange
-  "#bb6dd4ff", // Very Dark Purple
-  "#060a35ff", // Very Dark Indigo
-  "#1a0a03ff", // Very Dark Brown
-  "#d44c90ff", // Very Dark Pink
-  "#e6f517ff", // Very Dark Blue
-  "#e76570ff", // Very Dark Deep Orange
-  "#45dbcfff", // Very Dark Blue Grey
- ]
+    const colorList = [
+      "#67e467ff", // Very Dark Green
+      "#ce2020ff", // Very Dark Red
+      "#ecf012ff", // Very Dark Orange
+      "#bb6dd4ff", // Very Dark Purple
+      "#060a35ff", // Very Dark Indigo
+      "#1a0a03ff", // Very Dark Brown
+      "#d44c90ff", // Very Dark Pink
+      "#e6f517ff", // Very Dark Blue
+      "#e76570ff", // Very Dark Deep Orange
+      "#45dbcfff", // Very Dark Blue Grey
+    ]
 
 
     const color = colorList[Object.keys(groupColors).length % colorList.length];
@@ -56,53 +56,56 @@ const TabulerData = () => {
       // const queryPayload = {
       //   unified_case_id: caseData.id
       // };
-          const rawPayload = {
-      case_id: String(caseData.id),
-      file_type: caseFilter?.file_type,
-     starttime: caseFilter?.start_time,
-      endtime: caseFilter?.end_time,
-      aggsFields: caseFilter?.aggs_fields,
-      keyword: caseFilter?.keyword,
-      sentiments:caseFilter?.sentiment,
-      targets:caseFilter?.target,
-      page: currentPage,
-      itemsPerPage: 50,
-    };
-        const summaryPayload =Object.fromEntries(
-      Object.entries(rawPayload).filter(
-        ([_, value]) =>
-          value !== undefined &&
-          value !== null &&
-          value !== "" &&
-          !(Array.isArray(value) && value.length === 0) &&
-          !(typeof value === "object" && !Array.isArray(value) && Object.keys(value).length === 0)
-      )
-    ); 
+      const rawPayload = {
+        case_id: String(caseData.id),
+        file_type: caseFilter?.file_type,
+        starttime: caseFilter?.start_time,
+        endtime: caseFilter?.end_time,
+        aggsFields: caseFilter?.aggs_fields,
+        keyword: caseFilter?.keyword,
+        sentiments: caseFilter?.sentiment,
+        targets: Array.isArray(caseFilter?.target)
+          ? caseFilter.target.map(t => String(t.value))
+          : [],
+
+        page: currentPage,
+        itemsPerPage: 50,
+      };
+      const summaryPayload = Object.fromEntries(
+        Object.entries(rawPayload).filter(
+          ([_, value]) =>
+            value !== undefined &&
+            value !== null &&
+            value !== "" &&
+            !(Array.isArray(value) && value.length === 0) &&
+            !(typeof value === "object" && !Array.isArray(value) && Object.keys(value).length === 0)
+        )
+      );
       dispatch(fetchSummaryData(summaryPayload));
-       console.log("su mardtaatbulerr", summaryPayload)
+      console.log("su mardtaatbulerr", summaryPayload)
     }
   }, [caseData?.id]);
 
- useEffect(() => {
-  const fetchMapping = async () => {
-    try {
-      const token = Cookies.get("accessToken");
-      const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/mappings`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json"
-        }
-      });
-      setColumnMapping(response.data);
-    } catch (error) {
-      console.error("Mapping fetch failed", error);
-    }
-  };
+  useEffect(() => {
+    const fetchMapping = async () => {
+      try {
+        const token = Cookies.get("accessToken");
+        const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/mappings`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json"
+          }
+        });
+        setColumnMapping(response.data);
+      } catch (error) {
+        console.error("Mapping fetch failed", error);
+      }
+    };
 
-  
+
     fetchMapping();
-  
-}, [caseData?.id, page]);
+
+  }, [caseData?.id, page]);
 
 
   const processedHeaders = headers.map((header) => {
@@ -123,19 +126,21 @@ const TabulerData = () => {
     // const queryPayload = {
     //   unified_case_id: caseData.id
     // };
-  const rawPayload = {
+    const rawPayload = {
       case_id: String(caseData.id),
       file_type: caseFilter?.file_type,
       starttime: caseFilter?.start_time,
       endtime: caseFilter?.end_time,
       aggsFields: caseFilter?.aggs_fields,
       keyword: caseFilter?.keyword,
-      sentiments:caseFilter?.sentiment,
-      targets:caseFilter?.target,
+      sentiments: caseFilter?.sentiment,
+      targets: Array.isArray(caseFilter?.target)
+        ? caseFilter.target.map(t => String(t.value))
+        : [],
       page,
       itemsPerPage: 50,
     };
-        const pageChangePayload =Object.fromEntries(
+    const pageChangePayload = Object.fromEntries(
       Object.entries(rawPayload).filter(
         ([_, value]) =>
           value !== undefined &&
@@ -144,9 +149,9 @@ const TabulerData = () => {
           !(Array.isArray(value) && value.length === 0) &&
           !(typeof value === "object" && !Array.isArray(value) && Object.keys(value).length === 0)
       )
-    ); 
+    );
     dispatch(fetchSummaryData(pageChangePayload));
-    console.log("paageechngepayloadda",pageChangePayload)
+    console.log("paageechngepayloadda", pageChangePayload)
   };
 
   if (loading) return <Loader />;
@@ -181,7 +186,7 @@ const TabulerData = () => {
       showGroupHeaders={false} // Set to true if you want group headers
       specialColumns={["targets", "person", "gpe", "unified_case_id", "org", "loc", "socialmedia_hashtags"]}
     />
-      
+
   );
 };
 
