@@ -136,7 +136,7 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
             }
 
             if (formData.targets && formData.targets.length > 0) {
-                payloadS.targets = formData.targets.map(t => t.value);
+                payloadS.targets = formData.targets.map(t => String(t.value));
             }
 
             if (formData.sentiments && formData.sentiments.length > 0) {
@@ -167,7 +167,7 @@ const AddNewCriteria = ({ handleCreateCase, searchChips, isPopupVisible, setIsPo
                     case_id: payloadS.case_id || [],
                     file_type: payloadS.file_type || [],
                     keyword: searchChips || [],
-                    targets: payloadS.targets || [],
+                    targets: formData.targets || [],
                     sentiment: payloadS.sentiments || [],
                     start_time: payloadS.start_time ?? null,
                     end_time: payloadS.end_time ?? null,

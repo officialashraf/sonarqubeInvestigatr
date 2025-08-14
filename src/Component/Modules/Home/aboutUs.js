@@ -12,8 +12,8 @@ const AboutUs = ({ togglePopup }) => {
                 <div className={styles.grid}>
                     <DetailBox label="Product Name" value={buildInfo.productName} />
                     <DetailBox label="Version" value={buildInfo.version} />
-                    <DetailBox label="Updated By" value={"Proforce"} />
-                    <DetailBox label="Maintained By" value={"Proforce"} />
+                    <DetailBox label="Updated By" value={"Curated Codes"} />
+                    <DetailBox label="Maintained By" value={"Curated Codes"} />
                 </div>
             </div>
             <div className="d-flex justify-content-center mt-3">

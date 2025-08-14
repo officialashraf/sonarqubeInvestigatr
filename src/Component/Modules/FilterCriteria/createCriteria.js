@@ -139,21 +139,36 @@ const CreateCriteria = ({ handleCreateCase }) => {
           }
         );
 
-        const buckets = response.data?.targets?.buckets || [];
+        // const buckets = response.data?.targets?.buckets || [];
         const sentimentBuckets = response.data?.sentiment?.buckets || [];
+  const targetIds = response.data?.targets?.buckets.map(b => parseInt(b.key, 10)).filter(id => !isNaN(id));
 
-
-        const formatted = buckets.map(bucket => ({
-          value: bucket.key,
-          label: bucket.key
-        }));
-    console.log("targetoptions",formatted)
+        // const formatted = buckets.map(bucket => ({
+        //   value: bucket.key,
+        //   label: bucket.key
+        // }));
+    
         const formattedSentiments = sentimentBuckets.map(bucket => ({
           value: bucket.key,
           label: bucket.key
         }));
+               let tOpts = [];
+                if (targetIds.length > 0) {
+                    const targetRes = await axios.post(
+                        `${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/target-names`,
+                        { target_ids: targetIds },
+                        { headers: { Authorization: `Bearer ${Token}` } }
+                    );
 
-        setTargetOptions(formatted);
+                    // API expected to return something like [{id:1,name:"X"}]
+                    tOpts = targetRes.data.map(t => ({
+                        value: t.id,
+                        label: `TAR${String(t.id).padStart(4, '0')} - ${t.name || ' '}`,
+                        name: t.name,
+                    }));
+
+                }
+        setTargetOptions(tOpts);
         setSentimentOptions(formattedSentiments);
 
       } catch (error) {
@@ -251,7 +266,7 @@ const CreateCriteria = ({ handleCreateCase }) => {
           : [],
 
         file_type: formData.filetype?.length > 0 ? formData.filetype.map(type => type.value) : [],
-        targets: formData.targets?.length > 0 ? formData.targets.map(target => target.value) : [],
+        targets: formData.targets?.length > 0 ? formData.targets.map(target => String(target.value)) : [],
         sentiments: formData.sentiment?.length > 0
           ? formData.sentiment.map(s => s.value)
           : [],
@@ -303,10 +318,21 @@ const CreateCriteria = ({ handleCreateCase }) => {
         total_results: response.data.total_results || 0,
       }));
 
-      dispatch(setKeywords({
-        keyword: response.data.input.keyword,
-        queryPayload: payload  // or other fields if needed
-      }));
+       dispatch(setKeywords({
+                keyword:response.data.input.keyword,
+                queryPayload: {
+                    case_id: payload.case_id || [],
+                    file_type: payload.file_type || [],
+                    keyword: formData.searchQuery || [],
+                    targets: formData.targets || [],
+                    sentiment: payload.sentiments || [],
+                    start_time: payload.start_time ?? null,
+                    end_time: payload.end_time ?? null,
+                    latitude: payload.latitude ?? null,
+                    longitude: payload.longitude ?? null,
+                    page: payload.page ?? 1
+                }
+            }));
       console.log("setkeywordDispacth", response.data.input.keyword)
       // Dispatch initial page number
       dispatch(setPage(1));

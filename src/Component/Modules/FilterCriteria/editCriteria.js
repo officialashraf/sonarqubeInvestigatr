@@ -117,22 +117,36 @@ const EditCriteria = ({ togglePopup, criteriaId, onUpdate }) => {
       console.log("criteriaData.sentiment:", response.sentiment);
 
 
-      const buckets = response.data?.targets?.buckets || [];
+      // const buckets = response.data?.targets?.buckets || [];
       const sentimentBuckets = response.data?.sentiment?.buckets || [];
-
-      const formattedTargets = buckets.map(bucket => ({
-        value: bucket.key,
-        label: bucket.key
-      }));
+const targetIds = response.data?.targets?.buckets.map(b => parseInt(b.key, 10)).filter(id => !isNaN(id));
+      // const formattedTargets = buckets.map(bucket => ({
+      //   value: bucket.key,
+      //   label: bucket.key
+      // }));
 
       const formattedSentiments = sentimentBuckets.map(bucket => ({
         value: bucket.key,
         label: bucket.key
       }));
+ let tOpts = [];
+                if (targetIds.length > 0) {
+                    const targetRes = await axios.post(
+                        `${window.runtimeConfig.REACT_APP_API_CASE_MAN}/api/case-man/v1/target-names`,
+                        { target_ids: targetIds },
+                        { headers: { Authorization: `Bearer ${Token}` } }
+                    );
 
-      setTargetOptions(formattedTargets);
+                    // API expected to return something like [{id:1,name:"X"}]
+                    tOpts = targetRes.data.map(t => ({
+                        value: t.id,
+                        label: `TAR${String(t.id).padStart(4, '0')} - ${t.name || ' '}`,
+                        name: t.name,
+                    }));
+                  }
+      setTargetOptions(tOpts);
       setSentimentOptions(formattedSentiments);
-      return { targets: formattedTargets, sentiments: formattedSentiments };
+      return { targets: tOpts, sentiments: formattedSentiments };
     } catch (error) {
       console.error("Failed to fetch target and sentiment options:", error);
       toast.error('Failed to fetch target and sentiment options');
