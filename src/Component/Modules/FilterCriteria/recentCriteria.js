@@ -508,21 +508,25 @@ const RecentCriteria = () => {
       
       // Update Redux with the reused criteria
       const allDisplayChips = getDisplayChips();
-      dispatch(setKeywords({
-        keyword: allDisplayChips,
-        queryPayload: {
-          case_id: localCaseIdChips,
-          file_type: localFileTypeChips,
-          keyword: localKeywordChips,
-          targets: localTargetChips,
-          sentiment: localSentimentChips,
-          start_time: localStartTime,
-          end_time: localEndTime,
-          latitude: queryPayload.lat || null,
-          longitude: queryPayload.long || null,
-          page: 1
-        }
-      }));
+     const actionPayload = setKeywords({
+  keyword: allDisplayChips,
+  queryPayload: {
+    case_id: queryPayload.case_id,
+    file_type: queryPayload.file_type,
+    keyword: queryPayload.keyword,
+    targets: queryPayload.targets,
+    sentiment: queryPayload.sentiments,
+    start_time: queryPayload.start_time,
+    end_time: queryPayload.end_time,
+    latitude: queryPayload.lat || null,
+    longitude: queryPayload.long || null,
+    page: 1
+  }
+});
+
+console.log("Action object:", actionPayload); // ye dikhayega type aur payload
+dispatch(actionPayload);
+
 
       // Store API result in Redux
       dispatch(setSearchResults({
