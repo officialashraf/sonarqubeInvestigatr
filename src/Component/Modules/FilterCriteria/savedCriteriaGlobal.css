@@ -71,12 +71,24 @@
 .chips-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  /* gap: 8px; */
   /* height: 100px; */
   overflow: auto;
-  margin: 4px 0px 4px 0px;
-  max-height: 60px;
- min-height: 0px;
+  /* margin: 4px 0px 4px 0px; */
+  max-height: 48px;
+ min-height: 20px;
+   scrollbar-color: #1e7df8 var(--color-colors-secondary) ;
+  scrollbar-width: thin;
+}
+
+.overrideHeight {
+  display: flex;
+  flex-wrap: wrap;
+  overflow: auto;
+  max-height: 100px;
+ min-height: 20px;
+ scrollbar-color: #1e7df8 var(--color-colors-secondary) ;
+  scrollbar-width: thin;
 }
 
 .search-chip {

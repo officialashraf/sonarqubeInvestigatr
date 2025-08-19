@@ -106,11 +106,17 @@ const Resources = () => {
 
   // Update allResources to only contain current page data
   useEffect(() => {
-    if (summaryData && Array.isArray(summaryData)) {
+    if (summaryData && Array.isArray(summaryData) && summaryData.length > 0) {
       setAllResources(summaryData);
       setHasMore(currentPage < totalPages);
+      setSelectedResource(summaryData[0]);
+    } else if (summaryData && Array.isArray(summaryData) && summaryData.length === 0) {
+      // If no data, clear everything
+      setAllResources([]);
+      setSelectedResource(null);
+      setHasMore(false);
     }
-  }, [summaryData, currentPage, totalPages]);
+  }, [summaryData, currentPage, totalPages]);
 
   const handleResourceClick = resource => {
     console.log("Selected Resource:", resource);

@@ -255,8 +255,9 @@ const targetIds = response.data?.targets?.buckets.map(b => parseInt(b.key, 10)).
       // Format targets as an array of objects for React-Select
       const selectedTargets = [];
       if (criteriaData.targets) {
-        const targetsArray = Array.isArray(criteriaData.targets) ? criteriaData.targets : [criteriaData.targets];
+     const targetsArray = Object.keys(criteriaData.targets || {});
 
+  console.warn("criteriaDetailc",criteriaData.targets)
         targetsArray.forEach(target => {
           const matchingOption = targetOpts.find(option => option.value.toString().toLowerCase() === target.toString().toLowerCase());
           if (matchingOption) {
@@ -347,15 +348,16 @@ const targetIds = response.data?.targets?.buckets.map(b => parseInt(b.key, 10)).
     e.preventDefault();
 
     //   Validation
-    if (!formData.searchQuery.trim()) {
-      toast.info('Search query is required');
-      return;
-    }
+    // if (!formData.searchQuery.trim()) {
+    //   toast.info('Search query is required');
+    //   return;
+    // }
     // const validationErrors = validateForm();
     // if (Object.keys(validationErrors).length > 0) {
     //   setError(validationErrors);
     //   return;
     // }
+    
     setIsSubmitting(true);
     try {
       const keywordsArray = formatKeywordsForAPI(formData.searchQuery);
@@ -364,7 +366,11 @@ const targetIds = response.data?.targets?.buckets.map(b => parseInt(b.key, 10)).
         keyword: keywordsArray, // Now properly formatted as array
         case_id: formData.caseIds.map(caseId => caseId.value.toString()),
         file_type: formData.filetype.map(file => file.value.toString()),
-        targets: formData.targets.map(target => target.value.toString()),
+        targets : formData.targets.reduce((acc, target) => {
+  acc[target.value] = target.name;
+  return acc;
+}, {}),
+
         sentiments: formData.sentiment.map(s => s.value.toString()),
         latitude: formData.latitude || "",
         longitude: formData.longitude || "",

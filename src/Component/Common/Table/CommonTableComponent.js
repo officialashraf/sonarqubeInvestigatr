@@ -294,11 +294,12 @@ const CommonTableComponent = ({
                     alignItems: "center",
                     justifyContent: "space-between",
                     width: "100%",
-                    padding: "0 16px"
+                    padding: "0 16px",
+                    backgroundColor:"#101D2B"
                 }}
             >
                 {/* Pagination centered */}
-                <div style={{ flex: 1, display: "flex", justifyContent: "center" }}>
+                <div style={{ flex: 1, display: "flex", justifyContent: "center",backgroundColor:"#101D2B"}}>
                     {totalPages > 1 && (
                         <Pagination>
                             <Pagination.First

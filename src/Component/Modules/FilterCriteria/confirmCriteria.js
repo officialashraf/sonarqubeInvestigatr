@@ -50,7 +50,19 @@ const Confirm = ({ formData, selectedDates, searchChips }) => {
                     ...(formData.filetype?.length > 0 ? formData.filetype.map((file) => file.value) : []),
                     ...(formData.platform?.length > 0 ? formData.platform.map((platform) => platform.value) : [])
                 ],
-                targets: formData.targets?.length > 0 ? formData.targets.map(target => String(target.value)) : [],
+//  targets: formData.targets?.length > 0
+//     ? formData.targets.map(target => ({
+//         id: String(target.value),
+//         name: String(target.name)
+//       }))
+//     : [],
+              targets: formData.targets?.length > 0
+  ? formData.targets.reduce((acc, target) => {
+      acc[String(target.value)] = String(target.name);
+      return acc;
+    }, {})
+  : {},
+  
                 sentiments: formData.sentiment?.length > 0
                     ? formData.sentiment.map(s => s.value)
                     : [],
