@@ -668,26 +668,86 @@ export default function ResourceDetails({
                             <p className="displayName">{resource.socialmedia_from_displayname}</p>
                         </div>
                     </div>
-                    {resource.socialmedia_media_url &&
-                        resource.socialmedia_media_url.match(/\.(mp4|mov|webm|ogg)$/i) ? (
-                        <video
-                            src={resource.socialmedia_media_url}
-                            controls
-                            className="postImage"
-                            width="100%"
-                            height="400"
-                        />
-                    ) : (
-                        <img
-                            src={resource.socialmedia_media_url}
-                            className="postImage"
-                            alt="Social Media"
-                            onError={e => {
-                                e.target.onerror = null;
-                                e.target.src = "/images/placeholder-square.png";
-                            }}
-                        />
-                    )}
+                    {resource.socialmedia_media_url && (() => {
+                        let urls = [];
+
+                        // Handle different URL formats
+                        if (typeof resource.socialmedia_media_url === 'string') {
+                            // Check if it's a JSON string
+                            if (resource.socialmedia_media_url.trim().startsWith('[') || resource.socialmedia_media_url.trim().startsWith('"')) {
+                                try {
+                                    urls = JSON.parse(resource.socialmedia_media_url);
+                                    // Ensure it's an array
+                                    if (!Array.isArray(urls)) {
+                                        urls = [urls];
+                                    }
+                                } catch (error) {
+                                    // If JSON parsing fails, treat it as a single URL
+                                    urls = [resource.socialmedia_media_url];
+                                }
+                            } else {
+                                // It's a single URL string
+                                urls = [resource.socialmedia_media_url];
+                            }
+                        } else if (Array.isArray(resource.socialmedia_media_url)) {
+                            urls = resource.socialmedia_media_url;
+                        } else {
+                            return <p></p>;
+                        }
+
+                        // Filter valid media URLs
+                        const validMedia = urls.filter(url => {
+                            if (!url || typeof url !== 'string') return false;
+
+                            const trimmedUrl = url.trim();
+                            return (
+                                /\.(jpg|jpeg|png|gif|webp)$/i.test(trimmedUrl) ||
+                                trimmedUrl.includes('scontent') ||
+                                trimmedUrl.includes('userapi.com') || // VK images
+                                trimmedUrl.includes('twimg.com') || // Twitter images
+                                trimmedUrl.includes('cdninstagram.com') || // Instagram images
+                                /\.(mp4|mov|webm|ogg)$/i.test(trimmedUrl) ||
+                                trimmedUrl.includes('video')
+                            );
+                        });
+
+                        if (validMedia.length === 0) {
+                            return <p></p>;
+                        }
+
+                        return (
+                            <div className="imageGridWrapper">
+                                {validMedia.map((url, index) => {
+                                    const trimmedUrl = url.trim();
+
+                                    // Check if it's a video
+                                    if (trimmedUrl.includes('video') || /\.(mp4|mov|webm|ogg)$/i.test(trimmedUrl)) {
+                                        return (
+                                            <video key={index} controls className="postImage" preload="metadata">
+                                                <source src={trimmedUrl} type="video/mp4" />
+                                                Your browser does not support the video tag.
+                                            </video>
+                                        );
+                                    }
+
+                                    // It's an image
+                                    return (
+                                        <img
+                                            key={index}
+                                            src={trimmedUrl}
+                                            alt={`Media ${index + 1}`}
+                                            className="postMedia"
+                                            loading="lazy"
+                                            onError={(e) => {
+                                                console.log('Image failed to load:', trimmedUrl);
+                                                e.target.style.display = 'none';
+                                            }}
+                                        />
+                                    );
+                                })}
+                            </div>
+                        );
+                    })()}
                     <p className="activityContent">
                         {resource.unified_activity_content}
                     </p>

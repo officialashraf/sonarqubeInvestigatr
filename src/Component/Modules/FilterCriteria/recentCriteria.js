@@ -441,19 +441,20 @@ const RecentCriteria = () => {
         queryPayload.file_type = item.file_type;
         item.file_type.forEach(chip => newReduxChips.add(chip));
       }
+if (item.targets && typeof item.targets === 'object' && Object.keys(item.targets).length > 0) {
+  const targetChips = Object.entries(item.targets).map(([id, name]) => ({
+    id,
+    name,
+    value: id,
+    label: name
+  }));
 
-      if (Array.isArray(item.targets) && item.targets.length > 0) {
-        // Handle targets properly with name, value, label
-        const targetChips = item.targets.map(t => ({
-          id: t.id || t.value || t.name,
-          name: t.name,
-          value: t.value || t.id || t.name,
-          label: t.label || t.name
-        }));
-        setLocalTargetChips(targetChips);
-        queryPayload.targets = item.targets.map(t => String(t.value || t.id || t.name));
-        targetChips.forEach(t => newReduxChips.add(t.name));
-      }
+
+  setLocalTargetChips(targetChips);
+  queryPayload.targets = Object.keys(item.targets); // ["55", "56"]
+  targetChips.forEach(t => newReduxChips.add(t.name));
+}
+
 
       if (Array.isArray(item.sentiments) && item.sentiments.length > 0) {
         setLocalSentimentChips([...item.sentiments]);
@@ -508,13 +509,20 @@ const RecentCriteria = () => {
       
       // Update Redux with the reused criteria
       const allDisplayChips = getDisplayChips();
+const reduxTargets = item?.targets
+  ? Object.entries(item.targets).map(([id, name]) => ({
+      value: String(id),
+      name: String(name ?? "")
+    }))
+  : [];
+
      const actionPayload = setKeywords({
   keyword: allDisplayChips,
   queryPayload: {
     case_id: queryPayload.case_id,
     file_type: queryPayload.file_type,
     keyword: queryPayload.keyword,
-    targets: queryPayload.targets,
+    targets: reduxTargets,
     sentiment: queryPayload.sentiments,
     start_time: queryPayload.start_time,
     end_time: queryPayload.end_time,

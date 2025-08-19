@@ -80,7 +80,16 @@ const ScrollCriteriaViewer = () => {
             setLoading(false);
         }
     };
-
+useEffect(() => {
+        if (searchResults && Array.isArray(searchResults) && searchResults.length > 0) {
+            // Auto-select first resource from the current search results
+            setSelectedResource(searchResults[0]);
+        } else if (searchResults && Array.isArray(searchResults) && searchResults.length === 0) {
+            // If no data, clear selected resource
+            setSelectedResource(null);
+        }
+    }, [searchResults]);
+    
     useEffect(() => {
         fetchPageData(currentPage);
     }, []);

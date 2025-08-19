@@ -172,7 +172,6 @@ const ReportPage = () => {
 
   return (
     <div style={{ backgroundColor: '#080E17', color: 'white' }}>
-      <h5 style={{ marginBottom: '20px' }}>Search Report</h5>
       <form onSubmit={handleSearch} style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
         <div style={{ display: 'flex', flex: 1, gap: '10px' }}>
           <div className={styles.searchBarContainer}

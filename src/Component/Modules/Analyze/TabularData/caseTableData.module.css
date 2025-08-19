@@ -36,10 +36,13 @@
   --bs-pagination-hover-bg: var(--color-colors-primaryAccent) !important;
 }
 
-:global(.pagination) {
-  background-color: var(--bs-pagination-bg) !important;
+/* :global(.pagination) {
+  background-color: var(--color-colors-secondary) !important;
+} */
+:global(.page-link) {
+  background-color:var(--color-colors-secondary);
+  
 }
-
 :global(.pagination .page-item:hover .page-link) {
   background-color: #0073CF !important;
   color: white !important;
@@ -71,7 +74,7 @@
 /* Disabled pagination item color */
 :global(.pagination .page-item.disabled),
 :global(.pagination .page-item.disabled .page-link) {
-  background-color: #080E17 !important;
+  background-color:var(--color-colors-secondary);
   color: var(--color-colors-neutralText) !important;
   border: none !important;
   box-shadow: none !important;

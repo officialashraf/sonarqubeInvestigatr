@@ -92,7 +92,10 @@ const SearchUIContainer = ({
 
       {/* Chips Section */}
       <div className="search-term-indicator" style={{ backgroundColor: "#080E17" }}>
-        <div className="chips-container">
+     <div
+  className={`chips-container ${!showCaseHeader ? 'overrideHeight' : ''}`}
+>
+
           {displayChips.map((chip, index) => {
             let chipStyle = { backgroundColor: "#0073CF", color: "white" };
             for (let check of chipCheckFunctions) {

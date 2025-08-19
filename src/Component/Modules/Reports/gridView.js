@@ -8,6 +8,9 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import styles from "../../Common/Table/table.module.css";
 import AddButton from "../../Common/Buttton/button";
+import Select from "react-select";
+import customSelectStyles from "../../Common/CustomStyleSelect/customSelectStyles";
+
 
 const GridView = () => {
   const Token = Cookies.get('accessToken');
@@ -33,11 +36,27 @@ const GridView = () => {
   const [isInitialLoad, setIsInitialLoad] = useState(true); // Track initial load
   const [data, setData] = useState([]);
 
+  const [selectedFormat, setSelectedFormat] = useState(null);
+
+  const formatOptions = [
+    { value: "docx", label: "Word (.docx)" },
+    { value: "csv", label: "CSV (.csv)" },
+    { value: "pdf", label: "PDF (.pdf)" },
+    { value: "json", label: "JSON (.json)" }
+  ];
+
+
   useEffect(() => {
     setData(results || []);
   }, [results]);
 
   const itemsPerPage = 50;
+  // const handleExportChange = async (selected) => {
+  //   if (!selected) return;
+  //   setSelectedFormat(selected);
+  //   await exportData(selected.value); // तुरंत download होगा
+  // };
+
 
   // Fetch report data function
   const fetchReportData = async () => {
@@ -91,8 +110,79 @@ const GridView = () => {
       setLoading(false);
     }
   };
+  // const exportData = async (format) => {
+  //   try {
+  //     setLoading(true);
 
-  // Handle data changes
+  //     if (format === "json") {
+  //       const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+  //       const url = URL.createObjectURL(blob);
+  //       const a = document.createElement("a");
+  //       a.href = url;
+  //       a.download = "records.json";
+  //       a.click();
+  //       return;
+  //     }
+
+  //     if (format === "csv") {
+  //       const headers = [...new Set(data.flatMap(item => Object.keys(item)))];
+  //       const csvRows = [
+  //         headers.join(","),
+  //         ...data.map(row => headers.map(h => `"${row[h] ?? ""}"`).join(","))
+  //       ];
+  //       const blob = new Blob([csvRows.join("\n")], { type: "text/csv" });
+  //       const url = URL.createObjectURL(blob);
+  //       const a = document.createElement("a");
+  //       a.href = url;
+  //       a.download = "records.csv";
+  //       a.click();
+  //       return;
+  //     }
+
+  //     if (format === "pdf") {
+  //       const response = await axios.post(
+  //         `${window.runtimeConfig.REACT_APP_API_OSINT_MAN}/api/osint-man/v1/report/pdf`,
+  //         { rows: data },
+  //         {
+  //           responseType: "blob",
+  //           headers: { Accept: "application/pdf", Authorization: `Bearer ${Token}` },
+  //         }
+  //       );
+  //       const url = URL.createObjectURL(response.data);
+  //       const a = document.createElement("a");
+  //       a.href = url;
+  //       a.download = "records.pdf";
+  //       a.click();
+  //       return;
+  //     }
+
+  //     if (format === "docx") {
+  //       const response = await axios.post(
+  //         `${window.runtimeConfig.REACT_APP_API_OSINT_MAN}/api/osint-man/v1/report`,
+  //         { rows: data },
+  //         {
+  //           responseType: "blob",
+  //           headers: {
+  //             Accept: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  //             Authorization: `Bearer ${Token}`,
+  //           },
+  //         }
+  //       );
+  //       const url = URL.createObjectURL(response.data);
+  //       const a = document.createElement("a");
+  //       a.href = url;
+  //       a.download = "social_media_report.docx";
+  //       a.click();
+  //     }
+  //   } catch (err) {
+  //     console.error("Export error:", err);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+
+  //   // Handle data changes
   useEffect(() => {
     // Update loading state based on the redux state, but not for initial load
     if (!isInitialLoad) {
@@ -162,14 +252,10 @@ const GridView = () => {
 
   return (
     <>
-      <div className="grid-view-header" style={{
-        display: 'flex',
-        flexDirection: 'column',
-        // minHeight: '100vh',
-      }}>
+      <div className={styles.mainContainer} >
         <div
           className={styles.tableWrapper}
-          style={{ marginTop: '12px', padding: '2px 10px 10px 10px', backgroundColor: '#101D2B' }}
+          style={{ marginTop: '12px', backgroundColor: '#101D2B' }}
         >
           {!dataAvailable ? (
             <Table hover responsive size="sm" className={styles.table}>            <thead></thead>
@@ -230,25 +316,25 @@ const GridView = () => {
                             }}
                             title={typeof item[key] === 'object' ? JSON.stringify(item[key]) : item[key]}
                           >
-                          {["socialmedia_hashtags", "targets", "person", "gpe", "unified_case_id", "org","loc"].includes(key) && Array.isArray(item[key]) ? (
-                                  <div style={{ display: "flex", gap: "4px" }}>
-                                    {item[key].map((tag, i) => (
-                                      <span
-                                        key={i}
-                                        style={{
-                                          backgroundColor: "#FFC107",
-                                          color: "#000",
-                                          padding: "2px 6px",
-                                          borderRadius: "12px",
-                                          fontSize: "11px",
-                                          whiteSpace: "nowrap",
-                                        }}
-                                      >
-                                        {tag}
-                                      </span>
-                                    ))}
-                                  </div>
-                                ) : typeof item[key] === "object" && item[key] !== null ? (
+                            {["socialmedia_hashtags", "targets", "person", "gpe", "unified_case_id", "org", "loc"].includes(key) && Array.isArray(item[key]) ? (
+                              <div style={{ display: "flex", gap: "4px" }}>
+                                {item[key].map((tag, i) => (
+                                  <span
+                                    key={i}
+                                    style={{
+                                      backgroundColor: "#FFC107",
+                                      color: "#000",
+                                      padding: "2px 6px",
+                                      borderRadius: "12px",
+                                      fontSize: "11px",
+                                      whiteSpace: "nowrap",
+                                    }}
+                                  >
+                                    {tag}
+                                  </span>
+                                ))}
+                              </div>
+                            ) : typeof item[key] === "object" && item[key] !== null ? (
                               JSON.stringify(item[key])
                             ) : (
                               item[key] || "-"
@@ -288,8 +374,11 @@ const GridView = () => {
               alignItems: "center",
               marginTop: "auto", // push to bottom
               padding: "10px 20px",
-              marginBottom: "30px",
-              boxShadow: "0 -2px 5px rgba(0,0,0,0.05)"
+              marginBottom: "10px",
+              boxShadow: "0 -2px 5px rgba(0,0,0,0.05)",
+              backgroundColor: '#101D2B',
+              borderBottomLeftRadius: '12px',
+              borderBottomRightRadius: '12px'
             }}
           >
             <Pagination style={{ width: "200px" }}>
@@ -333,13 +422,49 @@ const GridView = () => {
             </Pagination>
 
 
-            <AddButton
-              // style={{ backgroundColor: "black", color: 'white', borderRadius: '5px' }}
-              onClick={fetchReportData}
-              disabled={loading}
-            >
-              {loading ? "Processing..." : "Print Records"}
-            </AddButton>
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <Select
+                options={formatOptions}
+                value={selectedFormat}
+                onChange={(option) => {
+                  setSelectedFormat(null);  // force back to placeholder
+                  fetchReportData(option);
+                }}
+
+styles={{
+                singleValue: (provided) => ({
+                  ...provided,
+                  color: '#FFFFFF'  // 👈 White color for selected text
+                }),
+                control: (provided) => ({
+                  ...provided,
+                  backgroundColor: '#0073CF',
+                  color:'#E8F5E9',
+                  borderRadius: '15px',
+                  border: 'none'
+                }),
+                menu: (provided) => ({
+                  ...provided,
+                  backgroundColor: '#080E17',
+                  borderRadius: '15px',
+                  overflow: 'hidden',
+                  border: "1px solid #0073CF",
+                }),
+                option: (provided, state) => ({
+                  ...provided,
+                  backgroundColor: state.isFocused ? '#101D2B' : '#080E17',
+                  color: '#D9D9D9',
+                  cursor: 'pointer'
+                })
+              }}
+                menuPlacement="top"   // dropdown हमेशा ऊपर खुलेगा
+                isSearchable={false}  // search off
+                placeholder="Print Record"
+                getOptionLabel={(option) => option.label}
+                formatOptionLabel={(option) => option.label}
+              />
+
+            </div>
           </div>
         )}
       </div>
