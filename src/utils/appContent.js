@@ -31,6 +31,10 @@ import ConnectionManagement from '../Component/Modules/Connections/connectionMan
 import DAButton from '../Component/Common/Buttton/button.js';
 import CatelogList from '../Component/Modules/Catlog/catelogList.js';
 import AddFilter from '../Component/Modules/Analyze/TabularData/filter.js';
+import CatelogMain from '../Component/Modules/Catlog/catelogMain.js';
+import CatalogMain from '../Component/Modules/Catlog/catelogMain.js';
+import CatlogList from '../Component/Modules/Catlog/catelogList.js';
+import PIICatelog from '../Component/Modules/Catlog/piiCatelog.js';
 
 const styels = {}
 const AppContent = () => {
@@ -59,7 +63,9 @@ const AppContent = () => {
     if (path === "/roles") return "Roles";
     if (path === "/targets") return "Target";
     if (path === "/connections") return "Connections";
-    if (path === "/catalogue") return "Catalogue";
+    if (path === "/gridCatalogue") return "Grid Catalogue";
+    if (path === "/piiCatalogue") return "PII Catalogue";
+       if (path === "/catalogue") return "Catalogue";
     return "Cases";
   };
   const excludedPaths = ["/login", "/", "/license"];
@@ -117,7 +123,9 @@ const AppContent = () => {
                     <Route path="/reports" element={<ReportPage />} />
                     <Route path="/targets" element={<TargetDashboard />} />
                     <Route path="/connections" element={<ConnectionManagement />} />
-                    <Route path="/catalogue" element={<CatelogList/>} />
+                    <Route path="/catalogue" element={<CatalogMain/>} />
+                    <Route path="/gridCatalogue" element={<CatelogList/>} />
+                    <Route path="/piiCatalogue" element={<PIICatelog/>} />
                     <Route path="*" element={<div className='notfound'><h4>Work in progress........</h4></div>} />
                   </Route>
                   <Route path='loader' element={<Loader />} />
