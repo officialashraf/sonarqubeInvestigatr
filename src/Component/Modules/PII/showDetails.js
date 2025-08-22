@@ -24,11 +24,11 @@ const ShowDetails = () => {
   const handleSearch = async () => {
 
     if (!query.trim()) return;
-    if (searchType === "social" && !platform.trim()) {
-      toast.info("Please select a social media platform");
-      return;
-    }
-    console.log("Seartype", searchType)
+    // if (searchType === "social" && !platform.trim()) {
+    //   toast.info("Please select a social media platform");
+    //   return;
+    // }
+    // console.log("Seartype", searchType)
 
     if (searchType === "email") {
       if (!validator.isEmail(query)) {
@@ -51,8 +51,8 @@ const ShowDetails = () => {
       url = `${window.runtimeConfig.REACT_APP_API_OSINT_MAN}/api/pii/getEmailInfo/${query}`;
     } else if (searchType === "phone number") {
       url = `${window.runtimeConfig.REACT_APP_API_OSINT_MAN}/api/pii/getPhoneNumberInfo/${query.startsWith('+') ? query : '+' + query}`;
-    } else if (searchType === "social") {
-      url = `${window.runtimeConfig.REACT_APP_API_OSINT_MAN}/api/osint-man/v1/${platform}/socialinfo/${query}`;
+    } else if (searchType === "social media id") {
+      url = `${window.runtimeConfig.REACT_APP_API_OSINT_MAN}/api/osint-man/v1/alias/${query}`;
     }
 
     url = encodeURI(url); // Encode URL to handle special characters
@@ -80,7 +80,7 @@ const ShowDetails = () => {
     { value: 'phone number', label: <span style={{ color: '#d2d2d2' }}>Phone</span> },
     { value: 'email', label: <span style={{ color: '#d2d2d2' }}>Email</span> },
     {
-      value: 'social', label: <span style={{ color: '#d2d2d2' }}>Social Media ID</span>
+      value: 'social media id', label: <span style={{ color: '#d2d2d2' }}>Social Media ID</span>
     }
   ];
 
@@ -141,7 +141,7 @@ const ShowDetails = () => {
               })
             }}
           />
-          {searchType === "social" && (
+          {/* {searchType === "social" && (
             <Select
               className={styles.searchDropdown}
               options={socialPlatforms}
@@ -175,7 +175,7 @@ const ShowDetails = () => {
                 })
               }}
             />
-          )}
+          )} */}
           {searchType === "phone number" ? (
             <PhoneInput
               country={"ng"}
@@ -214,7 +214,8 @@ const ShowDetails = () => {
                   handleSearch(); // Validate and execute search only when Enter is pressed
                 }
               }}
-              placeholder={searchType === "social" ? "Enter keyword to search" : `Enter ${searchType} to search`}
+              // placeholder={searchType === "social" ? "Enter keyword to search" : `Enter ${searchType} to search`}
+              placeholder={`Enter ${searchType} to search`}
               disabled={!searchType}
             />
           )}

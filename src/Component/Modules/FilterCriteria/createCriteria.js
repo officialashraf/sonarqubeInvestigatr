@@ -104,33 +104,11 @@ const CreateCriteria = ({ handleCreateCase }) => {
       }
     };
 
-    // Fetch file types from API
-    const fetchFileTypes = async () => {
-      try {
-        const response = await axios.get(`${window.runtimeConfig.REACT_APP_API_OSINT_MAN}/api/osint-man/v1/platforms`, {
-          headers: {
-            'Authorization': `Bearer ${Token}`
-          },
-        });
-        console.log("response", response.data.data)
-        // Format the response data for react-select
-        const fileTypeOptionsFormatted = response.data.data.map(platform => ({
-          value: platform,  // Use the platform value directly if it's a string
-          label: platform   // Use the platform value directly if it's a string
-        }));
-
-        setFileTypeOptions(fileTypeOptionsFormatted);
-      } catch (error) {
-        console.error('Error fetching file types:', error);
-
-      }
-    };
-
     const fetchTargetOptions = async () => {
       try {
         const response = await axios.post(
           `${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/distinct`,
-          { fields: ["targets", "sentiment"] },
+          { fields: ["targets", "sentiment","unified_record_type"] },
           {
             headers: {
               'Authorization': `Bearer ${Token}`,
@@ -138,7 +116,7 @@ const CreateCriteria = ({ handleCreateCase }) => {
             }
           }
         );
-
+ const fileTypeOptionsFormatted = response?.data?.unified_record_type.buckets.map(b => ({ value: b.key, label: b.key }));
         // const buckets = response.data?.targets?.buckets || [];
         const sentimentBuckets = response.data?.sentiment?.buckets || [];
   const targetIds = response.data?.targets?.buckets.map(b => parseInt(b.key, 10)).filter(id => !isNaN(id));
@@ -168,6 +146,7 @@ const CreateCriteria = ({ handleCreateCase }) => {
                     }));
 
                 }
+        setFileTypeOptions(fileTypeOptionsFormatted);
         setTargetOptions(tOpts);
         setSentimentOptions(formattedSentiments);
 
@@ -177,7 +156,6 @@ const CreateCriteria = ({ handleCreateCase }) => {
     };
 
     fetchCaseData();
-    fetchFileTypes();
     fetchTargetOptions();
   }, [Token]);
   useEffect(() => {

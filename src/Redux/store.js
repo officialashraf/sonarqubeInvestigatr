@@ -8,7 +8,7 @@ import { combineReducers } from "redux";
 import { searchReducer, popupReducer, criteriaReducer } from './Reducers/criteriaReducer';
 import { thunk } from "redux-thunk";
 import searchReducer1 from './Reducers/piiReducer';
-import reportReducer from './Reducers/reportReducer';
+import reportReducer, { ReportFilterPayloadReducer } from './Reducers/reportReducer';
 import { userReducer } from './Reducers/userReducer';
 //  Persist Config
 const persistConfig = {
@@ -31,6 +31,7 @@ const rootReducer = combineReducers({
   criteriaKeywords: criteriaReducer,
   report: reportReducer,
   caseFilter:CaseFilterPayloadReducer,
+   reportFilter:ReportFilterPayloadReducer,
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
