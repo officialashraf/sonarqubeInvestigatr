@@ -3,6 +3,7 @@ import Select from 'react-select';
 import DatePickera from '../FilterCriteria/datepicker';
 import { Search, CalendarToday } from '@mui/icons-material';
 import { InputAdornment, TextField } from '@mui/material';
+import { Search as SearchIcon, Close as CloseIcon, Send as SendIcon, Tune as TuneIcon } from "@mui/icons-material";
 import { useDispatch } from 'react-redux';
 import Cookies from 'js-cookie';
 import { setPage } from '../../../Redux/Action/criteriaAction';
@@ -14,6 +15,7 @@ import axios from 'axios';
 import GridView from './gridView';
 import customSelectStyles from "../../Common/CustomStyleSelect/customSelectStyles";
 import { toast } from 'react-toastify';
+import AppButton from '../../Common/Buttton/button';
 
 const ReportPage = () => {
   const Token = Cookies.get('accessToken');
@@ -172,7 +174,7 @@ const ReportPage = () => {
 
   return (
     <div style={{ backgroundColor: '#080E17', color: 'white' }}>
-      <form onSubmit={handleSearch} style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+      {/* <form onSubmit={handleSearch} style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
         <div style={{ display: 'flex', flex: 1, gap: '10px' }}>
           <div className={styles.searchBarContainer}
            style={{ flex: 1, display: 'flex', alignItems: 'center', backgroundColor: '#101d2b', borderRadius: '15px', paddingLeft: '10px' }}
@@ -237,7 +239,85 @@ const ReportPage = () => {
         >
           Search
         </AddButton>
-      </form>
+      </form> */}
+   <div
+  className={styles.actionIconsContainer}
+  style={{
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: "5px"
+  }}
+>
+  <div
+    className={styles.searchHeader}
+    style={{
+      width: "60%",
+      backgroundColor: "#080E17",
+      display: "flex",
+      alignItems: "center",
+      gap: "10px" // spacing between input and button
+    }}
+  >
+    <TextField
+      fullWidth
+      InputProps={{
+        startAdornment: (
+          <InputAdornment position="start">
+            <SearchIcon style={{ color: "#0073CF" }} />
+          </InputAdornment>
+        ),
+        endAdornment: (
+          <InputAdornment position="end">
+            <SendIcon
+              style={{ cursor: "pointer", color: "#0073CF", marginRight: "5px" }}
+              onClick={handleSearch}
+            />
+            <TuneIcon
+              style={{
+                cursor: "pointer",
+                backgroundColor: "#0073CF",
+                color: "#0A192F"
+              }}
+              // onClick={() => setIsPopupVisible(true)}
+            />
+          </InputAdornment>
+        ),
+        style: {
+          height: "38px",
+          padding: "0 8px",
+          backgroundColor: "#101D2B",
+          borderRadius: "15px",
+          color: "white",
+          fontSize: "12px",
+          marginBottom: "5px"
+        }
+      }}
+      type="text"
+      // value={inputValue}
+      // onChange={(e) => setInputValue(e.target.value)}
+      // onKeyPress={handleKeyPress}
+      placeholder="Search..."
+    />
+
+    <AppButton
+      children={"Reset"}
+      // onClick={resetSearch}
+      style={{
+        height: "38px",
+        borderRadius: "15px",
+        fontSize: "12px",
+        marginBottom:'5px'
+      }}
+    />
+  </div>
+
+  {/* If you have other icons or actions, keep them here */}
+  <div style={{ display: "flex", gap: "20px", alignItems: "center" }}>
+    {/* Other action buttons or icons */}
+  </div>
+</div>
+
 
       {showPopupD && (
         <DatePickera

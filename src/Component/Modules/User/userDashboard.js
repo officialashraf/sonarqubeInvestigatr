@@ -1,11 +1,12 @@
 import { Card, CardContent, Typography, IconButton } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import HttpsIcon from '@mui/icons-material/Https';
+import HttpsOutlinedIcon from '@mui/icons-material/HttpsOutlined';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useNavigate } from 'react-router-dom';
-import { MdAdminPanelSettings } from "react-icons/md";
-import { FaUsersBetweenLines } from "react-icons/fa6";
-import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
+import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
+import Groups3OutlinedIcon from '@mui/icons-material/Groups3Outlined';
+import AutoAwesomeOutlinedIcon from '@mui/icons-material/AutoAwesomeOutlined';
+
 import  styles from '../Home/card.module.css';
 
 const UserDashboard = () => {
@@ -41,24 +42,24 @@ const UserDashboard = () => {
             }}
           >
             <CardContent onClick={() => handleCheckboxChange(data.title)}>
-              <div className="d-flex justify-content-end align-items-end">
+              {/* <div className="d-flex justify-content-end align-items-end">
                 <IconButton sx={{ color: "white" }} size="small">
-                  {/* <MoreVertIcon /> */}
+                  <MoreVertIcon />
                 </IconButton>
-              </div>
-              <div className={styles.customIconCircle} style={{marginBottom:"5px"}}>
+              </div> */}
+              <div className={styles.customIconCircle} >
                 <IconButton size="small" 
                 // sx={{ color: "white" }}
                 >
-                  {index === 0 && <FaUsersBetweenLines />}
-                  {index === 1 && <MdAdminPanelSettings />}
-                  {index === 2 && <HttpsIcon/>}
-                  {index === 3 && <AutoAwesomeIcon/>}
+                  {index === 0 && <Groups3OutlinedIcon  />}
+                  {index === 1 && <AdminPanelSettingsOutlinedIcon />}
+                  {index === 2 && <HttpsOutlinedIcon />}
+                  {index === 3 &&  <AutoAwesomeOutlinedIcon />}
                 </IconButton>
               </div>
-              <Typography variant="subtitle1" sx={{ color: "#0073cf",marginTop:"5px" }}>
+              <div  style={{ color: "#0073cf",fontSize:"0.75rem", fontWeight:"400",marginTop:"5px" }}>
                 {data.title}
-              </Typography>
+              </div>
               {data.subtitle &&
                 <Typography variant="body2" sx={{ color: "#94a3b8" }}>
                   {data.subtitle}

@@ -3,7 +3,6 @@ import axios from "axios";
 import styles from "./searchBar.module.css";
 import { Search } from "react-bootstrap-icons";
 import UserCards from "./cardDetails";
-import ProfileDetails from "./profileDetails";
 import { useDispatch } from 'react-redux';
 import { searchSuccess } from "../../../Redux/Action/piiAction";
 import { toast } from 'react-toastify';
@@ -81,7 +80,7 @@ const ShowDetails = () => {
     { value: 'phone number', label: <span style={{ color: '#d2d2d2' }}>Phone</span> },
     { value: 'email', label: <span style={{ color: '#d2d2d2' }}>Email</span> },
     {
-      value: 'social', label: <span style={{ color: '#d2d2d2' }}>Social Media</span>
+      value: 'social', label: <span style={{ color: '#d2d2d2' }}>Social Media ID</span>
     }
   ];
 
@@ -231,7 +230,6 @@ const ShowDetails = () => {
                 <Loader />
               ) : (
                 <>
-                  {/* <ProfileDetails /> */}
                   <UserCards />
                 </>
               )}

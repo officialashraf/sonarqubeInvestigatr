@@ -34,13 +34,22 @@ const handleCheckboxChange = (title) => {
               borderRadius: "15px"
             }}
           >
-            <CardContent onClick={() => handleCheckboxChange(data.title)}>
-              <div className="d-flex justify-content-end align-items-end">
+            <CardContent 
+            sx={{
+   '&.MuiCardContent-root': {
+      padding: '10px !important'
+    },
+    '&.MuiCardContent-root:last-child': {
+      padding: '10px !important'
+    }
+  }}
+            onClick={() => handleCheckboxChange(data.title)}>
+              {/* <div className="d-flex justify-content-end align-items-end">
                 <IconButton sx={{ color: "white" }} size="small">
-                  {/* <MoreVertIcon /> */}
+                  <MoreVertIcon />
                 </IconButton>
-              </div>
-              <div className={styles.customIconCircle} style={{marginBottom:"5px"}}>
+              </div> */}
+              <div className={styles.customIconCircle} >
                 <IconButton size="small" 
                 // sx={{ color: "white" }}
                 >
@@ -49,9 +58,9 @@ const handleCheckboxChange = (title) => {
                  
                 </IconButton>
               </div>
-              <Typography variant="subtitle1" sx={{ color: "#0073cf",marginTop:"5px" }}>
+             < div   style={{ color: "#0073cf",fontSize:"0.75rem", fontWeight:"400",marginTop:"5px" }}>
                 {data.title}
-              </Typography>
+              </div>
               {data.subtitle &&
                 <Typography variant="body2" sx={{ color: "#94a3b8" }}>
                   {data.subtitle}

@@ -83,30 +83,30 @@ const TableModal = ({ columns = [], title, data = [], onAddClick, searchPlacehol
         String(row[col.key] || "").toLowerCase().includes(searchTerm.toLowerCase())
       )
     )
- .sort((a, b) => {
-  if (!sortConfig.key) return 0;
+    .sort((a, b) => {
+      if (!sortConfig.key) return 0;
 
-  const aRaw = a[sortConfig.key] || "";
-  const bRaw = b[sortConfig.key] || "";
+      const aRaw = a[sortConfig.key] || "";
+      const bRaw = b[sortConfig.key] || "";
 
-  const extractNumber = (val) => {
-    const str = String(val);
-    const match = str.match(/\d+/);
-    return match ? parseInt(match[0], 10) : 0;
-  };
+      const extractNumber = (val) => {
+        const str = String(val);
+        const match = str.match(/\d+/);
+        return match ? parseInt(match[0], 10) : 0;
+      };
 
-  if (sortConfig.key.toLowerCase() === "id") {
-    const aNum = extractNumber(aRaw);
-    const bNum = extractNumber(bRaw);
-    return sortConfig.direction === "asc" ? aNum - bNum : bNum - aNum;
-  }
+      if (sortConfig.key.toLowerCase() === "id") {
+        const aNum = extractNumber(aRaw);
+        const bNum = extractNumber(bRaw);
+        return sortConfig.direction === "asc" ? aNum - bNum : bNum - aNum;
+      }
 
-  const aVal = String(aRaw).toLowerCase();
-  const bVal = String(bRaw).toLowerCase();
-  return sortConfig.direction === "asc"
-    ? aVal.localeCompare(bVal)
-    : bVal.localeCompare(aVal);
-});
+      const aVal = String(aRaw).toLowerCase();
+      const bVal = String(bRaw).toLowerCase();
+      return sortConfig.direction === "asc"
+        ? aVal.localeCompare(bVal)
+        : bVal.localeCompare(aVal);
+    });
 
 
 
@@ -132,8 +132,8 @@ const TableModal = ({ columns = [], title, data = [], onAddClick, searchPlacehol
 
 
         {title !== 'Catalogue Dashboard' && (
-  <AppButton onClick={() => onAddClick && onAddClick()} children={btnTitle} />
-)}
+          <AppButton onClick={() => onAddClick && onAddClick()} children={btnTitle} />
+        )}
 
       </div>
       <div className={styles.tableContainer}>
@@ -191,6 +191,7 @@ const TableModal = ({ columns = [], title, data = [], onAddClick, searchPlacehol
                                 : row.is_visible
                             }
                             onChange={(e) => handleVisibilityChange(row.id, e.target.checked)}
+                            disabled={row.is_system_catalogue === true} // 🔒 Disable if system catalogue
                             sx={{
                               padding: '0px 9px',
                               color: 'white',
@@ -202,6 +203,7 @@ const TableModal = ({ columns = [], title, data = [], onAddClick, searchPlacehol
                               : row.is_visible
                           ) ? "Yes" : "No"}
                         </>
+
                       ) : col.key === "id" && idPrefix ? (
                         `${idPrefix}${String(row[col.key]).padStart(4, "0")}`
                       ) : col.key === "watchers" || col.key === "synonyms" ? (

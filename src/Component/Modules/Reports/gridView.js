@@ -431,32 +431,36 @@ const GridView = () => {
                   fetchReportData(option);
                 }}
 
-styles={{
-                singleValue: (provided) => ({
-                  ...provided,
-                  color: '#FFFFFF'  // 👈 White color for selected text
-                }),
-                control: (provided) => ({
-                  ...provided,
-                  backgroundColor: '#0073CF',
-                  color:'#E8F5E9',
-                  borderRadius: '15px',
-                  border: 'none'
-                }),
-                menu: (provided) => ({
-                  ...provided,
-                  backgroundColor: '#080E17',
-                  borderRadius: '15px',
-                  overflow: 'hidden',
-                  border: "1px solid #0073CF",
-                }),
-                option: (provided, state) => ({
-                  ...provided,
-                  backgroundColor: state.isFocused ? '#101D2B' : '#080E17',
-                  color: '#D9D9D9',
-                  cursor: 'pointer'
-                })
-              }}
+                styles={{
+                  placeholder: (provided) => ({
+                    ...provided,
+                    color: '#d9d9d9', // 👈 Your desired placeholder color
+                  }),
+                  singleValue: (provided) => ({
+                    ...provided,
+                    color: '#FFFFFF'  // 👈 White color for selected text
+                  }),
+                  control: (provided) => ({
+                    ...provided,
+                    backgroundColor: '#0073CF',
+                    color: '#E8F5E9',
+                    borderRadius: '15px',
+                    border: 'none'
+                  }),
+                  menu: (provided) => ({
+                    ...provided,
+                    backgroundColor: '#080E17',
+                    borderRadius: '15px',
+                    overflow: 'hidden',
+                    border: "1px solid #0073CF",
+                  }),
+                  option: (provided, state) => ({
+                    ...provided,
+                    backgroundColor: state.isFocused ? '#0073CF' : '#080E17',
+                    color: '#D9D9D9',
+                    cursor: 'pointer'
+                  })
+                }}
                 menuPlacement="top"   // dropdown हमेशा ऊपर खुलेगा
                 isSearchable={false}  // search off
                 placeholder="Print Record"

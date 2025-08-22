@@ -129,3 +129,12 @@
     height: 24px;
   }
 }
+
+:global(.css-1lt5qva-MuiCardContent-root) {
+  padding: 10px !important;
+}
+
+:global(.css-1lt5qva-MuiCardContent-root:last-child) {
+  padding: 10px !important;
+}
+ 
