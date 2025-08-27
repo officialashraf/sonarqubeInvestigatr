@@ -25,7 +25,7 @@ export default reportReducer;
 export const ReportFilterPayloadReducer = (
   state = {
     reportFilters: {
-      caseId: [],
+      case_id: [],
       file_type: [],
       start_time: "",
       end_time: "",
@@ -45,7 +45,7 @@ export const ReportFilterPayloadReducer = (
        reportFilters: {
           aggs_fields: action.payload.aggs_fields || [],
           keyword: action.payload.keyword || [],
-          caseId: action.payload.caseId || [],
+          case_id: action.payload.case_id || [],
           target: action.payload.target || [],
           sentiment: action.payload.sentiment || [],
           file_type: action.payload.file_type || [],
@@ -58,8 +58,8 @@ export const ReportFilterPayloadReducer = (
   return {
     ...state,
     reportFilters: {
-      ...state.caseFilters,
-      caseId: state.caseFilters.caseId, // Preserve current caseId
+      ...state.reportFilters,
+      case_id: [], // Preserve current case_id
       file_type: [],
       start_time: "",
       end_time: "",

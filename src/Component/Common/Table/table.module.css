@@ -340,8 +340,6 @@ margin-bottom: 0px !important;
   }
 }
 
-  
-
 /* 📱 For very short screens: height ≤ 540px */
 @media screen and (max-width: 768px) {
   .tableWrapper {

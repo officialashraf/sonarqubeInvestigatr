@@ -65,7 +65,7 @@ const CatlogList = () => {
     }, []);
 
 
-    const allowedKeys = ["group_name", "display_name", "is_visible"];
+    const allowedKeys = ["group_name", "display_name", "is_visible", "show_in_reports"];
 
 const handleSaveChanges = async (editedRows) => {
   const token = Cookies.get("accessToken");
@@ -115,6 +115,7 @@ const handleSaveChanges = async (editedRows) => {
         { key: "group_name", label: "Group Name" },
         { key: "display_name", label: "Display Name" },
         { key: "is_visible", label: "Visible" },
+                { key: "show_in_reports", label: "Report" },
     ];
 
     return (

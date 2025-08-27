@@ -436,6 +436,40 @@ const CaseTableDataFilter = () => {
     const displayChips = getDisplayChips();
 
     return (
+        <SearchUIContainer
+            inputValue={inputValue}
+            setInputValue={setInputValue}
+            handleSearch={handleSearchSubmit}
+            handleKeyPress={handleKeyPress}
+            resetSearch={resetSearch}
+            activeComponent={activeComponent}
+            setActiveComponent={setActiveComponent}
+            displayChips={displayChips}
+            chipCheckFunctions={[
+                (chip) => localFileTypeChips.includes(chip),
+                (chip) => localAggsFieldsChips.includes(chip),
+                (chip) => localSetiments.includes(chip),
+                (chip) => localTargets.includes(chip),
+                (chip) => chip.includes(' to ')
+            ]}
+            removeChip={removeChip}
+            PopupComponent={AddFilter }
+            isPopupVisible={isPopupVisible}
+            setIsPopupVisible={setIsPopupVisible}
+            showCaseHeader={true}
+            CaseHeaderComponent={<CaseHeader />}
+            componentsMap={{
+                graphicalData: { icon: PieChart, component: <GraphicalData /> },
+                resources: { icon: FaPhotoVideo, component: <Resources /> },
+                caseData: { icon: ListAltOutlined, component: <TabulerData /> },
+            }}
+              popupSearchChips={localKeywordChips}
+        />
+
+    );
+};
+
+export default CaseTableDataFilter;
         // <div className="search-container" style={{ backgroundColor: '#080E17', height: '100%', zIndex: '1050', overflowY: "hidden" }}>
         //     <CaseHeader />
         //     <div className={styles.actionIconsContainer} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "5px" }}>
@@ -569,37 +603,4 @@ const CaseTableDataFilter = () => {
         //         />
         //     )}
         // </div>
-        <SearchUIContainer
-            inputValue={inputValue}
-            setInputValue={setInputValue}
-            handleSearch={handleSearchSubmit}
-            handleKeyPress={handleKeyPress}
-            resetSearch={resetSearch}
-            activeComponent={activeComponent}
-            setActiveComponent={setActiveComponent}
-            displayChips={displayChips}
-            chipCheckFunctions={[
-                (chip) => localFileTypeChips.includes(chip),
-                (chip) => localAggsFieldsChips.includes(chip),
-                (chip) => localSetiments.includes(chip),
-                (chip) => localTargets.includes(chip),
-                (chip) => chip.includes(' to ')
-            ]}
-            removeChip={removeChip}
-            PopupComponent={AddFilter }
-            isPopupVisible={isPopupVisible}
-            setIsPopupVisible={setIsPopupVisible}
-            showCaseHeader={true}
-            CaseHeaderComponent={<CaseHeader />}
-            componentsMap={{
-                graphicalData: { icon: PieChart, component: <GraphicalData /> },
-                resources: { icon: FaPhotoVideo, component: <Resources /> },
-                caseData: { icon: ListAltOutlined, component: <TabulerData /> },
-            }}
-              popupSearchChips={localKeywordChips}
-        />
-
-    );
-};
-
-export default CaseTableDataFilter;
+        

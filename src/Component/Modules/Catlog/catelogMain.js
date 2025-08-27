@@ -9,7 +9,7 @@ const CatalogMain = () => {
   const navigate = useNavigate();
   const cardData = [
     { title: 'PII Management' },
-    { title: 'Gridview Management'}
+    { title: 'Unified Entity Management'}
   ];
 
 const handleCheckboxChange = (title) => {
@@ -17,8 +17,8 @@ const handleCheckboxChange = (title) => {
     navigate("/piiCatalogue");
   }
 
-  if (title === "Gridview Management") {
-    navigate("/gridCatalogue");
+  if (title === "Unified Entity Management") {
+    navigate("/entityCatalogue");
   }
 };
 

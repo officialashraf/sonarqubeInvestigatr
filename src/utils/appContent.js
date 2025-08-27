@@ -63,7 +63,7 @@ const AppContent = () => {
     if (path === "/roles") return "Roles";
     if (path === "/targets") return "Target";
     if (path === "/connections") return "Connections";
-    if (path === "/gridCatalogue") return "Grid Catalogue";
+    if (path === "/entityCatalogue") return "Unified Entity Catalogue";
     if (path === "/piiCatalogue") return "PII Catalogue";
        if (path === "/catalogue") return "Catalogue";
     return "Cases";
@@ -124,7 +124,7 @@ const AppContent = () => {
                     <Route path="/targets" element={<TargetDashboard />} />
                     <Route path="/connections" element={<ConnectionManagement />} />
                     <Route path="/catalogue" element={<CatalogMain/>} />
-                    <Route path="/gridCatalogue" element={<CatelogList/>} />
+                    <Route path="/entityCatalogue" element={<CatelogList/>} />
                     <Route path="/piiCatalogue" element={<PIICatelog/>} />
                     <Route path="*" element={<div className='notfound'><h4>Work in progress........</h4></div>} />
                   </Route>

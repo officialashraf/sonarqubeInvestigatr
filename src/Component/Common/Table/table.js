@@ -41,7 +41,6 @@ const TableModal = ({ columns = [], title, data = [], onAddClick, searchPlacehol
     }));
   };
 
-
   const handleVisibilityChange = (id, newValue) => {
     setEditedRows((prev) => ({
       ...prev,
@@ -52,6 +51,15 @@ const TableModal = ({ columns = [], title, data = [], onAddClick, searchPlacehol
     }));
   };
 
+  const handleShowInReportChange = (id, newValue) => {
+    setEditedRows((prev) => ({
+      ...prev,
+      [id]: {
+        ...prev[id],
+        show_in_reports: newValue,
+      },
+    }));
+  };
 
   const handleDisplayNameChange = (id, newValue) => {
     setEditedRows((prev) => ({
@@ -62,7 +70,6 @@ const TableModal = ({ columns = [], title, data = [], onAddClick, searchPlacehol
       },
     }));
   };
-
 
   const handleSort = (key) => {
     const direction = sortConfig.key === key && sortConfig.direction === "asc" ? "desc" : "asc";
@@ -203,7 +210,27 @@ const TableModal = ({ columns = [], title, data = [], onAddClick, searchPlacehol
                               : row.is_visible
                           ) ? "Yes" : "No"}
                         </>
-
+                      ) : editable && col.key === "show_in_reports" ? (
+                        <>
+                          <Checkbox
+                            checked={
+                              editedRows[row.id]?.show_in_reports !== undefined
+                                ? editedRows[row.id].show_in_reports
+                                : row.show_in_reports
+                            }
+                            onChange={(e) => handleShowInReportChange(row.id, e.target.checked)}
+                            disabled={row.is_system_catalogue === true} // 🔒 Disable if system catalogue
+                            sx={{
+                              padding: '0px 9px',
+                              color: 'white',
+                            }}
+                          />
+                          {(
+                            editedRows[row.id]?.show_in_reports !== undefined
+                              ? editedRows[row.id].show_in_reports
+                              : row.show_in_reports
+                          ) ? "Yes" : "No"}
+                        </>
                       ) : col.key === "id" && idPrefix ? (
                         `${idPrefix}${String(row[col.key]).padStart(4, "0")}`
                       ) : col.key === "watchers" || col.key === "synonyms" ? (
@@ -293,6 +320,3 @@ const TableModal = ({ columns = [], title, data = [], onAddClick, searchPlacehol
 };
 
 export default TableModal;
-
-
-

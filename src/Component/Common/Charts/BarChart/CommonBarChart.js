@@ -55,7 +55,6 @@ const ReusableBarChart = ({
                             ? queryPayload.targets.map(t => String(t.value))
                             : [],
 
-
                     sentiments: Array.isArray(queryPayload?.sentiments)
                         ? queryPayload.sentiments
                         : Array.isArray(queryPayload?.sentiment)
@@ -77,7 +76,6 @@ const ReusableBarChart = ({
 
                 const payload = flatQuery;
 
-
                 // ✅ Step 4: API call
                 const response = await axios.post(
                     `${window.runtimeConfig.REACT_APP_API_DAS_SEARCH}/api/das/aggregate`,
@@ -94,7 +92,6 @@ const ReusableBarChart = ({
                 const raw = response.data[field] || [];
                 const transformed = transformData(raw);
                 setRawData(transformed);
-
                 const limitedData = transformed.length > MAX_BARS ? transformed.slice(0, MAX_BARS) : transformed;
                 setBarData(limitedData.length ? limitedData : [{ name: 'No Data', value: 0 }]);
 
